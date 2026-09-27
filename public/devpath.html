@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#11120f" />
+    <meta name="description" content="Aprenda desenvolvimento web construindo um projeto real, uma pequena etapa de cada vez." />
+    <title>DevPath — aprenda construindo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23d9fc68'/%3E%3Cpath d='m17 11-8 9 8 9m6-18 8 9-8 9' fill='none' stroke='%231c2518' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Pular para o conteúdo</a>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navegação principal">
+        <a class="brand" href="#/home" aria-label="DevPath início">
+          <span class="brand-mark" aria-hidden="true">&lt;/&gt;</span>
+          <span>devpath<span class="brand-period">.</span></span>
+        </a>
+
+        <div class="sidebar-label">ESPAÇO DE APRENDIZADO</div>
+        <nav class="primary-nav">
+          <a href="#/home" data-nav="home"><span class="nav-icon" aria-hidden="true">⌂</span> Início</a>
+          <a href="#/catalog" data-nav="catalog"><span class="nav-icon" aria-hidden="true">▤</span> Trilhas</a>
+          <a href="#/review" data-nav="review"><span class="nav-icon" aria-hidden="true">↻</span> Revisão <span class="nav-count" id="review-count">3</span></a>
+        </nav>
+
+        <div class="sidebar-label path-label">SUA PRIMEIRA TRILHA <span>01 / 03</span></div>
+        <a class="side-path" href="#/catalog">
+          <span class="path-dot"></span>
+          <span><strong>Web Foundations</strong><small>HTML · CSS · Web</small></span>
+          <span class="path-chevron">›</span>
+        </a>
+
+        <div class="sidebar-bottom">
+          <div class="daily-note">
+            <span class="note-spark" aria-hidden="true">✳</span>
+            <p>Um pequeno passo<br />já muda o que você<br />consegue construir.</p>
+          </div>
+          <div class="profile-row">
+            <div class="avatar" aria-hidden="true">D</div>
+            <span><strong>Conta conectada</strong><small>Carregando perfil…</small></span>
+            <button class="icon-button profile-menu" aria-label="Opções do perfil" title="Opções">···</button>
+          </div>
+        </div>
+      </aside>
+
+      <main id="main" class="main-content" tabindex="-1">
+        <header class="topbar">
+          <div class="breadcrumbs" id="breadcrumbs"><span>Seu espaço</span><span class="crumb-sep">/</span><strong>Início</strong></div>
+          <div class="topbar-right"><span class="save-status"><i></i> conectando</span><button class="icon-button help-button" aria-label="Sobre o DevPath" title="Sobre o DevPath">?</button></div>
+        </header>
+        <div id="view" class="view" aria-live="polite"></div>
+        <footer class="site-footer"><span>DEVPATH <span class="brand-period">✳</span> APRENDA CONSTRUINDO</span><span>Seu progresso acompanha sua conta.</span></footer>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
