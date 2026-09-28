@@ -1,17 +1,20 @@
 # DevPath
 
-Plataforma de aprendizagem de desenvolvimento web em português, com tema escuro e layout adaptável a celulares, tablets e computadores.
+Plataforma interativa de aprendizagem de programação. A etapa ativa deste site reúne cinco exercícios introdutórios de JavaScript, com aquecimento, previsão, escrita e execução de código, explicação do aluno e revisão espaçada.
 
-## Conta e progresso
+## Abrir
 
-O Site usa o fluxo oficial **Entrar com ChatGPT** do Sites. Não há senha criada pelo DevPath. As rotas protegidas e a API validam a identidade no servidor; o identificador estável da conta é a chave de cada registro.
+Abra `index.html` no navegador. Para uma prévia servida localmente, execute `python -m http.server 8000` nesta pasta e visite `http://localhost:8000`.
 
-O progresso fica no D1 configurado como `DB`: aulas concluídas, respostas, tentativas, desafios escritos, revisões e dias ativos. O navegador não usa `localStorage` como fonte dos dados. Se o banco ficar temporariamente indisponível, a interface informa que não conseguiu sincronizar.
+O progresso desta versão fica no armazenamento local do navegador. A versão autenticada do site sincroniza o progresso pela conta. Exercícios concluídos têm uma pergunta de revisão vinculada; revisões corretas avançam pelos intervalos de 1, 3, 7 e 21 dias.
 
-## Desenvolvimento
+## Experiência incluída
 
-- `npm run dev`: prévia local com autenticação de desenvolvimento do Sites.
-- `npm run db:generate`: gera uma nova migração Drizzle depois de alterar `db/schema.ts`.
-- `npm run build`: compila a aplicação para Cloudflare Workers.
+- Início e catálogo centrados nos exercícios de JavaScript 00.01–00.05.
+- Aquecimento animado e pergunta de compreensão antes da prática.
+- Previsão do resultado, edição e execução do código no interpretador introdutório.
+- Explicação escrita do aluno antes da conclusão.
+- Dicas graduais e revisão vinculada a cada exercício concluído.
+- Layout responsivo, navegação por teclado, foco visível, mensagens acessíveis e preferência por movimento reduzido.
 
-As migrações ficam em `drizzle/` e são aplicadas pelo Sites durante a publicação.
+O conteúdo histórico de Web, HTML e CSS deixa de ser exibido como trilha ativa. Os registros anteriores de progresso permanecem armazenados; os cinco exercícios de JavaScript têm progresso e revisões próprios.
