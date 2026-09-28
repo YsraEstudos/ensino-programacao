@@ -1,9 +1,10 @@
 import { getD1 } from "../../../db";
+import { courseExerciseIds } from "../../../lib/course-exercise-ids";
 import { getChatGPTUser } from "../../chatgpt-auth";
 
 export const dynamic = "force-dynamic";
 
-const exerciseIds = new Set(["00.01", "00.02", "00.03", "00.04", "00.05", "00.06", "00.07", "00.08", "00.09", "01.01"]);
+const exerciseIds = new Set<string>(courseExerciseIds);
 const slugs = new Set(["web", "html", "css", ...exerciseIds]);
 type UserProgress = {
   completed: string[];
@@ -76,9 +77,9 @@ function sanitize(value: unknown): UserProgress {
   }
 
   for (const id of exerciseIds) {
-    if (typeof drafts[id] === "string") cleanDrafts[id] = (drafts[id] as string).slice(0, 600);
-    if (typeof predictions[id] === "string") cleanPredictions[id] = (predictions[id] as string).slice(0, 120);
-    if (typeof reflections[id] === "string") cleanReflections[id] = (reflections[id] as string).slice(0, 300);
+    if (typeof drafts[id] === "string") cleanDrafts[id] = (drafts[id] as string).slice(0, 2500);
+    if (typeof predictions[id] === "string") cleanPredictions[id] = (predictions[id] as string).slice(0, 400);
+    if (typeof reflections[id] === "string") cleanReflections[id] = (reflections[id] as string).slice(0, 600);
     if (typeof warmups[id] === "boolean") cleanWarmups[id] = warmups[id] as boolean;
   }
 
@@ -121,7 +122,7 @@ export async function PUT(request: Request) {
   if (!user) return Response.json({ error: "Entre com sua conta para continuar." }, { status: 401 });
   try {
     const payload: unknown = await request.json();
-    if (JSON.stringify(payload).length > 12000) return Response.json({ error: "O progresso enviado excede o limite." }, { status: 413 });
+    if (JSON.stringify(payload).length > 900000) return Response.json({ error: "O progresso enviado excede o limite." }, { status: 413 });
     const progress = sanitize(payload);
     await getD1().prepare("INSERT INTO user_progress (user_id, progress_json, updated_at) VALUES (?1, ?2, unixepoch()) ON CONFLICT(user_id) DO UPDATE SET progress_json = excluded.progress_json, updated_at = unixepoch()")
       .bind(user.userId, JSON.stringify(progress)).run();

@@ -1,11 +1,15 @@
 const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, warmupCompleted: {}, reviewSchedule: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
 let progress = blankProgress();
+let curriculumActivities = window.DevPathStage00UI.activities;
 let saveQueue = Promise.resolve();
 let selectedCatalogFilter = "Todas";
+let selectedStageFilter = "Todas";
+let catalogSearch = "";
 let reviewQuestionIndex = 0;
 let reviewSession = null;
 let hintIndexes = {};
 let toastTimer;
+let courseSaveTimer;
 const view = document.querySelector("#view");
 const breadcrumb = document.querySelector("#breadcrumbs");
 
@@ -23,6 +27,16 @@ function saveProgress() {
 
 async function initialize() {
   const status = document.querySelector(".save-status");
+  try {
+    const response = await fetch("/course-catalog.json", { cache: "no-store" });
+    if (response.ok) {
+      const catalog = await response.json();
+      if (Array.isArray(catalog) && catalog.length === 217 && catalog.every((item) => item.id && item.learner === undefined)) {
+        curriculumActivities = catalog;
+        document.querySelector(".side-path small").textContent = "Etapas 00–20 · 217 exercícios";
+      }
+    }
+  } catch { /* Keep the existing starter catalog if the expanded course asset is unavailable. */ }
   try {
     const response = await fetch("/api/progress", { cache: "no-store" });
     if (!response.ok) throw new Error("load failed");
@@ -78,18 +92,18 @@ function updateNav(route) {
 
 function routeInfo() {
   const path = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
-  if (path[0] === "javascript" && path[1] && window.DevPathStage00UI.activities.some((item) => item.id === path[1])) return { name: "javascript", id: path[1] };
+  if (path[0] === "javascript" && path[1] && curriculumActivities.some((item) => item.id === path[1])) return { name: "javascript", id: path[1] };
   if (path[0] === "javascript") return { name: "javascript" };
   if (["catalog", "review"].includes(path[0])) return { name: path[0] };
   return { name: "home" };
 }
 
 function isExerciseDone(id) { return progress.answers?.[id] === true; }
-function doneCount() { return window.DevPathStage00UI.activities.filter((item) => isExerciseDone(item.id)).length; }
-function percentDone() { return Math.round(doneCount() / window.DevPathStage00UI.activities.length * 100); }
-function dueExercises() { return window.DevPathStage00UI.activities.filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
+function doneCount() { return curriculumActivities.filter((item) => isExerciseDone(item.id)).length; }
+function percentDone() { return Math.round(doneCount() / curriculumActivities.length * 100); }
+function dueExercises() { return curriculumActivities.filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
 function nextReviewDate() {
-  const dates = window.DevPathStage00UI.activities.filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity));
+  const dates = curriculumActivities.filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity));
   return dates.length ? Math.min(...dates) : null;
 }
 
@@ -109,26 +123,27 @@ function render() {
 function stageContext() { return { progress, saveProgress, render }; }
 
 function renderJavaScriptOverview() {
-  setBreadcrumb("JavaScript", "Exercícios");
-  view.innerHTML = window.DevPathStage00UI.renderOverview(progress);
+  renderCatalog();
 }
 
 function renderJavaScriptExercise(id) {
-  const item = window.DevPathStage00UI.activities.find((activity) => activity.id === id);
+  const item = curriculumActivities.find((activity) => activity.id === id);
   if (!item) { location.hash = "#/javascript"; return; }
   setBreadcrumb("JavaScript", `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
-  view.innerHTML = window.DevPathStage00UI.renderExercise(id, progress);
+  view.innerHTML = renderCurriculumLesson(item);
 }
 
 function renderHome() {
   setBreadcrumb("Início");
-  const activities = window.DevPathStage00UI.activities;
+  const activities = curriculumActivities;
   const next = activities.find((item) => !isExerciseDone(item.id)) || activities[0];
   const allDone = doneCount() === activities.length;
   const stageIds = [...new Set(activities.map((item) => item.stage || item.id.slice(0, 2)))];
   const stageRows = stageIds.map((stage) => {
     const items = activities.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
-    return `<section class="home-exercise-stage" aria-labelledby="home-stage-${stage}"><div class="section-heading"><h2 id="home-stage-${stage}">JavaScript · Etapa ${stage}</h2>${stage === stageIds[0] ? '<a class="text-link" href="#/catalog">Ver exercícios <span aria-hidden="true">→</span></a>' : ""}</div>${items.map((item,index)=>`<a class="unit-row" href="#/javascript/${item.id}"><span class="unit-index ${isExerciseDone(item.id)?"done":""}">${isExerciseDone(item.id)?"✓":String(index+1).padStart(2,"0")}</span><span class="unit-copy"><h3>${esc(item.title)}</h3><p>${esc(item.objective)}</p></span><span class="unit-kind">JavaScript</span><span class="unit-state ${isExerciseDone(item.id)?"complete":""}"><i class="state-dot"></i>${isExerciseDone(item.id)?"Concluído":esc(item.duration)}</span></a>`).join("")}</section>`;
+    const completed = items.filter((item) => isExerciseDone(item.id)).length;
+    const nextInStage = items.find((item) => !isExerciseDone(item.id)) || items[0];
+    return `<a class="path-stage-card" href="#/javascript/${nextInStage.id}"><div><span class="eyebrow">ETAPA ${esc(stage)}</span><strong>${completed} / ${items.length}</strong></div><h2>${esc(items[0].title)}${items.length > 1 ? ` <span>+ ${items.length - 1} atividades</span>` : ""}</h2><div class="stage-progress"><i style="width:${Math.round(completed / items.length * 100)}%"></i></div></a>`;
   }).join("");
   const label = allDone ? "Praticar revisão" : isExerciseDone(next.id) ? "Revisitar exercício" : doneCount() ? "Continuar exercício" : "Começar exercício";
   const href = allDone ? "#/review" : `#/javascript/${next.id}`;
@@ -136,7 +151,7 @@ function renderHome() {
   view.innerHTML = `
     <section class="welcome"><div><div class="eyebrow">${new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(new Date()).toUpperCase()} · UMA IDEIA DE CADA VEZ</div><h1>Olá, aprendiz<span class="brand-period">.</span></h1><p>${allDone ? `Os ${activities.length} exercícios disponíveis estão concluídos. Revise ou pratique novamente.` : "Você tem um caminho pela frente. <strong>Vamos escrever mais uma linha?</strong>"}</p></div><div class="date-chip">${new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date()).toUpperCase()}</div></section>
     <section class="continue-panel" aria-labelledby="continue-title"><div class="continue-copy"><div class="eyebrow">JAVASCRIPT · EXERCÍCIO ${esc(next.id)}</div><h2 id="continue-title">${esc(next.title)}.</h2><p>${esc(next.objective)}</p><div class="continue-bottom"><a class="button-primary" href="${href}">${label}<span aria-hidden="true">→</span></a><span class="subtle-meta">${doneCount()} / ${activities.length} exercícios concluídos</span></div></div><div class="code-art" aria-hidden="true"><div class="code-top"><i></i><i></i><i></i></div><div class="code-line w-1"></div><div class="code-line w-2"></div><div class="code-line w-3"></div><div class="code-line w-4"></div><div class="code-line w-5"></div><span class="code-caption">console.log("você")</span></div></section>
-    ${stageRows}
+    <section class="path-overview"><div class="section-heading"><h2>Trilha JavaScript · etapas 00 a 20</h2><a class="text-link" href="#/catalog">Abrir os 217 exercícios →</a></div><div class="path-stage-grid">${stageRows}</div></section>
     <div class="bottom-grid"><section class="week-panel" aria-labelledby="week-title"><div class="section-heading"><h2 id="week-title">Um pouco já conta</h2><span class="eyebrow">SEUS ÚLTIMOS 7 DIAS</span></div><div class="week-track">${week}</div></section><aside class="stat-note"><span class="stat-number">${percentDone()}%</span><span class="stat-copy"><strong>${doneCount()} de ${activities.length} exercícios</strong>Seu progresso acompanha<br />o que você conseguiu fazer.</span></aside></div>`;
 }
 
@@ -157,19 +172,108 @@ function weekMarkup() {
 
 function renderCatalog() {
   setBreadcrumb("Exercícios");
-  const activities = window.DevPathStage00UI.activities;
   const filters = ["Todas", "Em andamento", "Concluídas"];
-  let items = activities;
-  if (selectedCatalogFilter === "Em andamento") items = activities.filter((item) => !isExerciseDone(item.id));
-  if (selectedCatalogFilter === "Concluídas") items = activities.filter((item) => isExerciseDone(item.id));
-  view.innerHTML = `<section class="page-intro"><div class="eyebrow">JAVASCRIPT · ETAPAS 00 E 01</div><h1>Aprender escrevendo código<span class="brand-period">.</span></h1><p>Cada exercício começa com uma explicação e um exemplo, pede uma previsão, dá espaço para escrever e executar código e termina com uma explicação sua.</p></section><div class="catalog-toolbar"><div class="filter-tabs" role="group" aria-label="Filtrar exercícios">${filters.map((filter)=>`<button class="filter-tab ${selectedCatalogFilter===filter?"selected":""}" data-filter="${filter}" aria-pressed="${selectedCatalogFilter===filter}">${filter}</button>`).join("")}</div><span class="catalog-count">${items.length} ${items.length===1?"EXERCÍCIO":"EXERCÍCIOS"} · JAVASCRIPT</span></div><section aria-label="Exercícios de JavaScript">${items.length?items.map((item,index)=>`<article class="catalog-course"><div class="course-art ${["lime","lilac","peach"][index%3]}"><span class="art-label">${esc(item.id)} · ETAPA ${esc(item.stage || item.id.slice(0, 2))}</span><span class="art-glyph" aria-hidden="true">${["{ }","↻","⇅",'0 ""',"JS","!","+","<>","→","typeof"][window.DevPathStage00UI.activities.indexOf(item)]}</span></div><div class="catalog-info"><div class="eyebrow">${esc(item.focus)}</div><h2>${esc(item.title)}</h2><p>${esc(item.objective)}</p><div class="course-facts"><span>${esc(item.duration)}</span><span>${isExerciseDone(item.id)?"Concluído":"Aquecimento + código"}</span></div></div><div class="course-action"><a class="button-primary" href="#/javascript/${item.id}">${isExerciseDone(item.id)?"Revisitar":"Começar"}<span aria-hidden="true">→</span></a><small>${isExerciseDone(item.id)?"Revisão vinculada":"Prevê · escreve · executa"}</small></div></article>`).join(""):`<p class="empty-state">Nenhum exercício nesta categoria. <button class="hint-link" data-filter="Todas">Ver todos</button></p>`}</section>`;
+  const stages = [...new Set(curriculumActivities.map((item) => item.stage))];
+  view.innerHTML = `<section class="page-intro"><div class="eyebrow">JAVASCRIPT · ETAPAS 00 A 20</div><h1>Aprender escrevendo código<span class="brand-period">.</span></h1><p>217 atividades com previsão antes da explicação, espaço para escrever, exemplos públicos e revisão espaçada. Escolha uma etapa ou procure um tema.</p></section><div class="catalog-tools"><label class="course-search-label" for="course-search">Buscar exercício<input id="course-search" type="search" value="${esc(catalogSearch)}" placeholder="Título, tema ou enunciado" autocomplete="off" /></label><label class="stage-select-label" for="stage-filter">Etapa<select id="stage-filter">${["Todas", ...stages].map((stage) => `<option value="${esc(stage)}" ${selectedStageFilter === stage ? "selected" : ""}>${stage === "Todas" ? "Todas as etapas" : `Etapa ${stage}`}</option>`).join("")}</select></label><div class="filter-tabs" role="group" aria-label="Filtrar por progresso">${filters.map((filter) => `<button class="filter-tab ${selectedCatalogFilter === filter ? "selected" : ""}" data-filter="${filter}" aria-pressed="${selectedCatalogFilter === filter}">${filter}</button>`).join("")}</div></div><div class="catalog-count-row"><span id="catalog-count" class="catalog-count"></span><span>Escolha uma atividade para abrir a explicação guiada.</span></div><section id="catalog-results" aria-label="Exercícios de JavaScript"></section>`;
+  updateCatalogResults();
+}
+
+function updateCatalogResults() {
+  const results = document.querySelector("#catalog-results");
+  if (!results) return;
+  const query = catalogSearch.trim().toLocaleLowerCase("pt-BR");
+  let items = curriculumActivities.filter((item) => {
+    const stage = item.stage || item.id.slice(0, 2);
+    if (selectedCatalogFilter === "Em andamento" && isExerciseDone(item.id)) return false;
+    if (selectedCatalogFilter === "Concluídas" && !isExerciseDone(item.id)) return false;
+    if (selectedStageFilter !== "Todas" && stage !== selectedStageFilter) return false;
+    if (query && !`${item.id} ${item.title} ${item.kind} ${item.prompt} ${item.firstResponse?.action || ""}`.toLocaleLowerCase("pt-BR").includes(query)) return false;
+    return true;
+  });
+  document.querySelector("#catalog-count").textContent = `${items.length} ${items.length === 1 ? "EXERCÍCIO" : "EXERCÍCIOS"} · ${doneCount()} CONCLUÍDOS`;
+  const stageIds = [...new Set(items.map((item) => item.stage || item.id.slice(0, 2)))];
+  results.innerHTML = items.length ? stageIds.map((stage) => {
+    const group = items.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
+    const completed = group.filter((item) => isExerciseDone(item.id)).length;
+    return `<section class="catalog-stage" aria-labelledby="catalog-stage-${stage}"><div class="catalog-stage-heading"><div><span class="eyebrow">SEQUÊNCIA CURRICULAR</span><h2 id="catalog-stage-${stage}">Etapa ${esc(stage)}</h2></div><span>${completed} / ${group.length} concluídos</span></div><div class="catalog-card-grid">${group.map((item) => `<article class="catalog-learning-card ${isExerciseDone(item.id) ? "is-complete" : ""}"><div class="catalog-learning-meta"><span>${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA" : ""}</span><span>${isExerciseDone(item.id) ? "✓ concluído" : esc(item.duration)}</span></div><h3>${esc(item.title)}</h3><p>${esc(item.firstResponse.action)}</p><a href="#/javascript/${item.id}" class="text-link">${isExerciseDone(item.id) ? "Revisitar atividade" : "Abrir atividade"}<span aria-hidden="true">→</span></a></article>`).join("")}</div></section>`;
+  }).join("") : `<p class="empty-state">Nenhum exercício corresponde a esses filtros. Ajuste a busca ou selecione outra etapa.</p>`;
+}
+
+function loadCourseDraft(item) {
+  const raw = progress.exerciseDrafts?.[item.id];
+  if (typeof raw === "string" && raw.startsWith("__course_files__:")) {
+    try { return JSON.parse(raw.slice("__course_files__:".length)); } catch { /* Use the published starter files. */ }
+  }
+  return Object.fromEntries(item.starterFiles.map((file, index) => [file.path, index === 0 && typeof raw === "string" ? raw : file.content]));
+}
+
+function renderResources(resources = []) {
+  return resources.length ? `<ul class="course-resource-list">${resources.map((resource) => {
+    const safe = esc(resource);
+    const linked = safe.replace(/https:\/\/[^\s<>]+/g, (url) => {
+      const clean = url.replace(/[),.;]+$/, "");
+      const tail = url.slice(clean.length);
+      return `<a href="${clean}" target="_blank" rel="noopener noreferrer">${clean}</a>${tail}`;
+    });
+    return `<li>${linked}</li>`;
+  }).join("")}</ul>` : `<p>Sem recurso externo obrigatório nesta atividade.</p>`;
+}
+
+function renderCurriculumLesson(item) {
+  const id = item.id;
+  const answered = progress.warmupCompleted?.[id] === true || isExerciseDone(id);
+  const complete = isExerciseDone(id);
+  const prediction = progress.exercisePredictions?.[id] || "";
+  const reflection = progress.exerciseReflections?.[id] || "";
+  const drafts = loadCourseDraft(item);
+  const previous = curriculumActivities[curriculumActivities.indexOf(item) - 1];
+  const next = curriculumActivities[curriculumActivities.indexOf(item) + 1];
+  const firstFile = item.starterFiles[0];
+  const starterPreview = item.starterFiles.map((file) => `<div class="course-file-preview"><span>${esc(file.path)}</span><pre><code>${esc(file.content)}</code></pre></div>`).join("");
+  const editors = item.starterFiles.map((file) => `<label class="course-editor-label" for="course-file-${id}-${item.starterFiles.indexOf(file)}"><span>${esc(file.path)}</span><textarea id="course-file-${id}-${item.starterFiles.indexOf(file)}" class="course-editor" data-course-editor="${esc(id)}" data-course-file="${esc(file.path)}" maxlength="${Math.max(80, Math.floor(1100 / item.starterFiles.length))}" spellcheck="false" autocapitalize="off" autocomplete="off">${esc(drafts[file.path] ?? file.content)}</textarea></label>`).join("");
+  const exampleDetails = item.examples?.length ? `<details class="course-reveal"><summary>Conferir exemplos públicos depois da sua tentativa</summary><ul>${item.examples.map((example) => `<li><strong>${esc(example.given || "Exemplo")}</strong><span>${esc(example.expected || "")}</span></li>`).join("")}</ul></details>` : "";
+  const rubricDetails = item.rubric?.length || item.constraints?.length ? `<details class="course-reveal"><summary>Critérios e limites desta atividade</summary>${item.rubric?.length ? `<h3>Como conferir</h3><ul>${item.rubric.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>` : ""}${item.constraints?.length ? `<h3>Restrições</h3><ul>${item.constraints.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>` : ""}</details>` : "";
+  return `<article class="course-lesson"><a class="lesson-back" href="#/catalog">← Todas as etapas</a><header class="course-lesson-hero"><div class="eyebrow">${esc(item.id)} · ETAPA ${esc(item.stage)} · ${esc(item.kind)}${item.optional ? " · ATIVIDADE EXTRA" : ""}</div><h1>${esc(item.title)}<span class="brand-period">.</span></h1><p>${esc(item.firstResponse.action)}</p><div class="course-lesson-meta"><span>${esc(item.duration)}</span><span>Runtime sugerido: ${esc(item.runtime || "JavaScript")}</span><span>${complete ? "✓ concluído" : "em andamento"}</span></div></header><nav class="course-steps" aria-label="Etapas da atividade"><span class="${answered ? "complete" : "active"}">01 · Ler</span><span class="${answered ? "complete" : "active"}">02 · Responder</span><span class="${answered ? "active" : ""}">03 · Entender</span><span class="${complete ? "complete" : ""}">04 · Escrever</span><span class="${complete ? "complete" : ""}">05 · Explicar</span></nav><section class="course-prompt-panel"><div class="course-section-kicker">DESAFIO</div><p class="course-prompt">${esc(item.prompt)}</p><div class="course-interaction-note"><strong>Como responder</strong><p>${esc(item.interaction)}</p></div><div class="course-starter-read"><div class="course-section-kicker">LEIA O ARQUIVO ANTES DE RESPONDER</div>${starterPreview}</div>${answered ? `<div class="course-first-response-saved"><strong>Sua resposta inicial foi registrada</strong><p>${esc(prediction)}</p><span>${esc(item.firstResponse.timing)}</span></div>` : `<label class="course-response-label" for="first-response-${id}"><span>Sua primeira resposta</span><small>${esc(item.firstResponse.timing)}</small><textarea id="first-response-${id}" data-first-response-input="${esc(id)}" maxlength="400" placeholder="Escreva sua previsão, hipótese ou primeira decisão…">${esc(prediction)}</textarea></label><button type="button" class="button-primary" data-course-first-response="${esc(id)}">Registrar resposta e abrir a explicação <span aria-hidden="true">→</span></button>`}</section>${answered ? `<section class="course-explanation-panel"><div class="course-section-kicker">EXPLICAÇÃO GUIADA</div><h2>O modelo mental</h2><p>${esc(item.explanation.mental_model)}</p><h3>Exemplo trabalhado</h3><p>${esc(item.explanation.worked_example)}</p><div class="course-explanation-columns"><div><strong>Armadilha comum</strong><p>${esc(item.explanation.common_trap)}</p></div><div><strong>Por que isso importa</strong><p>${esc(item.explanation.why_it_matters)}</p></div></div>${exampleDetails}${rubricDetails}<div class="course-resources"><h3>Recursos para esta atividade</h3>${renderResources(item.resources)}</div></section><section class="course-practice-panel"><div class="course-section-kicker">SUA VEZ DE ESCREVER</div><h2>Edite o arquivo do exercício</h2><p>Comece pelo código fornecido. Escreva sua tentativa no editor; a página salva o rascunho na sua conta.</p><div class="course-editors">${editors}</div><label class="course-reflection-label" for="course-reflection-${id}"><span>Explique com suas palavras o que você fez ou descobriu</span><textarea id="course-reflection-${id}" data-course-reflection="${esc(id)}" maxlength="600" placeholder="Sua explicação ajuda a consolidar o raciocínio…">${esc(reflection)}</textarea></label><div class="course-complete-row"><span data-course-reflection-count>${reflection.trim().length}/16 caracteres</span><button type="button" class="button-primary" data-course-complete="${esc(id)}" ${complete || reflection.trim().length < 16 ? "disabled" : ""}>${complete ? "Atividade concluída ✓" : "Concluir com minha explicação"}</button></div>${complete ? `<p class="course-complete-note" role="status">Esta atividade foi marcada como concluída. A revisão correspondente entra no intervalo de 7 dias.</p>` : ""}</section><footer class="course-lesson-footer">${previous ? `<a class="button-secondary" href="#/javascript/${previous.id}">← ${esc(previous.id)} · ${esc(previous.title)}</a>` : `<span></span>`}${next ? `<a class="button-secondary" href="#/javascript/${next.id}">${esc(next.id)} · ${esc(next.title)} →</a>` : ""}</footer>` : `<p class="course-gate-note" role="status">A explicação e o editor aparecem depois que você registrar sua primeira resposta.</p>`}</article>`;
 }
 
 function reviewSet() {
-  const activities = window.DevPathStage00UI.activities.filter((item) => isExerciseDone(item.id));
+  const activities = curriculumActivities.filter((item) => isExerciseDone(item.id));
   const due = dueExercises();
   const pool = due.length ? due : activities.slice(0, 1);
   return pool.map((item) => ({ exercise: item, ...item.review, scheduled: due.some((dueItem) => dueItem.id === item.id) }));
+}
+
+function saveCourseDraft(id) {
+  const editors = [...view.querySelectorAll(`[data-course-editor="${id}"]`)];
+  if (!editors.length) return;
+  const files = Object.fromEntries(editors.map((editor) => [editor.dataset.courseFile, editor.value]));
+  const value = editors.length === 1 ? editors[0].value : `__course_files__:${JSON.stringify(files)}`;
+  if (value.length > 2500) { toast("Este rascunho passou do limite salvo para a atividade."); return; }
+  progress.exerciseDrafts ||= {};
+  progress.exerciseDrafts[id] = value;
+}
+
+function scheduleCourseSave() {
+  clearTimeout(courseSaveTimer);
+  courseSaveTimer = setTimeout(() => { courseSaveTimer = null; saveProgress(); }, 500);
+}
+
+function completeCourseExercise(id) {
+  const reflection = view.querySelector(`[data-course-reflection="${id}"]`)?.value.trim() || "";
+  if (reflection.length < 16) { toast("Escreva pelo menos 16 caracteres na explicação final."); return; }
+  saveCourseDraft(id);
+  progress.exerciseReflections ||= {};
+  progress.exerciseReflections[id] = reflection.slice(0, 600);
+  progress.answers ||= {};
+  progress.answers[id] = true;
+  progress.completed ||= [];
+  if (!progress.completed.includes(id)) progress.completed.push(id);
+  progress.attempts ||= {};
+  progress.attempts[id] = Math.min(100000, Number(progress.attempts[id] || 0) + 1);
+  progress.reviewSchedule ||= {};
+  progress.reviewSchedule[id] = { intervalIndex: 0, dueAt: Date.now() + 7 * 24 * 60 * 60 * 1000, lastReviewedAt: new Date().toISOString() };
+  saveProgress();
+  render();
 }
 
 function renderReview() {
@@ -226,6 +330,21 @@ function checkReview(answer) {
 
 view.addEventListener("click", async (event) => {
   if (routeInfo().name === "javascript" && window.DevPathStage00UI.handleClick(event, stageContext())) { event.preventDefault(); return; }
+  const firstResponse = event.target.closest("[data-course-first-response]");
+  if (firstResponse) {
+    const id = firstResponse.dataset.courseFirstResponse;
+    const response = view.querySelector(`[data-first-response-input="${id}"]`)?.value.trim() || "";
+    if (!response) { toast("Registre uma primeira resposta antes de abrir a explicação."); return; }
+    progress.exercisePredictions ||= {};
+    progress.exercisePredictions[id] = response.slice(0, 400);
+    progress.warmupCompleted ||= {};
+    progress.warmupCompleted[id] = true;
+    saveProgress();
+    render();
+    return;
+  }
+  const completeActivity = event.target.closest("[data-course-complete]");
+  if (completeActivity) { completeCourseExercise(completeActivity.dataset.courseComplete); return; }
   const filter = event.target.closest("[data-filter]");
   if (filter) { selectedCatalogFilter = filter.dataset.filter; renderCatalog(); return; }
   const reviewChoice = event.target.closest("[data-review-choice]");
@@ -235,7 +354,23 @@ view.addEventListener("click", async (event) => {
 });
 
 view.addEventListener("input", (event) => {
+  if (event.target.matches("#course-search")) { catalogSearch = event.target.value; updateCatalogResults(); return; }
+  if (event.target.matches("[data-course-editor]")) { saveCourseDraft(event.target.dataset.courseEditor); scheduleCourseSave(); return; }
+  if (event.target.matches("[data-course-reflection]")) {
+    const id = event.target.dataset.courseReflection;
+    progress.exerciseReflections ||= {};
+    progress.exerciseReflections[id] = event.target.value.slice(0, 600);
+    const count = view.querySelector("[data-course-reflection-count]");
+    const button = view.querySelector(`[data-course-complete="${id}"]`);
+    if (count) count.textContent = `${event.target.value.trim().length}/16 caracteres`;
+    if (button) button.disabled = event.target.value.trim().length < 16;
+    scheduleCourseSave();
+    return;
+  }
   if (routeInfo().name === "javascript") window.DevPathStage00UI.handleInput(event, stageContext());
+});
+view.addEventListener("change", (event) => {
+  if (event.target.matches("#stage-filter")) { selectedStageFilter = event.target.value; updateCatalogResults(); }
 });
 for (const eventName of ["dragstart", "dragover", "dragleave", "drop"]) {
   view.addEventListener(eventName, (event) => {
