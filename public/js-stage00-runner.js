@@ -1,7 +1,7 @@
 /*
- * Interpretador pedagógico da etapa 00.
- * Gramática: uma chamada console.log por linha; argumentos string/number ou
- * soma de dois literais numéricos. Não avalia JavaScript nem cria scripts.
+ * Interpretador pedagógico: console.log com literais, typeof restrito,
+ * somas numéricas simples e validação estrutural de HTML em modo separado.
+ * Não avalia JavaScript arbitrário nem executa a marcação submetida.
  * Resultado: {ok:true, lines:[{sourceLine, values}]} ou erro didático por linha.
  */
 (function (global) {
