@@ -110,6 +110,95 @@
         ["VS Code", "ferramenta"], ["npm", "ferramenta"], ["console", "depende"]
       ],
       categories: ["linguagem", "navegador", "ambiente", "ferramenta", "depende"]
+    },
+    {
+      id: "00.06", stage: "00", title: "Caça ao erro inicial", duration: "9 min", focus: "Depurar uma falha por vez",
+      objective: "Encontrar três erros em sequência, corrigir o primeiro que impede a execução e conferir cada ajuste.",
+      explanation: "O interpretador precisa conseguir ler a instrução antes de executá-la. Uma aspa aberta pode impedir a leitura do restante do arquivo. Depois que a sintaxe é corrigida, outros erros podem aparecer; por isso, investigamos uma falha por vez.",
+      vocabulary: ["Sintaxe: regras de escrita que permitem ler o programa.", "Erro de execução: uma instrução válida tenta usar algo que não existe.", "Regressão: executar outra vez depois do ajuste para conferir o resultado."],
+      example: 'console.log("Olá")\nconsole.log("fim")\nconsole.log("ok")',
+      walkthrough: ["As aspas fecham o texto da primeira linha.", "console.log tem o nome correto nas três instruções.", "Com a primeira falha removida, o programa pode chegar às linhas seguintes."],
+      micro: { question: "Qual problema pode impedir o arquivo de ser lido antes de qualquer saída?", choices: ["Uma aspa que não foi fechada", "Uma mensagem curta", "Um número negativo"], answer: 0, feedback: "Uma string sem fechamento deixa a instrução incompleta; corrija isso antes de investigar a próxima linha." },
+      review: { prompt: "Um arquivo mostra SyntaxError na primeira linha. Qual é a melhor próxima ação?", choices: ["Mudar todas as linhas ao mesmo tempo", "Corrigir uma causa provável nessa linha e executar de novo", "Apagar o restante do arquivo"], answer: 1, correctFeedback: "Isso. Uma alteração por vez ajuda a ligar cada correção ao resultado observado.", incorrectFeedback: "Tente preservar o programa e isolar a primeira falha antes de mudar outras linhas." },
+      prompt: "O arquivo tem uma aspa ausente, um nome de método digitado errado e uma chamada inexistente. Corrija um problema por vez e execute após cada mudança.",
+      starter: 'console.log("Olá);\nconsole.lo("fim");\nconsole.logg("ok");', expected: [["Olá"], ["fim"], ["ok"]], sample: 'console.log("Olá")\nconsole.log("fim")\nconsole.log("ok")', minimumEdits: 3,
+      expectedLabel: "três textos curtos, depois de corrigir as falhas sem pular direto para uma solução copiada.",
+      misconception: "A primeira mensagem de erro pode esconder problemas que só ficam visíveis depois da primeira correção.",
+      hints: ["Comece pela mensagem de erro mais antiga; o arquivo pode nem ter sido lido por completo.", "Confira o fechamento das aspas na linha 1 antes de avaliar as chamadas seguintes.", 'Compare com esta forma válida: console.log("A") — depois revise o nome de cada chamada.'],
+      reflectionPrompt: "Qual foi o primeiro erro, o que apareceu depois de corrigi-lo e por que você executou entre os ajustes?",
+      transfer: 'Investigue outro trecho curto como console.log("B) e console.lo("C"). Descreva a primeira falha sem copiar a solução.',
+      prediction: "Antes de executar, qual tipo de erro você espera encontrar primeiro?", baseline: null
+    },
+    {
+      id: "00.07", stage: "00", title: "Calculadora por literais", duration: "7 min", focus: "Somar valores escritos no código",
+      objective: "Prever e completar três somas de literais, incluindo zero e um número negativo.",
+      explanation: "O sinal + soma os dois valores numéricos escritos ao lado dele. Cada console.log mostra o resultado dessa linha. Zero pode participar de uma soma sem mudar o outro valor; um número negativo continua sendo um número.",
+      vocabulary: ["Operador +: soma dois valores numéricos neste exercício.", "Literal: número escrito diretamente no código.", "Precedência: regra sobre qual operador calcular primeiro; ainda não precisamos dela aqui."],
+      example: "console.log(2 + 3)\nconsole.log(0 + 4)\nconsole.log(-1 + 2)",
+      walkthrough: ["2 + 3 resulta em 5.", "Somar zero a 4 mantém o resultado 4.", "-1 + 2 resulta em 1; o sinal negativo faz parte do primeiro número."],
+      micro: { question: "Quanto resulta em 0 + 4?", choices: ["0", "4", "04"], answer: 1, feedback: "Zero não altera o outro valor em uma soma numérica." },
+      review: { prompt: "O que console.log(-3 + 1) mostra?", choices: ["-2", "-4", "31"], answer: 0, correctFeedback: "Correto: partindo de -3 e avançando uma unidade, o resultado é -2.", incorrectFeedback: "Marque os números na reta: -3, -2, -1, 0, 1." },
+      prompt: "Complete os dois espaços e personalize uma das somas. Registre primeiro os três resultados que espera ver.",
+      starter: "console.log(2 + )\nconsole.log(0 + 4)\nconsole.log(-1 + )", expected: [[5], [4], [1]], sample: "console.log(2 + 3)\nconsole.log(0 + 4)\nconsole.log(-1 + 2)",
+      expectedLabel: "5, 4 e 1, na ordem do programa.", misconception: "Sem aspas, esses valores são somas numéricas; o programa não está juntando caracteres.",
+      hints: ["Resolva uma soma de cada vez, sem misturar as linhas.", "A primeira lacuna participa de 2 + 3; a última começa em -1.", "Um exemplo parecido: console.log(-2 + 5) mostra 3."],
+      reflectionPrompt: "Explique como o zero e o sinal negativo aparecem nos resultados das três linhas.",
+      transfer: "Troque 0 + 4 por 0 + 0 e -1 + 2 por -3 + 1; preveja e confira as novas saídas.",
+      prediction: "Escreva os três resultados na ordem antes de executar.", baseline: null
+    },
+    {
+      id: "00.08", stage: "00", title: "HTML ponte zero", duration: "8 min", focus: "Ler e escrever uma estrutura HTML",
+      codeMode: "html", objective: "Identificar form, label, input, button, atributos e relações pai-filho; completar a ligação entre rótulo e campo.",
+      explanation: "HTML descreve a estrutura de uma página. Uma tag indica o tipo de elemento; atributos dão detalhes como id e class. Um label pode apontar para um campo por meio do atributo for, cujo valor precisa corresponder ao id desse input.",
+      vocabulary: ["Tag: marca de abertura ou fechamento de um elemento HTML.", "Atributo: informação escrita na tag, como id ou class.", "Pai e filho: relação entre um elemento que contém outro e o elemento contido."],
+      example: '<form id="entrada">\n  <label for="nome">Nome</label>\n  <input id="nome" class="campo">\n  <button>Enviar</button>\n</form>',
+      walkthrough: ["form contém os três elementos do pequeno formulário.", "label aponta para o campo cujo id é nome.", "input é filho de form, assim como label e button."],
+      micro: { question: "Para qual atributo o valor de label for deve apontar?", choices: ["Para o id do input correspondente", "Para o nome da tag form", "Para a class do botão"], answer: 0, feedback: "O valor de for conecta o rótulo ao id do campo." },
+      review: { prompt: 'Um label tem for="email". Qual input corresponde a ele?', choices: ['O input com id="email"', 'Qualquer input dentro da mesma página', 'O input com class="email"'], answer: 0, correctFeedback: "Isso: for se conecta ao id do controle.", incorrectFeedback: "Compare o atributo for do rótulo com o id do campo; class não faz essa ligação." },
+      prompt: 'Complete a ligação do rótulo: acrescente for="nome" ao label. Mantenha os três elementos como filhos de form; depois execute a conferência estrutural.',
+      starter: '<form id="entrada">\n  <label>Nome</label>\n  <input id="nome" class="campo">\n  <button>Enviar</button>\n</form>', expected: [], sample: '<form id="entrada">\n  <label for="nome">Nome</label>\n  <input id="nome" class="campo">\n  <button>Enviar</button>\n</form>', codeStarterForComparison: '<form id="entrada">\n  <label>Nome</label>\n  <input id="nome" class="campo">\n  <button>Enviar</button>\n</form>',
+      expectedLabel: "um form contendo label, input e button, com for e id ligados pelo valor nome.", misconception: "id e class descrevem elementos, mas o vínculo acessível do label usa for com o id do campo.",
+      hints: ['O rótulo precisa indicar a qual campo seu texto pertence.', "Compare o atributo for do label com o id do input abaixo dele.", 'Exemplo parecido: <label for="cidade">Cidade</label> e <input id="cidade">.'],
+      reflectionPrompt: "Explique como o navegador sabe que o texto Nome pertence àquele input.",
+      transfer: 'Se o campo passar a ter id="email", altere o label correspondente e mantenha-os dentro do mesmo form.',
+      prediction: "Antes de conferir, o que falta para associar Nome ao input?", baseline: null
+    },
+    {
+      id: "00.09", stage: "00", title: "Microprojeto — roteiro de execução", duration: "15 min", focus: "Prever, modificar e explicar a execução",
+      objective: "Modificar um pequeno programa, registrar cada saída e explicar o que muda quando uma instrução é removida.",
+      explanation: "Um roteiro de execução relaciona cada linha do código com o que ela produz. Ao remover uma chamada, a saída daquela linha desaparece; as outras instruções permanecem na sequência original.",
+      vocabulary: ["Roteiro de execução: registro linha a linha do que o programa faz.", "Efeito: mudança observável depois de editar ou remover uma linha.", "Evidência: saída que ajuda a justificar sua explicação."],
+      example: 'console.log("abrir")\nconsole.log(1 + 2)\nconsole.log("fechar")',
+      walkthrough: ["A primeira linha mostra abrir.", "A segunda calcula 1 + 2 e mostra 3.", "A última linha mostra fechar; remover a linha numérica não apaga as outras duas."],
+      micro: { question: "Se a linha do cálculo for removida, o que ainda aparece?", choices: ["abrir e fechar", "Somente 3", "Nada"], answer: 0, feedback: "As chamadas restantes continuam sendo executadas na sua ordem." },
+      review: { prompt: 'Em console.log("abrir"), console.log(1 + 2), console.log("fechar"), o que aparece se a segunda linha for removida?', choices: ["abrir e fechar, nessa ordem", "abrir, 3 e fechar", "Somente fechar"], answer: 0, correctFeedback: "Correto: remover uma linha elimina sua saída e preserva as outras.", incorrectFeedback: "Rastreie apenas as chamadas que ainda existem depois da remoção." },
+      prompt: "Preveja as três saídas. Depois mude a soma para obter 8, execute e anote o que a remoção da linha numérica faria.",
+      starter: 'console.log("abrir")\nconsole.log(1 + 2)\nconsole.log("fechar")', expected: [["abrir"], [8], ["fechar"]], sample: 'console.log("abrir")\nconsole.log(3 + 5)\nconsole.log("fechar")', baseline: [["abrir"], [3], ["fechar"]],
+      expectedLabel: "abrir, 8 e fechar; sem a linha do cálculo, ainda aparecem abrir e fechar.", misconception: "Editar uma chamada muda sua saída; remover a chamada não altera as demais linhas.",
+      hints: ["Siga cada chamada de cima para baixo e registre uma saída por linha.", "A alteração pedida está apenas na expressão numérica do meio.", "Uma soma semelhante, 6 + 2, resulta em 8; teste-a no editor."],
+      reflectionPrompt: "Qual linha mudou, quais saídas permaneceram e o que sumiria ao remover o cálculo?",
+      transfer: 'Troque a mensagem abrir por "preparar" e simule mentalmente a remoção da última chamada.',
+      prediction: "Escreva as três saídas esperadas e indique qual delas sumiria se a linha 2 fosse removida.", baseline: [["abrir"], [3], ["fechar"]]
+    },
+    {
+      id: "01.01", stage: "01", title: "Classifique os valores", duration: "8 min", focus: "Tipos e operador typeof",
+      objective: "Prever e executar typeof em dez valores, distinguindo tipos conceituais e resultados observados.",
+      explanation: "Valores diferentes têm tipos diferentes. O operador typeof pergunta ao JavaScript qual tipo está associado a um valor e devolve essa resposta como texto. Algumas respostas históricas surpreendem: typeof null resulta em \"object\", embora null represente a ausência intencional de um valor de objeto.",
+      vocabulary: ["Tipo: categoria de um valor, como string, number ou boolean.", "typeof: operador que devolve o nome do tipo como uma string.", "NaN: valor numérico especial; typeof NaN resulta em \"number\"."],
+      example: 'console.log(typeof "trilha")\nconsole.log(typeof 42)\nconsole.log(typeof null)',
+      walkthrough: ["O texto entre aspas tem tipo string.", "42 tem tipo number.", "typeof null devolve object por uma peculiaridade histórica da linguagem."],
+      micro: { question: "Qual texto typeof 8 devolve?", choices: ['"number"', '"string"', '"undefined"'], answer: 0, feedback: "O valor é numérico; o resultado do typeof é o texto number." },
+      review: { prompt: "Qual é o resultado de typeof null?", choices: ['"null"', '"object"', '"undefined"'], answer: 1, correctFeedback: "Isso: typeof null devolve object, um comportamento histórico que vale reconhecer.", incorrectFeedback: "A resposta observada é object. null e undefined continuam sendo valores diferentes." },
+      prompt: "Confira as dez previsões e personalize pelo menos três literais sem mudar os tipos esperados. Execute para comparar previsões e resultados.",
+      starter: 'console.log(typeof "JS")\nconsole.log(typeof 42)\nconsole.log(typeof true)\nconsole.log(typeof false)\nconsole.log(typeof null)\nconsole.log(typeof undefined)\nconsole.log(typeof NaN)\nconsole.log(typeof 3.14)\nconsole.log(typeof `trilha`)\nconsole.log(typeof "")',
+      expected: [["string"], ["number"], ["boolean"], ["boolean"], ["object"], ["undefined"], ["number"], ["number"], ["string"], ["string"]],
+      sample: 'console.log(typeof "DevPath")\nconsole.log(typeof 21)\nconsole.log(typeof true)\nconsole.log(typeof false)\nconsole.log(typeof null)\nconsole.log(typeof undefined)\nconsole.log(typeof NaN)\nconsole.log(typeof 9.5)\nconsole.log(typeof `aprendizado`)\nconsole.log(typeof "")', minimumEdits: 3,
+      expectedLabel: "string, number, boolean, boolean, object, undefined, number, number, string e string.",
+      misconception: "O tipo conceitual de null é ausência intencional; a resposta específica de typeof null é object.",
+      hints: ["typeof devolve o nome do tipo como texto; faça uma previsão antes de executar.", "Compare cada valor na chamada typeof, especialmente null, undefined e NaN.", 'Exemplo parecido: console.log(typeof `exemplo`) mostra string.'],
+      reflectionPrompt: "Compare sua previsão com a saída e explique a peculiaridade observada em typeof null.",
+      transfer: "Troque um número inteiro por outro número e um texto por outro texto; observe o que muda e o que permanece no typeof.",
+      prediction: "Anote os tipos esperados para null, undefined e NaN, nessa ordem.", baseline: null
     }
   ];
 
@@ -125,7 +214,13 @@
   function done(progress, id) { return progress.answers?.[id] === true; }
   function renderOverview(progress) {
     const completed = activities.filter((item) => done(progress, item.id)).length;
-    return `<section class="js00-overview"><div class="eyebrow">JAVASCRIPT · ETAPA 00</div><h1>Aprenda escrevendo<span class="brand-period">.</span></h1><p class="js00-lead">Cinco primeiros exercícios: entenda a ideia, veja um exemplo, confira seu raciocínio e escreva código em cada etapa.</p><div class="js00-progress" aria-label="Progresso da etapa"><span style="width:${completed / activities.length * 100}%"></span></div><p class="js00-progress-caption">${completed} de ${activities.length} exercícios concluídos · interpretador introdutório, sem execução geral de JavaScript.</p><div class="js00-card-grid">${activities.map((item, index) => `<article class="js00-card ${done(progress, item.id) ? "is-done" : ""}"><div class="js00-card-top"><span>${esc(item.id)}</span><span>${done(progress, item.id) ? "✓ concluído" : esc(item.duration)}</span></div><div class="js00-card-orbit" aria-hidden="true"><span>${["{ }", "↻", "⇅", '0 ""', "JS"] [index]}</span></div><h2>${esc(item.title)}</h2><p>${esc(item.objective)}</p><a class="button-primary" href="#/javascript/${item.id}">${done(progress, item.id) ? "Revisitar" : "Aprender e praticar"}<span aria-hidden="true">→</span></a></article>`).join("")}</div><aside class="js00-runtime-note"><strong>O que você vai executar</strong><p>Um interpretador pequeno para as chamadas console.log ensinadas aqui. Ele não executa JavaScript arbitrário e não substitui navegador ou Node.js.</p></aside></section>`;
+    const stages = [...new Set(activities.map((item) => item.stage || item.id.slice(0, 2)))];
+    const cards = stages.map((stage) => {
+      const items = activities.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
+      const stageDone = items.filter((item) => done(progress, item.id)).length;
+      return `<section class="js00-stage-group" aria-labelledby="stage-${stage}"><div class="js00-stage-heading"><div><div class="eyebrow">JAVASCRIPT · SEQUÊNCIA CURRICULAR</div><h2 id="stage-${stage}">Etapa ${stage}</h2></div><span>${stageDone} / ${items.length} concluídos</span></div><div class="js00-card-grid">${items.map((item, index) => `<article class="js00-card ${done(progress, item.id) ? "is-done" : ""}"><div class="js00-card-top"><span>${esc(item.id)}</span><span>${done(progress, item.id) ? "✓ concluído" : esc(item.duration)}</span></div><div class="js00-card-orbit" aria-hidden="true"><span>${["{ }", "↻", "⇅", '0 ""', "JS", "!", "+", "<>", "→", "typeof"][activities.indexOf(item)]}</span></div><h3>${esc(item.title)}</h3><p>${esc(item.objective)}</p><a class="button-primary" href="#/javascript/${item.id}">${done(progress, item.id) ? "Revisitar" : "Aprender e praticar"}<span aria-hidden="true">→</span></a></article>`).join("")}</div></section>`;
+    }).join("");
+    return `<section class="js00-overview"><div class="eyebrow">JAVASCRIPT · EXERCÍCIOS</div><h1>Aprenda escrevendo<span class="brand-period">.</span></h1><p class="js00-lead">Aqueça com um exemplo, confira seu raciocínio, preveja a saída e escreva código antes de executar.</p><div class="js00-progress" aria-label="Progresso geral dos exercícios"><span style="width:${completed / activities.length * 100}%"></span></div><p class="js00-progress-caption">${completed} de ${activities.length} exercícios concluídos · uma revisão vinculada a cada atividade.</p>${cards}<aside class="js00-runtime-note"><strong>O que você vai executar</strong><p>O ambiente didático valida apenas as construções ensinadas em cada atividade. Ele não executa JavaScript arbitrário nem substitui navegador ou Node.js.</p></aside></section>`;
   }
 
   function renderExercise(id, progress) {
@@ -140,6 +235,7 @@
     const micro = item.micro;
     const isRebuild = item.id === "00.03";
     const isMap = item.id === "00.05";
+    const isHtml = item.codeMode === "html";
     const visual = isRebuild ? `<section class="js00-card-work" aria-labelledby="blocks-heading"><div class="js00-section-kicker">04 · INTERAÇÃO</div><h2 id="blocks-heading">Monte a rotina</h2><p>Reordene os cartões úteis. Arraste com o mouse ou use os botões para teclado.</p><ol class="js00-block-list" data-block-list>${item.blocks.map((block, index) => `<li class="js00-block" draggable="true" data-block-index="${index}" data-correct="${block.correct}" data-code="${esc(block.text)}"><span class="js00-block-grip" aria-hidden="true">⠿</span><span>${esc(block.label)}</span><span><button type="button" data-move="up" aria-label="Mover ${esc(block.label)} para cima">↑</button><button type="button" data-move="down" aria-label="Mover ${esc(block.label)} para baixo">↓</button></span></li>`).join("")}</ol><button type="button" class="button-secondary" data-sync-blocks>Levar blocos úteis ao editor</button><p class="js00-feedback" data-block-feedback aria-live="polite">O cartão Pausar é um distrator e deve ficar de fora.</p></section>` : isMap ? `<section class="js00-card-work"><div class="js00-section-kicker">04 · CLASSIFICAÇÃO</div><h2>Organize os 12 cartões</h2><p>Escolha uma categoria em cada cartão. Para fetch e console, considere o runtime e registre “depende”.</p><div class="js00-vocab-grid">${item.cards.map(([label], index) => `<label class="js00-vocab-card"><span>${esc(label)}</span><select data-vocab="${index}" aria-label="Categoria de ${esc(label)}"><option value="">Escolher</option>${item.categories.map((category) => `<option value="${esc(category)}">${esc(category)}</option>`).join("")}</select></label>`).join("")}</div><button type="button" class="button-secondary" data-check-map>Conferir os cartões</button><p class="js00-feedback" data-map-feedback aria-live="polite"></p></section>` : "";
 
     return `<article class="js00-exercise"><a class="lesson-back" href="#/javascript">← Visão geral da etapa</a><header class="js00-hero"><div class="eyebrow">${esc(item.id)} · ${esc(item.focus)}</div><h1>${esc(item.title)}<span class="brand-period">.</span></h1><p>${esc(item.objective)}</p><div class="js00-hero-meta"><span>${esc(item.duration)}</span><span>${done(progress, id) ? "✓ concluído" : "em andamento"}</span><span>rascunho salvo automaticamente</span></div></header>
@@ -149,8 +245,8 @@
       <section class="js00-micro"><div class="js00-section-kicker">02 · CONFERIR ENTENDIMENTO</div><h2>Uma pergunta rápida</h2><p>${esc(micro.question)}</p><div class="js00-choice-list" role="group" aria-label="Resposta rápida">${micro.choices.map((choice, index) => `<button type="button" class="js00-choice" data-micro-choice="${index}" aria-pressed="${warmupPassed && index === micro.answer}" ${!warmupPassed ? "disabled" : ""}>${String.fromCharCode(65 + index)} · ${esc(choice)}</button>`).join("")}</div><p class="js00-feedback" data-micro-feedback aria-live="polite">${warmupPassed ? `Aquecimento concluído. ${esc(micro.feedback)}` : "A pergunta será liberada depois da demonstração."}</p></section>
       <p class="js00-practice-gate" data-practice-gate role="status" ${warmupPassed ? "hidden" : ""}>Responda corretamente para começar a prática.</p>
       <div class="js00-practice-unlocked" data-practice-unlocked ${warmupPassed ? "" : "hidden"}>${visual}
-      <section class="js00-practice"><div class="js00-section-kicker">${isMap ? "05" : isRebuild ? "05" : "04"} · SUA VEZ DE ESCREVER</div><h2>Você no teclado</h2><p>${esc(item.prompt)}</p><label class="js00-prediction">${esc(item.prediction)}<input data-prediction="${esc(id)}" type="text" maxlength="120" placeholder="Registre sua previsão antes de executar" value="${esc(prediction)}" /></label><label class="js00-code-label" for="editor-${esc(id)}">Editor de código · até 600 caracteres</label><textarea id="editor-${esc(id)}" class="js00-editor" data-stage-editor="${esc(id)}" maxlength="600" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="syntax-${esc(id)}">${esc(code)}</textarea><div id="syntax-${esc(id)}" class="js00-syntax-note">Use uma chamada console.log(...) por linha. Aceitos: strings, números e soma de dois literais numéricos.</div><div class="js00-run-row"><button type="button" class="button-primary" data-run="${esc(id)}">Executar meu código <span aria-hidden="true">▶</span></button><button type="button" class="button-secondary" data-hint="${esc(id)}">Preciso de uma dica</button><span class="js00-attempts">${Number(progress.attempts?.[id] || 0)} execuções</span></div><p class="js00-feedback js00-run-feedback" data-run-feedback aria-live="polite"></p><div class="js00-result" data-result hidden aria-live="polite"></div><div class="js00-reflection" data-reflection hidden><strong>Agora, explique o que aconteceu.</strong><p>Compare sua previsão com a saída. ${esc(item.reflectionPrompt)}</p><label class="js00-code-label" for="reflection-${esc(id)}">Sua explicação · pelo menos 16 caracteres</label><textarea id="reflection-${esc(id)}" data-reflection-input="${esc(id)}" maxlength="300" placeholder="Escreva com suas palavras…">${esc(reflection)}</textarea><div class="js00-reflection-footer"><span data-reflection-count>${reflection.trim().length}/16 caracteres</span><button type="button" class="button-primary" data-submit-reflection="${esc(id)}" ${reflection.trim().length < 16 ? "disabled" : ""}>Concluir com minha explicação</button></div><p class="js00-feedback" data-reflection-feedback aria-live="polite"></p></div><div class="js00-hint" data-hint-panel hidden aria-live="polite"></div><div class="js00-transfer" data-transfer hidden><strong>Leve a ideia para outro contexto</strong><p>${esc(item.transfer)}</p></div></section>
-      <aside class="js00-misconception"><strong>Uma confusão comum</strong><p>${esc(item.misconception)}</p></aside><footer class="js00-footer"><a class="text-link" href="#/javascript">Voltar aos cinco exercícios</a>${activities[activities.indexOf(item) + 1] ? `<a class="button-secondary" href="#/javascript/${activities[activities.indexOf(item) + 1].id}">Próximo exercício →</a>` : ""}</footer></div></article>`;
+      <section class="js00-practice"><div class="js00-section-kicker">${isMap || isRebuild ? "05" : "04"} · SUA VEZ DE ESCREVER</div><h2>Você no teclado</h2><p>${esc(item.prompt)}</p><label class="js00-prediction">${esc(item.prediction)}<input data-prediction="${esc(id)}" type="text" maxlength="120" placeholder="Registre sua previsão antes de executar" value="${esc(prediction)}" /></label><label class="js00-code-label" for="editor-${esc(id)}">${isHtml ? "Editor de HTML" : "Editor de código"} · até 600 caracteres</label><textarea id="editor-${esc(id)}" class="js00-editor" data-stage-editor="${esc(id)}" maxlength="600" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="syntax-${esc(id)}">${esc(code)}</textarea><div id="syntax-${esc(id)}" class="js00-syntax-note">${isHtml ? "Tags aceitas nesta prática: form, label, input e button; atributos: id, for e class." : item.id === "01.01" ? "Use console.log(typeof valor) com os literais apresentados; sem variáveis ou execução geral de JavaScript." : "Use uma chamada console.log(...) por linha. Aceitos: strings, números, typeof dos valores ensinados e somas simples."}</div><div class="js00-run-row"><button type="button" class="button-primary" data-run="${esc(id)}">${isHtml ? "Conferir estrutura" : "Executar meu código"} <span aria-hidden="true">▶</span></button><button type="button" class="button-secondary" data-hint="${esc(id)}">Preciso de uma dica</button><span class="js00-attempts">${Number(progress.attempts?.[id] || 0)} ${Number(progress.attempts?.[id] || 0) === 1 ? "execução" : "execuções"}</span></div><p class="js00-feedback js00-run-feedback" data-run-feedback aria-live="polite"></p><div class="js00-result" data-result hidden aria-live="polite"></div><div class="js00-reflection" data-reflection hidden><strong>Agora, explique o que aconteceu.</strong><p>Compare sua previsão com a saída. ${esc(item.reflectionPrompt)}</p><label class="js00-code-label" for="reflection-${esc(id)}">Sua explicação · pelo menos 16 caracteres</label><textarea id="reflection-${esc(id)}" data-reflection-input="${esc(id)}" maxlength="300" placeholder="Escreva com suas palavras…">${esc(reflection)}</textarea><div class="js00-reflection-footer"><span data-reflection-count>${reflection.trim().length}/16 caracteres</span><button type="button" class="button-primary" data-submit-reflection="${esc(id)}" ${reflection.trim().length < 16 ? "disabled" : ""}>Concluir com minha explicação</button></div><p class="js00-feedback" data-reflection-feedback aria-live="polite"></p></div><div class="js00-hint" data-hint-panel hidden aria-live="polite"></div><div class="js00-transfer" data-transfer hidden><strong>Leve a ideia para outro contexto</strong><p>${esc(item.transfer)}</p></div></section>
+      <aside class="js00-misconception"><strong>Uma confusão comum</strong><p>${esc(item.misconception)}</p></aside><footer class="js00-footer"><a class="text-link" href="#/javascript">Voltar à visão geral</a>${activities[activities.indexOf(item) + 1] ? `<a class="button-secondary" href="#/javascript/${activities[activities.indexOf(item) + 1].id}">Próximo exercício →</a>` : ""}</footer></div></article>`;
   }
 
   function saveField(context, bucket, id, value, maximum) {
@@ -359,7 +455,7 @@
     activateStep(root, 4);
     root.dataset.latestRunCorrect = "false";
     const code = editor.value.slice(0, 600);
-    const parsed = global.DevPathStage00Runner.interpret(code);
+    const parsed = global.DevPathStage00Runner.interpret(code, item.codeMode || "javascript");
     const attempt = (Number(context.progress.attempts?.[item.id]) || 0) + 1;
     context.progress.attempts ||= {};
     context.progress.attempts[item.id] = attempt;
@@ -377,7 +473,7 @@
     }
 
     const outputs = parsed.lines.map((line) => line.values);
-    const outputHead = document.createElement("strong"); outputHead.textContent = "Saída do seu programa"; resultBox.append(outputHead);
+    const outputHead = document.createElement("strong"); outputHead.textContent = item.codeMode === "html" ? "Estrutura reconhecida" : "Saída do seu programa"; resultBox.append(outputHead);
     const token = ++runToken;
     for (let index = 0; index < outputs.length; index += 1) {
       if (token !== runToken) return;
@@ -415,7 +511,14 @@
     const cardsCorrect = item.id === "00.05"
       ? vocab.length === 12 && vocab.every((select) => select.value === item.cards[Number(select.dataset.vocab)][1])
       : true;
-    let codeCorrect = JSON.stringify(outputs) === JSON.stringify(item.expected);
+    let codeCorrect = item.codeMode === "html" ? parsed.validation?.complete === true : JSON.stringify(outputs) === JSON.stringify(item.expected);
+    if (item.minimumEdits) {
+      const initial = String(item.starter || "").split(/\r?\n/);
+      const current = code.split(/\r?\n/);
+      const changedLines = Math.max(initial.length, current.length);
+      const edits = Array.from({ length: changedLines }, (_, index) => initial[index] !== current[index]).filter(Boolean).length;
+      codeCorrect = codeCorrect && edits >= item.minimumEdits;
+    }
     if (item.id === "00.01") codeCorrect = outputs.length === 3 && typeof outputs[0]?.[0] === "string" && outputs[0][0].trim().length > 0 && JSON.stringify(outputs.slice(1)) === JSON.stringify([[10], ["Até a próxima!"]]);
     if (item.id === "00.03") codeCorrect = outputs.length === 3 && JSON.stringify(outputs.slice(0, 2)) === JSON.stringify([["Acordar"], ["Estudar"]]) && typeof outputs[2]?.[0] === "string" && outputs[2][0].trim().length > 0 && outputs[2][0].trim() !== "Praticar";
     const exact = codeCorrect && blocksInOrder && cardsCorrect;
@@ -435,7 +538,11 @@
       context.saveProgress();
     } else {
       const wasComplete = context.progress.answers?.[item.id] === true;
-      feedback.textContent = `Compare a saída exibida com o objetivo (${item.expectedLabel}). Revise a primeira chamada diferente e tente novamente.${predictionFeedback}`;
+      const structuralNote = parsed.validation?.issues?.length ? ` ${parsed.validation.issues.join(" ")}` : "";
+      const editNote = item.minimumEdits ? ` Personalize pelo menos ${item.minimumEdits} linhas em relação ao modelo e preserve os tipos esperados.` : "";
+      feedback.textContent = item.codeMode === "html" || structuralNote
+        ? `A estrutura ainda precisa de ajustes.${structuralNote}${predictionFeedback}`
+        : `Compare a saída exibida com o objetivo (${item.expectedLabel}). Revise a primeira chamada diferente e tente novamente.${editNote}${predictionFeedback}`;
       feedback.classList.add("error");
       if (!wasComplete) context.progress.answers[item.id] = false;
     }

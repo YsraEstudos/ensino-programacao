@@ -3,8 +3,8 @@ import { getChatGPTUser } from "../../chatgpt-auth";
 
 export const dynamic = "force-dynamic";
 
-const slugs = new Set(["web", "html", "css", "00.01", "00.02", "00.03", "00.04", "00.05"]);
-const exerciseIds = new Set(["00.01", "00.02", "00.03", "00.04", "00.05"]);
+const exerciseIds = new Set(["00.01", "00.02", "00.03", "00.04", "00.05", "00.06", "00.07", "00.08", "00.09", "01.01"]);
+const slugs = new Set(["web", "html", "css", ...exerciseIds]);
 type UserProgress = {
   completed: string[];
   answers: Record<string, boolean>;
