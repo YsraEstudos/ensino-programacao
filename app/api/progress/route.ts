@@ -3,12 +3,17 @@ import { getChatGPTUser } from "../../chatgpt-auth";
 
 export const dynamic = "force-dynamic";
 
-const slugs = new Set(["web", "html", "css"]);
+const slugs = new Set(["web", "html", "css", "00.01", "00.02", "00.03", "00.04", "00.05"]);
+const exerciseIds = new Set(["00.01", "00.02", "00.03", "00.04", "00.05"]);
 type UserProgress = {
   completed: string[];
   answers: Record<string, boolean>;
   attempts: Record<string, number>;
   challenges: Record<string, { text: string; submittedAt: string }>;
+  exerciseDrafts: Record<string, string>;
+  exercisePredictions: Record<string, string>;
+  exerciseReflections: Record<string, string>;
+  warmupCompleted: Record<string, boolean>;
   reviewSchedule: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }>;
   lastLesson: string | null;
   activeDays: string[];
@@ -17,7 +22,8 @@ type UserProgress = {
 };
 
 const emptyProgress: UserProgress = {
-  completed: [], answers: {}, attempts: {}, challenges: {}, reviewSchedule: {},
+  completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {},
+  exercisePredictions: {}, exerciseReflections: {}, warmupCompleted: {}, reviewSchedule: {},
   lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null,
 };
 
@@ -35,10 +41,18 @@ function sanitize(value: unknown): UserProgress {
   const answers = record(input.answers);
   const attempts = record(input.attempts);
   const challenges = record(input.challenges);
+  const drafts = record(input.exerciseDrafts);
+  const predictions = record(input.exercisePredictions);
+  const reflections = record(input.exerciseReflections);
+  const warmups = record(input.warmupCompleted);
   const schedules = record(input.reviewSchedule);
   const cleanAnswers: Record<string, boolean> = {};
   const cleanAttempts: Record<string, number> = {};
   const cleanChallenges: Record<string, { text: string; submittedAt: string }> = {};
+  const cleanDrafts: Record<string, string> = {};
+  const cleanPredictions: Record<string, string> = {};
+  const cleanReflections: Record<string, string> = {};
+  const cleanWarmups: Record<string, boolean> = {};
   const cleanSchedules: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }> = {};
 
   for (const slug of slugs) {
@@ -61,11 +75,22 @@ function sanitize(value: unknown): UserProgress {
     }
   }
 
+  for (const id of exerciseIds) {
+    if (typeof drafts[id] === "string") cleanDrafts[id] = (drafts[id] as string).slice(0, 600);
+    if (typeof predictions[id] === "string") cleanPredictions[id] = (predictions[id] as string).slice(0, 120);
+    if (typeof reflections[id] === "string") cleanReflections[id] = (reflections[id] as string).slice(0, 300);
+    if (typeof warmups[id] === "boolean") cleanWarmups[id] = warmups[id] as boolean;
+  }
+
   return {
     completed: Array.isArray(input.completed) ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [],
     answers: cleanAnswers,
     attempts: cleanAttempts,
     challenges: cleanChallenges,
+    exerciseDrafts: cleanDrafts,
+    exercisePredictions: cleanPredictions,
+    exerciseReflections: cleanReflections,
+    warmupCompleted: cleanWarmups,
     reviewSchedule: cleanSchedules,
     lastLesson: typeof input.lastLesson === "string" && slugs.has(input.lastLesson) ? input.lastLesson : null,
     activeDays: Array.isArray(input.activeDays) ? [...new Set(input.activeDays.map(validDate).filter((day): day is string => Boolean(day)))].slice(-30) : [],
