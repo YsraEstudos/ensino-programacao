@@ -397,6 +397,24 @@ body { background: var(--paper); color: var(--ink); }
 .toast { color: #f2f5e9; border-color: #475643; background: #2f3b30; }
 .button-primary:disabled { color: #9a9d91; background: #34362f; }
 
+.course-runner, .course-rubric-checks { margin-top: 17px; padding: 16px; border: 1px solid #3a4030; border-radius: 7px; background: #191b16; }
+.course-runner-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; color: #e1e8d1; font-size: 11px; }
+.course-runner-heading span { color: #a6ad96; font: 9px var(--mono); }
+.course-runner > p, .course-rubric-checks > p { margin: 8px 0 12px; color: #aeb3a4; font-size: 10px; line-height: 1.7; }
+.course-runner .button-secondary { min-height: 35px; padding: 0 12px; font-size: 9px; }
+.course-run-output { min-height: 44px; max-height: 180px; overflow: auto; margin-top: 11px; padding: 11px; border: 1px solid #34372f; border-radius: 5px; color: #d4dfc1; background: #11120f; font: 10px/1.65 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.course-rubric-checks { display: grid; gap: 9px; }
+.course-rubric-checks legend { padding: 0 5px; color: #d8e7b0; font-size: 11px; font-weight: 700; }
+.course-self-check { display: flex; align-items: flex-start; gap: 9px; color: #d2d6c8; font-size: 10px; line-height: 1.6; cursor: pointer; }
+.course-self-check input { flex: 0 0 auto; width: 16px; height: 16px; margin: 1px 0 0; accent-color: #b3ce67; }
+.course-runner button:focus-visible, .course-self-check input:focus-visible { outline: 3px solid #91aa50; outline-offset: 3px; }
+.course-stage-bridge { margin: 13px 0; padding: 21px 24px; border: 1px solid #48513a; border-radius: 9px; background: #20231b; }
+.course-stage-bridge h2 { margin: 8px 0; color: #e5eccf; font-size: 18px; }
+.course-stage-bridge .course-bridge-intro { color: #aeb5a0; font-size: 10px; line-height: 1.65; }
+.course-bridge-copy { display: grid; gap: 10px; margin-top: 14px; }
+.course-bridge-copy p { margin: 0; color: #d1d5c7; font-size: 11px; line-height: 1.85; white-space: pre-wrap; }
+.course-bridge-copy code { padding: 1px 4px; border-radius: 3px; color: #e2ebb9; background: #151711; font: 10px var(--mono); }
+
 @media (max-width: 850px) {
   .sidebar { background: #171814f2; border-top-color: var(--line); }
   .primary-nav a:hover, .primary-nav a.active { background: #252720; }

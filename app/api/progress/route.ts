@@ -9,11 +9,13 @@ const slugs = new Set(["web", "html", "css", ...exerciseIds]);
 type UserProgress = {
   completed: string[];
   answers: Record<string, boolean>;
+  exerciseVersions: Record<string, number>;
   attempts: Record<string, number>;
   challenges: Record<string, { text: string; submittedAt: string }>;
   exerciseDrafts: Record<string, string>;
   exercisePredictions: Record<string, string>;
   exerciseReflections: Record<string, string>;
+  exerciseEvidence: Record<string, { status: "executed" | "written"; runResult: "result" | "error" | "timeout" | "guided"; output: string; rubric: number[]; runCount: number; recordedAt?: string }>;
   warmupCompleted: Record<string, boolean>;
   reviewSchedule: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }>;
   lastLesson: string | null;
@@ -24,7 +26,7 @@ type UserProgress = {
 
 const emptyProgress: UserProgress = {
   completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {},
-  exercisePredictions: {}, exerciseReflections: {}, warmupCompleted: {}, reviewSchedule: {},
+  exerciseVersions: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {},
   lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null,
 };
 
@@ -37,22 +39,32 @@ function validDate(value: unknown): string | null {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
 }
 
+function isExerciseDataKey(value: string): boolean {
+  if (exerciseIds.has(value)) return true;
+  const versioned = /^(.+)@v([1-9]\d{0,2})$/.exec(value);
+  return Boolean(versioned && exerciseIds.has(versioned[1]));
+}
+
 function sanitize(value: unknown): UserProgress {
   const input = record(value);
   const answers = record(input.answers);
+  const versions = record(input.exerciseVersions);
   const attempts = record(input.attempts);
   const challenges = record(input.challenges);
   const drafts = record(input.exerciseDrafts);
   const predictions = record(input.exercisePredictions);
   const reflections = record(input.exerciseReflections);
+  const evidence = record(input.exerciseEvidence);
   const warmups = record(input.warmupCompleted);
   const schedules = record(input.reviewSchedule);
   const cleanAnswers: Record<string, boolean> = {};
+  const cleanVersions: Record<string, number> = {};
   const cleanAttempts: Record<string, number> = {};
   const cleanChallenges: Record<string, { text: string; submittedAt: string }> = {};
   const cleanDrafts: Record<string, string> = {};
   const cleanPredictions: Record<string, string> = {};
   const cleanReflections: Record<string, string> = {};
+  const cleanEvidence: UserProgress["exerciseEvidence"] = {};
   const cleanWarmups: Record<string, boolean> = {};
   const cleanSchedules: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }> = {};
 
@@ -77,20 +89,45 @@ function sanitize(value: unknown): UserProgress {
   }
 
   for (const id of exerciseIds) {
+    if (typeof versions[id] === "number" && Number.isInteger(versions[id]) && versions[id] >= 1 && versions[id] <= 1000) cleanVersions[id] = versions[id];
+  }
+
+  const exerciseDataKeys = new Set([
+    ...exerciseIds,
+    ...Object.keys(drafts).filter(isExerciseDataKey),
+    ...Object.keys(predictions).filter(isExerciseDataKey),
+    ...Object.keys(reflections).filter(isExerciseDataKey),
+    ...Object.keys(evidence).filter(isExerciseDataKey),
+    ...Object.keys(warmups).filter(isExerciseDataKey),
+  ]);
+  for (const id of exerciseDataKeys) {
     if (typeof drafts[id] === "string") cleanDrafts[id] = (drafts[id] as string).slice(0, 2500);
     if (typeof predictions[id] === "string") cleanPredictions[id] = (predictions[id] as string).slice(0, 400);
     if (typeof reflections[id] === "string") cleanReflections[id] = (reflections[id] as string).slice(0, 600);
+    const itemEvidence = record(evidence[id]);
+    if ((itemEvidence.status === "executed" || itemEvidence.status === "written") && ["result", "error", "timeout", "guided"].includes(String(itemEvidence.runResult))) {
+      cleanEvidence[id] = {
+        status: itemEvidence.status,
+        runResult: itemEvidence.runResult as UserProgress["exerciseEvidence"][string]["runResult"],
+        output: typeof itemEvidence.output === "string" ? itemEvidence.output.slice(0, 9000) : "",
+        rubric: Array.isArray(itemEvidence.rubric) ? [...new Set(itemEvidence.rubric.filter((index): index is number => Number.isInteger(index) && index >= 0 && index < 20))].slice(0, 20) : [],
+        runCount: typeof itemEvidence.runCount === "number" && Number.isInteger(itemEvidence.runCount) ? Math.max(0, Math.min(100000, itemEvidence.runCount)) : 0,
+        ...(typeof itemEvidence.recordedAt === "string" && !Number.isNaN(Date.parse(itemEvidence.recordedAt)) ? { recordedAt: itemEvidence.recordedAt } : {}),
+      };
+    }
     if (typeof warmups[id] === "boolean") cleanWarmups[id] = warmups[id] as boolean;
   }
 
   return {
     completed: Array.isArray(input.completed) ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [],
     answers: cleanAnswers,
+    exerciseVersions: cleanVersions,
     attempts: cleanAttempts,
     challenges: cleanChallenges,
     exerciseDrafts: cleanDrafts,
     exercisePredictions: cleanPredictions,
     exerciseReflections: cleanReflections,
+    exerciseEvidence: cleanEvidence,
     warmupCompleted: cleanWarmups,
     reviewSchedule: cleanSchedules,
     lastLesson: typeof input.lastLesson === "string" && slugs.has(input.lastLesson) ? input.lastLesson : null,

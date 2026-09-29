@@ -1,4 +1,4 @@
-const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, warmupCompleted: {}, reviewSchedule: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
+const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseVersions: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
 let progress = blankProgress();
 let curriculumActivities = window.DevPathStage00UI.activities;
 let saveQueue = Promise.resolve();
@@ -98,12 +98,21 @@ function routeInfo() {
   return { name: "home" };
 }
 
-function isExerciseDone(id) { return progress.answers?.[id] === true; }
-function doneCount() { return curriculumActivities.filter((item) => isExerciseDone(item.id)).length; }
-function percentDone() { return Math.round(doneCount() / curriculumActivities.length * 100); }
-function dueExercises() { return curriculumActivities.filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
+function exerciseProgressKey(item) {
+  if (!item) return "";
+  return Number(item.contentVersion || 1) > 1 ? `${item.id}@v${item.contentVersion}` : item.id;
+}
+function isExerciseDone(id) {
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  const version = Number(item?.contentVersion || 1);
+  return progress.answers?.[id] === true && (version === 1 || Number(progress.exerciseVersions?.[id] || 1) === version);
+}
+function requiredActivities() { return curriculumActivities.filter((item) => item.optional !== true); }
+function doneCount() { return requiredActivities().filter((item) => isExerciseDone(item.id)).length; }
+function percentDone() { const required = requiredActivities(); return required.length ? Math.round(doneCount() / required.length * 100) : 0; }
+function dueExercises() { return requiredActivities().filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
 function nextReviewDate() {
-  const dates = curriculumActivities.filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity));
+  const dates = requiredActivities().filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity));
   return dates.length ? Math.min(...dates) : null;
 }
 
@@ -135,7 +144,7 @@ function renderJavaScriptExercise(id) {
 
 function renderHome() {
   setBreadcrumb("Início");
-  const activities = curriculumActivities;
+  const activities = requiredActivities();
   const next = activities.find((item) => !isExerciseDone(item.id)) || activities[0];
   const allDone = doneCount() === activities.length;
   const stageIds = [...new Set(activities.map((item) => item.stage || item.id.slice(0, 2)))];
@@ -190,17 +199,18 @@ function updateCatalogResults() {
     if (query && !`${item.id} ${item.title} ${item.kind} ${item.prompt} ${item.firstResponse?.action || ""}`.toLocaleLowerCase("pt-BR").includes(query)) return false;
     return true;
   });
-  document.querySelector("#catalog-count").textContent = `${items.length} ${items.length === 1 ? "EXERCÍCIO" : "EXERCÍCIOS"} · ${doneCount()} CONCLUÍDOS`;
+  document.querySelector("#catalog-count").textContent = `${items.length} ${items.length === 1 ? "EXERCÍCIO" : "EXERCÍCIOS"} · ${doneCount()} / ${requiredActivities().length} OBRIGATÓRIOS CONCLUÍDOS`;
   const stageIds = [...new Set(items.map((item) => item.stage || item.id.slice(0, 2)))];
   results.innerHTML = items.length ? stageIds.map((stage) => {
     const group = items.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
-    const completed = group.filter((item) => isExerciseDone(item.id)).length;
-    return `<section class="catalog-stage" aria-labelledby="catalog-stage-${stage}"><div class="catalog-stage-heading"><div><span class="eyebrow">SEQUÊNCIA CURRICULAR</span><h2 id="catalog-stage-${stage}">Etapa ${esc(stage)}</h2></div><span>${completed} / ${group.length} concluídos</span></div><div class="catalog-card-grid">${group.map((item) => `<article class="catalog-learning-card ${isExerciseDone(item.id) ? "is-complete" : ""}"><div class="catalog-learning-meta"><span>${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA" : ""}</span><span>${isExerciseDone(item.id) ? "✓ concluído" : esc(item.duration)}</span></div><h3>${esc(item.title)}</h3><p>${esc(item.firstResponse.action)}</p><a href="#/javascript/${item.id}" class="text-link">${isExerciseDone(item.id) ? "Revisitar atividade" : "Abrir atividade"}<span aria-hidden="true">→</span></a></article>`).join("")}</div></section>`;
+    const core = group.filter((item) => item.optional !== true);
+    const completed = core.filter((item) => isExerciseDone(item.id)).length;
+    return `<section class="catalog-stage" aria-labelledby="catalog-stage-${stage}"><div class="catalog-stage-heading"><div><span class="eyebrow">SEQUÊNCIA CURRICULAR</span><h2 id="catalog-stage-${stage}">Etapa ${esc(stage)}</h2></div><span>${completed} / ${core.length} obrigatórios concluídos · ${group.length - core.length} extras opt-in</span></div><div class="catalog-card-grid">${group.map((item, index) => `<article class="catalog-learning-card ${isExerciseDone(item.id) ? "is-complete" : ""}"><div class="catalog-learning-meta"><span>${index + 1} de ${group.length} · ${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ""}</span><span>${isExerciseDone(item.id) ? "✓ concluído" : `Estimativa: ${esc(item.duration)}`}</span></div><h3>${esc(item.title)}</h3><p>${esc(item.firstResponse.action)}</p><a href="#/javascript/${item.id}" class="text-link">${isExerciseDone(item.id) ? "Revisitar atividade" : "Abrir atividade"}<span aria-hidden="true">→</span></a></article>`).join("")}</div></section>`;
   }).join("") : `<p class="empty-state">Nenhum exercício corresponde a esses filtros. Ajuste a busca ou selecione outra etapa.</p>`;
 }
 
 function loadCourseDraft(item) {
-  const raw = progress.exerciseDrafts?.[item.id];
+  const raw = progress.exerciseDrafts?.[exerciseProgressKey(item)];
   if (typeof raw === "string" && raw.startsWith("__course_files__:")) {
     try { return JSON.parse(raw.slice("__course_files__:".length)); } catch { /* Use the published starter files. */ }
   }
@@ -219,25 +229,49 @@ function renderResources(resources = []) {
   }).join("")}</ul>` : `<p>Sem recurso externo obrigatório nesta atividade.</p>`;
 }
 
+function renderStageBridge(item) {
+  if (!item.stageBridge) return "";
+  const paragraphs = item.stageBridge.split(/\n\s*\n/).filter(Boolean).map((paragraph) => {
+    const safe = esc(paragraph.trim()).replace(/`([^`]+)`/g, "<code>$1</code>");
+    return `<p>${safe}</p>`;
+  }).join("");
+  return `<section class="course-stage-bridge"><div class="course-section-kicker">PONTE CONCEITUAL DA ETAPA ${esc(item.stage)}</div><h2>${esc(item.stageBridgeTitle)}</h2><p class="course-bridge-intro">Leia depois da sua primeira previsão e antes de praticar. Use os exemplos para conectar a ideia ao exercício.</p><div class="course-bridge-copy">${paragraphs}</div></section>`;
+}
+
 function renderCurriculumLesson(item) {
   const id = item.id;
-  const answered = progress.warmupCompleted?.[id] === true || isExerciseDone(id);
+  const answered = progress.warmupCompleted?.[exerciseProgressKey(item)] === true || isExerciseDone(id);
   const complete = isExerciseDone(id);
-  const prediction = progress.exercisePredictions?.[id] || "";
-  const reflection = progress.exerciseReflections?.[id] || "";
+  const progressKey = exerciseProgressKey(item);
+  const prediction = progress.exercisePredictions?.[progressKey] || "";
+  const reflection = progress.exerciseReflections?.[progressKey] || "";
+  const evidence = progress.exerciseEvidence?.[progressKey] || {};
+  const evidenceReady = evidence.status === "executed" || evidence.status === "written";
   const drafts = loadCourseDraft(item);
-  const previous = curriculumActivities[curriculumActivities.indexOf(item) - 1];
-  const next = curriculumActivities[curriculumActivities.indexOf(item) + 1];
+  const itemIndex = curriculumActivities.indexOf(item);
+  const core = requiredActivities();
+  const previous = [...core].reverse().find((activity) => curriculumActivities.indexOf(activity) < itemIndex);
+  const next = core.find((activity) => curriculumActivities.indexOf(activity) > itemIndex);
+  const stageActivities = curriculumActivities.filter((activity) => activity.stage === item.stage);
+  const sequenceLabel = `Etapa ${item.stage} · ${stageActivities.indexOf(item) + 1} de ${stageActivities.length}`;
   const firstFile = item.starterFiles[0];
   const starterPreview = item.starterFiles.map((file) => `<div class="course-file-preview"><span>${esc(file.path)}</span><pre><code>${esc(file.content)}</code></pre></div>`).join("");
   const editors = item.starterFiles.map((file) => `<label class="course-editor-label" for="course-file-${id}-${item.starterFiles.indexOf(file)}"><span>${esc(file.path)}</span><textarea id="course-file-${id}-${item.starterFiles.indexOf(file)}" class="course-editor" data-course-editor="${esc(id)}" data-course-file="${esc(file.path)}" maxlength="${Math.max(80, Math.floor(1100 / item.starterFiles.length))}" spellcheck="false" autocapitalize="off" autocomplete="off">${esc(drafts[file.path] ?? file.content)}</textarea></label>`).join("");
+  const codeFile = item.starterFiles.find((file) => /\.js$/i.test(file.path));
+  const rubricChecks = (item.rubric || []).map((criterion, index) => `<label class="course-self-check"><input type="checkbox" data-course-rubric="${esc(id)}" value="${index}" ${evidence.rubric?.includes(index) ? "checked" : ""}><span>${esc(criterion)}</span></label>`).join("");
+  const requiresModuleImports = codeFile && /^\s*import(?:\s|\{|\*)/m.test(codeFile.content || "");
+  const runPanel = codeFile && !requiresModuleImports
+    ? `<div class="course-runner"><div class="course-runner-heading"><strong>Execute uma tentativa</strong><span>JavaScript em frame isolado · sem acesso à rede</span></div><p>O executor remove apenas o modificador ESM <code>export</code> de declarações para permitir a execução local. O resultado serve para investigar seu código; os critérios continuam sendo conferidos por você, com a rubrica.</p><button type="button" class="button-secondary" data-course-run="${esc(id)}">Executar JavaScript</button><div class="course-run-output" data-course-output="${esc(id)}" role="status" aria-live="polite">${evidence.output ? esc(evidence.output) : "A saída aparecerá aqui."}</div></div>`
+    : `<div class="course-runner"><div class="course-runner-heading"><strong>Registre uma análise escrita</strong><span>Modo guiado · sem IA</span></div><p>Edite o arquivo acima com sua análise, diagnóstico ou solução. Depois registre a tentativa para anexar a evidência à revisão.</p><button type="button" class="button-secondary" data-course-submit-writing="${esc(id)}">Registrar análise escrita</button><div class="course-run-output" data-course-output="${esc(id)}" role="status" aria-live="polite">${evidence.status === "written" ? "Análise registrada." : "Escreva pelo menos 40 caracteres no material antes de registrar."}</div></div>`;
+  const rubricPanel = rubricChecks ? `<fieldset class="course-rubric-checks"><legend>Autoavaliação guiada</legend><p>Marque apenas os critérios que você conferiu no próprio trabalho. Isso registra sua reflexão; não é uma nota automática.</p>${rubricChecks}</fieldset>` : "";
   const exampleDetails = item.examples?.length ? `<details class="course-reveal"><summary>Conferir exemplos públicos depois da sua tentativa</summary><ul>${item.examples.map((example) => `<li><strong>${esc(example.given || "Exemplo")}</strong><span>${esc(example.expected || "")}</span></li>`).join("")}</ul></details>` : "";
   const rubricDetails = item.rubric?.length || item.constraints?.length ? `<details class="course-reveal"><summary>Critérios e limites desta atividade</summary>${item.rubric?.length ? `<h3>Como conferir</h3><ul>${item.rubric.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>` : ""}${item.constraints?.length ? `<h3>Restrições</h3><ul>${item.constraints.map((line) => `<li>${esc(line)}</li>`).join("")}</ul>` : ""}</details>` : "";
-  return `<article class="course-lesson"><a class="lesson-back" href="#/catalog">← Todas as etapas</a><header class="course-lesson-hero"><div class="eyebrow">${esc(item.id)} · ETAPA ${esc(item.stage)} · ${esc(item.kind)}${item.optional ? " · ATIVIDADE EXTRA" : ""}</div><h1>${esc(item.title)}<span class="brand-period">.</span></h1><p>${esc(item.firstResponse.action)}</p><div class="course-lesson-meta"><span>${esc(item.duration)}</span><span>Runtime sugerido: ${esc(item.runtime || "JavaScript")}</span><span>${complete ? "✓ concluído" : "em andamento"}</span></div></header><nav class="course-steps" aria-label="Etapas da atividade"><span class="${answered ? "complete" : "active"}">01 · Ler</span><span class="${answered ? "complete" : "active"}">02 · Responder</span><span class="${answered ? "active" : ""}">03 · Entender</span><span class="${complete ? "complete" : ""}">04 · Escrever</span><span class="${complete ? "complete" : ""}">05 · Explicar</span></nav><section class="course-prompt-panel"><div class="course-section-kicker">DESAFIO</div><p class="course-prompt">${esc(item.prompt)}</p><div class="course-interaction-note"><strong>Como responder</strong><p>${esc(item.interaction)}</p></div><div class="course-starter-read"><div class="course-section-kicker">LEIA O ARQUIVO ANTES DE RESPONDER</div>${starterPreview}</div>${answered ? `<div class="course-first-response-saved"><strong>Sua resposta inicial foi registrada</strong><p>${esc(prediction)}</p><span>${esc(item.firstResponse.timing)}</span></div>` : `<label class="course-response-label" for="first-response-${id}"><span>Sua primeira resposta</span><small>${esc(item.firstResponse.timing)}</small><textarea id="first-response-${id}" data-first-response-input="${esc(id)}" maxlength="400" placeholder="Escreva sua previsão, hipótese ou primeira decisão…">${esc(prediction)}</textarea></label><button type="button" class="button-primary" data-course-first-response="${esc(id)}">Registrar resposta e abrir a explicação <span aria-hidden="true">→</span></button>`}</section>${answered ? `<section class="course-explanation-panel"><div class="course-section-kicker">EXPLICAÇÃO GUIADA</div><h2>O modelo mental</h2><p>${esc(item.explanation.mental_model)}</p><h3>Exemplo trabalhado</h3><p>${esc(item.explanation.worked_example)}</p><div class="course-explanation-columns"><div><strong>Armadilha comum</strong><p>${esc(item.explanation.common_trap)}</p></div><div><strong>Por que isso importa</strong><p>${esc(item.explanation.why_it_matters)}</p></div></div>${exampleDetails}${rubricDetails}<div class="course-resources"><h3>Recursos para esta atividade</h3>${renderResources(item.resources)}</div></section><section class="course-practice-panel"><div class="course-section-kicker">SUA VEZ DE ESCREVER</div><h2>Edite o arquivo do exercício</h2><p>Comece pelo código fornecido. Escreva sua tentativa no editor; a página salva o rascunho na sua conta.</p><div class="course-editors">${editors}</div><label class="course-reflection-label" for="course-reflection-${id}"><span>Explique com suas palavras o que você fez ou descobriu</span><textarea id="course-reflection-${id}" data-course-reflection="${esc(id)}" maxlength="600" placeholder="Sua explicação ajuda a consolidar o raciocínio…">${esc(reflection)}</textarea></label><div class="course-complete-row"><span data-course-reflection-count>${reflection.trim().length}/16 caracteres</span><button type="button" class="button-primary" data-course-complete="${esc(id)}" ${complete || reflection.trim().length < 16 ? "disabled" : ""}>${complete ? "Atividade concluída ✓" : "Concluir com minha explicação"}</button></div>${complete ? `<p class="course-complete-note" role="status">Esta atividade foi marcada como concluída. A revisão correspondente entra no intervalo de 7 dias.</p>` : ""}</section><footer class="course-lesson-footer">${previous ? `<a class="button-secondary" href="#/javascript/${previous.id}">← ${esc(previous.id)} · ${esc(previous.title)}</a>` : `<span></span>`}${next ? `<a class="button-secondary" href="#/javascript/${next.id}">${esc(next.id)} · ${esc(next.title)} →</a>` : ""}</footer>` : `<p class="course-gate-note" role="status">A explicação e o editor aparecem depois que você registrar sua primeira resposta.</p>`}</article>`;
+  const stageBridge = renderStageBridge(item);
+  return `<article class="course-lesson"><a class="lesson-back" href="#/catalog">← Todas as etapas</a><header class="course-lesson-hero"><div class="eyebrow">${esc(sequenceLabel)} · ${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ""}</div><h1>${esc(item.title)}<span class="brand-period">.</span></h1><p>${esc(item.firstResponse.action)}</p><div class="course-lesson-meta"><span title="Estimativa editorial inicial para planejar a sessão, não medida de domínio.">Estimativa: ${esc(item.duration)}</span><span>Runtime sugerido: ${esc(item.runtime || "JavaScript")}</span><span>${complete ? "✓ concluído" : "em andamento"}</span></div></header><nav class="course-steps" aria-label="Etapas da atividade"><span class="${answered ? "complete" : "active"}">01 · Ler</span><span class="${answered ? "complete" : "active"}">02 · Responder</span><span class="${answered ? "active" : ""}">03 · Entender</span><span class="${complete ? "complete" : ""}">04 · Escrever</span><span class="${complete ? "complete" : ""}">05 · Explicar</span></nav><section class="course-prompt-panel"><div class="course-section-kicker">DESAFIO</div><p class="course-prompt">${esc(item.prompt)}</p><div class="course-interaction-note"><strong>Como responder</strong><p>${esc(item.interaction)}</p></div><div class="course-starter-read"><div class="course-section-kicker">LEIA O ARQUIVO ANTES DE RESPONDER</div>${starterPreview}</div>${answered ? `<div class="course-first-response-saved"><strong>Sua resposta inicial foi registrada</strong><p>${esc(prediction)}</p><span>${esc(item.firstResponse.timing)}</span></div>` : `<label class="course-response-label" for="first-response-${id}"><span>Sua primeira resposta</span><small>${esc(item.firstResponse.timing)}</small><textarea id="first-response-${id}" data-first-response-input="${esc(id)}" maxlength="400" placeholder="Escreva sua previsão, hipótese ou primeira decisão…">${esc(prediction)}</textarea></label><button type="button" class="button-primary" data-course-first-response="${esc(id)}">Registrar resposta e abrir a explicação <span aria-hidden="true">→</span></button>`}</section>${answered ? `<section class="course-explanation-panel"><div class="course-section-kicker">EXPLICAÇÃO GUIADA</div><h2>O modelo mental</h2><p>${esc(item.explanation.mental_model)}</p><h3>Exemplo trabalhado</h3><p>${esc(item.explanation.worked_example)}</p><div class="course-explanation-columns"><div><strong>Armadilha comum</strong><p>${esc(item.explanation.common_trap)}</p></div><div><strong>Por que isso importa</strong><p>${esc(item.explanation.why_it_matters)}</p></div></div>${exampleDetails}${rubricDetails}<div class="course-resources"><h3>Recursos para esta atividade</h3>${renderResources(item.resources)}</div></section>${stageBridge}<section class="course-practice-panel"><div class="course-section-kicker">SUA VEZ DE ESCREVER</div><h2>Edite o arquivo do exercício</h2><p>O rascunho é salvo na sua conta. A forma de registrar a tentativa depende do material desta atividade.</p><div class="course-editors">${editors}</div>${runPanel}${rubricPanel}<label class="course-reflection-label" for="course-reflection-${id}"><span>Explique com suas palavras o que você fez ou descobriu</span><textarea id="course-reflection-${id}" data-course-reflection="${esc(id)}" maxlength="600" placeholder="Sua explicação ajuda a consolidar o raciocínio…">${esc(reflection)}</textarea></label><div class="course-complete-row"><span data-course-reflection-count>${reflection.trim().length}/16 caracteres · ${evidenceReady ? "tentativa registrada" : "registre uma tentativa"}</span><button type="button" class="button-primary" data-course-complete="${esc(id)}" ${complete || reflection.trim().length < 16 || !evidenceReady || ((item.rubric || []).length && (evidence.rubric || []).length !== item.rubric.length) ? "disabled" : ""}>${complete ? "Atividade concluída ✓" : "Concluir com minha explicação"}</button></div>${complete ? `<p class="course-complete-note" role="status">Atividade concluída com uma tentativa registrada e autoavaliação. A revisão correspondente entra no intervalo de 7 dias.</p>` : ""}</section><footer class="course-lesson-footer">${previous ? `<a class="button-secondary" href="#/javascript/${previous.id}">← ${esc(previous.id)} · ${esc(previous.title)}</a>` : `<span></span>`}${next ? `<a class="button-secondary" href="#/javascript/${next.id}">${esc(next.id)} · ${esc(next.title)} →</a>` : ""}</footer>` : `<p class="course-gate-note" role="status">A explicação e o editor aparecem depois que você registrar sua primeira resposta.</p>`}</article>`;
 }
 
 function reviewSet() {
-  const activities = curriculumActivities.filter((item) => isExerciseDone(item.id));
+  const activities = requiredActivities().filter((item) => isExerciseDone(item.id));
   const due = dueExercises();
   const pool = due.length ? due : activities.slice(0, 1);
   return pool.map((item) => ({ exercise: item, ...item.review, scheduled: due.some((dueItem) => dueItem.id === item.id) }));
@@ -250,7 +284,7 @@ function saveCourseDraft(id) {
   const value = editors.length === 1 ? editors[0].value : `__course_files__:${JSON.stringify(files)}`;
   if (value.length > 2500) { toast("Este rascunho passou do limite salvo para a atividade."); return; }
   progress.exerciseDrafts ||= {};
-  progress.exerciseDrafts[id] = value;
+  progress.exerciseDrafts[exerciseProgressKey(curriculumActivities.find((activity) => activity.id === id))] = value;
 }
 
 function scheduleCourseSave() {
@@ -258,14 +292,100 @@ function scheduleCourseSave() {
   courseSaveTimer = setTimeout(() => { courseSaveTimer = null; saveProgress(); }, 500);
 }
 
+function syncCourseCompletionButton(id) {
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  const evidence = progress.exerciseEvidence?.[exerciseProgressKey(item)] || {};
+  const reflection = view.querySelector(`[data-course-reflection="${id}"]`)?.value.trim() || "";
+  const checked = view.querySelectorAll(`[data-course-rubric="${id}"]:checked`).length;
+  const button = view.querySelector(`[data-course-complete="${id}"]`);
+  if (button) button.disabled = isExerciseDone(id) || reflection.length < 16 || !["executed", "written"].includes(evidence.status) || ((item?.rubric || []).length > 0 && checked !== item.rubric.length);
+}
+
+function saveExerciseEvidence(id, evidence) {
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  const key = exerciseProgressKey(item);
+  progress.exerciseEvidence ||= {};
+  progress.exerciseEvidence[key] = { ...progress.exerciseEvidence[key], ...evidence, recordedAt: new Date().toISOString() };
+  saveProgress();
+  syncCourseCompletionButton(id);
+}
+
+function runCourseJavaScript(id) {
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  const file = item?.starterFiles.find((entry) => /\\.js$/i.test(entry.path));
+  const editor = file && view.querySelector(`[data-course-editor="${id}"][data-course-file="${CSS.escape(file.path)}"]`);
+  const output = view.querySelector(`[data-course-output="${id}"]`);
+  if (!editor || !output) return;
+  if (!editor.value.trim()) { toast("Escreva uma tentativa antes de executar."); return; }
+  if (/^\s*import(?:\s|\{|\*)/m.test(editor.value) || /^\s*export\s*(?:\{|default\b)/m.test(editor.value)) {
+    output.textContent = "Este arquivo usa import ou uma forma de export que depende do carregador ESM. Faça a análise no editor e use o modo guiado de registro desta atividade.";
+    return;
+  }
+  saveCourseDraft(id);
+  const token = `${id}-${crypto.randomUUID()}`;
+  const frame = document.createElement("iframe");
+  frame.title = "Execução isolada do código do exercício";
+  frame.setAttribute("sandbox", "allow-scripts");
+  frame.setAttribute("aria-hidden", "true");
+  frame.tabIndex = -1;
+  frame.style.cssText = "position:fixed;width:1px;height:1px;left:-10px;top:-10px;border:0;opacity:0;pointer-events:none";
+  const moduleCode = editor.value.replace(/^\s*export\s+(?=(?:async\s+)?(?:function|class|const|let|var)\b)/gm, "");
+  const safeCode = JSON.stringify(moduleCode).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
+  frame.srcdoc = `<!doctype html><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval'; connect-src 'none'; img-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"><script>const token=${JSON.stringify(token)};const lines=[];const show=v=>{if(typeof v==='string')return v;try{return JSON.stringify(v)}catch{return String(v)}};console.log=(...v)=>{lines.push(v.map(show).join(' '));if(lines.join('\\n').length>9000)lines.push('[saída truncada]')};const send=(kind,error)=>parent.postMessage({token,kind,text:error?(error.name?error.name+': ':'')+(error.message||String(error)):lines.join('\\n')||'(sem saída no console)'},'*');try{Promise.resolve(new Function('return (async()=>{\\n'+${safeCode}+'\\n})()')()).then(()=>send('result')).catch(error=>send('error',error))}catch(error){send('error',error)}</script>`;
+  output.textContent = "Executando em frame isolado… limite de 2 segundos.";
+  document.body.append(frame);
+  let settled = false;
+  const finish = (kind, text) => {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timeout);
+    window.removeEventListener("message", onMessage);
+    frame.remove();
+    const result = String(text || "(sem saída)").slice(0, 9000);
+    output.textContent = `${kind === "timeout" ? "Tempo limite excedido" : kind === "error" ? "Erro na tentativa" : "Execução concluída"}\n${result}`;
+    const item = curriculumActivities.find((activity) => activity.id === id);
+    const key = exerciseProgressKey(item);
+    saveExerciseEvidence(id, { status: "executed", runResult: kind, output: result, runCount: Math.min(100000, Number(progress.exerciseEvidence?.[key]?.runCount || 0) + 1) });
+  };
+  const onMessage = (event) => {
+    if (event.source !== frame.contentWindow || event.data?.token !== token) return;
+    finish(event.data.kind, event.data.text);
+  };
+  const timeout = setTimeout(() => finish("timeout", "O código foi interrompido. Procure um loop que não termina ou uma operação longa."), 2000);
+  window.addEventListener("message", onMessage);
+}
+
+function submitGuidedWriting(id) {
+  const editors = [...view.querySelectorAll(`[data-course-editor="${id}"]`)];
+  const material = editors.map((editor) => editor.value.trim()).join("\n");
+  const output = view.querySelector(`[data-course-output="${id}"]`);
+  if (material.length < 40) {
+    if (output) output.textContent = `Ainda faltam ${40 - material.length} caracteres de análise no arquivo. Desenvolva sua resposta e tente novamente.`;
+    return;
+  }
+  saveCourseDraft(id);
+  if (output) output.textContent = `Análise registrada (${material.length} caracteres). Agora confira sua resposta com os critérios e explique o raciocínio.`;
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  saveExerciseEvidence(id, { status: "written", runResult: "guided", output: `Análise escrita registrada (${material.length} caracteres).`, rubric: progress.exerciseEvidence?.[exerciseProgressKey(item)]?.rubric || [] });
+}
+
 function completeCourseExercise(id) {
   const reflection = view.querySelector(`[data-course-reflection="${id}"]`)?.value.trim() || "";
+  const item = curriculumActivities.find((activity) => activity.id === id);
+  const key = exerciseProgressKey(item);
+  const evidence = progress.exerciseEvidence?.[key] || {};
+  const checked = [...view.querySelectorAll(`[data-course-rubric="${id}"]:checked`)].map((input) => Number(input.value));
+  if (!item || (evidence.status !== "executed" && evidence.status !== "written")) { toast("Registre uma tentativa antes de concluir."); return; }
   if (reflection.length < 16) { toast("Escreva pelo menos 16 caracteres na explicação final."); return; }
+  if ((item.rubric || []).length && checked.length !== item.rubric.length) { toast("Revise cada critério da autoavaliação antes de concluir."); return; }
+  progress.exerciseEvidence[key] = { ...evidence, rubric: checked };
   saveCourseDraft(id);
   progress.exerciseReflections ||= {};
-  progress.exerciseReflections[id] = reflection.slice(0, 600);
+  progress.exerciseReflections[key] = reflection.slice(0, 600);
   progress.answers ||= {};
   progress.answers[id] = true;
+  progress.exerciseVersions ||= {};
+  progress.exerciseVersions[id] = Number(item.contentVersion || 1);
   progress.completed ||= [];
   if (!progress.completed.includes(id)) progress.completed.push(id);
   progress.attempts ||= {};
@@ -336,15 +456,21 @@ view.addEventListener("click", async (event) => {
     const response = view.querySelector(`[data-first-response-input="${id}"]`)?.value.trim() || "";
     if (!response) { toast("Registre uma primeira resposta antes de abrir a explicação."); return; }
     progress.exercisePredictions ||= {};
-    progress.exercisePredictions[id] = response.slice(0, 400);
+    const item = curriculumActivities.find((activity) => activity.id === id);
+    const key = exerciseProgressKey(item);
+    progress.exercisePredictions[key] = response.slice(0, 400);
     progress.warmupCompleted ||= {};
-    progress.warmupCompleted[id] = true;
+    progress.warmupCompleted[key] = true;
     saveProgress();
     render();
     return;
   }
   const completeActivity = event.target.closest("[data-course-complete]");
   if (completeActivity) { completeCourseExercise(completeActivity.dataset.courseComplete); return; }
+  const runActivity = event.target.closest("[data-course-run]");
+  if (runActivity) { runCourseJavaScript(runActivity.dataset.courseRun); return; }
+  const writtenActivity = event.target.closest("[data-course-submit-writing]");
+  if (writtenActivity) { submitGuidedWriting(writtenActivity.dataset.courseSubmitWriting); return; }
   const filter = event.target.closest("[data-filter]");
   if (filter) { selectedCatalogFilter = filter.dataset.filter; renderCatalog(); return; }
   const reviewChoice = event.target.closest("[data-review-choice]");
@@ -359,17 +485,30 @@ view.addEventListener("input", (event) => {
   if (event.target.matches("[data-course-reflection]")) {
     const id = event.target.dataset.courseReflection;
     progress.exerciseReflections ||= {};
-    progress.exerciseReflections[id] = event.target.value.slice(0, 600);
+    const item = curriculumActivities.find((activity) => activity.id === id);
+    progress.exerciseReflections[exerciseProgressKey(item)] = event.target.value.slice(0, 600);
     const count = view.querySelector("[data-course-reflection-count]");
     const button = view.querySelector(`[data-course-complete="${id}"]`);
     if (count) count.textContent = `${event.target.value.trim().length}/16 caracteres`;
     if (button) button.disabled = event.target.value.trim().length < 16;
     scheduleCourseSave();
+    syncCourseCompletionButton(id);
     return;
   }
   if (routeInfo().name === "javascript") window.DevPathStage00UI.handleInput(event, stageContext());
 });
 view.addEventListener("change", (event) => {
+  if (event.target.matches("[data-course-rubric]")) {
+    const id = event.target.dataset.courseRubric;
+    const selected = [...view.querySelectorAll(`[data-course-rubric="${id}"]:checked`)].map((input) => Number(input.value));
+    progress.exerciseEvidence ||= {};
+    const item = curriculumActivities.find((activity) => activity.id === id);
+    const key = exerciseProgressKey(item);
+    progress.exerciseEvidence[key] = { ...progress.exerciseEvidence[key], rubric: selected };
+    scheduleCourseSave();
+    syncCourseCompletionButton(id);
+    return;
+  }
   if (event.target.matches("#stage-filter")) { selectedStageFilter = event.target.value; updateCatalogResults(); }
 });
 for (const eventName of ["dragstart", "dragover", "dragleave", "drop"]) {
