@@ -6,7 +6,7 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "test:stage00": "node scripts/test-stage00-ui.mjs",
+    "test:stage00": "node scripts/test-stage00-content.mjs && node scripts/test-stage00-ui.mjs",
     "install:ci": "node scripts/install-ci.mjs",
     "prebuild": "node scripts/validate-course-catalog.mjs && node --check public/app.js && node --check public/js-stage00-preparation.js",
     "dev": "node scripts/run-framework.mjs dev",

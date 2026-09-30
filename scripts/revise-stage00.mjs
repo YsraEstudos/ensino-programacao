@@ -1,11 +1,11 @@
 import {readFileSync,writeFileSync} from 'node:fs';
+import {stage00} from '../course-src/stage00-preparation.mjs';
 const root=new URL('../',import.meta.url);
-const source=JSON.parse(readFileSync(new URL('stage00-content.json',import.meta.url),'utf8'));
 const catalogPath=new URL('public/course-catalog.json',root);
 const catalog=JSON.parse(readFileSync(catalogPath,'utf8'));
 for(const item of catalog.filter(item=>item.stage==='00')){
-  const p=source[item.id];if(!p)throw Error(`Missing teaching content ${item.id}`);
-  item.contentVersion=Math.max(item.contentVersion||1,3);
+  const p=stage00[item.id];if(!p)throw Error(`Missing teaching content ${item.id}`);
+  item.contentVersion=Math.max(item.contentVersion||1,4);
   item.title=p.title;item.objective=p.mental;item.prompt=p.prompt;item.interaction=p.response;
   item.firstResponse={action:p.response,timing:p.mode==='debug'?'Depois de ler a explicação e executar o arquivo intacto, antes da primeira alteração.':p.mode==='written'?'Depois de ler a explicação e o exemplo resolvido, antes de preencher sua análise.':'Depois de ler a explicação e o exemplo resolvido, antes de executar sua tentativa.'};
   item.explanation={mental_model:p.mental,worked_example:p.example.walkthrough.join(' '),common_trap:item.explanation.common_trap,why_it_matters:item.explanation.why_it_matters};

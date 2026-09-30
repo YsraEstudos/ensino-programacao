@@ -14,6 +14,7 @@ const progress = {exercisePredictions:{},exerciseDrafts:{},exerciseReflections:{
 const context = {progress,saveProgress:()=>saves++,scheduleSave:()=>saves++,render:()=>{}};
 const view=dom.window.document.querySelector('#view');
 const click = action => {const button=view.querySelector(`[data-s00-action="${action}"]`);assert(button);ui.handleClick({target:button,preventDefault(){}},catalog.find(x=>x.id===view.querySelector('[data-s00-id]').dataset.s00Id),context);};
+const labClick = (selector,item) => {const button=view.querySelector(selector);assert(button,selector);ui.handleClick({target:button,preventDefault(){}},item,context);};
 const fill = (selector,value,item)=>{const input=view.querySelector(selector);assert(input);input.value=value;ui.handleInput({target:input},item,context);};
 for(const item of lessons){
   assert(item.preparation?.vocabulary?.length>=3,`${item.id}: teach vocabulary`);
@@ -21,6 +22,42 @@ for(const item of lessons){
   assert(item.preparation?.example?.code && item.preparation?.example?.output,`${item.id}: solved example`);
   assert(!/Mostre |Apresente |leitor de tela|O aprendiz/.test(item.interaction),`${item.id}: learner-facing instructions`);
   view.innerHTML=ui.render(item,context);
+  if(item.preparation.lab)assert(view.querySelector(`[data-s00-lab="${item.preparation.lab.kind}"]`),`${item.id}: interactive lab renders`);
+  if(item.id==='00.01'){
+    assert(view.querySelector('.s00-glossary'),'secondary vocabulary remains available on demand');
+    assert.equal(view.querySelector('[data-s00-lab-output]'),null,'trace asks for a prediction before showing output');
+    labClick('[data-s00-lab-choice="0"]',item);labClick('[data-s00-lab-action="confirm-trace"]',item);
+    assert.match(view.querySelector('[data-s00-lab-output]').textContent,/abrir/);
+    labClick('[data-s00-lab-action="next"]',item);labClick('[data-s00-lab-choice="0"]',item);labClick('[data-s00-lab-action="confirm-trace"]',item);
+    assert.match(view.querySelector('[data-s00-lab-output]').textContent,/5/,'trace reveals expression evaluation and accumulated output');
+  }
+  if(item.id==='00.02'){
+    labClick('[data-s00-lab-choice="0"]',item);
+    assert.match(view.querySelector('[data-s00-lab-feedback]').textContent,/última execução/,'diagnosis is explained with evidence');
+    labClick('[data-s00-lab-action="case"][data-s00-lab-index="1"]',item);
+    assert.match(view.textContent,/Arquivo salvo: console\.log/,'unsaved edits are a distinct diagnostic case');
+    labClick('[data-s00-lab-action="case"][data-s00-lab-index="2"]',item);
+    assert.match(view.textContent,/rascunho\.js/,'running the wrong file is a distinct diagnostic case');
+  }
+  if(item.id==='00.04'){
+    assert.match(view.querySelector('.s00-argument-preview').textContent,/pontos:.*0.*número/,'the argument preview separates text and numeric value before the call');
+    assert.match(view.querySelector('[data-s00-lab-code]').textContent,/console\.log/);
+    assert.match(view.querySelector('[data-s00-lab-output]').textContent,/Pagamento aprovado/);
+  }
+  if(item.id==='00.05'){
+    assert.equal(view.querySelectorAll('[data-s00-lab-case]').length,2,'environment bridge includes console and Node tasks');
+    assert.match(view.textContent,/undefined/,'browser console return value is explained as separate from output');
+    assert.match(view.textContent,/pasta desse arquivo/,'terminal exercise explains the working folder');
+  }
+  if(item.id==='00.08'){
+    assert.match(view.querySelector('[data-s00-lab-code]').textContent,/id="cliente"/);
+    assert.match(view.querySelector('[data-s00-lab-tree]').textContent,/id=cliente/);
+    assert.notEqual(view.querySelector('.s00-html-lab label').htmlFor,view.querySelector('[data-s00-preview-input]').id,'the broken preview reproduces a disconnected label');
+    labClick('[data-s00-lab-action="html-fix"]',item);
+    assert.match(view.querySelector('[data-s00-lab-code]').textContent,/id="nome"/,'HTML correction synchronizes the preview');
+    assert.match(view.querySelector('[data-s00-lab-tree]').textContent,/id=nome/);
+    assert.equal(view.querySelector('.s00-html-lab label').htmlFor,view.querySelector('[data-s00-preview-input]').id,'the repaired preview connects the label to the field');
+  }
   const teaching=view.querySelector('[data-s00-teaching]');
   assert(teaching && !teaching.hidden,`${item.id}: explanation visible without an answer`);
   assert(teaching.compareDocumentPosition(view.querySelector('[data-s00-prediction]'))&dom.window.Node.DOCUMENT_POSITION_FOLLOWING);
@@ -81,7 +118,8 @@ const solutions={
   '00.03':'console.log("Início");\nconsole.log("Olá, Ana");\nconsole.log("Fim");',
   '00.04':'console.log("nome:", "Ana");\nconsole.log("pontos:", 0);\nconsole.log("fim");',
   '00.07':'console.log("início");\nconsole.log(0);\nconsole.log("fim");',
-  '00.06':'console.log("Olá");\nconsole.log("fim");\nconsole.log("ok");'
+  '00.06':'console.log("Olá");\nconsole.log("fim");\nconsole.log("ok");',
+  '00.09':'console.log("Atendimento");\nconsole.log("Pessoa:", "Ana");\nconsole.log("Itens:", 0);\nconsole.log("Fim");'
 };
 const app=await loadApp();
 const aq=selector=>app.window.document.querySelector(selector);
@@ -92,6 +130,7 @@ for(const item of lessons){
   const first=aq('[data-s00-target]');first.click();assert.equal(app.window.document.activeElement.id,first.dataset.s00Target);
   if(item.id==='00.06'){aq('[data-s00-action="run"]').click();assert.match(aq('[data-s00-output]').textContent,/SyntaxError/);}
   afill('[data-s00-prediction]','Registrei uma previsão ou plano depois de estudar o exemplo.');aq('[data-s00-action="predict"]').click();
+  if(item.id==='00.09')aq('[data-s00-lab-action="zero-requirement"]').click();
   if(solutions[item.id])afill('[data-s00-editor]',solutions[item.id]);
   if(aq('[data-s00-action="run"]'))aq('[data-s00-action="run"]').click();
   if(aq('[data-s00-action="write"]')){
@@ -100,15 +139,20 @@ for(const item of lessons){
   }
   afill('[data-s00-reflection]','Conferi o resultado com a previsão e expliquei a regra usando o exemplo anterior.');
   for(const input of app.window.document.querySelectorAll('[data-s00-rubric]'))input.click();
+  if(item.id==='00.09'){
+    assert(aq('[data-s00-action="complete"]').disabled,'capstone requires both transfer responses before completion');
+    afill('[data-s00-lab-transfer="0"]','A saída seria iniciar, mostrar 2 e encerrar a tarefa.');
+    afill('[data-s00-lab-transfer="1"]','O console prova que mostrou texto; eu verificaria o registro real no sistema.');
+  }
   assert.equal(aq('[data-s00-action="complete"]').disabled,false,`${item.id}: valid attempt can complete`);
   aq('[data-s00-action="complete"]').click();await settle();
   assert(accountProgress.answers[item.id],`${item.id}: saved to account`);
-  assert.equal(accountProgress.exerciseVersions[item.id],3);
+  assert.equal(accountProgress.exerciseVersions[item.id],4);
   const reloaded=await loadApp();reloaded.window.location.hash=`#/javascript/${item.id}`;await settle();
   assert.match(reloaded.window.document.querySelector('[data-s00-action="complete"]').textContent,/concluída/);
   reloaded.window.close();
 }
 // Existing historical attempts remain untouched by this editorial revision.
-assert.equal(Object.keys(accountProgress.exercisePredictions).filter(x=>x.endsWith('@v3')).length,9);
+assert.equal(Object.keys(accountProgress.exercisePredictions).filter(x=>x.endsWith('@v4')).length,9);
 app.window.close();
 console.log('Stage 00 app integration: all 9 activities completed through real click/input listeners and reloaded from account progress.');
