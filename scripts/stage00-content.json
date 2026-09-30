@@ -1,0 +1,641 @@
+{
+  "00.01": {
+    "title": "Seu primeiro contato com código e saída",
+    "vocabulary": [
+      "JavaScript é a linguagem em que escrevemos as instruções. Um programa é uma sequência dessas instruções.",
+      "main.js é o nome do arquivo: .js indica que ele contém código JavaScript. Não é um comando para digitar.",
+      "Código-fonte é o texto das instruções; saída é o resultado mostrado depois que elas são executadas.",
+      "console.log(...) pede para mostrar os valores dentro dos parênteses. Console é a área onde essas mensagens aparecem. Mostrar na tela é o sentido de imprimir aqui; não envolve uma impressora.",
+      "Chamada é o uso de um comando como console.log(...). Argumento é o valor que colocamos entre os parênteses para ele receber.",
+      "Aspas delimitam texto: \"Oi\" mostra Oi, sem as aspas. Um número como 4 fica sem aspas. Literal é um valor escrito diretamente no código.",
+      "Uma expressão é algo que produz um valor: 4 + 2 produz 6. Sem aspas, a conta é calculada; \"4 + 2\" é texto e mostra os caracteres 4 + 2.",
+      "O ponto separa console de log; os parênteses delimitam o que mostrar. O ponto e vírgula encerra a instrução. Use a forma completa console.log(valor); nos exemplos desta etapa.",
+      "Executar (Run, em inglês) significa pedir que o computador siga as instruções. Neste trecho, ele segue de cima para baixo, uma chamada de cada vez.",
+      "Você fará esta prática no próprio site: não precisa instalar Node.js, criar arquivos no computador ou abrir um terminal. O editor mostra o arquivo da atividade e o botão executa os comandos introdutórios ensinados aqui.",
+      "Previsão é sua anotação sobre o resultado esperado, não código novo. Confiança é uma estimativa pessoal: 0% = nenhuma certeza, 50% = dúvida, 100% = muita certeza; ela não vale nota."
+    ],
+    "mental": "Para cada linha, leia o valor entre parênteses. Se for uma conta, calcule primeiro; depois console.log mostra esse valor. Só então vem a próxima linha. Chamamos essa sequência de execução síncrona: neste programa, as chamadas acontecem uma após outra.",
+    "example": {
+      "code": "console.log(\"começo\");\nconsole.log(4 + 2);\nconsole.log(\"pronto\");",
+      "output": "começo\n6\npronto",
+      "walkthrough": [
+        "A linha 1 mostra começo; as aspas pertencem ao código, não à saída.",
+        "Na linha 2, 4 + 2 vira 6 antes de a mensagem aparecer.",
+        "A linha 3 mostra pronto depois das anteriores. Há três chamadas e três linhas de resultado."
+      ]
+    },
+    "prompt": "Leia as três linhas de main.js e use o exemplo resolvido acima. Anote a saída prevista de cada linha e sua confiança. Registre a previsão, execute o arquivo e compare. Não altere o código nesta atividade.",
+    "response": "Escreva, por exemplo: Linha 1: …; Linha 2: …; Linha 3: …; Confiança: …%. Substitua os pontos pela sua previsão.",
+    "steps": [
+      "Leia a explicação e acompanhe o exemplo resolvido. Você pode voltar a ele sempre que precisar.",
+      "Leia main.js de cima para baixo. Preencha a previsão com uma saída por chamada; não copie a sintaxe console.log.",
+      "Clique em Registrar resposta. Depois use Executar e comparar. O código é apenas para leitura neste exercício.",
+      "Compare o resultado com a previsão. Se forem diferentes, comece pela primeira linha que não coincidiu; se forem iguais, diga que coincidiram.",
+      "Na explicação final, conte por que a conta foi calculada antes de aparecer e por que as mensagens ficaram nessa ordem."
+    ],
+    "docs": [
+      {
+        "title": "MDN: console.log",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/console/log_static",
+        "task": "Consulta opcional: abra Syntax (Sintaxe) e localize console.log(val1). val1 é um nome de exemplo para o valor que a chamada recebe; não é para digitá-lo literalmente.",
+        "takeaway": "Você pode conferir a forma de escrever uma chamada sem decorar a página inteira.",
+        "required": false
+      }
+    ],
+    "mode": "read-run",
+    "expected": [
+      [
+        "A"
+      ],
+      [
+        5
+      ],
+      [
+        "B"
+      ]
+    ],
+    "rubric": [
+      "Comparei as três linhas previstas com a saída executada.",
+      "Expliquei a ordem e o cálculo antes da exibição."
+    ],
+    "reflection": "As três linhas coincidiram com sua previsão? Explique a soma e a ordem com suas palavras.",
+    "review": {
+      "prompt": "O que console.log(4 + 1); mostra?",
+      "choices": [
+        "O número 5, depois de calcular a soma.",
+        "O texto 4 + 1, sem calcular.",
+        "Duas linhas: uma com 4 e outra com 1."
+      ],
+      "answer": 0,
+      "correctFeedback": "Sem aspas, a expressão é calculada antes de a chamada mostrar o valor.",
+      "incorrectFeedback": "Releia a explicação da atividade. Sem aspas, a expressão é calculada antes de a chamada mostrar o valor."
+    }
+  },
+  "00.02": {
+    "title": "Compare uma alteração no programa",
+    "vocabulary": [
+      "Versão é uma cópia do programa em um determinado momento. Aqui há dois arquivos separados para comparar.",
+      "Comentário começa com // e serve como anotação: JavaScript ignora o restante dessa linha. Não é uma mensagem de saída.",
+      "Alterar o texto dentro das aspas muda a mensagem daquela chamada. As outras chamadas continuam com seus próprios valores.",
+      "Comparar linha por linha significa verificar o mesmo lugar nos dois arquivos, sem reutilizar automaticamente a previsão antiga."
+    ],
+    "mental": "Nestes programas, cada chamada mostra sua própria mensagem. Substituir uma mensagem na segunda linha não muda as chamadas de abertura e encerramento.",
+    "example": {
+      "code": "// exemplo\nconsole.log(\"abrir\");\nconsole.log(\"revisar\");\nconsole.log(\"fechar\");",
+      "output": "abrir\nrevisar\nfechar",
+      "walkthrough": [
+        "// exemplo é um comentário e não aparece na saída.",
+        "Se você trocar apenas \"revisar\" por \"confirmar\", a saída central passa a ser confirmar.",
+        "As mensagens abrir e fechar permanecem nas mesmas posições."
+      ]
+    },
+    "prompt": "Compare versao-1.js e versao-2.js. Preveja três saídas para cada arquivo e indique qual chamada mudou. Execute os dois arquivos separadamente pelo botão e explique por que as outras mensagens continuam iguais.",
+    "response": "Escreva Versão 1: … / … / …; Versão 2: … / … / …; Linha alterada: … .",
+    "steps": [
+      "Leia como funcionam comentários e alterações no exemplo acima.",
+      "Compare os dois arquivos e anote suas duas sequências de saída.",
+      "Registre a previsão e use Executar e comparar: o resultado identifica cada arquivo; eles não são executados como um único programa.",
+      "Explique qual mensagem mudou e quais permaneceram iguais. Não é preciso editar código."
+    ],
+    "docs": [],
+    "mode": "read-run",
+    "starterFiles": [
+      {
+        "path": "versao-1.js",
+        "content": "console.log(\"entrada\");\nconsole.log(\"processo\");\nconsole.log(\"saída\");"
+      },
+      {
+        "path": "versao-2.js",
+        "content": "console.log(\"entrada\");\nconsole.log(\"novo\");\nconsole.log(\"saída\");"
+      }
+    ],
+    "expected": [
+      [
+        "entrada"
+      ],
+      [
+        "processo"
+      ],
+      [
+        "saída"
+      ]
+    ],
+    "expectedByFile": {
+      "versao-1.js": [
+        [
+          "entrada"
+        ],
+        [
+          "processo"
+        ],
+        [
+          "saída"
+        ]
+      ],
+      "versao-2.js": [
+        [
+          "entrada"
+        ],
+        [
+          "novo"
+        ],
+        [
+          "saída"
+        ]
+      ]
+    },
+    "rubric": [
+      "Registrei a saída de cada versão e identifiquei a chamada alterada.",
+      "Comparei as mensagens preservadas com a execução."
+    ],
+    "reflection": "Qual chamada mudou? Por que a primeira e a última mensagem se mantiveram?",
+    "review": {
+      "prompt": "Você troca somente a mensagem da segunda chamada. O que acontece com as outras duas?",
+      "choices": [
+        "Continuam com suas mensagens na mesma ordem.",
+        "Também mudam de mensagem automaticamente.",
+        "Deixam de aparecer."
+      ],
+      "answer": 0,
+      "correctFeedback": "Nestes trechos as chamadas são independentes. A edição muda somente a mensagem alterada.",
+      "incorrectFeedback": "Releia a explicação da atividade. Nestes trechos as chamadas são independentes. A edição muda somente a mensagem alterada."
+    }
+  },
+  "00.03": {
+    "title": "Monte um programa com linhas prontas",
+    "vocabulary": [
+      "Bloco é uma linha de código já escrita que você pode escolher e copiar. A, B, C e D são rótulos dos blocos, não comandos JavaScript.",
+      "Ordem é a sequência das chamadas no arquivo; ela determina a sequência das mensagens neste programa.",
+      "Distrator é uma opção que parece possível, mas não atende ao resultado pedido. Você pode deixar um bloco de fora.",
+      "Nesta atividade você monta o programa copiando as linhas necessárias no editor; não precisa arrastar blocos nem inventar novas mensagens."
+    ],
+    "mental": "Primeiro associe cada mensagem pedida a uma linha pronta. Depois copie somente as linhas escolhidas na ordem das mensagens. Os rótulos A=, B= etc. não entram no editor.",
+    "example": {
+      "code": "console.log(\"abrir\");\nconsole.log(\"verificar\");\nconsole.log(\"encerrar\");",
+      "output": "abrir\nverificar\nencerrar",
+      "walkthrough": [
+        "Se as opções são P=encerrar, Q=abrir, R=verificar e S=pausa, a sequência dos rótulos é Q, R, P.",
+        "Copie as chamadas correspondentes, uma por linha. Não copie os rótulos.",
+        "O bloco pausa fica de fora porque não faz parte das três mensagens solicitadas."
+      ]
+    },
+    "prompt": "Monte um programa que mostre exatamente Início, Olá, Ana e Fim, nessa ordem. Opções: A = console.log(\"Início\"); B = console.log(\"Olá, Ana\"); C = console.log(\"Fim\"); D = console.log(\"Olá\");. Escolha três blocos e deixe de fora a mensagem que não foi pedida.",
+    "response": "Anote os três rótulos escolhidos na ordem e indique o rótulo que ficará de fora. Depois você copiará as chamadas no editor.",
+    "steps": [
+      "Leia o exemplo de seleção e a saída pedida; a vírgula em Olá, Ana faz parte de uma única mensagem.",
+      "Registre a ordem dos rótulos e o bloco que não será usado.",
+      "No editor main.js, copie as três chamadas correspondentes, uma por linha, sem A=, B=, C= ou D=.",
+      "Execute, compare com as três mensagens pedidas e explique por que deixou uma opção de fora."
+    ],
+    "docs": [],
+    "mode": "edit-run",
+    "starterFiles": [
+      {
+        "path": "main.js",
+        "content": ""
+      }
+    ],
+    "expected": [
+      [
+        "Início"
+      ],
+      [
+        "Olá, Ana"
+      ],
+      [
+        "Fim"
+      ]
+    ],
+    "rubric": [
+      "Escolhi somente as três mensagens pedidas.",
+      "Executei as chamadas na ordem Início, Olá, Ana, Fim."
+    ],
+    "reflection": "Qual bloco ficou de fora e por que ele não atendia ao pedido?",
+    "review": {
+      "prompt": "Há quatro linhas disponíveis, mas o pedido exige três mensagens. Como escolher?",
+      "choices": [
+        "Escolher as linhas que correspondem às mensagens pedidas e ordenar essas três.",
+        "Usar as quatro porque todas foram oferecidas.",
+        "Escolher as três linhas mais curtas."
+      ],
+      "answer": 0,
+      "correctFeedback": "O resultado pedido orienta a escolha; uma opção disponível pode ficar de fora.",
+      "incorrectFeedback": "Releia a explicação da atividade. O resultado pedido orienta a escolha; uma opção disponível pode ficar de fora."
+    }
+  },
+  "00.04": {
+    "title": "Complete os valores de uma mensagem",
+    "vocabulary": [
+      "Lacuna é um espaço que você deve substituir. Os caracteres ___ são uma marca de exercício, não o valor final.",
+      "Uma chamada pode receber mais de um argumento: a vírgula separa os valores dentro dos parênteses.",
+      "Rótulo é o texto que explica o valor seguinte: em \"vidas:\", o sinal : pertence à mensagem e deve ser preservado.",
+      "0 é um número válido e também é mostrado. Ele não faz console.log pular uma chamada. Não precisamos estudar condições ou valores falsy nesta atividade."
+    ],
+    "mental": "Em console.log(\"vidas:\", 2), a chamada recebe texto e número. Nesta saída eles aparecem juntos, separados por um espaço: vidas: 2. Use aspas para textos e deixe o número sem aspas.",
+    "example": {
+      "code": "console.log(\"cidade:\", \"Recife\");\nconsole.log(\"vidas:\", 0);\nconsole.log(\"pronto\");",
+      "output": "cidade: Recife\nvidas: 0\npronto",
+      "walkthrough": [
+        "A primeira chamada recebe dois textos e mostra cidade: Recife.",
+        "A segunda recebe o rótulo e o número zero: a linha aparece normalmente.",
+        "A última tem um único argumento. Cada chamada gera uma linha."
+      ]
+    },
+    "prompt": "Substitua somente as três lacunas ___ por \"Ana\", 0 e \"fim\", respectivamente. A saída deve ser nome: Ana, pontos: 0 e fim, uma mensagem por linha. Preserve os rótulos, vírgulas, parênteses e a ordem.",
+    "response": "Anote as três linhas esperadas e qual valor vai em cada lacuna; use aspas quando descrever os textos no código.",
+    "steps": [
+      "Observe no exemplo a diferença entre vírgula do código e espaço na saída.",
+      "Registre sua previsão. No editor, selecione cada ___ e substitua pelo valor correspondente; não acrescente outro console.log.",
+      "Execute. Se houver erro, compare aspas, vírgulas e parênteses com o exemplo.",
+      "Confira se o zero apareceu e explique a diferença entre o rótulo e o valor."
+    ],
+    "docs": [
+      {
+        "title": "MDN: argumentos de console.log",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/console/log_static",
+        "task": "Consulta guiada: em Syntax (Sintaxe), procure a forma que recebe val1 e valN. O trecho /* …, */ indica que mais valores podem existir; não precisa copiá-lo.",
+        "takeaway": "A vírgula separa vários valores em uma mesma chamada. A documentação permite conferir essa forma.",
+        "required": false
+      }
+    ],
+    "mode": "edit-run",
+    "expected": [
+      [
+        "nome:",
+        "Ana"
+      ],
+      [
+        "pontos:",
+        0
+      ],
+      [
+        "fim"
+      ]
+    ],
+    "rubric": [
+      "Preenchi as três lacunas sem alterar os rótulos.",
+      "A saída contém nome: Ana, pontos: 0 e fim nessa ordem."
+    ],
+    "reflection": "Por que pontos: e 0 aparecem na mesma linha? O zero foi mostrado?",
+    "review": {
+      "prompt": "Qual é o resultado de console.log(\"vidas:\", 0);?",
+      "choices": [
+        "vidas: 0",
+        "Uma linha vazia porque zero não aparece.",
+        "Duas linhas separadas: vidas: e 0."
+      ],
+      "answer": 0,
+      "correctFeedback": "A vírgula separa os argumentos da mesma chamada. O rótulo e o zero aparecem juntos.",
+      "incorrectFeedback": "Releia a explicação da atividade. A vírgula separa os argumentos da mesma chamada. O rótulo e o zero aparecem juntos."
+    }
+  },
+  "00.07": {
+    "title": "Escreva seu primeiro programa",
+    "vocabulary": [
+      "Arquivo vazio significa que nenhuma instrução foi escrita ainda; você agora vai escrever as chamadas completas.",
+      "A estrutura é console.log(valor);. Substitua valor pelo texto ou número pedido: não escreva a palavra valor.",
+      "Texto precisa de aspas de abertura e fechamento. O número 0 fica sem aspas, pois o pedido é um número e não o texto \"0\".",
+      "Mesmo quando 0 e \"0\" parecem iguais na saída, o código representa valores diferentes: número e texto. Nesta tarefa confira também o que você escreveu."
+    ],
+    "mental": "Para produzir três mensagens, escreva três chamadas completas, uma por linha. Reaproveite a estrutura conhecida e escolha o argumento de cada uma. O programa usa a ordem em que você colocou essas linhas.",
+    "example": {
+      "code": "console.log(\"ligado\");\nconsole.log(7);\nconsole.log(\"pronto\");",
+      "output": "ligado\n7\npronto",
+      "walkthrough": [
+        "A primeira chamada recebe o texto ligado.",
+        "A segunda recebe o número 7, sem aspas.",
+        "A terceira recebe o texto pronto. Você pode usar essa estrutura com outros valores."
+      ]
+    },
+    "prompt": "No main.js vazio, escreva três chamadas console.log: texto início, número 0 e texto fim, nessa ordem. Antes de executar, registre a saída prevista. Use uma chamada completa por linha.",
+    "response": "Anote as três mensagens esperadas e seu plano: uma chamada para cada mensagem.",
+    "steps": [
+      "Releia a estrutura console.log(valor); e o exemplo resolvido.",
+      "Registre as três saídas que o pedido descreve.",
+      "Escreva as três chamadas no editor; troque os valores do exemplo pelos valores pedidos.",
+      "Execute e compare as mensagens. Confira no código que 0 está sem aspas.",
+      "Explique por que escrever somente início, 0 e fim não substituiria as chamadas."
+    ],
+    "docs": [
+      {
+        "title": "MDN: consultar a sintaxe",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/console/log_static",
+        "task": "Antes de escrever, consulte Syntax (Sintaxe) para conferir console.log(val1). Leia apenas essa seção. val1 representa o argumento, que você substituirá por seu valor.",
+        "takeaway": "Consultar uma referência para lembrar a forma de escrever é parte normal de programar.",
+        "required": true
+      }
+    ],
+    "mode": "edit-run",
+    "expected": [
+      [
+        "início"
+      ],
+      [
+        0
+      ],
+      [
+        "fim"
+      ]
+    ],
+    "rubric": [
+      "Escrevi três chamadas completas e usei o número 0 sem aspas.",
+      "A execução mostrou início, 0 e fim nessa ordem."
+    ],
+    "reflection": "Como você escolheu textos e número nos argumentos? Como conferiu a forma da chamada?",
+    "review": {
+      "prompt": "Qual chamada usa zero como número?",
+      "choices": [
+        "console.log(0);",
+        "console.log(\"0\");",
+        "console.log(\"zero\");"
+      ],
+      "answer": 0,
+      "correctFeedback": "Aspas delimitam texto. O número zero é escrito sem aspas.",
+      "incorrectFeedback": "Releia a explicação da atividade. Aspas delimitam texto. O número zero é escrito sem aspas."
+    }
+  },
+  "00.05": {
+    "title": "Descubra quem fornece cada recurso",
+    "vocabulary": [
+      "Linguagem é o conjunto de regras de JavaScript. ECMAScript é o nome do padrão que define essas regras e seus objetos básicos.",
+      "Ambiente de execução, também chamado runtime ou host, é o programa que executa JavaScript. O navegador executa código de páginas; Node.js executa JavaScript fora delas.",
+      "API é um conjunto de recursos que um ambiente oferece para o programa usar. Saber que um recurso existe não exige aprender a usá-lo agora.",
+      "Ferramenta ajuda a desenvolver. npm organiza pacotes de código. TypeScript é uma linguagem que acrescenta verificações de tipos e costuma ser transformada em JavaScript.",
+      "Array é um recurso padrão da linguagem para sequências de valores. document dá acesso à página no navegador. process fornece informações sobre o processo em Node.js.",
+      "node:fs é o módulo de arquivos do Node.js. Módulo é um conjunto de recursos reunidos; ele precisa ser carregado para usar. Aqui só classificamos o nome: não vamos escrever import.",
+      "console mostra mensagens e fetch faz pedidos de dados. Ambos existem em navegadores atuais e Node.js 24. Aparecer nos dois não transforma uma API de ambiente em regra da linguagem.",
+      "Uma matriz é uma tabela. Aqui cada linha é um nome e cada coluna é uma origem; um nome pode receber mais de uma marca. Não tente executar essa lista como JavaScript."
+    ],
+    "mental": "Separe a origem do recurso de sua disponibilidade. Um recurso do padrão JavaScript, como Array, acompanha a linguagem. Outros são oferecidos pelo ambiente. Para conferir disponibilidade, a documentação precisa corresponder ao ambiente e à versão usados.",
+    "example": {
+      "code": "Nome | Padrão JavaScript | Navegador | Node.js 24 | Ferramenta/linguagem externa\nMath | sim | — | — | —\nnavigator (documentação do navegador) | — | sim | — | —\nVS Code | — | — | — | sim",
+      "output": "Math é padrão JavaScript; o exemplo de navigator foi consultado na documentação do navegador; VS Code é ferramenta.",
+      "walkthrough": [
+        "Math reúne operações matemáticas padrão; não depende de uma página.",
+        "O contexto entre parênteses indica qual documentação está sendo usada. Um mesmo nome pode ter outra implementação em outro ambiente.",
+        "— significa que você não marcou aquela categoria de origem; não é código nem afirmação de que o nome jamais existe ali."
+      ]
+    },
+    "prompt": "Classifique Array, document, process, node:fs, console, fetch, npm e TypeScript na tabela de resposta. Use as explicações acima e consulte as referências para conferir console e fetch. Marque ambas as colunas de ambiente quando aplicável. Não escreva chamadas JavaScript.",
+    "response": "Escreva seu plano de consulta: quais seções você vai procurar para conferir console e fetch no navegador e no Node.js 24?",
+    "steps": [
+      "Leia as definições de linguagem, API, ambiente e ferramenta. Nesta tarefa, você precisa reconhecer a origem, não dominar cada recurso.",
+      "Registre seu plano de consulta; a documentação está disponível desde o início.",
+      "Abra as referências guiadas e procure os títulos console e fetch. Volte à página e preencha sim ou — em cada coluna da tabela textual.",
+      "Use Registrar análise. Depois confira os critérios e explique por que alguns nomes recebem duas marcas. A página registra sua análise; não calcula uma nota automática."
+    ],
+    "docs": [
+      {
+        "title": "Node.js 24: recursos globais",
+        "url": "https://nodejs.org/download/release/v24.16.0/docs/api/globals.html",
+        "task": "Use a busca da página (Ctrl+F) para localizar console e depois fetch. Confirme no título que está na versão 24. Global significa disponível sem carregar um módulo nesta referência.",
+        "takeaway": "A presença de console e fetch aqui confirma sua disponibilidade no Node.js 24.",
+        "required": true
+      },
+      {
+        "title": "MDN: fetch no navegador",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/API/Window/fetch",
+        "task": "Leia a descrição inicial: ela apresenta fetch como método para solicitar um recurso pela rede. Não precisa estudar Promise, parâmetros ou exemplos avançados agora.",
+        "takeaway": "A referência do navegador e a do Node.js são fontes diferentes para conferir a mesma disponibilidade.",
+        "required": true
+      }
+    ],
+    "mode": "written",
+    "starterFiles": [
+      {
+        "path": "material.md",
+        "content": "Array | document | process | node:fs | console | fetch | npm | TypeScript"
+      },
+      {
+        "path": "resposta.md",
+        "content": "Nome | Padrão JavaScript | Navegador | Node.js 24 | Ferramenta/linguagem externa\nArray | | | |\ndocument | | | |\nprocess | | | |\nnode:fs | | | |\nconsole | | | |\nfetch | | | |\nnpm | | | |\nTypeScript | | | |"
+      }
+    ],
+    "rubric": [
+      "Classifiquei os oito nomes com base nas definições e na documentação.",
+      "Marquei console e fetch nos dois ambientes e expliquei essa escolha."
+    ],
+    "reflection": "Qual referência você consultou? Por que console e fetch podem aparecer em dois ambientes?",
+    "review": {
+      "prompt": "A documentação confirma console e fetch no navegador e no Node.js 24. Como marcar a tabela?",
+      "choices": [
+        "Marcar os dois ambientes para ambos os nomes.",
+        "Marcar somente navegador.",
+        "Marcar somente ferramenta externa."
+      ],
+      "answer": 0,
+      "correctFeedback": "Um mesmo recurso pode existir em dois ambientes. A consulta à versão correta confirma isso.",
+      "incorrectFeedback": "Releia a explicação da atividade. Um mesmo recurso pode existir em dois ambientes. A consulta à versão correta confirma isso."
+    }
+  },
+  "00.06": {
+    "title": "Investigue um erro de cada vez",
+    "vocabulary": [
+      "Sintaxe é a regra de escrita do código. SyntaxError significa que o programa não pôde ser lido corretamente, por exemplo porque faltou fechar uma aspa.",
+      "Analisar o arquivo, ou fazer parse, é conferir sua escrita antes de começar a execução. Uma falha nessa análise impede todas as linhas de executar.",
+      "ReferenceError é um erro durante a execução: o código usa um nome que não existe, como consle em vez de console. A escrita pode ser analisada, mas o nome não é encontrado.",
+      "Resultado incorreto é uma saída diferente do pedido mesmo sem mensagem de erro. Terminar sem erro não prova que o programa fez o que você queria.",
+      "Depurar é investigar e corrigir um problema. Uma hipótese é sua explicação provisória; a nova execução ajuda a conferir se ela estava certa.",
+      "A linha indicada no painel orienta a busca. O local e o texto exatos de uma mensagem podem variar entre ferramentas; o importante é a categoria e a causa."
+    ],
+    "mental": "Comece executando o arquivo intacto. Registre o primeiro erro antes de editar. Corrija uma causa e execute novamente. Só investigue a falha seguinte quando a anterior tiver desaparecido. No final compare a saída com o alvo.",
+    "example": {
+      "code": "console.log(\"porta\");\nconsole.log(\"pronto\");",
+      "output": "porta\npronto",
+      "walkthrough": [
+        "Se a primeira linha fosse console.log(\"porta);, a aspa faltante causaria SyntaxError e nenhuma saída apareceria.",
+        "Depois de fechar a aspa, uma linha com consle.log(\"pronto\"); causaria ReferenceError: o nome correto é console.",
+        "Se a linha final mostrasse \"errado\" em vez de \"pronto\", não haveria exceção, mas o resultado ainda estaria diferente do alvo."
+      ]
+    },
+    "prompt": "A saída final deve ser Olá, fim e ok, nessa ordem. Execute primeiro o arquivo intacto. Registre a primeira falha; feche a aspa ausente e execute de novo. Depois investigue o nome consle e, por último, a mensagem diferente do alvo. Faça uma alteração por vez.",
+    "response": "Depois da primeira execução, anote: categoria do erro; linha indicada; causa que você suspeita. Você não precisa prever uma mensagem antes de vê-la.",
+    "steps": [
+      "Leia a diferença entre erro de sintaxe, erro na execução e resultado incorreto.",
+      "Clique em Executar e comparar antes de editar. Nesta atividade esse botão está disponível antes da primeira resposta.",
+      "Registre o erro observado e sua hipótese. Depois corrija somente a aspa que está faltando; execute novamente.",
+      "Registre no campo Histórico de investigação qual erro apareceu e o que você alterou. Corrija consle e execute de novo.",
+      "Compare a saída sem erro com Olá, fim, ok. Corrija a mensagem divergente e execute uma última vez.",
+      "Explique a ordem dos problemas e o que cada execução confirmou."
+    ],
+    "docs": [
+      {
+        "title": "MDN: mensagens de erro",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors",
+        "task": "Consulta opcional: procure SyntaxError ou ReferenceError na lista. Use o nome do erro para localizar uma explicação; não precisa decorar os nomes das mensagens.",
+        "takeaway": "O nome da categoria ajuda a escolher se você confere a escrita ou o nome usado no programa.",
+        "required": false
+      }
+    ],
+    "mode": "debug",
+    "starterFiles": [
+      {
+        "path": "main.js",
+        "content": "console.log(\"Olá);\nconsle.log(\"fim\");\nconsole.log(\"erro\");"
+      }
+    ],
+    "expected": [
+      [
+        "Olá"
+      ],
+      [
+        "fim"
+      ],
+      [
+        "ok"
+      ]
+    ],
+    "rubric": [
+      "Executei o arquivo intacto e registrei o primeiro erro.",
+      "Fiz uma alteração por vez e acompanhei o histórico de resultados.",
+      "A execução final mostrou Olá, fim e ok, sem erro."
+    ],
+    "reflection": "Qual falha veio primeiro, qual veio depois e como você percebeu a mensagem errada sem exceção?",
+    "review": {
+      "prompt": "O programa terminou sem mensagem de erro, mas mostrou uma palavra diferente da pedida. O que fazer?",
+      "choices": [
+        "Comparar com o resultado esperado e corrigir a mensagem.",
+        "Concluir: terminar sem erro garante a resposta correta.",
+        "Apagar todas as chamadas."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma execução sem erro pode ter resultado incorreto. Compare também a saída com o pedido.",
+      "incorrectFeedback": "Releia a explicação da atividade. Uma execução sem erro pode ter resultado incorreto. Compare também a saída com o pedido."
+    }
+  },
+  "00.08": {
+    "title": "Leia seu primeiro formulário HTML",
+    "vocabulary": [
+      "HTML é a linguagem de marcação que descreve a estrutura da página; não é JavaScript e não é uma lista de chamadas console.log.",
+      "Elemento é uma parte da página, como um formulário ou botão. Uma tag é a marca escrita entre < e > que indica o elemento.",
+      "<form> abre um formulário e </form> o fecha. A barra / indica fechamento. O conteúdo entre essas tags está dentro do formulário.",
+      "label dá um rótulo ao campo; input é o campo de entrada; button é o botão. input é um elemento vazio: não usa </input> em HTML.",
+      "Atributo é uma informação na tag, escrita como nome=\"valor\". id identifica um elemento no documento e deve ser único; class é um rótulo que vários elementos podem compartilhar.",
+      "for no label indica o id do campo associado. Não aponta para class. O texto Nome dentro do label é conteúdo, não atributo.",
+      "Pai é o elemento que contém outro diretamente. Filho é o elemento contido. Elementos com o mesmo pai são irmãos. Recuos ajudam a ler, mas são as tags que definem a estrutura.",
+      "Uma árvore textual representa essa relação: escreva o pai e, nas linhas recuadas abaixo, seus filhos. Não é preciso escrever CSS (a linguagem de aparência) nesta atividade."
+    ],
+    "mental": "Comece pela tag externa e acompanhe até seu fechamento. As tags internas mostram os filhos. Depois leia os atributos: compare for do label com id do input para encontrar a associação entre rótulo e campo.",
+    "example": {
+      "code": "<form id=\"contato\">\n  <label for=\"postal\">CEP</label>\n  <input id=\"postal\" class=\"campo-form\">\n  <button>Continuar</button>\n</form>",
+      "output": "form (id=contato)\n  label (for=postal)\n  input (id=postal, class=campo-form)\n  button",
+      "walkthrough": [
+        "form é o pai direto de label, input e button; os três são irmãos.",
+        "for=\"postal\" e id=\"postal\" têm o mesmo valor: o rótulo CEP corresponde ao campo.",
+        "campo-form é a classe do input. O botão tem texto e tag de fechamento; input não precisa de fechamento."
+      ]
+    },
+    "prompt": "Leia index.html sem alterá-lo. Na resposta, desenhe a árvore pai/filhos, identifique os valores de id e class e diga a qual input o label se conecta pelo atributo for. Use os atributos como evidência.",
+    "response": "Anote por onde você começará: qual é a tag externa e quais atributos vai comparar? Depois preencha a análise textual.",
+    "steps": [
+      "Leia o vocabulário e a árvore do exemplo acima.",
+      "Registre seu plano de leitura e observe o arquivo index.html. Ele está formatado em linhas para facilitar a leitura.",
+      "Na resposta.md, escreva o pai e seus três filhos. Em seguida, liste os atributos id, for e class com seus valores.",
+      "Abra a referência guiada de label e confira qual atributo estabelece a associação.",
+      "Registre a análise e explique com suas palavras a ligação entre o rótulo e o campo. O arquivo HTML não será executado nesta tarefa de leitura."
+    ],
+    "docs": [
+      {
+        "title": "MDN: associação de label",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label",
+        "task": "Use Ctrl+F para procurar for ou id. Leia o trecho da associação explícita: o valor de for precisa corresponder ao id do controle. Ignore exemplos com APIs JavaScript por enquanto.",
+        "takeaway": "A documentação confirma qual par de atributos liga o texto do rótulo ao campo.",
+        "required": true
+      }
+    ],
+    "mode": "written",
+    "starterFiles": [
+      {
+        "path": "index.html",
+        "content": "<form id=\"entrada\">\n  <label for=\"nome\">Nome</label>\n  <input id=\"nome\" class=\"campo\">\n  <button>Enviar</button>\n</form>"
+      },
+      {
+        "path": "resposta.md",
+        "content": "Árvore pai/filhos:\n\nValores de id:\nValor de for:\nValor de class:\nAssociação entre rótulo e campo:\n"
+      }
+    ],
+    "rubric": [
+      "Descrevi form como pai e label, input e button como filhos diretos.",
+      "Identifiquei os atributos e comparei for com o id do campo."
+    ],
+    "reflection": "Como você encontrou o pai dos elementos e a associação entre label e input?",
+    "review": {
+      "prompt": "Um label tem for=\"email\". Qual atributo do input faz a associação?",
+      "choices": [
+        "id=\"email\"",
+        "class=\"email\"",
+        "id=\"outro\""
+      ],
+      "answer": 0,
+      "correctFeedback": "Na associação explícita, o valor de for corresponde ao id do campo.",
+      "incorrectFeedback": "Releia a explicação da atividade. Na associação explícita, o valor de for corresponde ao id do campo."
+    }
+  },
+  "00.09": {
+    "title": "Explique o efeito de cada chamada",
+    "vocabulary": [
+      "Rastreamento, ou trace, é acompanhar o código e registrar o efeito de cada linha. Não é uma nova sintaxe.",
+      "Efeito observável é algo que você consegue conferir, como uma mensagem na saída.",
+      "Remover uma chamada é retirar a instrução inteira. Neste programa as chamadas são independentes: a retirada não altera os valores das outras.",
+      "Linha do arquivo e posição na saída são coisas diferentes: se uma chamada sai, as mensagens restantes ocupam novas posições na saída."
+    ],
+    "mental": "Associe uma saída a cada chamada. Depois imagine o arquivo sem a chamada escolhida e leia novamente as restantes de cima para baixo. Não é preciso editar o programa para explicar essa hipótese.",
+    "example": {
+      "code": "console.log(\"carregar\");\nconsole.log(9 + 2);\nconsole.log(\"pronto\");",
+      "output": "carregar\n11\npronto",
+      "walkthrough": [
+        "Linha 1 → carregar; linha 2 → 11; linha 3 → pronto.",
+        "Sem a chamada da linha 2, a saída seria carregar e pronto, em duas linhas.",
+        "pronto passa a ser a segunda saída, mas sua chamada continua sendo a que era a terceira instrução no arquivo original."
+      ]
+    },
+    "prompt": "Sem editar main.js, registre a saída de cada linha. Depois descreva três cenários separados: remover só a primeira chamada, só a segunda ou só a terceira. Em cada cenário, diga quais mensagens restariam e em que ordem.",
+    "response": "Preveja as três saídas do arquivo original. Você usará essa previsão para escrever os três cenários de remoção.",
+    "steps": [
+      "Acompanhe o exemplo de rastreamento e remoção.",
+      "Registre a previsão do arquivo original e use Executar e comparar para conferir suas três saídas.",
+      "Preencha resposta.md com o mapa linha → saída e os três cenários. Não remova linhas do arquivo original nesta atividade.",
+      "Use Registrar análise. Confira cada cenário lendo somente as chamadas que restariam.",
+      "Na explicação final, diferencie remover uma mensagem de mudar o valor de outra chamada."
+    ],
+    "docs": [],
+    "mode": "trace-writing",
+    "expected": [
+      [
+        "abrir"
+      ],
+      [
+        3
+      ],
+      [
+        "fechar"
+      ]
+    ],
+    "starterFiles": [
+      {
+        "path": "main.js",
+        "content": "console.log(\"abrir\");\nconsole.log(1 + 2);\nconsole.log(\"fechar\");"
+      },
+      {
+        "path": "resposta.md",
+        "content": "Linha 1 →\nLinha 2 →\nLinha 3 →\nSem a primeira chamada →\nSem a segunda chamada →\nSem a terceira chamada →"
+      }
+    ],
+    "rubric": [
+      "Associei cada chamada à sua saída e conferi o arquivo original.",
+      "Descrevi os três cenários separados, preservando a ordem das chamadas restantes."
+    ],
+    "reflection": "Ao remover a chamada central, quais mensagens restam? Por que os valores das outras não mudam?",
+    "review": {
+      "prompt": "Um programa mostra começar, 8 e terminar. Se remover só a chamada do meio, o que resta?",
+      "choices": [
+        "começar e terminar, nessa ordem.",
+        "8 e terminar.",
+        "terminar e começar, nessa ordem."
+      ],
+      "answer": 0,
+      "correctFeedback": "A retirada elimina somente a saída da chamada removida. As outras mantêm a ordem.",
+      "incorrectFeedback": "Releia a explicação da atividade. A retirada elimina somente a saída da chamada removida. As outras mantêm a ordem."
+    }
+  }
+}

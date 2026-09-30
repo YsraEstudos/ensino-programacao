@@ -190,11 +190,18 @@
   function parseLine(rawLine, sourceLine) {
     const line = rawLine.trim();
     if (!line) return { values: null };
-    if (/^(\/\/|\/\*|\*|#)/.test(line)) {
+    if (/^\/\//.test(line)) return { values: null };
+    if (/^(\/\*|\*|#)/.test(line)) {
       return { error: { line: sourceLine, kind: "not_taught", message: `Linha ${sourceLine}: comentários ainda não foram ensinados. Use apenas chamadas console.log.` } };
     }
     const prefix = /^console\s*\.\s*log\s*\(/.exec(line);
     if (!prefix) {
+      const misspelled = /^consle\s*\.\s*log\s*\(/.exec(line);
+      if (misspelled) {
+        const arguments_ = parseArguments(line, misspelled[0].length);
+        if (!arguments_ || !/^(?:;)?$/.test(line.slice(arguments_.next).trim())) return {error:{line:sourceLine,kind:'syntax',message:'Confira aspas e parênteses antes de investigar o nome da chamada.'}};
+        return {error:{line:sourceLine,kind:'runtime',message:'consle não está definido. Compare o nome com console no exemplo.'}};
+      }
       const kind = /\b(const|let|var|if|for|while|function|return|fetch|document|window|process|require|import)\b/.test(line) || /\bconsole\s*\./.test(line)
         ? "not_taught" : "syntax";
       const message = kind === "not_taught"
@@ -223,10 +230,14 @@
     if (source.length > MAX_SOURCE_LENGTH) return failure(1, "syntax", `O código passou do limite de ${MAX_SOURCE_LENGTH} caracteres.`);
     const sourceLines = source.split(/\r?\n/);
     if (sourceLines.length > MAX_LINES) return failure(MAX_LINES + 1, "syntax", `Use no máximo ${MAX_LINES} linhas nesta atividade.`);
+    // Check the whole file for syntax before simulating any runtime effect.
+    const parsed = sourceLines.map((line, index) => parseLine(line, index + 1));
+    const syntax = parsed.find(result => result.error?.kind === 'syntax');
+    if (syntax) return {ok:false,error:syntax.error};
     const lines = [];
-    for (let index = 0; index < sourceLines.length; index += 1) {
-      const result = parseLine(sourceLines[index], index + 1);
-      if (result.error) return { ok: false, error: result.error };
+    for (let index = 0; index < parsed.length; index += 1) {
+      const result = parsed[index];
+      if (result.error) return { ok: false, error: result.error, lines };
       if (result.values) lines.push({ sourceLine: index + 1, values: result.values });
     }
     return { ok: true, lines };

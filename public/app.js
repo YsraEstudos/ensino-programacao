@@ -131,6 +131,7 @@ function render() {
 }
 
 function stage02Context() { return { progress, saveProgress, render, toast, scheduleSave: scheduleCourseSave }; }
+function stage00Context() { return { progress, saveProgress, render, scheduleSave: scheduleCourseSave, activities: curriculumActivities }; }
 
 function stageContext() { return { progress, saveProgress, render }; }
 
@@ -142,7 +143,8 @@ function renderJavaScriptExercise(id) {
   const item = curriculumActivities.find((activity) => activity.id === id);
   if (!item) { location.hash = "#/javascript"; return; }
   setBreadcrumb("JavaScript", `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
-  view.innerHTML = item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
+  view.innerHTML = item.stage === "00" && item.preparation ? window.DevPathStage00Preparation.render(item, stage00Context()) : item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
+  if (item.stage === "00" && item.preparation) window.DevPathStage00Preparation.sync(item, stage00Context());
 }
 
 function renderHome() {
@@ -452,6 +454,8 @@ function checkReview(answer) {
 
 
 view.addEventListener("click", async (event) => {
+  const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
+  if (stage00Item && window.DevPathStage00Preparation.handleClick(event, stage00Item, stage00Context())) return;
   const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
   if (stage02Item && window.DevPathStage02UI.handleClick(event, stage02Item, stage02Context())) return;
   if (routeInfo().name === "javascript" && window.DevPathStage00UI.handleClick(event, stageContext())) { event.preventDefault(); return; }
@@ -485,6 +489,8 @@ view.addEventListener("click", async (event) => {
 });
 
 view.addEventListener("input", (event) => {
+  const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
+  if (stage00Item && window.DevPathStage00Preparation.handleInput(event, stage00Item, stage00Context())) return;
   const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
   if (stage02Item && window.DevPathStage02UI.handleInput(event, stage02Item, stage02Context())) return;
   if (event.target.matches("#course-search")) { catalogSearch = event.target.value; updateCatalogResults(); return; }
