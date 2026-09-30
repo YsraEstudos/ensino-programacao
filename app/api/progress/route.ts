@@ -6,7 +6,12 @@ export const dynamic = "force-dynamic";
 
 const exerciseIds = new Set<string>(courseExerciseIds);
 const slugs = new Set(["web", "html", "css", ...exerciseIds]);
+type Stage02State = {
+  version: number; index: number; complete: boolean; reflection: string;
+  blocks: { code: string; prediction: string; predictionSaved: boolean; understood: boolean; passedCode: string | null; hintLevel: number; parsons: string[] }[];
+};
 type UserProgress = {
+  stage02: Record<string, Stage02State>;
   completed: string[];
   answers: Record<string, boolean>;
   exerciseVersions: Record<string, number>;
@@ -25,6 +30,7 @@ type UserProgress = {
 };
 
 const emptyProgress: UserProgress = {
+  stage02: {},
   completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {},
   exerciseVersions: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {},
   lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null,
@@ -47,6 +53,28 @@ function isExerciseDataKey(value: string): boolean {
 
 function sanitize(value: unknown): UserProgress {
   const input = record(value);
+  const stage02: Record<string, Stage02State> = {};
+  for (const id of exerciseIds) {
+    if (!id.startsWith("02.")) continue;
+    const state = record(record(input.stage02)[id]);
+    if (state.version !== 1 || !Array.isArray(state.blocks) || state.blocks.length < 1 || state.blocks.length > 3) continue;
+    const blocks = state.blocks.map((value: unknown) => {
+      const block = record(value);
+      const code = typeof block.code === "string" ? block.code.slice(0, 12000) : "";
+      return {
+        code, prediction: typeof block.prediction === "string" ? block.prediction.slice(0, 2000) : "",
+        predictionSaved: block.predictionSaved === true, understood: block.understood === true,
+        passedCode: typeof block.passedCode === "string" && block.passedCode === code ? code : null,
+        hintLevel: Math.max(0, Math.min(3, Math.trunc(Number(block.hintLevel) || 0))),
+        parsons: Array.isArray(block.parsons) ? [...new Set(block.parsons.filter((letter): letter is string => typeof letter === "string" && /^[A-E]$/.test(letter)))].slice(0, 5) : ["C", "D", "A", "E", "B"],
+      };
+    });
+    stage02[id] = {
+      version: 1, index: Math.max(0, Math.min(blocks.length - 1, Math.trunc(Number(state.index) || 0))),
+      complete: state.complete === true && blocks.every(block => block.predictionSaved && block.understood && block.passedCode === block.code),
+      reflection: typeof state.reflection === "string" ? state.reflection.slice(0, 600) : "", blocks,
+    };
+  }
   const answers = record(input.answers);
   const versions = record(input.exerciseVersions);
   const attempts = record(input.attempts);
@@ -119,6 +147,7 @@ function sanitize(value: unknown): UserProgress {
   }
 
   return {
+    stage02,
     completed: Array.isArray(input.completed) ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [],
     answers: cleanAnswers,
     exerciseVersions: cleanVersions,

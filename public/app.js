@@ -1,4 +1,4 @@
-const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseVersions: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
+const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseVersions: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {}, stage02: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
 let progress = blankProgress();
 let curriculumActivities = window.DevPathStage00UI.activities;
 let saveQueue = Promise.resolve();
@@ -103,6 +103,7 @@ function exerciseProgressKey(item) {
   return Number(item.contentVersion || 1) > 1 ? `${item.id}@v${item.contentVersion}` : item.id;
 }
 function isExerciseDone(id) {
+  if (id.startsWith("02.")) return window.DevPathStage02UI.complete({ id }, progress);
   const item = curriculumActivities.find((activity) => activity.id === id);
   const version = Number(item?.contentVersion || 1);
   return progress.answers?.[id] === true && (version === 1 || Number(progress.exerciseVersions?.[id] || 1) === version);
@@ -129,6 +130,8 @@ function render() {
   document.querySelector("#main").focus({ preventScroll: true });
 }
 
+function stage02Context() { return { progress, saveProgress, render, toast, scheduleSave: scheduleCourseSave }; }
+
 function stageContext() { return { progress, saveProgress, render }; }
 
 function renderJavaScriptOverview() {
@@ -139,7 +142,7 @@ function renderJavaScriptExercise(id) {
   const item = curriculumActivities.find((activity) => activity.id === id);
   if (!item) { location.hash = "#/javascript"; return; }
   setBreadcrumb("JavaScript", `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
-  view.innerHTML = renderCurriculumLesson(item);
+  view.innerHTML = item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
 }
 
 function renderHome() {
@@ -449,6 +452,8 @@ function checkReview(answer) {
 
 
 view.addEventListener("click", async (event) => {
+  const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
+  if (stage02Item && window.DevPathStage02UI.handleClick(event, stage02Item, stage02Context())) return;
   if (routeInfo().name === "javascript" && window.DevPathStage00UI.handleClick(event, stageContext())) { event.preventDefault(); return; }
   const firstResponse = event.target.closest("[data-course-first-response]");
   if (firstResponse) {
@@ -480,6 +485,8 @@ view.addEventListener("click", async (event) => {
 });
 
 view.addEventListener("input", (event) => {
+  const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
+  if (stage02Item && window.DevPathStage02UI.handleInput(event, stage02Item, stage02Context())) return;
   if (event.target.matches("#course-search")) { catalogSearch = event.target.value; updateCatalogResults(); return; }
   if (event.target.matches("[data-course-editor]")) { saveCourseDraft(event.target.dataset.courseEditor); scheduleCourseSave(); return; }
   if (event.target.matches("[data-course-reflection]")) {
