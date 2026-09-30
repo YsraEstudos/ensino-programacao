@@ -52,6 +52,9 @@
     return Object.fromEntries(item.starterFiles.map(file=>[file.path,file.content]));
   }
   const done = (item, progress) => progress.answers?.[item.id]===true && Number(progress.exerciseVersions?.[item.id]||1)===Number(item.contentVersion||1);
+  function renderExample(p) {
+    return `<div class="s00-example-grid"><div><div class="s00-code-caption">EXEMPLO · JAVASCRIPT</div><pre><code>${esc(p.example.code)}</code></pre></div><div><div class="s00-code-caption">RESULTADO DO EXEMPLO</div><pre class="s00-example-output">${esc(p.example.output)}</pre></div></div>`;
+  }
   function render(item, context) {
     const p=item.preparation, progress=context.progress, k=key(item), saved=progress.warmupCompleted?.[k]===true;
     const files=drafts(item,progress), evidence=progress.exerciseEvidence?.[k]||{}, complete=done(item,progress);
@@ -60,14 +63,14 @@
     const previous=position>0?activities[position-1]:null,next=position>=0?activities[position+1]:null;
     const glossary=p.glossary?.length?`<details class="s00-glossary"><summary>Glossário consultável · ${p.glossary.length} termos</summary><ul>${p.glossary.map(line=>`<li>${inline(line)}</li>`).join('')}</ul></details>`:'';
     const sections=['learn','challenge','predict','practice','explain'];
-    const labels=['01 · Aprender','02 · Ler o desafio','03 · Responder','04 · Praticar','05 · Explicar'];
+    const labels=['Aprender','Desafio','Responder','Praticar','Explicar'];
     const descriptions=['Vocabulário e exemplo resolvido','O que a atividade pede','Sua previsão ou plano','Executar código ou registrar análise','Comparar e explicar o resultado'];
     return `<article class="course-lesson s00-lesson" data-s00-id="${esc(item.id)}">
       <a class="lesson-back" href="#/catalog">Todas as etapas</a>
-      <header class="course-lesson-hero"><div class="eyebrow">JAVASCRIPT · ETAPA 00 · ${esc(item.id)}</div><h1>${esc(item.title)}</h1><p>${inline(item.objective)}</p></header>
-      <nav class="s00-steps" aria-label="Ir para uma parte desta aula">${sections.map((name,i)=>`<button type="button" data-s00-target="${prefix}-${name}"><strong>${labels[i]}</strong><span>${descriptions[i]}</span></button>`).join('')}</nav>
-      <p class="s00-path-help">Os passos acima são atalhos para as partes da aula. Comece por Aprender; você pode voltar à explicação a qualquer momento. Registrar uma resposta não é necessário para ler a teoria.</p>
-      <section id="${prefix}-learn" tabindex="-1" class="course-explanation-panel" data-s00-teaching><div class="course-section-kicker">ANTES DO EXERCÍCIO</div><h2>O que você precisa saber</h2><ul class="s00-vocabulary">${p.vocabulary.map(line=>`<li>${inline(line)}</li>`).join('')}</ul><h3>Como pensar neste problema</h3><p>${inline(p.mental)}</p><h3>Exemplo resolvido</h3><p>Este exemplo ensina a regra com outros valores. Use o raciocínio para resolver a atividade abaixo.</p><pre><code>${esc(p.example.code)}</code></pre><strong>Resultado do exemplo</strong><pre class="s00-example-output">${esc(p.example.output)}</pre><ol>${p.example.walkthrough.map(line=>`<li>${inline(line)}</li>`).join('')}</ol>
+      <header class="course-lesson-hero"><div class="s00-hero-top"><div class="eyebrow">JAVASCRIPT <span aria-hidden="true">/</span> ETAPA 00</div><span class="s00-lesson-index">${esc(item.id)}</span></div><h1>${esc(item.title)}</h1><p>${inline(item.objective)}</p><div class="s00-hero-meta"><span><i aria-hidden="true"></i>${esc(item.duration || 'No seu ritmo')}</span><span>${complete?'Atividade concluída':'Aprenda, experimente, compreenda'}</span></div></header>
+      <div class="s00-journey"><div class="s00-journey-caption"><span>ROTEIRO DA AULA</span><span data-s00-reading-step aria-hidden="true">01 / 05</span></div><nav class="s00-steps" aria-label="Ir para uma parte desta aula">${sections.map((name,i)=>`<button type="button" data-s00-target="${prefix}-${name}" ${i===0?'aria-current="step"':''}><span class="s00-step-number" aria-hidden="true">0${i+1}</span><span class="s00-step-copy"><strong>${labels[i]}</strong><span>${descriptions[i]}</span></span></button>`).join('')}</nav></div>
+      <p class="s00-path-help">Comece por Aprender. Use os passos para navegar e volte à explicação quando precisar. A teoria fica disponível em todos os passos.</p>
+      <section id="${prefix}-learn" tabindex="-1" class="course-explanation-panel" data-s00-teaching><div class="course-section-kicker">ANTES DO EXERCÍCIO</div><h2>O que você precisa saber</h2><ul class="s00-vocabulary">${p.vocabulary.map(line=>`<li>${inline(line)}</li>`).join('')}</ul><h3>Como pensar neste problema</h3><p>${inline(p.mental)}</p><h3>Exemplo resolvido</h3><p>Este exemplo ensina a regra com outros valores. Use o raciocínio para resolver a atividade abaixo.</p>${renderExample(p)}<ol>${p.example.walkthrough.map(line=>`<li>${inline(line)}</li>`).join('')}</ol>
       ${glossary}${p.docs.length?`<aside class="s00-docs"><h3>Aprenda a consultar a documentação</h3><p>Documentação é uma referência para conferir um recurso. Abra o link em outra aba e leia somente o trecho indicado. Se a página estiver em inglês, use a tradução do navegador; os nomes de código continuam iguais. Consultar uma referência faz parte do exercício.</p>${p.docs.map(doc=>`<div><a href="${esc(doc.url)}" target="_blank" rel="noopener noreferrer">${esc(doc.title)}</a><span class="s00-doc-kind">${doc.required?'Consulta guiada nesta atividade':'Consulta opcional'}</span><p>${inline(doc.task)}</p><p><strong>O que aproveitar:</strong> ${inline(doc.takeaway)}</p></div>`).join('')}</aside>`:''}</section>
       ${renderLab(item,context)}<section id="${prefix}-challenge" tabindex="-1" class="course-prompt-panel"><div class="course-section-kicker">AGORA, O EXERCÍCIO</div><h2>O que fazer</h2><p>${inline(item.prompt)}</p><ol>${p.steps.map(line=>`<li>${inline(line)}</li>`).join('')}</ol><div class="course-starter-read">${item.starterFiles.filter(file=>file.path!=='resposta.md').map(file=>`<div class="course-file-preview"><strong>${esc(file.path)}</strong><pre><code>${esc(file.content)||'(arquivo vazio: você escreverá o programa na prática)'}</code></pre></div>`).join('')}</div></section>
       <section id="${prefix}-predict" tabindex="-1" class="course-prompt-panel"><h2>${p.mode==='debug'?'Registre a primeira observação':'Sua previsão ou plano'}</h2><p>${inline(item.interaction)}</p><p>${inline(item.firstResponse.timing)}</p><label for="${prefix}-prediction">${p.mode==='debug'?'Erro observado e hipótese':'Resposta inicial'}</label><textarea id="${prefix}-prediction" data-s00-prediction maxlength="400" ${saved?'readonly':''} placeholder="${p.mode==='debug'?'SyntaxError; linha …; suspeito que …':'Escreva sua resposta seguindo o formato acima.'}">${esc(progress.exercisePredictions?.[k]||'')}</textarea><button type="button" class="button-primary" data-s00-action="predict" ${saved?'disabled':''}>${saved?'Resposta inicial registrada':'Registrar resposta'}</button><p data-s00-prediction-status role="status">${saved?'A resposta foi preservada para comparação. A explicação continua disponível acima.':'Depois de registrar, a prática fica disponível. Você pode reler a explicação antes.'}</p></section>
@@ -96,7 +99,37 @@
     const transfers=item.preparation.lab?.kind==='capstone'?transferAnswers.length===2&&transferAnswers.every(text=>(text||'').trim().length>=20):true;
     return p.warmupCompleted?.[k]===true && evidenceOkay && transfers && (r.querySelector('[data-s00-reflection]')?.value.trim().length||0)>=16 && checked===item.rubric.length;
   }
-  function sync(item,context) {const button=root()?.querySelector('[data-s00-action="complete"]');if(button)button.disabled=done(item,context.progress)||!ready(item,context);}
+  let presentationRoot=null, revealObserver=null, scrollQueued=false;
+  const reducedMotion = () => Boolean(global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function selectReadingStep(r,index) {
+    const buttons=[...r.querySelectorAll('[data-s00-target]')];
+    buttons.forEach((button,i)=>{if(i===index)button.setAttribute('aria-current','step');else button.removeAttribute('aria-current');});
+    const caption=r.querySelector('[data-s00-reading-step]');
+    if(caption)caption.textContent=`${String(index+1).padStart(2,'0')} / ${String(buttons.length).padStart(2,'0')}`;
+  }
+  function trackReadingStep() {
+    scrollQueued=false;
+    if(!presentationRoot?.isConnected){global.removeEventListener('scroll',queueReadingStep);revealObserver?.disconnect();presentationRoot=null;return;}
+    const sections=[...presentationRoot.querySelectorAll('[data-s00-target]')].map(button=>document.getElementById(button.dataset.s00Target));
+    const threshold=Math.min(180,global.innerHeight*.28);
+    let index=0;sections.forEach((section,i)=>{if(section && section.getBoundingClientRect().top<=threshold)index=i;});
+    selectReadingStep(presentationRoot,index);
+  }
+  function queueReadingStep() {
+    if(scrollQueued)return;scrollQueued=true;
+    if(global.requestAnimationFrame)global.requestAnimationFrame(trackReadingStep);else trackReadingStep();
+  }
+  function mountPresentation(r) {
+    if(!r || presentationRoot===r)return;
+    revealObserver?.disconnect();global.removeEventListener('scroll',queueReadingStep);presentationRoot=r;
+    [...r.querySelectorAll('[data-s00-target]')].forEach((button,i)=>{const section=document.getElementById(button.dataset.s00Target);if(section)section.dataset.s00Step=String(i+1).padStart(2,'0');});
+    global.addEventListener('scroll',queueReadingStep,{passive:true});trackReadingStep();
+    if(global.IntersectionObserver && !reducedMotion()){
+      revealObserver=new global.IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.classList.add('s00-revealed');revealObserver.unobserve(entry.target);}},{threshold:.06});
+      r.querySelectorAll(':scope > section').forEach(section=>revealObserver.observe(section));
+    }
+  }
+  function sync(item,context) {const r=root();mountPresentation(r);const button=r?.querySelector('[data-s00-action="complete"]');if(button)button.disabled=done(item,context.progress)||!ready(item,context);}
   function handleInput(event,item,context) {
     if(!root()?.contains(event.target))return false;
     const input=event.target,k=key(item),p=context.progress;
@@ -137,7 +170,7 @@
     const target=event.target.closest('[data-s00-action], [data-s00-target], [data-s00-rubric]');if(!target)return false;
     if(target.hasAttribute('data-s00-rubric')){sync(item,context);return true;}
     event.preventDefault?.();
-    if(target.dataset.s00Target){const section=document.getElementById(target.dataset.s00Target);section?.focus({preventScroll:true});section?.scrollIntoView({block:'start',behavior:'auto'});return true;}
+    if(target.dataset.s00Target){const r=root(),section=document.getElementById(target.dataset.s00Target);const index=[...r.querySelectorAll('[data-s00-target]')].indexOf(target);selectReadingStep(r,index);section?.focus({preventScroll:true});section?.scrollIntoView({block:'start',behavior:reducedMotion()?'auto':'smooth'});return true;}
     const p=context.progress,k=key(item);
     if(target.dataset.s00Action==='predict'){
       if(p.warmupCompleted?.[k])return true;

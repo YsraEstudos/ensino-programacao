@@ -62,6 +62,20 @@ for(const item of lessons){
   assert(teaching && !teaching.hidden,`${item.id}: explanation visible without an answer`);
   assert(teaching.compareDocumentPosition(view.querySelector('[data-s00-prediction]'))&dom.window.Node.DOCUMENT_POSITION_FOLLOWING);
   for(const button of view.querySelectorAll('[data-s00-target]'))assert(view.querySelector(`[id="${button.dataset.s00Target}"]`));
+  if(item.id==='00.01'){
+    // Navigation keeps keyboard focus and disables smooth scrolling when motion is reduced.
+    let behavior;const scroll=dom.window.HTMLElement.prototype.scrollIntoView;
+    dom.window.HTMLElement.prototype.scrollIntoView=function(options){behavior=options.behavior;};
+    const steps=[...view.querySelectorAll('[data-s00-target]')];
+    dom.window.matchMedia=()=>({matches:true});
+    ui.handleClick({target:steps[2],preventDefault(){}},item,context);
+    assert.equal(behavior,'auto');assert.equal(dom.window.document.activeElement.id,steps[2].dataset.s00Target);
+    assert.equal(steps[2].getAttribute('aria-current'),'step');
+    assert.equal(view.querySelectorAll('[data-s00-target][aria-current]').length,1);
+    dom.window.matchMedia=()=>({matches:false});
+    ui.handleClick({target:steps[0],preventDefault(){}},item,context);assert.equal(behavior,'smooth');
+    delete dom.window.matchMedia;dom.window.HTMLElement.prototype.scrollIntoView=scroll;
+  }
   assert(view.querySelector('[data-s00-action="complete"]').disabled);
   click('predict');assert(!progress.warmupCompleted[ui.key(item)],'empty response cannot unlock');
   if(item.preparation.mode==='debug')click('run');
