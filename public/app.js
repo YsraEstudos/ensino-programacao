@@ -148,6 +148,7 @@ function render() {
   if (route.name === "catalog") renderCatalog();
   if (route.name === "javascript") route.id ? renderJavaScriptExercise(route.id) : renderJavaScriptOverview();
   if (route.name === "review") renderReview();
+  window.DevPathLearningJourney?.sync(view);
   document.querySelector("#main").focus({ preventScroll: true });
 }
 
@@ -163,7 +164,7 @@ function renderJavaScriptExercise(id) {
   const item = curriculumActivities.find((activity) => activity.id === id);
   if (!item) { location.hash = "#/javascript"; return; }
   setBreadcrumb("JavaScript", item.stage === "D" ? "Diagnóstico" : `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
-  view.innerHTML = item.stage === "00" && item.preparation ? window.DevPathStage00Preparation.render(item, stage00Context()) : item.stage === "01" ? window.DevPathStage01UI.render(item, stage00Context()) : item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
+  view.innerHTML = item.stage === "D" ? window.DevPathDiagnosticUI.render(item, stage00Context()) : item.stage === "00" && item.preparation ? window.DevPathStage00Preparation.render(item, stage00Context()) : item.stage === "01" ? window.DevPathStage01UI.render(item, stage00Context()) : item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
   if (item.stage === "00" && item.preparation) window.DevPathStage00Preparation.sync(item, stage00Context());
 }
 
@@ -492,6 +493,8 @@ function checkReview(answer) {
 
 
 view.addEventListener("click", async (event) => {
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleClick(event, diagnosticItem, stage00Context())) return;
   const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
   if (stage00Item && window.DevPathStage00Preparation.handleClick(event, stage00Item, stage00Context())) return;
   const stage01Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "01");
@@ -531,6 +534,8 @@ view.addEventListener("click", async (event) => {
 });
 
 view.addEventListener("input", (event) => {
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleInput(event, diagnosticItem, stage00Context())) return;
   const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
   if (stage00Item && window.DevPathStage00Preparation.handleInput(event, stage00Item, stage00Context())) return;
   const stage01Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "01");
@@ -555,6 +560,8 @@ view.addEventListener("input", (event) => {
   if (routeInfo().name === "javascript") window.DevPathStage00UI.handleInput(event, stageContext());
 });
 view.addEventListener("change", (event) => {
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleInput(event, diagnosticItem, stage00Context())) return;
   if (event.target.matches("[data-course-rubric]")) {
     const id = event.target.dataset.courseRubric;
     const selected = [...view.querySelectorAll(`[data-course-rubric="${id}"]:checked`)].map((input) => Number(input.value));

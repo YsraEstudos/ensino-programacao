@@ -107,6 +107,63 @@ stage01Preparation['01.07'].notes = ['O formato pedido é horas + a letra h + mi
 stage01Preparation['01.08'].notes = ['Substitua os comentários por instruções reais: imprima um resumo, execute volume = 7; e imprima o resumo seguinte. Escrever volume=7 dentro de // não altera nenhum valor.', 'Não declare volume de novo: ele já existe. Reavalie a template literal depois da atribuição para ler o volume atual.'];
 stage01Preparation['01.09'].workedExample = {code: 'const modelo = "Lume";\nlet energia = 8;\nconst resumo = `${modelo} | energia ${energia}`;\nconsole.log(resumo);\nenergia = 3;\nconsole.log(resumo);\nconsole.log(`${modelo} | energia ${energia}`);\nenergia = 0;\nconsole.log(`${modelo} | energia ${energia}`);', output: ['Lume | energia 8', 'Lume | energia 8', 'Lume | energia 3', 'Lume | energia 0'], steps: ['resumo guarda a string calculada quando energia era 8.', 'Mudar energia para 3 não muda a string já guardada: o segundo log ainda mostra 8.', 'A próxima template literal é calculada novamente e lê 3.', 'Depois da reatribuição para 0, uma nova avaliação mostra zero. No projeto, produza somente as três fichas atuais pedidas.']};
 stage01Preparation['01.09'].notes = ['Checkpoint é um momento de observação: imprima a ficha inicial, reatribua vida, imprima outra ficha, reatribua vida novamente e imprima a última. Você pode repetir console.log; não precisa criar funções.', 'Preparação para a Etapa 02: antes de calcular ou comparar, identifique se o dado é número, texto ou booleano. "3" e 3 têm tipos diferentes. Zero e false são valores presentes; não são sinônimos de null ou undefined. As conversões e comparações serão ensinadas na próxima etapa.'];
+
+stage01Preparation['01.02'].vocabulary = ['Um nome no código pode ficar associado a um valor; essa associação é chamada binding.', 'const cria um nome que não recebe outra atribuição; let cria um nome que pode receber outro valor.', 'Inicializar é dar o primeiro valor ao nome; reatribuir é dar outro valor ao mesmo nome.'];
+stage01Preparation['01.03'].vocabulary = ['Uma declaração cria um nome associado a um valor.', 'Uma leitura precisa ocorrer depois de o nome lido receber seu primeiro valor.', 'Nomes independentes podem ser declarados em ordens diferentes sem mudar o resultado.'];
+stage01Preparation['01.04'].vocabulary = ['const impede reatribuir o nome associado ao valor.', 'let permite reatribuir o nome quando ele precisa apontar para outro valor.', 'A escolha const/let depende da mudança prevista, não do valor inicial.'];
+
+const stage01Scaffolds = {
+  '01.01': {
+    introduction: 'Nesta atividade, você vai descobrir como JavaScript classifica valores e como o operador typeof devolve esse rótulo em texto.',
+    conceptSteps: ['Um valor é o dado que aparece no código, como 42, "42" ou true.', 'Aspas transformam o conteúdo em texto; sem aspas, 42 continua sendo um número.', 'typeof recebe um valor e devolve uma string com seu rótulo, como "number" ou "string".', 'undefined, null e os rótulos que eles produzem têm regras próprias; observe-as antes de prever.'],
+    practiceSteps: ['Leia cada valor sem executar e escreva o rótulo que typeof deve devolver.', 'Compare sua previsão com as cinco linhas executadas e marque onde valor e rótulo são diferentes.', 'Explique com suas palavras por que typeof null devolve "object" nesta linguagem.']
+  },
+  '01.02': {
+    introduction: 'Nesta atividade, você vai acompanhar como um nome mantém seu valor ou recebe outro valor linha por linha.',
+    conceptSteps: ['Um nome associado a um valor é um binding; a declaração cria essa associação.', 'Na atribuição, leia primeiro o lado direito e só depois atualize o nome à esquerda.', 'const mantém a associação sem nova atribuição; let permite que o nome receba outro valor.', 'Uma soma como contador + 1 produz um novo valor; ela não muda o outro nome usado no cálculo.'],
+    practiceSteps: ['Preencha o estado de base e total depois de cada instrução, incluindo quando total ainda não foi inicializado.', 'Execute o código e compare cada linha da tabela com sua previsão.', 'Explique por que a última atribuição muda total, mas deixa base com o mesmo valor.']
+  },
+  '01.03': {
+    introduction: 'Nesta atividade, você vai organizar instruções pela dependência real entre os nomes que elas produzem e leem.',
+    conceptSteps: ['Uma declaração produz um nome com seu primeiro valor.', 'Um console.log é consumidor: ele precisa vir depois dos nomes que lê.', 'Declarações que não usam umas às outras podem trocar de lugar.', 'Uma linha extra pode executar, mas ainda assim não pertencer à saída pedida.'],
+    practiceSteps: ['Liste os nomes que o resumo lê e coloque suas declarações antes dele.', 'Monte uma primeira ordem válida e depois escreva outra trocando apenas produtores independentes.', 'Retire o diagnóstico extra e explique por que ele não faz parte do resultado.']
+  },
+  '01.04': {
+    introduction: 'Nesta atividade, você vai escolher const ou let olhando para o que cada nome precisará fazer depois.',
+    conceptSteps: ['const e let declaram nomes associados a valores.', 'Use const quando o nome não receberá outra atribuição.', 'Use let quando o nome for reatribuído mais adiante.', 'Zero, false e texto são valores válidos; o valor inicial sozinho não decide a escolha.'],
+    practiceSteps: ['Procure as linhas que reatribuem um nome e marque esses nomes primeiro.', 'Escolha let para os nomes que mudam e const para os demais.', 'Confira se zero e false continuam na saída e explique uma das suas escolhas.']
+  },
+  '01.05': {
+    introduction: 'Nesta atividade, você vai classificar valores especiais sem tentar calcular como eles foram produzidos.',
+    conceptSteps: ['typeof classifica o valor recebido; o nome escrito não cria uma categoria nova.', 'NaN e Infinity continuam pertencendo ao tipo number.', 'O sufixo n mostra que 1n e 5n são bigint.', 'null continua sendo a peculiaridade histórica que typeof apresenta como "object".'],
+    practiceSteps: ['Leia os quatro valores e preencha somente os rótulos de typeof.', 'Compare NaN, Infinity, bigint e null com os casos comuns da atividade anterior.', 'Explique por que um valor especial não precisa ser um tipo novo.']
+  },
+  '01.06': {
+    introduction: 'Nesta atividade, você vai montar uma string a partir de valores guardados em nomes.',
+    conceptSteps: ['Uma template literal é uma string delimitada por crases.', 'O texto fora de ${...} permanece como foi escrito.', 'Cada expressão dentro de ${...} é avaliada e inserida no texto.', 'Os nomes usados dentro da expressão precisam ter recebido valor antes da leitura.'],
+    practiceSteps: ['Preveja a linha final usando os valores atuais de nome e nivel.', 'Substitua o comentário por uma única expressão entre crases.', 'Execute com os dados alternativos e confirme que o texto acompanha os bindings, sem valores colados.']
+  },
+  '01.07': {
+    introduction: 'Nesta atividade, você vai criar uma string derivada e imprimi-la como uma linha de resumo.',
+    conceptSteps: ['Uma expressão pode produzir uma string a partir de outros valores.', 'O exemplo usa dias e horas para mostrar o formato; o desafio usa horas e minutos com a mesma ideia.', 'Guardar o resultado em resumo permite passá-lo depois para console.log.', 'O zero também é um valor que deve aparecer no texto.'],
+    practiceSteps: ['Preveja o formato de horas e minutos com os valores fornecidos.', 'Declare resumo usando horas e minutos dentro de crases.', 'Imprima resumo e confira um caso em que um dos campos vale zero.']
+  },
+  '01.08': {
+    introduction: 'Nesta atividade, você vai modelar uma configuração que mantém algumas escolhas e altera apenas um valor.',
+    conceptSteps: ['Uma configuração é um conjunto de nomes associados aos valores de um estado.', 'Escolha const para jogo, dificuldade, legendas e idioma porque eles permanecem iguais.', 'Escolha let para volume porque ele recebe outra atribuição.', 'Cada resumo deve ser montado de novo para ler os valores atuais.'],
+    practiceSteps: ['Marque o nome que muda antes de preencher as cinco declarações.', 'Produza o primeiro resumo, reatribua apenas volume e produza o segundo.', 'Compare os dois estados e explique por que zero e false continuam publicados.']
+  },
+  '01.09': {
+    introduction: 'Nesta atividade, você vai registrar uma ficha em três momentos para observar como uma reatribuição muda as próximas leituras.',
+    conceptSteps: ['Um estado é o conjunto de valores atuais em um momento.', 'A ficha inicial usa vida 10; depois, o mesmo nome recebe 6 e depois 0.', 'Uma template literal é calculada quando a linha é executada e lê os valores daquele momento.', 'Uma string guardada antes da mudança continua com o texto antigo; uma nova template literal pode mostrar o valor atual.'],
+    practiceSteps: ['Preveja as três fichas antes de editar, incluindo vida 0.', 'Imprima a ficha inicial, reatribua somente vida para 6 e imprima a ficha desse estado.', 'Reatribua vida para 0, imprima a última ficha e explique por que vida usa let e o zero não deve desaparecer.']
+  }
+};
+
+for (const [id, scaffold] of Object.entries(stage01Scaffolds)) {
+  Object.assign(stage01Preparation[id], scaffold);
+}
+
 for (const [id, config] of Object.entries(stage01Preparation)) {
   config.predictionGuide ||= 'Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.';
   config.reflectionPrompt = id === '01.09' ? 'Explique por que vida usa let, por que zero aparece na última ficha e por que uma string guardada antes da mudança pode mostrar um valor antigo. Relacione também uma das transferências ao projeto.' : `Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo.`;

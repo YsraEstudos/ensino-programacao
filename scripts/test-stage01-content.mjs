@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { stage01Preparation } from '../../course-src/stage01-preparation.mjs';
+import { stage01Preparation } from '../course-src/stage01-preparation.mjs';
 
 const runnerContext = { console };
 vm.runInNewContext(fs.readFileSync(new URL('../public/js-stage01-runner.js', import.meta.url), 'utf8'), runnerContext);

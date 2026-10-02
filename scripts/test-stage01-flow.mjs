@@ -3,7 +3,7 @@ import {readFileSync} from 'node:fs';
 import {JSDOM} from 'jsdom';
 import test from 'node:test';
 import {solutions} from './test-stage01-checks.mjs';
-import {stage01Preparation} from '../../course-src/stage01-preparation.mjs';
+import {stage01Preparation} from '../course-src/stage01-preparation.mjs';
 const root = new URL('../public/',import.meta.url);
 const catalog=JSON.parse(readFileSync(new URL('course-catalog.json',root),'utf8'));
 function fixture(id) {
