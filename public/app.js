@@ -100,7 +100,23 @@ function toast(message) {
 }
 
 function setBreadcrumb(...parts) {
-  breadcrumb.innerHTML = `<span>Seu espaço</span>${parts.map((part) => `<span class="crumb-sep">/</span><strong>${esc(part)}</strong>`).join("")}`;
+  const hrefFor = (part) => {
+    if (part === "Seu espaço" || part === "Início") return "#/home";
+    if (part === "JavaScript" || part === "Exercícios") return "#/catalog";
+    if (part === "Diagnóstico") return "#/javascript/D.01";
+    if (part === "Revisão") return "#/review";
+    const stage = /^Etapa (\d{2})$/.exec(part);
+    return stage ? `#/javascript/${stage[1]}.01` : null;
+  };
+  const home = `<a class="breadcrumb-home" href="#/home">Seu espaço</a>`;
+  const trail = parts.map((part, index) => {
+    const href = hrefFor(part);
+    const content = index === parts.length - 1
+      ? `<strong aria-current="page">${esc(part)}</strong>`
+      : href ? `<a href="${href}">${esc(part)}</a>` : `<span>${esc(part)}</span>`;
+    return `<span class="crumb-sep" aria-hidden="true">/</span>${content}`;
+  }).join("");
+  breadcrumb.innerHTML = home + trail;
 }
 
 function updateNav(route) {
