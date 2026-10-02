@@ -1,0 +1,42 @@
+ETAPA 18 - keyof, typeof, indexed access
+e utility types
+Faixa
+TypeScript II
+Carga
+16-22 h
+Nivel curricular
+3.0/5
+PRE-REQUISITOS
+Generics basicos e objetos tipados. A ponte da etapa apresenta keyof e T[K] antes dos cartoes que os exigem.
+Resultados de aprendizagem
+• Derivar tipos de outros tipos em vez de duplicá-los.
+• Usar keyof e indexed access para relacionar chaves/valores.
+• Empregar Partial, Pick, Omit, Record, ReturnType e afins com moderação.
+• Reconhecer quando um utility type esconde demais a intenção.
+Conceitos nucleares
+keyof · typeof em contexto de tipo · T[K] · Partial · Pick/Omit · Record · ReturnType/Parameters · satisfies
+introdutório · satisfies · as const · readonly tuples · exact optional properties
+Modelo mental aprofundado
+keyof, typeof e indexed access permitem derivar tipos da fonte em vez de duplicar listas de chaves
+manualmente. Utility types entram como combinacoes recorrentes, mas o curso obriga o aluno a nomear
+tipos de dominio quando Pick/Omit aninhados passam a esconder intencao.
+satisfies ocupa um lugar importante entre anotacao e inferencia: valida que um valor cumpre um contrato
+sem necessariamente alargar o tipo inferido para o contrato. Isso e praticado em configuracoes e mapas de
+handlers.
+as const e readonly tuples ajudam a obter literal unions a partir de arrays/objetos constantes. exact
+optional properties retorna aqui para mostrar como API e serializacao diferenciam propriedade ausente de
+propriedade presente com undefined.
+Erros e concepcoes que a etapa deve revelar
+• Duplicar lista de chaves em tipos e runtime.
+• Usar anotacao ampla e perder literais que satisfies preservaria.
+• Confundir propriedade opcional com propriedade presente contendo undefined.
+Exemplo resolvido - getter seguro por chave
+function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+O generic relaciona três coisas: objeto, chave válida e tipo do valor naquela chave. Esse padrão aparece
+em formulários, tabelas e APIs genéricas.
+GATE DE DOMINIO
+Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
+justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
+parte do contrato.

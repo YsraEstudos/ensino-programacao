@@ -1,0 +1,722 @@
+[
+  {
+    "id": 1,
+    "priority": "P0",
+    "title": "Transformar o documento em uma especificação verdadeiramente implementável",
+    "description": "- Para cada exercício, o PDF deve distinguir explicitamente o que o aluno verá e o que só a plataforma verá.\n   - Cada exercício deve passar a ter: ID estável; título; competência principal; competências secundárias; requires; introduces; dificuldade; tempo estimado; enunciado final; starter code; arquivos disponíveis; exemplos públicos; testes públicos; contrato dos testes ocultos; restrições; concepções erradas esperadas; dicas; solução comentada; exercício de recuperação; critério de domínio; runtime; compatibilidade; telemetria pedagógica e próxima atividade possível.\n   - Não basta mais dizer “criar uma função que faça X”. Se o site fornecer código inicial, o código inicial precisa estar especificado. Se houver testes, a suíte precisa ser especificada. Se existir solução, a solução de referência precisa existir.\n   - Teste oculto nunca pode depender de uma escolha não definida. Se uma lista vazia deve retornar null, lançar RangeError ou retornar objeto vazio, isso deve ser contrato explícito. “Defina o comportamento” só funciona em exercício avaliado por rubrica, não em corretor determinístico.\n   - O PDF pode continuar sendo a versão humana, mas eu faria o source of truth real em JSON/YAML/Markdown estruturado, do qual o PDF e os dados do site são gerados. Isso impediria PDF e plataforma de divergirem.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 2,
+    "priority": "P0",
+    "title": "Reconstruir o arquivo editorial do zero, em vez de editar o PDF atual",
+    "description": "- Escolher uma única versão canônica e descartar as variantes intermediárias.\n   - Regerar o PDF a partir da fonte, eliminando qualquer texto fantasma, rodapés antigos e camadas sobrepostas.\n   - Corrigir toda a acentuação de forma automática e depois revisar manualmente.\n   - Remover duplicações de conceitos como type erasure, satisfies e code review.\n   - Eliminar resíduos de markup/equações truncadas.\n   - Atualizar automaticamente contagem de páginas, etapas e exercícios.\n   - Criar um lint editorial que falhe o build se houver ID duplicado, exercício sem pré-requisito, campo vazio, link quebrado, conceito inexistente ou caracteres estranhos.\n   - Como há hoje divergência entre auditorias de 201 e 204 exercícios, a nova fonte deve gerar um manifest com todos os IDs e impedir números “aproximados”.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 3,
+    "priority": "P0",
+    "title": "Refazer completamente dicas, diagnósticos e aprovação",
+    "description": "- Esta é a maior deficiência restante. A 2ª edição afirma que eliminou feedback genérico, mas ainda há casos como 21.04, onde um cache sem limite pergunta ao aluno sobre “event listeners”, e 21.05, sobre Web Workers, repete a mesma classificação.     JavaScript_TypeScript_Zero_ao_A…\n   - Na minha varredura da versão atual, os 201 exercícios repetem a mesma frase-base de aprovação; e 144 das 201 Dica 2 seguem o molde “construa manualmente um caso mínimo para a borda...”.\n   - Cada exercício deve declarar algo como:\n     - misconception_target\n     - observable_failure\n     - diagnostic_question\n     - hint_1_conceptual\n     - hint_2_decomposition\n     - hint_3_analogous_example\n     - worked_solution\n     - transfer_after_solution\n   - Exemplo para 21.04: se a quantidade de chaves cresce indefinidamente, o feedback deve perguntar sobre política de eviction/TTL/cardinalidade, não sobre listeners.\n   - Exemplo para 21.05: se o worker funciona mas a interface continua bloqueada, investigar se o cálculo ainda está sendo realizado no main thread; se o resultado não chega, investigar postMessage/eventos; se falha, verificar propagação de erro.\n   - O “critério de aprovação” deve variar por formato. Previsão não é avaliada igual a projeto; debugging não é avaliado igual a TypeScript; UI não é avaliada igual a função pura.\n   - A solução completa só aparece após a escada de pistas e, quando ela for aberta, o site deve marcar a competência como não dominada e gerar um exercício isomórfico posterior.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 4,
+    "priority": "P0",
+    "title": "Criar um grafo formal de pré-requisitos",
+    "description": "- Todo exercício deve possuir requires e introduces.\n   - O pipeline editorial deve impedir automaticamente: “este exercício exige conceito X, mas X só é introduzido três etapas depois”.\n   - Isso resolveria vários problemas de uma vez.\n   - 00.01 não pode ter uma variável que muda entre logs se a Etapa 00 declara que variáveis ainda não são exigidas.\n   - 00.07 não deveria cobrar precedência de operadores antes de a precedência fazer parte formal da aprendizagem.\n   - 01.07 usa Math.floor, / e %; eu o moveria para a parte de operadores/matemática, ou ensinaria esses elementos antes.\n   - O 15.05 Never exaustivo deve sair da Etapa 15. Hoje ele exige uma union de estados e exhaustiveness antes da Etapa 16 formalizar unions discriminadas e assertNever.     JavaScript_TypeScript_Zero_ao_A…\n   - Array.fromAsync não deve aparecer antes de uma ponte formal por AsyncIterable, Symbol.asyncIterator, async function* e for await...of.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 5,
+    "priority": "P0",
+    "title": "Redefinir a dificuldade para o motor adaptativo",
+    "description": "- Parar de derivá-la principalmente da posição na etapa.\n   - Manter o número 1–5 para interface, mas internamente usar várias dimensões:\n     - novidade conceitual;\n     - carga de sintaxe;\n     - quantidade de conceitos combinados;\n     - complexidade de estado;\n     - incerteza de debugging;\n     - número de arquivos;\n     - necessidade de leitura de código existente;\n     - independência exigida;\n     - domínio de ferramentas.\n   - O valor exibido pode ser uma composição dessas dimensões.\n   - Depois que usuários reais utilizarem o site, recalibrar usando taxa de acerto sem dica, tempo, solicitações de hint e abandono.\n   - O 19.x de conditional/mapped/infer não precisa ser artificialmente “mais difícil” do que concorrência, memória ou arquitetura. O sistema de tipos avançado deve ser tratado como especialização de alta carga cognitiva, não como chefão obrigatório de toda programação profissional.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 6,
+    "priority": "P1",
+    "title": "Formalizar um novo tipo de exercício: MODIFY",
+    "description": "- Hoje a progressão vai de prever/completar para implementar. Falta o meio mais comum no trabalho real: receber código funcional e alterar um requisito.\n   - Adotaria a progressão:\n     Predict → Run → Investigate → Modify → Make → Debug → Transfer.\n   - Em funções: “o código calcula desconto; acrescente nova faixa”.\n   - Em arrays: “o relatório funciona; agora não pode mutar a entrada”.\n   - Em DOM: “a lista funciona; agora adicione edição por teclado”.\n   - Em async: “o cliente funciona; agora requests anteriores precisam ser cancelados”.\n   - Em TS: “a API aceita um estado novo; altere tipos e implementação sem casts”.\n   - Isso reduz brutalmente o salto entre “sei acompanhar” e “preciso escrever tudo sozinho”.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 7,
+    "priority": "P1",
+    "title": "Dividir conceitualmente a Etapa 03",
+    "description": "- 03A – decisões: booleans, if, else, switch, guard clauses.\n   - 03B – repetição: for, while, contadores, acumuladores, break, continue.\n   - Não introduzir branch logic, loops infinitos e controle de iteração no mesmo pacote cognitivo.\n   - for...of só deve aparecer quando o aluno já conhece uma estrutura iterável concreta ou então ser apresentado com algo extremamente controlado.\n   - A numeração das 24 etapas pode permanecer; a divisão pode ser feita em subcapítulos obrigatórios.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 8,
+    "priority": "P1",
+    "title": "Descongestionar a Etapa 05",
+    "description": "- Separar:\n     - 05A Strings e Arrays;\n     - 05B Parsing e Regex.\n   - Em 05A, foco em indexação, métodos fundamentais, mutação vs não mutação, slice, splice, toSorted, toReversed, toSpliced, with.\n   - Regex entra depois que strings já são familiares.\n   - RegExp.escape, grupos, classes e flags entram progressivamente.\n   - Regex deve reaparecer depois em formulários/parsers para transferência, e não morrer na própria aula.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 9,
+    "priority": "P1",
+    "title": "Resolver definitivamente o paradoxo DOM × módulos × testes",
+    "description": "- O Kanban da Etapa 11 é complexo demais para ser apresentado como um grande arquivo global.\n   - Eu introduziria antes dele uma ponte mínima de ESM no navegador:\n     - <script type=\"module\">;\n     - export;\n     - import;\n     - separar state.js, view.js e main.js.\n   - Não é necessário ensinar package resolution/npm nesse ponto; isso continua na Etapa 14.\n   - Importações estáticas só funcionam em contexto de módulo; a própria documentação da linguagem faz essa distinção. MDN Web Docs\n   - Kanban vira Kanban v1, focado em DOM, estado, a11y e persistência.\n   - Depois da Etapa 13, o projeto retorna como Kanban v2, agora com testes escritos pelo aluno.\n   - Isso impede que o curso exija Vitest antes de ensiná-lo sem obrigar o aluno a escrever uma aplicação monolítica.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 10,
+    "priority": "P1",
+    "title": "Tornar testes uma competência muito mais concreta",
+    "description": "- A Etapa 13 já estabelece Vitest e debugging formalmente, o que deve permanecer.     JavaScript_TypeScript_Zero_ao_A…\n    - Adicionar:\n      - vi.fn;\n      - vi.spyOn;\n      - stubs/fakes;\n      - fake timers;\n      - relógio simulado;\n      - mocks de rede;\n      - testes de async/rejeição;\n      - testes de estado intermediário;\n      - diferença entre fake, stub, spy e mock sem academicismo excessivo.\n    - Vitest oferece vi.useFakeTimers justamente para testar setTimeout/setInterval sem esperar tempo real. Vitest\n    - Nomear oficialmente expectTypeOf como ferramenta de type tests na trilha TypeScript; o Vitest possui API própria para isso. Vitest\n    - A suíte da própria plataforma deve simular latência, erro, timeout e resposta fora de ordem.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 11,
+    "priority": "P1",
+    "title": "Automatizar a avaliação de acessibilidade",
+    "description": "- Além da rubrica humana, DOM exercises devem poder validar:\n      - existência de <label> corretamente associado;\n      - uso de <button> quando há ação;\n      - foco após ações relevantes;\n      - atributos ARIA quando realmente necessários;\n      - aria-live quando a atividade exigir;\n      - navegação por teclado.\n    - Não pontuar “quantidade de ARIA”. O ideal é semântica HTML nativa primeiro.\n    - Quando a UI tiver estados de loading/erro, o avaliador deve também testar o estado durante a espera, não apenas o resultado final.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 12,
+    "priority": "P1",
+    "title": "Adicionar segurança DOM como conteúdo explícito",
+    "description": "- innerHTML, outerHTML, insertAdjacentHTML, eval e outros sinks não podem aparecer apenas como “evite”.\n    - Ensinar texto não confiável via textContent/createTextNode.\n    - Mostrar um exercício com uma string maliciosa tratada como texto.\n    - Introduzir sanitização apenas quando HTML realmente precisar ser aceito.\n    - Trusted Types pode entrar no avançado; em 2026 já há suporte significativamente mais amplo e a API foi feita especificamente para controlar sinks de DOM XSS. MDN Web Docs\n    - CSRF eu não colocaria no núcleo JS sem um módulo de autenticação/backend. XSS, por outro lado, é diretamente pertinente ao DOM que o curso ensina.\n    - CORS deve aparecer no fetch como modelo do navegador e fronteira HTTP, não ser apresentado genericamente como “falha de segurança”.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 13,
+    "priority": "P1",
+    "title": "Completar eventos no navegador",
+    "description": "- Etapa 11 deve cobrir:\n      - capture;\n      - target;\n      - bubble;\n      - event.target;\n      - currentTarget;\n      - preventDefault;\n      - stopPropagation;\n      - delegação.\n    - Criar um exercício no qual impedir comportamento padrão e parar propagação produzam resultados diferentes.\n    - Debounce/throttle continua ali de maneira introdutória e volta na Etapa 21 para implementação/performance.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 14,
+    "priority": "P1",
+    "title": "Dar um lugar formal a Math",
+    "description": "- Não deixar Math.floor aparecer como conhecimento espontâneo.\n    - Entraria próximo de números/operadores:\n      - Math.floor;\n      - ceil;\n      - round;\n      - trunc;\n      - min/max;\n      - abs;\n      - random.\n    - Math.random() deve vir com aviso de que não é fonte criptograficamente segura.\n    - Depois, desafios reais: dados, randomização de teste, paginação, conversão de tempo.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 15,
+    "priority": "P1",
+    "title": "Dar a Date uma experiência real, não apenas citações",
+    "description": "- Não a colocaria principalmente na Etapa 06 só porque Date é um objeto.\n    - A colocaria junto de tempo/cache/async na Etapa 12.\n    - Exercícios:\n      - criar data;\n      - timestamp;\n      - comparar datas;\n      - calcular expiração;\n      - serialização ISO;\n      - timezone/local vs UTC;\n      - formatar com Intl.DateTimeFormat.\n    - Mostrar explicitamente por que parsing/formatação de datas é traiçoeiro.\n    - Temporal permanece nota avançada/condicional conforme runtime.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 16,
+    "priority": "P1",
+    "title": "Fortalecer assincronismo moderno",
+    "description": "- Manter os quatro combinadores de Promise já incluídos.\n    - Adicionar AbortSignal.timeout() e composição de cancelamento.\n    - Adicionar URL e URLSearchParams para queries de fetch.\n    - Ensinar estado obsoleto/stale response com request ID ou abort.\n    - Separar “timeout de UI”, “cancelamento real” e “Promise que apenas parou de ser aguardada”.\n    - Introduzir depois async function*, Symbol.asyncIterator e for await...of.\n    - Só então usar Array.fromAsync.\n    - O aluno precisa entender que materializar um async iterable e processá-lo streaming são decisões diferentes.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 17,
+    "priority": "P1",
+    "title": "Diferenciar Event Loop de Browser e Node sem estragar o modelo inicial",
+    "description": "- O modelo simples da Etapa 12 permanece primeiro.\n    - Depois, exercício avançado compara ambiente web e Node.\n    - process.nextTick() merece apenas leitura/compatibilidade: a documentação atual do Node o classifica como Legacy e recomenda queueMicrotask() para a maioria dos casos.\n    - Há ainda uma nuance importante: a ordem relativa de nextTick e microtasks difere entre CommonJS e ESM. Node.js\n    - Portanto não ensinar “nextTick sempre vem antes de Promise” como regra universal.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 18,
+    "priority": "P1",
+    "title": "Adicionar Error.cause e melhorar taxonomia de erros",
+    "description": "- Etapa 13 deve ensinar:\n      - capturar;\n      - contextualizar;\n      - relançar;\n      - preservar causa.\n    - new Error(\"Falha ao carregar usuário\", { cause: err }).\n    - Isso preserva a origem em vez de perder contexto. MDN Web Docs\n    - Diferenciar mensagem para humano, código/tipo de erro e causa original.\n    - Depois reaparece no capstone.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 19,
+    "priority": "P1",
+    "title": "Ampliar objetos antes de protótipos",
+    "description": "- Etapa 06 precisa também apresentar:\n      - propriedade própria vs herdada;\n      - enumerabilidade;\n      - Object.keys/values/entries;\n      - Object.hasOwn;\n      - operador in;\n      - descriptors em nível introdutório.\n    - Isso cria uma ponte muito melhor para prototype chain e for...in.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 20,
+    "priority": "P1",
+    "title": "Melhorar ESM na Etapa 14",
+    "description": "- Manter ESM/CJS, package.json, scripts, semver, exports e Node — a estrutura atual é boa.     JavaScript_TypeScript_Zero_ao_A…\n    - Adicionar:\n      - import();\n      - import.meta;\n      - top-level await;\n      - consequências no grafo de módulos;\n      - ciclos;\n      - side effects de import.\n    - Top-level await faz módulos dependentes aguardarem avaliação assíncrona, portanto precisa ser ensinado como semântica de grafo e não apenas sintaxe permitida. MDN Web Docs",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 21,
+    "priority": "P1",
+    "title": "Criar uma progressão real para runtime validation",
+    "description": "- Etapa 15: unknown e validação mínima.\n    - Etapa 16: type guards + assertion functions + pequenos parsers combináveis.\n    - Etapa 17/18: reutilização desses parsers em APIs/formulários.\n    - Etapa 22: comparação com Zod/Valibot, composição complexa, erros, inferência, performance/bundle e fonte da verdade.\n    - Assim o aluno não fica seis etapas escrevendo guardas manuais gigantes para então descobrir schemas.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 22,
+    "priority": "P1",
+    "title": "Corrigir a sequência de exhaustiveness",
+    "description": "- assertNever deve existir na Etapa 16, junto da union discriminada.\n    - O exercício precisa exigir explicitamente:\n      assertNever(x: never): never.\n    - Type test adiciona uma nova variante e espera erro no switch incompleto.\n    - Runtime test pode verificar barreira defensiva em input forjado.\n    - Isso é mais coerente com o próprio conteúdo da Etapa 16 do que mantê-lo em 15.05.     JavaScript_TypeScript_Zero_ao_A…",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 23,
+    "priority": "P1",
+    "title": "Ensinar catch corretamente em TypeScript",
+    "description": "- Criar exercício:\n      catch (e: unknown).\n    - Narrowing via e instanceof Error.\n    - Cenário adicional onde algo que não é Error é lançado.\n    - Relacionar com Error.cause.\n    - Evitar catch (e: any) como atalho.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 24,
+    "priority": "P2",
+    "title": "Ensinar enum sem transformar a aula em “enum é ruim”",
+    "description": "- Concordo com incluir.\n    - Discordo de dizer simplesmente que “o correto é sempre as const”.\n    - A própria documentação oficial diz que enums são objetos reais em runtime e que, em TypeScript moderno, um objeto as const pode ser suficiente em muitos casos. TypeScript\n    - Criar exercício de leitura:\n      - enum numérico;\n      - enum string;\n      - objeto as const;\n      - union derivada.\n    - Mostrar JS emitido.\n    - Explicar especialmente as armadilhas de ambient const enum em bibliotecas.\n    - A trilha pode preferir literais/as const quando não há necessidade de enum runtime, mas como escolha justificada.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 25,
+    "priority": "P2",
+    "title": "Adicionar branded/opaque types, mas como padrão avançado, não fundamento",
+    "description": "- Boa sugestão para Etapa 19 ou 22.\n    - Exemplo:\n      UserId e OrderId, ambos strings em runtime.\n    - Mostrar que TypeScript é estrutural e o branding cria distinção intencional.\n    - Comparar branding manual, wrappers e validação nas bordas.\n    - Não vender isso como um recurso nativo de nominal typing; é um padrão construído sobre intersections/unique symbols.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 26,
+    "priority": "P2",
+    "title": "Incluir isolatedDeclarations, mas corrigir a justificativa",
+    "description": "- Deve aparecer na Etapa 22 de bibliotecas/pacotes.\n    - Não é “configuração indispensável” para todo projeto.\n    - A documentação do TypeScript afirma explicitamente que isolatedDeclarations exige anotações suficientes em exports para permitir emissão independente e recomenda adoção caso a caso, porque existem trade-offs de ergonomia. TypeScript\n    - Excelente exercício:\n      - habilitar a flag;\n      - observar exports problemáticos;\n      - adicionar tipos públicos deliberadamente;\n      - gerar declarations.\n    - Gate obrigatório apenas no track “autor de biblioteca”.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 27,
+    "priority": "P2",
+    "title": "Completar utility types importantes",
+    "description": "- Awaited<T>.\n    - NonNullable<T>.\n    - Exclude<T, U>.\n    - Extract<T, U>.\n    - ReturnType.\n    - Parameters.\n    - NoInfer como avançado/opcional.\n    - Evitar virar coleção de puzzles: cada tipo precisa nascer de um problema concreto.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 28,
+    "priority": "P2",
+    "title": "Rebalancear a Etapa 19",
+    "description": "- Conditional/distributive types, infer, mapped types e template literal types continuam.\n    - Menos exercícios de “type golf”.\n    - Mais aplicações:\n      - API client;\n      - event map;\n      - schema;\n      - handler registry;\n      - DTO transformations.\n    - 19.06/19.07 não precisam ser o máximo absoluto de dificuldade só por envolverem tipos.\n    - Criar “orçamento de complexidade”: se um tipo precisa ser explicado com uma página inteira, perguntar se uma abstração runtime/nomeada seria melhor.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 29,
+    "priority": "P2",
+    "title": "Criar uma microtrilha Git",
+    "description": "- Não precisa virar curso de Git.\n    - Mas code review, change request, PR e release discipline no capstone pressupõem conceitos que hoje aparecem sem preparação; a Etapa 23 já espera revisão de código e disciplina de release.     JavaScript_TypeScript_Zero_ao_A…\n    - Incluir:\n      - init/clone;\n      - status;\n      - add/commit;\n      - diff;\n      - branch;\n      - merge básico;\n      - conflito simples;\n      - .gitignore;\n      - leitura de PR/diff.\n    - GitHub pode ser opcional; Git é a competência.\n    - Pode ser uma trilha paralela entre 13 e 14.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 30,
+    "priority": "P2",
+    "title": "Declarar formalmente o escopo de tooling/bundlers/frameworks",
+    "description": "- O PDF precisa ter uma seção “não faz parte do núcleo”.\n    - Exemplos:\n      - React/Vue/Svelte: trilha futura;\n      - bundlers: aprofundamento opcional;\n      - backend framework: outra trilha;\n      - banco de dados: fora deste curso;\n      - deployment: opcional.\n    - Para bundling, eu ensinaria apenas o conceito e uma experiência mínima com Vite ou outro ambiente decidido pelo produto.\n    - Não é necessário ensinar webpack/Rollup/esbuild individualmente apenas para preencher checklist.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 31,
+    "priority": "P2",
+    "title": "Incluir segurança de dependências/npm",
+    "description": "- Antes de instalar um pacote:\n      - necessidade;\n      - manutenção;\n      - dependências;\n      - licença;\n      - superfície de risco.\n    - Lockfile.\n    - Atualizações.\n    - Auditoria.\n    - Pacote desnecessário como risco e custo.\n    - Supply-chain deve aparecer na Etapa 14 ou na trilha profissional, sem transformar o curso em segurança ofensiva.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 32,
+    "priority": "P2",
+    "title": "Tornar capstone também uma auditoria de operação e segurança",
+    "description": "- O capstone já exige teste, typecheck, acessibilidade, trust boundaries e change request.     JavaScript_TypeScript_Zero_ao_A…\n    - Acrescentaria:\n      - DOM sinks;\n      - secrets/configuração;\n      - logs sensíveis;\n      - erros e cause;\n      - entradas de arquivos;\n      - URLs;\n      - dependências;\n      - cleanup;\n      - cancelamento;\n      - observabilidade.\n    - Não precisa ter “zero vulnerabilidades”; precisa provar que o aluno sabe identificar fronteiras de confiança.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 33,
+    "priority": "P2",
+    "title": "Especificar observabilidade com exercício, não apenas palavra",
+    "description": "- Logs estruturados.\n    - contexto do erro;\n    - não logar segredo/token;\n    - ID de operação/request quando apropriado;\n    - medir duração;\n    - diferenciar warning de error.\n    - Capstone deve produzir um pequeno relatório de uma falha reproduzida.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 34,
+    "priority": "P2",
+    "title": "Formalizar a ordem dos conteúdos de “ponte”",
+    "description": "- Nenhuma API nova deveria aparecer depois do microprojeto final da etapa.\n    - A regra deve ser:\n      conteúdo → prática curta → ponte → microprojeto.\n    - Se a fonte canônica realmente contiver flat(), flatMap() e Promise.try depois dos projetos, eles devem ser reposicionados.\n    - Na versão de 116 páginas que tenho disponível agora, esses IDs extras não aparecem; portanto isso precisa ser reconciliado com a versão-fonte antes da geração da 3ª edição.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 35,
+    "priority": "P2",
+    "title": "Replicar o bom formato “Ponte conceitual”",
+    "description": "- Toda API que aparece pela primeira vez e possui uma pegadinha deve ganhar:\n      - “o que ela resolve”;\n      - snippet mínimo;\n      - comparação com solução conhecida;\n      - erro comum;\n      - previsão antes de execução.\n    - Bons candidatos:\n      - flatMap;\n      - reduce;\n      - structuredClone;\n      - Promise.allSettled;\n      - AbortController;\n      - satisfies;\n      - assertNever;\n      - Proxy;\n      - WeakMap;\n      - Array.fromAsync;\n      - using.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 36,
+    "priority": "P2",
+    "title": "Refinar projetos evolutivos em vez de simplesmente adicionar mais projetos",
+    "description": "- Projeto A/B/C deve realmente carregar decisões de etapas anteriores.\n    - Cada versão recebe um changelog:\n      - V1 procedural;\n      - V2 funções;\n      - V3 arrays/objetos;\n      - V4 persistência;\n      - V5 DOM;\n      - V6 async;\n      - V7 testes;\n      - V8 módulos;\n      - V9 TS;\n      - V10 runtime validation.\n    - Paralelamente, manter pequenos projetos independentes para testar transferência.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 37,
+    "priority": "P2",
+    "title": "Tornar a revisão espaçada baseada em competência, não em “etapa concluída”",
+    "description": "- O aluno não revisa “Etapa 07”.\n    - Ele revisa “map/filter”, “mutação”, “closure”, “narrowing”, “event loop” etc.\n    - Cada erro atualiza uma competência.\n    - Uma solução vista reduz confiança naquele skill.\n    - Acerto independente em problema novo aumenta domínio.\n    - Depois o site mistura competências antigas em novos contextos.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 38,
+    "priority": "P2",
+    "title": "Especificar melhor o motor adaptativo",
+    "description": "- Não pular um fundamento só porque o aluno acertou uma pergunta fácil.\n    - Considerar:\n      - acerto;\n      - quantidade de dicas;\n      - tempo;\n      - número de tentativas;\n      - capacidade de explicar;\n      - transferência.\n    - Um aluno que viu a solução e depois colou o mesmo padrão não deve ser classificado como “domínio alto”.\n    - “Difícil” e “não dominado” são variáveis diferentes.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 39,
+    "priority": "P2",
+    "title": "Integrar IA à arquitetura de exercício, não deixá-la só em uma seção teórica",
+    "description": "- Para cada atividade, definir o que a IA pode fazer em cada estágio.\n    - Antes da tentativa: nenhuma solução.\n    - Primeira dificuldade: pergunta diagnóstica.\n    - Depois: pista conceitual.\n    - Depois: decomposição.\n    - Depois: exemplo análogo.\n    - Só finalmente: solução comentada.\n    - Se detectar código colado muito próximo da resposta, gerar variação de transferência em vez de apenas marcar “correto”.\n    - A IA nunca deve contradizer o contrato do avaliador.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 40,
+    "priority": "P3",
+    "title": "Revisar a linguagem de todos os contratos",
+    "description": "- “Teste oculto/borda” precisa dizer o comportamento esperado quando isso for necessário para a máquina.\n    - “O que se espera” deve ser verificável.\n    - “Diagnóstico” deve descrever o erro, não o conceito genérico da etapa.\n    - “Dica” deve reduzir o espaço de busca sem entregar a linha.\n    - “Aprovação” deve referenciar uma política global + overrides específicos, em vez de repetir 201 vezes o mesmo parágrafo.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 41,
+    "priority": "P0",
+    "title": "Criar um diagnóstico inicial de conhecimento, e não obrigar todos a começarem exatamente do mesmo lugar. Antes da Etapa 00, o site deveria aplicar um diagnóstico curto de leitura de código, valores/tipos, fluxo e funções. Ele não serviria simplesmente para “pular aulas”: produziria um mapa de competências, com pré-requisitos que ainda precisam ser provados. How Learning Works enfatiza que conhecimento prévio pode tanto ajudar quanto atrapalhar, e que domínio exige competências componentes antes da integração. Dartmouth Sites",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 42,
+    "priority": "P0",
+    "title": "Separar “acertou” de “dominou”. Cada competência deveria ter estados como não visto → reconhece → resolve guiado → resolve independente → transfere → retido. Um aluno que acertou map() logo após uma explicação não deveria ser considerado equivalente a alguém que o reconhece uma semana depois em um problema diferente. Retrieval practice, spacing e interleaving apoiam justamente essa distinção entre desempenho imediato e retenção. Pooja K. Agarwal, Ph.D",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 43,
+    "priority": "P0",
+    "title": "Adicionar calibração de confiança. Em exercícios de previsão, o site pergunta antes da execução: “qual sua resposta?” e “quão confiante você está?”. Depois compara confiança × resultado. Isso combate a ilusão de domínio causada por reconhecimento/releitura. O aluno que marca 95% de confiança e erra precisa de um tratamento pedagógico diferente daquele que respondeu “não sei”. A literatura de retrieval aponta explicitamente o problema das ilusões de conhecimento. Pooja K. Agarwal, Ph.D",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 44,
+    "priority": "P0",
+    "title": "Usar vários worked examples para conceitos difíceis, não apenas um exemplo por etapa. Um dos pontos mais fortes da literatura de carga cognitiva é que iniciantes podem aprender melhor estudando exemplos resolvidos antes de serem jogados em resolução independente; a transição depois precisa ser gradual. Para closures, event loop, this, generics, narrowing e conditional types, eu usaria 2–3 exemplos progressivos antes de retirar suporte. Cambridge University Press",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 45,
+    "priority": "P0",
+    "title": "Implementar “faded worked examples”. Primeiro o site mostra a solução inteira comentada; no segundo exemplo remove uma decisão; no terceiro remove mais partes; depois chega ao problema completo. Isso deve ser uma categoria formal diferente de “completar lacuna”. A retirada da ajuda precisa acompanhar domínio, e não simplesmente a posição fixa do exercício na etapa. Cambridge University Press",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 46,
+    "priority": "P1",
+    "title": "Criar exercícios de comparação contrastiva. Mostrar duas implementações que funcionam e perguntar: “qual diferença semântica importa?”. Exemplos excelentes seriam || × ??, sort × toSorted, spread × structuredClone, método normal × arrow, Promise.all × allSettled, annotation × satisfies, Map × objeto e type assertion × validação runtime. Isso força discriminação — aprender quando usar uma ferramenta, não apenas repetir como ela funciona. A prática intercalada é especialmente útil para desenvolver esse tipo de escolha. Pooja K. Agarwal, Ph.D",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 47,
+    "priority": "P0",
+    "title": "Melhorar o tracing: perguntar a finalidade da variável, não decorar nomes de “papéis”. O estudo ICER 2023 encontrou que pedir simplesmente o nome formal do papel da variável ajudava pouco; pedir ao aluno para explicar o que aquela variável representa naquele programa foi mais útil para concentrar a atenção e reduzir carga cognitiva. Portanto, substituir perguntas artificiais como “qual papel desta variável?” por “o que muda se ela for removida?”, “o que ela representa?” e “de quais valores ela depende?”. ICER 2023",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 48,
+    "priority": "P0",
+    "title": "Ensinar o aluno a escolher entradas que tentem provar que sua própria hipótese está errada. Esse é um achado muito interessante do mesmo estudo de tracing. Depois que o aluno explica o que acha que o código faz, o site deve perguntar: “qual entrada teria maior chance de contradizer sua explicação?”. Isso transforma teste e debugging em raciocínio, não tentativa aleatória. ICER 2023",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 49,
+    "priority": "P1",
+    "title": "Criar um “modo de tracing abstrato”. Nos primeiros exercícios, tabela linha a linha. Depois, o site passa a pedir relações: entrada → transformação → estado → saída, sem rastrear cada atribuição. O ICER 2023 encontrou utilidade no abstract tracing para ajudar alunos a perceber relações de nível mais alto. ICER 2023",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 50,
+    "priority": "P0",
+    "title": "Ensinar explicitamente quando usar Run, debugger, teste ou leitura estática. Isso deveria virar uma competência. Em estudo com 421 alunos, execução foi especialmente útil em código simples; com aumento da complexidade ciclomática, o debugger ganhou valor relativo, e alunos melhores alternavam entre ferramentas. Portanto, exercícios podem perguntar primeiro: “qual ferramenta você escolheria para investigar isso e por quê?”. ICER 2024",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 51,
+    "priority": "P1",
+    "title": "Criar um “Museu de bugs e concepções erradas”. Cada erro frequente detectado pela plataforma entra em categorias: truthiness, mutação, aliasing, this, closure, off-by-one, Promise esquecida, race condition, narrowing incorreto etc. Depois, exercícios de revisão podem apresentar deliberadamente bugs que correspondam às concepções que aquele aluno demonstrou anteriormente. The Programmer's Brain dedica atenção específica a misconceptions e à leitura de código como atividade cognitiva própria. Google Livros",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 52,
+    "priority": "P1",
+    "title": "Registrar “o que me confundiu” como dado pedagógico. Depois de determinados erros, oferecer opções curtas: “não entendi a sintaxe”, “não sabia qual método usar”, “não consegui prever o estado”, “entendi a ideia, mas não sabia implementar”. Isso permite distinguir falta de conhecimento, problema de recuperação, problema de decomposição e erro de sintaxe. O objetivo não é coletar questionários longos, mas melhorar a próxima intervenção",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 53,
+    "priority": "P0",
+    "title": "Criar exercícios formais de leitura de código sem edição. Atualmente ainda há muito foco em produzir código. O site deveria ter atividades como: “qual é a finalidade deste módulo?”, “onde você faria esta alteração?”, “qual função controla esta regra?”, “qual dado atravessa estes três módulos?”. The Programmer's Brain dedica grande parte de sua estrutura a leitura e compreensão antes de escrita. Google Livros",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 54,
+    "priority": "P1",
+    "title": "Criar exercícios de navegação em codebase. Na parte avançada, fornecer um mini-repositório com 8–15 arquivos e pedir que o aluno encontre onde determinada funcionalidade nasce. Depois incluir uma issue pequena. Isso é diferente de construir algo do zero e é muito próximo do trabalho profissional. Discussões recentes no Reddit também recomendam ler projetos open source, issues e histórico de commits para aprender organização e estrutura; isso é evidência comunitária, não experimental. Reddit",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 55,
+    "priority": "P1",
+    "title": "Tornar nomenclatura uma habilidade avaliada. a, data, thing podem estar semanticamente corretos e ainda tornar um programa muito mais difícil de compreender. Criar exercícios de renomeação sem mudança de comportamento e, mais tarde, code review focado em nomes. The Programmer's Brain relaciona nomes, leitura e carga cognitiva explicitamente. Google Livros",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 56,
+    "priority": "P0",
+    "title": "Ensinar a leitura de documentação como parte do currículo. Não apenas “consulte MDN”. Deve haver exercício: receber uma página de documentação, encontrar assinatura, parâmetros, retorno, exceções e compatibilidade e então implementar algo. Reddit recente insiste bastante em documentação + pequenos projetos como alternativa a assistir cursos intermináveis; isso é experiência comunitária e coincide com a direção que eu usaria. Reddit",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 57,
+    "priority": "P1",
+    "title": "Criar um “modo documentação bloqueada”. Em alguns exercícios iniciais o aluno recebe links específicos; depois recebe apenas o nome da API; mais tarde precisa localizar a documentação sozinho. A independência também deve sofrer fading",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 58,
+    "priority": "P0",
+    "title": "Introduzir reflexão pós-projeto. Depois de um microprojeto, três perguntas: “o que deu errado?”, “qual decisão você mudaria?”, “qual competência anterior acabou sendo necessária?”. Reflection, retrieval e geração aparecem como mecanismos importantes na literatura de aprendizagem. Pooja K. Agarwal, Ph.D",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 59,
+    "priority": "P0",
+    "title": "Implementar um “orçamento de luta produtiva”. O site não deve entregar dica instantaneamente, mas também não deve deixar um iniciante 45 minutos travado em um detalhe sintático. Dificuldade desejável é útil quando continua pedagogicamente produtiva; worked-example research também mostra que o nível adequado de orientação depende da complexidade e do conhecimento do aluno. Cambridge University Press",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 60,
+    "priority": "P1",
+    "title": "Diversificar projetos por contexto real, não só temática divertida. O livro Exercises for Programmers constrói desafios a partir de coisas semelhantes às que programadores realmente fazem — checkout, conversão, dados externos etc. Eu manteria RPG/jogos, mas equilibraria com pagamentos, importação de arquivos, relatórios, agenda, API, configuração, processamento de logs e formulários. Pragmatic Bookshelf",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 61,
+    "priority": "P0",
+    "title": "Criar uma microcamada de HTTP antes de aprofundar fetch. Hoje muitos cursos ensinam fetch() como se fosse apenas uma função que “busca JSON”. Antes disso, o site deve explicar request/response, método, status, headers, Content-Type, corpo e URL. Eloquent JavaScript separa explicitamente HTTP/forms como parte do aprendizado do navegador, e a documentação de Fetch trabalha diretamente com Request, Response, headers e CORS. Eloquent JavaScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 62,
+    "priority": "P1",
+    "title": "Fazer o aluno trabalhar com respostas que não são JSON. Response.text(), blob(), arrayBuffer(), formData() e json(). Também testar Content-Type antes de interpretar o corpo. A documentação oficial de fetch expõe esses formatos como parte normal da API. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 63,
+    "priority": "P1",
+    "title": "Ensinar que corpos de Request/Response são consumíveis. Um exercício pode tentar ler o mesmo body duas vezes e investigar por que falha/por que bodyUsed muda. Isso ajuda depois em streams e debugging de rede. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 64,
+    "priority": "P1",
+    "title": "Ensinar o ciclo de carregamento do navegador. Antes ou dentro do DOM: parser HTML, script clássico, defer, async, módulo e DOMContentLoaded. Em particular, scripts type=\"module\" já são adiados automaticamente e DOMContentLoaded espera módulos/deferred scripts. Isso elimina uma enorme quantidade de “coloque o script no fim do body porque sim”. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 65,
+    "priority": "P1",
+    "title": "Expandir addEventListener com opções modernas. Depois do básico: { once: true }, { passive: true } e principalmente { signal }, permitindo remover listeners usando AbortController. Isso conecta DOM, cleanup e cancelamento em vez de ensinar esses assuntos isoladamente. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 66,
+    "priority": "P0",
+    "title": "Criar uma microetapa sobre o modelo numérico real do JavaScript. Isso está mais ausente do que parece. O aluno deveria entender que Number é ponto flutuante IEEE-754, 0.1 + 0.2 !== 0.3, intervalo de inteiros seguros, Number.isSafeInteger, NaN, Infinity, arredondamento e quando BigInt é apropriado. A MDN documenta explicitamente precisão, MAX_SAFE_INTEGER e EPSILON. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 67,
+    "priority": "P1",
+    "title": "Corrigir também a história de “usar Number.EPSILON”. Não ensinar “compare floats sempre usando EPSILON” como receita. A própria MDN alerta que a tolerância deve depender da magnitude e precisão dos dados. Um exercício pode mostrar que uma tolerância aceitável em torno de 1 falha para valores de ordem de milhares. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 68,
+    "priority": "P1",
+    "title": "Criar uma aula curta sobre Unicode e strings reais. \"😀\".length, code units × code points, caracteres combinantes, codePointAt, iteração com for...of e normalize(). Duas strings visualmente idênticas podem ter sequências Unicode diferentes e até length diferente antes de normalização. Isso é uma lacuna muito comum em cursos de JS. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 69,
+    "priority": "P2",
+    "title": "Introduzir encoding somente quando houver motivação. TextEncoder, TextDecoder, UTF-8 e Uint8Array podem entrar num bloco avançado ligado a arquivos/network/workers. TextEncoder transforma strings em bytes UTF-8, o que cria uma ponte concreta entre texto, rede e dados binários. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 70,
+    "priority": "P1",
+    "title": "Diferenciar profundamente “readonly em TypeScript” de imutabilidade runtime. O Handbook deixa claro que readonly não congela objetos e pode até ser contornado indiretamente por aliasing. Criar exercício em que uma referência readonly observa alteração feita por uma referência mutável. Isso conecta perfeitamente TypeScript com a Etapa 06 de referências. TypeScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 71,
+    "priority": "P1",
+    "title": "Ensinar Excess Property Checks explicitamente. É uma fonte muito frequente de confusão: literal de objeto recebe verificação especial, enquanto uma variável intermediária pode apresentar comportamento diferente. Isso é excelente para aprofundar structural typing e impedir a falsa ideia de que TS é um “schema validator”. TypeScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 72,
+    "priority": "P1",
+    "title": "Ensinar que TypeScript deliberadamente não é completamente sound. Não precisa entrar em teoria de tipos, mas o aluno avançado deve entender que “compilou” não significa matematicamente seguro. A documentação de compatibilidade reconhece explicitamente escolhas de unsoundness por compatibilidade com padrões JavaScript. Isso justifica ainda mais runtime validation. TypeScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 73,
+    "priority": "P1",
+    "title": "Adicionar import type + verbatimModuleSyntax. Na parte profissional de TS, o aluno precisa distinguir import que existe em runtime de import exclusivamente de tipos. A opção verbatimModuleSyntax torna essa diferença explícita e reduz comportamentos surpreendentes de import elision. TypeScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 74,
+    "priority": "P2",
+    "title": "Criar uma trilha opcional de projetos TypeScript grandes com Project References. Não deve ser obrigatório para todo aluno, mas quem seguir “bibliotecas/monorepo/TS em escala” deveria aprender a separar projetos e builds. Project References podem reduzir custo de typecheck/build e reforçar fronteiras lógicas. TypeScript",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 75,
+    "priority": "P2",
+    "title": "Acrescentar Streams como extensão natural de async iterators. Depois de for await...of, ensinar ReadableStream e o conceito de backpressure. Isso é especialmente útil porque a própria Etapa 21 já menciona backpressure conceitualmente; hoje falta transformar o conceito em experiência. A Streams API define backpressure justamente como o mecanismo que regula produção e consumo quando o consumidor não acompanha o produtor. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 76,
+    "priority": "P2",
+    "title": "Ligar Web Workers a transferência de memória, não somente postMessage. structuredClone pode transferir certos recursos em vez de copiá-los; um ArrayBuffer, por exemplo, pode ser transferido e então fica detached no emissor. Isso produz um ótimo exercício avançado de performance e memória. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 77,
+    "priority": "P1",
+    "title": "Completar a taxonomia de async errors com AggregateError. Como a trilha já ensina Promise.any, o aluno deve ver que, quando todas as Promises falham, a rejeição é um AggregateError contendo múltiplas causas. Isso é uma ponte natural com Error.cause e tratamento de falhas parciais. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 78,
+    "priority": "P2",
+    "title": "Ao ensinar using/await using, incluir SuppressedError. Se o corpo lança um erro e o cleanup também falha, o aluno precisa entender qual erro é preservado/suprimido. A documentação moderna de erros distingue AggregateError — vários erros relacionados — de SuppressedError — erro ocorrido enquanto outro já estava sendo tratado. MDN Web Docs",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 79,
+    "priority": "P1",
+    "title": "Transformar DevTools em parte transversal, não apenas capítulo. Network na etapa HTTP, Application/Storage com localStorage, Sources com debugging, Performance com debounce/workers e Memory com leaks. Assim cada painel aparece quando resolve um problema real, em vez de existir uma “aula de DevTools” descontextualizada",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 80,
+    "priority": "P1",
+    "title": "Criar exercícios explicitamente orientados a manutenção de dados persistidos. Se um projeto salva {version: 1}, uma etapa futura deve fornecer {version: 2} e exigir migration. O site testa save antigo, save parcialmente corrompido e nova estrutura. Isso transforma “versionar storage” de recomendação abstrata em uma habilidade",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 81,
+    "priority": "P1",
+    "title": "Criar um checkpoint “sem tutorial”. Em pontos importantes — funções, DOM, async e TypeScript — fornecer apenas requisitos + documentação permitida. Sem sequência de passos. Isso combate exatamente a fricção relatada com frequência nas comunidades: pessoas capazes de seguir tutorial, mas incapazes de iniciar algo sozinhas. Reddit recente insiste bastante em pequenos projetos e escrever código de verdade depois dos fundamentos; novamente, uso isso como sinal comunitário, não como prova causal. Reddit",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 82,
+    "priority": "P1",
+    "title": "Depois, criar um checkpoint ainda diferente: alterar software alheio. Em vez de “crie uma aplicação”, receber uma aplicação de outra pessoa com README, testes e issue. Isso avalia leitura, busca, debugging e mudança localizada — competências diferentes de criar projeto do zero",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 83,
+    "priority": "P1",
+    "title": "Não avaliar velocidade como domínio nos níveis iniciais. Tempo deve servir ao motor para identificar fricção, não punir o aluno. Só mais tarde podem existir tarefas com restrições de tempo por motivo real. O foco deve ser meta clara + prática orientada + feedback específico, princípios bem estabelecidos em How Learning Works. Dartmouth Sites",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 84,
+    "priority": "P1",
+    "title": "Criar exercícios de “quando NÃO usar”. “Você realmente precisa de Proxy?”, “precisa de classe?”, “precisa de generic?”, “precisa de regex?”, “precisa de worker?”, “precisa de biblioteca?”. Isso evita que a progressão avançada ensine que complexidade é sinal de maturidade",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 85,
+    "priority": "P1",
+    "title": "Tornar todo projeto um teste de seleção de ferramentas. O site não deveria dizer “use reduce”. Deve pedir o resultado. Se o aluno escolher reduce, for, Map ou outra estratégia válida, a correção comportamental aceita; depois a reflexão compara legibilidade/trade-offs. Isso é essencial para sair de “aprendi o método da aula” para “sei resolver o problema”",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 86,
+    "priority": "P1",
+    "title": "Criar uma taxonomia clara de exercício de sintaxe × semântica × design. O site não deve penalizar da mesma forma:",
+    "description": "- erro de sintaxe;\n    - erro de modelo mental;\n    - comportamento incorreto;\n    - solução correta porém difícil de manter.\n   Esse diagnóstico também deve determinar qual revisão futura é agendada.",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 87,
+    "priority": "P1",
+    "title": "Fazer o aluno escrever explicações curtas de código, mas não em todo exercício. O estudo de compreensão mostra utilidade em explicar intenção e relações, mas transformar cada questão numa redação gera fadiga. Reservar explicação para conceitos em que o modelo mental importa: referência, closure, this, async, narrowing, módulos e arquitetura. ICER 2023",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 88,
+    "priority": "P1",
+    "title": "Introduzir “problemas isomórficos” formalmente. Se o aluno viu a solução de “inventário RPG usando Map”, sua recuperação não pode ser outro inventário com nomes diferentes. Deve mudar o domínio — por exemplo, contagem de erros em logs — mantendo a mesma competência estrutural. Isso é a transferência que queremos medir",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 89,
+    "priority": "P1",
+    "title": "A revisão espaçada precisa misturar competências, não apenas ressuscitar exercícios antigos. Depois de async, por exemplo, um exercício pode exigir Map, função pura, AbortController, tratamento de erro e formatação. Interleaving ajuda justamente a treinar reconhecimento de qual abordagem deve ser aplicada. Pooja K. Agarwal, Ph.D",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  },
+  {
+    "id": 90,
+    "priority": "P0",
+    "title": "Criar métricas pedagógicas do site desde a primeira versão. Para cada competência: tentativa sem dica, tipos de erro, tempo até primeira solução correta, quantidade de hints, solução aberta ou não, retenção D+7/D+21 e transferência. Sem isso, “curso adaptativo” vira somente uma sequência fixa que reage a acerto/erro. Os números devem servir à adaptação e à auditoria futura da própria dificuldade dos exercícios",
+    "description": "",
+    "status": "pending",
+    "evidence": []
+  }
+]

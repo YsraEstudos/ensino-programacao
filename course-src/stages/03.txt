@@ -1,0 +1,42 @@
+ETAPA 03 - Decisões e repetição: if,
+switch e loops
+Faixa
+Fundamentos I
+Carga
+9-12 h
+Nivel curricular
+1.0/5
+PRE-REQUISITOS
+Operadores/comparacoes da ETAPA 02; sem arrays como pre-requisito.
+Resultados de aprendizagem
+• Escrever condicionais legíveis.
+• Usar for, while e for...of quando apropriado.
+• Evitar loops infinitos e condições redundantes.
+• Decompor uma regra em casos antes de codificar.
+Conceitos nucleares
+if/else · switch · for · while · for...of · break/continue · invariantes simples · contadores e acumuladores
+Modelo mental aprofundado
+Controle de fluxo deve ser aprendido sem depender de arrays. Os primeiros loops usam intervalos
+numericos, contadores e acumuladores. Isso isola a habilidade "repetir e atualizar estado" da habilidade
+"percorrer uma colecao".
+O aluno aprende a desenhar tabela de rastreamento com estado antes/depois de cada iteracao. Isso reduz
+o misterio de off-by-one, continue, break e loops infinitos. Em problemas de decisao, limites sao testados
+deliberadamente: exatamente no corte, um abaixo e um acima.
+switch e apresentado quando comunica melhor um conjunto discreto de casos. O curso evita transformar
+todo if em switch ou ternario. A metrica e clareza do fluxo e cobertura de estados.
+Erros e concepcoes que a etapa deve revelar
+• Alterar o contador em apenas alguns ramos e criar loop infinito.
+• Errar limites <= / <.
+• Usar break para mascarar uma condicao mal modelada.
+Exemplo resolvido - acumulador com condição
+let total = 0;
+for (let n = 1; n <= 4; n++) {
+  if (n % 2 === 0) total += n;
+}
+console.log(total);
+Loops usam contadores numericos e acumuladores. Arrays e for...of ficam para a etapa de colecoes,
+eliminando um pre-requisito oculto.
+GATE DE DOMINIO
+Avance quando conseguir resolver dois exercicios de transferencia curtos sem dica, prever a
+saida antes de executar e explicar um erro em linguagem natural. Mini-projeto pode usar uma
+dica conceitual, mas nao codigo pronto.

@@ -1,0 +1,62 @@
+"""New activity identities required by the two audits.
+
+Detailed contracts live in recipes; these records only establish stable IDs
+and visible goals. 15.05 is retired and points to 16.09.
+"""
+
+EXTRAS = [
+    ("04.10", "Renomear para explicar", "MODIFY", "Renomeie identificadores de um módulo de cálculo sem mudar comportamento; justifique como os nomes ajudam a leitura e prove equivalência.", [55]),
+    ("02.10", "Math e conversões", "MODIFY", "Receba um conversor de tempo e acrescente arredondamento declarado usando floor, ceil, round e trunc; compare os quatro resultados.", [4, 14]),
+    ("02.11", "Number não é decimal exato", "PREDICT", "Preveja 0.1 + 0.2, o limite de inteiros seguros, NaN e Infinity antes de executar; explique quando BigInt é adequado.", [66]),
+    ("02.12", "Tolerância depende da escala", "MAKE", "Implemente comparação aproximada com tolerância fornecida; contraste dados em torno de 1 e em torno de 2000.", [67]),
+    ("05.11", "Unicode visto de perto", "COMPARE", "Compare length, for...of e normalize em emoji e caracteres combinantes; escolha a operação adequada para contar caracteres.", [68]),
+    ("06.10", "Propriedade própria ou herdada", "READ", "Leia dois objetos ligados por protótipo e distinga Object.hasOwn, in, keys e descriptor.", [19]),
+    ("11.09", "Quando o script executa", "PREDICT", "Compare script clássico, defer, async e type=module com DOMContentLoaded e preveja quando o DOM existe.", [64]),
+    ("11.10", "Kanban em três módulos", "MODIFY", "Divida state.js, view.js e main.js e carregue main.js como módulo de navegador mantendo o Kanban V1 funcional.", [9]),
+    ("11.11", "Propagação não é comportamento padrão", "COMPARE", "Rastreie capture, target e bubble; compare preventDefault com stopPropagation em clique de link dentro de lista.", [13, 65]),
+    ("11.12", "Comentário como texto seguro", "UI", "Renderize comentários de origem não confiável literalmente com textContent e teste uma string que parece HTML.", [11, 12]),
+    ("11.13", "Save antigo no Kanban", "MODIFY", "Migre dados persistidos versão 1 para versão 2 e trate save parcial ou corrompido sem perder tarefas válidas.", [80]),
+    ("11.14", "Listeners com ciclo de vida", "MODIFY", "Compare once, passive e signal em addEventListener; implemente remoção por AbortController e explique quando preventDefault é permitido.", [65]),
+    ("12.10", "Antes de fetch: HTTP", "READ", "Leia três requests/responses e identifique método, URL, status, headers, Content-Type e corpo antes de escolher como tratar a resposta.", [61]),
+    ("12.11", "Response tem corpo consumível", "INVESTIGATE", "Teste text, json, blob, arrayBuffer e formData com Content-Type; investigue bodyUsed e a segunda leitura.", [62, 63]),
+    ("12.12", "Tempo, expiração e fuso", "MODIFY", "Acrescente TTL a uma cache com timestamp, ISO, UTC/local e formatação via Intl.DateTimeFormat.", [15]),
+    ("12.13", "Iteração assíncrona antes de materializar", "COMPARE", "Crie async generator, use for await...of e compare processamento gradual com Array.fromAsync em runtime compatível.", [16]),
+    ("12.14", "Falha agregada", "PREDICT", "Preveja Promise.any quando todas as entradas rejeitam; inspecione AggregateError.errors e preserve causas.", [77]),
+    ("13.09", "Dublês e relógio falso", "TEST", "Escreva testes com vi.fn, vi.spyOn, fake timers e rede simulada para função que agenda retry.", [10]),
+    ("13.10", "Preserve a causa do erro", "MODIFY", "Capture falha externa, relance Error com cause e separe mensagem pública de causa técnica.", [18]),
+    ("13.11", "Leia a documentação para implementar", "DOCS", "Encontre assinatura, parâmetros, retorno, exceções e compatibilidade em uma página oficial e use a API em uma tarefa curta.", [56, 57]),
+    ("13.12", "Run, debugger, teste ou leitura?", "INVESTIGATE", "Escolha uma ferramenta para cada uma de quatro falhas, justifique, investigue e compare com uma alternativa.", [50, 79]),
+    ("13.13", "Teste DOM com teclado e foco", "TEST", "Escreva testes de um formulário e lista dinâmica cobrindo label, teclado, foco, aria-live e texto tratado como texto.", [10, 11, 12]),
+    ("13.14", "Kanban V2: migração e regressões", "MODIFY", "Retome o Kanban V1, migre saves antigos para V2 e escreva testes de domínio, DOM, teclado, foco e persistência antes de publicar a mudança.", [9, 10, 11, 36, 80]),
+    ("14.09", "Git antes do PR", "MODIFY", "Num repositório pequeno, faça status, diff, commit, branch, merge de conflito simples e leia uma alteração de PR.", [29]),
+    ("14.10", "Grafo ESM em execução", "TRACE", "Rastreie import(), import.meta, top-level await, ciclo e efeito de import em módulos pequenos.", [20]),
+    ("14.11", "Devo instalar esta dependência?", "COMPARE", "Compare duas bibliotecas e uma implementação local por manutenção, licença, dependências, lockfile e risco.", [31]),
+    ("14.12", "Por que existe um bundler?", "COMPARE", "Empacote um grafo ESM mínimo, compare arquivos gerados e explique resolução de módulos, transformação, assets e source maps sem exigir framework.", [30]),
+    ("14.13", "Event loop em dois runtimes", "COMPARE", "Compare o modelo de tasks/microtasks no navegador com um snippet Node de nextTick/Promise, declarando módulo e runtime antes de prever.", [17]),
+    ("15.09", "Readonly observa mutação", "PREDICT", "Preveja alteração vista por referência readonly após mutação feita por alias gravável; diferencie de Object.freeze.", [70]),
+    ("15.10", "Literal fresco versus variável", "COMPARE", "Compare excess property checks em literal de objeto e variável intermediária; não trate TS como schema runtime.", [71]),
+    ("15.11", "Compilou, mas falhou", "DEBUG", "Investigue valor externo aceito por cast que falha em runtime; explique limite intencional da checagem TS.", [72]),
+    ("16.09", "Exaustividade com assertNever", "TYPE", "Implemente assertNever(x: never): never e teste que adicionar variante quebra switch incompleto.", [4, 22]),
+    ("16.10", "Catch recebe unknown", "MODIFY", "Trate catch(e: unknown) com instanceof Error e caso de valor lançado que não é Error; preserve cause.", [23]),
+    ("17.09", "Enum, objeto e código emitido", "COMPARE", "Compare enum numérico/string e objeto as const; inspecione JS emitido e escolha conforme necessidade runtime.", [24]),
+    ("18.09", "Import de tipo não roda", "TRACE", "Ative verbatimModuleSyntax e distinga import type de import de valor em módulo com efeito colateral.", [73]),
+    ("18.10", "Utility types com propósito", "MODIFY", "Refatore API real usando Awaited, NonNullable, Exclude, Extract, ReturnType e Parameters; explique cada relação.", [27]),
+    ("19.09", "IDs nominais por convenção", "TYPE", "Diferencie UserId e OrderId via branding e valide entrada na borda; compare wrapper runtime.", [25]),
+    ("20.09", "Stream sob consumidor lento", "INVESTIGATE", "Leia ReadableStream com consumidor lento e observe desiredSize/backpressure antes de materializar tudo.", [75]),
+    ("20.10", "String vira bytes", "MODIFY", "Use TextEncoder/TextDecoder com UTF-8 e Uint8Array em arquivo pequeno; preserve emoji ao voltar para string.", [69]),
+    ("21.10", "Transferir não é copiar", "INVESTIGATE", "Transfira ArrayBuffer a worker, observe buffer detached no emissor e compare com structuredClone sem transferência.", [76]),
+    ("21.11", "Erro durante descarte", "PREDICT", "Compare AggregateError e SuppressedError quando corpo e cleanup falham em ambiente com using.", [78]),
+    ("22.09", "Exports e declarations", "MODIFY", "Ative isolatedDeclarations num pacote; anote exports públicos e gere declarations. Project References ficam em extensão opcional.", [26, 74]),
+    ("22.10", "Trilha opcional: Project References", "MODIFY", "Separe biblioteca e consumidor em dois projetos TypeScript composite, configure references e build incremental; compare o grafo e os arquivos gerados.", [74]),
+    ("23.09", "Falha observável sem segredo", "PROJECT", "Instrumente operação com ID, duração, nível do log e Error.cause; reproduza falha e produza relatório sem token.", [32, 33]),
+    ("23.10", "Encontre a regra no mini-repositório", "READ", "Receba 10 arquivos, README e testes; localize a origem de uma regra, seu caminho até a UI e o melhor ponto para uma mudança pequena.", [53, 54]),
+    ("23.11", "Corrija uma issue alheia", "MODIFY", "Em um mini-repositório desconhecido com issue e testes existentes, reproduza o bug, mude o módulo correto e preserve o resto.", [82]),
+]
+
+DIAGNOSTIC = [
+    ("D.01", "Leitura de saída", "PREDICT", "Preveja três saídas de logs síncronos e informe confiança.", [41, 43]),
+    ("D.02", "Valores e tipos", "PREDICT", "Classifique cinco valores, incluindo null, 0 e string vazia; informe confiança.", [41, 43]),
+    ("D.03", "Fluxo de decisão", "TRACE", "Leia uma regra if/else e preveja o ramo em duas entradas.", [41, 47]),
+    ("D.04", "Função e retorno", "READ", "Identifique entrada, retorno e efeito de uma função curta.", [41, 53]),
+    ("D.05", "Localize a falha", "INVESTIGATE", "Escolha leitura, Run ou teste para localizar uma falha curta e explique sua escolha.", [41, 50]),
+]

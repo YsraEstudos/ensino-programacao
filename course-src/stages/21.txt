@@ -1,0 +1,51 @@
+ETAPA 21 - Performance, memoria,
+WeakMap/WeakSet, workers e recursos
+Faixa
+JavaScript avançado
+Carga
+20-28 h
+Nivel curricular
+4.0/5
+PRE-REQUISITOS
+Async, DOM e iteradores conforme exercicio.
+Resultados de aprendizagem
+• Medir antes de otimizar.
+• Reconhecer alocação, retenção e vazamentos comuns em aplicações JS.
+• Entender tarefas CPU-bound vs I/O-bound.
+• Usar workers quando paralelismo real de CPU é necessário e justificável.
+Conceitos nucleares
+GC conceitual · memory leaks · event listeners · timers · profiling · benchmark pitfalls · workers ·
+transferable data · memoization trade-offs · backpressure conceitual · WeakMap/WeakSet ·
+debounce/throttle · using/await using · Disposable/AsyncDisposable · performance.now · profiling antes de
+otimizar
+Modelo mental aprofundado
+Performance comeca por hipotese e medicao. A etapa separa CPU, rede, I/O, DOM e memoria.
+performance.now, Performance panel e benchmarks com warmup/multiplas amostras entram antes de
+qualquer micro-otimizacao.
+WeakMap/WeakSet sao explicados por alcance de referencias: eles nao enumeram chaves de forma normal
+e nao mantem uma referencia forte que, sozinha, impeça coleta. Isso os torna uteis para metadados
+associados a objetos e certos caches, mas nao para toda cache.
+Debounce reduz a frequencia de execucao apos uma rajada; throttle limita a taxa durante a rajada. O aluno
+mede impacto em eventos de input/scroll antes de aplicar. Workers entram quando trabalho CPU-bound
+realmente bloquearia a thread principal.
+using/await using formalizam cleanup de recursos Disposable/AsyncDisposable em ambientes compativeis.
+O curso ensina primeiro cleanup manual para que o aluno reconheca o problema que a sintaxe resolve.
+Erros e concepcoes que a etapa deve revelar
+• Otimizar sem medir.
+• Cache sem politica de expiracao/limite.
+• Worker para tarefa pequena que custa mais em serializacao do que economiza.
+Exemplo resolvido - leak por listener não removido
+function montar() {
+  const onResize = () => medir();
+  window.addEventListener('resize', onResize);
+  return () => window.removeEventListener('resize', onResize);
+}
+Cleanup manual continua essencial para entender o problema. Depois o curso mostra padroes de
+debounce/throttle e, em ambientes compativeis, Explicit Resource Management com using/await using.
+WeakMap/WeakSet entram quando referencias fracas realmente expressam a propriedade desejada, nao
+como otimizacao magica.
+
+GATE DE DOMINIO
+Avance quando conseguir justificar o uso da tecnica avancada e demonstrar alternativa mais
+simples quando ela existe. Medicao/compatibilidade/runtime validation sao parte do gate
+quando relevantes.

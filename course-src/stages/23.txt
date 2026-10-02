@@ -1,0 +1,49 @@
+ETAPA 23 - Arquitetura, contratos,
+fronteiras de confianca e capstone
+Faixa
+Avançado profissional
+Carga
+30-50 h
+Nivel curricular
+4.5/5
+PRE-REQUISITOS
+Todo o nucleo da trilha; capstone integra dominios selecionados.
+Resultados de aprendizagem
+• Projetar APIs pequenas com contratos explícitos.
+• Separar domínio, I/O e apresentação.
+• Revisar código por corretude, legibilidade, testes, tipos e custo.
+• Resolver problema amplo sem tutorial passo a passo.
+Conceitos nucleares
+arquitetura modular · ports/adapters introdutório · dependency inversion · contracts · runtime validation
+boundaries · error taxonomy · public API · refactoring · code review · release discipline · validacao na borda
+· dominio puro · adaptadores · mudanca de requisito · code review · observabilidade basica
+Modelo mental aprofundado
+Arquitetura e apresentada como gestao de mudanca. O nucleo de dominio deve ser testavel sem
+navegador, banco ou rede quando isso fizer sentido; adaptadores carregam efeitos externos; validacao
+acontece na fronteira de confianca.
+O capstone nao tem a mesma regra de avanco da etapa 00. Ele usa a rubrica completa: corretude,
+compreensao, testabilidade, tipos, manutencao, performance quando relevante, acessibilidade em UI e
+capacidade de absorver uma mudanca surpresa.
+Code review e parte da avaliacao. O aluno precisa distinguir bug, risco, requisito faltante e preferencia
+estetica. Comentarios devem priorizar impacto e propor experimento/teste quando houver incerteza.
+O objetivo final e transferencia: receber um problema que nao apareceu no curso, decompor, consultar
+documentacao, implementar, testar, depurar e justificar trade-offs sem depender de um tutorial
+sequencial.
+Erros e concepcoes que a etapa deve revelar
+• Criar camadas sem responsabilidade real.
+• Misturar regra de negocio com fetch/DOM/persistencia.
+• Tratar preferencia de estilo como bug em code review.
+Exemplo resolvido - núcleo puro, bordas impuras
+// domínio puro
+export function aplicarEvento(state, event) { /* ... */ }
+// adaptador
+export async function carregarEventos(api) { /* ... */ }
+// composição
+const novo = eventos.reduce(aplicarEvento, inicial);
+O capstone final deve permitir trocar UI, storage ou API sem reescrever regras centrais. Tipos ajudam no
+contrato, mas validação runtime protege as bordas externas.
+
+GATE DE DOMINIO
+CAPSTONE: use a rubrica completa. O projeto precisa passar testes, typecheck, revisao de
+acessibilidade quando houver UI, auditoria de trust boundaries e uma mudanca surpresa sem
+regressao. Nao existe limite artificial de "uma dica".

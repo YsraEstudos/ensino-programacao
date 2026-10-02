@@ -1,0 +1,759 @@
+/* Generated from course-src/stage01-preparation.mjs. */
+globalThis.DevPathStage01Preparation = {
+  "01.01": {
+    "vocabulary": [
+      "Aspas delimitam uma string; elas não são parte do valor exibido.",
+      "number é o rótulo de números; string é o rótulo de texto; boolean é true ou false.",
+      "null representa ausência intencional; undefined indica que nenhum valor foi fornecido; typeof devolve rótulos em texto."
+    ],
+    "explanation": "Leia o valor entre parênteses e preveja o rótulo textual que typeof devolve. O texto \"42\" é diferente do número 42; null é uma peculiaridade histórica que retorna object.",
+    "workedExample": {
+      "code": "console.log(typeof \"azul\");\nconsole.log(typeof 7);\nconsole.log(typeof false);\nconsole.log(typeof undefined);\nconsole.log(typeof null);",
+      "output": [
+        "string",
+        "number",
+        "boolean",
+        "undefined",
+        "object"
+      ],
+      "steps": [
+        "Aspas fazem de \"azul\" um texto; 7 sem aspas é um número.",
+        "false e true são os dois valores booleanos.",
+        "undefined é um valor que indica ausência de valor fornecido.",
+        "null representa ausência intencional. typeof null devolve \"object\" por uma peculiaridade histórica; null continua sendo um primitivo."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: typeof",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof",
+        "section": "Description",
+        "question": "Que string typeof devolve para cada valor?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "typeof 42"
+      },
+      {
+        "label": "typeof \"42\""
+      },
+      {
+        "label": "typeof true"
+      },
+      {
+        "label": "typeof undefined"
+      },
+      {
+        "label": "typeof null"
+      }
+    ],
+    "hints": [
+      "Separe o valor do texto que typeof retorna.",
+      "Número sem aspas e texto entre aspas têm rótulos diferentes.",
+      "null é o caso histórico que retorna object."
+    ],
+    "transfer": "Preveja typeof 8, typeof \"8\" e typeof true em três linhas.",
+    "mode": "predict",
+    "readonly": true,
+    "notes": [
+      "Um literal escreve o valor diretamente no código. console.log mostra o resultado de typeof, não o valor que ele examinou. O rótulo retornado também é uma string.",
+      "Não confunda o valor undefined com um nome não declarado: console.log(pessoa) antes de declarar pessoa causa erro. Nesta atividade, você examina valores literais. Objetos e Symbol serão estudados depois."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.02": {
+    "vocabulary": [
+      "Binding é o identificador associado a um valor.",
+      "const cria um binding que não recebe nova atribuição; let cria um binding que pode receber outro valor.",
+      "Inicializar é dar o primeiro valor; reatribuir é dar outro valor ao mesmo binding."
+    ],
+    "explanation": "Uma variável é um nome associado a um valor; binding é o termo para essa associação. Em const limite = 4, const declara, limite é o nome, = atribui e 4 é o valor inicial. Leia o programa de cima para baixo: primeiro calcule o lado direito e só depois atualize o nome à esquerda. O sinal = faz uma atribuição, não uma comparação.",
+    "workedExample": {
+      "code": "const limite = 4;\nlet contador = limite;\ncontador = contador + 1;\nconsole.log(limite, contador);",
+      "output": [
+        "4 5"
+      ],
+      "steps": [
+        "limite recebe 4.",
+        "contador recebe o valor atual de limite, 4.",
+        "A reatribuição calcula 4 + 1 e muda somente contador."
+      ],
+      "trace": {
+        "columns": [
+          "Instrução",
+          "limite",
+          "contador"
+        ],
+        "rows": [
+          [
+            "const limite = 4;",
+            "4",
+            "ainda não inicializado"
+          ],
+          [
+            "let contador = limite;",
+            "4",
+            "4"
+          ],
+          [
+            "contador = contador + 1;",
+            "4",
+            "5"
+          ],
+          [
+            "console.log(limite, contador);",
+            "4",
+            "5"
+          ]
+        ]
+      }
+    },
+    "docs": [
+      {
+        "title": "MDN: const",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+        "section": "Description",
+        "question": "O que fica impedido quando um binding const recebe uma nova atribuição?"
+      },
+      {
+        "title": "MDN: let",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+        "section": "Description",
+        "question": "Quando let permite que o binding receba outro valor?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "após const base = 2"
+      },
+      {
+        "label": "após let total = base"
+      },
+      {
+        "label": "após total = total + 3"
+      },
+      {
+        "label": "saída"
+      }
+    ],
+    "hints": [
+      "Registre o estado depois de cada linha.",
+      "Leia o lado direito antes de atualizar o nome à esquerda.",
+      "Uma inicialização posterior não altera o valor já guardado em outro binding."
+    ],
+    "transfer": "Rastreie const taxa=2; let custo=taxa; custo=custo+4; e registre cada estado.",
+    "mode": "trace",
+    "readonly": true,
+    "notes": [
+      "Em contador = contador + 1, usamos apenas a soma de dois números: 4 + 1 produz 5. As demais operações e conversões serão estudadas na Etapa 02.",
+      "Nomes diferenciam maiúsculas de minúsculas: total e Total são diferentes. Use nomes descritivos como totalPontos, sem espaços ou hífen, e não comece com um número. Nesta prática, use letras sem acentos; const e let são palavras reservadas.",
+      "console.log(limite, contador) lê os dois valores atuais e os exibe na mesma linha, separados por um espaço."
+    ],
+    "predictionGuide": "Em cada campo, escreva base: valor; total: valor. Se um nome ainda não foi inicializado, escreva isso. No último campo, registre a linha impressa.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.03": {
+    "vocabulary": [
+      "Declaração cria e inicializa um binding.",
+      "Uma leitura precisa ocorrer depois da inicialização do nome lido.",
+      "Blocos independentes podem trocar de ordem sem mudar o resultado."
+    ],
+    "explanation": "O bloco de saída lê nome, idade e ativo. As três declarações precisam estar antes dele, mas não têm dependência entre si. O bloco de diagnóstico é um extra e fica fora.",
+    "workedExample": {
+      "code": "const cidade = \"Recife\";\nconst aberto = true;\nconsole.log(cidade, aberto);",
+      "output": [
+        "Recife true"
+      ],
+      "steps": [
+        "cidade e aberto são inicializados.",
+        "Como não dependem um do outro, a ordem das duas declarações pode trocar.",
+        "O log vem depois dos dois nomes que consulta."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: const",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+        "section": "Description",
+        "question": "O que fica impedido quando um binding const recebe uma nova atribuição?"
+      },
+      {
+        "title": "MDN: let",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+        "section": "Description",
+        "question": "Quando let permite que o binding receba outro valor?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "ordem válida 1"
+      },
+      {
+        "label": "ordem válida 2"
+      }
+    ],
+    "hints": [
+      "Liste os nomes que o consumidor lê.",
+      "Coloque cada declaração produtora antes do consumidor.",
+      "Troque entre si apenas declarações independentes."
+    ],
+    "transfer": "Dê duas ordens válidas para três declarações independentes seguidas por um resumo.",
+    "mode": "parsons",
+    "parsons": {
+      "blocks": [
+        {
+          "id": "A",
+          "code": "const nome = \"Lia\";"
+        },
+        {
+          "id": "B",
+          "code": "const idade = 20;"
+        },
+        {
+          "id": "C",
+          "code": "const ativo = true;"
+        },
+        {
+          "id": "D",
+          "code": "console.log(nome, idade, ativo);"
+        },
+        {
+          "id": "E",
+          "code": "console.log(\"diagnóstico\");"
+        }
+      ],
+      "initialOrder": [
+        "E",
+        "C",
+        "D",
+        "B",
+        "A"
+      ]
+    },
+    "notes": [
+      "No exemplo, cidade → aberto → saída e aberto → cidade → saída são duas ordens válidas. Saída → cidade → aberto é inválida: tenta ler nomes ainda não inicializados.",
+      "Um log extra muda a saída, mesmo quando seu código executa sem erro. Por isso, remova o diagnóstico que não faz parte do resultado pedido. Use os botões de subir e descer; para outra tentativa, restaure os blocos."
+    ],
+    "predictionGuide": "Registre duas sequências de letras separadas por espaços. Organize os blocos na primeira sequência e escreva a segunda no campo “Segunda ordem válida”.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.04": {
+    "vocabulary": [
+      "const impede reatribuição do binding.",
+      "let permite reatribuição do binding.",
+      "A escolha const/let depende da mudança prevista, não do valor inicial."
+    ],
+    "explanation": "Use const nos nomes que permanecem com o mesmo binding e let nos nomes que recebem uma nova atribuição. Zero e false continuam sendo valores explícitos e válidos.",
+    "workedExample": {
+      "code": "const sala = \"azul\";\nlet lugares = 0;\nlugares = 2;\nconsole.log(sala, lugares);",
+      "output": [
+        "azul 2"
+      ],
+      "steps": [
+        "sala não muda e usa const.",
+        "lugares começa em zero, mas muda depois e usa let.",
+        "A saída lê os valores atuais."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: const",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+        "section": "Description",
+        "question": "O que fica impedido quando um binding const recebe uma nova atribuição?"
+      },
+      {
+        "title": "MDN: let",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+        "section": "Description",
+        "question": "Quando let permite que o binding receba outro valor?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "nome"
+      },
+      {
+        "label": "pontos"
+      },
+      {
+        "label": "ativo"
+      },
+      {
+        "label": "volume"
+      },
+      {
+        "label": "idioma"
+      },
+      {
+        "label": "tentativas"
+      }
+    ],
+    "hints": [
+      "Marque primeiro quais nomes recebem uma atribuição depois.",
+      "Use let nesses nomes e const nos demais.",
+      "Não trate zero ou false como valor ausente."
+    ],
+    "transfer": "Escolha const/let para uma agenda com três preferências fixas e uma duração reatribuída.",
+    "mode": "faded",
+    "blanks": [
+      {
+        "name": "nome",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "pontos",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "ativo",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "volume",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "idioma",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "tentativas",
+        "choices": [
+          "const",
+          "let"
+        ]
+      }
+    ],
+    "predictionGuide": "Para cada nome, preveja const ou let. Depois use os seis seletores para completar o arquivo. A impressão final já está pronta; você só precisa escolher as declarações.",
+    "notes": [
+      "Usar let num nome fixo pode funcionar em JavaScript, mas esta atividade pede a convenção const quando não há reatribuição. A escolha comunica sua intenção.",
+      "Tentar reatribuir um const provoca erro. Para mudar lugares de 0 para 2, declare let lugares = 0; depois escreva lugares = 2;, sem declarar o nome outra vez."
+    ],
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.05": {
+    "vocabulary": [
+      "NaN é um valor do tipo number.",
+      "Infinity é um valor do tipo number.",
+      "A notação 1n cria um valor do tipo bigint; null mantém a peculiaridade object de typeof."
+    ],
+    "explanation": "Classifique o valor que typeof recebe sem estudar ainda as operações que produzem esses valores. A grafia NaN não é o nome de um tipo separado.",
+    "workedExample": {
+      "code": "console.log(typeof NaN);\nconsole.log(typeof Infinity);\nconsole.log(typeof 5n);\nconsole.log(typeof null);",
+      "output": [
+        "number",
+        "number",
+        "bigint",
+        "object"
+      ],
+      "steps": [
+        "NaN representa um resultado numérico inválido, mas seu tipo ainda é number.",
+        "Infinity representa infinito no tipo number.",
+        "5n é um inteiro bigint; aqui basta reconhecer o sufixo n.",
+        "null retoma a peculiaridade de typeof estudada em 01.01."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: typeof",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof",
+        "section": "Return value",
+        "question": "Que string typeof devolve para cada valor?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "typeof NaN"
+      },
+      {
+        "label": "typeof Infinity"
+      },
+      {
+        "label": "typeof 1n"
+      },
+      {
+        "label": "typeof null"
+      }
+    ],
+    "hints": [
+      "Preveja apenas os rótulos.",
+      "NaN não cria uma categoria nova.",
+      "A notação n é a pista para bigint."
+    ],
+    "transfer": "Classifique typeof -3, typeof NaN e typeof 5n.",
+    "mode": "predict",
+    "readonly": true,
+    "notes": [
+      "typeof informa o tipo, mas não garante que um número seja finito ou adequado ao problema: NaN e Infinity também devolvem number. Na Etapa 02, você estudará operações que produzem esses valores. Não é necessário calculá-los aqui."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.06": {
+    "vocabulary": [
+      "Template literal é uma string delimitada por crases.",
+      "Uma expressão entre ${...} é avaliada e inserida no texto.",
+      "Os identificadores dentro da expressão precisam estar inicializados antes da leitura."
+    ],
+    "explanation": "Use uma única expressão de template literal para montar o texto com os bindings atuais. Crases delimitam a string; aspas comuns deixariam ${nome} como texto literal.",
+    "workedExample": {
+      "code": "const codigo = \"R7\";\nconst estado = \"pronto\";\nconsole.log(`${codigo} — ${estado}`);",
+      "output": [
+        "R7 — pronto"
+      ],
+      "steps": [
+        "codigo e estado recebem seus valores.",
+        "Cada ${...} lê um binding.",
+        "A expressão resulta em uma string única."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: template literals",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+        "section": "Syntax",
+        "question": "Como crases e ${expressao} formam uma string?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "saída de perfil"
+      }
+    ],
+    "hints": [
+      "Preveja a linha antes de editar.",
+      "Use crases ao redor do texto.",
+      "Interpole nome e nivel, sem copiar seus valores."
+    ],
+    "transfer": "Monte uma expressão que produza M4 — pronto a partir de dois bindings.",
+    "mode": "faded",
+    "contract": "Nara: nível 3",
+    "requiredKinds": [
+      "expression"
+    ],
+    "notes": [
+      "Expressão é um trecho que produz um valor: nome, 3 e uma template literal são exemplos. Substitua o comentário /* uma expressão */ dentro de console.log; mantenha as declarações iniciais.",
+      "Comentários explicam o código e não são executados: // vale até o fim da linha; /* ... */ delimita um comentário. Dentro das crases, o texto fora de ${...} permanece como você o escreveu, incluindo espaços e pontuação."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.07": {
+    "vocabulary": [
+      "Uma declaração pode guardar uma string derivada.",
+      "console.log mostra o valor atual passado como argumento.",
+      "Uma template literal pode combinar dois bindings na ordem escrita."
+    ],
+    "explanation": "Crie o resumo e imprima-o. O programa deve usar os bindings de duração para produzir uma única linha; zero continua aparecendo como parte do texto.",
+    "workedExample": {
+      "code": "const dias = 2;\nconst horas = 3;\nconst resumo = `${dias}d${horas}h`;\nconsole.log(resumo);",
+      "output": [
+        "2d3h"
+      ],
+      "steps": [
+        "dias e horas são dados.",
+        "resumo é derivado dos dois bindings.",
+        "console.log imprime a string guardada."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: template literals",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+        "section": "Syntax",
+        "question": "Como crases e ${expressao} formam uma string?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "saída de duração"
+      }
+    ],
+    "hints": [
+      "Declare resumo antes de imprimi-lo.",
+      "Leia horas e minutos dentro das crases.",
+      "Não formate zero com regras novas."
+    ],
+    "transfer": "Crie e imprima um resumo de dias e horas usando dois bindings.",
+    "mode": "make",
+    "notes": [
+      "O formato pedido é horas + a letra h + minutos, sem acrescentar zeros: 2h15 e 0h0. Isso é uma representação textual, não um cálculo de duração.",
+      "Uma string derivada guarda o resultado calculado naquele momento. Ela não mantém uma ligação automática com as variáveis usadas para criá-la."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.08": {
+    "vocabulary": [
+      "Configuração é um conjunto de bindings que descreve um estado.",
+      "Um binding que muda usa let nesta trilha; os demais usam const.",
+      "Cada resumo deve ler os valores atuais dos bindings."
+    ],
+    "explanation": "Escolha const ou let pela reatribuição indicada e produza dois resumos. volume muda de 0 para 7; jogo, dificuldade, legendas e idioma permanecem iguais. Preserve 0 e false como escolhas publicadas.",
+    "workedExample": {
+      "code": "const nome = \"Agenda\";\nlet duracao = 15;\nconst avisos = false;\nconsole.log(`${nome} | duração ${duracao} | avisos ${avisos}`);\nduracao = 30;\nconsole.log(`${nome} | duração ${duracao} | avisos ${avisos}`);",
+      "output": [
+        "Agenda | duração 15 | avisos false",
+        "Agenda | duração 30 | avisos false"
+      ],
+      "steps": [
+        "Somente duracao recebe nova atribuição.",
+        "O primeiro resumo lê quinze.",
+        "Depois da atribuição, o segundo resumo lê trinta e mantém false."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: const",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+        "section": "Description",
+        "question": "O que fica impedido quando um binding const recebe uma nova atribuição?"
+      },
+      {
+        "title": "MDN: let",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+        "section": "Description",
+        "question": "Quando let permite que o binding receba outro valor?"
+      },
+      {
+        "title": "MDN: template literals",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+        "section": "Syntax",
+        "question": "Como crases e ${expressao} formam uma string?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "primeiro resumo"
+      },
+      {
+        "label": "segundo resumo"
+      }
+    ],
+    "hints": [
+      "Marque apenas volume como reatribuído.",
+      "Gere os dois resumos a partir dos bindings.",
+      "Não substitua zero ou false por outro valor."
+    ],
+    "transfer": "Modele uma agenda, altere apenas a duração e gere dois resumos preservando 0 e false.",
+    "mode": "transfer",
+    "blanks": [
+      {
+        "name": "jogo",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "volume",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "dificuldade",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "legendas",
+        "choices": [
+          "const",
+          "let"
+        ]
+      },
+      {
+        "name": "idioma",
+        "choices": [
+          "const",
+          "let"
+        ]
+      }
+    ],
+    "contract": [
+      "Arena | volume 0 | normal | legendas false | pt-BR",
+      "Arena | volume 7 | normal | legendas false | pt-BR"
+    ],
+    "notes": [
+      "Substitua os comentários por instruções reais: imprima um resumo, execute volume = 7; e imprima o resumo seguinte. Escrever volume=7 dentro de // não altera nenhum valor.",
+      "Não declare volume de novo: ele já existe. Reavalie a template literal depois da atribuição para ler o volume atual."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Compare sua previsão com a execução. Explique a regra praticada e um erro que ela ajuda a evitar. Use um nome ou valor deste desafio como exemplo."
+  },
+  "01.09": {
+    "vocabulary": [
+      "Estado é o conjunto de valores atuais em um momento.",
+      "Reatribuição muda o binding escolhido para as próximas leituras.",
+      "Uma string derivada é recalculada quando a expressão é executada."
+    ],
+    "explanation": "Construa uma ficha com os bindings atuais e execute três vezes: vida começa em 10, passa a 6 e passa a 0. O snapshot textual de cada chamada reflete o momento em que foi calculado; não há funções nesta etapa.",
+    "workedExample": {
+      "code": "const modelo = \"Lume\";\nlet energia = 8;\nconst resumo = `${modelo} | energia ${energia}`;\nconsole.log(resumo);\nenergia = 3;\nconsole.log(resumo);\nconsole.log(`${modelo} | energia ${energia}`);\nenergia = 0;\nconsole.log(`${modelo} | energia ${energia}`);",
+      "output": [
+        "Lume | energia 8",
+        "Lume | energia 8",
+        "Lume | energia 3",
+        "Lume | energia 0"
+      ],
+      "steps": [
+        "resumo guarda a string calculada quando energia era 8.",
+        "Mudar energia para 3 não muda a string já guardada: o segundo log ainda mostra 8.",
+        "A próxima template literal é calculada novamente e lê 3.",
+        "Depois da reatribuição para 0, uma nova avaliação mostra zero. No projeto, produza somente as três fichas atuais pedidas."
+      ]
+    },
+    "docs": [
+      {
+        "title": "MDN: const",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const",
+        "section": "Description",
+        "question": "O que fica impedido quando um binding const recebe uma nova atribuição?"
+      },
+      {
+        "title": "MDN: let",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/let",
+        "section": "Description",
+        "question": "Quando let permite que o binding receba outro valor?"
+      },
+      {
+        "title": "MDN: template literals",
+        "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals",
+        "section": "Syntax",
+        "question": "Como crases e ${expressao} formam uma string?"
+      }
+    ],
+    "predictionRows": [
+      {
+        "label": "ficha inicial"
+      },
+      {
+        "label": "ficha após vida = 6"
+      },
+      {
+        "label": "ficha após vida = 0"
+      }
+    ],
+    "hints": [
+      "Use nome, nivel, vida e status na ficha.",
+      "Reatribua somente vida entre os checkpoints.",
+      "Inclua o zero na última linha."
+    ],
+    "transfer": "Faça uma ficha de veículo com energia 8, 3 e 0, imprimindo cada estado.",
+    "mode": "project",
+    "contract": [
+      "Iris | nível 1 | vida 10 | ativa",
+      "Iris | nível 1 | vida 6 | ativa",
+      "Iris | nível 1 | vida 0 | ativa"
+    ],
+    "masteryTransfers": [
+      {
+        "id": "config",
+        "title": "Configuração de agenda",
+        "prompt": "Modele uma agenda com nome, duração e avisos; altere apenas duração e imprima dois estados.",
+        "starter": "const nome = \"Agenda\";\nlet duracao = 0;\nconst avisos = false;",
+        "expected": [
+          "Agenda | duração 0 | avisos false",
+          "Agenda | duração 30 | avisos false"
+        ],
+        "cases": [
+          {
+            "label": "default",
+            "fixtures": {
+              "nome": "Agenda",
+              "duracao": 0,
+              "avisos": false
+            },
+            "expected": [
+              "Agenda | duração 0 | avisos false",
+              "Agenda | duração 30 | avisos false"
+            ]
+          },
+          {
+            "label": "alternate",
+            "fixtures": {
+              "nome": "Calendário",
+              "duracao": 0,
+              "avisos": false
+            },
+            "expected": [
+              "Calendário | duração 0 | avisos false",
+              "Calendário | duração 30 | avisos false"
+            ]
+          }
+        ],
+        "requiredKinds": {
+          "nome": "const",
+          "duracao": "let",
+          "avisos": "const"
+        }
+      },
+      {
+        "id": "duration",
+        "title": "Duração por dias e horas",
+        "prompt": "Produza uma ficha textual usando dias e horas e atualize apenas horas.",
+        "starter": "const dias = 2;\nlet horas = 4;",
+        "expected": [
+          "2 dias | 4 horas",
+          "2 dias | 6 horas"
+        ],
+        "cases": [
+          {
+            "label": "default",
+            "fixtures": {
+              "dias": 2,
+              "horas": 4
+            },
+            "expected": [
+              "2 dias | 4 horas",
+              "2 dias | 6 horas"
+            ]
+          },
+          {
+            "label": "alternate",
+            "fixtures": {
+              "dias": 0,
+              "horas": 4
+            },
+            "expected": [
+              "0 dias | 4 horas",
+              "0 dias | 6 horas"
+            ]
+          }
+        ],
+        "requiredKinds": {
+          "dias": "const",
+          "horas": "let"
+        }
+      }
+    ],
+    "notes": [
+      "Checkpoint é um momento de observação: imprima a ficha inicial, reatribua vida, imprima outra ficha, reatribua vida novamente e imprima a última. Você pode repetir console.log; não precisa criar funções.",
+      "Preparação para a Etapa 02: antes de calcular ou comparar, identifique se o dado é número, texto ou booleano. \"3\" e 3 têm tipos diferentes. Zero e false são valores presentes; não são sinônimos de null ou undefined. As conversões e comparações serão ensinadas na próxima etapa."
+    ],
+    "predictionGuide": "Preveja a saída do código do desafio, não a do exemplo resolvido. Cada campo corresponde a uma chamada console.log. Uma previsão diferente do resultado é uma oportunidade de revisar seu raciocínio; ela não precisa estar correta para você concluir.",
+    "reflectionPrompt": "Explique por que vida usa let, por que zero aparece na última ficha e por que uma string guardada antes da mudança pode mostrar um valor antigo. Relacione também uma das transferências ao projeto."
+  }
+};

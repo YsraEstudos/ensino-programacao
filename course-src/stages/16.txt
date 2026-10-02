@@ -1,0 +1,45 @@
+ETAPA 16 - Unions, literals, narrowing e
+estados discriminados
+Faixa
+TypeScript I
+Carga
+14-18 h
+Nivel curricular
+3.0/5
+PRE-REQUISITOS
+TS strict, unions e narrowing basico.
+Resultados de aprendizagem
+• Modelar alternativas reais com unions.
+• Usar literal types para restringir estados.
+• Fazer narrowing com typeof, in, instanceof e discriminantes.
+• Eliminar combinações impossíveis do modelo.
+Conceitos nucleares
+union/intersection · literal types · discriminated unions · type guards · type predicates · exhaustive switch ·
+nullable states · as const · readonly literal tuples · assertNever · exhaustiveness
+Modelo mental aprofundado
+Unions e literal types modelam estados permitidos. Uma union discriminada transforma combinacoes
+impossiveis de booleans em variantes explicitas. O ganho nao e "mais tipos"; e tornar estados invalidos
+menos representaveis.
+Narrowing ocorre por typeof, in, instanceof, igualdade, discriminantes e type predicates. O curso
+desestimula casts como substituto de verificacao. as const ajuda a preservar literais e construir unions
+derivadas de dados constantes.
+assertNever fecha o ciclo de exaustividade: quando uma variante nova entra, o compilador aponta pontos
+de decisao incompletos. A funcao tambem lanca em runtime como ultima barreira caso dados forjados
+atravessem o sistema.
+Erros e concepcoes que a etapa deve revelar
+• Usar as para forcar narrowing.
+• Modelar estado com booleans independentes que geram combinacoes impossiveis.
+• Criar assertNever mas nunca chegar a ele por switch incompleto.
+Exemplo resolvido - estado de request impossível de
+contradizer
+type RequestState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'success'; data: User[] }
+  | { status: 'error'; message: string };
+Em vez de três booleans independentes, cada variante carrega apenas os dados válidos naquele estado. O
+tipo reduz bugs de combinação.
+GATE DE DOMINIO
+Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
+justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
+parte do contrato.

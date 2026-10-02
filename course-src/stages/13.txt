@@ -1,0 +1,46 @@
+ETAPA 13 - Erros, debugging, DevTools e
+testes com Vitest
+Faixa
+Intermediário II
+Carga
+18-24 h
+Nivel curricular
+2.5/5
+PRE-REQUISITOS
+Async basico e funcoes testaveis.
+Resultados de aprendizagem
+• Escrever testes de unidade focados em comportamento.
+• Interpretar stack traces e reduzir caso de reprodução.
+• Criar erros intencionais com mensagens úteis.
+• Projetar funções puras e bordas injetáveis para facilitar teste.
+Conceitos nucleares
+throw/Error · try/catch · assertions · unit tests · test doubles introdutórios · boundary cases · debugger · logs
+estruturados · TDD em pequena escala · breakpoints · step over/into/out · watch · Vitest
+describe/test/expect · testes de comportamento · TDD seletivo
+Modelo mental aprofundado
+Debugging comeca pelo habito prever -> executar -> comparar. Nesta etapa o aluno formaliza
+breakpoints, step over/into/out, watch e leitura de stack traces. Pesquisas recentes sugerem que execucao
+simples e util em trechos pequenos e debugger ganha valor relativo conforme a complexidade aumenta
+[E9].
+Vitest e a API padrao da plataforma: describe, test/it e expect. Isso remove a ambiguidade da primeira
+edicao. O aluno aprende arranjo-acao-verificacao, testes de tabela e a diferenca entre testar
+comportamento e acoplar o teste a detalhes internos.
+TDD aparece onde o feedback de especificacao e util: parsers, regras puras e bugs reproduziveis. O curso
+evita a regra "todo codigo precisa nascer de TDD". O criterio e reduzir ambiguidade e facilitar mudanca.
+Erros e concepcoes que a etapa deve revelar
+• Testar detalhe interno e bloquear refactor.
+• Usar console.log como unica ferramenta de debug.
+• Escrever teste depois de um bug sem reproduzir exatamente a regressao.
+Exemplo resolvido - teste de borda antes da implementação
+// comportamento desejado
+expect(clamp(12, 0, 10)).toBe(10);
+expect(clamp(-2, 0, 10)).toBe(0);
+expect(clamp(6, 0, 10)).toBe(6);
+A plataforma padroniza exemplos e testes ocultos em Vitest, usando describe/test/expect. Debugger
+aparece formalmente aqui, mas exercicios de previsao -> execucao -> breakpoint ja comecam nas etapas
+iniciais. A meta e alternar leitura, execucao e debugger conforme a complexidade, nao usar console.log
+para tudo.
+GATE DE DOMINIO
+Avance quando o projeto passar testes, incluir pelo menos uma sessao de debugging
+documentada e resistir a uma pequena mudanca de requisito. Erros de acessibilidade/async
+que quebram o contrato bloqueiam o gate.

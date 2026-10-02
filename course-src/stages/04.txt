@@ -1,0 +1,49 @@
+ETAPA 04 - Funções, parâmetros, retorno
+e decomposição
+Faixa
+Fundamentos II
+Carga
+10-14 h
+Nivel curricular
+1.5/5
+PRE-REQUISITOS
+Fluxo de controle e variaveis.
+Resultados de aprendizagem
+• Distinguir chamada, parâmetro, argumento e retorno.
+• Escrever funções pequenas com responsabilidade clara.
+• Usar parâmetros padrão e rest em contexto simples.
+• Entender funções como valores sem mergulhar ainda em closures.
+Conceitos nucleares
+function declaration · function expression · arrow function · return · parâmetros · default/rest · pureza
+introdutória · decomposição · separar calculo de apresentacao · Intl.NumberFormat como formatacao
+Modelo mental aprofundado
+Funcoes sao o primeiro grande salto de abstracao. A explicacao separa declaracao, chamada, parametros,
+argumentos, retorno e efeito colateral. O aluno precisa sentir a diferenca entre "imprimir" e "retornar"
+porque isso decide se funcoes podem ser compostas e testadas.
+Decomposicao entra com uma regra simples: extraia uma funcao quando ela representa uma ideia testavel
+com entrada/saida clara ou quando isola um efeito. Nao se cria uma funcao de uma linha apenas para
+aumentar contagem de abstractions.
+Intl.NumberFormat aparece como ferramenta de apresentacao. O curso deixa explicito que formatar
+moeda e uma coisa e realizar aritmetica monetaria exata e outra. toFixed pode servir para demonstracoes
+numericas, mas nao deve ser tratado como solucao universal de dinheiro.
+Erros e concepcoes que a etapa deve revelar
+• console.log no lugar de return.
+• Funcao que mistura calculo, I/O e formatacao sem necessidade.
+• Abstracao prematura com parametros que ninguem entende.
+Exemplo resolvido - decompor cálculo e apresentação
+function subtotal(preco, qtd) {
+  return preco * qtd;
+}
+function formatarMoeda(valor) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(
+valor);
+}
+console.log(formatarMoeda(subtotal(12.5, 2)));
+A funcao de calculo continua independente da apresentacao. Intl.NumberFormat resolve
+localizacao/formato; nao resolve, sozinho, toda questao de precisao monetaria. Alicerce: funcao pequena,
+retorno previsivel e efeito colateral na borda.
+
+GATE DE DOMINIO
+Avance quando conseguir resolver dois exercicios de transferencia curtos sem dica, prever a
+saida antes de executar e explicar um erro em linguagem natural. Mini-projeto pode usar uma
+dica conceitual, mas nao codigo pronto.

@@ -1,0 +1,50 @@
+ETAPA 05 - Strings, arrays, regex e
+metodos modernos sem mutacao
+Faixa
+Fundamentos II
+Carga
+12-16 h
+Nivel curricular
+1.5/5
+PRE-REQUISITOS
+Funcoes basicas e fluxo; callbacks ainda nao sao obrigatorios.
+Resultados de aprendizagem
+• Percorrer, transformar e consultar arrays.
+• Usar métodos de string sem criar cadeias ilegíveis.
+• Entender mutação básica vs criação de novo array.
+• Escolher método pelo objetivo e não por memorização.
+Conceitos nucleares
+length · slice · includes · split/join · push/pop · shift/unshift · indexOf · at · cópia rasa · métodos mutáveis vs
+não mutáveis · regex introdutoria · RegExp.escape · toSorted/toReversed/toSpliced/with ·
+findLast/findLastIndex
+Modelo mental aprofundado
+Strings e arrays sao introduzidos primeiro com operacoes que o aluno consegue rastrear. split/join, trim,
+slice, includes, push/pop e indexacao formam a base. map/filter/reduce ficam para a etapa seguinte de alta
+ordem; isso reduz a carga de aprender colecao e callback ao mesmo tempo.
+Regex entra aqui porque validacao e parsing aparecem ao longo de toda a trilha. O objetivo nao e escrever
+regex criptica. O aluno aprende literais, classes, quantificadores, grupos, flags e a regra "se a regex ficou
+mais dificil de explicar que um parser pequeno, considere o parser". RegExp.escape e citado para construir
+padroes com entrada dinamica em runtimes modernos.
+A etapa compara APIs mutaveis (sort, reverse, splice) com as alternativas copy-by-change modernas
+(toSorted, toReversed, toSpliced, with). O aluno aprende a escolher pelo contrato, nao por dogma de
+imutabilidade.
+Erros e concepcoes que a etapa deve revelar
+• Usar regex para parser estruturado complexo.
+• Ordenar com sort e esquecer que ele muta.
+• Usar map antes de entender o que a callback retorna.
+Exemplo resolvido - limpar e tokenizar texto
+const entrada = '  fogo, gelo, vento  ';
+const partes = entrada.trim().split(',');
+const itens = [];
+for (const parte of partes) {
+  itens.push(parte.trim());
+}
+console.log(itens);
+A primeira passagem nao usa map antes da etapa de funcoes de alta ordem. Regex entra aqui como
+ferramenta de texto, com enfase em legibilidade e limites; metodos copy-by-change modernos entram ao
+comparar mutacao com toSorted/toReversed/toSpliced/with.
+
+GATE DE DOMINIO
+Avance quando a implementacao principal e o mini-projeto passarem testes ocultos e voce
+conseguir explicar mutacao/estado/controle relevante. Uma dica estrutural e permitida apenas
+no projeto.

@@ -1,0 +1,43 @@
+ETAPA 19 - Conditional, mapped e
+template literal types; infer
+Faixa
+Avancado - sistema de tipos (alta
+carga)
+Carga
+20-30 h
+Nivel curricular
+4.0/5
+PRE-REQUISITOS
+Generics/keyof/utility types. Etapa deliberadamente de alta dificuldade.
+Resultados de aprendizagem
+• Entender tipos como transformações, não como truques.
+• Criar mapped types simples antes de conditional types complexos.
+• Usar infer para extrair relações úteis.
+• Saber parar: preferir tipo explícito quando a ginástica de tipos reduz manutenção.
+Conceitos nucleares
+mapped types · conditional types · distributivity · infer · template literal types · recursive types com cautela
+· type-level tests · evitar ginastica de tipos · criterio de custo/beneficio
+Modelo mental aprofundado
+Mapped, conditional, template literal types e infer sao uma linguagem de transformacao de tipos. Esta
+etapa e deliberadamente marcada como alta carga cognitiva. O aluno expande tipos pequenos a mao
+antes de confiar no editor.
+Distributividade de conditional types e ensinada com contraexemplo. infer aparece para extrair uma
+relacao que ja existe, nao para construir enigmas. A etapa inclui criterio de parada: se um tipo complexo
+precisa de um tutorial inteiro para ser mantido, talvez uma API mais simples seja melhor.
+Esta etapa pode ser mais dificil que iteradores/Proxy da etapa seguinte; a nova escala de dificuldade
+reflete exercicio a exercicio, em vez de assumir que qualquer JS avancado e automaticamente mais dificil
+que TS avancado.
+Erros e concepcoes que a etapa deve revelar
+• Construir puzzle de tipos sem valor para manutencao.
+• Ignorar distributividade de conditional types.
+• Recursao de tipos sem limite conceitual.
+Exemplo resolvido - transformar getters
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]
+};
+O exemplo só entra depois que keyof/mapped types estão sólidos. A avaliação inclui legibilidade e limite de
+complexidade, não apenas “funciona”.
+GATE DE DOMINIO
+Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
+justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
+parte do contrato.

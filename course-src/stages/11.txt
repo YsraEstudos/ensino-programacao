@@ -1,0 +1,56 @@
+ETAPA 11 - DOM, eventos, formularios,
+acessibilidade e persistencia local
+Faixa
+Intermediário II
+Carga
+18-24 h
+Nivel curricular
+2.5/5
+PRE-REQUISITOS
+Objetos/arrays + microponte HTML incluida nesta edicao.
+Resultados de aprendizagem
+• Selecionar e alterar DOM com segurança.
+• Entender propagação básica de eventos e delegação.
+• Ler/validar formulários sem acoplar tudo à interface.
+• Separar estado, lógica e renderização.
+Conceitos nucleares
+querySelector · createElement · event listeners · bubbling · delegação · forms · dataset · render · estado de
+UI · localStorage/sessionStorage · FormData · Object.fromEntries · label/input · foco · aria-live ·
+debounce/throttle introdutorio
+Modelo mental aprofundado
+Antes de manipular DOM, a pagina revisa HTML minimo: hierarquia, id/class, input, button, form e label. O
+modelo de UI e "estado -> render" sempre que possivel. O DOM nao deve virar a fonte de verdade de
+regras de negocio.
+FormData + Object.fromEntries entra como leitura moderna de formularios. O aluno aprende que os
+valores ainda precisam de parsing/validacao e que checkbox, multi-select e arquivos exigem atencao
+adicional.
+localStorage e sessionStorage sao ensinados antes do Kanban que os usa. Persistencia local e string-based,
+sincrona e sujeita a dado corrompido/antigo; portanto, toda leitura deve ter parse seguro e
+versao/esquema quando o projeto crescer.
+Acessibilidade e parte do contrato: label associado ao input, foco apos operacoes relevantes, botao real em
+vez de div clicavel, teclado e aria-live para mensagens dinamicas. Debounce/throttle entram como padroes
+de eventos frequentes, primeiro conceitualmente.
+Erros e concepcoes que a etapa deve revelar
+• Ler valor do DOM em dezenas de lugares e criar duas fontes de verdade.
+• Persistir sem tratar versao/dado corrompido.
+• Construir controle clicavel sem semantica de botao/teclado.
+Exemplo resolvido - renderizar a partir do estado
+let tarefas = [];
+function render() {
+  lista.replaceChildren(...tarefas.map(criarItem));
+}
+function adicionar(texto) {
+  tarefas = [...tarefas, { id: crypto.randomUUID(), texto }];
+  render();
+}
+
+O objetivo é não fazer do DOM a única fonte de verdade. Mesmo num exercício pequeno, o aluno aprende a
+distinguir dados, transição de estado e renderização.
+PONTE HTML
+OBRIGATORIA
+Antes dos exercicios DOM: 30-60 min de HTML minimo (elementos, atributos, id/class, form,
+label, input, button, arvore). O aluno nao precisa dominar CSS para continuar.
+GATE DE DOMINIO
+Avance quando o projeto passar testes, incluir pelo menos uma sessao de debugging
+documentada e resistir a uma pequena mudanca de requisito. Erros de acessibilidade/async
+que quebram o contrato bloqueiam o gate.

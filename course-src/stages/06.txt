@@ -1,0 +1,52 @@
+ETAPA 06 - Objetos, referencias, copia
+rasa, structuredClone e JSON
+Faixa
+Fundamentos II
+Carga
+12-16 h
+Nivel curricular
+1.5/5
+PRE-REQUISITOS
+Arrays/strings e funcoes pequenas.
+Resultados de aprendizagem
+• Modelar entidades com objetos.
+• Ler e atualizar propriedades com intenção.
+• Usar destructuring, spread e rest sem confundir cópia rasa com profunda.
+• Converter dados JSON e validar o formato mínimo.
+Conceitos nucleares
+objetos · propriedades computadas · destructuring · spread/rest · cópia rasa · JSON.parse/stringify ·
+referência · métodos de Object · structuredClone · aliasing · identidade vs igualdade · limites de JSON
+Modelo mental aprofundado
+O modelo mental mais importante e identidade. Duas variaveis podem apontar para o mesmo objeto;
+alterar por uma referencia sera observado pela outra. Spread cria uma nova camada externa, mas objetos
+internos podem continuar compartilhados. Esse fenomeno se chama aliasing e explica a maior parte dos
+bugs de "copiei mas ainda mudou".
+Stack vs heap pode aparecer como desenho auxiliar, mas com aviso forte: ECMAScript nao obriga engines
+a armazenar primitivos sempre numa stack e objetos sempre numa heap. O que o aluno precisa para
+programar corretamente e semantica de valor, identidade, referencia e tempo de vida observavel.
+structuredClone e apresentado como clonagem profunda nativa para muitos dados estruturados, mas nao
+como substituto universal de modelagem. JSON.parse(JSON.stringify(x)) e explicitamente rejeitado como
+clone generico, porque perde tipos e distorce valores. JSON e ensinado como formato de interoperabilidade
+com regras proprias.
+Erros e concepcoes que a etapa deve revelar
+• Achar que spread e clone profundo.
+• Usar JSON stringify/parse como clone universal.
+• Tratar um desenho stack/heap como obrigacao da especificacao.
+Exemplo resolvido - atualização imutável rasa
+const jogador = { nome: 'Nora', nivel: 3, hp: 20 };
+const atualizado = { ...jogador, hp: 14 };
+console.log(jogador.hp, atualizado.hp);
+O modelo principal e semantico: objetos podem ser compartilhados por referencia e spread faz copia rasa.
+Diagramas de stack/heap podem ser usados apenas como heuristica, porque a especificacao JavaScript nao
+exige um layout fisico de memoria especifico. O aluno deve raciocinar sobre identidade, aliasing e alcance
+da copia, nao sobre um endereco ficticio.
+
+MEMORIA SEM MITO
+Use desenhos de "referencias apontando para objetos" para raciocinar sobre identidade. Nao
+ensine como lei que primitivos ficam fisicamente na stack e objetos na heap; engines podem
+otimizar/alocar de formas diferentes. O contrato da linguagem e semantico, nao um endereco
+de memoria.
+GATE DE DOMINIO
+Avance quando a implementacao principal e o mini-projeto passarem testes ocultos e voce
+conseguir explicar mutacao/estado/controle relevante. Uma dica estrutural e permitida apenas
+no projeto.
