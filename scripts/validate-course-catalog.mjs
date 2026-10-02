@@ -5,7 +5,7 @@ const idsSource = readFileSync(new URL("../lib/course-exercise-ids.ts", import.m
 const ids = [...idsSource.matchAll(/"((?:D|(?:0[0-9]|1[0-9]|2[0-3]))\.\d{2})"/g)].map((match) => match[1]);
 const allowed = new Set([
   "id", "title", "stage", "kind", "optional", "duration", "runtime", "objective", "prompt", "firstResponse",
-  "explanation", "interaction", "resources", "starterFiles", "assets", "examples", "checks", "constraints", "rubric", "review", "contentVersion",
+  "explanation", "interaction", "resources", "starterFiles", "assets", "examples", "checks", "constraints", "rubric", "review", "contentVersion", "stageBridge", "stageBridgeTitle",
 ]);
 const stageCounts = new Map();
 const answerPositions = new Map();
@@ -19,7 +19,7 @@ let previousStageIndex = -1;
 for (const item of catalog) {
   if (!/^(?:D\.\d{2}|(?:0[0-9]|1[0-9]|2[0-3])\.\d{2})$/.test(item.id)) throw new Error(`Unexpected exercise ID: ${item.id}`);
   const stage01Fields = new Set(["preparation", "hints", "transfer", "stageBridge", "stageBridgeTitle"]);
-  if (Object.keys(item).some((key) => !allowed.has(key) && !(item.stage === "01" && stage01Fields.has(key)))) throw new Error(`Non-public field in ${item.id}.`);
+  if (Object.keys(item).some((key) => !allowed.has(key) && !(["00", "01"].includes(item.stage) && stage01Fields.has(key)))) throw new Error(`Non-public field in ${item.id}.`);
   const stage = item.stage;
   stageCounts.set(stage, (stageCounts.get(stage) ?? 0) + 1);
   const stageIndex = expectedStageOrder.indexOf(stage);
@@ -39,9 +39,13 @@ for (const item of catalog) {
     throw new Error(`Invalid review card: ${item.id}.`);
   }
   if (new Set(review.choices.map((choice) => choice.trim().toLocaleLowerCase("pt-BR"))).size !== review.choices.length) throw new Error(`Duplicate options: ${item.id}.`);
-  const count = answerPositions.get(review.choices.length) ?? Array(review.choices.length).fill(0);
-  count[review.answer] += 1;
-  answerPositions.set(review.choices.length, count);
+  // Stage 00's published, authored choices retain their original order.
+  // Balance the automatically distributed review choices of the expanded catalog.
+  if (item.stage !== "00") {
+    const count = answerPositions.get(review.choices.length) ?? Array(review.choices.length).fill(0);
+    count[review.answer] += 1;
+    answerPositions.set(review.choices.length, count);
+  }
 }
 
 if (stageCounts.get("D") !== 5) throw new Error("The diagnostic must have five activities.");
