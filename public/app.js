@@ -1,4 +1,6 @@
-const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseVersions: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {}, stage02: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
+const blankProgress = () => ({ completed: [], answers: {}, attempts: {}, challenges: {}, exerciseVersions: {}, exerciseDrafts: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {}, stage02: {}, stage01: {}, lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null });
+const localPreview = ["localhost", "127.0.0.1", "[::1]"].includes(location.hostname);
+const localProgressKey = "devpath-local-preview-v1";
 let progress = blankProgress();
 let curriculumActivities = window.DevPathStage00UI.activities;
 let saveQueue = Promise.resolve();
@@ -17,6 +19,12 @@ function saveProgress() {
   const status = document.querySelector(".save-status");
   status.innerHTML = "<i></i> salvando…";
   const snapshot = JSON.stringify(progress);
+  if (localPreview) {
+    try { localStorage.setItem(localProgressKey, snapshot); status.innerHTML = "<i></i> salvo neste navegador"; }
+    catch { status.innerHTML = "<i></i> falha ao salvar localmente"; }
+    updateNav(routeInfo().name);
+    return;
+  }
   saveQueue = saveQueue.catch(() => {}).then(async () => {
     const response = await fetch("/api/progress", { method: "PUT", headers: { "Content-Type": "application/json" }, body: snapshot });
     if (!response.ok) throw new Error("save failed");
@@ -31,12 +39,20 @@ async function initialize() {
     const response = await fetch("/course-catalog.json", { cache: "no-store" });
     if (response.ok) {
       const catalog = await response.json();
-      if (Array.isArray(catalog) && catalog.length === 217 && catalog.every((item) => item.id && item.learner === undefined)) {
+      if (Array.isArray(catalog) && catalog.length === 254 && catalog.every((item) => item.id && item.learner === undefined)) {
         curriculumActivities = catalog;
-        document.querySelector(".side-path small").textContent = "Etapas 00–20 · 217 exercícios";
+        document.querySelector(".side-path small").textContent = "Diagnóstico + etapas 00–23 · 254 exercícios";
       }
     }
   } catch { /* Keep the existing starter catalog if the expanded course asset is unavailable. */ }
+  if (localPreview) {
+    try { progress = { ...blankProgress(), ...JSON.parse(localStorage.getItem(localProgressKey) || "{}") }; }
+    catch { progress = blankProgress(); }
+    status.innerHTML = "<i></i> prévia local · progresso neste navegador";
+    document.querySelector(".site-footer > span:last-child").textContent = "Prévia local: seu progresso fica neste navegador.";
+    render();
+    return;
+  }
   try {
     const response = await fetch("/api/progress", { cache: "no-store" });
     if (!response.ok) throw new Error("load failed");
@@ -71,6 +87,10 @@ function esc(value) {
   return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char]);
 }
 
+function renderInlineCode(value) {
+  return esc(value).replace(/(^|[^`])`([^`\r\n]+)`(?!`)/g, (_, before, code) => `${before}<code>${code}</code>`);
+}
+
 function toast(message) {
   const el = document.querySelector("#toast");
   el.textContent = message;
@@ -80,7 +100,24 @@ function toast(message) {
 }
 
 function setBreadcrumb(...parts) {
-  breadcrumb.innerHTML = `<span>Seu espaço</span>${parts.map((part) => `<span class="crumb-sep">/</span><strong>${esc(part)}</strong>`).join("")}`;
+  const hrefFor = (part) => {
+    if (part === "Seu espaço" || part === "Início") return "#/home";
+    if (part === "JavaScript" || part === "Exercícios") return "#/catalog";
+    if (part === "Diagnóstico") return "#/javascript/D.01";
+    if (part === "Revisão") return "#/review";
+    if (part === "Etapa 03") return "#/javascript/03.04";
+    const stage = /^Etapa (\d{2})$/.exec(part);
+    return stage ? `#/javascript/${stage[1]}.01` : null;
+  };
+  const home = `<a class="breadcrumb-home" href="#/home">Seu espaço</a>`;
+  const trail = parts.map((part, index) => {
+    const href = hrefFor(part);
+    const content = index === parts.length - 1
+      ? `<strong aria-current="page">${esc(part)}</strong>`
+      : href ? `<a href="${href}">${esc(part)}</a>` : `<span>${esc(part)}</span>`;
+    return `<span class="crumb-sep" aria-hidden="true">/</span>${content}`;
+  }).join("");
+  breadcrumb.innerHTML = home + trail;
 }
 
 function updateNav(route) {
@@ -103,6 +140,8 @@ function exerciseProgressKey(item) {
   return Number(item.contentVersion || 1) > 1 ? `${item.id}@v${item.contentVersion}` : item.id;
 }
 function isExerciseDone(id) {
+  if (id.startsWith("03.")) return window.DevPathStage03UI?.complete({ id }, progress) || false;
+  if (id.startsWith("01.")) return window.DevPathStage01UI?.complete({ id }, progress) || false;
   if (id.startsWith("02.")) return window.DevPathStage02UI.complete({ id }, progress);
   const item = curriculumActivities.find((activity) => activity.id === id);
   const version = Number(item?.contentVersion || 1);
@@ -127,37 +166,43 @@ function render() {
   if (route.name === "catalog") renderCatalog();
   if (route.name === "javascript") route.id ? renderJavaScriptExercise(route.id) : renderJavaScriptOverview();
   if (route.name === "review") renderReview();
+  window.DevPathLearningJourney?.sync(view);
   document.querySelector("#main").focus({ preventScroll: true });
 }
 
-function stage02Context() { return { progress, saveProgress, render, toast, scheduleSave: scheduleCourseSave }; }
-function stage00Context() { return { progress, saveProgress, render, scheduleSave: scheduleCourseSave, activities: curriculumActivities }; }
-
 function stageContext() { return { progress, saveProgress, render }; }
+function stage02Context() { return { progress, saveProgress, render, toast, scheduleSave: scheduleCourseSave }; }
+function stage00Context() { return { progress, saveProgress, render, toast, scheduleSave: scheduleCourseSave, activities: curriculumActivities }; }
 
 function renderJavaScriptOverview() {
   renderCatalog();
 }
 
+function stage03Context() { return { progress, saveProgress, scheduleSave: scheduleCourseSave, render, toast, activities: curriculumActivities }; }
+
 function renderJavaScriptExercise(id) {
   const item = curriculumActivities.find((activity) => activity.id === id);
   if (!item) { location.hash = "#/javascript"; return; }
-  setBreadcrumb("JavaScript", `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
-  view.innerHTML = item.stage === "00" && item.preparation ? window.DevPathStage00Preparation.render(item, stage00Context()) : item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : renderCurriculumLesson(item);
+  setBreadcrumb("JavaScript", item.stage === "D" ? "Diagnóstico" : `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
+  view.innerHTML = item.stage === "D" ? window.DevPathDiagnosticUI.render(item, stage00Context()) : item.stage === "00" && item.preparation ? window.DevPathStage00Preparation.render(item, stage00Context()) : item.stage === "01" ? window.DevPathStage01UI.render(item, stage00Context()) : item.stage === "02" ? window.DevPathStage02UI.render(item, stage02Context()) : item.stage === "03" ? window.DevPathStage03UI.render(item, stage03Context()) : renderCurriculumLesson(item);
   if (item.stage === "00" && item.preparation) window.DevPathStage00Preparation.sync(item, stage00Context());
 }
 
 function renderHome() {
   setBreadcrumb("Início");
-  const activities = requiredActivities();
-  const next = activities.find((item) => !isExerciseDone(item.id)) || activities[0];
-  const allDone = doneCount() === activities.length;
+  const activities = curriculumActivities;
+  const required = requiredActivities();
+  const next = required.find((item) => !isExerciseDone(item.id)) || required[0] || activities[0];
+  const allDone = doneCount() === required.length;
   const stageIds = [...new Set(activities.map((item) => item.stage || item.id.slice(0, 2)))];
   const stageRows = stageIds.map((stage) => {
     const items = activities.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
-    const completed = items.filter((item) => isExerciseDone(item.id)).length;
-    const nextInStage = items.find((item) => !isExerciseDone(item.id)) || items[0];
-    return `<a class="path-stage-card" href="#/javascript/${nextInStage.id}"><div><span class="eyebrow">ETAPA ${esc(stage)}</span><strong>${completed} / ${items.length}</strong></div><h2>${esc(items[0].title)}${items.length > 1 ? ` <span>+ ${items.length - 1} atividades</span>` : ""}</h2><div class="stage-progress"><i style="width:${Math.round(completed / items.length * 100)}%"></i></div></a>`;
+    const core = items.filter((item) => !item.optional);
+    const extras = items.length - core.length;
+    const completed = core.filter((item) => isExerciseDone(item.id)).length;
+    const nextInStage = core.find((item) => !isExerciseDone(item.id)) || core[0] || items[0];
+    const stageLabel = stage === "D" ? "DIAGNÓSTICO" : `ETAPA ${esc(stage)}`;
+    return `<a class="path-stage-card" href="#/javascript/${nextInStage.id}"><div><span class="eyebrow">${stageLabel}</span><strong>${completed} / ${core.length}</strong></div><h2>${esc((core[0] || items[0]).title)}${items.length > 1 ? ` <span>+ ${items.length - 1} atividades${extras ? `, ${extras} extra` : ""}</span>` : ""}</h2><div class="stage-progress"><i style="width:${core.length ? Math.round(completed / core.length * 100) : 100}%"></i></div></a>`;
   }).join("");
   const label = allDone ? "Praticar revisão" : isExerciseDone(next.id) ? "Revisitar exercício" : doneCount() ? "Continuar exercício" : "Começar exercício";
   const href = allDone ? "#/review" : `#/javascript/${next.id}`;
@@ -165,7 +210,7 @@ function renderHome() {
   view.innerHTML = `
     <section class="welcome"><div><div class="eyebrow">${new Intl.DateTimeFormat("pt-BR", { weekday: "long" }).format(new Date()).toUpperCase()} · UMA IDEIA DE CADA VEZ</div><h1>Olá, aprendiz<span class="brand-period">.</span></h1><p>${allDone ? `Os ${activities.length} exercícios disponíveis estão concluídos. Revise ou pratique novamente.` : "Você tem um caminho pela frente. <strong>Vamos escrever mais uma linha?</strong>"}</p></div><div class="date-chip">${new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date()).toUpperCase()}</div></section>
     <section class="continue-panel" aria-labelledby="continue-title"><div class="continue-copy"><div class="eyebrow">JAVASCRIPT · EXERCÍCIO ${esc(next.id)}</div><h2 id="continue-title">${esc(next.title)}.</h2><p>${esc(next.objective)}</p><div class="continue-bottom"><a class="button-primary" href="${href}">${label}<span aria-hidden="true">→</span></a><span class="subtle-meta">${doneCount()} / ${activities.length} exercícios concluídos</span></div></div><div class="code-art" aria-hidden="true"><div class="code-top"><i></i><i></i><i></i></div><div class="code-line w-1"></div><div class="code-line w-2"></div><div class="code-line w-3"></div><div class="code-line w-4"></div><div class="code-line w-5"></div><span class="code-caption">console.log("você")</span></div></section>
-    <section class="path-overview"><div class="section-heading"><h2>Trilha JavaScript · etapas 00 a 20</h2><a class="text-link" href="#/catalog">Abrir os 217 exercícios →</a></div><div class="path-stage-grid">${stageRows}</div></section>
+    <section class="path-overview"><div class="section-heading"><h2>JavaScript · diagnóstico e etapas 00 a 23</h2><a class="text-link" href="#/catalog">Abrir os 254 exercícios →</a></div><div class="path-stage-grid">${stageRows}</div></section>
     <div class="bottom-grid"><section class="week-panel" aria-labelledby="week-title"><div class="section-heading"><h2 id="week-title">Um pouco já conta</h2><span class="eyebrow">SEUS ÚLTIMOS 7 DIAS</span></div><div class="week-track">${week}</div></section><aside class="stat-note"><span class="stat-number">${percentDone()}%</span><span class="stat-copy"><strong>${doneCount()} de ${activities.length} exercícios</strong>Seu progresso acompanha<br />o que você conseguiu fazer.</span></aside></div>`;
 }
 
@@ -188,7 +233,7 @@ function renderCatalog() {
   setBreadcrumb("Exercícios");
   const filters = ["Todas", "Em andamento", "Concluídas"];
   const stages = [...new Set(curriculumActivities.map((item) => item.stage))];
-  view.innerHTML = `<section class="page-intro"><div class="eyebrow">JAVASCRIPT · ETAPAS 00 A 20</div><h1>Aprender escrevendo código<span class="brand-period">.</span></h1><p>217 atividades com previsão antes da explicação, espaço para escrever, exemplos públicos e revisão espaçada. Escolha uma etapa ou procure um tema.</p></section><div class="catalog-tools"><label class="course-search-label" for="course-search">Buscar exercício<input id="course-search" type="search" value="${esc(catalogSearch)}" placeholder="Título, tema ou enunciado" autocomplete="off" /></label><label class="stage-select-label" for="stage-filter">Etapa<select id="stage-filter">${["Todas", ...stages].map((stage) => `<option value="${esc(stage)}" ${selectedStageFilter === stage ? "selected" : ""}>${stage === "Todas" ? "Todas as etapas" : `Etapa ${stage}`}</option>`).join("")}</select></label><div class="filter-tabs" role="group" aria-label="Filtrar por progresso">${filters.map((filter) => `<button class="filter-tab ${selectedCatalogFilter === filter ? "selected" : ""}" data-filter="${filter}" aria-pressed="${selectedCatalogFilter === filter}">${filter}</button>`).join("")}</div></div><div class="catalog-count-row"><span id="catalog-count" class="catalog-count"></span><span>Escolha uma atividade para abrir a explicação guiada.</span></div><section id="catalog-results" aria-label="Exercícios de JavaScript"></section>`;
+  view.innerHTML = `<section class="page-intro"><div class="eyebrow">JAVASCRIPT · DIAGNÓSTICO + ETAPAS 00 A 23</div><h1>Aprender escrevendo código<span class="brand-period">.</span></h1><p>254 atividades com previsão antes da explicação, espaço para escrever, exemplos públicos e revisão espaçada. Escolha uma etapa ou procure um tema.</p></section><div class="catalog-tools"><label class="course-search-label" for="course-search">Buscar exercício<input id="course-search" type="search" value="${esc(catalogSearch)}" placeholder="Título, tema ou enunciado" autocomplete="off" /></label><label class="stage-select-label" for="stage-filter">Etapa<select id="stage-filter">${["Todas", ...stages].map((stage) => `<option value="${esc(stage)}" ${selectedStageFilter === stage ? "selected" : ""}>${stage === "Todas" ? "Todas as etapas" : stage === "D" ? "Diagnóstico inicial" : `Etapa ${stage}`}</option>`).join("")}</select></label><div class="filter-tabs" role="group" aria-label="Filtrar por progresso">${filters.map((filter) => `<button class="filter-tab ${selectedCatalogFilter === filter ? "selected" : ""}" data-filter="${filter}" aria-pressed="${selectedCatalogFilter === filter}">${filter}</button>`).join("")}</div></div><div class="catalog-count-row"><span id="catalog-count" class="catalog-count"></span><span>Escolha uma atividade para abrir a explicação guiada.</span></div><section id="catalog-results" aria-label="Exercícios de JavaScript"></section>`;
   updateCatalogResults();
 }
 
@@ -208,9 +253,10 @@ function updateCatalogResults() {
   const stageIds = [...new Set(items.map((item) => item.stage || item.id.slice(0, 2)))];
   results.innerHTML = items.length ? stageIds.map((stage) => {
     const group = items.filter((item) => (item.stage || item.id.slice(0, 2)) === stage);
-    const core = group.filter((item) => item.optional !== true);
+    const core = group.filter((item) => !item.optional);
+    const extras = group.length - core.length;
     const completed = core.filter((item) => isExerciseDone(item.id)).length;
-    return `<section class="catalog-stage" aria-labelledby="catalog-stage-${stage}"><div class="catalog-stage-heading"><div><span class="eyebrow">SEQUÊNCIA CURRICULAR</span><h2 id="catalog-stage-${stage}">Etapa ${esc(stage)}</h2></div><span>${completed} / ${core.length} obrigatórios concluídos · ${group.length - core.length} extras opt-in</span></div><div class="catalog-card-grid">${group.map((item, index) => `<article class="catalog-learning-card ${isExerciseDone(item.id) ? "is-complete" : ""}"><div class="catalog-learning-meta"><span>${index + 1} de ${group.length} · ${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ""}</span><span>${isExerciseDone(item.id) ? "✓ concluído" : `Estimativa: ${esc(item.duration)}`}</span></div><h3>${esc(item.title)}</h3><p>${esc(item.firstResponse.action)}</p><a href="#/javascript/${item.id}" class="text-link">${isExerciseDone(item.id) ? "Revisitar atividade" : "Abrir atividade"}<span aria-hidden="true">→</span></a></article>`).join("")}</div></section>`;
+    return `<section class="catalog-stage" aria-labelledby="catalog-stage-${stage}"><div class="catalog-stage-heading"><div><span class="eyebrow">SEQUÊNCIA CURRICULAR</span><h2 id="catalog-stage-${stage}">${stage === "D" ? "Diagnóstico inicial" : `Etapa ${esc(stage)}`}</h2></div><span>${completed} / ${core.length} obrigatórios${extras ? ` · ${extras} extras opcionais` : ""}</span></div><div class="catalog-card-grid">${group.map((item) => { const order = core.indexOf(item); return `<article class="catalog-learning-card ${isExerciseDone(item.id) ? "is-complete" : ""}"><div class="catalog-learning-meta"><span>${esc(item.id)} · ${esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ` · ${order + 1} de ${core.length}`}</span><span>${isExerciseDone(item.id) ? "✓ concluído" : `estimativa ${esc(item.duration)}`}</span></div><h3>${esc(item.title)}</h3><p>${renderInlineCode(item.firstResponse.action)}</p><a href="#/javascript/${item.id}" class="text-link">${isExerciseDone(item.id) ? "Revisitar atividade" : "Abrir atividade"}<span aria-hidden="true">→</span></a></article>`; }).join("")}</div></section>`;
   }).join("") : `<p class="empty-state">Nenhum exercício corresponde a esses filtros. Ajuste a busca ou selecione outra etapa.</p>`;
 }
 
@@ -253,12 +299,13 @@ function renderCurriculumLesson(item) {
   const evidence = progress.exerciseEvidence?.[progressKey] || {};
   const evidenceReady = evidence.status === "executed" || evidence.status === "written";
   const drafts = loadCourseDraft(item);
-  const itemIndex = curriculumActivities.indexOf(item);
-  const core = requiredActivities();
-  const previous = [...core].reverse().find((activity) => curriculumActivities.indexOf(activity) < itemIndex);
-  const next = core.find((activity) => curriculumActivities.indexOf(activity) > itemIndex);
-  const stageActivities = curriculumActivities.filter((activity) => activity.stage === item.stage);
-  const sequenceLabel = `Etapa ${item.stage} · ${stageActivities.indexOf(item) + 1} de ${stageActivities.length}`;
+  const required = requiredActivities();
+  const itemPosition = curriculumActivities.indexOf(item);
+  const previous = [...required].reverse().find((candidate) => curriculumActivities.indexOf(candidate) < itemPosition);
+  const next = required.find((candidate) => curriculumActivities.indexOf(candidate) > itemPosition);
+  const stageCore = required.filter((candidate) => candidate.stage === item.stage);
+  const stageOrder = stageCore.indexOf(item) + 1;
+  const sequenceLabel = item.optional ? "EXTRA OPT-IN" : `ORDEM ${stageOrder} DE ${stageCore.length}`;
   const firstFile = item.starterFiles[0];
   const starterPreview = item.starterFiles.map((file) => `<div class="course-file-preview"><span>${esc(file.path)}</span><pre><code>${esc(file.content)}</code></pre></div>`).join("");
   const editors = item.starterFiles.map((file) => `<label class="course-editor-label" for="course-file-${id}-${item.starterFiles.indexOf(file)}"><span>${esc(file.path)}</span><textarea id="course-file-${id}-${item.starterFiles.indexOf(file)}" class="course-editor" data-course-editor="${esc(id)}" data-course-file="${esc(file.path)}" maxlength="${Math.max(80, Math.floor(1100 / item.starterFiles.length))}" spellcheck="false" autocapitalize="off" autocomplete="off">${esc(drafts[file.path] ?? file.content)}</textarea></label>`).join("");
@@ -276,10 +323,12 @@ function renderCurriculumLesson(item) {
 }
 
 function reviewSet() {
-  const activities = requiredActivities().filter((item) => isExerciseDone(item.id));
-  const due = dueExercises();
-  const pool = due.length ? due : activities.slice(0, 1);
-  return pool.map((item) => ({ exercise: item, ...item.review, scheduled: due.some((dueItem) => dueItem.id === item.id) }));
+  const activities = curriculumActivities.filter((item) => isExerciseDone(item.id));
+  const due = dueExercises().sort((a, b) => Number(progress.reviewSchedule?.[a.id]?.dueAt) - Number(progress.reviewSchedule?.[b.id]?.dueAt));
+  if (due.length) return due.slice(0, 12).map((item) => ({ exercise: item, ...item.review, scheduled: true }));
+  if (!activities.length) return [];
+  const index = Math.max(0, Math.trunc(Number(progress.reviewIndex) || 0)) % activities.length;
+  return [{ exercise: activities[index], ...activities[index].review, scheduled: false }];
 }
 
 function saveCourseDraft(id) {
@@ -396,7 +445,9 @@ function completeCourseExercise(id) {
   progress.attempts ||= {};
   progress.attempts[id] = Math.min(100000, Number(progress.attempts[id] || 0) + 1);
   progress.reviewSchedule ||= {};
-  progress.reviewSchedule[id] = { intervalIndex: 0, dueAt: Date.now() + 7 * 24 * 60 * 60 * 1000, lastReviewedAt: new Date().toISOString() };
+  if (!progress.reviewSchedule[id]) {
+    progress.reviewSchedule[id] = { intervalIndex: 0, dueAt: Date.now() + 7 * 24 * 60 * 60 * 1000 };
+  }
   saveProgress();
   render();
 }
@@ -410,12 +461,12 @@ function renderReview() {
   const upcoming = nextReviewDate();
   const question = questions[reviewQuestionIndex];
   const empty = !questions.length;
-  const heading = dueCount ? `${dueCount} ${dueCount === 1 ? "ideia para revisar" : "ideias para revisar"}` : doneCount() ? "Pratique quando quiser" : "As revisões começam com seus exercícios";
-  const description = dueCount ? "Estas ideias chegaram ao intervalo de revisão." : doneCount() ? `Próxima revisão ${upcoming ? `em ${new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "short" }).format(new Date(upcoming))}` : "em breve"}. Você também pode praticar uma pergunta agora.` : "Conclua um exercício para desbloquear a pergunta relacionada a ele.";
+  const heading = questions.length && completedReview ? "Rodada concluída" : dueCount ? `${dueCount} ${dueCount === 1 ? "ideia para revisar" : "ideias para revisar"}` : doneCount() ? "Pratique quando quiser" : "As revisões começam com seus exercícios";
+  const description = questions.length && completedReview ? dueCount ? `${questions.length} respostas registradas nesta rodada; ${dueCount} ${dueCount === 1 ? "revisão vencida ainda aguarda" : "revisões vencidas ainda aguardam"}.` : `${questions.length} ${questions.length === 1 ? "resposta registrada" : "respostas registradas"}. A próxima revisão aparece no intervalo agendado.` : dueCount ? `${questions.length} perguntas nesta rodada; ${dueCount} ${dueCount === 1 ? "revisão vencida" : "revisões vencidas"} no total. Responda uma vez e siga para a próxima.` : doneCount() ? `Próxima revisão ${upcoming ? `em ${new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "short" }).format(new Date(upcoming))}` : "em breve"}. Você também pode praticar uma pergunta agora.` : "Conclua um exercício para desbloquear a pergunta relacionada a ele.";
   let content = "";
-  if (empty) content = `<section class="review-done"><span class="done-icon">✳</span><h2>Seu primeiro conceito está esperando.</h2><p>Depois de concluir um exercício com previsão, código executado e explicação, a revisão correspondente aparece aqui.</p><a class="button-primary" href="#/javascript/00.01">Começar o exercício 00.01 <span aria-hidden="true">→</span></a></section>`;
-  else if (completedReview) content = `<section class="review-done"><span class="done-icon">✳</span><h2>Revisão concluída.</h2><p>Você recuperou ${questions.length} ${questions.length === 1 ? "ideia" : "ideias"} ligada${questions.length === 1 ? "" : "s"} ao${questions.length === 1 ? " exercício" : "s exercícios"} de JavaScript concluído${questions.length === 1 ? "" : "s"}. Novas perguntas aparecem conforme você progride.</p><a class="button-primary" href="#/catalog">Voltar aos exercícios <span aria-hidden="true">→</span></a></section>`;
-  else content = `<section class="review-question"><div class="eyebrow">${esc(question.exercise.id)} · ETAPA ${esc(question.exercise.stage || question.exercise.id.slice(0, 2))} · RECUPERAÇÃO ATIVA</div><h2>${esc(question.prompt)}</h2><div class="answer-group" role="group" aria-label="Escolha uma resposta">${question.choices.map((choice, index) => `<button class="answer-option" data-review-choice="${index}" aria-pressed="false">${String.fromCharCode(65 + index)}. ${esc(choice)}</button>`).join("")}</div><div class="feedback" id="review-feedback" role="status" aria-live="polite">Responda sem abrir o exercício. Uma tentativa já ajuda a lembrar.</div><div class="review-actions"><a class="hint-link" href="#/javascript/${question.exercise.id}">Rever este exercício</a><button class="button-primary" data-review-check="${question.answer}">Conferir resposta <span aria-hidden="true">→</span></button></div></section>`;
+  if (empty) content = `<section class="review-done"><span class="done-icon">✳</span><h2>Seu primeiro conceito está esperando.</h2><p>Conclua um exercício e registre sua explicação final. A pergunta correspondente aparece aqui no intervalo de revisão.</p><a class="button-primary" href="#/javascript/D.01">Começar pelo diagnóstico D.01 <span aria-hidden="true">→</span></a></section>`;
+  else if (completedReview) content = `<section class="review-done"><span class="done-icon">✳</span><h2>Revisão concluída.</h2><p>Você respondeu ${questions.length} ${questions.length === 1 ? "pergunta" : "perguntas"} nesta rodada.${dueCount ? ` Ainda há ${dueCount} revisões vencidas.` : " As próximas perguntas aparecem no intervalo agendado."}</p>${dueCount ? `<button type="button" class="button-primary" data-review-next-batch>Continuar para a próxima rodada <span aria-hidden="true">→</span></button>` : `<a class="button-primary" href="#/catalog">Voltar aos exercícios <span aria-hidden="true">→</span></a>`}</section>`;
+  else content = `<section class="review-question"><div class="eyebrow">${esc(question.exercise.id)} · ${question.exercise.stage === "D" ? "DIAGNÓSTICO" : `ETAPA ${esc(question.exercise.stage || question.exercise.id.slice(0, 2))}`} · RECUPERAÇÃO ATIVA</div><h2>${renderInlineCode(question.prompt)}</h2><div class="answer-group" role="group" aria-label="Escolha uma resposta">${question.choices.map((choice, index) => `<button class="answer-option" data-review-choice="${index}" aria-pressed="false">${String.fromCharCode(65 + index)}. ${esc(choice)}</button>`).join("")}</div><div class="feedback" id="review-feedback" role="status" aria-live="polite">Responda sem abrir o exercício. Uma tentativa já ajuda a lembrar.</div><div class="review-actions"><a class="hint-link" href="#/javascript/${question.exercise.id}">Rever este exercício</a><button class="button-primary" data-review-check="${question.answer}">Conferir resposta <span aria-hidden="true">→</span></button></div></section>`;
   view.innerHTML = `<section class="page-intro"><div class="eyebrow">RECUPERE, NÃO APENAS RELEIA</div><h1>Revisão em pequenos passos<span class="brand-period">.</span></h1><p>Cada exercício de JavaScript concluído tem uma pergunta de revisão vinculada. Responda de memória e retome o código quando quiser.</p></section><section class="review-banner"><div class="review-icon" aria-hidden="true">↻</div><div><h2>${heading}</h2><p>${description}</p></div><span class="review-progress">${empty ? "0 / 0" : completedReview ? "FEITO" : dueCount ? `${Math.min(reviewQuestionIndex + 1, questions.length)} / ${questions.length}` : "PRÁTICA"}</span></section>${content}`;
 }
 
@@ -426,39 +477,55 @@ function checkReview(answer) {
   const correct = Number(selected.dataset.reviewChoice) === Number(answer);
   const question = reviewSession?.[reviewQuestionIndex];
   selected.classList.add(correct ? "correct" : "incorrect");
-  feedback.textContent = correct ? question.correctFeedback : question.incorrectFeedback;
+  feedback.innerHTML = renderInlineCode(correct ? question.correctFeedback : question.incorrectFeedback);
   feedback.classList.toggle("error", !correct);
   if (question) {
-    const schedule = progress.reviewSchedule[question.exercise.id] || { intervalIndex: 0 };
-    if (correct) {
-      const intervals = [1, 3, 7, 21];
-      schedule.intervalIndex = Math.min((schedule.intervalIndex || 0) + 1, intervals.length - 1);
-      schedule.dueAt = Date.now() + intervals[schedule.intervalIndex] * 24 * 60 * 60 * 1000;
+    if (question.scheduled) {
+      const schedule = progress.reviewSchedule?.[question.exercise.id] || { intervalIndex: 0 };
+      if (correct) {
+        const intervals = [7, 14, 30, 60];
+        const priorIndex = Math.trunc(Number(schedule.intervalIndex) || 0);
+        const nextIndex = priorIndex < 0 ? 0 : Math.min(priorIndex + 1, intervals.length - 1);
+        schedule.intervalIndex = nextIndex;
+        schedule.dueAt = Date.now() + intervals[nextIndex] * 24 * 60 * 60 * 1000;
+      } else {
+        schedule.intervalIndex = -1;
+        schedule.dueAt = Date.now() + 24 * 60 * 60 * 1000;
+      }
+      schedule.lastReviewedAt = new Date().toISOString();
+      progress.reviewSchedule[question.exercise.id] = schedule;
     } else {
-      schedule.intervalIndex = 0;
-      schedule.dueAt = Date.now() + 24 * 60 * 60 * 1000;
+      const completedCount = Math.max(doneCount(), 1);
+      const currentReviewIndex = Math.max(0, Math.trunc(Number(progress.reviewIndex) || 0)) % completedCount;
+      progress.reviewIndex = (currentReviewIndex + 1) % completedCount;
     }
-    schedule.lastReviewedAt = new Date().toISOString();
-    progress.reviewSchedule[question.exercise.id] = schedule;
-    saveProgress();
-  }
-  if (correct) {
     reviewQuestionIndex += 1;
-    if (reviewQuestionIndex >= reviewSession.length) progress.lastReview = new Date().toLocaleDateString("sv-SE");
+    if (question.scheduled && reviewQuestionIndex >= reviewSession.length) progress.lastReview = new Date().toLocaleDateString("sv-SE");
+    saveProgress();
+    document.querySelectorAll("[data-review-choice]").forEach((button) => { button.disabled = true; });
     const button = document.querySelector("[data-review-check]");
     button.disabled = true;
     button.innerHTML = reviewQuestionIndex >= reviewSession.length ? "Rodada completa ✓" : "Próxima pergunta →";
+  if (!correct && question.scheduled) feedback.innerHTML += renderInlineCode(" Esta pergunta volta amanhã; siga para a próxima.");
     button.addEventListener("click", () => renderReview(), { once: true });
   }
 }
 
 
 view.addEventListener("click", async (event) => {
+  const stage03Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "03");
+  if (stage03Item && window.DevPathStage03UI.handleClick(event, stage03Item, stage03Context())) return;
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleClick(event, diagnosticItem, stage00Context())) return;
   const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
   if (stage00Item && window.DevPathStage00Preparation.handleClick(event, stage00Item, stage00Context())) return;
+  const stage01Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "01");
+  if (stage01Item && window.DevPathStage01UI.handleClick(event, stage01Item, stage00Context())) return;
   const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
   if (stage02Item && window.DevPathStage02UI.handleClick(event, stage02Item, stage02Context())) return;
   if (routeInfo().name === "javascript" && window.DevPathStage00UI.handleClick(event, stageContext())) { event.preventDefault(); return; }
+  const nextReviewBatch = event.target.closest("[data-review-next-batch]");
+  if (nextReviewBatch) { reviewSession = null; reviewQuestionIndex = 0; renderReview(); return; }
   const firstResponse = event.target.closest("[data-course-first-response]");
   if (firstResponse) {
     const id = firstResponse.dataset.courseFirstResponse;
@@ -489,8 +556,14 @@ view.addEventListener("click", async (event) => {
 });
 
 view.addEventListener("input", (event) => {
+  const stage03Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "03");
+  if (stage03Item && window.DevPathStage03UI.handleInput(event, stage03Item, stage03Context())) return;
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleInput(event, diagnosticItem, stage00Context())) return;
   const stage00Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "00" && item.preparation);
   if (stage00Item && window.DevPathStage00Preparation.handleInput(event, stage00Item, stage00Context())) return;
+  const stage01Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "01");
+  if (stage01Item && window.DevPathStage01UI.handleInput(event, stage01Item, stage00Context())) return;
   const stage02Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "02");
   if (stage02Item && window.DevPathStage02UI.handleInput(event, stage02Item, stage02Context())) return;
   if (event.target.matches("#course-search")) { catalogSearch = event.target.value; updateCatalogResults(); return; }
@@ -511,6 +584,10 @@ view.addEventListener("input", (event) => {
   if (routeInfo().name === "javascript") window.DevPathStage00UI.handleInput(event, stageContext());
 });
 view.addEventListener("change", (event) => {
+  const stage03Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "03");
+  if (stage03Item && window.DevPathStage03UI.handleInput(event, stage03Item, stage03Context())) return;
+  const diagnosticItem = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "D");
+  if (diagnosticItem && window.DevPathDiagnosticUI.handleInput(event, diagnosticItem, stage00Context())) return;
   if (event.target.matches("[data-course-rubric]")) {
     const id = event.target.dataset.courseRubric;
     const selected = [...view.querySelectorAll(`[data-course-rubric="${id}"]:checked`)].map((input) => Number(input.value));
@@ -522,6 +599,8 @@ view.addEventListener("change", (event) => {
     syncCourseCompletionButton(id);
     return;
   }
+  const stage01Item = curriculumActivities.find(item => item.id === routeInfo().id && item.stage === "01");
+  if (stage01Item && window.DevPathStage01UI.handleInput(event, stage01Item, stage00Context())) return;
   if (event.target.matches("#stage-filter")) { selectedStageFilter = event.target.value; updateCatalogResults(); }
 });
 for (const eventName of ["dragstart", "dragover", "dragleave", "drop"]) {
@@ -531,6 +610,7 @@ for (const eventName of ["dragstart", "dragover", "dragleave", "drop"]) {
 }
 
 window.addEventListener("hashchange", render);
+window.addEventListener("beforeunload", () => { if (localPreview) saveProgress(); });
 document.querySelector(".help-button").addEventListener("click", () => toast("DevPath: aprender construindo, com uma ideia nova de cada vez."));
 document.querySelector(".profile-menu").addEventListener("click", () => toast("Sua conta e suas opções estão no cabeçalho."));
 initialize();

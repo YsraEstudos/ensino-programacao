@@ -1,0 +1,45 @@
+ETAPA 20 - JavaScript avançado:
+iteradores, geradores, Symbol, Proxy e
+Reflect
+Faixa
+JavaScript avançado
+Carga
+18-26 h
+Nivel curricular
+3.5/5
+PRE-REQUISITOS
+JS intermediario/avancado; nao exige TS 19 concluido para todos os exercicios.
+Resultados de aprendizagem
+• Entender protocolo iterável e criar iteradores quando há motivo.
+• Usar generators para sequências lazy.
+• Entender Symbol como chave e protocolo.
+• Conhecer Proxy/Reflect sem usá-los como solução padrão.
+Conceitos nucleares
+iterator protocol · generator · yield · Symbol.iterator · well-known symbols · Proxy · Reflect ·
+metaprogramming · lazy evaluation · Iterator helpers ES2025 · Array.fromAsync ES2026 · Iterator.concat
+ES2026 · compatibilidade por runtime
+Modelo mental aprofundado
+Iteradores e generators tornam explicito um protocolo que for...of ja usa. O aluno implementa next/return e
+entende laziness antes de usar helpers modernos. Isso prepara streams, pipelines e fontes potencialmente
+infinitas.
+ES2025 acrescentou Iterator helpers e metodos de Set; ES2026 acrescentou Iterator.concat e
+Array.fromAsync entre outras melhorias. A trilha apresenta essas APIs como camada moderna, sempre com
+a regra "verifique o runtime alvo".
+Proxy/Reflect entram como ferramentas meta-programacao. O aluno implementa um exemplo, ve como
+recursao acidental pode acontecer e precisa justificar por que um Proxy seria melhor que uma
+funcao/objeto explicito. Nao e conteudo para usar em todo projeto.
+Erros e concepcoes que a etapa deve revelar
+• Usar Proxy para esconder comportamento que uma funcao deixaria explicito.
+• Materializar colecao inteira quando laziness era requisito.
+• Assumir suporte de feature moderna sem baseline.
+Exemplo resolvido - range lazy
+function* range(inicio, fim) {
+  for (let n = inicio; n <= fim; n++) yield n;
+}
+for (const n of range(3, 5)) console.log(n);
+O aluno compara gerar um array inteiro com produzir valores sob demanda. Em seguida discute quando a
+complexidade extra vale a pena.
+GATE DE DOMINIO
+Avance quando conseguir justificar o uso da tecnica avancada e demonstrar alternativa mais
+simples quando ela existe. Medicao/compatibilidade/runtime validation sao parte do gate
+quando relevantes.

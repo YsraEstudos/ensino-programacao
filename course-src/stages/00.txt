@@ -1,0 +1,49 @@
+ETAPA 00 - Ambiente, mentalidade de
+execução e leitura de código
+Faixa
+Zero absoluto
+Carga
+3-5 h
+Nivel curricular
+1.0/5
+PRE-REQUISITOS
+Nenhum. O aluno pode nunca ter programado.
+Resultados de aprendizagem
+• Executar JavaScript no navegador e no Node.js.
+• Distinguir código-fonte, runtime, console, erro e saída.
+• Ler uma pequena função antes de tentar escrever uma.
+• Usar o editor, terminal e mensagens de erro sem depender de copiar comandos cegamente.
+Conceitos nucleares
+console e REPL · arquivo .js · ordem de execução · comentários · erro de sintaxe vs erro de runtime · ler
+stack trace · pseudocódigo
+Modelo mental aprofundado
+A primeira etapa precisa remover uma confusao que costuma acompanhar iniciantes por semanas:
+JavaScript e a linguagem; o navegador e o Node.js sao ambientes de execucao. O navegador fornece DOM,
+eventos, armazenamento e varias Web APIs. Node fornece APIs de sistema, arquivos, processos e rede. O
+mesmo codigo de linguagem pode existir nos dois, mas as APIs disponiveis mudam.
+Antes de escrever, o aluno aprende a ler. Para cada trecho curto, ele registra uma previsao, executa e
+compara. O objetivo e construir uma maquina nocional simples: o programa percorre instrucoes, avalia
+expressoes, chama funcoes e produz efeitos observaveis. Nao e necessario explicar engine, JIT ou garbage
+collector agora.
+O editor, terminal e mensagens de erro entram como ferramentas de investigacao. O site deve diferenciar
+SyntaxError, erro em runtime e saida incorreta. Na primeira semana, "corrigir um erro por vez e
+reexecutar" e uma habilidade mais valiosa que decorar atalhos.
+Ponte web minima: antes da etapa de DOM, o aluno fara uma microlicao de HTML suficiente para
+reconhecer elemento, atributo, id, class, input, button, form e hierarquia. Isso nao vira um curso de
+HTML/CSS; apenas elimina um pre-requisito escondido.
+Erros e concepcoes que a etapa deve revelar
+• Confundir JavaScript com Node ou com DOM.
+• Executar repetidamente sem antes formular uma previsao.
+• Copiar comando de terminal sem saber em qual diretorio/arquivo esta.
+Exemplo resolvido - rastrear a execução linha por linha
+console.log('ola');
+console.log(2 + 3);
+console.log('fim');
+O primeiro contato evita declarar variaveis. O aluno aprende a prever ordem, distinguir codigo de saida e
+usar o console. Depois a pagina mostra que JavaScript e a linguagem; navegador e Node sao ambientes
+que oferecem APIs diferentes.
+
+GATE DE DOMINIO
+Avance quando conseguir resolver dois exercicios de transferencia curtos sem dica, prever a
+saida antes de executar e explicar um erro em linguagem natural. Mini-projeto pode usar uma
+dica conceitual, mas nao codigo pronto.

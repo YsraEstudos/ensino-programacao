@@ -1,0 +1,42 @@
+ETAPA 01 - Valores, variáveis e tipos
+primitivos
+Faixa
+Fundamentos I
+Carga
+102 min de prática + revisão estimada de 2-3 h
+Nivel curricular
+1.0/5
+PRE-REQUISITOS
+ETAPA 00: executar arquivo e ler saida.
+Resultados de aprendizagem
+• Usar const e let com intenção.
+• Reconhecer string, number, boolean, null, undefined e bigint em nível introdutório.
+• Distinguir valor de variável e reatribuição.
+• Usar typeof sabendo suas principais limitações.
+Conceitos nucleares
+const/let · primitivos · typeof · NaN · Infinity · bigint · template literals · nomes de identificadores
+Modelo mental aprofundado
+Variaveis sao nomes ligados a valores, nao caixas fisicas que o curso deva localizar na memoria. const
+impede reatribuicao daquele binding; nao torna automaticamente um objeto profundo imutavel. let e
+usado quando o binding precisa apontar para outro valor.
+O aluno pratica Number, String, Boolean, null, undefined e bigint como categorias introdutórias do runtime, mas
+nao tenta memorizar tudo de uma vez. NaN e Infinity são valores que pertencem a number; não são categorias novas.
+Symbol e objetos ficam explicitamente adiados para etapas posteriores. typeof e ensinado junto com suas
+peculiaridades, especialmente typeof null.
+Nomes de identificadores precisam ser declarados antes de serem lidos. A etapa trabalha valores literais e
+strings montadas no próprio programa; leitura de formulário, parsing e validação ficam para etapas posteriores.
+Erros e concepcoes que a etapa deve revelar
+• Usar let por habito quando nao ha reatribuicao.
+• Confundir NaN ou Infinity com tipos separados de number.
+Exemplo resolvido - modelar um pequeno estado
+const usuario = 'Lia';
+let tentativas = 0;
+const limite = 3;
+tentativas = tentativas + 1;
+console.log(`${usuario}: ${tentativas}/${limite}`);
+O exemplo serve para discutir por que usuario e limite são const, enquanto tentativas precisa de let. A
+meta não é decorar regras; é justificar a escolha.
+GATE DE DOMINIO
+Avance quando conseguir resolver dois exercicios de transferencia curtos sem dica, prever a
+saida antes de executar e explicar um erro em linguagem natural. Mini-projeto pode usar uma
+dica conceitual, mas nao codigo pronto.

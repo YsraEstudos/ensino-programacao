@@ -114,7 +114,7 @@ console.log('Stage 00: all 9 explanations precede answers; navigation, execution
 const settle=async()=>{for(let i=0;i<5;i++)await new Promise(resolve=>setImmediate(resolve));};
 let accountProgress={};
 async function loadApp(){
-  const app=new JSDOM(readFileSync(new URL('devpath.html',root),'utf8'),{url:'http://localhost/devpath.html',runScripts:'outside-only'});
+  const app=new JSDOM(readFileSync(new URL('devpath.html',root),'utf8'),{url:'https://devpath.test/devpath.html',runScripts:'outside-only'});
   app.window.HTMLElement.prototype.scrollIntoView=function(){};
   app.window.matchMedia=()=>({matches:true,addEventListener(){}});
   app.window.fetch=async (url,options={})=>{

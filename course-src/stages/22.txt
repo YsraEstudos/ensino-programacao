@@ -1,0 +1,50 @@
+ETAPA 22 - TypeScript em escala:
+declarations, runtime validation e
+migracao
+Faixa
+TypeScript avançado
+Carga
+22-32 h
+Nivel curricular
+4.0/5
+PRE-REQUISITOS
+TS avancado, modulos e runtime boundaries.
+Resultados de aprendizagem
+• Entender .d.ts como descrição de superfície runtime existente.
+• Tipar bibliotecas JS e módulos externos sem inventar comportamento.
+• Usar module augmentation com extremo cuidado.
+• Planejar migração incremental de JS para TS strict.
+Conceitos nucleares
+.d.ts · ambient declarations · module declarations · declaration merging · augmentation · package
+exports/types · allowJs/checkJs · project references · incremental migration · schema validation · parser
+composavel · Zod/Valibot como exemplos · biblioteca vs source of truth · TS 7.0 tooling
+Modelo mental aprofundado
+Declaration files sao promessas sobre um runtime. Se o .d.ts disser que parse sempre retorna Result mas a
+funcao JS retorna undefined, o tipo esta mentindo. Portanto, testes de consumo e testes runtime
+acompanham tipos publicos.
+A ponte de runtime validation agora e obrigatoria. O aluno comeca com guardas manuais pequenos, evolui
+para parsers composaveis e depois compara bibliotecas de schema como Zod e Valibot. A escolha e
+apresentada como trade-off de ergonomia, bundle, desempenho, ecossistema e fonte de verdade.
+TypeScript 7.0 esta estavel em 2026 e muda principalmente a implementacao/performance do compilador,
+nao a semantica basica que o aluno aprendeu. A trilha ensina versao alvo, tsconfig e migracoes
+incrementais em vez de perseguir toda release note.
+Bibliotecas exigem superficie publica minima, exports claros, declarations, testes de tipos e
+compatibilidade de modulo. Migracao de JS usa allowJs/checkJs quando util e evita big-bang.
+Erros e concepcoes que a etapa deve revelar
+• .d.ts diferente do runtime.
+• Assumir que typecheck valida payload externo.
+• Escolher schema library por moda sem medir requisitos.
+Exemplo resolvido - declarar uma API JS existente
+export type Result =
+  | { ok: true; value: unknown }
+  | { ok: false; error: string };
+// Runtime JS existente: export function parse(input)
+export declare function parse(input: string): Result;
+O .d.ts agora e autocontido. Em paralelo, o aluno aprende que declaration files descrevem o runtime; nao o
+validam. Dados externos entram como unknown e passam por parser/schema. Zod e Valibot aparecem
+
+como exemplos comparaveis, nao como requisito universal da linguagem.
+GATE DE DOMINIO
+Avance quando conseguir justificar o uso da tecnica avancada e demonstrar alternativa mais
+simples quando ela existe. Medicao/compatibilidade/runtime validation sao parte do gate
+quando relevantes.

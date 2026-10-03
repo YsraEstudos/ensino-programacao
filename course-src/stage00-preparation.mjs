@@ -1,4 +1,4 @@
-// Teaching source for Stage 00. Applied to the opened Site by revise-stage00.mjs.
+// Teaching source for Stage 00. Published by the canonical build-public-curriculum.mjs generator.
 const logDocs = 'https://developer.mozilla.org/en-US/docs/Web/API/console/log_static';
 const example = (code, output, walkthrough) => ({code, output, walkthrough});
 const docs = (title, url, task, takeaway, required = false) => ({title, url, task, takeaway, required});

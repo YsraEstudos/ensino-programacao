@@ -1,3 +1,4 @@
+import { sanitizeStage01Progress, type Stage01State } from "../../../lib/stage01-progress";
 import { getD1 } from "../../../db";
 import { courseExerciseIds } from "../../../lib/course-exercise-ids";
 import { getChatGPTUser } from "../../chatgpt-auth";
@@ -11,6 +12,7 @@ type Stage02State = {
   blocks: { code: string; prediction: string; predictionSaved: boolean; understood: boolean; passedCode: string | null; hintLevel: number; parsons: string[] }[];
 };
 type UserProgress = {
+  stage01: Record<string, Stage01State>;
   stage02: Record<string, Stage02State>;
   completed: string[];
   answers: Record<string, boolean>;
@@ -30,6 +32,7 @@ type UserProgress = {
 };
 
 const emptyProgress: UserProgress = {
+  stage01: {},
   stage02: {},
   completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {},
   exerciseVersions: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {},
@@ -109,7 +112,7 @@ function sanitize(value: unknown): UserProgress {
     const schedule = record(schedules[slug]);
     if (typeof schedule.dueAt === "number" && Number.isFinite(schedule.dueAt)) {
       cleanSchedules[slug] = {
-        intervalIndex: Math.max(0, Math.min(3, Math.trunc(Number(schedule.intervalIndex) || 0))),
+        intervalIndex: Math.max(-1, Math.min(3, Math.trunc(Number(schedule.intervalIndex) || 0))),
         dueAt: Math.max(0, Math.trunc(Number(schedule.dueAt))),
         ...(typeof schedule.lastReviewedAt === "string" && !Number.isNaN(Date.parse(schedule.lastReviewedAt)) ? { lastReviewedAt: schedule.lastReviewedAt } : {}),
       };
@@ -147,6 +150,7 @@ function sanitize(value: unknown): UserProgress {
   }
 
   return {
+    stage01: sanitizeStage01Progress(input.stage01),
     stage02,
     completed: Array.isArray(input.completed) ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [],
     answers: cleanAnswers,
@@ -161,7 +165,7 @@ function sanitize(value: unknown): UserProgress {
     reviewSchedule: cleanSchedules,
     lastLesson: typeof input.lastLesson === "string" && slugs.has(input.lastLesson) ? input.lastLesson : null,
     activeDays: Array.isArray(input.activeDays) ? [...new Set(input.activeDays.map(validDate).filter((day): day is string => Boolean(day)))].slice(-30) : [],
-    reviewIndex: typeof input.reviewIndex === "number" && Number.isInteger(input.reviewIndex) ? Math.max(0, Math.min(3, input.reviewIndex)) : 0,
+    reviewIndex: typeof input.reviewIndex === "number" && Number.isInteger(input.reviewIndex) ? Math.max(0, Math.min(courseExerciseIds.length - 1, input.reviewIndex)) : 0,
     lastReview: validDate(input.lastReview),
   };
 }

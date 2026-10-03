@@ -1,0 +1,53 @@
+ETAPA 15 - TypeScript: runtime vs
+compile-time, tipagem estrutural e strict
+Faixa
+TypeScript I
+Carga
+12-16 h
+Nivel curricular
+3.0/5
+PRE-REQUISITOS
+JavaScript ate modulos/async. TypeScript comeca sem exigir tipos avancados.
+Resultados de aprendizagem
+• Entender que tipos são verificados em tempo de compilação e removidos no runtime.
+• Usar inferência em vez de anotar tudo.
+• Ativar strict e interpretar erros como feedback de design.
+• Distinguir any, unknown, never e void em nível prático.
+Conceitos nucleares
+type checking · inference · annotations · tsconfig · strict · any · unknown · never · void · type erasure ·
+structural typing · type erasure · trust boundaries · unknown antes de validar · noUncheckedIndexedAccess
+· exactOptionalPropertyTypes
+Modelo mental aprofundado
+TypeScript nao muda o runtime JavaScript. Tipos existem para analise, editor e build; sao apagados quando
+o JavaScript executa. Esse ponto vem antes de qualquer sintaxe de anotacao porque impede a falsa
+expectativa de que interface valide JSON externo.
+Tipagem estrutural significa que a compatibilidade depende principalmente da forma do valor. Dois tipos
+com membros compativeis podem ser atribuidos sem heranca nominal explicita. O curso contrasta isso
+com o modelo nominal que muitos conhecem de Java/C#.
+strict e o ponto de partida. noUncheckedIndexedAccess e exactOptionalPropertyTypes aparecem como
+flags deliberadas que aumentam rigor em pontos onde o modelo padrao pode ser otimista. O aluno
+aprende a escolher flags por contrato de equipe/projeto, nao por culto a configuracao.
+unknown e a entrada preferida para dados sem confianca. any e demonstrado como escape hatch que
+desliga verificacao e, portanto, precisa ser localizado e justificado.
+Erros e concepcoes que a etapa deve revelar
+• Achar que interface existe em runtime.
+• Trocar unknown por any para silenciar o compilador.
+• Supor tipagem nominal quando TS e estrutural.
+Exemplo resolvido - borda unknown
+function tamanhoSeguro(valor: unknown): number {
+  if (typeof valor === 'string') return valor.length;
+  if (Array.isArray(valor)) return valor.length;
+  return 0;
+}
+TypeScript verifica o programa antes da execucao e seus tipos sao apagados no runtime. Compatibilidade
+e principalmente estrutural: a forma importa mais que o nome nominal do tipo. A etapa introduz strict e
+mostra flags mais estritas que nao devem ser confundidas com runtime validation.
+
+FRONTEIRA CRITICA
+Um valor recebido de JSON continua sendo dado de runtime. Escrever const user = data as
+User nao valida nada. Dados externos entram como unknown e precisam ser validados antes
+de virar tipo de dominio.
+GATE DE DOMINIO
+Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
+justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
+parte do contrato.

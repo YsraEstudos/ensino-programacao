@@ -1,0 +1,1650 @@
+[
+  {
+    "id": "00.01",
+    "title": "Primeiro rastreamento",
+    "stage": "00",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.02",
+    "title": "Rastreamento com contradicao",
+    "stage": "00",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.03",
+    "title": "Reconstruir o programa",
+    "stage": "00",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.04",
+    "title": "Complete o eco",
+    "stage": "00",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.05",
+    "title": "Mapa de ambientes",
+    "stage": "00",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.06",
+    "title": "Caça ao erro inicial",
+    "stage": "00",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.07",
+    "title": "Calculadora por literais",
+    "stage": "00",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.08",
+    "title": "HTML ponte zero",
+    "stage": "00",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "00.09",
+    "title": "Trace de chamadas e remoções",
+    "stage": "00",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.01",
+    "title": "Classifique os valores",
+    "stage": "01",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.02",
+    "title": "Tabela de bindings",
+    "stage": "01",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.03",
+    "title": "Monte o cartão de perfil",
+    "stage": "01",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.04",
+    "title": "Escolha const ou let",
+    "stage": "01",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.05",
+    "title": "Valores especiais",
+    "stage": "01",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.06",
+    "title": "Preveja e complete um resumo",
+    "stage": "01",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.07",
+    "title": "Escreva um resumo de duração",
+    "stage": "01",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.08",
+    "title": "Transfira const e let para configurações",
+    "stage": "01",
+    "kind": "TRANSFER",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "01.09",
+    "title": "Projeto curto: ficha com estados sucessivos",
+    "stage": "01",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.01",
+    "title": "Preveja expressões",
+    "stage": "02",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.02",
+    "title": "Matriz falsy/nullish",
+    "stage": "02",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.03",
+    "title": "Parsons de validação",
+    "stage": "02",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.04",
+    "title": "Normalizador de entrada",
+    "stage": "02",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.05",
+    "title": "Coercao explicita",
+    "stage": "02",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.06",
+    "title": "Bug de fallback",
+    "stage": "02",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.07",
+    "title": "Regra de desconto",
+    "stage": "02",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.08",
+    "title": "Transferencia - preferencia de usuario",
+    "stage": "02",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "02.09",
+    "title": "Microprojeto - placar robusto",
+    "stage": "02",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.04",
+    "title": "Classificador de faixa",
+    "stage": "03",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.05",
+    "title": "Teste de limites",
+    "stage": "03",
+    "kind": "TEST",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.01",
+    "title": "Tabela de execução",
+    "stage": "03",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.02",
+    "title": "Trace sem arrays",
+    "stage": "03",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.03",
+    "title": "Monte o FizzBuzz restrito",
+    "stage": "03",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.06",
+    "title": "Loop que não termina",
+    "stage": "03",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.07",
+    "title": "Contador por intervalo",
+    "stage": "03",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.08",
+    "title": "Transferencia - simulador de fila",
+    "stage": "03",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "03.09",
+    "title": "Microprojeto - batalha por turnos",
+    "stage": "03",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.01",
+    "title": "Preveja retornos",
+    "stage": "04",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.02",
+    "title": "Retorno vs efeito",
+    "stage": "04",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.03",
+    "title": "Parsons de decomposição",
+    "stage": "04",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.04",
+    "title": "Complete a assinatura",
+    "stage": "04",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.05",
+    "title": "Intl em contexto",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.06",
+    "title": "Bug de retorno",
+    "stage": "04",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.07",
+    "title": "API de carrinho",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.08",
+    "title": "Transferencia - regra por funcoes",
+    "stage": "04",
+    "kind": "TRANSFER",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.09",
+    "title": "Microprojeto - gerador de ficha",
+    "stage": "04",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.01",
+    "title": "Estado do array",
+    "stage": "05",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.03",
+    "title": "Parsons de slug",
+    "stage": "05",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.04",
+    "title": "Complete a busca",
+    "stage": "05",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.06",
+    "title": "Bug da mutacao - legado vs moderno",
+    "stage": "05",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.07",
+    "title": "Estatísticas de lista",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.10",
+    "title": "Desaninhe grupos com flat()",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.02",
+    "title": "Regex minima",
+    "stage": "05",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.05",
+    "title": "RegExp.escape em busca",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.08",
+    "title": "Transferencia - log parser pequeno",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "05.09",
+    "title": "Microprojeto - inventário textual",
+    "stage": "05",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.01",
+    "title": "Leitura de referências",
+    "stage": "06",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.02",
+    "title": "Aliasing visual",
+    "stage": "06",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.03",
+    "title": "Parsons de normalização",
+    "stage": "06",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.04",
+    "title": "Complete o merge",
+    "stage": "06",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.05",
+    "title": "structuredClone comparativo",
+    "stage": "06",
+    "kind": "INVESTIGATE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.06",
+    "title": "JSON quebrado e tipos distorcidos",
+    "stage": "06",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.07",
+    "title": "Indexador por id",
+    "stage": "06",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.08",
+    "title": "Transferencia - config versionada",
+    "stage": "06",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.09",
+    "title": "Microprojeto - save de jogo robusto",
+    "stage": "06",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.01",
+    "title": "Escolha o método",
+    "stage": "07",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.02",
+    "title": "GroupBy moderno",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.03",
+    "title": "Parsons de ranking",
+    "stage": "07",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.04",
+    "title": "Complete callbacks",
+    "stage": "07",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.05",
+    "title": "Set operations",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.06",
+    "title": "Reduce ilegível",
+    "stage": "07",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.07",
+    "title": "Contagem e agrupamento",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.10",
+    "title": "Expandir resultados com flatMap()",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.08",
+    "title": "Transferencia - relatorio de vendas",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "07.09",
+    "title": "Microprojeto - analisador de sessão",
+    "stage": "07",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.01",
+    "title": "Classifique a complexidade",
+    "stage": "08",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.02",
+    "title": "Parsons recursivo",
+    "stage": "08",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.03",
+    "title": "Complete busca binária",
+    "stage": "08",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.04",
+    "title": "Invariantes",
+    "stage": "08",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.05",
+    "title": "Bug off-by-one",
+    "stage": "08",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.06",
+    "title": "Deduplique eficientemente",
+    "stage": "08",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.07",
+    "title": "Trace BFS por largura",
+    "stage": "08",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "08.08",
+    "title": "Microprojeto - planejador de rotas simplificado",
+    "stage": "08",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.01",
+    "title": "Mapa de escopo",
+    "stage": "09",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.02",
+    "title": "Parsons de factory",
+    "stage": "09",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.03",
+    "title": "Complete closure",
+    "stage": "09",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.04",
+    "title": "Closure passo a passo",
+    "stage": "09",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.05",
+    "title": "Bug no loop e callback",
+    "stage": "09",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.06",
+    "title": "Cache simples",
+    "stage": "09",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.07",
+    "title": "WeakMap de metadados",
+    "stage": "09",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "09.08",
+    "title": "Microprojeto - store mínimo",
+    "stage": "09",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.01",
+    "title": "Preveja this - metodo comum vs arrow",
+    "stage": "10",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.02",
+    "title": "Parsons de classe",
+    "stage": "10",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.03",
+    "title": "Complete protótipo",
+    "stage": "10",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.04",
+    "title": "Metodo extraido",
+    "stage": "10",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.05",
+    "title": "Bug de herança",
+    "stage": "10",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.06",
+    "title": "Refatore para composição",
+    "stage": "10",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.07",
+    "title": "Transferencia - composicao vs heranca",
+    "stage": "10",
+    "kind": "TRANSFER",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "10.08",
+    "title": "Microprojeto - motor de entidades",
+    "stage": "10",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.01",
+    "title": "Rastreie eventos",
+    "stage": "11",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.02",
+    "title": "Parsons de componente",
+    "stage": "11",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.03",
+    "title": "Complete validação",
+    "stage": "11",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.04",
+    "title": "FormData real",
+    "stage": "11",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.05",
+    "title": "Bug de listeners duplicados",
+    "stage": "11",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.06",
+    "title": "Delegação de eventos",
+    "stage": "11",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.07",
+    "title": "A11y de formulario",
+    "stage": "11",
+    "kind": "UI",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "11.08",
+    "title": "Microprojeto - Kanban acessivel e persistente",
+    "stage": "11",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.01",
+    "title": "Ordem do event loop",
+    "stage": "12",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.04",
+    "title": "Microtask vs task",
+    "stage": "12",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.02",
+    "title": "Parsons de retry",
+    "stage": "12",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.03",
+    "title": "Complete Promise.all",
+    "stage": "12",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.05",
+    "title": "Bug de await e captura local",
+    "stage": "12",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.06",
+    "title": "Busca cancelável",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.07",
+    "title": "Combinadores de Promise",
+    "stage": "12",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.09",
+    "title": "Normalizar callbacks com Promise.try()",
+    "stage": "12",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "12.08",
+    "title": "Microprojeto - dashboard de API",
+    "stage": "12",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.01",
+    "title": "Leia uma falha de teste",
+    "stage": "13",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.02",
+    "title": "Parsons de validação",
+    "stage": "13",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.03",
+    "title": "Complete a suíte",
+    "stage": "13",
+    "kind": "TEST",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.04",
+    "title": "Prever-executar-debugger",
+    "stage": "13",
+    "kind": "INVESTIGATE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.05",
+    "title": "Bug fantasma",
+    "stage": "13",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.06",
+    "title": "TDD de parser",
+    "stage": "13",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.07",
+    "title": "Teste de regressao",
+    "stage": "13",
+    "kind": "TEST",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "13.08",
+    "title": "Microprojeto - biblioteca confiável",
+    "stage": "13",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.01",
+    "title": "Mapa de imports",
+    "stage": "14",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.02",
+    "title": "Parsons de CLI",
+    "stage": "14",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.03",
+    "title": "Complete package scripts",
+    "stage": "14",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.04",
+    "title": "ESM vs CJS",
+    "stage": "14",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.05",
+    "title": "Bug de caminho",
+    "stage": "14",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.06",
+    "title": "Config por ambiente",
+    "stage": "14",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.07",
+    "title": "Compatibilidade de feature",
+    "stage": "14",
+    "kind": "DOCS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "14.08",
+    "title": "Microprojeto - CLI de notas",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.01",
+    "title": "Leia o erro do compilador",
+    "stage": "15",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.02",
+    "title": "Parsons tipado",
+    "stage": "15",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.03",
+    "title": "Complete as anotações mínimas",
+    "stage": "15",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.04",
+    "title": "Any contagioso",
+    "stage": "15",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.06",
+    "title": "Estrutural vs nominal",
+    "stage": "15",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.07",
+    "title": "Flags strict extras",
+    "stage": "15",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "15.08",
+    "title": "Microprojeto - migrar utilitários",
+    "stage": "15",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.01",
+    "title": "Ache estados impossíveis",
+    "stage": "16",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.02",
+    "title": "Parsons de narrowing",
+    "stage": "16",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.03",
+    "title": "Complete a união",
+    "stage": "16",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.04",
+    "title": "Cast perigoso",
+    "stage": "16",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.05",
+    "title": "Type predicate",
+    "stage": "16",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.06",
+    "title": "as const derivado",
+    "stage": "16",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.07",
+    "title": "Mudanca de requisito",
+    "stage": "16",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "16.08",
+    "title": "Microprojeto - máquina de estados",
+    "stage": "16",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.01",
+    "title": "Generic ou union?",
+    "stage": "17",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.02",
+    "title": "Parsons de repository",
+    "stage": "17",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.03",
+    "title": "Complete callbacks",
+    "stage": "17",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.04",
+    "title": "Constraint excessiva",
+    "stage": "17",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.05",
+    "title": "Readonly por contrato",
+    "stage": "17",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.06",
+    "title": "Overload, union ou generic?",
+    "stage": "17",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.07",
+    "title": "Const type parameter",
+    "stage": "17",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "17.08",
+    "title": "Microprojeto - cache genérico",
+    "stage": "17",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.01",
+    "title": "Derive, não replique",
+    "stage": "18",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.02",
+    "title": "Parsons de patch",
+    "stage": "18",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.03",
+    "title": "Complete chave/valor",
+    "stage": "18",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.04",
+    "title": "Utility type inadequado",
+    "stage": "18",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.05",
+    "title": "Mapa de handlers",
+    "stage": "18",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.06",
+    "title": "satisfies vs annotation",
+    "stage": "18",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.07",
+    "title": "Indice seguro",
+    "stage": "18",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "18.08",
+    "title": "Microprojeto - formulario tipado com satisfies",
+    "stage": "18",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.01",
+    "title": "Expanda à mão",
+    "stage": "19",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.02",
+    "title": "Parsons condicional",
+    "stage": "19",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.03",
+    "title": "Complete infer",
+    "stage": "19",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.04",
+    "title": "Distributividade surpresa",
+    "stage": "19",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.05",
+    "title": "Eventos por template literal",
+    "stage": "19",
+    "kind": "TYPE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.06",
+    "title": "Expandir mapped type",
+    "stage": "19",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.07",
+    "title": "Orcamento de complexidade",
+    "stage": "19",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "19.08",
+    "title": "Microprojeto - DSL de eventos tipada",
+    "stage": "19",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.01",
+    "title": "Protocolo iterável",
+    "stage": "20",
+    "kind": "TRACE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.02",
+    "title": "Parsons generator",
+    "stage": "20",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.03",
+    "title": "Complete Symbol.iterator",
+    "stage": "20",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.04",
+    "title": "Proxy recursivo ruim",
+    "stage": "20",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.05",
+    "title": "Validador via Proxy",
+    "stage": "20",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.06",
+    "title": "Iterator helpers",
+    "stage": "20",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.07",
+    "title": "Array.fromAsync",
+    "stage": "20",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "20.08",
+    "title": "Microprojeto - pipeline lazy",
+    "stage": "20",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "21.01",
+    "title": "Qual é o gargalo?",
+    "stage": "21",
+    "kind": "PREDICT",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Para seis cenários, decidir se o problema provável é CPU, I/O, rede, DOM ou memória antes de propor solução."
+  },
+  {
+    "id": "21.02",
+    "title": "Parsons de cleanup",
+    "stage": "21",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Reordenar setup/cleanup de timer e listener."
+  },
+  {
+    "id": "21.03",
+    "title": "Complete benchmark",
+    "stage": "21",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Preencher benchmark simples com warmup e múltiplas execuções, registrando mediana."
+  },
+  {
+    "id": "21.04",
+    "title": "Cache sem limite",
+    "stage": "21",
+    "kind": "DEBUG",
+    "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "21.05",
+    "title": "Worker para CPU",
+    "stage": "21",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Mover cálculo pesado independente para worker e criar fallback/teste da função pura."
+  },
+  {
+    "id": "21.06",
+    "title": "WeakMap cache por objeto",
+    "stage": "21",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Associar metadados calculados a objetos com WeakMap, demonstrando por que string/id comum pediria Map."
+  },
+  {
+    "id": "21.07",
+    "title": "Debounce vs throttle",
+    "stage": "21",
+    "kind": "MAKE",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Implementar ambos, simular 100 eventos e medir numero/tempo de chamadas."
+  },
+  {
+    "id": "21.08",
+    "title": "using / await using",
+    "stage": "21",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Criar recurso descartavel didatico e reescrever bloco de try/finally com using; depois criar AsyncDisposable para await using."
+  },
+  {
+    "id": "21.09",
+    "title": "Microprojeto - laboratório de performance",
+    "stage": "21",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Construir página que compara duas implementações, mede tempo e memória aproximada e registra resultados."
+  },
+  {
+    "id": "22.01",
+    "title": "Runtime vs declaration",
+    "stage": "22",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Comparar arquivo JS e .d.ts incompatíveis e identificar mentiras do tipo."
+  },
+  {
+    "id": "22.02",
+    "title": "Parsons de package types",
+    "stage": "22",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Reordenar exports/types de pacote mínimo com ESM."
+  },
+  {
+    "id": "22.03",
+    "title": "Complete declaração",
+    "stage": "22",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Escrever .d.ts para biblioteca JS pequena usando exemplos e testes runtime."
+  },
+  {
+    "id": "22.04",
+    "title": "Augmentation perigosa",
+    "stage": "22",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Remover monkey patch global desnecessário ou isolá-lo com documentação e escopo."
+  },
+  {
+    "id": "22.05",
+    "title": "Plano de migração",
+    "stage": "22",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Migrar módulo por módulo usando allowJs/checkJs, reduzindo any em etapas."
+  },
+  {
+    "id": "22.06",
+    "title": "Guard manual -> schema",
+    "stage": "22",
+    "kind": "COMPARE",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Validar um payload pequeno manualmente; depois modelar a mesma fronteira com uma biblioteca de schema (Zod ou Valibot) e comparar mensagens, inferencia e custo."
+  },
+  {
+    "id": "22.07",
+    "title": "Type test de pacote",
+    "stage": "22",
+    "kind": "TEST",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Escrever casos que devem compilar e casos com @ts-expect-error para superficie publica de uma biblioteca."
+  },
+  {
+    "id": "22.08",
+    "title": "Microprojeto - pacote publicável",
+    "stage": "22",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Criar pequena biblioteca TS com build de JS, declarations, exports, testes e exemplo de consumo."
+  },
+  {
+    "id": "23.01",
+    "title": "Revisão arquitetural",
+    "stage": "23",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Receber módulo “god object” e separar responsabilidades em um diagrama de dependências."
+  },
+  {
+    "id": "23.02",
+    "title": "Parsons de fluxo",
+    "stage": "23",
+    "kind": "PARSONS",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Reordenar camadas de entrada -> validação -> domínio -> persistência -> apresentação."
+  },
+  {
+    "id": "23.03",
+    "title": "Complete o contrato",
+    "stage": "23",
+    "kind": "FADED",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Definir interface pública e invariantes de uma feature antes da implementação."
+  },
+  {
+    "id": "23.04",
+    "title": "Refactor guiado por testes",
+    "stage": "23",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Melhorar código legado em passos mantendo testes verdes."
+  },
+  {
+    "id": "23.05",
+    "title": "Revisão de PR simulada",
+    "stage": "23",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Analisar diff com bugs de async, tipos frouxos, mutação inesperada e teste frágil."
+  },
+  {
+    "id": "23.06",
+    "title": "Boundary audit",
+    "stage": "23",
+    "kind": "READ",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Mapear todas as entradas externas do capstone: HTTP, storage, DOM/form, env e arquivos; marcar onde cada uma vira dado de dominio validado."
+  },
+  {
+    "id": "23.07",
+    "title": "Change request final",
+    "stage": "23",
+    "kind": "MODIFY",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Depois do capstone pronto, receber uma nova regra que cruza duas features e implementa-la sem reescrever tudo."
+  },
+  {
+    "id": "23.08",
+    "title": "Capstone - sistema completo",
+    "stage": "23",
+    "kind": "PROJECT",
+    "origin": "second_edition",
+    "audit_ids": [],
+    "prompt": "Construir aplicação ou biblioteca de porte médio com JS/TS, API interna tipada, persistência substituível, testes e documentação."
+  }
+]

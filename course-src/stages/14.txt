@@ -1,0 +1,45 @@
+ETAPA 14 - ES Modules, Node.js, npm,
+tooling e estrutura de projeto
+Faixa
+Intermediário II
+Carga
+18-26 h
+Nivel curricular
+2.5/5
+PRE-REQUISITOS
+Funcoes/modulos mentais; testes basicos.
+Resultados de aprendizagem
+• Organizar código em módulos com imports/exports claros.
+• Entender package.json, scripts e dependências em nível de uso.
+• Separar código de runtime e configuração.
+• Executar testes/lint/build sem tratar ferramentas como magia.
+Conceitos nucleares
+ESM · named/default exports · package.json · npm scripts · semver conceitual · Node fs/path · env vars ·
+lint/format · estrutura por responsabilidade · Node 24 LTS como baseline · ESM como padrao da trilha ·
+package exports · npm scripts · compatibilidade de runtime
+Modelo mental aprofundado
+Modulos sao limites de dependencia. import/export ESM e o padrao da trilha; CommonJS e ensinado para
+leitura e interoperabilidade. package.json, scripts, package exports e resolucao de modulos entram junto
+de uma estrutura pequena de projeto.
+A edicao fixa um baseline reproduzivel: Node 24 LTS para o executor oficial e navegadores evergreen para
+Web APIs, com matriz de compatibilidade por exercicio. Recursos ES2025/2026 podem ser marcados como
+modernos/condicionais quando o runtime ainda nao for universal.
+npm e tratado como gerenciador de pacotes e scripts, nao como lista de comandos para decorar. Lockfile,
+semver, dependencia de producao vs desenvolvimento e risco de instalar pacote para problema trivial
+entram no criterio de escolha.
+Erros e concepcoes que a etapa deve revelar
+• Misturar ESM/CJS sem entender resolucao.
+• Instalar dependencia para uma funcao trivial.
+• Ignorar versao de runtime e quebrar o executor/usuario.
+Exemplo resolvido - dependência invertida simples
+// save.js
+export function salvar(repo, item) {
+  return repo.insert(item);
+}
+// produção injeta um repo real; testes injetam um fake.
+A etapa usa Node para praticar módulos e I/O, mas o foco continua sendo linguagem e design.
+Dependências externas ficam pequenas e substituíveis.
+GATE DE DOMINIO
+Avance quando o projeto passar testes, incluir pelo menos uma sessao de debugging
+documentada e resistir a uma pequena mudanca de requisito. Erros de acessibilidade/async
+que quebram o contrato bloqueiam o gate.

@@ -1,0 +1,44 @@
+ETAPA 07 - Funções de alta ordem,
+map/filter/reduce, Map e Set
+Faixa
+Intermediário I
+Carga
+14-18 h
+Nivel curricular
+1.5/5
+PRE-REQUISITOS
+Funcoes e arrays. Aqui callbacks passam a ser requisito explicito.
+Resultados de aprendizagem
+• Tratar funções como valores.
+• Escolher map, filter, find, some, every e reduce conforme a intenção.
+• Usar Map e Set quando expressam melhor o problema.
+• Evitar reduce quando piora legibilidade.
+Conceitos nucleares
+callbacks · map/filter/find · some/every · reduce · sort com comparator · Map · Set · composição simples ·
+Object.groupBy/Map.groupBy · metodos de Set ES2025 · quando nao usar reduce
+Modelo mental aprofundado
+Callbacks transformam funcoes em dados que podem ser passados para outras funcoes. Antes de pipelines
+longos, o aluno escreve a callback separadamente e descreve entrada, retorno e efeito. So depois encadeia
+map/filter/sort.
+Map e Set entram por semantica: Map quando a chave nao deveria ser implicitamente string ou quando a
+API de mapa comunica melhor a intencao; Set quando unicidade e operacao de conjunto sao a ideia
+central. ES2025 acrescentou metodos uteis de Set, que aparecem como extensao moderna com checagem
+de compatibilidade.
+Object.groupBy e Map.groupBy entram como ferramenta moderna para agrupamento. reduce continua
+importante, mas o curso evita premiar uma unica chamada reduce que acumula cinco responsabilidades e
+fica dificil de revisar.
+Erros e concepcoes que a etapa deve revelar
+• Usar reduce por exibicionismo quando duas etapas sao mais claras.
+• Esquecer comparator numerico em sort.
+• Escolher Object quando Map comunica melhor a chave real.
+Exemplo resolvido - pipeline de dados
+const ativos = usuarios
+  .filter(u => u.ativo)
+  .map(u => ({ id: u.id, nome: u.nome }))
+  .sort((a, b) => a.nome.localeCompare(b.nome));
+O aluno descreve em português a intenção de cada estágio. Só depois executa. Isso reforça leitura
+semântica em vez de decorar nomes de métodos.
+GATE DE DOMINIO
+Avance quando a implementacao principal e o mini-projeto passarem testes ocultos e voce
+conseguir explicar mutacao/estado/controle relevante. Uma dica estrutural e permitida apenas
+no projeto.

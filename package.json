@@ -6,14 +6,24 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "test:stage00": "node scripts/test-stage00-content.mjs && node scripts/test-stage00-ui.mjs",
+    "test:stage02": "node --test scripts/test-stage02.mjs scripts/test-stage02-ui.mjs scripts/test-stage02-progress.mjs scripts/test-stage02-audit.mjs",
     "install:ci": "node scripts/install-ci.mjs",
-    "prebuild": "node scripts/validate-course-catalog.mjs && node --check public/app.js && node --check public/js-stage00-preparation.js",
     "dev": "node scripts/run-framework.mjs dev",
+    "build:lessons": "npm run build:curriculum",
+    "test:diagnostic": "node --test scripts/test-diagnostic.mjs",
+    "prebuild": "npm run build:curriculum && npm run check:curriculum && node --check public/app.js",
     "build": "node scripts/run-framework.mjs build",
     "start": "node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js dev --config dist/server/wrangler.json --local --persist-to .wrangler/state --ip 127.0.0.1 --inspector-port 0",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "db:generate": "drizzle-kit generate",
+    "test:stage01": "node --test scripts/test-stage01-runner.mjs scripts/test-stage01-checks.mjs scripts/test-stage01-content.mjs scripts/test-stage01-ui.mjs scripts/test-stage01-progress.mjs scripts/test-stage01-integration.mjs scripts/test-stage01-flow.mjs",
+    "test:stage00": "node scripts/test-stage00-content.mjs && node scripts/test-stage00-ui.mjs",
+    "test:stage03": "node --test scripts/test-stage03-runner.mjs scripts/test-stage03-content.mjs scripts/test-stage03-ui.mjs scripts/test-stage03-progress.mjs scripts/test-stage03-scope.mjs scripts/test-stage03-runtime.mjs",
+    "build:stage03": "npm run build:curriculum",
+    "build:curriculum": "node course-src/build-public-curriculum.mjs",
+    "check:curriculum": "node course-src/build-public-curriculum.mjs --check && node scripts/validate-course-catalog.mjs && node scripts/validate-curriculum-source.mjs",
+    "test:layout": "node --test scripts/test-project-layout.mjs",
+    "test": "npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

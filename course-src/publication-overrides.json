@@ -1,0 +1,2974 @@
+{
+  "D.01": {
+    "objective": "Anote a saída prevista para cada chamada, na ordem do arquivo, e sua confiança de 0 a 100%.",
+    "firstResponse": {
+      "action": "Anote a saída prevista para cada chamada, na ordem do arquivo, e sua confiança de 0 a 100%.",
+      "timing": "Depois de ler as três linhas de main.js e antes de executar ou consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "As chamadas síncronas seguem a ordem do arquivo. Cada argumento é avaliado antes de console.log escrever sua linha.",
+      "worked_example": "console.log(\"porta\"); escreve porta. A expressão 3 + 2 vale 5 antes da chamada seguinte escrever 5; depois, a última chamada escreve aberta.",
+      "common_trap": "Ler 3 + 2 como texto literal ou imaginar que as chamadas síncronas podem trocar de ordem.",
+      "why_it_matters": "Prever a saída antes de executar ajuda a perceber qual linha divergiu quando o resultado não corresponde à expectativa."
+    },
+    "interaction": "Mostre o código em um bloco com linhas legíveis e campos textuais para prever cada saída e registrar confiança. Mantenha a ordem clara para teclado e leitor de tela; compare as previsões com a saída textual depois da tentativa.",
+    "review": {
+      "prompt": "Ao percorrer as três chamadas de main.js sem executar, qual regra permite prever as linhas corretamente?",
+      "choices": [
+        "As chamadas síncronas seguem a ordem textual; cada argumento é avaliado antes de sua chamada imprimir.",
+        "JavaScript espera todas as chamadas de console.log em uma fila assíncrona, então a ordem pode inverter.",
+        "console.log recebe uma expressão aritmética como texto literal se ela não estiver guardada numa variável."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A expressão é calculada antes da chamada escrever a linha, e as instruções síncronas seguem a ordem do arquivo.",
+      "incorrectFeedback": "Leia uma chamada de cada vez, de cima para baixo. Sem aspas, 3 + 2 é uma expressão avaliada antes de console.log escrever o resultado."
+    }
+  },
+  "D.02": {
+    "objective": "Para cada cartão apresentado, registre o valor, seu tipo conceitual e, quando solicitado, o resultado de typeof; marque sua confiança.",
+    "prompt": "Classifique os valores apresentados, incluindo null, 0 e string vazia; informe confiança.",
+    "firstResponse": {
+      "action": "Para cada cartão apresentado, registre o valor, seu tipo conceitual e, quando solicitado, o resultado de typeof; marque sua confiança.",
+      "timing": "Depois de ler os cartões e antes de consultar a classificação ou executar qualquer código."
+    },
+    "explanation": {
+      "mental_model": "Tipo, resultado de typeof e truthiness são perguntas diferentes. null é um valor próprio apesar do resultado histórico typeof null === \"object\"; typeof NaN retorna \"number\".",
+      "worked_example": "0 é number e falsy; \"0\" é string e truthy. null continua sendo o valor null, embora typeof null retorne \"object\".",
+      "common_trap": "Classificar pela aparência ou confundir ser truthy/falsy com o tipo do valor.",
+      "why_it_matters": "Separar essas noções evita erros ao interpretar dados e condições."
+    },
+    "interaction": "Mostre os cartões e campos textuais separados para valor, tipo conceitual e typeof. Use rótulos explícitos, navegáveis por teclado e anunciados pelo leitor de tela.",
+    "review": {
+      "prompt": "Qual afirmação classifica corretamente o valor null e o resultado de typeof null?",
+      "choices": [
+        "null é um objeto comum; typeof null retorna \"null\".",
+        "null é um valor distinto; typeof null retorna \"object\" por uma exceção histórica.",
+        "null é outra forma de undefined; typeof null retorna \"undefined\"."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. null é seu próprio valor; typeof null retornar \"object\" é uma exceção histórica da linguagem.",
+      "incorrectFeedback": "Separe o valor da saída de typeof: null continua distinto, embora typeof null retorne a string \"object\"."
+    }
+  },
+  "D.03": {
+    "objective": "Para cada entrada, anote se a condição pontos >= 10 é verdadeira e qual mensagem o ramo escolhido produz.",
+    "firstResponse": {
+      "action": "Para cada entrada, anote se a condição pontos >= 10 é verdadeira e qual mensagem o ramo escolhido produz.",
+      "timing": "Depois de ler a condição e as entradas, antes de executar ou revelar a resposta."
+    },
+    "explanation": {
+      "mental_model": "Em um if/else, a condição escolhe um dos ramos. O operador >= inclui o limite comparado.",
+      "worked_example": "Com pontos igual a 10, pontos >= 10 é verdadeiro e a saída é passou. Com 9, a condição é falsa e a saída é tente.",
+      "common_trap": "Ler >= como se fosse > e mandar o próprio valor-limite para o ramo else.",
+      "why_it_matters": "Testar abaixo, no limite e acima da condição ajuda a confirmar regras de decisão."
+    },
+    "interaction": "Apresente a condição e entradas textuais; ofereça campos para valor da condição e mensagem prevista em cada caso. Mantenha os rótulos claros para teclado e leitor de tela.",
+    "review": {
+      "prompt": "O que caracteriza o ramo else em uma estrutura if/else?",
+      "choices": [
+        "Ele substitui a condição inicial por uma segunda comparação independente.",
+        "Ele executa sempre após o bloco if, mesmo quando a condição foi verdadeira.",
+        "Ele oferece o caminho alternativo quando a condição do if resulta em false."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. O if trata o caminho em que sua condição é verdadeira; o else trata a alternativa.",
+      "incorrectFeedback": "O else não repete a condição nem executa em todos os casos: ele é o caminho alternativo quando a condição do if é falsa."
+    }
+  },
+  "D.04": {
+    "objective": "Registre a entrada da função, o valor que return devolve e a saída causada por console.log.",
+    "firstResponse": {
+      "action": "Registre a entrada da função, o valor que return devolve e a saída causada por console.log.",
+      "timing": "Depois de ler o trecho e antes de consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "return devolve um valor à chamada; console.log produz uma saída. Uma função pode retornar sem imprimir.",
+      "worked_example": "dobro(3) chama a função com entrada 3 e recebe 6. A chamada externa console.log(resultado) é que escreve uma linha com 6.",
+      "common_trap": "Afirmar que return imprime o valor ou que console.log devolve o resultado de dobro.",
+      "why_it_matters": "Distinguir retorno de efeito permite acompanhar o fluxo de dados entre funções e suas chamadas."
+    },
+    "interaction": "Mostre o trecho de código e campos textuais rotulados entrada, retorno e efeito no console. A resposta não exige editar código; mantenha a sequência compreensível por teclado e leitor de tela.",
+    "review": {
+      "prompt": "Em dobro(3), seguida de console.log(resultado), qual descrição separa corretamente retorno e efeito?",
+      "choices": [
+        "dobro recebe 3 e retorna 6; a chamada externa a console.log imprime 6.",
+        "dobro imprime 6 por causa de return; console.log recebe um valor sem retorno.",
+        "console.log calcula e retorna 6; dobro apenas imprime o argumento."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A função calcula e retorna o valor; a chamada externa causa a saída.",
+      "incorrectFeedback": "Localize separadamente return dentro da função e console.log fora dela: um devolve um valor, o outro escreve a saída."
+    }
+  },
+  "D.05": {
+    "objective": "Para a pergunta apresentada, registre sua hipótese, a ferramenta inicial e a evidência que espera obter.",
+    "firstResponse": {
+      "action": "Para a pergunta apresentada, registre sua hipótese, a ferramenta inicial e a evidência que espera obter.",
+      "timing": "Depois de ler a função e a situação, antes de escolher ou usar uma ferramenta."
+    },
+    "explanation": {
+      "mental_model": "Escolha a ferramenta de acordo com a incerteza: leia ou execute para conferir uma saída curta, use um teste pequeno para reproduzir uma borda e inspecione o estado quando o fluxo divergir.",
+      "worked_example": "Para [2, -1, 3], a soma dos positivos é 5 e leitura ou execução pode conferir a previsão. Para investigar uma falha de borda, reproduza-a num teste pequeno; se o estado do loop divergir, observe-o no debugger.",
+      "common_trap": "Abrir o debugger sem hipótese ou limitar-se a ler quando há uma divergência de estado que precisa ser localizada.",
+      "why_it_matters": "Uma hipótese e uma evidência apropriadas tornam a investigação reproduzível e ajudam a distinguir causa de palpite."
+    },
+    "interaction": "Mostre a função e a situação em texto. Peça campos para hipótese, ferramenta escolhida e evidência esperada, sem exigir uma ordem visual; rotule cada campo para teclado e leitor de tela.",
+    "review": {
+      "prompt": "Um caso grande produz soma errada, e o contador diverge do esperado dentro do loop. Qual abordagem corresponde a essa incerteza?",
+      "choices": [
+        "Executar repetidamente o caso grande sem registrar hipótese, até que uma saída pareça correta.",
+        "Criar um caso pequeno reproduzível e usar um breakpoint para observar o estado na primeira divergência.",
+        "Ler apenas a assinatura da função, pois observar o estado durante a iteração não ajuda a localizar a divergência."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. O teste preserva a reprodução, e o debugger ajuda a localizar onde o estado deixa de corresponder à hipótese.",
+      "incorrectFeedback": "Combine uma reprodução pequena com a ferramenta adequada à divergência observada: inspecione o estado no ponto em que o loop se comporta diferente do esperado."
+    }
+  },
+  "04.01": {
+    "review": {
+      "prompt": "Ao depurar uma função chamada dentro de outra expressão, qual evidência mostra o valor que a expressão consumirá?",
+      "choices": [
+        "A última mensagem exibida no console, independentemente de onde foi produzida.",
+        "O valor da variável local com nome mais parecido com o da função.",
+        "O valor retornado pela chamada, distinguindo-o de mensagens escritas como efeito colateral."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: a expressão recebe o retorno da chamada; efeitos de console são observações separadas.",
+      "incorrectFeedback": "Uma mensagem exibida não é automaticamente o valor retornado. Siga o valor da chamada até o consumidor."
+    }
+  },
+  "04.03": {
+    "review": {
+      "prompt": "Qual é a diferença entre declarar uma arrow function e executar o corpo dela?",
+      "choices": [
+        "O corpo executa imediatamente ao final da declaração, mesmo sem nenhuma chamada.",
+        "A declaração disponibiliza a função; o corpo só executa quando alguma chamada a invoca.",
+        "A declaração executa e guarda o resultado, que as chamadas futuras apenas reutilizam."
+      ],
+      "answer": 1,
+      "correctFeedback": "Isso: a declaração cria a função; a execução das instruções acontece quando ela é chamada.",
+      "incorrectFeedback": "Separe a criação da função da execução do corpo. Declarar uma arrow, por si só, não executa suas instruções."
+    }
+  },
+  "04.07": {
+    "review": {
+      "prompt": "Como reduzir erros ao combinar uma taxa percentual e um cupom de valor fixo?",
+      "choices": [
+        "Usar nomes genéricos para ambos e combinar os valores em uma única soma.",
+        "Tratar os dois parâmetros como porcentagens, pois ambos alteram o preço.",
+        "Documentar unidades distintas e definir a base e a ordem de cada operação."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: unidades e ordem explícitas evitam aplicar uma taxa ou desconto com significado errado.",
+      "incorrectFeedback": "Parâmetros monetários podem ter unidades diferentes. Registre o que cada um mede, a base de cálculo e a ordem contratada."
+    }
+  },
+  "04.10": {
+    "review": {
+      "prompt": "Que evidência sustenta uma refatoração que deveria mudar apenas nomes internos?",
+      "choices": [
+        "O programa inicia sem erro, mesmo que as saídas e a interface pública não sejam comparadas.",
+        "Comentários descrevem a intenção, então não é necessário executar verificações.",
+        "Os nomes ficaram mais claros e as verificações existentes preservam interface e comportamento."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: testes de regressão e a interface preservada mostram que a mudança foi apenas de legibilidade.",
+      "incorrectFeedback": "Iniciar sem erro ou adicionar comentários não demonstra equivalência. Compare comportamento observável e contrato público."
+    }
+  },
+  "05.01": {
+    "review": {
+      "prompt": "Se um módulo não deve expor sua coleção mutável interna, que decisão de API reduz acoplamento?",
+      "choices": [
+        "Expor operações ou uma representação controlada, em vez de entregar diretamente o contêiner interno.",
+        "Devolver o contêiner interno e presumir que todo chamador o tratará como imutável.",
+        "Guardar os dados numa variável global para que os consumidores compartilhem o mesmo estado."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto: uma API controlada protege a propriedade do estado e deixa explícitas as operações permitidas.",
+      "incorrectFeedback": "Uma referência mutável compartilhada permite que consumidores acoplem seus efeitos ao estado interno. Delimite a interface."
+    }
+  },
+  "05.04": {
+    "review": {
+      "prompt": "Se uma busca precisa apenas responder se um elemento está presente, qual abordagem expressa melhor essa intenção?",
+      "choices": [
+        "Converter o resultado da busca em booleano por truthiness.",
+        "Inferir presença comparando o tamanho do array antes e depois da busca.",
+        "Usar uma operação de pertinência em vez de depender do valor de uma posição."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: uma operação de pertinência expressa presença diretamente e não confunde posição com existência.",
+      "incorrectFeedback": "Posições são dados diferentes de uma resposta de presença; truthiness pode confundir uma posição válida com ausência."
+    }
+  },
+  "05.06": {
+    "objective": "Rastreie a mutação de sort/reverse, implemente duas versões não mutantes — cópia explícita e métodos copy-by-change — e compare clareza e compatibilidade.",
+    "prompt": "Corrija ordenarSemMutar sem alterar a entrada e apresente duas implementações: a versão compatível com cópia explícita [...numeros].sort((a,b)=>a-b).reverse() e a versão moderna numeros.toSorted((a,b)=>a-b).toReversed(). Use a entrada congelada como evidência e compare clareza e compatibilidade do runtime.",
+    "examples": [
+      {
+        "given": "[3,1,2]",
+        "expected": "[3,2,1] e entrada permanece [3,1,2]"
+      },
+      {
+        "given": "Object.freeze([2,1]) e []",
+        "expected": "[2,1] sem erro e []"
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "[3,1,2], Object.freeze([2,1]) e []",
+          "expected": "Ambas as versões retornam ordem numérica decrescente, preservam a entrada, funcionam com array congelado e retornam [] para entrada vazia"
+        },
+        "scoring": "Exija reprodução e causa do bug, regressão em todos os casos, as duas estratégias não mutantes e comparação explicada de clareza/compatibilidade."
+      }
+    ],
+    "review": {
+      "prompt": "Antes de depender de um método moderno de cópia por mudança em um pacote, o que verificar?",
+      "choices": [
+        "Se os runtimes de destino oferecem o método ou se será preciso fornecer uma alternativa compatível.",
+        "Se sort é sempre não mutável, pois o método moderno só muda o nome.",
+        "Se o método está disponível em todos os runtimes por executar JavaScript."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto: verificar suporte no ambiente de destino orienta a escolha entre a API moderna e uma alternativa compatível.",
+      "incorrectFeedback": "APIs da linguagem variam por suporte do runtime, e métodos mutáveis não se tornam imutáveis por trocar de nome. Confira a compatibilidade."
+    }
+  },
+  "05.07": {
+    "review": {
+      "prompt": "Que estratégia reduz memória extra ao calcular métricas básicas de uma coleção?",
+      "choices": [
+        "Criar várias cópias ordenadas para cada métrica antes de combinar os resultados.",
+        "Atualizar um conjunto pequeno de acumuladores durante a passagem pelos dados.",
+        "Armazenar uma segunda lista de todos os estados intermediários mesmo quando não serão usados."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto: acumuladores mantêm o estado necessário sem construir coleções auxiliares proporcionais à entrada.",
+      "incorrectFeedback": "Cópias e históricos completos aumentam memória sem necessidade. Mantenha apenas o estado exigido pelas métricas."
+    }
+  },
+  "05.10": {
+    "review": {
+      "prompt": "Ao achatar arrays aninhados, que decisão deve orientar o uso de flat?",
+      "choices": [
+        "Presumir que flat percorre recursivamente qualquer estrutura, sem limite.",
+        "Usar flat apenas para remover elementos vazios, pois arrays internos permanecem iguais.",
+        "Determinar a profundidade estrutural esperada e escolher uma operação compatível com ela."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: flat segue uma profundidade definida; a estrutura dos dados determina se esse comportamento basta.",
+      "incorrectFeedback": "flat não significa necessariamente percorrer todos os níveis. Compare a estrutura esperada à profundidade configurada."
+    }
+  },
+  "05.11": {
+    "review": {
+      "prompt": "Se uma interface precisa contar caracteres percebidos pela pessoa, qual recurso é mais apropriado para textos Unicode?",
+      "choices": [
+        "Segmentar o texto em grafemas, em vez de contar diretamente unidades de representação.",
+        "Contar bytes e tratar cada byte como um caractere visível.",
+        "Somar os comprimentos internos das strings sem considerar combinações Unicode."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto: grafemas representam unidades percebidas na interface; unidades internas e bytes medem outra coisa.",
+      "incorrectFeedback": "Representação em memória não corresponde necessariamente a caracteres visíveis. Escolha uma segmentação adequada à experiência da interface."
+    }
+  },
+  "05.02": {
+    "review": {
+      "prompt": "Qual é a diferença entre validar uma entrada e normalizá-la antes de validar?",
+      "choices": [
+        "Normalizar sempre preserva exatamente o texto recebido, enquanto validar sempre o modifica.",
+        "Validar decide se a entrada satisfaz o contrato; normalizar a transforma e só deve ocorrer se isso fizer parte do contrato.",
+        "As duas operações são equivalentes e podem ser trocadas sem alterar o comportamento."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto: validação aceita ou rejeita conforme o contrato; normalização altera a representação recebida.",
+      "incorrectFeedback": "Transformar silenciosamente pode aceitar algo diferente do que foi fornecido. Declare se a transformação é permitida antes de validar."
+    }
+  },
+  "05.05": {
+    "review": {
+      "prompt": "Ao usar uma API de escape de regex em uma biblioteca, que questão de compatibilidade deve ser verificada?",
+      "choices": [
+        "Se qualquer implementação de JavaScript disponibiliza automaticamente toda API recente.",
+        "Se a API pode ser omitida porque o construtor sempre interpreta texto dinamicamente como literal.",
+        "Se todos os runtimes declarados como alvo oferecem a API ou recebem uma alternativa compatível."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: a superfície da linguagem disponível depende dos runtimes suportados pela biblioteca.",
+      "incorrectFeedback": "Declarar JavaScript como plataforma não garante suporte uniforme a APIs recentes. Verifique os alvos e planeje uma alternativa."
+    }
+  },
+  "05.08": {
+    "review": {
+      "prompt": "Quando um parser rejeita uma linha, que informação ajuda a pessoa a investigar o problema?",
+      "choices": [
+        "A linha original junto de um motivo de rejeição claro, sem alterar silenciosamente a entrada.",
+        "Somente a posição da linha, descartando o conteúdo que falhou.",
+        "Uma versão corrigida automaticamente, sem registrar que a entrada original era inválida."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto: preservar a entrada rejeitada e explicar o motivo torna o diagnóstico reproduzível.",
+      "incorrectFeedback": "Sem conteúdo original ou motivo, fica difícil localizar e reproduzir a falha. Registre ambos conforme o contrato do parser."
+    }
+  },
+  "05.09": {
+    "review": {
+      "prompt": "Qual divisão de responsabilidades facilita manter consistente um inventário exibido como texto?",
+      "choices": [
+        "Usar o texto renderizado como armazenamento principal e reconstruir a coleção depois.",
+        "Atualizar o estado da coleção separadamente de formatar sua representação para exibição.",
+        "Misturar regras de formatação e alteração de estado em uma única string fixa."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto: separar estado e apresentação deixa a coleção como fonte de dados e permite formatar a saída de forma consistente.",
+      "incorrectFeedback": "Texto exibido é uma representação, não um bom substituto para o estado estruturado. Separe a atualização da coleção da formatação."
+    }
+  },
+  "06.01": {
+    "review": {
+      "prompt": "Por que um diagrama de referências ajuda a investigar objetos compartilhados?",
+      "choices": [
+        "Ele substitui a necessidade de acompanhar atribuições feitas durante a execução.",
+        "Ele prova igualdade profunda sempre que dois nomes aparecem perto um do outro.",
+        "Ele separa os nomes das variáveis dos objetos que esses nomes podem referenciar."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: nomes são bindings e objetos são identidades; desenhar essa relação torna a leitura do fluxo mais clara.",
+      "incorrectFeedback": "Proximidade de nomes não mostra identidade. Acompanhe quais objetos são criados e a quais deles cada binding se liga."
+    }
+  },
+  "06.02": {
+    "review": {
+      "prompt": "Num diagrama de referências, o que uma seta entre dois nós representa?",
+      "choices": [
+        "Uma propriedade que aponta para a identidade do objeto de destino.",
+        "Uma cópia automática de todos os campos do objeto de destino.",
+        "Uma garantia de que as propriedades dos dois objetos serão sempre iguais."
+      ],
+      "answer": 0,
+      "correctFeedback": "A seta representa uma referência. Duas setas podem apontar para o mesmo nó sem criar uma cópia.",
+      "incorrectFeedback": "No grafo, a seta indica ligação por referência; igualdade dos campos e cópia são ideias diferentes."
+    }
+  },
+  "06.03": {
+    "review": {
+      "prompt": "Qual é o principal benefício de converter uma entrada externa para um modelo interno explícito?",
+      "choices": [
+        "Garantir que qualquer campo recebido permaneça disponível sem revisão.",
+        "Separar o formato recebido da interface de dados que o restante do programa usa.",
+        "Fazer com que a entrada externa e o modelo interno compartilhem sempre a mesma identidade."
+      ],
+      "answer": 1,
+      "correctFeedback": "A conversão cria uma fronteira clara entre o formato de entrada e o modelo usado pela aplicação.",
+      "incorrectFeedback": "Uma normalização serve para controlar essa fronteira; não precisa manter formato, campos ou identidade da entrada."
+    }
+  },
+  "06.04": {
+    "review": {
+      "prompt": "Por que manter uma função de transformação de configurações separada da persistência?",
+      "choices": [
+        "Garante que todo campo armazenado seja válido sem precisar de um contrato.",
+        "Faz qualquer mudança de configuração ser salva automaticamente no local correto.",
+        "Permite revisar e testar a transformação sem misturar acesso externo e regras de atualização."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: separar transformação e I/O delimita efeitos colaterais e facilita verificar a regra isoladamente.",
+      "incorrectFeedback": "Uma transformação pura não define validação nem persistência. Mantenha cada responsabilidade e seu contrato explícitos."
+    }
+  },
+  "06.06": {
+    "objective": "Diferencie falha de sintaxe JSON de JSON válido; investigue perdas e conversões no round-trip de Date, undefined, NaN, Infinity, Map e Set.",
+    "prompt": "Depure lerSave para retornar null em texto JSON sintaticamente inválido e aceitar um objeto JSON válido, como {\"vida\":0}. Em uma investigação separada no mesmo starter, serialize e restaure a amostra fornecida; registre o que acontece com Date, undefined, NaN, Infinity, Map e Set. Não implemente validação de esquema neste cartão: essa etapa vem depois do parse.",
+    "resources": [
+      "Tabela visível de round-trip: Date vira string ISO; propriedade undefined é omitida; NaN e Infinity viram null; Map e Set viram objetos vazios; depois do parse, os tipos originais não são reconstruídos.",
+      "MDN JSON.parse: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse",
+      "MDN JSON.stringify: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"
+    ],
+    "starterFiles": [
+      {
+        "path": "main.js",
+        "content": "export function lerSave(texto){ try{return JSON.parse(texto)}catch(e){return null} }\nconst amostra={data:new Date(\"2026-01-01T00:00:00.000Z\"),ausente:undefined,nan:NaN,infinito:Infinity,mapa:new Map([[\"a\",1]]),conjunto:new Set([1])};\nconst textoRoundTrip=JSON.stringify(amostra);\nconsole.log(textoRoundTrip);\nconsole.log(lerSave(textoRoundTrip));"
+      }
+    ],
+    "examples": [
+      {
+        "given": "texto '{invalido' e texto '{\"vida\":0}'",
+        "expected": "null; objeto parseado com vida 0"
+      },
+      {
+        "given": "JSON.stringify({data:Date UTC,ausente:undefined,nan:NaN,infinito:Infinity,mapa:Map,conjunto:Set}) seguido de JSON.parse",
+        "expected": "data é string ISO; ausente não aparece; nan e infinito são null; mapa e conjunto são {}; os tipos especiais não são reconstruídos"
+      }
+    ]
+  },
+  "06.07": {
+    "objective": "Converta entidades em objeto indexado por id; duplicatas usam o último registro, lista vazia retorna objeto vazio e id __proto__ permanece chave de dados própria sem alterar o protótipo.",
+    "prompt": "Implemente indexar(entidades) com o contrato visível: o último registro de um id duplicado vence, a lista vazia produz um objeto vazio e id \"__proto__\" é uma chave própria comum sem alterar o protótipo nem poluí-lo. Não altere os itens recebidos; escolha uma estrutura que cumpra os três casos.",
+    "resources": [
+      "Contrato e casos visíveis: ids únicos, último duplicado vence, lista vazia resulta em objeto vazio e __proto__ é dado próprio sem poluição do protótipo.",
+      "MDN Object.create: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create",
+      "MDN Object.hasOwn: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwn"
+    ],
+    "examples": [
+      {
+        "given": "[{id:\"a\",v:1},{id:\"b\",v:2}]",
+        "expected": "índice com a.v=1 e b.v=2"
+      },
+      {
+        "given": "[{id:\"a\",v:1},{id:\"a\",v:3}], [], [{id:\"__proto__\",v:1}]",
+        "expected": "a.v=3 (último vence); objeto vazio; __proto__ é chave própria com v=1 e o protótipo não muda"
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "ids únicos, duplicata de a, lista vazia e id __proto__",
+          "expected": "lookup correto; último a vence; {} para vazio; __proto__ consultável como dado próprio e sem alteração do protótipo"
+        },
+        "scoring": "Verifique saída, política de duplicata, ausência de mutação dos itens e ausência de efeito no protótipo para todos os casos publicados."
+      }
+    ],
+    "review": {
+      "prompt": "Ao construir um índice de registros por um campo identificador, o que cada entrada do índice deve associar?",
+      "choices": [
+        "A posição atual do registro como única informação, descartando o próprio registro.",
+        "Uma lista de todos os campos do registro transformados em nomes de propriedades.",
+        "O identificador do registro àquele registro, para permitir busca direta."
+      ],
+      "answer": 2,
+      "correctFeedback": "Um índice relaciona a chave escolhida ao dado que será recuperado por ela.",
+      "incorrectFeedback": "Pense no que a consulta precisa devolver: o índice deve preservar a associação entre a chave e o registro."
+    }
+  },
+  "06.08": {
+    "review": {
+      "prompt": "Qual é o objetivo central de uma migração de formato persistido?",
+      "choices": [
+        "Recusar com status de versão não suportada e não regravar o save",
+        "Tentar processá-la como a versão antiga removendo campos desconhecidos",
+        "Carregar defaults atuais e sobrescrever o save futuro"
+      ],
+      "answer": 0,
+      "correctFeedback": "Migração adapta a estrutura persistida sem mudar o sentido dos dados que o programa já conhece.",
+      "incorrectFeedback": "Migrar ou regravar formato desconhecido pode descartar dados. Retorne status de recusa sem alterar o save."
+    }
+  },
+  "06.10": {
+    "review": {
+      "prompt": "Em um descritor de propriedade, o que controla a flag writable?",
+      "choices": [
+        "Se a propriedade aparece na enumeração de chaves próprias.",
+        "Se uma propriedade pode ser removida ou redefinida.",
+        "Se o valor de uma propriedade de dados pode ser substituído por atribuição."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto: writable controla a possibilidade de atribuir outro valor à propriedade de dados.",
+      "incorrectFeedback": "As flags de descritor têm papéis distintos: writable trata atribuição; outras flags controlam enumeração e reconfiguração."
+    }
+  },
+  "07.01": {
+    "review": {
+      "prompt": "Qual método é adequado quando cada item deve virar um valor correspondente, mantendo um resultado para cada posição?",
+      "choices": [
+        "`map`, que transforma cada item e retorna uma nova coleção.",
+        "`filter`, que remove os itens cuja condição não passa.",
+        "`some`, que resume a coleção a uma resposta booleana."
+      ],
+      "answer": 0,
+      "correctFeedback": "`map` estabelece uma transformação item a item; `filter` seleciona e `some` responde se há correspondência.",
+      "incorrectFeedback": "Escolha pelo formato do resultado: transformação por item pede uma coleção transformada, não seleção ou booleano."
+    }
+  },
+  "07.06": {
+    "review": {
+      "prompt": "O que a função de redução precisa devolver em cada chamada do callback?",
+      "choices": [
+        "O array completo de entrada para reiniciar o percurso.",
+        "O próximo acumulador que será entregue à etapa seguinte.",
+        "Um efeito colateral, pois o valor retornado pelo callback é ignorado."
+      ],
+      "answer": 1,
+      "correctFeedback": "Cada retorno atualiza o acumulador; a etapa seguinte recebe esse valor.",
+      "incorrectFeedback": "O retorno do callback não é descartado: ele define o estado acumulado para o próximo passo."
+    }
+  },
+  "07.10": {
+    "review": {
+      "prompt": "Quando cada item de entrada deve corresponder a exatamente um valor transformado, qual método expressa melhor essa relação?",
+      "choices": [
+        "`filter`, que seleciona apenas itens que passam por uma condição.",
+        "`reduce`, que combina os itens em um único acumulado.",
+        "`map`, que aplica uma transformação a cada item."
+      ],
+      "answer": 2,
+      "correctFeedback": "`map` mantém a relação item a item; `filter` seleciona e `reduce` agrega.",
+      "incorrectFeedback": "Escolha conforme a forma desejada da saída: transformação individual, seleção ou agregação."
+    }
+  },
+  "07.09": {
+    "review": {
+      "prompt": "Qual característica torna um analisador de sessões mais fácil de repetir em testes automatizados?",
+      "choices": [
+        "Consultar a hora atual durante cada cálculo para ordenar as ações.",
+        "Receber os eventos como entrada e produzir o resultado sem depender de relógio ou estado externo.",
+        "Manter resultados anteriores em uma variável compartilhada entre execuções."
+      ],
+      "answer": 1,
+      "correctFeedback": "Entradas explícitas e ausência de dependências ocultas tornam a execução reproduzível.",
+      "incorrectFeedback": "Relógio e estado compartilhado introduzem variação externa; um analisador determinístico depende dos dados recebidos."
+    }
+  },
+  "08.01": {
+    "review": {
+      "prompt": "Um algoritmo ordena uma coleção e depois faz uma única varredura. Qual termo representa o crescimento dominante?",
+      "choices": [
+        "`O(n²)`, porque duas operações sempre multiplicam seus custos.",
+        "`O(log n)`, porque uma ordenação reduz pela metade a coleção.",
+        "`O(n log n)`, determinado pela ordenação, que domina a varredura linear."
+      ],
+      "answer": 2,
+      "correctFeedback": "Operações sequenciais somam custos; para tamanhos grandes, a ordenação domina a varredura linear.",
+      "incorrectFeedback": "A contagem sequencial não é automaticamente multiplicativa; compare as taxas de crescimento das operações."
+    }
+  },
+  "08.02": {
+    "review": {
+      "prompt": "Ao escrever uma função recursiva para agregar uma estrutura em árvore, o que torna o problema menor a cada chamada?",
+      "choices": [
+        "Aplicar a mesma função às subárvores e combinar os resultados.",
+        "Repetir a chamada com a árvore inteira até o contador global mudar.",
+        "Pular a verificação de término e esperar que a pilha de chamadas limite o percurso."
+      ],
+      "answer": 0,
+      "correctFeedback": "A recursão progride quando cada chamada trata subproblemas menores e combina seus resultados.",
+      "incorrectFeedback": "Uma chamada precisa aproximar-se do caso base; repetir o mesmo problema não garante término."
+    }
+  },
+  "08.03": {
+    "review": {
+      "prompt": "Qual pré-condição permite à busca binária descartar metade do intervalo de busca com segurança?",
+      "choices": [
+        "A coleção contém somente números positivos.",
+        "Os elementos estão ordenados segundo a mesma relação usada pela busca.",
+        "A coleção tem tamanho que é potência de dois."
+      ],
+      "answer": 1,
+      "correctFeedback": "A ordem permite inferir de que lado o alvo poderia estar depois de comparar o meio.",
+      "incorrectFeedback": "Sem ordenação compatível, uma comparação não informa qual metade pode ser descartada."
+    }
+  },
+  "08.05": {
+    "review": {
+      "prompt": "Se um percurso precisa apenas visitar valores, sem usar posições, qual escolha reduz erros de controle manual do índice?",
+      "choices": [
+        "Incrementar manualmente um índice e calcular o limite em dois lugares.",
+        "Começar do último índice e subtrair em uma condição independente do tamanho.",
+        "Usar `for...of` para obter cada valor diretamente."
+      ],
+      "answer": 2,
+      "correctFeedback": "Quando a posição não é necessária, `for...of` remove a aritmética do índice da tarefa.",
+      "incorrectFeedback": "O controle manual pode ser útil quando posições importam, mas é desnecessário para simples visita dos valores."
+    }
+  },
+  "08.06": {
+    "review": {
+      "prompt": "Como um algoritmo de deduplicação pode preservar a ordem da primeira aparição?",
+      "choices": [
+        "Percorrer a entrada na ordem original e acrescentar um item somente quando ainda não foi visto.",
+        "Ordenar a entrada antes de remover repetidos e devolver a ordem classificada.",
+        "Percorrer a entrada ao contrário e substituir cada item já emitido."
+      ],
+      "answer": 0,
+      "correctFeedback": "A saída mantém a ordem se os itens forem emitidos no percurso original, no primeiro encontro.",
+      "incorrectFeedback": "Ordenar ou percorrer ao contrário pode mudar qual ocorrência aparece primeiro; emita durante o percurso original."
+    }
+  },
+  "08.07": {
+    "review": {
+      "prompt": "Por que a busca deve marcar um vértice ao enfileirá-lo?",
+      "choices": [
+        "Para impedir que ciclos ou vizinhos convergentes sejam enfileirados várias vezes.",
+        "Para ordenar os vértices alfabeticamente antes da busca.",
+        "Para visitar o destino antes de processar qualquer vizinho.",
+        "Para transformar um grafo sem pesos em grafo ponderado."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Registrar na descoberta garante que cada vértice entre uma vez na fila.",
+      "incorrectFeedback": "A descoberta ocorre antes da remoção posterior. Marcar nesse momento evita duplicação em ciclos e caminhos convergentes."
+    }
+  },
+  "08.08": {
+    "review": {
+      "prompt": "Em um grafo sem pesos, por que a busca em largura encontra uma rota com o menor número de arestas?",
+      "choices": [
+        "Ela escolhe sempre o vizinho com o menor nome.",
+        "Ela explora os vértices em ordem de distância por meio de uma fila FIFO.",
+        "Ela aprofunda um único ramo até o fim antes de considerar os demais."
+      ],
+      "answer": 1,
+      "correctFeedback": "A fila mantém a exploração por camadas; por isso uma rota mais curta é considerada antes das mais longas.",
+      "incorrectFeedback": "A ordem alfabética não mede distância, e aprofundar um ramo primeiro é característica de outra estratégia."
+    }
+  },
+  "09.01": {
+    "review": {
+      "prompt": "Qual afirmação descreve o alcance de `let` e `const` em relação a `var`?",
+      "choices": [
+        "`let`, `const` e `var` têm todos escopo de bloco.",
+        "`var` tem escopo de módulo, enquanto `let` e `const` são sempre globais.",
+        "`let` e `const` têm escopo de bloco; `var` tem escopo de função."
+      ],
+      "answer": 2,
+      "correctFeedback": "As declarações léxicas respeitam blocos; `var` é delimitado pela função mais próxima.",
+      "incorrectFeedback": "A diferença aparece ao comparar blocos internos com o escopo de função; as três declarações não têm o mesmo alcance."
+    }
+  },
+  "09.02": {
+    "review": {
+      "prompt": "O que caracteriza uma closure em JavaScript?",
+      "choices": [
+        "Uma função junto ao acesso que mantém ao ambiente léxico relevante.",
+        "Uma cópia serializada de todos os objetos visíveis no momento da chamada.",
+        "Uma função que só pode ser executada uma vez depois de retornar."
+      ],
+      "answer": 0,
+      "correctFeedback": "A closure continua podendo acessar bindings do ambiente em que foi criada.",
+      "incorrectFeedback": "Closure não é uma serialização nem limita a função a uma chamada; ela preserva acesso lexical."
+    }
+  },
+  "09.03": {
+    "review": {
+      "prompt": "O que significa currying na forma `f(a)(b)`?",
+      "choices": [
+        "Uma função aceita todos os argumentos apenas como um array.",
+        "Uma chamada retorna outra função, que recebe o próximo argumento.",
+        "Uma função executa seus argumentos em paralelo e combina as promessas."
+      ],
+      "answer": 1,
+      "correctFeedback": "Currying divide a aplicação em chamadas encadeadas, cada uma recebendo parte dos argumentos.",
+      "incorrectFeedback": "A notação encadeada representa funções retornadas entre chamadas, não array de argumentos nem concorrência."
+    }
+  },
+  "09.05": {
+    "review": {
+      "prompt": "Por que um callback pode consultar um binding lexical associado à sua criação mesmo quando executado depois?",
+      "choices": [
+        "O mecanismo reexecuta automaticamente o bloco que declarou a função.",
+        "O valor é sempre copiado para uma variável global quando o callback é criado.",
+        "A função mantém acesso ao ambiente léxico capturado."
+      ],
+      "answer": 2,
+      "correctFeedback": "Uma closure mantém acesso aos bindings capturados durante a vida da função.",
+      "incorrectFeedback": "Execução tardia não recria o bloco nem exige variável global; a função conserva acesso lexical."
+    }
+  },
+  "09.06": {
+    "review": {
+      "prompt": "Em que tipo de função a memoização tende a preservar o significado das chamadas?",
+      "choices": [
+        "Uma função determinística cujo resultado depende dos argumentos considerados na chave.",
+        "Uma função que depende de relógio, rede ou estado global não incluído na chave.",
+        "Uma função que modifica a entrada e retorna objetos diferentes a cada chamada."
+      ],
+      "answer": 0,
+      "correctFeedback": "O cache só é seguro quando a chave representa todas as entradas relevantes e o resultado é repetível.",
+      "incorrectFeedback": "Se dados externos mudam o resultado sem aparecer na chave, uma resposta armazenada pode ficar obsoleta."
+    }
+  },
+  "09.07": {
+    "review": {
+      "prompt": "Qual caso de uso combina com `WeakMap`?",
+      "choices": [
+        "Manter um inventário cujas chaves precisam ser listadas e ordenadas.",
+        "Associar metadados a objetos sem acrescentar propriedades ao objeto.",
+        "Armazenar valores escalares independentes de qualquer objeto como chaves."
+      ],
+      "answer": 1,
+      "correctFeedback": "`WeakMap` permite associação externa por identidade de objeto sem alterar a forma pública do objeto.",
+      "incorrectFeedback": "`WeakMap` é apropriado para metadados ligados a objetos, não para coleções que precisam ser percorridas ou ordenadas."
+    }
+  },
+  "09.08": {
+    "review": {
+      "prompt": "No padrão observável, qual é o papel principal de `subscribe`?",
+      "choices": [
+        "Devolver uma cópia do estado e encerrar os listeners existentes.",
+        "Aplicar diretamente uma mudança ao estado sem executar a operação da store.",
+        "Registrar uma função para receber notificações sobre mudanças futuras."
+      ],
+      "answer": 2,
+      "correctFeedback": "`subscribe` registra um observador; a operação que altera o estado continua sendo responsabilidade da store.",
+      "incorrectFeedback": "Inscrição estabelece uma relação de observação, não substitui leitura ou atualização do estado."
+    }
+  },
+  "10.02": {
+    "review": {
+      "prompt": "Por que testes de encapsulamento devem preferir a API pública em vez de inspecionar diretamente um campo privado?",
+      "choices": [
+        "Porque o contrato útil é o comportamento observável; detalhes privados podem mudar sem alterar a API.",
+        "Porque um campo privado não pode participar de nenhum cálculo dentro da classe.",
+        "Porque testes só podem criar instâncias e nunca chamar métodos públicos."
+      ],
+      "answer": 0,
+      "correctFeedback": "Testar pela interface protege o comportamento prometido e permite mudar a implementação interna.",
+      "incorrectFeedback": "Campos privados participam da implementação; o teste deve verificar efeitos públicos sem acoplar-se a eles."
+    }
+  },
+  "10.03": {
+    "review": {
+      "prompt": "O que `Object.getPrototypeOf(obj)` devolve?",
+      "choices": [
+        "Uma cópia de todas as propriedades herdadas pelo objeto.",
+        "O protótipo direto ligado ao objeto consultado.",
+        "A lista de todas as instâncias criadas pela mesma função."
+      ],
+      "answer": 1,
+      "correctFeedback": "O método expõe o elo direto da cadeia, não uma cópia nem um inventário de instâncias.",
+      "incorrectFeedback": "A cadeia de protótipos é formada por elos; `getPrototypeOf` retorna o elo direto."
+    }
+  },
+  "10.04": {
+    "review": {
+      "prompt": "Qual característica de uma arrow function afeta o uso de `this`?",
+      "choices": [
+        "Ela sempre associa `this` ao objeto que contém a propriedade da função.",
+        "Ela converte qualquer chamada em uma chamada com `bind` explícito.",
+        "Ela não cria um `this` próprio e usa o contexto léxico externo."
+      ],
+      "answer": 2,
+      "correctFeedback": "Arrow functions capturam `this` do ambiente léxico em vez de receber um receptor próprio pela chamada.",
+      "incorrectFeedback": "Arrow não fixa automaticamente o objeto que guarda a função; seu `this` vem do contexto léxico."
+    }
+  },
+  "10.05": {
+    "review": {
+      "prompt": "O que `extends` estabelece entre uma classe derivada e sua classe base?",
+      "choices": [
+        "Uma relação de protótipos que permite herdar comportamento e sobrescrever partes da interface.",
+        "Uma cópia independente de todos os métodos base dentro de cada instância.",
+        "Uma conexão que faz todas as instâncias compartilharem os mesmos campos mutáveis."
+      ],
+      "answer": 0,
+      "correctFeedback": "A herança conecta protótipos para reutilizar comportamento; não copia métodos nem exige estado de instância compartilhado.",
+      "incorrectFeedback": "`extends` cria uma relação de herança/delegação, não uma cópia de métodos nem um único estado global."
+    }
+  },
+  "10.06": {
+    "review": {
+      "prompt": "Qual vantagem da composição sobre uma hierarquia com uma subclasse para cada combinação?",
+      "choices": [
+        "Garantir que todos os objetos exponham todos os métodos disponíveis.",
+        "Combinar capacidades necessárias sem codificar cada combinação possível como tipo novo.",
+        "Fazer com que instâncias diferentes usem obrigatoriamente o mesmo estado."
+      ],
+      "answer": 1,
+      "correctFeedback": "Composição reúne comportamentos escolhidos e evita multiplicar subclasses para combinações.",
+      "incorrectFeedback": "Composição busca combinações menores e explícitas; não obriga a expor toda capacidade nem compartilhar estado."
+    }
+  },
+  "10.07": {
+    "review": {
+      "prompt": "Que custo de manutenção pode surgir quando subclasses representam cada combinação de políticas independentes?",
+      "choices": [
+        "As classes deixam de poder declarar métodos próprios.",
+        "O runtime passa a escolher automaticamente a política mais adequada.",
+        "A quantidade de tipos pode crescer conforme se multiplicam as combinações."
+      ],
+      "answer": 2,
+      "correctFeedback": "Eixos independentes combinados em subclasses podem multiplicar tipos e duplicar decisões.",
+      "incorrectFeedback": "O risco é o crescimento combinatório do modelo; subclasses continuam podendo ter métodos e não são escolhidas automaticamente."
+    }
+  },
+  "10.08": {
+    "review": {
+      "prompt": "O que um invariante de um motor de entidades descreve?",
+      "choices": [
+        "Uma condição que o estado deve respeitar antes e depois das operações permitidas.",
+        "Uma sequência exata de chamadas que toda entidade precisa executar.",
+        "Uma decisão interna de implementação que não pode ser expressa por comportamento observável."
+      ],
+      "answer": 0,
+      "correctFeedback": "Invariantes definem condições de validade que as operações precisam preservar.",
+      "incorrectFeedback": "Um invariante é uma regra sobre validade do estado, não uma ordem fixa de chamadas nem um detalhe interno."
+    }
+  },
+  "11.09": {
+    "review": {
+      "prompt": "Qual comportamento caracteriza um script clássico marcado com defer?",
+      "choices": [
+        "Ele executa assim que o download termina e pode inverter a ordem de outros scripts defer.",
+        "Ele baixa sem bloquear o parse e executa após o parse, mantendo a ordem entre scripts defer do documento.",
+        "Ele só pode executar depois do evento load e sempre bloqueia o parse enquanto baixa."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Um script de métricas lento com async pode terminar depois de um script menor abaixo dele; a posição no HTML não garante ordem de execução.",
+      "incorrectFeedback": "Revise esta regra: Considerar async ordenado como defer. Um script de métricas lento com async pode terminar depois de um script menor abaixo dele; a posição no HTML não garante ordem de execução."
+    }
+  },
+  "11.01": {
+    "review": {
+      "prompt": "Em um listener de evento, o que distinguem target e currentTarget?",
+      "choices": [
+        "target sempre identifica document; currentTarget sempre identifica o elemento clicado.",
+        "target e currentTarget são aliases e nunca diferem durante a propagação.",
+        "target identifica a origem do evento; currentTarget identifica o nó cujo listener está sendo executado."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Em article > a > span, clicar em span começa nele; o listener bubble de a roda antes do listener de article porque o caminho sobe a partir do alvo.",
+      "incorrectFeedback": "Revise esta regra: Supor que eventos sempre começam no elemento mais externo. Em article > a > span, clicar em span começa nele; o listener bubble de a roda antes do listener de article porque o caminho sobe a partir do alvo."
+    }
+  },
+  "11.11": {
+    "review": {
+      "prompt": "Em qual direção a fase capture percorre a árvore antes de alcançar o alvo?",
+      "choices": [
+        "Dos ancestrais mais externos em direção ao alvo.",
+        "Do alvo para os ancestrais depois que todos os listeners target terminaram.",
+        "Somente entre elementos irmãos no mesmo nível."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Num link dentro de item de lista, impedir navegação não impede o evento de alcançar ancestrais; parar propagação não cancela sozinho a navegação.",
+      "incorrectFeedback": "Revise esta regra: Confundir ação padrão com propagação. Num link dentro de item de lista, impedir navegação não impede o evento de alcançar ancestrais; parar propagação não cancela sozinho a navegação."
+    }
+  },
+  "11.14": {
+    "review": {
+      "prompt": "Qual é o efeito de registrar um listener com a opção once: true?",
+      "choices": [
+        "O listener passa a executar uma vez por cada elemento descendente.",
+        "O navegador remove esse listener depois da primeira invocação.",
+        "A opção transforma o callback em execução assíncrona."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Um botão “Copiar” pode responder uma vez; um listener de rolagem que não cancela a ação padrão pode ser passivo; fechar um painel pode abortar os listeners ligados ao controller dele.",
+      "incorrectFeedback": "Revise esta regra: Confundir once com cleanup geral ou usar preventDefault em listener passive. Um botão “Copiar” pode responder uma vez; um listener de rolagem que não cancela a ação padrão pode ser passivo; fechar um painel pode abortar os listeners ligados ao controller dele."
+    }
+  },
+  "11.02": {
+    "review": {
+      "prompt": "Qual método cria um novo elemento HTML para montar uma interface no DOM?",
+      "choices": [
+        "document.createTextNode(tagName)",
+        "element.setAttribute(tagName, valor)",
+        "document.createElement(tagName)"
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Para exibir “Novo <em>rascunho</em>”, um nó de texto mantém as marcas literalmente; o navegador não cria um elemento <em> a partir delas.",
+      "incorrectFeedback": "Revise esta regra: Usar innerHTML com dado não confiável ou remover a lista inteira. Para exibir “Novo <em>rascunho</em>”, um nó de texto mantém as marcas literalmente; o navegador não cria um elemento <em> a partir delas."
+    }
+  },
+  "11.03": {
+    "review": {
+      "prompt": "Qual é uma vantagem de manter a validação de dados em uma função separada da manipulação do DOM?",
+      "choices": [
+        "A regra pode ser verificada deterministicamente sem montar a interface, e a apresentação dos erros fica independente.",
+        "O navegador passa a validar automaticamente qualquer regra específica do produto.",
+        "A função separada garante que nenhum dado vindo do usuário precise de verificação."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Em um formulário de entrega, “  Lia ” vira “Lia” e “4” vira o número quatro; apresentar um erro não deve substituir os valores ainda editados.",
+      "incorrectFeedback": "Revise esta regra: Validar apenas presença da string, aceitando quantidade inválida. Em um formulário de entrega, “  Lia ” vira “Lia” e “4” vira o número quatro; apresentar um erro não deve substituir os valores ainda editados."
+    }
+  },
+  "11.04": {
+    "review": {
+      "prompt": "Qual evento deve ser observado para tratar o envio de um formulário tanto por botão quanto pelo teclado?",
+      "choices": [
+        "O evento `click` de cada botão de envio.",
+        "O evento `submit` no próprio formulário.",
+        "O evento `keydown` de cada campo de texto."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Em um formulário de preferências, getAll(\"cor\") pode retornar [azul, verde] e preservar as duas caixas marcadas; get(\"cor\") retorna apenas uma ocorrência.",
+      "incorrectFeedback": "Revise esta regra: Usar get no campo repetido ou tratar string numérica como number. Em um formulário de preferências, getAll(\"cor\") pode retornar [azul, verde] e preservar as duas caixas marcadas; get(\"cor\") retorna apenas uma ocorrência."
+    }
+  },
+  "11.05": {
+    "review": {
+      "prompt": "O que acontece quando `addEventListener` registra uma função para um tipo de evento?",
+      "choices": [
+        "A função é executada imediatamente e removida após retornar.",
+        "A função passa a ser chamada em todo redesenho do DOM, mesmo sem evento.",
+        "A função fica associada para ser chamada quando aquele evento for despachado no alvo apropriado."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Um painel de favoritos pode redesenhar sua lista a cada busca, enquanto um listener único no contêiner continua atendendo novos cartões.",
+      "incorrectFeedback": "Revise esta regra: Confundir render de elementos com instalação de listeners. Um painel de favoritos pode redesenhar sua lista a cada busca, enquanto um listener único no contêiner continua atendendo novos cartões."
+    }
+  },
+  "11.06": {
+    "review": {
+      "prompt": "Qual definição corresponde a `event.currentTarget` dentro de um listener?",
+      "choices": [
+        "O elemento ao qual aquele listener foi associado.",
+        "Sempre o elemento mais interno originalmente clicado.",
+        "O primeiro ancestral que contém um atributo de dados."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Numa lista de arquivos, clicar no ícone dentro de Arquivar deve localizar o botão ancestral antes de ler seu data-id.",
+      "incorrectFeedback": "Revise esta regra: Ler dataset apenas de event.target e perder clique em filho. Numa lista de arquivos, clicar no ícone dentro de Arquivar deve localizar o botão ancestral antes de ler seu data-id."
+    }
+  },
+  "11.12": {
+    "review": {
+      "prompt": "O que `container.append(node)` faz com um nó DOM?",
+      "choices": [
+        "Converte automaticamente o nó em uma string HTML segura.",
+        "Clona o nó e o adiciona a todos os elementos com o mesmo seletor.",
+        "Insere o nó como filho do contêiner."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Uma nota “2 < 5 & 7 > 3” pode aparecer como caracteres dentro de um parágrafo; a árvore continua tendo apenas o parágrafo esperado.",
+      "incorrectFeedback": "Revise esta regra: Tratar texto externo como HTML confiável. Uma nota “2 < 5 & 7 > 3” pode aparecer como caracteres dentro de um parágrafo; a árvore continua tendo apenas o parágrafo esperado."
+    }
+  },
+  "11.13": {
+    "review": {
+      "prompt": "Por que tarefas persistidas devem ter um identificador estável?",
+      "choices": [
+        "Para obrigar duas tarefas diferentes a serem tratadas como a mesma tarefa.",
+        "Para codificar a posição atual da tarefa na lista como parte de sua identidade.",
+        "Para que uma tarefa continue reconhecível mesmo quando seu texto ou outros campos mudam."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Uma lista antiga de favoritos pode virar objetos com ids estáveis. Se uma entrada estiver incompleta, as demais podem ser convertidas e a interface pode reportar o descarte.",
+      "incorrectFeedback": "Revise esta regra: Descartar todas as tarefas porque um único item antigo está inválido. Uma lista antiga de favoritos pode virar objetos com ids estáveis. Se uma entrada estiver incompleta, as demais podem ser convertidas e a interface pode reportar o descarte."
+    }
+  },
+  "12.10": {
+    "review": {
+      "prompt": "Que informação o status HTTP comunica, independentemente do formato do corpo?",
+      "choices": [
+        "O resultado protocolar da solicitação, como sucesso, redirecionamento ou uma classe de falha.",
+        "A estrutura exata dos campos do JSON que o cliente deve receber.",
+        "Se o corpo da resposta foi previamente consumido por JavaScript."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Uma requisição de imagem em faixa pode responder 206 com bytes parciais e Content-Range; o cliente deve distinguir essa representação de uma resposta JSON.",
+      "incorrectFeedback": "Revise esta regra: Confundir status, cabeçalho e corpo ou assumir JSON em toda resposta. Uma requisição de imagem em faixa pode responder 206 com bytes parciais e Content-Range; o cliente deve distinguir essa representação de uma resposta JSON."
+    }
+  },
+  "12.11": {
+    "review": {
+      "prompt": "O que a propriedade Response.bodyUsed informa?",
+      "choices": [
+        "Se o servidor já encerrou a conexão TCP.",
+        "Se o stream do corpo dessa resposta já foi consumido.",
+        "Se os headers foram validados contra um schema JSON."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Um recibo em texto simples pode ser lido uma vez com text(); depois bodyUsed indica consumo, e outra leitura do mesmo stream não deve ser presumida reutilizável.",
+      "incorrectFeedback": "Revise esta regra: Achar que header Content-Type consome/parseia corpo ou que body pode ser lido repetidamente. Um recibo em texto simples pode ser lido uma vez com text(); depois bodyUsed indica consumo, e outra leitura do mesmo stream não deve ser presumida reutilizável."
+    }
+  },
+  "12.01": {
+    "review": {
+      "prompt": "Quando a função passada ao construtor new Promise(executor) é executada?",
+      "choices": [
+        "Somente depois que todas as reações de then forem executadas.",
+        "Na próxima task, como um callback de setTimeout.",
+        "Imediatamente, durante a chamada ao construtor, na pilha síncrona atual."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Um log síncrono antes e depois de queueMicrotask permanece na mesma pilha; a microtask roda após essa pilha e antes do callback setTimeout.",
+      "incorrectFeedback": "Revise esta regra: Tratar timeout 0 como execução imediata. Um log síncrono antes e depois de queueMicrotask permanece na mesma pilha; a microtask roda após essa pilha e antes do callback setTimeout."
+    }
+  },
+  "12.04": {
+    "review": {
+      "prompt": "Qual par classifica corretamente os callbacks de `Promise.then` e `setTimeout`?",
+      "choices": [
+        "`Promise.then` agenda uma microtask; `setTimeout` agenda uma task.",
+        "`Promise.then` agenda uma task; `setTimeout` agenda uma microtask.",
+        "Ambos agendam microtasks e diferem somente pelo atraso numérico."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Se um callback de Promise enfileira outra microtask enquanto uma já espera, a que aguardava conserva sua posição; a nova é anexada ao fim.",
+      "incorrectFeedback": "Revise esta regra: Supor que novas microtasks pulam à frente das que já estavam na fila. Se um callback de Promise enfileira outra microtask enquanto uma já espera, a que aguardava conserva sua posição; a nova é anexada ao fim."
+    }
+  },
+  "12.02": {
+    "review": {
+      "prompt": "Como retry se diferencia de fallback?",
+      "choices": [
+        "Retry sempre troca a operação por outra; fallback repete a mesma chamada.",
+        "Retry tenta novamente a mesma operação; fallback oferece um caminho alternativo.",
+        "São nomes diferentes para aguardar antes de qualquer operação assíncrona."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Se uma gravação de arquivo puder ser tentada duas vezes, uma falha transitória na primeira chamada permite uma espera e uma última chamada; não há espera depois da falha final.",
+      "incorrectFeedback": "Revise esta regra: Repetir infinitamente ou esperar após última falha. Se uma gravação de arquivo puder ser tentada duas vezes, uma falha transitória na primeira chamada permite uma espera e uma última chamada; não há espera depois da falha final."
+    }
+  },
+  "12.03": {
+    "review": {
+      "prompt": "O que Promise.all faz com as operações representadas pelos valores que recebe?",
+      "choices": [
+        "Invoca cada função de serviço recebida e inicia todas as operações automaticamente.",
+        "Converte qualquer valor recebido em uma operação de rede concorrente.",
+        "Coordena e aguarda os valores recebidos; não chama por conta própria as funções que iniciariam operações."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Uma tela pode pedir detalhes de conta e preferências ao mesmo tempo; se preferências terminar primeiro, cada valor ainda ocupa seu campo nomeado no resultado final.",
+      "incorrectFeedback": "Revise esta regra: Fazer awaits sequenciais para recursos independentes ou pensar que rejeição cancela requests. Uma tela pode pedir detalhes de conta e preferências ao mesmo tempo; se preferências terminar primeiro, cada valor ainda ocupa seu campo nomeado no resultado final."
+    }
+  },
+  "12.05": {
+    "review": {
+      "prompt": "O que uma função async retorna mesmo quando seu corpo usa return com um valor comum?",
+      "choices": [
+        "Uma Promise que será cumprida com esse valor.",
+        "O valor comum diretamente, sem envolver uma Promise.",
+        "Um callback que só pode ser executado por setTimeout."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Se um carregador retorna Promise, use await dentro do try quando essa função precisa traduzir localmente uma rejeição para uma mensagem útil.",
+      "incorrectFeedback": "Revise esta regra: Achar que try/catch captura rejeição de Promise retornada sem await. Se um carregador retorna Promise, use await dentro do try quando essa função precisa traduzir localmente uma rejeição para uma mensagem útil."
+    }
+  },
+  "12.06": {
+    "review": {
+      "prompt": "Por que operações independentes costumam usar um AbortController novo para cada tentativa?",
+      "choices": [
+        "Um AbortController novo faz qualquer servidor responder mais rápido.",
+        "Depois de abortado, um AbortSignal continua abortado e não pode ser rearmado para uma nova tentativa.",
+        "O navegador aceita somente um AbortController durante toda a vida da página."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Busque uma cidade com fixture lenta e depois outra com fixture rápida. Mesmo que a primeira resolva por último apesar do abort, um id de geração impede que substitua o resultado novo.",
+      "incorrectFeedback": "Revise esta regra: Confiar só na ordem de chegada ou mostrar abort como falha. Busque uma cidade com fixture lenta e depois outra com fixture rápida. Mesmo que a primeira resolva por último apesar do abort, um id de geração impede que substitua o resultado novo."
+    }
+  },
+  "12.09": {
+    "review": {
+      "prompt": "Para que serve uma verificação de capacidade de runtime antes de usar um método recente?",
+      "choices": [
+        "Escolher o caminho compatível com a API disponível naquele runtime.",
+        "Alterar a versão instalada do runtime durante a execução.",
+        "Fazer o compilador adicionar a implementação ausente ao objeto global."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Um plugin pode retornar string simples e ser normalizado para Promise cumprida; se lançar durante a chamada, o wrapper transforma isso em rejeição em vez de deixar escapar sincronamente.",
+      "incorrectFeedback": "Revise esta regra: Executar callback fora de try e deixar throw escapar síncrono, ou dizer que .then(fn) tem mesma ordem. Um plugin pode retornar string simples e ser normalizado para Promise cumprida; se lançar durante a chamada, o wrapper transforma isso em rejeição em vez de deixar escapar sincronamente."
+    }
+  },
+  "12.12": {
+    "review": {
+      "prompt": "Por que validar a conversão de um timestamp antes de usar seu resultado em aritmética de tempo?",
+      "choices": [
+        "A validação transforma automaticamente qualquer string em horário UTC correto.",
+        "Uma data inválida pode produzir um valor numérico não finito e contaminar comparações posteriores.",
+        "O timestamp convertido deixa de depender da unidade usada pelo relógio."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. O mesmo instante salvo em Lisboa e exibido em Tóquio continua sendo um único valor de epoch; a conversão visual não altera tempo decorrido.",
+      "incorrectFeedback": "Revise esta regra: Comparar strings locais ou exibição formatada para expiração. O mesmo instante salvo em Lisboa e exibido em Tóquio continua sendo um único valor de epoch; a conversão visual não altera tempo decorrido."
+    }
+  },
+  "12.13": {
+    "review": {
+      "prompt": "Qual protocolo um objeto precisa expor para ser consumido diretamente por for await...of?",
+      "choices": [
+        "Somente um método toJSON que produza um array.",
+        "Uma propriedade length numérica e índices consecutivos.",
+        "O protocolo de iterável assíncrono, normalmente fornecido por Symbol.asyncIterator."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Uma fonte async de registros pode deixar o loop resumir o primeiro item enquanto o segundo ainda carrega; uma coleção completa só é retornada quando a iteração termina.",
+      "incorrectFeedback": "Revise esta regra: Achar que materializar mantém processamento incremental para o consumidor. Uma fonte async de registros pode deixar o loop resumir o primeiro item enquanto o segundo ainda carrega; uma coleção completa só é retornada quando a iteração termina."
+    }
+  },
+  "12.14": {
+    "review": {
+      "prompt": "Como Promise.any ordena os motivos no campo errors de um AggregateError?",
+      "choices": [
+        "Na ordem das entradas fornecidas, não na ordem em que as rejeições ocorreram.",
+        "Na ordem temporal em que as rejeições chegaram.",
+        "Em ordem alfabética pelo texto de cada motivo."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Uma página tenta duas fontes de fonte tipográfica; a primeira que cumpre permite renderizar, mesmo se uma falha anterior chegou antes.",
+      "incorrectFeedback": "Revise esta regra: Tratar primeira rejeição como falha final de any. Uma página tenta duas fontes de fonte tipográfica; a primeira que cumpre permite renderizar, mesmo se uma falha anterior chegou antes."
+    }
+  },
+  "12.08": {
+    "review": {
+      "prompt": "Qual benefício principal um fetcher injetado oferece a um dashboard testado localmente?",
+      "choices": [
+        "Garante que toda resposta de rede tenha o formato esperado pela interface.",
+        "Permite substituir a fronteira de rede por uma implementação controlada nos testes.",
+        "Faz o navegador armazenar respostas em cache sem configuração adicional."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Uma fixture local pode cumprir com status 503 e corpo JSON válido. A Promise de rede foi cumprida, mas o dashboard precisa classificar a resposta HTTP como malsucedida.",
+      "incorrectFeedback": "Revise esta regra: Assumir que fetch rejeita em status HTTP de erro. Uma fixture local pode cumprir com status 503 e corpo JSON válido. A Promise de rede foi cumprida, mas o dashboard precisa classificar a resposta HTTP como malsucedida."
+    }
+  },
+  "13.01": {
+    "review": {
+      "prompt": "Por que repetir uma falha antes de começar a alterá-la?",
+      "choices": [
+        "Para provar que a primeira hipótese sobre a causa está correta.",
+        "Para dispensar a leitura do teste e do contexto da implementação.",
+        "Para confirmar que o comportamento é reproduzível e separar um defeito consistente de uma ocorrência transitória."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Reproduzir a observação fortalece a investigação, mas não determina sozinho a causa.",
+      "incorrectFeedback": "Uma reprodução confirma o fenômeno; a explicação ainda precisa de evidência."
+    }
+  },
+  "13.02": {
+    "review": {
+      "prompt": "Por que uma anotação de tipo TypeScript não substitui validação na fronteira de dados?",
+      "choices": [
+        "Tipos estáticos não verificam automaticamente valores externos recebidos durante a execução.",
+        "Toda anotação de tipo executa uma conversão obrigatória em runtime.",
+        "Valores externos são sempre confiáveis depois de passar pelo parser JSON."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Dados externos precisam de verificações executadas antes de serem tratados como válidos.",
+      "incorrectFeedback": "TypeScript orienta o typecheck; ele não inspeciona automaticamente os valores em execução."
+    }
+  },
+  "13.03": {
+    "review": {
+      "prompt": "Qual vantagem testes parametrizados oferecem ao cobrir diferentes casos de uma mesma regra?",
+      "choices": [
+        "Fazem cada caso herdar automaticamente o resultado esperado do primeiro.",
+        "Reutilizam a mesma estrutura de verificação e deixam explícitas as variações dos dados de entrada.",
+        "Eliminam a necessidade de observar o comportamento da implementação."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Uma tabela de casos reduz repetição sem esconder quais entradas estão sendo exercitadas.",
+      "incorrectFeedback": "Parametrizar compartilha o formato do teste, mas cada caso ainda precisa de dados e expectativa próprios."
+    }
+  },
+  "13.10": {
+    "review": {
+      "prompt": "Ao traduzir uma falha técnica para um erro de domínio, o que a mensagem pública deve priorizar?",
+      "choices": [
+        "Todos os detalhes internos e valores locais capturados durante a falha.",
+        "O nome da biblioteca externa, mesmo quando não ajuda a pessoa consumidora.",
+        "Uma descrição estável e compreensível da condição relevante para quem usa o domínio."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. A mensagem de domínio descreve o problema no vocabulário da aplicação.",
+      "incorrectFeedback": "A mensagem pública deve servir ao domínio; detalhes de implementação têm outro público e outro canal."
+    }
+  },
+  "13.14": {
+    "objective": "Retome o migrador V1→V2 implementado em 11.13 e estenda o contrato V2 para incluir priority='normal' por padrão, mantendo campos, IDs e regressões já existentes; também cubra saves parciais, texto literal, teclado, foco e persistência.",
+    "prompt": "Evolua o Kanban conforme a change request do roteiro: saves V1 continuam migrando para V2, agora com priority='normal' em cada tarefa. Reuse a migração V1→V2 de 11.13 e preserve text, status, IDs estáveis e todas as regressões antigas. Saves V2 já produzidos por 11.13, mas sem priority, continuam válidos: complete o default sem reaplicar a conversão V1 nem gerar novos IDs. Não crie V3. Recupere tarefas válidas de save parcial com aviso; trate JSON totalmente inválido conforme o contrato anterior; mantenha texto HTML literal, teclado, foco e persistência. Entregue a alteração localizada e os testes de domínio, DOM e regressão antes de publicar.",
+    "firstResponse": {
+      "action": "Registre que 11.13 já converte V1 para V2; liste os campos e comportamentos que precisam permanecer e o default de priority que será acrescentado.",
+      "timing": "Nos primeiros 4 minutos de 75, antes de alterar o loader ou abrir a solução."
+    },
+    "explanation": {
+      "mental_model": "Uma mudança de projeto convive com comportamento já utilizado. Evoluir exige preservar compatibilidade e tornar as novas regras observáveis.",
+      "worked_example": "Uma lista de compras V1 pode ganhar priority ao passar para V2; a migração preserva os itens antigos e fornece um padrão para o campo novo.",
+      "common_trap": "Armadilha: Reimplementar V1→V2 ou assumir que persistência antiga já tem estrutura V2; perder dados ou acessibilidade anterior. Volte à regra pertinente e explique qual evidência a sustenta.",
+      "why_it_matters": "Esse raciocínio reaparece em Catálogo de estoque V2→V3 com reorderThreshold. Reconhecer o mesmo mecanismo permite reutilizá-lo sem copiar a implementação."
+    },
+    "resources": [
+      "Baseline de 11.13: migrador V1→V2 e testes de regressão existentes.",
+      "Fixtures a fornecer no cartão: save V1, save V2 sem priority, save parcial e JSON inválido; storage e navegador isolados do perfil pessoal.",
+      "Suíte de aceitação do projeto para migração, DOM, teclado, foco e persistência; não usar storage pessoal."
+    ],
+    "examples": [
+      {
+        "given": "Save V1 [{text:'A',done:false}]",
+        "expected": "V2 preserva A com ID estável e status A fazer, acrescenta priority='normal' e mantém os dados após reload."
+      },
+      {
+        "given": "Save V2 de 11.13 com tarefa {id:'a1',text:'A',status:'todo'} e sem priority",
+        "expected": "Continua sendo lido como V2; mantém id/text/status, completa priority='normal' sem recriar ID nem repetir a conversão V1."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "Save V1 com tarefas válidas e campos text/done",
+          "expected": "Migração para V2 conserva tarefas, IDs estáveis e status; cada tarefa recebe priority='normal'."
+        },
+        "scoring": "A suíte de 11.13 continua verde; os campos V1→V2 anteriores permanecem inalterados."
+      },
+      {
+        "fixture": {
+          "given": "Save V2 de 11.13 sem o campo priority, carregado mais de uma vez",
+          "expected": "O loader mantém V2 e os IDs existentes, aplica priority='normal' uma única vez e não reaplica a migração V1."
+        },
+        "scoring": "Leitura idempotente; sem perda, duplicação de ID ou regressão no contrato de 11.13."
+      },
+      {
+        "fixture": {
+          "given": "Save parcial com tarefas válidas e inválidas",
+          "expected": "Tarefas válidas sobrevivem e a interface mostra aviso para registros descartados."
+        },
+        "scoring": "Regressão de migração cobre recuperação parcial sem apagar dados válidos."
+      },
+      {
+        "fixture": {
+          "given": "Texto de tarefa com marcação HTML e operação da interface por teclado seguida de reload",
+          "expected": "Texto aparece literalmente; fluxo de teclado/foco e persistência continuam funcionando."
+        },
+        "scoring": "Testes antigos de DOM, teclado, foco e persistência permanecem verdes junto aos novos casos."
+      }
+    ],
+    "rubric": [
+      "V1 continua migrando para V2 com prioridade normal, IDs estáveis e campos anteriores preservados.",
+      "V2 antigo sem priority continua legível sem reaplicar a migração V1; regressões de 11.13 passam.",
+      "Save parcial conserva itens válidos e avisa; texto, teclado, foco e persistência não regridem.",
+      "A alteração é localizada e coberta por testes de domínio, DOM e regressão antes da publicação."
+    ],
+    "review": {
+      "prompt": "Como acrescentar a prioridade pedida sem quebrar o contrato V1→V2 de 11.13?",
+      "choices": [
+        "Substituir o migrador por uma conversão direta V1→V3 e remover o caminho V2 de 11.13.",
+        "Reusar a migração V1→V2, preservar id/text/status e preencher priority='normal'; aceitar V2 antigo sem reaplicar a migração.",
+        "Recriar IDs e descartar saves V2 que ainda não tenham priority.",
+        "Sobrescrever todos os registros parciais com uma lista vazia para simplificar a nova versão."
+      ],
+      "answer": 1,
+      "correctFeedback": "A extensão mantém o contrato V1→V2 de 11.13 e adiciona o default sem reinterpretar um save V2 como V1.",
+      "incorrectFeedback": "Preserve os campos, IDs e migração já usados por 11.13. A prioridade nova precisa de default retrocompatível para V2 antigo; descartar ou converter novamente pode perder dados."
+    }
+  },
+  "14.01": {
+    "review": {
+      "prompt": "Em um grafo dirigido, qual critério define que um nó pertence a um ciclo?",
+      "choices": [
+        "Existe um caminho dirigido que sai do nó e retorna a ele.",
+        "O nó tem uma aresta para qualquer nó que faça parte de um ciclo.",
+        "O nó está conectado por arestas a pelo menos outro componente do grafo."
+      ],
+      "answer": 0,
+      "correctFeedback": "Pertencer ao ciclo exige que o próprio nó esteja em um caminho dirigido de retorno.",
+      "incorrectFeedback": "Uma ligação com um ciclo não basta; verifique se o caminho retorna ao próprio nó."
+    }
+  },
+  "14.02": {
+    "review": {
+      "prompt": "O que `process.argv.slice(2)` fornece em um programa Node iniciado pela linha de comando?",
+      "choices": [
+        "Todas as variáveis de ambiente que começam com letras minúsculas.",
+        "Os argumentos informados pelo usuário, sem os prefixos do executável e do script.",
+        "O texto de saída que o processo já escreveu no terminal."
+      ],
+      "answer": 1,
+      "correctFeedback": "`process.argv` começa com informações de execução; o recorte após elas contém os argumentos do comando.",
+      "incorrectFeedback": "`argv` descreve argumentos do processo; variáveis de ambiente e saída do terminal são interfaces diferentes."
+    }
+  },
+  "14.04": {
+    "review": {
+      "prompt": "Qual afirmação descreve o escopo de cada arquivo ES module?",
+      "choices": [
+        "Cada módulo tem seu próprio escopo; seus nomes só atravessam arquivos pela interface de módulos.",
+        "Todos os módulos compartilham automaticamente um escopo global de declarações locais.",
+        "As declarações dentro de um módulo ficam visíveis a qualquer arquivo sem importação."
+      ],
+      "answer": 0,
+      "correctFeedback": "ES modules encapsulam declarações por arquivo e expõem explicitamente os nomes exportados.",
+      "incorrectFeedback": "A fronteira do módulo impede visibilidade implícita; comunicação entre arquivos usa a interface de importação/exportação."
+    }
+  },
+  "14.05": {
+    "review": {
+      "prompt": "Por que usar os helpers de `node:path` em vez de concatenar fragmentos com uma barra escrita manualmente?",
+      "choices": [
+        "A concatenação manual transforma qualquer caminho relativo em URL de módulo.",
+        "Os helpers compõem e normalizam caminhos segundo as convenções da plataforma.",
+        "Os helpers verificam que o arquivo existe e carregam seu conteúdo."
+      ],
+      "answer": 1,
+      "correctFeedback": "`node:path` lida com composição e separadores do sistema; leitura de arquivo é outra operação.",
+      "incorrectFeedback": "Helpers de caminho não carregam arquivos nem resolvem automaticamente o contexto do módulo; eles normalizam segmentos de caminho."
+    }
+  },
+  "14.07": {
+    "objective": "Consulte documentação oficial para decidir se Promise.try está disponível no runtime baseline definido; registre runtime, versão, data da consulta, assinatura, parâmetros, retorno e erros antes de escolher uso ou fallback.",
+    "prompt": "Avalie Promise.try no runtime-alvo Node.js 24 LTS consultando uma fonte oficial. Registre versão e data da consulta, assinatura, parâmetros, retorno e tratamento de erros. Se Promise.try estiver disponível, justifique o uso no exercício. Se não estiver, use exatamente o fallback descrito no roteiro: Promise.resolve().then(fn). Explique e teste a diferença de timing: then agenda fn como microtask, portanto não afirme equivalência de execução síncrona sem requisito e evidência. Não troque o recurso principal por Iterator helpers.",
+    "resources": [
+      "MDN Promise.try(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try",
+      "MDN Promise.prototype.then(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then",
+      "Runtime-alvo Node.js 24 LTS, cuja versão exata deve ser registrada no exercício."
+    ],
+    "examples": [
+      {
+        "given": "Promise.try está documentada como disponível na versão baseline consultada",
+        "expected": "Registrar a fonte, versão e data; usar Promise.try e comprovar assinatura, retorno e erro conforme a documentação oficial."
+      },
+      {
+        "given": "Promise.try não está disponível na versão baseline consultada",
+        "expected": "Usar o fallback do roteiro Promise.resolve().then(fn) para o caso documentado; registrar que fn é agendada como microtask e não alegar timing idêntico ao de Promise.try."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "Promise.try disponível segundo documentação oficial do runtime e versão registrados",
+          "expected": "Decisão de uso documentada, com assinatura, parâmetros, retorno e erros verificados."
+        },
+        "scoring": "A fonte oficial e o runtime/versão sustentam a decisão; a prova curta cobre retorno e erro síncrono."
+      },
+      {
+        "fixture": {
+          "given": "Promise.try indisponível no runtime baseline documentado",
+          "expected": "Fallback Promise.resolve().then(fn) e diferença de agendamento explicitamente registrada."
+        },
+        "scoring": "O fallback corresponde ao roteiro e a atividade não o declara equivalente em timing sem prova."
+      }
+    ],
+    "review": {
+      "prompt": "Que evidência sustenta melhor a escolha de uma API moderna para um runtime específico?",
+      "choices": [
+        "Documentação oficial compatível com o runtime-alvo e confirmação da disponibilidade e assinatura da API.",
+        "A data em que a proposta da API foi discutida, sem conferir o runtime.",
+        "O fato de um editor não mostrar erro de sintaxe, mesmo sem verificar a API em execução."
+      ],
+      "answer": 0,
+      "correctFeedback": "A compatibilidade depende do runtime declarado e do contrato real da API.",
+      "incorrectFeedback": "Uma proposta ou ausência de erro no editor não confirma suporte no runtime escolhido."
+    }
+  },
+  "14.11": {
+    "review": {
+      "prompt": "Como decidir com responsabilidade entre manter uma função pequena no projeto e adotar uma dependência?",
+      "choices": [
+        "Escolher sempre a opção mais popular, sem avaliar se atende ao caso de uso.",
+        "Comparar o ajuste ao problema e o custo total de manter cada alternativa ao longo do tempo.",
+        "Escolher sempre a opção com mais recursos, mesmo que o projeto use apenas uma parte."
+      ],
+      "answer": 1,
+      "correctFeedback": "A decisão deve considerar a necessidade real e as responsabilidades que cada opção traz.",
+      "incorrectFeedback": "Popularidade ou quantidade de recursos, isoladamente, não demonstram que a opção seja adequada."
+    }
+  },
+  "14.12": {
+    "review": {
+      "prompt": "Qual é o papel principal de um bundler no fluxo de módulos de um projeto?",
+      "choices": [
+        "Decidir a lógica de negócio que será executada em cada interação do usuário.",
+        "Substituir o runtime-alvo, tornando desnecessário considerar o ambiente em que a saída será usada.",
+        "Analisar módulos e recursos e produzir arquivos de saída conforme a configuração do projeto."
+      ],
+      "answer": 2,
+      "correctFeedback": "O bundler transforma e organiza entradas para produzir artefatos de build.",
+      "incorrectFeedback": "A saída do build ainda será usada por um runtime; a ferramenta não escolhe a lógica de negócio."
+    }
+  },
+  "14.13": {
+    "review": {
+      "prompt": "O que torna uma observação sobre a ordem do event loop reproduzível e interpretável?",
+      "choices": [
+        "Registrar o ambiente e o contexto do experimento e comparar execuções feitas sob as mesmas condições.",
+        "Anotar apenas a ordem observada uma vez e tratá-la como universal.",
+        "Combinar resultados de runtimes diferentes sem identificar qual gerou cada observação."
+      ],
+      "answer": 0,
+      "correctFeedback": "Resultados interpretáveis precisam estar associados às condições em que foram observados.",
+      "incorrectFeedback": "Uma observação isolada ou sem contexto não justifica generalização entre ambientes."
+    }
+  },
+  "15.02": {
+    "review": {
+      "prompt": "Por que uma fronteira que recebe dados externos deve começar tratando o valor como unknown?",
+      "choices": [
+        "Porque unknown converte automaticamente os dados para o formato esperado.",
+        "Porque anotar o parâmetro com um tipo de domínio garante que a entrada externa já tenha esse formato.",
+        "Porque é preciso verificar e converter o valor em runtime antes de tratá-lo como um tipo de domínio."
+      ],
+      "answer": 2,
+      "correctFeedback": "A checagem estática não valida dados externos; uma fronteira precisa estabelecer a forma do valor.",
+      "incorrectFeedback": "Uma anotação não transforma a entrada. A aplicação precisa inspecioná-la e validá-la em execução."
+    }
+  },
+  "15.03": {
+    "review": {
+      "prompt": "Ao declarar uma variável local sem tipo explícito, de onde TypeScript obtém a maior parte da informação para inferir seu tipo estático?",
+      "choices": [
+        "Da expressão inicializadora e das operações de fluxo de controle aplicáveis à variável.",
+        "Do nome escolhido para a variável, conforme palavras como count ou user.",
+        "De inspecionar os valores que a variável terá em produção depois da compilação."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A inferência usa informação disponível no código-fonte e no fluxo de tipos.",
+      "incorrectFeedback": "O compilador não deduz contratos pelo nome nem observa a execução futura do programa."
+    }
+  },
+  "15.04": {
+    "review": {
+      "prompt": "O que acontece em runtime quando um tipo TypeScript como unknown é adicionado ou alterado?",
+      "choices": [
+        "O JavaScript percorre automaticamente o objeto e valida as propriedades descritas pelo tipo.",
+        "Nada por causa da anotação em si; tipos são apagados, e só código de verificação explícito altera o comportamento runtime.",
+        "O compilador insere uma conversão que transforma o valor em um objeto do tipo declarado."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Anotações TypeScript orientam o typecheck; elas não criam validação runtime.",
+      "incorrectFeedback": "Separe as garantias estáticas do código JavaScript que realmente executa."
+    }
+  },
+  "15.06": {
+    "objective": "Preveja a compatibilidade entre duas interfaces de nomes diferentes e mesma forma; depois altere um membro e compare com a regra de excesso em objeto literal.",
+    "prompt": "Compare interface A { id: string } com interface B { id: string }: preveja e confirme atribuições nos dois sentidos. Em seguida, altere B.id para number e registre o diagnóstico. Por fim, compare um objeto literal fresco com propriedade extra a uma variável intermediária com a mesma propriedade.",
+    "firstResponse": {
+      "action": "Antes de compilar, registre se A e B são compatíveis nos dois sentidos e o que espera que mude quando B.id passar a number.",
+      "timing": "Primeiros 60 segundos, antes das dicas e da revisão."
+    },
+    "explanation": {
+      "mental_model": "TypeScript compara principalmente a forma estrutural: nomes distintos não impedem atribuição quando os membros requeridos são compatíveis. Uma propriedade incompatível quebra essa relação. A verificação de propriedade extra para literal fresco é uma checagem adicional de contexto; atribuição via variável intermediária segue a compatibilidade estrutural.",
+      "worked_example": "interface Produto { id: string } e interface Registro { id: string } podem descrever formas compatíveis apesar dos nomes distintos. Se um membro obrigatório mudar para um tipo incompatível, a atribuição deixa de funcionar; um literal fresco também pode receber um diagnóstico contextual por propriedade extra.",
+      "common_trap": "Concluir que nomes distintos tornam interfaces nominais, ou tratar a verificação de propriedade extra em literal fresco como regra geral de compatibilidade.",
+      "why_it_matters": "Compatibilidade estrutural permite integrar modelos de APIs diferentes quando suas formas coincidem; as checagens contextuais do compilador ajudam a detectar objetos escritos com campos inesperados."
+    },
+    "interaction": "Registre, em uma tabela textual, cada par comparado, a previsão, o diagnóstico do compilador e a regra observada. Edite B.id entre as duas rodadas. Depois compare a atribuição de um literal fresco com propriedade extra e a atribuição da variável intermediária. Tudo pode ser preenchido por teclado; leitor de tela anuncia os rótulos e diagnósticos em ordem.",
+    "resources": [
+      "TypeScript Handbook, Type Compatibility — https://www.typescriptlang.org/docs/handbook/type-compatibility.html",
+      "TypeScript Handbook, Excess Property Checks — https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks",
+      "TypeScript Playground — https://www.typescriptlang.org/play/"
+    ],
+    "starterFiles": [
+      {
+        "path": "material.md",
+        "content": "material.md: interface A{id:string}; interface B{id:string}; teste atribuição A->B e B->A; depois altere B.id para number; compare literal fresco com propriedade extra e variável intermediária"
+      }
+    ],
+    "examples": [
+      {
+        "given": "A{id:string} e B{id:string}; depois B{id:number}",
+        "expected": "As formas iniciais são compatíveis nos dois sentidos; após a mudança, a propriedade id incompatível causa erro de atribuição."
+      },
+      {
+        "given": "Atribua {id:'x',extra:true} diretamente a A e faça a mesma atribuição via variável intermediária",
+        "expected": "O literal fresco recebe excess-property diagnostic; a variável intermediária permanece atribuível por compatibilidade estrutural."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "A{id:string}, B{id:string}; depois B{id:number}; literal fresco com extra e variável intermediária",
+          "expected": "Compatibilidade inicial nos dois sentidos; membro incompatível após mudança; excesso sinalizado no literal fresco e não exigido na atribuição via variável intermediária."
+        },
+        "scoring": "Exija previsão e confirmação de cada caso no typecheck, com justificativa que distinga forma estrutural de excess-property checking."
+      }
+    ],
+    "review": {
+      "prompt": "No modelo estrutural do TypeScript, o que geralmente permite compatibilidade entre dois tipos de objeto?",
+      "choices": [
+        "A igualdade dos nomes dos tipos, independentemente dos membros declarados.",
+        "A declaração de ambos os objetos pela mesma interface nomeada.",
+        "A compatibilidade dos membros públicos requeridos, mesmo que os tipos tenham nomes diferentes."
+      ],
+      "answer": 2,
+      "correctFeedback": "A compatibilidade estrutural considera a forma dos valores, não apenas o nome do tipo.",
+      "incorrectFeedback": "No modelo estrutural, o nome por si só não determina a compatibilidade dos objetos."
+    }
+  },
+  "15.08": {
+    "review": {
+      "prompt": "O que demonstra progresso controlado ao migrar um módulo de utilitários?",
+      "choices": [
+        "Converter todos os arquivos juntos e avaliar o resultado somente no final.",
+        "Fazer mudanças localizadas, revisar as chamadas afetadas e registrar evidência em cada etapa.",
+        "Ocultar os diagnósticos restantes sem relacioná-los aos módulos ou às chamadas."
+      ],
+      "answer": 1,
+      "correctFeedback": "Etapas pequenas tornam as mudanças e seus efeitos mais fáceis de acompanhar.",
+      "incorrectFeedback": "Uma conversão em lote ou sem rastrear diagnósticos dificulta localizar problemas."
+    }
+  },
+  "15.09": {
+    "review": {
+      "prompt": "Duas variáveis apontam para o mesmo objeto. O que se deve prever sobre uma mutação feita por uma delas?",
+      "choices": [
+        "Atribuir o objeto à segunda variável cria automaticamente uma cópia independente.",
+        "A identidade do objeto muda sempre que uma propriedade é alterada.",
+        "As duas referências continuam apontando para o mesmo objeto, então a alteração pode ser observada pela outra."
+      ],
+      "answer": 2,
+      "correctFeedback": "Atribuir uma referência não implica clonar o objeto.",
+      "incorrectFeedback": "Considere identidade e aliasing: duas referências podem apontar para o mesmo valor mutável."
+    }
+  },
+  "15.10": {
+    "review": {
+      "prompt": "Por que comparar a checagem de um objeto literal direto com a atribuição de uma variável contendo o objeto?",
+      "choices": [
+        "Para observar como a checagem de propriedades extras em literais frescos difere da compatibilidade estrutural de uma variável.",
+        "Para demonstrar que o TypeScript remove propriedades extras do objeto em runtime.",
+        "Para provar que variáveis sempre precisam declarar exatamente o mesmo nome de tipo."
+      ],
+      "answer": 0,
+      "correctFeedback": "O contexto da expressão afeta a checagem de propriedades extras; isso não significa que o objeto seja filtrado.",
+      "incorrectFeedback": "A comparação trata de regras de compatibilidade estática, não de remoção de propriedades em runtime."
+    }
+  },
+  "15.11": {
+    "review": {
+      "prompt": "Como vários chamadores podem consumir dados externos sem duplicar suposições sobre o tipo de domínio?",
+      "choices": [
+        "Fazer cada chamador declarar localmente que os dados externos já têm o tipo esperado.",
+        "Usar uma fronteira compartilhada que valida os dados e só então fornece o tipo de domínio aos chamadores.",
+        "Confiar na compilação do projeto como evidência de que qualquer resposta externa segue o tipo."
+      ],
+      "answer": 1,
+      "correctFeedback": "Uma fronteira explícita centraliza a validação antes do uso pelo restante do programa.",
+      "incorrectFeedback": "Suposições locais e compilação não estabelecem a forma de um valor recebido em runtime."
+    }
+  },
+  "16.01": {
+    "review": {
+      "prompt": "Que característica de uma propriedade permite que uma comparação de igualdade estreite uma união discriminada?",
+      "choices": [
+        "Ela é opcional em todas as variantes e recebe qualquer string em runtime.",
+        "Ela é declarada como private em uma classe que implementa cada variante.",
+        "Ela tem valores literais distintos entre as variantes e está presente no contrato de cada uma."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Um discriminante comum com valores literais permite ao compilador identificar cada alternativa.",
+      "incorrectFeedback": "Pense numa propriedade compartilhada cuja união de valores represente as alternativas possíveis."
+    }
+  },
+  "16.02": {
+    "review": {
+      "prompt": "Ao formatar uma união de tipos primitivos, por que ramificar com guardas de tipo explícitas?",
+      "choices": [
+        "Para estreitar cada variante e aplicar a lógica apropriada sem colapsar os casos em uma coerção genérica.",
+        "Para converter todas as variantes em uma só representação antes de verificar qual valor chegou.",
+        "Para dispensar a análise do caso de ausência porque o compilador escolhe a variante em runtime."
+      ],
+      "answer": 0,
+      "correctFeedback": "Guardas explícitas permitem tratar cada alternativa segundo seu tipo.",
+      "incorrectFeedback": "O compilador não escolhe nem valida a variante em runtime; a lógica precisa examinar o valor."
+    }
+  },
+  "16.03": {
+    "prompt": "Modele pagamentos Pix, cartão e boleto como uma união discriminada pela propriedade metodo. Mantenha obrigatórios os campos exclusivos de cada variante e escreva um handler switch que só leia os campos válidos daquele método.",
+    "interaction": "Complete as três variantes de pagamento, associe a cada uma um exemplo válido e acrescente os casos Pix sem chave e boleto com campo de cartão como exemplos inválidos. Depois percorra o switch e marque quais campos ficam disponíveis em cada ramo. Teclado e leitor de tela podem usar a sequência textual método, campos, resultado, sem depender de cor.",
+    "review": {
+      "prompt": "Antes de narrowing, o que o tipo `A | B` garante sobre um valor?",
+      "choices": [
+        "O valor precisa conter simultaneamente todos os membros requeridos por A e por B.",
+        "O valor é atribuível a pelo menos uma das alternativas, então só membros seguros para todas ficam disponíveis sem narrowing.",
+        "O valor não pode compartilhar membros entre A e B."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. Uma união representa alternativas; uma interseção exige satisfazer as duas formas.",
+      "incorrectFeedback": "Compare o sentido de união com o de interseção e considere quais membros são seguros em qualquer alternativa."
+    }
+  },
+  "16.09": {
+    "review": {
+      "prompt": "Em um `switch` JavaScript, o que pode ocorrer se um `case` terminar sem `break`, `return` ou outra saída?",
+      "choices": [
+        "O runtime encerra automaticamente o switch assim que encontra o próximo rótulo case.",
+        "TypeScript converte automaticamente o switch em uma cadeia de if com escopos isolados.",
+        "A execução pode continuar no corpo do próximo case, fenômeno chamado fallthrough."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. Rótulos case não encerram o fluxo por si sós; uma saída explícita evita fallthrough não intencional.",
+      "incorrectFeedback": "Lembre-se de que o comportamento básico do switch vem do JavaScript e requer uma saída explícita quando desejada."
+    }
+  },
+  "16.04": {
+    "review": {
+      "prompt": "Como vários componentes devem obter um tipo de domínio confiável a partir de dados de API?",
+      "choices": [
+        "Passar o valor por uma fronteira comum que verifica sua forma antes de entregá-lo aos componentes.",
+        "Deixar cada componente presumir independentemente a forma esperada do valor.",
+        "Usar o status da resposta como substituto para verificar a estrutura dos dados."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma fronteira compartilhada evita suposições divergentes entre os consumidores.",
+      "incorrectFeedback": "Informações de transporte ou suposições locais não verificam a estrutura do valor."
+    }
+  },
+  "16.05": {
+    "review": {
+      "prompt": "O que TypeScript infere para os elementos retornados por `array.filter(isSpecificType)` quando `isSpecificType` declara um type predicate?",
+      "choices": [
+        "Um array com todos os elementos originais, pois type predicates só existem na documentação.",
+        "Um array estreitado para o subtipo declarado pelo predicate; em runtime, filter ainda conserva os itens cujo callback retorna true.",
+        "Um array serializado para JSON com as propriedades verificadas pelo predicate."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. A assinatura informa narrowing estático, enquanto filter continua aplicando seu callback em runtime.",
+      "incorrectFeedback": "Separe a informação de tipo usada pelo compilador do comportamento real de Array.filter."
+    }
+  },
+  "16.10": {
+    "review": {
+      "prompt": "Em runtimes JavaScript comuns, qual propriedade de Error é usada para inspecionar o caminho de chamadas associado a uma falha?",
+      "choices": [
+        "name",
+        "message",
+        "stack"
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. stack costuma expor contexto de chamadas; seu formato exato depende do runtime.",
+      "incorrectFeedback": "name e message descrevem a classe e o texto do erro; procure a propriedade de contexto de chamadas."
+    }
+  },
+  "16.06": {
+    "review": {
+      "prompt": "Em uma posição de tipo, o que a consulta `typeof binding` permite referenciar?",
+      "choices": [
+        "O tipo estático associado a uma variável ou propriedade existente no código.",
+        "O texto produzido pelo operador JavaScript typeof durante a execução.",
+        "Uma cópia congelada do valor da variável no heap."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. O operador de consulta de tipo reaproveita um tipo existente; não é uma operação runtime.",
+      "incorrectFeedback": "A posição sintática importa: em um tipo, typeof é uma consulta estática, não uma execução JavaScript."
+    }
+  },
+  "16.07": {
+    "prompt": "Adicione a variante triangle { kind: 'triangle'; base: number; height: number } à união Shape. Registre o diagnóstico de assertNever antes de atualizar os pontos afetados, implemente área como base * height / 2, confirme que height ausente é rejeitado no typecheck e que nenhum default silencioso retorna zero. Rode os casos anteriores e um caso de triângulo.",
+    "interaction": "Guarde primeiro o diagnóstico do compilador antes da correção. Depois registre o código atualizado, o typecheck e a saída dos casos circle, square e triangle. Teclado: use campos textuais 'antes', 'depois' e 'resultado'. Leitor de tela: anuncie a saída e o diagnóstico como texto associado ao caso, sem sinalização só por cor.",
+    "examples": [
+      {
+        "given": "Adicione triangle com base 6 e height 4",
+        "expected": "Antes de tratar a nova variante, assertNever acusa valor restante; após implementar a variante, área é 12. Omitir height falha no typecheck."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "Shape existente acrescida de triangle; avaliar um triangle completo e outro sem height",
+          "expected": "Diagnóstico de exaustividade antes da correção; área base*height/2; triangle sem height rejeitado no typecheck; nenhum default genérico retorna 0; circle e square continuam corretos."
+        },
+        "scoring": "Exija evidência do compilador antes/depois, regra de domínio correta, erro de campo ausente e regressão das variantes existentes."
+      }
+    ],
+    "review": {
+      "prompt": "Quando uma união fechada recebe uma nova variante, por que revisar os handlers que já a consomem?",
+      "choices": [
+        "Para permitir que os handlers antigos escolham qualquer variante automaticamente.",
+        "Para decidir explicitamente como cada consumidor trata a nova alternativa.",
+        "Para remover a nova alternativa dos tipos até todos os consumidores ignorá-la."
+      ],
+      "answer": 1,
+      "correctFeedback": "Uma alteração no conjunto de variantes pode exigir uma decisão em cada ponto de consumo.",
+      "incorrectFeedback": "Uma variante nova não recebe comportamento automaticamente; os consumidores precisam manter intenção clara."
+    }
+  },
+  "17.02": {
+    "objective": "Construir pair<K,V> e wrap<T> antes de Repository<T>, preservando tipos separados para ID e entidade.",
+    "prompt": "Reordene e complete pair<K,V>, wrap<T> e Repository<T extends Entity>. Preserve o tipo específico da entidade em save/get e mantenha o ID como papel de tipo separado; não substitua ambos por um único parâmetro genérico.",
+    "firstResponse": {
+      "action": "Antes de montar o repository, anote quais papéis de tipo pertencem a pair<K,V>, wrap<T> e Repository<T>, e por que ID e entidade não devem ser o mesmo T.",
+      "timing": "4 min"
+    },
+    "explanation": {
+      "mental_model": "Cada parâmetro genérico representa um papel de tipo; uma constraint declara capacidades mínimas e deixa T conservar a forma específica da entidade.",
+      "worked_example": "pair('a', 2) preserva K=string e V=number em posições distintas. Um Repository<Produto> usa o id:string como chave e mantém Produto como tipo do valor retornado; uma busca ausente pode retornar undefined.",
+      "common_trap": "Usar um único parâmetro para representar tanto o ID quanto a entidade mistura dois papéis. A constraint Entity limita o requisito estrutural, enquanto T preserva os demais campos da entidade concreta.",
+      "why_it_matters": "Tipos relacionais precisos deixam APIs reutilizáveis sem ocultar quais partes são escolhas de design."
+    },
+    "interaction": "Reordene os blocos de pair<K,V> e wrap<T> antes de Repository<T extends Entity>; preencha e compile cada helper. Depois confira a chave string, a preservação do tipo específico da entidade e o resultado da busca ausente. Os blocos independentes não exigem ordem entre si. Tudo funciona por teclado; leitor de tela anuncia bloco, posição e diagnóstico.",
+    "starterFiles": [
+      {
+        "path": "material.md",
+        "content": "blocos pair<K,V>, wrap<T>, interface Entity{id:string}, Repository<T extends Entity> com Map<string,T>; organize helpers antes de Repository"
+      }
+    ],
+    "examples": [
+      {
+        "given": "pair('a',2); repo.save({id:'u1',name:'A'}); get('u1')",
+        "expected": "pair preserva [string,number]; Repository aceita entidade com id:string e get devolve a entidade específica ou undefined."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "pair de string e number; wrap de uma entidade; Repository de entidade com id string; busca ausente",
+          "expected": "Os tipos de K e V permanecem distintos; T é preservado por wrap/repository; get de ID ausente é undefined."
+        },
+        "scoring": "Avalie reordenação e typecheck de cada helper/repository; não exija ordem entre blocos independentes."
+      }
+    ],
+    "review": {
+      "prompt": "Qual benefício um repositório genérico oferece ao trabalhar com diferentes tipos de entidade?",
+      "choices": [
+        "Permite reutilizar as operações mantendo o tipo escolhido pelo consumidor ao longo da API.",
+        "Converte automaticamente cada entidade em uma instância de uma classe-base em runtime.",
+        "Substitui o modelo de dados por um tipo amplo, evitando declarar relações entre tipos."
+      ],
+      "answer": 0,
+      "correctFeedback": "Um parâmetro de tipo torna a implementação reutilizável sem abandonar informação de tipo.",
+      "incorrectFeedback": "Generics apoiam reutilização estática; não convertem objetos nem eliminam o contrato dos dados."
+    }
+  },
+  "17.04": {
+    "review": {
+      "prompt": "O que um tipo genérico bem escolhido oferece a um helper reutilizável em comparação com any?",
+      "choices": [
+        "Força todas as chamadas do helper a usar um único tipo concreto escolhido na primeira chamada.",
+        "Preserva relações de tipo entre entradas e resultados para que o checker acompanhe cada uso.",
+        "Converte em runtime qualquer valor recebido para o tipo declarado pelo chamador."
+      ],
+      "answer": 1,
+      "correctFeedback": "Generics permitem reutilização mantendo informação estática específica de cada chamada.",
+      "incorrectFeedback": "Parâmetros de tipo não convertem valores em runtime nem precisam fixar todos os usos ao mesmo tipo."
+    }
+  },
+  "17.05": {
+    "review": {
+      "prompt": "Ao projetar uma função utilitária para coleções, por que é útil declarar apenas as operações necessárias ao algoritmo?",
+      "choices": [
+        "Garante que todos os chamadores usem a mesma implementação interna da coleção.",
+        "Faz o compilador substituir a coleção por uma cópia otimizada.",
+        "Reduz acoplamento e torna a intenção da função mais clara para quem a chama."
+      ],
+      "answer": 2,
+      "correctFeedback": "Um contrato enxuto deixa explícitas as necessidades reais do algoritmo.",
+      "incorrectFeedback": "A assinatura comunica requisitos da função; ela não escolhe nem copia a implementação de cada coleção."
+    }
+  },
+  "17.08": {
+    "prompt": "Implemente Cache<K,V> com Map, get/set/has/delete e relógio injetável. Uma entrada expira quando now >= expiresAt: get retorna undefined e a remove; has retorna false para a entrada expirada. TTL negativo lança RangeError. Suporte valores armazenados como 0 ou undefined sem usar truthiness; has deve permitir distinguir presença de ausência quando get retorna undefined.",
+    "examples": [
+      {
+        "given": "set('a',1,ttl=100) em t=0; get em t=99; avançar para t=100",
+        "expected": "Em t=99, get devolve 1; em t=100, get devolve undefined e remove a entrada, e has devolve false."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "Cache com relógio controlado; TTL 100 em t=0; entradas com valor 0 e undefined; consulta em t=99 e t=100; TTL negativo",
+          "expected": "Valor disponível antes do limite; expiração inclusiva em now >= expiresAt; get de expirado remove; has expirado false; presença de 0/undefined não depende de truthiness; TTL negativo lança RangeError."
+        },
+        "scoring": "Avalie typecheck, coerência de get/has/delete e cada fronteira temporal; nenhum timer global é necessário."
+      }
+    ],
+    "review": {
+      "prompt": "Por que injetar uma fonte de tempo em uma abstração com comportamento temporal?",
+      "choices": [
+        "Para tornar a leitura do tempo controlável e reproduzível ao exercitar a política temporal.",
+        "Para definir automaticamente a política que decide quando um dado deixa de estar disponível.",
+        "Para sincronizar os relógios de todos os processos que usam a abstração."
+      ],
+      "answer": 0,
+      "correctFeedback": "A dependência de tempo explícita pode ser controlada; a regra temporal ainda precisa ser definida pela implementação.",
+      "incorrectFeedback": "Injetar um relógio não escolhe a política nem sincroniza relógios entre processos."
+    }
+  },
+  "17.09": {
+    "review": {
+      "prompt": "Ao escolher uma representação para um conjunto finito de valores nomeados, qual critério deve orientar a decisão?",
+      "choices": [
+        "Qual forma tem a menor quantidade de caracteres no arquivo-fonte.",
+        "Como os consumidores usarão a API e quais convenções do projeto favorecem seu entendimento.",
+        "Qual forma cria mais declarações, independentemente de como a API será usada."
+      ],
+      "answer": 1,
+      "correctFeedback": "A escolha deve servir ao uso da API e ser compreensível no contexto do projeto.",
+      "incorrectFeedback": "Tamanho do texto-fonte ou volume de declarações, isoladamente, não definem a melhor representação."
+    }
+  },
+  "18.03": {
+    "review": {
+      "prompt": "Por que escrever um helper genérico para acessar campos de diferentes registros em vez de usar um tipo amplo para todos?",
+      "choices": [
+        "Para obrigar todos os registros a conter exatamente as mesmas propriedades.",
+        "Para permitir que qualquer texto seja tratado como propriedade sem relação com o registro.",
+        "Para reutilizar a operação mantendo a informação sobre a forma do registro fornecido pelo chamador."
+      ],
+      "answer": 2,
+      "correctFeedback": "Generics ajudam um helper a trabalhar com formas variadas sem perder a informação estática recebida.",
+      "incorrectFeedback": "Um tipo amplo perde informação, enquanto um helper genérico pode preservar a forma de cada registro."
+    }
+  },
+  "18.05": {
+    "review": {
+      "prompt": "Que vantagem de manutenção uma tabela central de handlers pode oferecer?",
+      "choices": [
+        "Deixar a lógica de despacho visível em um único lugar para que a estrutura possa ser revista como unidade.",
+        "Espalhar decisões de despacho por módulos sem relação para reduzir a leitura do ponto de entrada.",
+        "Substituir nomes de comandos por strings arbitrárias em cada chamada."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma tabela central pode tornar a organização das ações mais fácil de inspecionar.",
+      "incorrectFeedback": "Dispersar ou tornar arbitrárias as decisões de despacho dificulta entender a estrutura da API."
+    }
+  },
+  "18.07": {
+    "review": {
+      "prompt": "Qual vantagem há em registrar uma política de checagem de tipos no tsconfig compartilhado do projeto?",
+      "choices": [
+        "O compilador passa a validar em runtime todos os dados fornecidos por usuários.",
+        "A equipe e os builds aplicam a mesma análise sem depender de escolhas locais de cada editor.",
+        "As regras do projeto deixam de se aplicar quando o código é compilado em CI."
+      ],
+      "answer": 1,
+      "correctFeedback": "A configuração compartilhada torna a checagem consistente entre ambientes de desenvolvimento e build.",
+      "incorrectFeedback": "Configuração de tipos não insere validação runtime, e deve ser aplicada também nos builds do projeto."
+    }
+  },
+  "18.08": {
+    "review": {
+      "prompt": "Por que derivar nomes e tipos de campos a partir de uma única configuração de formulário?",
+      "choices": [
+        "Para garantir que valores enviados pelo usuário já estejam convertidos sem código adicional.",
+        "Para tornar cada campo independente do restante da configuração.",
+        "Para reduzir declarações duplicadas que poderiam divergir e manter as relações estáticas próximas à configuração."
+      ],
+      "answer": 2,
+      "correctFeedback": "Uma fonte comum reduz repetição e ajuda a manter a configuração e seus tipos alinhados.",
+      "incorrectFeedback": "Derivação de tipos não executa conversão, e separá-los sem necessidade pode criar divergência."
+    }
+  },
+  "18.09": {
+    "review": {
+      "prompt": "Como verificar se a organização dos módulos compilados pode ser consumida pelo runtime Node declarado?",
+      "choices": [
+        "Testar o artefato compilado em um consumidor compatível com o formato de módulo e o runtime previstos.",
+        "Confiar apenas na navegação de tipos do editor antes da compilação.",
+        "Examinar somente os nomes dos arquivos-fonte, sem consultar a saída gerada."
+      ],
+      "answer": 0,
+      "correctFeedback": "O consumidor deve exercitar a saída que o runtime realmente receberá.",
+      "incorrectFeedback": "Informação do editor e nomes de origem não confirmam por si sós como o artefato compilado será consumido."
+    }
+  },
+  "18.10": {
+    "prompt": "Refatore os tipos derivados da API de usuários do starter: loadUser assíncrona, handle(input:string) e a união de eventos. Use Awaited, NonNullable, Exclude, Extract, ReturnType e Parameters apenas onde cada transformação preserva uma relação útil com a fonte; explique cada alias e mantenha claro que tipos não validam valores em runtime.",
+    "review": {
+      "prompt": "Qual raciocínio ajuda a escolher uma utility type sem empilhar transformações sem propósito?",
+      "choices": [
+        "Aplicar o maior número possível de utilities para deixar o alias mais genérico.",
+        "Identificar o tipo de origem e a relação desejada, escolhendo a transformação que expressa essa relação.",
+        "Escolher uma utility pelo nome mais curto, sem relacioná-la à API de origem."
+      ],
+      "answer": 1,
+      "correctFeedback": "Cada alias deve partir de uma fonte identificável e representar uma transformação útil para a API.",
+      "incorrectFeedback": "Empilhar utilities sem uma relação definida torna o alias difícil de justificar e manter."
+    }
+  },
+  "19.02": {
+    "review": {
+      "prompt": "Como verificar se um tipo condicional genérico representa corretamente as categorias de entrada previstas?",
+      "choices": [
+        "Executar exemplos em runtime, pois isso comprova diretamente todos os resultados do typechecker.",
+        "Testar apenas uma entrada feliz e presumir que as outras categorias seguem a mesma regra.",
+        "Escrever type tests para os casos incluídos no contrato e comparar cada resultado com o comportamento pretendido."
+      ],
+      "answer": 2,
+      "correctFeedback": "Type tests verificam as relações estáticas previstas para as diferentes categorias do contrato.",
+      "incorrectFeedback": "Execução runtime não substitui checagem de tipos, e um único caso não cobre todas as categorias declaradas."
+    }
+  },
+  "19.03": {
+    "review": {
+      "prompt": "Qual é a principal função de type tests para utilitários genéricos de tipos?",
+      "choices": [
+        "Registrar resultados esperados para tipos representativos e detectar mudanças acidentais no contrato estático.",
+        "Executar as funções JavaScript associadas aos tipos sem iniciar o runtime.",
+        "Substituir testes de comportamento mesmo quando o utilitário também altera código executável."
+      ],
+      "answer": 0,
+      "correctFeedback": "Type tests preservam o comportamento de checagem que a API de tipos promete.",
+      "incorrectFeedback": "Testes de tipos não executam funções e não substituem testes de runtime quando há comportamento executável."
+    }
+  },
+  "19.04": {
+    "review": {
+      "prompt": "O que melhora a manutenção de uma transformação escrita com tipos condicionais complexos?",
+      "choices": [
+        "Comprimir todas as condições em uma expressão sem exemplos que documentem seu uso.",
+        "Usar nomes descritivos e type tests que mostrem a intenção da transformação.",
+        "Adicionar casts em cada consumidor para evitar explicar a transformação."
+      ],
+      "answer": 1,
+      "correctFeedback": "Nomes e exemplos de tipos tornam a regra mais fácil de revisar e preservar.",
+      "incorrectFeedback": "Expressões opacas e casts espalhados escondem a intenção em vez de documentá-la."
+    }
+  },
+  "19.07": {
+    "review": {
+      "prompt": "Que critério ajuda a decidir se uma transformação recursiva de tipos merece ser mantida?",
+      "choices": [
+        "Ela é preferível sempre que uma composição de tipos puder ser escrita de forma mais engenhosa.",
+        "Ela deve ser mantida mesmo quando não há uso demonstrável, desde que o typechecker a aceite.",
+        "Ela representa uma necessidade clara do domínio, tem comportamento verificável e continua compreensível para quem a mantém."
+      ],
+      "answer": 2,
+      "correctFeedback": "Justifique a complexidade pelo uso e pela clareza; simplificar ou adiar também pode ser a melhor decisão.",
+      "incorrectFeedback": "Compilar ou parecer engenhoso não basta para justificar uma transformação difícil de entender."
+    }
+  },
+  "19.08": {
+    "review": {
+      "prompt": "Por que limitar uma assertion necessária à implementação interna de uma biblioteca?",
+      "choices": [
+        "Para conter a parte menos verificável e manter uma superfície pública útil para consumidores.",
+        "Para exigir que consumidores façam a mesma assertion em toda chamada.",
+        "Para substituir a modelagem dos tipos públicos por any."
+      ],
+      "answer": 0,
+      "correctFeedback": "Conter a assertion reduz o alcance da suposição e preserva a API tipada para quem a usa.",
+      "incorrectFeedback": "Assertions públicas ou any amplo espalham a suposição para todos os consumidores."
+    }
+  },
+  "19.09": {
+    "review": {
+      "prompt": "Que problema de modelagem tipos marcados distintos ajudam a evitar?",
+      "choices": [
+        "Para garantir que valores iguais em tempo de execução recebam sempre a mesma identidade nominal.",
+        "Para distinguir conceitos diferentes que compartilham a mesma representação básica ao verificar chamadas.",
+        "Para inferir propriedades de domínio que não fazem parte da assinatura declarada."
+      ],
+      "answer": 1,
+      "correctFeedback": "A marcação comunica uma distinção de domínio entre conceitos que poderiam parecer iguais pela representação.",
+      "incorrectFeedback": "O benefício está em distinguir significados no modelo de tipos, não em alterar valores ou descobrir propriedades ausentes."
+    }
+  },
+  "20.01": {
+    "prompt": "Rastreie a sequência conceitual de chamadas next() durante for...of. Antes de executar, registre quantas chamadas ocorrem, os pares done/value de cada resultado e quais valores chegam ao corpo. Não conte o resultado terminal como elemento.",
+    "explanation": {
+      "mental_model": "O laço pede next() até receber done:true. Os resultados com done:false fornecem os elementos ao corpo; o resultado terminal encerra o laço e não é entregue como elemento, mesmo que uma implementação também inclua value nele.",
+      "worked_example": "Uma ferramenta que expõe IteratorResult permite inspecionar o sinal de término e o campo value separadamente; o consumidor decide quais resultados contam como elementos.",
+      "common_trap": "Contar o value terminal como elemento ou achar que done:true exige ausência de value.",
+      "why_it_matters": "Entender o protocolo separa valores iterados de metadados ou retornos consumidos manualmente."
+    },
+    "starterFiles": [
+      {
+        "path": "material.md",
+        "content": "iterator next() devolve {value:1,done:false},{value:2,done:false},{done:true}; rastrear for...of"
+      }
+    ],
+    "examples": [
+      {
+        "given": "for...of sobre o iterator descrito no starter",
+        "expected": "O corpo recebe 1 e 2; next é chamado 3 vezes; {done:true} termina a iteração e não é contado como item."
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "IteratorResult sequence {value:1,done:false}, {value:2,done:false}, {done:true}",
+          "expected": "Duas entregas ao corpo, três chamadas conceituais a next e nenhum item terminal. Reutilizar o mesmo iterator já consumido produz zero valores no segundo for...of quando Symbol.iterator retorna esse iterator."
+        },
+        "scoring": "Compare a previsão de chamadas, done e valores; peça explicação curta da primeira divergência."
+      }
+    ],
+    "review": {
+      "prompt": "Qual é a diferença geral entre um objeto iterável e o iterador obtido a partir dele?",
+      "choices": [
+        "O iterador é sempre uma cópia completa dos valores, e o iterável é apenas um método de array.",
+        "Qualquer objeto que possua propriedades enumeráveis já implementa o protocolo de iteração.",
+        "O iterável oferece uma forma de obter um iterador; o iterador fornece os passos que o consumidor percorre."
+      ],
+      "answer": 2,
+      "correctFeedback": "O protocolo separa a fonte iterável do objeto que fornece a travessia ao consumidor.",
+      "incorrectFeedback": "Iteração não é definida apenas por propriedades enumeráveis nem exige materializar a fonte inteira."
+    }
+  },
+  "20.02": {
+    "review": {
+      "prompt": "Por que separar uma função de travessia de uma função wrapper que prepara sua entrada?",
+      "choices": [
+        "A travessia pode se concentrar em percorrer um nó, enquanto o wrapper trata como obter e preparar a entrada inicial.",
+        "A separação faz com que todos os valores da estrutura sejam calculados antes de o consumidor pedi-los.",
+        "O wrapper deve decidir a ordem interna dos filhos em cada chamada recursiva, mesmo quando essa regra pertence à travessia."
+      ],
+      "answer": 0,
+      "correctFeedback": "Separar essas responsabilidades deixa mais claro o contrato de cada função e facilita reutilizar a travessia.",
+      "incorrectFeedback": "Um wrapper organiza a entrada da operação; não precisa materializar a estrutura nem duplicar a lógica recursiva."
+    }
+  },
+  "20.03": {
+    "review": {
+      "prompt": "Qual papel o protocolo iterável oferece a uma construção consumida por for...of?",
+      "choices": [
+        "Um método de comprimento substitui o protocolo e define como cada valor é produzido.",
+        "Um método de iteração fornece um iterador cujo next comunica os passos da travessia.",
+        "Um índice de propriedade faz for...of ler automaticamente todos os membros enumeráveis."
+      ],
+      "answer": 1,
+      "correctFeedback": "for...of consome a interface iterável para obter um iterador e avançar pela sequência.",
+      "incorrectFeedback": "O protocolo depende do iterador e de seus passos, não de um comprimento ou da enumeração de propriedades."
+    }
+  },
+  "20.04": {
+    "review": {
+      "prompt": "Que registro ajuda a revisar uma correção localizada em um trap de Proxy?",
+      "choices": [
+        "Uma reescrita de todos os traps de uma vez, sem anotar o comportamento que motivou a mudança.",
+        "A conclusão de que a correção funciona porque o código compila, sem descrever o cenário examinado.",
+        "A hipótese inicial, uma operação pequena que a ilustre e a comparação do comportamento observado antes e depois."
+      ],
+      "answer": 2,
+      "correctFeedback": "Uma hipótese e uma observação comparável tornam a alteração localizada e revisável.",
+      "incorrectFeedback": "Compilar ou alterar vários traps ao mesmo tempo não explica qual comportamento precisava de correção."
+    }
+  },
+  "20.05": {
+    "review": {
+      "prompt": "Ao comparar validação em um trap set de Proxy com uma função update explícita, qual critério ajuda a recomendar uma abordagem?",
+      "choices": [
+        "Avaliar onde a regra fica mais visível e testável para quem chama e mantém a API.",
+        "Preferir Proxy em todos os casos porque ele intercepta automaticamente qualquer alteração profunda.",
+        "Preferir sempre a função update porque operações em Proxy não podem validar atribuições."
+      ],
+      "answer": 0,
+      "correctFeedback": "A atividade compara as abordagens pela clareza da regra e pela evidência dos testes, não por uma preferência universal.",
+      "incorrectFeedback": "Proxy não torna a validação automaticamente profunda, e ambos os estilos podem expressar uma regra de atualização."
+    }
+  },
+  "20.06": {
+    "review": {
+      "prompt": "Ao comparar duas formas de montar uma pipeline de iteração, qual critério deve orientar a recomendação final?",
+      "choices": [
+        "Se a sintaxe mais nova pode ser usada, independentemente da clareza ou do contexto do projeto.",
+        "Se a forma escolhida comunica claramente a intenção da transformação e se ajusta às necessidades de manutenção do projeto.",
+        "Se uma das formas tem mais operadores encadeados, pois mais etapas indicam uma pipeline mais eficiente."
+      ],
+      "answer": 1,
+      "correctFeedback": "A recomendação deve considerar legibilidade e adequação ao projeto, além do comportamento observado.",
+      "incorrectFeedback": "Novidade ou quantidade de operadores, por si só, não estabelece clareza nem adequação."
+    }
+  },
+  "20.07": {
+    "review": {
+      "prompt": "Por que uma comparação entre abordagens de consumo assíncrono deve usar uma fonte determinística?",
+      "choices": [
+        "Para que a fonte assíncrona seja convertida em síncrona antes da comparação.",
+        "Para garantir que qualquer abordagem produza o mesmo tipo de interface de consumo.",
+        "Para que diferenças observadas possam ser atribuídas às abordagens comparadas, e não a mudanças imprevisíveis na fonte."
+      ],
+      "answer": 2,
+      "correctFeedback": "Manter a fonte previsível ajuda a interpretar a comparação entre as estratégias de consumo.",
+      "incorrectFeedback": "Determinismo torna a observação comparável; não torna a fonte síncrona nem iguala as interfaces."
+    }
+  },
+  "21.01": {
+    "objective": "Para cada cenário, anote o gargalo provável e a evidência mensurável que ajudaria a confirmar a hipótese antes de sugerir uma solução.",
+    "firstResponse": {
+      "action": "Para cada cenário, anote o gargalo provável e a evidência mensurável que ajudaria a confirmar a hipótese antes de sugerir uma solução.",
+      "timing": "Depois de ler os cenários e antes de consultar a classificação."
+    },
+    "explanation": {
+      "mental_model": "Lentidão pode vir de CPU, I/O, rede, DOM ou memória. Classifique a hipótese pelo trabalho observado e confirme-a com medição; fontes podem se combinar.",
+      "worked_example": "Um loop pesado ou um JSON grande para analisar sugere CPU; fetch lento sugere rede; heap crescente sugere memória.",
+      "common_trap": "Prescrever cache ou worker para toda lentidão sem identificar nem medir o gargalo.",
+      "why_it_matters": "Uma intervenção proporcional depende de saber onde o tempo ou os recursos estão sendo gastos."
+    },
+    "interaction": "Apresente os seis cenários em lista textual com campos para hipótese de gargalo e observação a medir. Use rótulos claros que não dependam de cores, arraste ou posição visual.",
+    "rubric": [
+      "Hipótese mensurável e métrica a observar.",
+      "Compare resposta registrada antes de Run com sequência/valor previstos; confiança é diagnóstica."
+    ],
+    "review": {
+      "prompt": "Uma operação fetch está lenta e ainda não há evidência de trabalho pesado no DOM. Qual é a hipótese inicial mais alinhada ao contrato?",
+      "choices": [
+        "Rede; medir a duração da requisição antes de escolher uma otimização.",
+        "CPU; transferir a chamada fetch para um worker sem investigar a espera.",
+        "DOM; alterar o layout antes de verificar o tempo da requisição."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. Fetch lento aponta inicialmente para rede; a medição confirma se essa hipótese explica o atraso.",
+      "incorrectFeedback": "Classifique a fonte provável do atraso e procure uma observação mensurável antes de prescrever uma solução."
+    }
+  },
+  "21.02": {
+    "objective": "Liste os recursos criados no setup e o cleanup correspondente, incluindo a referência exata do listener.",
+    "firstResponse": {
+      "action": "Liste os recursos criados no setup e o cleanup correspondente, incluindo a referência exata do listener.",
+      "timing": "Depois de ler os blocos disponíveis e antes de reordená-los."
+    },
+    "explanation": {
+      "mental_model": "Cada montagem que instala um timer ou listener deve poder desfazê-lo. removeEventListener precisa da mesma referência de callback usada na instalação; cleanup repetido deve ser seguro.",
+      "worked_example": "Uma montagem instala um timer e um listener; o unmount limpa ambos. Repetir mount/unmount não deve deixar duplicatas ativas.",
+      "common_trap": "Criar uma nova função no removeEventListener: ela não é a mesma referência do listener instalado.",
+      "why_it_matters": "Limpar exatamente os recursos criados evita listeners e timers que continuam ativos após o componente sair."
+    },
+    "interaction": "Mostre blocos de setup e cleanup em ordem textual para seleção e reordenação. Peça uma explicação curta de como cada recurso é desfeito; ofereça alternativa por teclado e leitura linear.",
+    "rubric": [
+      "Nenhum recurso permanece após desmontagem.",
+      "Avalie ordem/seleção de blocos e comportamento final; não exija ordem entre blocos independentes."
+    ],
+    "review": {
+      "prompt": "Qual é a finalidade de parear setup e cleanup em um componente ou recurso?",
+      "choices": [
+        "Executar novamente o setup sempre que o cleanup for chamado.",
+        "Delimitar efeitos criados pelo setup e oferecer uma rotina responsável por desfazê-los quando deixam de ser necessários.",
+        "Limpar todo o estado da aplicação, mesmo quando ele não foi criado por esse recurso."
+      ],
+      "answer": 1,
+      "correctFeedback": "O cleanup deve corresponder às responsabilidades do setup e ao ciclo de vida do recurso.",
+      "incorrectFeedback": "Cleanup não é uma segunda montagem nem deve apagar estado alheio ao recurso que preparou."
+    }
+  },
+  "21.03": {
+    "objective": "Separe aquecimentos de amostras medidas e anote a mediana prevista para [1, 9, 2].",
+    "firstResponse": {
+      "action": "Separe aquecimentos de amostras medidas e anote a mediana prevista para [1, 9, 2].",
+      "timing": "Depois de ler o esqueleto do benchmark e antes de preencher as lacunas."
+    },
+    "explanation": {
+      "mental_model": "Aquecimentos não entram nas amostras reportadas. A mediana ordena as amostras medidas e seleciona o centro; com quantidade par, usa a média dos dois valores centrais.",
+      "worked_example": "Ordenando [1, 9, 2], obtemos [1, 2, 9], então a mediana é 2. Os warmups ficam fora desse cálculo.",
+      "common_trap": "Incluir aquecimentos na mediana ou tratar uma única execução ou a média instável como evidência definitiva.",
+      "why_it_matters": "Separar aquecimento e medida, e informar o método, torna a comparação menos dependente de uma única observação."
+    },
+    "interaction": "Mostre em texto as etapas warmup, execuções medidas, tempos e cálculo da mediana. Permita registrar o raciocínio antes da resposta; não dependa de animação ou cor.",
+    "rubric": [
+      "Resultado reprodutível o suficiente para comparação didática.",
+      "Avalie somente as decisões retiradas e execute o arquivo completo."
+    ],
+    "review": {
+      "prompt": "Depois dos warmups, as amostras medidas são [1, 9, 2]. Qual mediana deve ser registrada?",
+      "choices": [
+        "4; deve-se usar a média aritmética das três amostras.",
+        "9; a amostra mais alta representa melhor o desempenho após o aquecimento.",
+        "2; os warmups não entram e o valor central da lista ordenada é 2."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. A lista ordenada é [1, 2, 9], e seu valor central é 2.",
+      "incorrectFeedback": "Ordene somente as amostras medidas. Para três valores, a mediana é o valor central, não a média nem o maior."
+    }
+  },
+  "21.04": {
+    "objective": "Reproduza o crescimento do cache, escolha a política a investigar e registre a ordem de uso das chaves.",
+    "prompt": "Depurar memoization que cresce para sempre; introduzir política de limite/expiração.",
+    "firstResponse": {
+      "action": "Reproduza o crescimento do cache, escolha a política a investigar e registre a ordem de uso das chaves.",
+      "timing": "Depois de ler o Map inicial e antes de alterá-lo."
+    },
+    "explanation": {
+      "mental_model": "Um cache limitado precisa de uma política explícita, como LRU ou TTL, e não pode ultrapassar o máximo declarado. Em LRU, um hit atualiza a recência.",
+      "worked_example": "Com capacidade 2, inserir A e B, ler A e inserir C torna B a menos recente; B é removida.",
+      "common_trap": "Deixar o Map crescer sem limite, tratar valor 0 como miss ou remover uma chave sem respeitar a política escolhida.",
+      "why_it_matters": "Cache pode reduzir trabalho, mas ocupa memória e precisa manter comportamento correto nos limites."
+    },
+    "interaction": "Peça uma tabela textual de operação, chaves presentes e ordem de recência antes e depois da correção. Inclua campos para política e casos de borda; permita respostas digitadas.",
+    "resources": [],
+    "starterFiles": [
+      {
+        "path": "material.md",
+        "content": "memoize de Map sem limite; adicionar LRU max=2 ou TTL declarado"
+      }
+    ],
+    "examples": [
+      {
+        "given": "chaves A,B; ler A; inserir C",
+        "expected": "B removida na política LRU"
+      }
+    ],
+    "checks": [
+      {
+        "fixture": {
+          "given": "chaves A,B; ler A; inserir C",
+          "expected": "B removida na política LRU"
+        },
+        "scoring": "Exija reprodução, causa, correção e regressão."
+      }
+    ],
+    "rubric": [
+      "Memória limitada por desenho e comportamento documentado.",
+      "Exija reprodução, causa, correção e regressão."
+    ],
+    "review": {
+      "prompt": "Num cache LRU de capacidade 2, há A e B; uma leitura de A ocorre antes da inserção de C. Qual chave é removida?",
+      "choices": [
+        "B, porque A foi usada mais recentemente.",
+        "A, porque qualquer leitura marca a chave para remoção.",
+        "Nenhuma; a política LRU permite exceder temporariamente o limite após uma inserção."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A leitura atualiza a recência de A, então B é a menos recente quando C entra.",
+      "incorrectFeedback": "Atualize a ordem de recência após a leitura de A. Quando C é inserida, a chave menos recentemente usada sai para manter o limite."
+    }
+  },
+  "21.05": {
+    "objective": "Separe o cálculo puro, as responsabilidades do worker e da interface principal, e como cada resposta será associada ao pedido.",
+    "firstResponse": {
+      "action": "Separe o cálculo puro, as responsabilidades do worker e da interface principal, e como cada resposta será associada ao pedido.",
+      "timing": "Depois de ler o cálculo e o cenário da interface, antes da primeira alteração."
+    },
+    "explanation": {
+      "mental_model": "Um worker pode executar cálculo independente e enviar mensagens; a interface e o DOM permanecem no thread principal. IDs permitem associar respostas a solicitações, e o fallback deve ser descrito sem prometer ausência de bloqueio.",
+      "worked_example": "Para um n pequeno, a função pura e o worker devem produzir o mesmo resultado. Se dois pedidos estiverem em andamento, cada resposta carrega o ID correspondente.",
+      "common_trap": "Tentar mover manipulação do DOM para o worker ou deixar o cálculo pesado no thread principal e presumir que a interface continuará responsiva.",
+      "why_it_matters": "Uma fronteira clara preserva a interface e torna solicitações e falhas rastreáveis."
+    },
+    "interaction": "Apresente áreas textuais separadas para função pura, mensagens main/worker e fallback/cleanup. Peça que o aprendiz descreva entrada, ID, resultado ou erro; mantenha a navegação linear e acessível.",
+    "rubric": [
+      "UI não bloqueia no cenário demonstrado.",
+      "Aceite qualquer implementação que cumpra entrada, saída, erro e efeitos declarados."
+    ],
+    "review": {
+      "prompt": "Ao delegar cálculo independente a um Web Worker, qual responsabilidade continua no thread principal?",
+      "choices": [
+        "Executar todo o cálculo pesado, pois workers só enviam mensagens.",
+        "Atualizar a interface e manipular o DOM.",
+        "Criar elementos DOM dentro do worker e anexá-los diretamente à página."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. O worker executa cálculo e troca mensagens; a página e seu DOM continuam no thread principal.",
+      "incorrectFeedback": "Separe cálculo independente de interface: o DOM continua sob responsabilidade do thread principal."
+    }
+  },
+  "21.06": {
+    "objective": "Compare os casos do mesmo objeto, de outro objeto com a mesma forma e de um identificador string; anote a estrutura apropriada e o motivo.",
+    "firstResponse": {
+      "action": "Compare os casos do mesmo objeto, de outro objeto com a mesma forma e de um identificador string; anote a estrutura apropriada e o motivo.",
+      "timing": "Depois de ler os exemplos e antes de escolher a estrutura de cache."
+    },
+    "explanation": {
+      "mental_model": "WeakMap associa valores a chaves objeto pela identidade. Um objeto diferente com os mesmos campos é outra chave; Map pode representar IDs primitivos e ser enumerado.",
+      "worked_example": "Consultar o mesmo objeto novamente pode ser um cache hit. Um segundo objeto com a mesma forma é outra identidade e gera miss.",
+      "common_trap": "Usar WeakMap para chave string ou supor que objetos estruturalmente iguais têm a mesma identidade.",
+      "why_it_matters": "A estrutura deve corresponder à forma da chave e às operações que o programa precisa observar."
+    },
+    "interaction": "Mostre casos rotulados mesma referência, objeto distinto e ID string. Peça a escolha e justificativa em texto; anuncie os resultados sem depender de identidade visual ou cor.",
+    "rubric": [
+      "API correta e justificativa de lifetime.",
+      "Aceite escolha justificada por diferença semântica publicada."
+    ],
+    "review": {
+      "prompt": "Um WeakMap já contém metadados para um objeto. Um segundo objeto tem os mesmos campos, mas é outra instância. O que ocorre ao consultá-lo?",
+      "choices": [
+        "Há hit, pois objetos com os mesmos campos são automaticamente a mesma chave.",
+        "A consulta converte os campos em uma string e falha por não permitir chaves objeto.",
+        "Há miss, pois WeakMap compara a identidade do objeto, não sua forma."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. A segunda instância tem outra identidade, mesmo que seus campos coincidam.",
+      "incorrectFeedback": "WeakMap usa a chave objeto, não uma comparação estrutural de propriedades. Compare se é a mesma referência."
+    }
+  },
+  "21.07": {
+    "objective": "Registre no timeline as chamadas previstas para debounce e throttle e declare a política leading/trailing do throttle.",
+    "firstResponse": {
+      "action": "Registre no timeline as chamadas previstas para debounce e throttle e declare a política leading/trailing do throttle.",
+      "timing": "Depois de ler os horários dos eventos e antes de implementar ou consultar o resultado."
+    },
+    "explanation": {
+      "mental_model": "Debounce reinicia a espera a cada evento e emite após o intervalo sem novos eventos. Throttle limita a frequência por janela; o contrato deve declarar leading/trailing.",
+      "worked_example": "No exemplo público, debounce produz chamadas em t=140 e t=260; o throttle leading declarado produz em t=0 e t=160.",
+      "common_trap": "Supor que debounce e throttle emitem nos mesmos instantes ou deixar indefinido o que ocorre na borda do intervalo.",
+      "why_it_matters": "Uma política temporal explícita torna o comportamento previsível e testável com relógio controlado."
+    },
+    "interaction": "Apresente uma lista textual de eventos com horário e campos para política e horário de cada chamada prevista. Permita navegar e responder pelo teclado; não dependa de animação.",
+    "rubric": [
+      "Tabela mostra diferenca de comportamento e escolha por caso de uso.",
+      "Aceite qualquer implementação que cumpra entrada, saída, erro e efeitos declarados."
+    ],
+    "review": {
+      "prompt": "Qual afirmação distingue corretamente debounce e throttle no contrato desta atividade?",
+      "choices": [
+        "Debounce reinicia a espera após cada evento; throttle limita a frequência por janela, com política leading/trailing declarada.",
+        "Debounce limita uma chamada por janela fixa; throttle sempre espera um período silencioso depois do último evento.",
+        "Ambos emitem apenas depois que todos os eventos terminam, então têm o mesmo padrão temporal."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A espera reiniciada caracteriza debounce; throttle aplica um limite de frequência conforme a política escolhida.",
+      "incorrectFeedback": "Compare quando cada função pode emitir: debounce espera silêncio após o evento mais recente, enquanto throttle limita chamadas ao longo das janelas."
+    }
+  },
+  "21.08": {
+    "objective": "Trace a aquisição e a liberação do recurso no caso síncrono e no assíncrono; anote também o fallback de compatibilidade.",
+    "firstResponse": {
+      "action": "Trace a aquisição e a liberação do recurso no caso síncrono e no assíncrono; anote também o fallback de compatibilidade.",
+      "timing": "Depois de ler o material e antes de reescrever o bloco."
+    },
+    "explanation": {
+      "mental_model": "using descarta recursos síncronos ao sair do escopo; await using aguarda o descarte assíncrono. O cleanup ocorre mesmo se o corpo lança erro, e recursos são descartados em ordem LIFO.",
+      "worked_example": "Ao terminar o bloco com using, dispose é chamado uma vez. Com await using, asyncDispose é aguardado antes de continuar.",
+      "common_trap": "Supor suporte de sintaxe em qualquer runtime ou esquecer que o cleanup ainda deve ocorrer após um throw.",
+      "why_it_matters": "O descarte previsível evita deixar recursos ativos depois que seu escopo terminou."
+    },
+    "interaction": "Mostre blocos rotulados aquisição, uso, descarte e fallback. Peça uma sequência textual para a saída normal e para o erro no corpo; inclua rótulos lineares para teclado e leitor de tela.",
+    "rubric": [
+      "Cleanup ocorre ao sair do escopo, inclusive em erro.",
+      "Rode regressões antigas e novos casos; avalie mudança localizada."
+    ],
+    "review": {
+      "prompt": "Qual benefício conceitual oferece associar o descarte de um recurso ao escopo que o utiliza?",
+      "choices": [
+        "Eliminar a necessidade de definir qualquer comportamento de descarte para o recurso.",
+        "Tornar explícita a relação entre o tempo de uso do recurso e a responsabilidade de liberá-lo.",
+        "Manter o recurso disponível indefinidamente, mesmo depois que seu escopo terminou."
+      ],
+      "answer": 1,
+      "correctFeedback": "A associação com o escopo ajuda a deixar visível quem usa e quem libera o recurso.",
+      "incorrectFeedback": "Gerenciamento de escopo organiza a responsabilidade pelo descarte; não remove essa responsabilidade."
+    }
+  },
+  "21.09": {
+    "objective": "Esboce como confirmar resultados equivalentes, separar warmup das medições e apresentar amostras, mediana, dispersão, ambiente e disponibilidade de memória.",
+    "firstResponse": {
+      "action": "Esboce como confirmar resultados equivalentes, separar warmup das medições e apresentar amostras, mediana, dispersão, ambiente e disponibilidade de memória.",
+      "timing": "Depois de ler o objetivo e antes de montar a página."
+    },
+    "explanation": {
+      "mental_model": "Uma comparação útil usa a mesma entrada, verifica equivalência dos resultados e resume múltiplas medições, incluindo mediana e dispersão. Memória pode ser aproximada ou indicada como indisponível.",
+      "worked_example": "Para as duas funções puras com a mesma entrada, confirme primeiro que os resultados coincidem; depois apresente as medições e o ambiente. Se memória não estiver disponível, indique N/D.",
+      "common_trap": "Usar um único tempo para declarar vencedor universal ou apresentar zero quando a medição de memória não está disponível.",
+      "why_it_matters": "Relatar método e limitações ajuda a interpretar ruído sem transformar uma amostra em conclusão geral."
+    },
+    "interaction": "Peça um esboço textual com regiões rotuladas para entrada, equivalência, medições e limitações. A resposta pode ser escrita em sequência e deve distinguir dados observados de conclusões.",
+    "rubric": [
+      "Medição separada de conclusão; relatório reconhece ruído e limitações.",
+      "Rode critérios comportamentais e revisão humana para decisões abertas."
+    ],
+    "review": {
+      "prompt": "O que deve ser mantido consistente para comparar duas implementações de forma justa?",
+      "choices": [
+        "A implementação de uma delas, alterando-a durante cada execução para explorar mais casos.",
+        "Somente o nome das funções, mesmo que cada uma execute uma tarefa diferente.",
+        "A tarefa realizada, os dados de entrada e as condições relevantes do ambiente de comparação."
+      ],
+      "answer": 2,
+      "correctFeedback": "Uma comparação interpretável mantém o trabalho e as condições relevantes equivalentes.",
+      "incorrectFeedback": "Se a tarefa ou as condições mudam, não é possível atribuir a diferença apenas às implementações."
+    }
+  },
+  "21.10": {
+    "objective": "Registre o byteLength do emissor e do worker antes e depois da transferência e compare com structuredClone sem transferência.",
+    "firstResponse": {
+      "action": "Registre o byteLength do emissor e do worker antes e depois da transferência e compare com structuredClone sem transferência.",
+      "timing": "Depois de ler o experimento e antes de transferir ou revelar os resultados."
+    },
+    "explanation": {
+      "mental_model": "A transferência de ArrayBuffer entrega a posse ao worker e desanexa o buffer no emissor. structuredClone sem transferência faz uma cópia independente e mantém o original válido.",
+      "worked_example": "Após transferir o ArrayBuffer de 8 bytes, o emissor observa byteLength 0 e o worker recebe 8 bytes. Sem transfer list, a cópia não invalida o original.",
+      "common_trap": "Tratar transferência como cópia normal e supor que emissor e worker continuam usando o mesmo buffer.",
+      "why_it_matters": "Distinguir cópia de transferência esclarece quem pode acessar os dados e por que a transferência pode evitar cópias."
+    },
+    "interaction": "Apresente uma tabela textual com lado, momento e byteLength para emissor e worker, seguida da comparação com structuredClone. Forneça rótulos acessíveis sem depender de uma visualização de memória.",
+    "review": {
+      "prompt": "Que decisão de projeto deve anteceder o envio de dados binários entre contextos de execução?",
+      "choices": [
+        "Definir quem é responsável pelo dado durante cada fase e por quanto tempo cada participante precisa dele.",
+        "Presumir que os participantes podem modificar a mesma representação sem coordenar responsabilidades.",
+        "Escolher o formato dos tipos TypeScript antes de decidir qual dado a mensagem precisa transportar."
+      ],
+      "answer": 0,
+      "correctFeedback": "Um contrato de mensagem claro considera responsabilidade e ciclo de vida do dado entre os participantes.",
+      "incorrectFeedback": "A interface de tipos não substitui uma decisão sobre responsabilidade e uso do dado transmitido."
+    }
+  },
+  "21.11": {
+    "objective": "Preveja qual erro é produzido para corpo A com descarte B e compare sua origem e propriedades com Promise.any quando todas as promessas rejeitam.",
+    "firstResponse": {
+      "action": "Preveja qual erro é produzido para corpo A com descarte B e compare sua origem e propriedades com Promise.any quando todas as promessas rejeitam.",
+      "timing": "Depois de ler os dois cenários e antes de executar ou consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "SuppressedError representa um erro de descarte que ocorre enquanto outro erro já está sendo propagado; AggregateError reúne erros de operações como Promise.any quando todas rejeitam.",
+      "worked_example": "Se o corpo lança A e dispose lança B, SuppressedError contém B em error e A em suppressed, conforme a semântica do runtime. Promise.any com todas rejeitadas expõe os erros em AggregateError.errors.",
+      "common_trap": "Confundir a causa e o momento dos dois erros ou supor que um fallback manual com try/finally cria automaticamente SuppressedError.",
+      "why_it_matters": "Identificar a origem dos erros preserva informação útil para diagnóstico e tratamento."
+    },
+    "interaction": "Mostre os cenários corpo/descarte e Promise.any como linhas separadas; peça classe, origem e propriedades relevantes em resposta textual. Rotule os campos para leitura linear acessível.",
+    "review": {
+      "prompt": "O corpo lança A e o método dispose lança B. Como SuppressedError representa esses erros?",
+      "choices": [
+        "AggregateError.errors contém A e B, pois todo erro de descarte é agregado.",
+        "error contém B e suppressed contém A, conforme a semântica do runtime.",
+        "error contém A e suppressed contém B, e try/finally sempre cria esse objeto."
+      ],
+      "answer": 1,
+      "correctFeedback": "Correto. SuppressedError preserva o erro de descarte em error e o erro anterior em suppressed.",
+      "incorrectFeedback": "Separe os erros pela origem: B ocorre durante o descarte; A já estava sendo propagado pelo corpo. AggregateError é o caso de várias rejeições."
+    }
+  },
+  "22.01": {
+    "objective": "Preveja o tipo real retornado pelo JavaScript e como o consumidor deve usar o resultado.",
+    "firstResponse": {
+      "action": "Preveja o tipo real retornado pelo JavaScript e como o consumidor deve usar o resultado.",
+      "timing": "Antes de ler a explicação ou comparar os arquivos."
+    },
+    "explanation": {
+      "mental_model": "O arquivo .d.ts descreve o JavaScript; não transforma o valor que ele retorna.",
+      "worked_example": "Se a função retorna Promise<string | null>, o consumidor aguarda a Promise e considera que o resultado pode ser null.",
+      "common_trap": "Tratar a Promise como string ou supor que a declaração elimina a possibilidade de null.",
+      "why_it_matters": "Uma declaração fiel ajuda o TypeScript a revelar usos que podem falhar em execução."
+    },
+    "interaction": "Compare a assinatura declarada com o resultado descrito para o JavaScript e registre a assinatura corrigida e o cuidado necessário no consumidor.",
+    "rubric": [
+      "Lista de incompatibilidades e versão corrigida.",
+      "Aceite escolha justificada por diferença semântica publicada."
+    ],
+    "review": {
+      "prompt": "Que princípio deve orientar a manutenção de declarações TypeScript para uma biblioteca JavaScript?",
+      "choices": [
+        "Descrever apenas a API que seria conveniente implementar no futuro.",
+        "Usar a declaração para transformar automaticamente os valores produzidos pelo JavaScript.",
+        "Descrever a API que a implementação realmente oferece aos consumidores, em vez de prometer comportamento diferente."
+      ],
+      "answer": 2,
+      "correctFeedback": "Declarações são um contrato estático para consumidores e precisam corresponder à implementação publicada.",
+      "incorrectFeedback": "Um arquivo de tipos não altera o JavaScript nem deve prometer capacidades que ele não oferece."
+    }
+  },
+  "22.02": {
+    "objective": "Preveja quais arquivos o consumidor ESM e o TypeScript precisam encontrar no pacote.",
+    "firstResponse": {
+      "action": "Preveja quais arquivos o consumidor ESM e o TypeScript precisam encontrar no pacote.",
+      "timing": "Antes de ordenar os blocos do package.json."
+    },
+    "explanation": {
+      "mental_model": "O manifesto conecta os caminhos de importação e de tipos aos arquivos que o build realmente gera.",
+      "worked_example": "O import ESM aponta para dist/index.js e a condição types aponta para dist/index.d.ts; ambos precisam estar no pacote.",
+      "common_trap": "Apontar para um arquivo de declaração inexistente ou usar o .d.ts como implementação JavaScript.",
+      "why_it_matters": "O consumidor precisa resolver a implementação em execução e os tipos publicados."
+    },
+    "interaction": "Leia os caminhos produzidos pelo build, associe cada um à finalidade correta e explique como verificaria o pacote gerado.",
+    "rubric": [
+      "Consumidor TS encontra tipos e runtime correto.",
+      "Avalie ordem/seleção de blocos e comportamento final; não exija ordem entre blocos independentes."
+    ],
+    "review": {
+      "prompt": "Por que o metadata de um pacote faz parte da experiência de sua API pública?",
+      "choices": [
+        "Ele orienta ferramentas consumidoras sobre como localizar e interpretar a interface publicada.",
+        "Ele substitui a implementação e as declarações de tipo depois da instalação.",
+        "Ele só afeta a organização dos arquivos no repositório do autor, nunca quem consome o pacote."
+      ],
+      "answer": 0,
+      "correctFeedback": "A configuração do pacote participa da descoberta e do consumo da API por outros projetos.",
+      "incorrectFeedback": "Metadata não substitui os arquivos do pacote e pode influenciar diretamente a resolução pelo consumidor."
+    }
+  },
+  "22.03": {
+    "objective": "Preveja como o consumidor distingue os dois resultados de parse e quais entradas a função aceita.",
+    "firstResponse": {
+      "action": "Preveja como o consumidor distingue os dois resultados de parse e quais entradas a função aceita.",
+      "timing": "Antes de completar a declaração."
+    },
+    "explanation": {
+      "mental_model": "Uma união discriminada descreve alternativas distintas; o consumidor usa ok para saber qual propriedade está disponível.",
+      "worked_example": "No ramo ok: true, o resultado tem value; no ramo ok: false, tem error. A entrada de parse continua restrita a string.",
+      "common_trap": "Declarar value e error como se ambos estivessem presentes em qualquer resultado ou ampliar a entrada para any.",
+      "why_it_matters": "A declaração fiel permite ao consumidor escrever código que respeita os resultados reais da biblioteca."
+    },
+    "interaction": "Complete a assinatura de parse a partir dos exemplos e indique qual propriedade pode ser acessada em cada ramo de ok.",
+    "rubric": [
+      "Autocomplete e type checks correspondem ao comportamento real.",
+      "Avalie somente as decisões retiradas e execute o arquivo completo."
+    ],
+    "review": {
+      "prompt": "Qual é o papel principal de uma declaração .d.ts ao distribuir uma biblioteca JavaScript?",
+      "choices": [
+        "Executar a lógica da biblioteca em ambientes que não carregam JavaScript.",
+        "Descrever a interface estática disponível para consumidores TypeScript sem substituir a implementação JavaScript.",
+        "Converter automaticamente argumentos inválidos em valores aceitos durante a execução."
+      ],
+      "answer": 1,
+      "correctFeedback": "A declaração ajuda o consumidor e o typechecker a entender a API; o comportamento continua na implementação.",
+      "incorrectFeedback": "Um .d.ts não é implementação executável nem valida argumentos em runtime."
+    }
+  },
+  "22.04": {
+    "objective": "Preveja o efeito de remover o monkey patch e como preservar o comportamento para os chamadores.",
+    "firstResponse": {
+      "action": "Preveja o efeito de remover o monkey patch e como preservar o comportamento para os chamadores.",
+      "timing": "Antes de modificar o código ou escolher uma alternativa."
+    },
+    "explanation": {
+      "mental_model": "Uma declaração global altera o que o TypeScript reconhece, mas não instala um método no runtime.",
+      "worked_example": "Um helper first(xs) pode retornar o primeiro item e undefined para array vazio, sem modificar Array.prototype.",
+      "common_trap": "Deixar apenas declare global e acreditar que isso fornece a implementação em execução.",
+      "why_it_matters": "Reduzir mudanças globais diminui o risco de colisões e mantém o contrato de runtime explícito."
+    },
+    "interaction": "Compare o helper exportado com a extensão global e descreva o resultado esperado quando a lista estiver vazia.",
+    "rubric": [
+      "Projeto compila sem contaminar tipos globais indevidamente.",
+      "Rode regressões antigas e novos casos; avalie mudança localizada."
+    ],
+    "review": {
+      "prompt": "Qual risco arquitetural pode surgir ao ampliar globalmente um protótipo embutido?",
+      "choices": [
+        "A alteração fica automaticamente restrita ao módulo que declara o método.",
+        "A declaração TypeScript garante que outros pacotes não vejam a mudança em runtime.",
+        "Código não relacionado pode passar a depender da alteração, aumentando conflitos e efeitos inesperados."
+      ],
+      "answer": 2,
+      "correctFeedback": "Uma alteração global amplia o alcance da API e pode afetar código fora do módulo que a introduziu.",
+      "incorrectFeedback": "Uma declaração de tipo não limita o alcance runtime de uma mutação global."
+    }
+  },
+  "22.05": {
+    "objective": "Proponha uma ordem de migração e um critério para avançar de um módulo ao próximo.",
+    "firstResponse": {
+      "action": "Proponha uma ordem de migração e um critério para avançar de um módulo ao próximo.",
+      "timing": "Antes de iniciar a migração."
+    },
+    "explanation": {
+      "mental_model": "Uma migração incremental usa contratos e checkpoints para manter os consumidores funcionando enquanto reduz any.",
+      "worked_example": "Ative allowJs e checkJs, identifique dependências, migre primeiro a folha da cadeia (C no exemplo) e confira build e regressões a cada etapa.",
+      "common_trap": "Renomear todos os arquivos de uma vez sem validar fronteiras e consumidores durante o processo.",
+      "why_it_matters": "Checkpoints localizam regressões e tornam o progresso de tipagem verificável."
+    },
+    "interaction": "Desenhe a ordem dos módulos, marque as verificações necessárias em cada checkpoint e indique como tratar dados JSON na fronteira.",
+    "rubric": [
+      "Build verde em cada checkpoint e strict no destino final.",
+      "Rode regressões antigas e novos casos; avalie mudança localizada."
+    ],
+    "review": {
+      "prompt": "Como planejar uma migração gradual de JavaScript para TypeScript mantendo os consumidores funcionando?",
+      "choices": [
+        "Ativar allowJs/checkJs, mapear contratos e dependências, migrar primeiro módulos folha e verificar build e regressões a cada etapa.",
+        "Renomear todos os arquivos para .ts de uma vez e corrigir os tipos somente depois que toda a migração terminar.",
+        "Manter any em todas as fronteiras até o fim e considerar a migração concluída quando os arquivos tiverem extensão .ts."
+      ],
+      "answer": 0,
+      "correctFeedback": "Checkpoints pequenos preservam consumidores e tornam visíveis os problemas de cada módulo antes de avançar.",
+      "incorrectFeedback": "Uma migração em lote ou sem contratos deixa os problemas para o final. Use checkJs e valide cada etapa, reduzindo any progressivamente."
+    }
+  },
+  "22.06": {
+    "objective": "Preveja quais entradas devem passar ou falhar e que critérios ajudam a comparar as duas abordagens.",
+    "firstResponse": {
+      "action": "Preveja quais entradas devem passar ou falhar e que critérios ajudam a comparar as duas abordagens.",
+      "timing": "Antes de implementar ou comparar o guard e o schema."
+    },
+    "explanation": {
+      "mental_model": "A validação de runtime protege a fronteira de dados; os tipos, sozinhos, não validam valores recebidos.",
+      "worked_example": "Ambas as abordagens devem preservar um payload válido e rejeitar amount como string, NaN ou null.",
+      "common_trap": "Escolher a biblioteca só para satisfazer o compilador ou adicioná-la sem avaliar a dependência.",
+      "why_it_matters": "Comparar o mesmo contrato torna visíveis diferenças de mensagens, inferência e custo."
+    },
+    "interaction": "Use as mesmas entradas válidas e inválidas nas duas abordagens e registre diferenças de resultado, mensagens, inferência e custo antes de escolher.",
+    "rubric": [
+      "Duas abordagens corretas e analise de trade-offs.",
+      "Aceite escolha justificada por diferença semântica publicada."
+    ],
+    "review": {
+      "prompt": "O que torna significativa a comparação entre duas estratégias de validação para a mesma fronteira?",
+      "choices": [
+        "Permitir que cada estratégia aceite dados e regras diferentes para maximizar o número de casos distintos.",
+        "Manter o contrato e o propósito da fronteira constantes para comparar como cada estratégia expressa esse mesmo objetivo.",
+        "Escolher uma estratégia antes de declarar qual comportamento a fronteira precisa garantir."
+      ],
+      "answer": 1,
+      "correctFeedback": "Uma comparação útil examina abordagens contra a mesma necessidade pública.",
+      "incorrectFeedback": "Se cada alternativa resolve um problema diferente, a comparação não informa qual atende melhor ao mesmo contrato."
+    }
+  },
+  "22.07": {
+    "objective": "Esboce um caso válido, um inválido e o que espera que o compilador sinalize em cada um.",
+    "firstResponse": {
+      "action": "Esboce um caso válido, um inválido e o que espera que o compilador sinalize em cada um.",
+      "timing": "Antes de escrever os type tests."
+    },
+    "explanation": {
+      "mental_model": "Type tests verificam o contrato estático de consumo; testes de runtime verificam o comportamento do JavaScript.",
+      "worked_example": "parse('x') deve compilar; parse(2) deve produzir diagnóstico coberto por @ts-expect-error.",
+      "common_trap": "Usar supressões amplas ou confiar em @ts-expect-error sem verificar que realmente existe um erro.",
+      "why_it_matters": "Casos válidos e inválidos detectam mudanças acidentais na superfície pública de tipos."
+    },
+    "interaction": "Escreva exemplos de consumo válidos e inválidos para parse e explique como os testes de runtime complementam a verificação de tipos.",
+    "rubric": [
+      "Mudancas acidentais no contrato sao detectadas.",
+      "Execute teste escrito pelo aluno contra implementação correta e mutantes defeituosos."
+    ],
+    "review": {
+      "prompt": "Por que testar uma biblioteca a partir de exemplos de uso de um consumidor?",
+      "choices": [
+        "Para testar somente a organização interna dos arquivos do autor.",
+        "Para evitar documentar a API, pois os exemplos substituem toda descrição.",
+        "Para verificar se a superfície pública é compreensível e atende os usos que a biblioteca pretende oferecer."
+      ],
+      "answer": 2,
+      "correctFeedback": "A perspectiva do consumidor ajuda a avaliar se a API publicada oferece uma experiência utilizável.",
+      "incorrectFeedback": "Um exemplo de consumo não substitui toda documentação nem se limita à organização interna."
+    }
+  },
+  "22.08": {
+    "objective": "Preveja como testar o artefato distribuído fora do workspace e que aspectos precisam ser conferidos.",
+    "firstResponse": {
+      "action": "Preveja como testar o artefato distribuído fora do workspace e que aspectos precisam ser conferidos.",
+      "timing": "Antes de empacotar ou testar o projeto."
+    },
+    "explanation": {
+      "mental_model": "Um pacote deve funcionar pelo conteúdo publicado, não depender de arquivos disponíveis apenas no workspace de desenvolvimento.",
+      "worked_example": "Gere um tarball com npm pack e faça um consumidor isolado importar a biblioteca e verificar os tipos.",
+      "common_trap": "Considerar os testes internos suficientes sem conferir se dist e os caminhos de exports estão no pacote.",
+      "why_it_matters": "O consumidor externo usa o artefato empacotado, incluindo JavaScript, declarations e metadados."
+    },
+    "interaction": "Inspecione conceitualmente o tarball e descreva como um consumidor isolado verificaria importação em runtime e typecheck sem publicar na rede.",
+    "rubric": [
+      "Pacote pode ser consumido por projeto JS e TS.",
+      "Rode critérios comportamentais e revisão humana para decisões abertas."
+    ],
+    "review": {
+      "prompt": "Que informação um README de uma pequena biblioteca deve oferecer a quem vai avaliá-la?",
+      "choices": [
+        "O propósito da biblioteca, uma forma de uso da API pública e orientações necessárias para desenvolver ou verificar o projeto.",
+        "Uma lista de detalhes internos sem explicar como a biblioteca pode ser usada.",
+        "Somente um slogan, pois os consumidores podem inferir a API pelo nome do pacote."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma documentação inicial útil conecta o propósito a um uso concreto e aos passos relevantes do projeto.",
+      "incorrectFeedback": "Detalhes internos ou um slogan isolado não explicam como entender e usar a biblioteca."
+    }
+  },
+  "22.09": {
+    "objective": "Preveja o que fazer quando um export exige anotação para que sua declaration seja emitida.",
+    "firstResponse": {
+      "action": "Preveja o que fazer quando um export exige anotação para que sua declaration seja emitida.",
+      "timing": "Antes de ativar a opção e ler os diagnósticos."
+    },
+    "explanation": {
+      "mental_model": "isolatedDeclarations exige que a superfície pública seja expressa de forma adequada para gerar declarations isoladas.",
+      "worked_example": "Anote os exports públicos necessários, use corretamente importações apenas de tipo e confira o .d.ts emitido.",
+      "common_trap": "Esperar que a opção produza declarations fiéis para todo export ambíguo sem anotação.",
+      "why_it_matters": "Declarations publicadas precisam corresponder à API real; Project References não são pré-requisito geral para este exercício."
+    },
+    "interaction": "Leia um diagnóstico de export, proponha a anotação pública mínima e descreva como conferir a declaration gerada.",
+    "review": {
+      "prompt": "Como declarações geradas ajudam um consumidor de pacote TypeScript?",
+      "choices": [
+        "Elas são o código JavaScript executado pelo consumidor no lugar da implementação.",
+        "Elas expõem a forma estática da API para que o consumidor possa usar e verificar chamadas sem depender dos tipos internos do autor.",
+        "Elas fazem com que qualquer export seja automaticamente seguro, mesmo que a implementação não cumpra o contrato."
+      ],
+      "answer": 1,
+      "correctFeedback": "Declarations comunicam a interface estática publicada ao projeto consumidor.",
+      "incorrectFeedback": "Declarações não executam nem provam o comportamento da implementação."
+    }
+  },
+  "22.10": {
+    "objective": "Preveja como configurar a dependência entre core e app e em que ordem o build deve ocorrer.",
+    "firstResponse": {
+      "action": "Preveja como configurar a dependência entre core e app e em que ordem o build deve ocorrer.",
+      "timing": "Antes de editar os tsconfig ou executar o build."
+    },
+    "explanation": {
+      "mental_model": "Project References descrevem dependências entre projetos e permitem que tsc -b coordene builds incrementais.",
+      "worked_example": "core usa composite e emite declarations; app referencia core; tsc -b packages/app constrói core antes de app.",
+      "common_trap": "Confundir paths aliases com referências de build ou criar uma referência cíclica.",
+      "why_it_matters": "O grafo permite rebuild dos dependentes quando core muda; a trilha é opcional e voltada a projetos maiores ou monorepos."
+    },
+    "interaction": "Desenhe as referências core → app, indique quais arquivos e opções permitem o consumo e preveja o efeito de alterar core.",
+    "review": {
+      "prompt": "O que deve justificar dividir uma base TypeScript em unidades de build separadas?",
+      "choices": [
+        "A possibilidade de adicionar arquivos de configuração, mesmo sem fronteiras ou ganhos desejados.",
+        "O desejo de substituir todas as formas de teste por comandos de compilação.",
+        "Fronteiras de módulos e necessidades reais de manutenção que compensem a configuração adicional."
+      ],
+      "answer": 2,
+      "correctFeedback": "A decisão deve responder à estrutura e às necessidades do projeto, considerando também seu custo de manutenção.",
+      "incorrectFeedback": "Mais configuração não é um benefício por si só nem substitui testes do comportamento."
+    }
+  },
+  "23.01": {
+    "objective": "Esboce as responsabilidades do módulo e as dependências entre UI, serviço, domínio, porta de repositório e adapter de storage.",
+    "firstResponse": {
+      "action": "Esboce as responsabilidades do módulo e as dependências entre UI, serviço, domínio, porta de repositório e adapter de storage.",
+      "timing": "Depois de ler o enunciado e antes de consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "Separe as regras de domínio dos detalhes de entrada, apresentação e armazenamento. O núcleo depende de portas; adapters implementam essas portas nas bordas.",
+      "worked_example": "No fluxo público, a UI chama o serviço, o domínio usa uma porta de repositório e o adapter de storage a implementa. Um repositório fake permite testar o domínio sem DOM ou fetch.",
+      "common_trap": "Dividir o código em arquivos sem mudar as dependências pode manter ciclos e dependências globais.",
+      "why_it_matters": "Fronteiras claras tornam possível testar regras e substituir detalhes técnicos sem reescrever o domínio."
+    },
+    "interaction": "Ofereça um campo textual para listar módulos e dependências, com uma alternativa em lista numerada para descrever as setas. A resposta pode ser escrita por teclado e deve continuar legível sem depender de cores ou de um editor de diagramas.",
+    "rubric": [
+      "Diagrama e plano incremental de refactor.",
+      "Rubrica de localização, fluxo de dados e intenção; nenhuma edição de código é exigida."
+    ],
+    "review": {
+      "prompt": "O que torna um diagrama de dependências útil durante uma revisão arquitetural?",
+      "choices": [
+        "Mostrar responsabilidades e relações relevantes entre partes para que outra pessoa consiga avaliar o desenho.",
+        "Listar todos os arquivos sem indicar como se relacionam ou que responsabilidade têm.",
+        "Substituir a explicação das decisões por uma imagem sem rótulos ou contexto."
+      ],
+      "answer": 0,
+      "correctFeedback": "Um diagrama deve comunicar a estrutura que importa à decisão, não apenas o inventário de arquivos.",
+      "incorrectFeedback": "Sem relações ou contexto, uma lista visual não ajuda a avaliar a arquitetura."
+    }
+  },
+  "23.02": {
+    "objective": "Ordene as etapas do fluxo e anote onde uma entrada inválida ou uma falha de storage deve seguir um caminho de erro.",
+    "firstResponse": {
+      "action": "Ordene as etapas do fluxo e anote onde uma entrada inválida ou uma falha de storage deve seguir um caminho de erro.",
+      "timing": "Após ler o enunciado e antes de ver a sequência explicada."
+    },
+    "explanation": {
+      "mental_model": "Dados externos devem ser analisados e validados antes de chegar ao domínio. O fluxo válido segue para persistência e apresentação; erros não devem provocar mutação indevida.",
+      "worked_example": "Para uma requisição válida: entrada, parse e validação, domínio, persistência, resposta à UI. Se a entrada for inválida, o fluxo falha antes de mutar; se o storage falhar, a UI recebe um erro seguro com a causa técnica preservada.",
+      "common_trap": "Um tipo TypeScript não valida em execução um JSON externo, e o domínio não deve depender de objetos Response.",
+      "why_it_matters": "A ordem protege o estado da aplicação e mantém as regras de domínio independentes do formato de transporte."
+    },
+    "interaction": "Apresente as etapas embaralhadas para ordenar por teclado, com comandos de mover para cima e para baixo. Ofereça campos separados para descrever os caminhos de entrada inválida e falha de storage.",
+    "rubric": [
+      "Dependências apontam para o núcleo, não para detalhes.",
+      "Avalie ordem/seleção de blocos e comportamento final; não exija ordem entre blocos independentes."
+    ],
+    "review": {
+      "prompt": "Por que manter o domínio independente dos formatos específicos usados na entrada e na apresentação?",
+      "choices": [
+        "Para que o domínio passe a analisar diretamente qualquer formato de requisição.",
+        "Para que regras da aplicação possam ser usadas sem depender de um transporte ou de uma representação de interface específicos.",
+        "Para permitir que a camada de apresentação decida todas as regras de negócio."
+      ],
+      "answer": 1,
+      "correctFeedback": "Separar formatos das regras facilita reutilizar e manter o domínio.",
+      "incorrectFeedback": "Conhecer todos os formatos de entrada ou delegar as regras à UI aumenta o acoplamento."
+    }
+  },
+  "23.03": {
+    "objective": "Escreva a assinatura de criarTarefa e liste seu resultado esperado, invariantes e comportamentos de erro.",
+    "firstResponse": {
+      "action": "Escreva a assinatura de criarTarefa e liste seu resultado esperado, invariantes e comportamentos de erro.",
+      "timing": "Depois de ler o enunciado e antes de abrir a explicação."
+    },
+    "explanation": {
+      "mental_model": "Um contrato público descreve o que entra, o que sai, quais regras precisam valer e como falhas afetam o estado.",
+      "worked_example": "Um título válido após trim cria uma tarefa com id e status inicial; título só com espaços causa ValidationError. Prazo inválido falha, e erro de storage preserva a causa sem deixar mutação parcial.",
+      "common_trap": "Definir apenas o caso feliz ou começar a implementação antes de decidir os erros deixa o comportamento ambíguo.",
+      "why_it_matters": "Um contrato explícito guia a implementação e permite verificar comportamento sem depender de detalhes internos."
+    },
+    "interaction": "Use campos textuais rotulados para assinatura, exemplo válido, invariantes e erros. Permita preenchimento por teclado e uma leitura linear da resposta.",
+    "rubric": [
+      "Contrato pequeno, casos de erro e exemplos de uso.",
+      "Avalie somente as decisões retiradas e execute o arquivo completo."
+    ],
+    "review": {
+      "prompt": "Que problema definir uma interface e seus invariantes antes de codificar ajuda a evitar?",
+      "choices": [
+        "A necessidade de escolher nomes de variáveis antes da implementação.",
+        "A possibilidade de que a solução contenha qualquer detalhe interno de implementação.",
+        "Decisões contraditórias sobre o que a feature aceita, promete e considera válido."
+      ],
+      "answer": 2,
+      "correctFeedback": "Um contrato prévio alinha expectativas sobre comportamento observável antes de escolher detalhes de código.",
+      "incorrectFeedback": "O contrato define expectativas externas; não serve para decidir cada detalhe interno de implementação."
+    }
+  },
+  "23.04": {
+    "objective": "Proponha passos pequenos para refatorar o código legado e indique que evidência verificaria cada passo.",
+    "firstResponse": {
+      "action": "Proponha passos pequenos para refatorar o código legado e indique que evidência verificaria cada passo.",
+      "timing": "Antes de consultar a explicação ou propor uma reescrita."
+    },
+    "explanation": {
+      "mental_model": "Primeiro registre o comportamento atual; depois altere uma parte por vez e confira as regressões a cada etapa.",
+      "worked_example": "Com validação duplicada e I/O misturado, caracterize os resultados e erros existentes, extraia uma função pequena e rode a suíte antes de avançar para outra fronteira.",
+      "common_trap": "Uma reescrita grande seguida de um teste feliz não demonstra que os outros comportamentos foram preservados.",
+      "why_it_matters": "Passos verificáveis ajudam a localizar regressões e a distinguir mudanças intencionais das acidentais."
+    },
+    "interaction": "Ofereça uma lista editável por teclado para ordenar os passos e campos curtos para registrar comportamento esperado, regressões e mudanças intencionais.",
+    "rubric": [
+      "Commits/etapas pequenas e comportamento preservado.",
+      "Rode regressões antigas e novos casos; avalie mudança localizada."
+    ],
+    "review": {
+      "prompt": "Por que mudar uma parte por vez ao refatorar uma base existente?",
+      "choices": [
+        "Para tornar mais fácil relacionar cada alteração ao efeito que ela introduz e revisar seu escopo.",
+        "Para evitar qualquer necessidade de compreender o comportamento existente.",
+        "Para permitir que cada passo altere várias responsabilidades sem uma comparação intermediária."
+      ],
+      "answer": 0,
+      "correctFeedback": "Passos pequenos ajudam a entender a causa de mudanças e a manter a revisão focada.",
+      "incorrectFeedback": "Refatorar incrementalmente ainda exige entender o código e controlar o alcance de cada alteração."
+    }
+  },
+  "23.05": {
+    "objective": "Registre possíveis achados do diff com localização, impacto e evidência ou correção mínima.",
+    "firstResponse": {
+      "action": "Registre possíveis achados do diff com localização, impacto e evidência ou correção mínima.",
+      "timing": "Após ler o diff e antes de consultar a análise explicada."
+    },
+    "explanation": {
+      "mental_model": "Uma revisão útil conecta cada comentário a um comportamento verificável e prioriza risco sem transformar preferência em defeito.",
+      "worked_example": "No diff descrito, investigue se uma rejeição async escapa do catch, se any enfraquece o contrato do payload, se sort altera a entrada e se um timer real torna o teste instável.",
+      "common_trap": "A compilação não prova ausência de bugs; uma suspeita sem evidência também não basta para afirmar um achado.",
+      "why_it_matters": "Comentários reproduzíveis ajudam a corrigir problemas reais com mudanças localizadas."
+    },
+    "interaction": "Apresente uma tabela de revisão com campos de localização, impacto, reprodução ou evidência e correção mínima. Permita preenchimento textual por teclado e leitura acessível por linha.",
+    "rubric": [
+      "Comentários priorizados por impacto, com propostas concretas.",
+      "Rubrica de localização, fluxo de dados e intenção; nenhuma edição de código é exigida."
+    ],
+    "review": {
+      "prompt": "Como priorizar comentários durante uma revisão quando há pouco tempo disponível?",
+      "choices": [
+        "Começar por preferências de formatação, independentemente do efeito da mudança.",
+        "Começar pelos riscos que podem afetar mais usuários ou comprometer comportamentos importantes.",
+        "Dar prioridade igual a toda observação, sem considerar impacto ou alcance."
+      ],
+      "answer": 1,
+      "correctFeedback": "Priorizar impacto ajuda a concentrar a revisão nos riscos mais relevantes.",
+      "incorrectFeedback": "Preferências visuais ou uma lista sem prioridade não ajudam a direcionar a revisão pelo risco."
+    }
+  },
+  "23.06": {
+    "objective": "Liste as fontes externas indicadas e, para cada uma, marque onde os dados são analisados, validados e convertidos em dados de domínio.",
+    "firstResponse": {
+      "action": "Liste as fontes externas indicadas e, para cada uma, marque onde os dados são analisados, validados e convertidos em dados de domínio.",
+      "timing": "Antes de abrir a explicação e sem tratar casts como validação."
+    },
+    "explanation": {
+      "mental_model": "Cada fronteira tem dados brutos e precisa de uma política explícita antes que esses dados sejam confiáveis para o domínio.",
+      "worked_example": "HTTP JSON unknown passa por validação antes de virar DomainInput; storage passa por parse, migração e validação antes de virar DomainState. Arquivo inválido deve preservar a causa no erro, segredos do ambiente devem ser redigidos e texto do DOM deve ser renderizado com segurança.",
+      "common_trap": "Um cast ou uma anotação de tipo não verifica a forma nem o conteúdo do dado em execução.",
+      "why_it_matters": "Mapear todas as entradas reduz falhas e evita que dados não confiáveis atravessem silenciosamente para as regras de negócio."
+    },
+    "interaction": "Ofereça uma tabela textual com uma linha para HTTP, storage, DOM/form, ambiente e arquivo, e colunas para formato bruto, validação e tratamento de erro. Todas as células devem aceitar teclado.",
+    "rubric": [
+      "Diagrama de trust boundaries e parsers claros.",
+      "Rubrica de localização, fluxo de dados e intenção; nenhuma edição de código é exigida."
+    ],
+    "review": {
+      "prompt": "Que pergunta central orienta o inventário de fronteiras de confiança de uma aplicação?",
+      "choices": [
+        "Quais módulos têm nomes mais longos na árvore de arquivos?",
+        "Quais valores já possuem uma anotação TypeScript, independentemente de sua origem?",
+        "Quais dados cruzam de uma origem para uma parte que opera sob outras suposições de confiança?"
+      ],
+      "answer": 2,
+      "correctFeedback": "O inventário começa identificando cruzamentos entre origens e os pressupostos de confiança envolvidos.",
+      "incorrectFeedback": "Nomes de módulos e anotações estáticas não identificam, por si, fronteiras de confiança."
+    }
+  },
+  "23.10": {
+    "objective": "Descreva o caminho da UI até a regra de limite e indique que README, teste ou execução apoiaria sua localização.",
+    "firstResponse": {
+      "action": "Descreva o caminho da UI até a regra de limite e indique que README, teste ou execução apoiaria sua localização.",
+      "timing": "Depois de inspecionar o enunciado e antes de editar qualquer arquivo."
+    },
+    "explanation": {
+      "mental_model": "Para encontrar a origem de uma regra, siga o fluxo até a decisão e use testes como evidência; nomes de arquivos, sozinhos, não identificam o dono.",
+      "worked_example": "No mini-repositório, localize a função de domínio que aplica o limite, trace como a UI chega até ela e confira o teste correspondente antes de propor uma mudança.",
+      "common_trap": "Editar o primeiro módulo com nome parecido pode alterar apenas a formatação, sem tocar na regra.",
+      "why_it_matters": "Entender a codebase antes de mudar reduz alterações no módulo errado e ajuda a justificar uma intervenção pequena."
+    },
+    "interaction": "Disponibilize campos textuais para mapa de arquivos, caminho de chamadas, linha da decisão e teste usado como evidência. A resposta deve poder ser preenchida e revisada por teclado.",
+    "review": {
+      "prompt": "Qual deve ser o primeiro objetivo ao se orientar em um repositório desconhecido?",
+      "choices": [
+        "Entender o propósito do projeto, sua estrutura e os caminhos gerais de execução antes de escolher onde agir.",
+        "Editar imediatamente o primeiro arquivo cujo nome pareça relacionado à solicitação.",
+        "Renomear a árvore de diretórios para que corresponda à arquitetura que se espera encontrar."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma orientação inicial reduz suposições e ajuda a navegar a base com contexto.",
+      "incorrectFeedback": "Editar ou reorganizar antes de compreender a base pode levar a mudanças sem relação com a solicitação."
+    }
+  },
+  "23.11": {
+    "objective": "Preveja o resultado abaixo, exatamente no limite e acima dele; indique o teste que reproduziria a falha.",
+    "firstResponse": {
+      "action": "Preveja o resultado abaixo, exatamente no limite e acima dele; indique o teste que reproduziria a falha.",
+      "timing": "Depois de ler a issue e antes de alterar o módulo responsável."
+    },
+    "explanation": {
+      "mental_model": "Uma correção segura reproduz primeiro o defeito, altera a regra no módulo dono e verifica casos vizinhos para preservar regressões.",
+      "worked_example": "Se o contrato inclui o limite superior, um teste exatamente nesse valor deve falhar com a comparação atual. Ajustar a regra de < para <= no domínio inclui esse valor; testes abaixo e acima verificam os limites adjacentes.",
+      "common_trap": "Mudar apenas a UI pode esconder o sintoma enquanto o serviço continua aplicando a regra errada.",
+      "why_it_matters": "Uma regressão localizada demonstra que a issue foi corrigida sem reescrever partes não relacionadas."
+    },
+    "interaction": "Ofereça campos para os resultados esperados abaixo, no limite e acima, além de uma resposta curta com reprodução, módulo dono e correção proposta.",
+    "review": {
+      "prompt": "Por que manter um patch de manutenção focado na issue relatada?",
+      "choices": [
+        "Para aproveitar a issue como oportunidade de reescrever módulos adjacentes sem justificativa.",
+        "Para facilitar revisão e atribuir efeitos ao conserto sem misturá-lo com limpeza não relacionada.",
+        "Para evitar explicar como a alteração se relaciona com o problema relatado."
+      ],
+      "answer": 1,
+      "correctFeedback": "Um diff focado torna mais clara a relação entre o problema e a mudança proposta.",
+      "incorrectFeedback": "Mudanças não relacionadas dificultam revisar o patch e entender seus efeitos."
+    }
+  },
+  "23.07": {
+    "objective": "Descreva a autorização, a transição de estado e o registro de auditoria para usuários comuns e administradores.",
+    "firstResponse": {
+      "action": "Descreva a autorização, a transição de estado e o registro de auditoria para usuários comuns e administradores.",
+      "timing": "Depois de ler a nova regra e antes de planejar a alteração."
+    },
+    "explanation": {
+      "mental_model": "Uma regra transversal precisa ser aplicada na operação responsável, não apenas na interface; estado e auditoria devem permanecer coerentes diante de falhas.",
+      "worked_example": "Usuário comum recebe Forbidden e a tarefa permanece concluída. Um administrador pode reabri-la e gravar o evento; se a gravação falhar, a operação precisa ser atômica ou ter uma compensação definida.",
+      "common_trap": "Esconder o botão para usuários comuns não impede que a API aceite a transição proibida.",
+      "why_it_matters": "Aplicar a autorização no lugar correto protege a regra e mantém um histórico confiável da mudança."
+    },
+    "interaction": "Apresente campos separados para ator, resultado esperado, alteração de estado e evento de auditoria, além de um campo para descrever a falha ao gravar o evento.",
+    "rubric": [
+      "Diff pequeno/coerente, testes novos e regressao zero.",
+      "Rode regressões antigas e novos casos; avalie mudança localizada."
+    ],
+    "review": {
+      "prompt": "Onde deve valer uma regra de autorização para que não dependa apenas do comportamento visual da interface?",
+      "choices": [
+        "Somente ao ocultar o botão da interface para os usuários sem permissão.",
+        "Em uma anotação de tipo que o navegador interpreta como autorização em runtime.",
+        "Na operação responsável do domínio ou serviço, além de qualquer controle apresentado na UI."
+      ],
+      "answer": 2,
+      "correctFeedback": "Correto. A regra precisa ser aplicada no caminho que executa a operação; a UI não é uma fronteira de autorização.",
+      "incorrectFeedback": "Ocultar um controle é apenas apresentação. A operação deve verificar a autorização no servidor ou domínio responsável."
+    }
+  },
+  "23.09": {
+    "objective": "Escolha quais campos registrar em sucesso e falha e indique quais dados devem ser redigidos.",
+    "firstResponse": {
+      "action": "Escolha quais campos registrar em sucesso e falha e indique quais dados devem ser redigidos.",
+      "timing": "Depois de ler o cenário e antes de consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "Logs úteis preservam contexto operacional e causa técnica sem armazenar credenciais ou expor detalhes internos ao usuário.",
+      "worked_example": "Em sucesso, registre ID, duração monotônica e status sem token. Em falha, preserve a causa no log técnico e apresente uma mensagem pública segura; diferencie níveis para timeout e erro de validação.",
+      "common_trap": "Registrar a requisição inteira pode vazar Authorization, tokens ou cookies, inclusive em objetos aninhados; apagar toda a causa também impede investigação.",
+      "why_it_matters": "Correlação e duração ajudam a investigar incidentes, enquanto redação protege dados sensíveis."
+    },
+    "interaction": "Apresente um modelo de log textual com campos editáveis para ID, duração, status, nível e causa; inclua uma lista para marcar campos sensíveis a redigir.",
+    "review": {
+      "prompt": "Por que uma aplicação pode preferir registros estruturados a mensagens livres sem campos estáveis?",
+      "choices": [
+        "Campos consistentes facilitam buscar, agrupar e comparar eventos de forma automatizada.",
+        "Mensagens estruturadas eliminam a necessidade de decidir quais dados registrar.",
+        "Texto livre impede qualquer pessoa de ler ou compreender um registro."
+      ],
+      "answer": 0,
+      "correctFeedback": "Uma estrutura estável torna mais previsíveis as consultas e análises posteriores.",
+      "incorrectFeedback": "Estruturar não escolhe o conteúdo por conta própria, e texto livre ainda pode ser legível; a vantagem é a consistência."
+    }
+  },
+  "23.08": {
+    "objective": "Esboce o MVP escolhido e indique como domínio, persistência, interface, API tipada, testes e documentação se relacionam.",
+    "firstResponse": {
+      "action": "Esboce o MVP escolhido e indique como domínio, persistência, interface, API tipada, testes e documentação se relacionam.",
+      "timing": "Antes de começar a implementação ou consultar a explicação."
+    },
+    "explanation": {
+      "mental_model": "O capstone demonstra um sistema coerente por meio de comportamento observável, fronteiras justificáveis, persistência substituível e testes.",
+      "worked_example": "Em um app de tarefas, criar, listar, mover e remover itens deve manter estado e persistência consistentes. Entrada inválida é rejeitada antes de mutar, e a recuperação após reinício deve ser considerada.",
+      "common_trap": "Uma interface visualmente completa não substitui contrato de dados, typecheck, testes ou comportamento após falhas.",
+      "why_it_matters": "Um projeto de porte médio mostra como as decisões de arquitetura sustentam funcionalidades reais e mudanças futuras."
+    },
+    "interaction": "Ofereça áreas textuais para MVP, contratos, diagrama de fronteiras, testes e decisões documentadas. Permita resposta por teclado e leitura linear; não indique execução automática do projeto.",
+    "rubric": [
+      "Funcionalidade real, arquitetura justificável, typecheck strict, testes de domínio e README de decisões.",
+      "Rode critérios comportamentais e revisão humana para decisões abertas."
+    ],
+    "review": {
+      "prompt": "O que torna uma decisão arquitetural do capstone útil para quem mantém o projeto depois?",
+      "choices": [
+        "Registrar apenas a tecnologia escolhida, sem explicar o problema que ela resolve.",
+        "Registrar a necessidade que motivou a decisão, a justificativa e os tradeoffs relevantes.",
+        "Listar todas as alternativas imagináveis mesmo sem relação com os requisitos do projeto."
+      ],
+      "answer": 1,
+      "correctFeedback": "A justificativa e os tradeoffs ajudam a entender o contexto e a reavaliar a decisão no futuro.",
+      "incorrectFeedback": "Uma escolha sem contexto ou uma lista sem relação com requisitos oferece pouca orientação a quem mantém o projeto."
+    }
+  }
+}

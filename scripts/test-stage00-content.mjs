@@ -2,11 +2,6 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { stage00 } from '../course-src/stage00-preparation.mjs';
 
-const revisionScript = readFileSync(new URL('./revise-stage00.mjs', import.meta.url), 'utf8');
-
-assert.match(revisionScript, /import\s*\{\s*stage00\s*\}/, 'the Site sync script imports the canonical Stage 00 source');
-assert.match(revisionScript, /stage00\[item\.id\]/, 'the Site sync script reads from the canonical source');
-assert.doesNotMatch(revisionScript, /\bsource\[item\.id\]/, 'the Site sync script does not reference a removed source variable');
 assert.equal(Object.keys(stage00).length, 9, 'the canonical source contains all nine Stage 00 activities');
 assert(stage00['00.01'].vocabulary.length <= 7 && stage00['00.01'].glossary?.length >= 3, 'first lesson keeps secondary terms in a consultable glossary');
 assert.equal(stage00['00.01'].lab?.kind, 'trace', '00.01 provides a learner-controlled execution trace');

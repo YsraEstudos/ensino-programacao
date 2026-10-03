@@ -1,0 +1,43 @@
+ETAPA 17 - Funções, objetos, interfaces e
+generics em TypeScript
+Faixa
+TypeScript II
+Carga
+16-22 h
+Nivel curricular
+3.0/5
+PRE-REQUISITOS
+TS strict + funcoes/objetos.
+Resultados de aprendizagem
+• Tipar callbacks e funções de alta ordem.
+• Escolher type/interface sem dogma e com base em necessidade.
+• Usar generics para preservar relações entre entradas e saídas.
+• Adicionar constraints somente quando necessárias.
+Conceitos nucleares
+function types · call signatures · interfaces · type aliases · generics · constraints · generic defaults ·
+readonly · optional properties · overloads vs union vs generics · const type parameters · generic constraints
+sem overengineering
+Modelo mental aprofundado
+Generics preservam relacoes entre entradas e saidas. O aluno comeca com funcoes simples como
+identity/getProp e so depois vai para constraints. A pergunta obrigatoria e: "qual relacao concreta o
+parametro de tipo esta preservando?" Se nao houver resposta, talvez um tipo concreto seja melhor.
+Overloads, union e generic resolvem problemas diferentes. Overload e util quando ha assinaturas publicas
+distintas suportadas pelo mesmo runtime; union e melhor quando o corpo realmente trata um conjunto
+comum; generic e melhor quando entrada e saida precisam manter relacao.
+Const type parameters aparecem como recurso moderno para inferencia literal em APIs genericas. O aluno
+tambem aprende que generics complexos podem aumentar tempo de typecheck e dificuldade de leitura.
+Erros e concepcoes que a etapa deve revelar
+• Criar generic que nao preserva relacao nenhuma.
+• Usar overload quando union simples e mais honesta.
+• Adicionar parametro de tipo so para parecer flexivel.
+Exemplo resolvido - generic que preserva o tipo
+function primeiro<T>(itens: readonly T[]): T | undefined {
+  return itens[0];
+}
+const n = primeiro([1, 2, 3]); // number | undefined
+O ponto não é “usar generic”, e sim manter uma relação: o tipo de retorno depende do tipo dos elementos
+recebidos.
+GATE DE DOMINIO
+Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
+justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
+parte do contrato.

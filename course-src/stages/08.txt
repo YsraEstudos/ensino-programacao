@@ -1,0 +1,51 @@
+ETAPA 08 - Trilha paralela de CS:
+problemas, recursao e complexidade
+Faixa
+Intermediario I - trilha paralela
+Carga
+16-22 h
+Nivel curricular
+2.0/5
+PRE-REQUISITOS
+Funcoes, loops, arrays. Trilha paralela: nao bloqueia DOM/async.
+Resultados de aprendizagem
+• Quebrar problemas em casos e subproblemas.
+• Escrever pseudocódigo antes de casos médios/difíceis.
+• Entender recursão, caso base e pilha conceitualmente.
+• Estimar Big-O em algoritmos comuns sem obsessão matemática.
+Conceitos nucleares
+decomposição · pseudocódigo · recursão · caso base · busca linear · busca binária · O(1), O(n), O(n log n),
+O(n²) · trade-offs
+Modelo mental aprofundado
+Esta etapa e uma trilha paralela, nao um pedagio para chegar ao DOM. O aluno pode faze-la junto das
+etapas 09-14. Ela ensina decomposicao, invariantes, recursao, busca e ordem de crescimento porque esses
+conceitos melhoram raciocinio geral, mas nao devem bloquear quem precisa primeiro construir interfaces e
+APIs.
+Big-O e tratado como modelo de crescimento, nao competicao de matematica. O aluno compara O(n) com
+O(n^2), entende por que dois loops sequenciais ainda sao O(n), e aprende a medir antes de otimizar
+codigo real.
+Recursao comeca por caso base e progresso em direcao ao caso base. Visualizar a pilha conceitual e util,
+mas o aluno tambem aprende que uma solucao iterativa pode ser mais simples e evitar limites de
+profundidade.
+Erros e concepcoes que a etapa deve revelar
+• Otimizar Big-O antes de ter codigo correto.
+• Recursao sem caso base/progresso.
+• Achar que dois loops sequenciais sao O(n^2).
+Exemplo resolvido - busca binária com invariantes
+function buscaBinaria(lista, alvo) {
+  let ini = 0, fim = lista.length - 1;
+  while (ini <= fim) {
+    const meio = Math.floor((ini + fim) / 2);
+    if (lista[meio] === alvo) return meio;
+    if (lista[meio] < alvo) ini = meio + 1;
+    else fim = meio - 1;
+  }
+  return -1;
+}
+O importante é explicar o invariante: se o alvo existe, ele permanece dentro do intervalo [ini, fim]. Depois o
+aluno contrasta com busca linear e discute pré-condição de ordenação.
+
+GATE DE DOMINIO
+TRILHA PARALELA: esta etapa nao bloqueia o avanco para DOM/async. Dominio recomendado:
+resolver implementacao + uma questao de complexidade + um problema de transferencia
+sem dica estrutural.

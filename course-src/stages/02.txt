@@ -1,0 +1,76 @@
+ETAPA 02 - Operadores, coerção,
+igualdade e truthiness
+Faixa
+Fundamentos I
+Carga
+Prática guiada: cerca de 3-4 h; reserve tempo adicional para revisão e retomadas.
+Nivel curricular
+1.0/5
+PRE-REQUISITOS
+Variaveis e tipos primitivos da ETAPA 01.
+Resultados de aprendizagem
+• Usar operadores aritméticos, relacionais e lógicos.
+• Entender coerção implícita o suficiente para evitá-la de forma acidental.
+• Preferir ===/!== em código de aplicação.
+• Raciocinar sobre truthy/falsy, curto-circuito e ?? em nível inicial.
+• Aplicar conversão explícita, finitude, ferramentas Math e uma política de tolerância.
+Conceitos nucleares
++ - * / % ** · === !== · coerção · truthy/falsy · && || ?? · precedência · seis valores falsy desta matriz ·
+curto-circuito · nullish coalescing · Number.isFinite · Math · precisão · inteiros seguros · BigInt · tolerância
+Optional chaining (?.) será retomado com objetos em etapas posteriores; não é requisito de conclusão aqui.
+Modelo mental aprofundado
+Coercao e um dos pontos em que JavaScript parece imprevisivel quando o aluno tenta decorar exemplos
+isolados. A estrategia aqui e usar uma matriz: operacao, tipos de entrada, regra de conversao, resultado. O
+aluno deve preferir conversao explicita quando a intencao de negocio poderia ficar ambigua.
+Esta matriz trabalha false, 0, string vazia, null, undefined e NaN, sem pretender listar todos os falsy de JavaScript. O aluno compara || e ?? em
+todos esses casos. A regra pratica e: use ?? quando o que significa "ausente" e apenas null/undefined; use
+|| quando qualquer valor falsy deve acionar o fallback.
+Igualdade estrita e o padrao do curso. == aparece para leitura de legado e para entender coercoes, nao
+como ferramenta preferencial para codigo novo. Short-circuit entra como controle de avaliacao, com
+atencao para efeitos colaterais escondidos em expressoes muito compactas.
+Erros e concepcoes que a etapa deve revelar
+• Usar || como fallback quando 0/false/"" sao valores validos.
+• Misturar == e === sem entender coercao.
+• Esconder regra de negocio dentro de uma expressao de curto-circuito dificil de ler.
+Exemplo resolvido - valor padrão sem destruir zero
+const quantidade = 0;
+const comOu = quantidade || 10;
+const comNullish = quantidade ?? 10;
+console.log(comOu, comNullish);
+O ponto nao e decorar operadores, mas entender que || reage a qualquer valor falsy enquanto ?? reage
+apenas a null/undefined. A etapa compara false, 0, string vazia, null, undefined e NaN para impedir a regra
+errada de negocio.
+Matriz falsy vs nullish
+Valor
+Boolean(x)
+x || "P"
+x ?? "P"
+false
+false
+"P"
+false
+
+false
+"P"
+
+""
+false
+"P"
+""
+null
+false
+"P"
+"P"
+undefined
+false
+"P"
+"P"
+NaN
+false
+"P"
+NaN
+CONCLUSAO DA PRATICA E CONFERENCIA DE DOMINIO
+Cada prática exige previsão registrada, conceito conferido, código atual aprovado nos casos e explicação da regra.
+Antes de avançar, confira sua autonomia: refaça as transferências 02.08 e 02.09 sem consultar exemplo ou dica,
+preveja a saída antes de executar e explique um erro em linguagem natural. Dicas ajudam durante o estudo;
+a conclusão automática registra a prática, não comprova sozinha domínio independente nem qualidade da explicação.

@@ -1,0 +1,55 @@
+ETAPA 12 - Assincrono, event loop,
+Promises, fetch, tempo e concorrencia
+Faixa
+Intermediário II
+Carga
+20-28 h
+Nivel curricular
+2.5/5
+PRE-REQUISITOS
+Funcoes, DOM basico e callbacks.
+Resultados de aprendizagem
+• Distinguir execução síncrona, microtasks e timers em nível prático.
+• Compor Promises e tratar falhas.
+• Usar async/await sem transformar erros em silêncio.
+• Fazer requests e validar resposta antes de usar dados.
+Conceitos nucleares
+event loop · Promise · then/catch/finally · async/await · Promise.all · fetch · AbortController · timeouts ·
+concorrência vs sequência · microtasks vs tasks · Promise.allSettled/race/any · return await em try/catch ·
+Date.now · Intl.DateTimeFormat · cache com expiracao
+Modelo mental aprofundado
+Assincronismo e ensinado com uma linha do tempo. Primeiro roda codigo sincrono; depois microtasks
+(Promise handlers, queueMicrotask) sao drenadas; o navegador pode atualizar a interface; tasks como
+timers/eventos entram no ciclo. O objetivo e prever ordem sem decorar slogans vagos de "fila".
+Promise.all, allSettled, race e any aparecem por semantica de falha. all e para "preciso de todos"; allSettled
+e para operacoes independentes onde resultados parciais importam; race e any resolvem problemas
+diferentes e devem ser escolhidos conscientemente.
+fetch e dividido em quatro fronteiras: transporte/rede, status HTTP, parse do corpo e validade estrutural do
+payload. AbortController trata cancelamento. Requisicoes concorrentes ensinam resposta obsoleta e
+controle de versao/identidade.
+Date.now fornece timestamps para expiracao de cache e medicao grossa; Intl.DateTimeFormat formata
+datas. Temporal aparece como nota avancada porque em 2026 ainda nao e Baseline em todos os
+navegadores. O curso nao obriga o aluno a usar uma API sem suporte amplo.
+Erros e concepcoes que a etapa deve revelar
+• Achar que fetch rejeita automaticamente em todo status HTTP ruim.
+• Confundir fila de microtasks com timers.
+• Usar Promise.all quando resultados parciais deveriam sobreviver.
+Exemplo resolvido - buscar com validação de status
+async function buscarUsuario(id) {
+  const res = await fetch(`/api/users/${id}`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+A explicacao segue um modelo deterministico: codigo sincrono esvazia a call stack; microtasks sao
+drenadas; o navegador pode renderizar; entao uma task e processada e o ciclo se repete. A etapa separa
+erro de rede, status HTTP, JSON invalido e payload estruturalmente invalido.
+
+EVENT LOOP -
+ORDEM DIDATICA
+1) executar codigo sincrono; 2) drenar microtasks; 3) oportunidade de renderizacao no
+browser; 4) processar uma task; 5) voltar a microtasks. Esta e uma simplificacao pedagogica
+controlada, suficiente para os exercicios desta trilha.
+GATE DE DOMINIO
+Avance quando o projeto passar testes, incluir pelo menos uma sessao de debugging
+documentada e resistir a uma pequena mudanca de requisito. Erros de acessibilidade/async
+que quebram o contrato bloqueiam o gate.
