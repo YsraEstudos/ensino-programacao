@@ -1,14 +1,8 @@
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
-import vm from 'node:vm';
-import ts from 'typescript';
+import {loadTsModule} from './load-ts-module.mjs';
 import test from 'node:test';
 { const site = 'canonical';
-  const source=readFileSync(new URL('../app/api/progress/route.ts',import.meta.url),'utf8').replace(/^import .*;$/gm,'');
-  const compiled=ts.transpileModule(source+'\nglobalThis.testSanitize=sanitize;', {compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText;
-  const context={exports:{},courseExerciseIds:['02.01','02.04','01.01']};
-  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../lib/stage01-progress.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS}}).outputText,context);
-  vm.runInNewContext(compiled,context);
+  const context={testSanitize:loadTsModule('lib/progress-sanitize.ts').sanitizeUserProgress};
   test(`${site}: sanitized server progress preserves long stage02 drafts and checks`,()=>{
     const code='const texto="12";\n'+'// retained\n'.repeat(250);
     const state={version:1,index:0,reflection:'Expliquei como validei a entrada numérica.',complete:true,blocks:[{code,prediction:'Prevejo false.',predictionSaved:true,understood:true,passedCode:code,hintLevel:2,parsons:['A','B','C','D']}]};

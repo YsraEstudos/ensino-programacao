@@ -59,7 +59,7 @@ function stageRank(stage) {
   return Number(stage) + 1;
 }
 
-function createFeatureMapper(conceptGraph, item) {
+function createFeatureMapper(conceptGraph) {
   const concepts = new Set((conceptGraph.concepts || []).map((item) => item.id));
   const conceptById = new Map((conceptGraph.concepts || []).map((concept) => [concept.id, concept]));
   // ESM is the exercise-runner packaging contract. Browser modules remain a distinct
@@ -93,7 +93,7 @@ function createFeatureMapper(conceptGraph, item) {
   return { concepts, conceptById, conceptByFeature };
 }
 
-function collectFeatures(sourceFile, text, mapper) {
+function collectFeatures(sourceFile, text) {
   const features = new Set();
   const extensionMentions = EXTENSION_APIS.filter(([, pattern]) => pattern.test(text)).map(([name]) => name);
   const add = (feature) => features.add(feature);
@@ -236,7 +236,6 @@ async function validateGraph(cards, graph, findings) {
     priorStage = Math.max(priorStage, rank);
 
     const requirements = Array.isArray(item.requires) ? item.requires : [];
-    const introductions = Array.isArray(item.introduces) ? item.introduces : [];
     const graphActivity = graphActivityById.get(item.id);
     if (!graphActivity) addFinding(findings, status, item.id, "GRAPH_ACTIVITY_MISSING", "Activity is absent from concept_graph.json.");
     else {

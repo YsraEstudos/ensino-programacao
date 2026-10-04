@@ -27,7 +27,7 @@ test('public curriculum matches the current generated editorial data', async () 
 });
 
 test('generated curriculum intermediates live in the ignored generated directory', () => {
-  for (const name of ['resolved_preview.json', 'concept_graph.json', 'audit_coverage.json']) {
+  for (const name of ['resolved_preview.json', 'concept_graph.json', 'audit_coverage.json', 'stage00-preparation.json']) {
     assert.equal(fs.existsSync(new URL(`course-src/${name}`, project)), false, `Generated source copy remains: ${name}`);
     assert.equal(fs.existsSync(new URL(`course-src/.generated/${name}`, project)), true, `Missing generated intermediate: ${name}`);
   }

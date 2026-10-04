@@ -1,3 +1,4 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
@@ -11,7 +12,7 @@ async function load(saved){
   let accountRequests=0;
   dom.window.fetch=async url=>{if(url==='/course-catalog.json')return {ok:true,json:async()=>catalog};accountRequests++;throw Error('Account API should not run in local preview');};
   if(saved)dom.window.localStorage.setItem('devpath-local-preview-v1',saved);
-  for(const name of ['js-stage00-runner.js','js-stage00-ui.js','js-stage02-runner.js','js-stage02-lessons.js','js-stage02-ui.js','app.js'])dom.window.eval(readFileSync(new URL(name,root),'utf8'));
+  for(const name of [...dom.window.document.querySelectorAll('script[src]')].map(script => new URL(script.src).pathname.slice(1)))dom.window.eval(withPublicDependencies(readFileSync(new URL(name,root),'utf8')));
   await settle();
   const document=dom.window.document;
   const q=selector=>document.querySelector(selector);

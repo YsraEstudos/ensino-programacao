@@ -1,3 +1,4 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { JSDOM } from 'jsdom';
@@ -7,7 +8,7 @@ const lessons = catalog.filter(item => item.stage === '00');
 assert.equal(lessons.length, 9);
 const dom = new JSDOM('<div id="view"></div>', {runScripts:'outside-only', url:'http://localhost'});
 dom.window.HTMLElement.prototype.scrollIntoView = function() {};
-for (const file of ['js-stage00-runner.js', 'js-stage00-preparation.js']) dom.window.eval(readFileSync(new URL(file, root), 'utf8'));
+for (const file of ['js-stage00-runner.js', 'js-stage00-preparation.js']) dom.window.eval(withPublicDependencies(readFileSync(new URL(file, root), 'utf8')));
 const ui = dom.window.DevPathStage00Preparation;
 let saves = 0;
 const progress = {exercisePredictions:{},exerciseDrafts:{},exerciseReflections:{},exerciseEvidence:{},warmupCompleted:{},answers:{},exerciseVersions:{},completed:[],reviewSchedule:{}};
@@ -113,6 +114,7 @@ console.log('Stage 00: all 9 explanations precede answers; navigation, execution
 // Exercise the actual application listeners and server-backed save/reload flow.
 const settle=async()=>{for(let i=0;i<5;i++)await new Promise(resolve=>setImmediate(resolve));};
 let accountProgress={};
+let accountRevision='"initial"';
 async function loadApp(){
   const app=new JSDOM(readFileSync(new URL('devpath.html',root),'utf8'),{url:'https://devpath.test/devpath.html',runScripts:'outside-only'});
   app.window.HTMLElement.prototype.scrollIntoView=function(){};
@@ -120,12 +122,17 @@ async function loadApp(){
   app.window.fetch=async (url,options={})=>{
     if(url==='/course-catalog.json')return {ok:true,json:async()=>catalog};
     if(url==='/api/progress'){
-      if(options.method==='PUT')accountProgress=JSON.parse(options.body);
-      return {ok:true,json:async()=>({progress:JSON.parse(JSON.stringify(accountProgress))})};
+      if(options.method==='PUT'){
+        assert.equal(options.headers['If-Match'],accountRevision);
+        accountProgress=JSON.parse(options.body);
+        accountRevision='"'+Date.now()+'-'+Math.random()+'"';
+        return {ok:true,json:async()=>({saved:true,revision:accountRevision})};
+      }
+      return {ok:true,json:async()=>({progress:JSON.parse(JSON.stringify(accountProgress)),revision:accountRevision,accountKey:'test-stage00'})};
     }
     return {ok:false,json:async()=>({})};
   };
-  for(const script of app.window.document.querySelectorAll('script[src]'))app.window.eval(readFileSync(new URL(script.getAttribute('src').split('?')[0].slice(1),root),'utf8'));
+  for(const script of app.window.document.querySelectorAll('script[src]'))app.window.eval(withPublicDependencies(readFileSync(new URL(script.getAttribute('src').split('?')[0].slice(1),root),'utf8')));
   await settle();return app;
 }
 const solutions={

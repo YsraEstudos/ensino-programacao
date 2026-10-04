@@ -32,6 +32,6 @@ As nove atividades usam um renderer específico da Etapa 00, integrado às mesma
 
 O executor introdutório avalia somente as chamadas e expressões ensinadas. Não roda JavaScript arbitrário. Confere os valores esperados, inclusive a diferença entre número e texto, mostra divergência em texto e reconhece a grafia incorreta usada no exercício de depuração. A análise da sintaxe precede a simulação da execução; erros durante a execução preservam as mensagens anteriores. Nos exercícios de leitura, o registro da análise e os critérios são autoavaliação explícita, sem simular correção automática.
 
-Fonte pedagógica única: `course-src/stage00-preparation.mjs`, versionada com o Site. Gere `../course-src/stage00-preparation.json` com `node ../course-src/build-stage00-preparation.mjs` antes de compilar o currículo Python. O catálogo público e os arquivos em `public/` são saídas geradas para cada aplicação.
+Fonte pedagógica única: `course-src/stage00-preparation.mjs`, versionada com o Site. `npm run build:curriculum` gera o JSON intermediário em `course-src/.generated/` antes de compilar o currículo. O catálogo público e os arquivos em `public/` são saídas geradas.
 
 Validação: `npm.cmd run test:stage00` verifica o conteúdo canônico e a interface, incluindo execução, diagnóstico, HTML, transferência do desafio final e persistência após recarga. `npm.cmd run build` valida o catálogo e compila o Site. Acessibilidade automatizada não substitui um teste real com leitor de tela.

@@ -313,7 +313,7 @@ def make_records() -> list[dict]:
 
 def apply_stage00_preparation(output: list[dict[str, Any]]) -> list[dict[str, Any]]:
     # Stage 00 teaches each new concept before requiring a first response.
-    preparation = json.loads((ROOT / "stage00-preparation.json").read_text(encoding="utf-8"))
+    preparation = json.loads((GENERATED_DIR / "stage00-preparation.json").read_text(encoding="utf-8"))
     for item in output:
         if item["stage"] != "00":
             continue

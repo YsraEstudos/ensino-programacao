@@ -1,3 +1,4 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
@@ -9,7 +10,7 @@ const catalog = JSON.parse(fs.readFileSync(new URL('course-catalog.json', root),
 function fixture(id) {
   const dom = new JSDOM('<main id="view"></main>', {runScripts:'outside-only',url:'http://localhost'});
   dom.window.HTMLElement.prototype.scrollIntoView = function () {};
-  for (const file of ['js-diagnostic-preparation.js','js-diagnostic-ui.js']) dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+  for (const file of ['js-diagnostic-preparation.js','js-diagnostic-ui.js']) dom.window.eval(withPublicDependencies(fs.readFileSync(new URL(file,root),'utf8')));
   const item = catalog.find(item=>item.id===id), ui=dom.window.DevPathDiagnosticUI, progress={}, view=dom.window.document.querySelector('#view');
   const ctx = {progress,activities:catalog,saveProgress(){assert.doesNotThrow(()=>JSON.stringify(progress));},render(){view.innerHTML=ui.render(item,ctx);}};
   const click = selector => ui.handleClick({target:view.querySelector(selector),preventDefault(){}},item,ctx);
@@ -72,7 +73,7 @@ test('the actual D route loads its dedicated diagnostic and preserves Stage00 re
   try {
     dom.window.fetch=async url=>({ok:true,json:async()=>url==='/course-catalog.json'?catalog:{progress:{}}});
     const scripts=[...dom.window.document.querySelectorAll('script[src]')].map(script=>script.getAttribute('src').split('?')[0].slice(1));
-    for(const file of scripts)dom.window.eval(fs.readFileSync(new URL(file,root),'utf8'));
+    for(const file of scripts)dom.window.eval(withPublicDependencies(fs.readFileSync(new URL(file,root),'utf8')));
     for(let i=0;i<4;i++)await new Promise(resolve=>setImmediate(resolve));
     assert(dom.window.document.querySelector('.diagnostic-lesson.s00-lesson'));
     dom.window.location.hash='#/javascript/00.01';

@@ -20,7 +20,7 @@ O workspace contém um único projeto ativo em `devpath-publish/`. Entre nessa p
 
 `npm run build:curriculum` compila receitas e etapas, recria `resolved_preview.json`, `concept_graph.json` e `audit_coverage.json` em `course-src/.generated/` e regenera os artefatos públicos. `npm run check:curriculum` compara essas saídas, valida o catálogo completo e verifica os contratos. Nenhum gerador lê um catálogo anterior para preservar silenciosamente alterações manuais.
 
-Após alterar receitas ou etapas, execute `npm run build:curriculum`; ele orquestra todos os intermediários e as saídas públicas. Após editar a preparação de 00, atualize também o intermediário com `node course-src/build-stage00-preparation.mjs` antes de compilar. Para gerar o PDF editorial, gere os dados primeiro e execute `python course-src/render_pdf.py`.
+Após alterar receitas ou etapas, execute `npm run build:curriculum`; ele atualiza todos os intermediários em `course-src/.generated/` e as saídas públicas, incluindo os dados derivados de `stage00-preparation.mjs`. Para gerar o PDF editorial, gere os dados primeiro e execute `python course-src/render_pdf.py`.
 
 ## Verificação
 

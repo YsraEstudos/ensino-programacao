@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+
 import { stage00 } from '../course-src/stage00-preparation.mjs';
 
 assert.equal(Object.keys(stage00).length, 9, 'the canonical source contains all nine Stage 00 activities');

@@ -1,204 +1,69 @@
-import { sanitizeStage01Progress, type Stage01State } from "../../../lib/stage01-progress";
 import { getD1 } from "../../../db";
-import { courseExerciseIds } from "../../../lib/course-exercise-ids";
 import { getChatGPTUser } from "../../chatgpt-auth";
+import { createEmptyProgress } from "../../../lib/progress-model";
+import { sanitizeUserProgress } from "../../../lib/progress-sanitize";
+import { readProgressBody, ProgressRequestError } from "../../../lib/progress-request";
 
 export const dynamic = "force-dynamic";
+const headers = { "Cache-Control": "private, no-store" };
+const unavailable = () => Response.json({ error: "Não foi possível acessar seu progresso. Tente novamente sem fechar esta página." }, { status: 503, headers });
+const conflict = () => Response.json({ error: "Seu progresso mudou em outra aba ou dispositivo. Sua tentativa foi preservada neste navegador." }, { status: 409, headers });
 
-const exerciseIds = new Set<string>(courseExerciseIds);
-const slugs = new Set(["web", "html", "css", ...exerciseIds]);
-type Stage02State = {
-  version: number; index: number; complete: boolean; reflection: string;
-  blocks: { code: string; prediction: string; predictionSaved: boolean; understood: boolean; passedCode: string | null; hintLevel: number; parsons: string[] }[];
-};
-type UserProgress = {
-  stage01: Record<string, Stage01State>;
-  stage02: Record<string, Stage02State>;
-  completed: string[];
-  answers: Record<string, boolean>;
-  exerciseVersions: Record<string, number>;
-  attempts: Record<string, number>;
-  challenges: Record<string, { text: string; submittedAt: string }>;
-  exerciseDrafts: Record<string, string>;
-  exercisePredictions: Record<string, string>;
-  exerciseReflections: Record<string, string>;
-  exerciseEvidence: Record<string, { status: "executed" | "written"; runResult: "result" | "error" | "timeout" | "guided"; output: string; rubric: number[]; runCount: number; recordedAt?: string }>;
-  warmupCompleted: Record<string, boolean>;
-  reviewSchedule: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }>;
-  lastLesson: string | null;
-  activeDays: string[];
-  reviewIndex: number;
-  lastReview: string | null;
-};
-
-const emptyProgress: UserProgress = {
-  stage01: {},
-  stage02: {},
-  completed: [], answers: {}, attempts: {}, challenges: {}, exerciseDrafts: {},
-  exerciseVersions: {}, exercisePredictions: {}, exerciseReflections: {}, exerciseEvidence: {}, warmupCompleted: {}, reviewSchedule: {},
-  lastLesson: null, activeDays: [], reviewIndex: 0, lastReview: null,
-};
-
-function record(value: unknown): Record<string, unknown> {
-  return value && typeof value === "object" && !Array.isArray(value)
-    ? value as Record<string, unknown> : {};
+async function revisionOf(source: string | null): Promise<string> {
+  if (source === null) return '"empty"';
+  const hash = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(source));
+  return `"${Array.from(new Uint8Array(hash), value => value.toString(16).padStart(2, "0")).join("")}"`;
 }
 
-function validDate(value: unknown): string | null {
-  return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
-}
-
-function isExerciseDataKey(value: string): boolean {
-  if (exerciseIds.has(value)) return true;
-  const versioned = /^(.+)@v([1-9]\d{0,2})$/.exec(value);
-  return Boolean(versioned && exerciseIds.has(versioned[1]));
-}
-
-function sanitize(value: unknown): UserProgress {
-  const input = record(value);
-  const stage02: Record<string, Stage02State> = {};
-  for (const id of exerciseIds) {
-    if (!id.startsWith("02.")) continue;
-    const state = record(record(input.stage02)[id]);
-    if (state.version !== 1 || !Array.isArray(state.blocks) || state.blocks.length < 1 || state.blocks.length > 3) continue;
-    const blocks = state.blocks.map((value: unknown) => {
-      const block = record(value);
-      const code = typeof block.code === "string" ? block.code.slice(0, 12000) : "";
-      return {
-        code, prediction: typeof block.prediction === "string" ? block.prediction.slice(0, 2000) : "",
-        predictionSaved: block.predictionSaved === true, understood: block.understood === true,
-        passedCode: typeof block.passedCode === "string" && block.passedCode === code ? code : null,
-        hintLevel: Math.max(0, Math.min(3, Math.trunc(Number(block.hintLevel) || 0))),
-        parsons: Array.isArray(block.parsons) ? [...new Set(block.parsons.filter((letter): letter is string => typeof letter === "string" && /^[A-E]$/.test(letter)))].slice(0, 5) : ["C", "D", "A", "E", "B"],
-      };
-    });
-    stage02[id] = {
-      version: 1, index: Math.max(0, Math.min(blocks.length - 1, Math.trunc(Number(state.index) || 0))),
-      complete: state.complete === true && blocks.every(block => block.predictionSaved && block.understood && block.passedCode === block.code),
-      reflection: typeof state.reflection === "string" ? state.reflection.slice(0, 600) : "", blocks,
-    };
-  }
-  const answers = record(input.answers);
-  const versions = record(input.exerciseVersions);
-  const attempts = record(input.attempts);
-  const challenges = record(input.challenges);
-  const drafts = record(input.exerciseDrafts);
-  const predictions = record(input.exercisePredictions);
-  const reflections = record(input.exerciseReflections);
-  const evidence = record(input.exerciseEvidence);
-  const warmups = record(input.warmupCompleted);
-  const schedules = record(input.reviewSchedule);
-  const cleanAnswers: Record<string, boolean> = {};
-  const cleanVersions: Record<string, number> = {};
-  const cleanAttempts: Record<string, number> = {};
-  const cleanChallenges: Record<string, { text: string; submittedAt: string }> = {};
-  const cleanDrafts: Record<string, string> = {};
-  const cleanPredictions: Record<string, string> = {};
-  const cleanReflections: Record<string, string> = {};
-  const cleanEvidence: UserProgress["exerciseEvidence"] = {};
-  const cleanWarmups: Record<string, boolean> = {};
-  const cleanSchedules: Record<string, { intervalIndex: number; dueAt: number; lastReviewedAt?: string }> = {};
-
-  for (const slug of slugs) {
-    if (typeof answers[slug] === "boolean") cleanAnswers[slug] = answers[slug] as boolean;
-    if (typeof attempts[slug] === "number" && Number.isInteger(attempts[slug]) && attempts[slug] >= 0) cleanAttempts[slug] = Math.min(attempts[slug], 100000);
-    const challenge = record(challenges[slug]);
-    if (typeof challenge.text === "string" && challenge.text.length <= 600) {
-      cleanChallenges[slug] = {
-        text: challenge.text,
-        submittedAt: typeof challenge.submittedAt === "string" && !Number.isNaN(Date.parse(challenge.submittedAt)) ? challenge.submittedAt : new Date().toISOString(),
-      };
-    }
-    const schedule = record(schedules[slug]);
-    if (typeof schedule.dueAt === "number" && Number.isFinite(schedule.dueAt)) {
-      cleanSchedules[slug] = {
-        intervalIndex: Math.max(-1, Math.min(3, Math.trunc(Number(schedule.intervalIndex) || 0))),
-        dueAt: Math.max(0, Math.trunc(Number(schedule.dueAt))),
-        ...(typeof schedule.lastReviewedAt === "string" && !Number.isNaN(Date.parse(schedule.lastReviewedAt)) ? { lastReviewedAt: schedule.lastReviewedAt } : {}),
-      };
-    }
-  }
-
-  for (const id of exerciseIds) {
-    if (typeof versions[id] === "number" && Number.isInteger(versions[id]) && versions[id] >= 1 && versions[id] <= 1000) cleanVersions[id] = versions[id];
-  }
-
-  const exerciseDataKeys = new Set([
-    ...exerciseIds,
-    ...Object.keys(drafts).filter(isExerciseDataKey),
-    ...Object.keys(predictions).filter(isExerciseDataKey),
-    ...Object.keys(reflections).filter(isExerciseDataKey),
-    ...Object.keys(evidence).filter(isExerciseDataKey),
-    ...Object.keys(warmups).filter(isExerciseDataKey),
-  ]);
-  for (const id of exerciseDataKeys) {
-    if (typeof drafts[id] === "string") cleanDrafts[id] = (drafts[id] as string).slice(0, 2500);
-    if (typeof predictions[id] === "string") cleanPredictions[id] = (predictions[id] as string).slice(0, 400);
-    if (typeof reflections[id] === "string") cleanReflections[id] = (reflections[id] as string).slice(0, 600);
-    const itemEvidence = record(evidence[id]);
-    if ((itemEvidence.status === "executed" || itemEvidence.status === "written") && ["result", "error", "timeout", "guided"].includes(String(itemEvidence.runResult))) {
-      cleanEvidence[id] = {
-        status: itemEvidence.status,
-        runResult: itemEvidence.runResult as UserProgress["exerciseEvidence"][string]["runResult"],
-        output: typeof itemEvidence.output === "string" ? itemEvidence.output.slice(0, 9000) : "",
-        rubric: Array.isArray(itemEvidence.rubric) ? [...new Set(itemEvidence.rubric.filter((index): index is number => Number.isInteger(index) && index >= 0 && index < 20))].slice(0, 20) : [],
-        runCount: typeof itemEvidence.runCount === "number" && Number.isInteger(itemEvidence.runCount) ? Math.max(0, Math.min(100000, itemEvidence.runCount)) : 0,
-        ...(typeof itemEvidence.recordedAt === "string" && !Number.isNaN(Date.parse(itemEvidence.recordedAt)) ? { recordedAt: itemEvidence.recordedAt } : {}),
-      };
-    }
-    if (typeof warmups[id] === "boolean") cleanWarmups[id] = warmups[id] as boolean;
-  }
-
-  return {
-    stage01: sanitizeStage01Progress(input.stage01),
-    stage02,
-    completed: Array.isArray(input.completed) ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [],
-    answers: cleanAnswers,
-    exerciseVersions: cleanVersions,
-    attempts: cleanAttempts,
-    challenges: cleanChallenges,
-    exerciseDrafts: cleanDrafts,
-    exercisePredictions: cleanPredictions,
-    exerciseReflections: cleanReflections,
-    exerciseEvidence: cleanEvidence,
-    warmupCompleted: cleanWarmups,
-    reviewSchedule: cleanSchedules,
-    lastLesson: typeof input.lastLesson === "string" && slugs.has(input.lastLesson) ? input.lastLesson : null,
-    activeDays: Array.isArray(input.activeDays) ? [...new Set(input.activeDays.map(validDate).filter((day): day is string => Boolean(day)))].slice(-30) : [],
-    reviewIndex: typeof input.reviewIndex === "number" && Number.isInteger(input.reviewIndex) ? Math.max(0, Math.min(courseExerciseIds.length - 1, input.reviewIndex)) : 0,
-    lastReview: validDate(input.lastReview),
-  };
+function savedProgress(source: string) {
+  const value: unknown = JSON.parse(source);
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid stored progress");
+  return sanitizeUserProgress(value);
 }
 
 export async function GET() {
   const user = await getChatGPTUser();
-  if (!user) return Response.json({ error: "Entre com sua conta para continuar." }, { status: 401 });
+  if (!user) return Response.json({ error: "Entre com sua conta para continuar." }, { status: 401, headers });
   try {
-    const row = await getD1().prepare("SELECT progress_json FROM user_progress WHERE user_id = ?1").bind(user.userId).first<{ progress_json: string }>();
-    let progress = emptyProgress;
-    if (row?.progress_json) {
-      try { progress = sanitize(JSON.parse(row.progress_json)); }
-      catch { console.error("Invalid saved DevPath progress for account", user.userId); }
-    }
-    return Response.json({ progress }, { headers: { "Cache-Control": "private, no-store" } });
+    const row = await getD1().prepare("SELECT progress_json FROM user_progress WHERE user_id = ?1")
+      .bind(user.userId).first<{ progress_json: string }>();
+    const source = row ? row.progress_json : null;
+    const progress = source === null ? createEmptyProgress() : savedProgress(source);
+    const revision = await revisionOf(source);
+    const accountKey = await revisionOf(user.userId);
+    return Response.json({ progress, revision, accountKey }, { headers: { ...headers, ETag: revision } });
   } catch (error) {
     console.error("DevPath progress load failed", error);
-    return Response.json({ error: "Não foi possível carregar o progresso agora." }, { status: 503 });
+    return unavailable();
   }
 }
 
 export async function PUT(request: Request) {
   const user = await getChatGPTUser();
-  if (!user) return Response.json({ error: "Entre com sua conta para continuar." }, { status: 401 });
+  if (!user) return Response.json({ error: "Entre com sua conta para continuar." }, { status: 401, headers });
   try {
-    const payload: unknown = await request.json();
-    if (JSON.stringify(payload).length > 900000) return Response.json({ error: "O progresso enviado excede o limite." }, { status: 413 });
-    const progress = sanitize(payload);
-    await getD1().prepare("INSERT INTO user_progress (user_id, progress_json, updated_at) VALUES (?1, ?2, unixepoch()) ON CONFLICT(user_id) DO UPDATE SET progress_json = excluded.progress_json, updated_at = unixepoch()")
-      .bind(user.userId, JSON.stringify(progress)).run();
-    return Response.json({ saved: true }, { headers: { "Cache-Control": "private, no-store" } });
+    const payload = await readProgressBody(request);
+    const expectedRevision = request.headers.get("If-Match");
+    if (!expectedRevision) {
+      return Response.json({ error: "Atualize a página antes de salvar seu progresso." }, { status: 428, headers });
+    }
+    const db = getD1();
+    const row = await db.prepare("SELECT progress_json FROM user_progress WHERE user_id = ?1")
+      .bind(user.userId).first<{ progress_json: string }>();
+    const source = row ? row.progress_json : null;
+    if (source !== null) savedProgress(source);
+    if (expectedRevision !== await revisionOf(source)) return conflict();
+    const serialized = JSON.stringify(sanitizeUserProgress(payload));
+    const statement = source === null
+      ? db.prepare("INSERT OR IGNORE INTO user_progress (user_id, progress_json, updated_at) VALUES (?1, ?2, unixepoch())").bind(user.userId, serialized)
+      : db.prepare("UPDATE user_progress SET progress_json = ?2, updated_at = unixepoch() WHERE user_id = ?1 AND progress_json = ?3").bind(user.userId, serialized, source);
+    const result = await statement.run();
+    if (result.meta.changes !== 1) return conflict();
+    const revision = await revisionOf(serialized);
+    return Response.json({ saved: true, revision }, { headers: { ...headers, ETag: revision } });
   } catch (error) {
+    if (error instanceof ProgressRequestError) return Response.json({ error: error.message }, { status: error.status, headers });
     console.error("DevPath progress save failed", error);
-    return Response.json({ error: "Não foi possível salvar o progresso agora." }, { status: 503 });
+    return unavailable();
   }
 }

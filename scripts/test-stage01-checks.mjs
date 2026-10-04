@@ -1,3 +1,4 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
@@ -5,7 +6,7 @@ import test from 'node:test';
 const root = new URL('../public/', import.meta.url);
 const ctx = vm.createContext({ console });
 for (const name of ['js-stage01-runner.js', 'js-stage01-checks.js']) {
-  if (existsSync(new URL(name, root))) vm.runInContext(readFileSync(new URL(name, root), 'utf8'), ctx);
+  if (existsSync(new URL(name, root))) vm.runInContext(withPublicDependencies(readFileSync(new URL(name, root), 'utf8')), ctx);
 }
 export const solutions = {
   '01.01': 'console.log(typeof 42); console.log(typeof "42"); console.log(typeof true); console.log(typeof undefined); console.log(typeof null);',

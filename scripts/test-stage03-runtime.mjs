@@ -1,3 +1,4 @@
+await import('../public/js-teaching-utils.js');
 import assert from 'node:assert/strict';
 await import('../public/js-stage03-runner.js');
 const { run, format } = globalThis.DevPathStage03Runner;

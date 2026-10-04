@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const python = process.env.DEVPATH_PYTHON || 'python';
 const steps = [
+  [process.execPath, ['course-src/build-stage00-preparation.mjs']],
   [python, ['course-src/compile_content.py']],
   [python, ['course-src/build_graph.py']],
   [python, ['course-src/build_coverage.py']],

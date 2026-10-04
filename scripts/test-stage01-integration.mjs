@@ -1,3 +1,4 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import {JSDOM} from 'jsdom';
@@ -9,8 +10,8 @@ test('01.02 actual app route teaches before prediction and loads dedicated contr
   const dom=new JSDOM(readFileSync(new URL('devpath.html',root),'utf8'),{url:'http://localhost:8011/devpath.html#/javascript/01.02',runScripts:'outside-only'});
   try {
     dom.window.fetch=async url=>({ok:true,json:async()=>url==='/course-catalog.json'?catalog:{progress:{}}});
-    for(const name of ['js-stage00-runner.js','js-stage00-ui.js','js-stage00-preparation.js','js-stage02-runner.js','js-stage02-lessons.js','js-stage02-ui.js','js-stage01-runner.js','js-stage01-preparation.js','js-stage01-checks.js','js-stage01-ui.js','js-learning-journey.js','js-diagnostic-preparation.js','js-diagnostic-ui.js','app.js']) {
-      if(existsSync(new URL(name,root)))dom.window.eval(readFileSync(new URL(name,root),'utf8'));
+    for(const name of [...dom.window.document.querySelectorAll('script[src]')].map(script => new URL(script.src).pathname.slice(1))) {
+      if(existsSync(new URL(name,root)))dom.window.eval(withPublicDependencies(readFileSync(new URL(name,root),'utf8')));
     }
     await settle();
     assert(dom.window.document.querySelector('.s01-lesson'),'Stage01 must use dedicated renderer');

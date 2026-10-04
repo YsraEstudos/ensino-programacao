@@ -1,0 +1,46 @@
+// Generated from lib/progress-contract.json; edit that contract.
+(function (global) {
+  "use strict";
+  const defaults = {
+  "completed": [],
+  "answers": {},
+  "attempts": {},
+  "challenges": {},
+  "exerciseVersions": {},
+  "exerciseDrafts": {},
+  "exercisePredictions": {},
+  "exerciseReflections": {},
+  "exerciseEvidence": {},
+  "warmupCompleted": {},
+  "reviewSchedule": {},
+  "stage01": {},
+  "stage02": {},
+  "lastLesson": null,
+  "activeDays": [],
+  "reviewIndex": 0,
+  "lastReview": null
+};
+  const limits = Object.freeze({
+  "codeChars": 12000,
+  "stage02PredictionChars": 2000,
+  "draftChars": 2500,
+  "predictionChars": 400,
+  "reflectionChars": 600,
+  "stage01ReflectionChars": 1200,
+  "outputChars": 9000,
+  "attemptCount": 100000,
+  "requestBytes": 900000,
+  "stage02Blocks": 3,
+  "hintLevel": 3,
+  "parsonsLetters": 5,
+  "rubricItems": 20,
+  "contentVersion": 1000,
+  "reviewIntervalIndex": 3,
+  "activeDays": 30,
+  "predictionRows": 12,
+  "transferCount": 2,
+  "transferIdChars": 30,
+  "secondOrderChars": 80
+});
+  global.DevPathProgressModel = Object.freeze({ create: () => JSON.parse(JSON.stringify(defaults)), limits });
+})(globalThis);

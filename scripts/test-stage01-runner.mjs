@@ -1,10 +1,11 @@
+import {withPublicDependencies} from './public-test-source.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 
 const source = fs.readFileSync(new URL('../public/js-stage01-runner.js', import.meta.url), 'utf8');
 const context = { console };
-vm.runInNewContext(source, context);
+vm.runInNewContext(withPublicDependencies(source), context);
 const runner = context.DevPathStage01Runner;
 assert.ok(runner);
 

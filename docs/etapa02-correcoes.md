@@ -39,6 +39,6 @@ O modo localhost salva blocos, previsões, código, explicações, conclusão e 
 
 Prévia: `python -m http.server 8000 --bind 127.0.0.1 --directory devpath-full-catalog/public`, seguida de `http://localhost:8000/devpath.html#/javascript/02.01`. A compilação e o typecheck dos dois projetos também fazem parte da verificação.
 
-Regeneração: `node course-src/build-stage00-preparation.mjs`, `python course-src/compile_content.py`, `python course-src/build_graph.py`, `node course-src/build-public-curriculum.mjs`, `node course-src/build-public-curriculum.mjs --full`. O modo completo preserva os cartões autorados fora da Etapa 02 e a posição das respostas de revisão. Ambos os sites locais devem passar seus validadores e `npm.cmd run build`.
+Regeneração no checkout consolidado: `npm run build:curriculum` gera os dados derivados em `.generated/` e as saídas públicas em sequência. A instrução anterior de executar cada gerador manualmente foi substituída pelo orquestrador único.
 
 Referências técnicas: [Number.isFinite](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite), [Math.random](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random) e [Number.EPSILON](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON).
