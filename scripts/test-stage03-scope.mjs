@@ -10,7 +10,7 @@ test('Stage 03 count examples retain the corrected upper endpoint', () => {
 });
 
 test('generation preserves every authored ID and leaves source records untouched', () => {
-  const sourcePath = new URL('../course-src/resolved_preview.json', import.meta.url);
+  const sourcePath = new URL('../course-src/.generated/resolved_preview.json', import.meta.url);
   const before = fs.readFileSync(sourcePath, 'utf8');
   const generated = JSON.parse(createCourseArtifacts().get('public/course-catalog.json'));
   assert.deepEqual(generated.map(item => item.id), JSON.parse(before).map(item => item.id));

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 
-const records = JSON.parse(readFileSync(new URL('./resolved_preview.json', import.meta.url)));
+const records = JSON.parse(readFileSync(new URL('./.generated/resolved_preview.json', import.meta.url)));
 const byId = new Map(records.map(item => [item.id, item]));
 const code = id => byId.get(id).learner.starter_files[0].content;
 function run(source, fixtures = {}) {
@@ -94,7 +94,7 @@ test('02.12: tolerance derives from policy, includes exact boundary and rejects 
   for (const [a,b,resolucao,expected] of [[2000.3,2000.304,0.01,[0.005,true]],[1,1.1,0.02,[0.01,false]],[0.1+0.2,0.3,2e-15,[1e-15,true]],[1000.1+1000.2,2000.3,2e-12,[1e-12,true]],[0,0.125,0.25,[0.125,true]],[0,0.25,0.25,[0.125,false]],[4,4,0.01,[0.005,true]]]) assert.deepEqual(run(solution,{a,b,resolucao}),[expected]);
 });
 test('stage graph names actual skills and prerequisites precede activities', () => {
-  const graph=JSON.parse(readFileSync(new URL('./concept_graph.json',import.meta.url)));
+const graph=JSON.parse(readFileSync(new URL('./.generated/concept_graph.json',import.meta.url)));
   const known=new Set(graph.concepts.map(c=>c.id));
   const learned=new Set(graph.concepts.filter(c=>c.introduced_at==='00' || c.introduced_at==='01').map(c=>c.id));
   for (const item of records) {

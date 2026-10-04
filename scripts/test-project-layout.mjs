@@ -17,13 +17,21 @@ test('one self-contained project retains the complete curriculum and latest revi
   assert.match(fs.readFileSync(new URL('course-src/stages/03.txt', project), 'utf8'), /reservar for\.\.\.of/);
 });
 
-test('generated curriculum is reproducible without reading its previous output', async () => {
+test('public curriculum matches the current generated editorial data', async () => {
   const {createCourseArtifacts} = await import('../course-src/build-public-curriculum.mjs');
   const artifacts = createCourseArtifacts();
   assert(artifacts instanceof Map);
   for (const [path, contents] of artifacts) {
     assert.equal(fs.readFileSync(new URL(path, project), 'utf8'), contents, `Regenerate ${path}`);
   }
+});
+
+test('generated curriculum intermediates live in the ignored generated directory', () => {
+  for (const name of ['resolved_preview.json', 'concept_graph.json', 'audit_coverage.json']) {
+    assert.equal(fs.existsSync(new URL(`course-src/${name}`, project)), false, `Generated source copy remains: ${name}`);
+    assert.equal(fs.existsSync(new URL(`course-src/.generated/${name}`, project)), true, `Missing generated intermediate: ${name}`);
+  }
+  assert.match(fs.readFileSync(new URL('.gitignore', project), 'utf8'), /course-src\/\.generated/);
 });
 
 test('obsolete checkouts and the old static application are absent', () => {

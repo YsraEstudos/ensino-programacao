@@ -1,4 +1,4 @@
-// Generated from course-src/resolved_preview.json; learner-facing IDs only.
+// Generated from course-src/.generated/resolved_preview.json; learner-facing IDs only.
 export const courseExerciseIds = [
   "D.01",
   "D.02",

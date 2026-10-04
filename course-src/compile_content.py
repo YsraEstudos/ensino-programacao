@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any
 
 from extras import EXTRAS, DIAGNOSTIC
+from generated_data import GENERATED_DIR
 
 ROOT = Path(__file__).resolve().parent
 PROJECT = ROOT.parent
@@ -349,5 +350,5 @@ def apply_stage00_preparation(output: list[dict[str, Any]]) -> list[dict[str, An
 if __name__ == "__main__":
     resolved = make_records()
     counts = Counter(item["status"] for item in resolved)
-    (ROOT / "resolved_preview.json").write_text(json.dumps(resolved, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (GENERATED_DIR / "resolved_preview.json").write_text(json.dumps(resolved, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"items={len(resolved)} statuses={dict(counts)}")

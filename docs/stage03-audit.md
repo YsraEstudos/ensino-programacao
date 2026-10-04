@@ -40,7 +40,7 @@ Após uma compilação editorial ampla, execute novamente o gerador restrito par
 ## Verificação
 
 - Testes da Etapa 03 nos dois checkouts: interpretador, exemplos, casos, mutações incorretas, tabelas, Parsons, conclusão, revalidação, rascunhos e preservação do progresso pela API existente.
-- Comparação com snapshots anteriores: todos os cartões e IDs fora da Etapa 03 permaneceram iguais; no `resolved_preview.json`, todos os objetos fora da Etapa 03 permaneceram iguais.
+- Comparação com snapshots anteriores: todos os cartões e IDs fora da Etapa 03 permaneceram iguais; em `course-src/.generated/resolved_preview.json`, todos os objetos fora da Etapa 03 permaneceram iguais.
 - Validação dos catálogos de 217 e 254 atividades.
 - Regressões existentes das etapas 00, 01 e 02 no catálogo completo.
 - ESLint dos módulos e gerador da Etapa 03 e verificação de sintaxe.

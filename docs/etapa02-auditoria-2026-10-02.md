@@ -47,7 +47,7 @@ O fluxo é regra → exemplo resolvido → previsão → checagem conceitual →
 
 ## Fontes, manutenção e limite das alterações
 
-Fonte curricular: `course-src/recipes/02.py`; descrição: `course-src/stages/02.txt`; saída editorial: somente os registros `stage=02` de `resolved_preview.json`.
+Fonte curricular: `course-src/recipes/02.py`; descrição: `course-src/stages/02.txt`; saída editorial: somente os registros `stage=02` de `course-src/.generated/resolved_preview.json`.
 
 Os módulos autorais da interação permanecem em `devpath-publish/public/js-stage02-lessons.js`, `js-stage02-ui.js` e `stage02.css`; suas cópias em `devpath-full-catalog/public` foram sincronizadas e conferidas por igualdade de conteúdo. O interpretador não precisou mudar. Os testes ficam em `devpath-full-catalog/scripts/test-stage02*.mjs` e podem usar `STAGE02_SITE=devpath-publish` para conferir o outro catálogo.
 

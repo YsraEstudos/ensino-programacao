@@ -18,6 +18,7 @@ from reportlab.platypus import (
     BaseDocTemplate, Frame, KeepTogether, PageBreak, PageTemplate,
     Paragraph, Spacer, Table, TableStyle,
 )
+from generated_data import GENERATED_DIR
 
 ROOT = Path(__file__).resolve().parent
 PROJECT = ROOT.parent
@@ -26,9 +27,9 @@ OUT.mkdir(parents=True, exist_ok=True)
 PDF = OUT / "JavaScript_TypeScript_Roteiro_do_Site_3a_Edicao.pdf"
 MANIFEST = OUT / "manifesto_exercicios_site_3a_edicao.json"
 
-records = json.loads((ROOT / "resolved_preview.json").read_text(encoding="utf-8"))
-coverage = json.loads((ROOT / "audit_coverage.json").read_text(encoding="utf-8"))
-graph = json.loads((ROOT / "concept_graph.json").read_text(encoding="utf-8"))
+records = json.loads((GENERATED_DIR / "resolved_preview.json").read_text(encoding="utf-8"))
+coverage = json.loads((GENERATED_DIR / "audit_coverage.json").read_text(encoding="utf-8"))
+graph = json.loads((GENERATED_DIR / "concept_graph.json").read_text(encoding="utf-8"))
 assert len(records) == 254 and len(coverage) == 90
 assert all(r["status"] == "contract_ready" for r in records)
 

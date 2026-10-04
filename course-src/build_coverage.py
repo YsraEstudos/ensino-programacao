@@ -2,10 +2,11 @@
 from __future__ import annotations
 import json
 from pathlib import Path
+from generated_data import GENERATED_DIR
 
 ROOT = Path(__file__).resolve().parent
 audits = json.loads((ROOT / "audit_requirements.json").read_text(encoding="utf-8"))
-items = json.loads((ROOT / "resolved_preview.json").read_text(encoding="utf-8"))
+items = json.loads((GENERATED_DIR / "resolved_preview.json").read_text(encoding="utf-8"))
 by_audit = {}
 for item in items:
     for number in item.get("audit_ids", []):
@@ -115,5 +116,5 @@ for audit in audits:
         "new_activity_ids":sorted(by_audit.get(audit["id"],[])),
         "scope":"editorial specification; site implementation follows per activity",
     })
-(ROOT/"audit_coverage.json").write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+(GENERATED_DIR/"audit_coverage.json").write_text(json.dumps(output,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
 print(f"mapped={len(output)} P0={sum(x['priority']=='P0' for x in output)} new_activities={sum(bool(x['new_activity_ids']) for x in output)}")

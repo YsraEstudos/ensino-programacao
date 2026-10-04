@@ -6,7 +6,7 @@ import ts from "typescript";
 import { fileURLToPath } from "node:url";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
-const DEFAULT_SOURCE = path.resolve(SCRIPT_DIR, "../course-src/resolved_preview.json");
+const DEFAULT_SOURCE = path.resolve(SCRIPT_DIR, "../course-src/.generated/resolved_preview.json");
 const TIMEOUT_MS = 1_000;
 const ALLOWED_STATUSES = new Set(["DRAFT", "NEEDS_CONTRACT", "CONTRACT_READY", "IMPLEMENTED", "REVIEW", "READY", "RETIRED"]);
 const EXTENSION_APIS = [

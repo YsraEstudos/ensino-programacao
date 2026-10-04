@@ -10,10 +10,10 @@ const project = new URL('../', import.meta.url);
 const json = name => JSON.parse(readFileSync(new URL(name, import.meta.url), 'utf8'));
 const bundle = (variable, value, source) => `// Generated from ${source}; edit the editorial source.\nglobalThis.${variable} = ${JSON.stringify(value, null, 2)};\n`;
 
-// Reads editorial inputs only; regeneration never depends on another checkout
-// or on a previous copy of the generated public catalog.
+// Reads compiled curriculum data and editorial inputs; regeneration never
+// depends on another checkout or on a previous public catalog.
 export function createCourseArtifacts() {
-  const records = json('resolved_preview.json');
+  const records = json('.generated/resolved_preview.json');
   const overrides = json('publication-overrides.json');
   const teaching01 = JSON.parse(JSON.stringify(stage01Preparation));
   for (const p of Object.values(teaching01)) {
@@ -93,7 +93,7 @@ export function createCourseArtifacts() {
   const ids = catalog.map(item => `  "${item.id}",`).join('\n');
   return new Map([
     ['public/course-catalog.json', JSON.stringify(catalog) + '\n'],
-    ['lib/course-exercise-ids.ts', `// Generated from course-src/resolved_preview.json; learner-facing IDs only.\nexport const courseExerciseIds = [\n${ids}\n] as const;\n`],
+    ['lib/course-exercise-ids.ts', `// Generated from course-src/.generated/resolved_preview.json; learner-facing IDs only.\nexport const courseExerciseIds = [\n${ids}\n] as const;\n`],
     ['public/js-stage01-preparation.js', bundle('DevPathStage01Preparation', teaching01, 'course-src/stage01-preparation.mjs')],
     ['public/js-stage03-preparation.js', bundle('DevPathStage03Preparation', stage03Contracts, 'course-src/stage03-preparation.mjs + stage03-contract.mjs')],
     ['public/js-diagnostic-preparation.js', bundle('DevPathDiagnosticPreparation', diagnosticPreparation, 'course-src/diagnostic-preparation.mjs')],

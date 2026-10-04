@@ -6,6 +6,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from compile_content import STAGE_INTRODUCES, STAGE_REQUIRES, make_records
+from generated_data import GENERATED_DIR
 
 ROOT = Path(__file__).resolve().parent
 records = make_records()
@@ -135,5 +136,5 @@ output = {
     "activities": [{"id": x["id"], "stage": x["stage"], "requires": x["requires"], "introduces": x["introduces"]} for x in records],
     "edges": edges,
 }
-(ROOT / "concept_graph.json").write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+(GENERATED_DIR / "concept_graph.json").write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"concepts={len(introduced_at)} activities={len(records)} edges={len(edges)} acyclic=yes")

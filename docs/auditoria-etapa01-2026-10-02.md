@@ -36,7 +36,7 @@ Foram mantidos os objetivos e o interpretador introdutório: sem funções, obje
 
 ## Fontes e escopo
 
-`recipes/01.py` define o starter; `resolved_preview.json` é sua representação compilada; `stage01-preparation.mjs` fornece ensino e exemplos; `build-public-curriculum.mjs --stage01` aplica somente os cards 01; `build-stage01.mjs` sincroniza os módulos específicos nas duas distribuições.
+ `recipes/01.py` define o starter; `course-src/.generated/resolved_preview.json` é sua representação compilada; `stage01-preparation.mjs` fornece ensino e exemplos; `build-public-curriculum.mjs --stage01` aplica somente os cards 01; `build-stage01.mjs` sincroniza os módulos específicos nas duas distribuições.
 
 O conteúdo de todas as demais etapas foi comparado estruturalmente com um snapshot anterior às alterações, nas duas distribuições, e permaneceu idêntico. Alterações preexistentes em arquivos compartilhados não foram revertidas nem atribuídas a esta auditoria. Não houve publicação.
 
