@@ -1,5 +1,7 @@
 # DevPath: primeiros cinco exercícios de JavaScript
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](../organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 ## Estado
 
 Especificação de design e plano aprovados pelo usuário em 27/09/2026. Implementação concluída com validação local; a persistência em D1 autenticado não foi exercitada sem sessão autenticada.

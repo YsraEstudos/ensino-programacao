@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-await import('../public/js-review-schedule.js');
+await import('../public/review-schedule.js');
 const schedule = globalThis.DevPathReviewSchedule;
 const now = Date.UTC(2026, 9, 4);
 

@@ -21,7 +21,7 @@ export const transfers={
 export function setup(id) {
   const dom=new JSDOM('<main id="view"></main>',{runScripts:'outside-only',url:`http://localhost/devpath.html#/javascript/${id}`});
   const w=dom.window;
-  for(const file of ['preparation','runner','checks','ui'])w.eval(withPublicDependencies(fs.readFileSync(new URL(`js-stage03-${file}.js`,publicRoot),'utf8')));
+  for(const file of ['preparation','runner','checks','ui'])w.eval(withPublicDependencies(fs.readFileSync(new URL(`stage03-${file}.js`,publicRoot),'utf8')));
   const item=catalog.find(x=>x.id===id),progress={};let saved=0;
   const ctx={progress,activities:catalog,saveProgress(){saved++;},scheduleSave(){saved++;},toast(){},render(){w.document.querySelector('#view').innerHTML=w.DevPathStage03UI.render(item,ctx);}};
   ctx.render();

@@ -1,5 +1,7 @@
 # Diagnóstico inicial e Etapa 01
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 Escopo autorizado: D.01–D.05 e 01.01–01.09. A Etapa 00 serviu de referência visual e de experiência; seu conteúdo, CSS e interações não foram alterados. Os demais estágios do catálogo foram comparados ao commit anterior e permanecem iguais.
 
 ## Prioridades conciliadas antes da implementação

@@ -1,5 +1,7 @@
 # Auditoria e revisão da Etapa 02 — 02/10/2026
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 A Etapa 02 tinha uma base coerente: operadores → ausência → conversão/validade → transferência → Math → precisão → tolerância. Os problemas de maior impacto estavam na entrega dessa sequência: teoria escondida até a previsão, exemplos excessivamente compactos, contratos de interação não realizados e casos insuficientes para distinguir algumas regras incorretas. A revisão preserva os 12 IDs, os temas e os objetivos próprios da etapa.
 
 Seis subagentes analisaram, em paralelo, conteúdo/progressão, pré-requisitos, explicações/exemplos, exercícios/interações, design/acessibilidade e organização do código. Os achados foram conferidos na versão atual e conciliados antes da implementação. As etapas 01 e 03 foram contexto de progressão; a 00 forneceu critérios de experiência, especialmente ensinar antes da tentativa, separar previsão/código/saída e oferecer feedback acessível.
@@ -8,7 +10,7 @@ Seis subagentes analisaram, em paralelo, conteúdo/progressão, pré-requisitos,
 
 | Prioridade | Atividade / evidência original | Efeito no aprendizado | Correção implementada |
 | --- | --- | --- | --- |
-| P1 | Todos os blocos: `js-stage02-ui.js` escondia o exemplo até `predictionSaved` | O iniciante precisava responder antes de receber a explicação específica | Regra, código resolvido, passos e armadilha disponíveis antes da previsão nos 17 blocos; exemplos executáveis |
+| P1 | Todos os blocos: `stage02-ui.js` escondia o exemplo até `predictionSaved` | O iniciante precisava responder antes de receber a explicação específica | Regra, código resolvido, passos e armadilha disponíveis antes da previsão nos 17 blocos; exemplos executáveis |
 | P1 | 02.01 e 02.11: `predictionFields` oferecia só valor, embora a fonte pedisse valor e tipo | A resposta não podia representar o conceito solicitado | Campos separados de valor/tipo, registro e comparação com o valor/tipo obtidos |
 | P1 | 02.02: a classificação falsy/nullish era pedida, mas não coletada | Memorização de saídas sem tornar a distinção conceitual observável | Classificação por entrada, comparação posterior e indicação explícita das divergências |
 | P1 | 02.10: recurso começava com `Ponte 02B`, mas a UI buscava `### Ponte 02B` | A preparação para Number/Math ficava invisível | Normalização do cabeçalho; instruções de retomada e ensino próprio em cada bloco da unidade B |
@@ -49,7 +51,7 @@ O fluxo é regra → exemplo resolvido → previsão → checagem conceitual →
 
 Fonte curricular: `course-src/recipes/02.py`; descrição: `course-src/stages/02.txt`; saída editorial: somente os registros `stage=02` de `course-src/.generated/resolved_preview.json`.
 
-Os módulos autorais da interação permanecem em `devpath-publish/public/js-stage02-lessons.js`, `js-stage02-ui.js` e `stage02.css`; suas cópias em `devpath-full-catalog/public` foram sincronizadas e conferidas por igualdade de conteúdo. O interpretador não precisou mudar. Os testes ficam em `devpath-full-catalog/scripts/test-stage02*.mjs` e podem usar `STAGE02_SITE=devpath-publish` para conferir o outro catálogo.
+Os módulos autorais da interação permanecem em `devpath-publish/public/stage02-lessons.js`, `stage02-ui.js` e `stage02.css`; suas cópias em `devpath-full-catalog/public` foram sincronizadas e conferidas por igualdade de conteúdo. O interpretador não precisou mudar. Os testes ficam em `devpath-full-catalog/scripts/test-stage02*.mjs` e podem usar `STAGE02_SITE=devpath-publish` para conferir o outro catálogo.
 
 O publicador ganhou `--stage02`, que mantém integralmente todos os cartões de outras etapas, preserva a ordem das respostas de revisão de cada catálogo e não regrava a lista de IDs. Uso: `node course-src/build-public-curriculum.mjs --stage02` e a mesma chamada com `--full`. Isso evita que uma atualização local da Etapa 02 sobrescreva o trabalho preexistente na Etapa 01.
 

@@ -1,5 +1,7 @@
 # Etapa 02 — revisão de 29/09/2026
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 Os 12 IDs foram preservados e os contratos foram versionados como 2. A etapa mantém 254 fichas no catálogo completo e 217 no recorte 00–20. Esta revisão é local; não constitui publicação no serviço hospedado nem promoção das fichas para READY.
 
 | Ponto | Correção |

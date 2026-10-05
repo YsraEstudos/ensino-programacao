@@ -1,5 +1,7 @@
 # Revisão pedagógica da Etapa 00 — 30/09/2026
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 Público: pessoa que nunca programou. Critério: toda ação pedida precisa ter conceitos, exemplo e instrução operacional disponíveis antes da tentativa. Documentação deve confirmar uma regra já apresentada, com link, seção e pergunta de consulta.
 
 ## Problemas comuns e correção

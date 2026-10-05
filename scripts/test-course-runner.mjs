@@ -45,7 +45,7 @@ function setup() {
       Worker, parent, addEventListener(name, callback) {events.set(name, callback);}
     });
   };
-  w.eval(withPublicDependencies(readFileSync(new URL('../public/js-course-runner.js', import.meta.url), 'utf8')));
+  w.eval(withPublicDependencies(readFileSync(new URL('../public/course-runner.js', import.meta.url), 'utf8')));
   const run = (code, timeoutMs = 2000) => new Promise(resolve => {
     w.DevPathCourseRunner.run(code, (kind, text) => resolve({kind, text}), {timeoutMs});
   });

@@ -1,6 +1,6 @@
-await import('../public/js-teaching-utils.js');
+await import('../public/teaching-utils.js');
 import assert from 'node:assert/strict';
-await import('../public/js-stage03-runner.js');
+await import('../public/stage03-runner.js');
 const { run, format } = globalThis.DevPathStage03Runner;
 
 function test(name, fn) { try { fn(); console.log(`ok - ${name}`); } catch (error) { console.error(`not ok - ${name}`); throw error; } }

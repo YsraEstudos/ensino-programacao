@@ -1,5 +1,7 @@
 # DevPath JavaScript Stage 00 Exercises Implementation Plan
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](../organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` or `superpowers:executing-plans` to implement this plan task-by-task. Keep each task within its listed files.
 
 **Goal:** Add the first five interactive JavaScript exercises (00.01–00.05) to the local DevPath preview and authenticated DevPath site.
@@ -8,7 +10,7 @@
 
 **Tech Stack:** Existing HTML, CSS, vanilla JavaScript, Next.js static public assets, TypeScript API route, and D1 JSON progress record. No new dependencies.
 
-**Spec:** `docs/superpowers/specs/2026-09-27-js-stage-00-design.md`
+**Spec:** `docs/especificacoes/2026-09-27-etapa00-interface.md`
 
 ## Global Constraints
 
@@ -35,7 +37,7 @@
 ### Task 1: Stage 00 subset interpreter
 
 **Files:**
-- Create `js-stage00-runner.js`
+- Create `stage00-runner.js`
 
 **Interfaces:**
 - Produce `window.DevPathStage00Runner.interpret(source)` for later UI use.
@@ -44,13 +46,13 @@
 - [x] **Step 1: Define the grammar and result shapes in JSDoc.** Accept one `console.log(...)` call per line, optional trailing semicolon, quoted single/double-quoted strings, finite numeric literals, and `number + number` expressions. Ignore commas inside quoted strings when splitting arguments. Reject variables, comments, other operators, control flow, member access beyond `console.log`, and extra statements.
 - [x] **Step 2: Implement a scanner/parser without `eval`, `Function`, or dynamic script creation.** Cap source at 600 characters and 20 lines; report the first malformed or unsupported line with a Portuguese message and `kind` set to `syntax` or `not_taught`.
 - [x] **Step 3: Produce typed output records for accepted lines.** Preserve an empty string as a value, compute only numeric literal addition, and keep the source line number for trace animation.
-- [x] **Step 4: Mirror the file at `devpath-site/public/js-stage00-runner.js`.** Keep the two copies identical so both site variants use the same grammar.
-- [x] **Step 5: Run `node --check js-stage00-runner.js`.** Expected: exit code 0. Review Focus 1 and 2 are later inspected through the UI.
+- [x] **Step 4: Mirror the file at `devpath-site/public/stage00-runner.js`.** Keep the two copies identical so both site variants use the same grammar.
+- [x] **Step 5: Run `node --check stage00-runner.js`.** Expected: exit code 0. Review Focus 1 and 2 are later inspected through the UI.
 
 ### Task 2: Exercise content and reusable stage UI
 
 **Files:**
-- Create `js-stage00-ui.js`
+- Create `stage00-ui.js`
 
 **Interfaces:**
 - Consume `window.DevPathStage00Runner.interpret(source)` from Task 1.
@@ -61,7 +63,7 @@
 - [x] **Step 2: Implement `renderOverview(progress)` and `renderExercise(id, progress)`.** Render the five activities in order; show the learn/example/microcheck sections before the main editor; restore that activity's saved draft; escape all data inserted into HTML.
 - [x] **Step 3: Implement delegated click/input handlers.** Support prediction, Run, hints, transfer, Parsons block reordering, and keyboard move controls. Update the in-memory draft on every input, debounce persistence by 500 ms, and flush pending saves on Run, in-app navigation, and route render. Increment `attempts[id]` on each explicit Run; an unsupported syntax result must not set `answers[id] = false`.
 - [x] **Step 4: Keep completion evidence separate from mastery.** Mark `answers[id]` successful and add the ID to `completed` only after the main public task succeeds; leave the transfer prompt available as a separate follow-up.
-- [x] **Step 5: Mirror the file at `devpath-site/public/js-stage00-ui.js` and run `node --check js-stage00-ui.js`.** Expected: exit code 0. Review Focus 3 and 4 are checked in the preview task.
+- [x] **Step 5: Mirror the file at `devpath-site/public/stage00-ui.js` and run `node --check stage00-ui.js`.** Expected: exit code 0. Review Focus 3 and 4 are checked in the preview task.
 
 ### Task 3: Integrate the local preview
 
@@ -69,7 +71,7 @@
 - Modify `index.html`
 - Modify `app.js`
 - Modify `styles.css`
-- Use `js-stage00-runner.js` and `js-stage00-ui.js` from Tasks 1–2
+- Use `stage00-runner.js` and `stage00-ui.js` from Tasks 1–2
 
 **Interfaces:**
 - Route `#/javascript` renders the stage overview; `#/javascript/00.01` through `#/javascript/00.05` render the matching activity.

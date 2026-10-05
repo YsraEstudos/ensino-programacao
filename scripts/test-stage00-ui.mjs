@@ -8,7 +8,7 @@ const lessons = catalog.filter(item => item.stage === '00');
 assert.equal(lessons.length, 9);
 const dom = new JSDOM('<div id="view"></div>', {runScripts:'outside-only', url:'http://localhost'});
 dom.window.HTMLElement.prototype.scrollIntoView = function() {};
-for (const file of ['js-stage00-runner.js', 'js-stage00-preparation.js']) dom.window.eval(withPublicDependencies(readFileSync(new URL(file, root), 'utf8')));
+for (const file of ['stage00-runner.js', 'stage00-preparation.js']) dom.window.eval(withPublicDependencies(readFileSync(new URL(file, root), 'utf8')));
 const ui = dom.window.DevPathStage00Preparation;
 let saves = 0;
 const progress = {exercisePredictions:{},exerciseDrafts:{},exerciseReflections:{},exerciseEvidence:{},warmupCompleted:{},answers:{},exerciseVersions:{},completed:[],reviewSchedule:{}};

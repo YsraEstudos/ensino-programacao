@@ -94,9 +94,9 @@ export function createCourseArtifacts() {
   return new Map([
     ['public/course-catalog.json', JSON.stringify(catalog) + '\n'],
     ['lib/course-exercise-ids.ts', `// Generated from course-src/.generated/resolved_preview.json; learner-facing IDs only.\nexport const courseExerciseIds = [\n${ids}\n] as const;\n`],
-    ['public/js-stage01-preparation.js', bundle('DevPathStage01Preparation', teaching01, 'course-src/stage01-preparation.mjs')],
-    ['public/js-stage03-preparation.js', bundle('DevPathStage03Preparation', stage03Contracts, 'course-src/stage03-preparation.mjs + stage03-contract.mjs')],
-    ['public/js-diagnostic-preparation.js', bundle('DevPathDiagnosticPreparation', diagnosticPreparation, 'course-src/diagnostic-preparation.mjs')],
+    ['public/stage01-preparation.js', bundle('DevPathStage01Preparation', teaching01, 'course-src/stage01-preparation.mjs')],
+    ['public/stage03-preparation.js', bundle('DevPathStage03Preparation', stage03Contracts, 'course-src/stage03-preparation.mjs + stage03-contract.mjs')],
+    ['public/diagnostic-preparation.js', bundle('DevPathDiagnosticPreparation', diagnosticPreparation, 'course-src/diagnostic-preparation.mjs')],
   ]);
 }
 

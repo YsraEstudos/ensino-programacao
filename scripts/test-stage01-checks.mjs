@@ -5,7 +5,7 @@ import vm from 'node:vm';
 import test from 'node:test';
 const root = new URL('../public/', import.meta.url);
 const ctx = vm.createContext({ console });
-for (const name of ['js-stage01-runner.js', 'js-stage01-checks.js']) {
+for (const name of ['stage01-runner.js', 'stage01-checks.js']) {
   if (existsSync(new URL(name, root))) vm.runInContext(withPublicDependencies(readFileSync(new URL(name, root), 'utf8')), ctx);
 }
 export const solutions = {

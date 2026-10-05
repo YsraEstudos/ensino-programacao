@@ -18,7 +18,7 @@ async function load({items = catalog, missingStatus = false, missingModule = fal
   w.localStorage.setItem('devpath-local-preview-v1', JSON.stringify(saved));
   for (const script of w.document.querySelectorAll('script[src]')) {
     const name = new URL(script.src).pathname.slice(1);
-    if (missingModule && name === 'js-stage00-ui.js') continue;
+    if (missingModule && name === 'stage00-ui.js') continue;
     w.eval(withPublicDependencies(readFileSync(new URL(name, root), 'utf8')));
   }
   await settle();

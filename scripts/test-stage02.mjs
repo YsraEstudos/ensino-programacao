@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 const publicRoot = new URL('../public/',import.meta.url);
-const runnerPath = new URL('js-stage02-runner.js', publicRoot);
+const runnerPath = new URL('stage02-runner.js', publicRoot);
 const context = { globalThis: {} };
 if (existsSync(runnerPath)) vm.runInNewContext(withPublicDependencies(readFileSync(runnerPath,'utf8')), context);
 const runner = context.globalThis.DevPathStage02Runner;
@@ -30,8 +30,8 @@ test('logical operators short-circuit before evaluating missing identifiers',()=
   assert.equal(runner.run('console.log(false && unknown, true || unknown, 0 ?? unknown);').ok,true);
 });
 
-vm.runInNewContext(withPublicDependencies(readFileSync(new URL('js-stage02-lessons.js',publicRoot),'utf8')),context);
-vm.runInNewContext(withPublicDependencies(readFileSync(new URL('js-stage02-ui.js',publicRoot),'utf8')),context);
+vm.runInNewContext(withPublicDependencies(readFileSync(new URL('stage02-lessons.js',publicRoot),'utf8')),context);
+vm.runInNewContext(withPublicDependencies(readFileSync(new URL('stage02-ui.js',publicRoot),'utf8')),context);
 const lessons=context.globalThis.DevPathStage02Lessons;
 const solutions={
   '02.01':[

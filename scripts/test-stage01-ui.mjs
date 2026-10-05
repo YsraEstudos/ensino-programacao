@@ -7,9 +7,9 @@ const root = new URL('../public/', import.meta.url);
 const dom = new JSDOM('<main id="view"></main>', { runScripts: 'outside-only', url: 'http://localhost' });
 dom.window.HTMLElement.prototype.scrollIntoView = function () {};
 dom.window.DevPathStage01Preparation = (await import('../course-src/stage01-preparation.mjs')).stage01Preparation;
-for (const file of ['js-stage01-runner.js', 'js-stage01-checks.js', 'js-stage01-ui.js']) {
+for (const file of ['stage01-runner.js', 'stage01-checks.js', 'stage01-ui.js']) {
   try { dom.window.eval(withPublicDependencies(readFileSync(new URL(file, root), 'utf8'))); } catch (error) {
-    if (file !== 'js-stage01-preparation.js') throw error;
+    if (file !== 'stage01-preparation.js') throw error;
   }
 }
 const ui = dom.window.DevPathStage01UI;

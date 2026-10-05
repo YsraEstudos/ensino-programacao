@@ -1,5 +1,7 @@
 # DevPath Exercises 00–20 Improvement Plan
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](../organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` to execute the three editorial workstreams. Each stage range has one owner; do not edit another agent's recipe files. Steps use checkbox syntax for tracking.
 
 **Goal:** Turn the 217 activities in stages 00–20 into an accessible, coherent path from guided code reading to independent implementation and software-maintenance judgment, while preserving the third-edition course contracts and the current live-site boundary.
@@ -8,7 +10,7 @@
 
 **Tech Stack:** Existing Python content compiler and recipe API, JSON preview and concept graph, current browser-based DevPath, Node/TypeScript/browser runners as supported by each activity's declared runtime. Add no new runtime dependency without a demonstrated need.
 
-**Spec:** `C:\Users\israe\Downloads\JavaScript_TypeScript_Roteiro_do_Site_3a_Edicao.pdf`; user-provided design references `C:\Users\israe\.codex\attachments\0794c127-db06-4867-ad7a-e0bdd6152393\Pasted text.txt` and `C:\Users\israe\.codex\attachments\013f80a0-6d06-48b0-87ba-a9bbf8f7bd85\Pasted text.txt`; `course-src/implementation_protocol.md`; `course-src/site_spec.md`; `docs/o-que-fazer-quando-adicionar-um-exercicio.md`.
+**Spec:** `C:\Users\israe\Downloads\JavaScript_TypeScript_Roteiro_do_Site_3a_Edicao.pdf`; user-provided design references `C:\Users\israe\.codex\attachments\0794c127-db06-4867-ad7a-e0bdd6152393\Pasted text.txt` and `C:\Users\israe\.codex\attachments\013f80a0-6d06-48b0-87ba-a9bbf8f7bd85\Pasted text.txt`; `course-src/implementation_protocol.md`; `course-src/site_spec.md`; `docs/guia-adicionar-exercicio.md`.
 
 ## Global Constraints
 

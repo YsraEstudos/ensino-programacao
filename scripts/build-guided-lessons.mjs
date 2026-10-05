@@ -6,8 +6,8 @@ const publicDir = new URL('../public/', import.meta.url);
 const stage01 = JSON.parse(JSON.stringify(stage01Preparation));
 for (const config of Object.values(stage01)) for (const transfer of config.masteryTransfers || []) delete transfer.solution;
 for (const [name, variable, value] of [
-  ['js-stage01-preparation.js', 'DevPathStage01Preparation', stage01],
-  ['js-diagnostic-preparation.js', 'DevPathDiagnosticPreparation', diagnosticPreparation],
+  ['stage01-preparation.js', 'DevPathStage01Preparation', stage01],
+  ['diagnostic-preparation.js', 'DevPathDiagnosticPreparation', diagnosticPreparation],
 ]) fs.writeFileSync(new URL(name, publicDir), `// Generated from course-src; edit the editorial source.\nglobalThis.${variable} = ${JSON.stringify(value, null, 2)};\n`);
 
 // Update only the named stage, retaining the rest of the authored catalog verbatim.

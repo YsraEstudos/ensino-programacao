@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 const context=vm.createContext({});
-vm.runInContext(withPublicDependencies(fs.readFileSync(new URL('../public/js-stage03-runner.js',import.meta.url),'utf8')),context);
+vm.runInContext(withPublicDependencies(fs.readFileSync(new URL('../public/stage03-runner.js',import.meta.url),'utf8')),context);
 const run=(code,input={})=>JSON.parse(JSON.stringify(context.DevPathStage03Runner.run(code,input)));
 test('for continue still advances and break exits only its loop',()=>{
   const result=run('let soma=0; for(let i=1;i<=5;i++){if(i%2===0)continue; soma+=i;} console.log(soma);');

@@ -7,7 +7,7 @@ const root=new URL('../public/',import.meta.url);
 const catalog=JSON.parse(readFileSync(new URL('course-catalog.json',root)));
 function setup(id){
   const dom=new JSDOM('<main id="view"></main>',{runScripts:'outside-only'});
-  for(const file of ['runner','lessons','ui'])dom.window.eval(withPublicDependencies(readFileSync(new URL(`js-stage02-${file}.js`,root),'utf8')));
+  for(const file of ['runner','lessons','ui'])dom.window.eval(withPublicDependencies(readFileSync(new URL(`stage02-${file}.js`,root),'utf8')));
   const item=catalog.find(item=>item.id===id),progress={};
   const ctx={progress,saveProgress(){},scheduleSave(){},toast(){},render(){dom.window.document.querySelector('#view').innerHTML=dom.window.DevPathStage02UI.render(item,ctx);}};
   ctx.render();

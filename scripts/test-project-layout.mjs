@@ -35,7 +35,7 @@ test('generated curriculum intermediates live in the ignored generated directory
 });
 
 test('obsolete checkouts and the old static application are absent', () => {
-  for (const path of ['devpath-full-catalog', 'course-src', 'app.js', 'index.html', 'styles.css', 'js-stage00-ui.js', 'js-stage00-runner.js']) {
+  for (const path of ['devpath-full-catalog', 'course-src', 'app.js', 'index.html', 'styles.css', 'stage00-ui.js', 'stage00-runner.js']) {
     assert.equal(fs.existsSync(new URL(path, workspace)), false, `Obsolete duplicate: ${path}`);
   }
 });

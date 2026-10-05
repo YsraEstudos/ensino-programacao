@@ -5,14 +5,14 @@ import vm from 'node:vm';
 import { stage01Preparation } from '../course-src/stage01-preparation.mjs';
 
 const runnerContext = { console };
-vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/js-stage01-runner.js', import.meta.url), 'utf8')), runnerContext);
+vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/stage01-runner.js', import.meta.url), 'utf8')), runnerContext);
 const runner = runnerContext.DevPathStage01Runner;
 const checksContext = { console, DevPathStage01Runner: runner, DevPathStage01Preparation: stage01Preparation };
-vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/js-stage01-checks.js', import.meta.url), 'utf8')), checksContext);
+vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/stage01-checks.js', import.meta.url), 'utf8')), checksContext);
 
 const ids = Object.keys(stage01Preparation);
 const publicContext = {};
-vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/js-stage01-preparation.js', import.meta.url), 'utf8')), publicContext);
+vm.runInNewContext(withPublicDependencies(fs.readFileSync(new URL('../public/stage01-preparation.js', import.meta.url), 'utf8')), publicContext);
 const safePreparation = JSON.parse(JSON.stringify(stage01Preparation));
 for (const config of Object.values(safePreparation)) for (const transfer of config.masteryTransfers || []) delete transfer.solution;
 assert.equal(JSON.stringify(publicContext.DevPathStage01Preparation), JSON.stringify(safePreparation), 'Published preparation must match the editorial source without transfer solutions');

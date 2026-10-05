@@ -10,7 +10,7 @@ const catalog=JSON.parse(readFileSync(new URL('course-catalog.json',root),'utf8'
 function fixture(id) {
   const dom=new JSDOM('<main id="view"></main>',{runScripts:'outside-only',url:'http://localhost'});
   dom.window.DevPathStage01Preparation=stage01Preparation;
-  for(const name of ['runner','checks','ui']) dom.window.eval(withPublicDependencies(readFileSync(new URL(`js-stage01-${name}.js`,root),'utf8')));
+  for(const name of ['runner','checks','ui']) dom.window.eval(withPublicDependencies(readFileSync(new URL(`stage01-${name}.js`,root),'utf8')));
   const ui=dom.window.DevPathStage01UI, item=catalog.find(x=>x.id===id), progress={};
   const ctx={progress,activities:catalog,saveProgress(){assert.doesNotThrow(()=>JSON.stringify(progress));},render(){view.innerHTML=ui.render(item,ctx);}};
   const view=dom.window.document.querySelector('#view'); ctx.render();

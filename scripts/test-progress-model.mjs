@@ -7,7 +7,7 @@ import {loadTsModule} from './load-ts-module.mjs';
 const model = loadTsModule('lib/progress-model.ts');
 const sanitize = loadTsModule('lib/progress-sanitize.ts').sanitizeUserProgress;
 const context = {};
-vm.runInNewContext(readFileSync('public/js-progress-model.js', 'utf8'), context);
+vm.runInNewContext(readFileSync('public/progress-model.js', 'utf8'), context);
 
 test('browser and server share exactly the same defaults with independent nested state', () => {
   const server = model.createEmptyProgress();

@@ -1,5 +1,7 @@
 # Auditoria e revisão da Etapa 03 — 2 de outubro de 2026
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 Foram analisadas as nove atividades da Etapa 03, suas fontes editoriais e a experiência efetivamente renderizada nos dois checkouts. Seis subagentes analisaram conteúdo/progressão, pré-requisitos, explicações/exemplos, exercícios/interações, design/acessibilidade e organização do código. As conclusões foram conciliadas com os arquivos reais antes da implementação.
 
 A Etapa 02 foi consultada para operadores e comparações; a Etapa 04, para a passagem a funções. A Etapa 00 serviu como referência de clareza, prática, feedback e navegação. O conteúdo das demais etapas foi preservado.
@@ -30,12 +32,12 @@ O fechamento de fila e batalha pede identificar entradas, estado, regra e saída
 
 - Fonte de ensino: `course-src/stage03-preparation.mjs`.
 - Tabelas e casos: `course-src/stage03-contract.mjs`.
-- Distribuição restrita: `node course-src/build-stage03.mjs`, executado da raiz RPG.
-- Cada checkout também tem `npm.cmd run build:stage03`, que regenera seus artefatos a partir de sua cópia editorial.
-- UI, avaliação e interpretador estão em módulos `js-stage03-*`; o `app.js` só delega atividades da Etapa 03 a esses módulos.
+- Na época desta auditoria, a distribuição usava `course-src/build-stage03.mjs` na raiz RPG. Esse gerador foi substituído na consolidação.
+- Atualmente, execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`. `build:stage03` é um alias da geração completa; não limita a atualização à Etapa 03.
+- UI, avaliação e interpretador estão em módulos `stage03-*`; o `app.js` só delega atividades da Etapa 03 a esses módulos.
 - IDs, ordem geral dos catálogos e formato da API de progresso foram preservados. A versão 2 usa chaves como `03.09@v2`; os registros antigos continuam armazenados e não aprovam automaticamente o novo conteúdo.
 
-Após uma compilação editorial ampla, execute novamente o gerador restrito para aplicar a camada de ensino da Etapa 03. Ele não recompila receitas ou cartões de outras etapas.
+O gerador atual incorpora a camada de ensino da Etapa 03 na mesma compilação das receitas e cartões. Não há etapa posterior de sincronização entre checkouts.
 
 ## Verificação
 

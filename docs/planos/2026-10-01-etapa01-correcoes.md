@@ -1,5 +1,7 @@
 # Etapa 01 — plano de correções autorizado
 
+> Registro histórico. Os caminhos, comandos e distribuições abaixo descrevem a estrutura da época; não devem orientar a manutenção atual. Consulte [a organização atual](../organizacao-projeto.md) e execute `npm.cmd run build:curriculum` dentro de `devpath-publish/`.
+
 Pedido: implementar as correções do diagnóstico consolidado, sem publicar. Preservar IDs e todo progresso histórico; novas evidências usam versão 3.
 
 ## Resultado
