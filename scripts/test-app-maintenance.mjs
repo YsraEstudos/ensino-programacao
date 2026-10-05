@@ -90,3 +90,14 @@ test('scheduled review advances once, saves its interval, and enables the next q
     assert.match(w.document.querySelector('#view').textContent, /Rodada concluída/);
   } finally { dom.window.close(); }
 });
+
+test('generic module activities expose execution instead of only written analysis', async () => {
+  const items=structuredClone(catalog),item=items.find(item=>item.id==='04.01');
+  item.starterFiles=[{path:'main.js',content:'import value from "./value.js"; console.log(value);'},{path:'value.js',content:'export default 7;'}];
+  const key=Number(item.contentVersion||1)>1?`${item.id}@v${item.contentVersion}`:item.id;
+  const dom=await load({items,saved:{warmupCompleted:{[key]:true}}});try{dom.window.location.hash='#/javascript/04.01';await settle();assert(dom.window.document.querySelector('[data-course-run="04.01"]'));}finally{dom.window.close();}
+});
+
+test('skip link focuses content without replacing the open exercise route', async () => {
+ const dom=await load();try{const w=dom.window;w.location.hash='#/javascript/04.01';await settle();w.document.querySelector('.skip-link').click();await settle();assert.equal(w.location.hash,'#/javascript/04.01');assert.equal(w.document.activeElement.id,'main');}finally{dom.window.close();}
+});

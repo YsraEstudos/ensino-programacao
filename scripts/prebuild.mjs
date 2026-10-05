@@ -2,6 +2,7 @@ import {spawnSync} from 'node:child_process';
 import {readdirSync} from 'node:fs';
 
 const steps = [
+  ['scripts/build-module-compiler.mjs'],
   ['scripts/build-curriculum-data.mjs'],
   ['scripts/build-progress-model.mjs'],
   ['course-src/build-public-curriculum.mjs', '--check'],

@@ -44,6 +44,7 @@ next-env.d.ts
 /.codex/
 /outputs/
 /work/
+/public/compiler-runtime/
 course-src/.generated/
 __pycache__/
 *.pyc

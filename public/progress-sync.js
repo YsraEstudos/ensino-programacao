@@ -6,7 +6,8 @@
     let loaded = false;
     let revision;
     let backupKey;
-    let queue = Promise.resolve();
+    let saving = false;
+    let pendingSource;
     let fallbackBackup;
 
     const pending = () => {
@@ -42,9 +43,14 @@
       if (!loaded || state === "recovery") return;
       preserve();
       if (state !== "ready") return;
+      pendingSource = source;
       status("salvando…");
-      queue = queue.catch(() => {}).then(async () => {
-        if (state !== "ready") return;
+      if (saving) return;
+      saving = true;
+      void (async () => {
+       while (pendingSource !== undefined && state === "ready") {
+        const source = pendingSource;
+        pendingSource = undefined;
         const response = await fetch("/api/progress", {
           method: "PUT", headers: { "Content-Type": "application/json", "If-Match": revision }, body: source
         });
@@ -62,14 +68,15 @@
         if (typeof data.revision !== "string") throw new Error("missing saved revision");
         revision = data.revision;
         if (source === snapshot()) clearBackup();
-        status("progresso salvo");
+        status(pendingSource === undefined ? "progresso salvo" : "salvando…");
         issue(null);
-      }).catch(() => {
+       }
+      })().catch(() => {
         state = "paused";
         preserve();
         status("tentativa ainda não sincronizada");
         issue(state, "Não foi possível confirmar o salvamento. Sua tentativa foi preservada; tente novamente.");
-      });
+      }).finally(() => { saving = false; });
     }
 
     return Object.freeze({

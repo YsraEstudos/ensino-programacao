@@ -8,7 +8,7 @@ import {JSDOM} from 'jsdom';
 
 // Execute the actual iframe bootstrap with real worker threads. Browser checks
 // additionally cover the sandbox and CSP, which jsdom does not implement.
-function setup() {
+function setup({failWorker = false} = {}) {
   const dom = new JSDOM('<body></body>', {url: 'http://localhost', runScripts: 'outside-only'});
   const w = dom.window;
   const workers = new Set();
@@ -25,6 +25,7 @@ function setup() {
     frame.remove = () => { events.get('pagehide')?.(); originalRemove(); };
     class Worker {
       constructor(url) {
+        if (failWorker) throw new Error("Worker indisponível");
         this.thread = new NodeWorker(`
           const {parentPort} = require('node:worker_threads');
           globalThis.self = globalThis;
@@ -84,3 +85,21 @@ test('output is bounded and cancellation releases the running worker', async () 
     assert.equal(env.workers.size, 0);
   } finally {env.close();}
 });
+
+test('foreign sources, wrong tokens and late messages cannot finish an execution', async () => {
+  const env = setup();
+  try {
+    const results=[];
+    const stop=env.w.DevPathCourseRunner.run('while(true){}',(kind,text)=>results.push({kind,text}));
+    const frame=env.w.document.querySelector('iframe');
+    const token=frame.srcdoc.match(/[0-9a-f]{8}-[0-9a-f-]{27}/)[0];
+    env.w.dispatchEvent(new env.w.MessageEvent('message',{source:null,data:{token,kind:'result',text:'forged'}}));
+    env.w.dispatchEvent(new env.w.MessageEvent('message',{source:frame.contentWindow,data:{token:'wrong',kind:'result',text:'forged'}}));
+    assert.equal(results.length,0);
+    const source=frame.contentWindow;stop();
+    env.w.dispatchEvent(new env.w.MessageEvent('message',{source,data:{token,kind:'result',text:'late'}}));
+    assert.equal(results.length,1);assert.equal(results[0].kind,'cancelled');assert.equal(env.workers.size,0);
+  } finally {env.close();}
+});
+
+test('worker creation failure reports an error and removes the sandbox',async()=>{const env=setup({failWorker:true});try{const result=await env.run('console.log(1)');assert.equal(result.kind,'error');assert.match(result.text,/Worker indisponível/);assert.equal(env.w.document.querySelectorAll('iframe').length,0);}finally{env.close();}});

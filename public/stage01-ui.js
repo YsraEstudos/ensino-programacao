@@ -13,15 +13,8 @@
             p = progress.stage01[item.id] = {};
         const config = prep(item);
         const starter = item.starterFiles?.[0]?.content ?? config.starterFiles?.[0]?.content ?? config.starter ?? '';
-        // Repair only the known compact legacy starter; preserve decisions and custom drafts.
-        if (item.id === '01.04' && typeof p.code === 'string' && !p.code.includes('\n')) {
-            const legacyShape = p.code.replace(/\b(?:const|let|___)(?=\s+(?:nome|pontos|ativo|volume|idioma|tentativas)\b)/g, '___').replace(/\s/g, '');
-            if (legacyShape === '___nome="Ana";___pontos=0;pontos=5;___ativo=false;___volume=0;volume=7;___idioma="pt-BR";___tentativas=1;tentativas=2;') {
-                p.code += '\nconsole.log(nome, pontos, ativo, volume, idioma, tentativas);';
-                p.passedCode = null;
-                p.complete = false;
-            }
-        }
+        const migration = global.DevPathProgressMigrations.stage01(item.id, p);
+        if (migration.changed) Object.assign(p, migration.state);
         const transferDefaults = arr(config.masteryTransfers).map((x) => ({
             id: x.id, code: x.starter || '', prediction: '', passedCode: null, hintUsed: false
         }));

@@ -7,8 +7,8 @@
   },
   "scripts": {
     "assets:version": "node scripts/update-asset-versions.mjs",
-    "predev": "npm run build:progress && npm run assets:version",
-    "test:app": "node --test scripts/test-app-maintenance.mjs scripts/test-review-schedule.mjs scripts/test-course-runner.mjs",
+    "predev": "npm run build:compiler && npm run build:progress && npm run assets:version",
+    "test:app": "node --test scripts/test-app-maintenance.mjs scripts/test-review-schedule.mjs scripts/test-course-runner.mjs scripts/test-stage-registry.mjs scripts/test-module-graph.mjs scripts/test-progress-migrations.mjs",
     "test:stage02": "node --test scripts/test-stage02.mjs scripts/test-stage02-ui.mjs scripts/test-stage02-progress.mjs scripts/test-stage02-audit.mjs",
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "node scripts/run-framework.mjs dev",
@@ -32,8 +32,9 @@
     "pretest:stage02": "npm run build:curriculum",
     "test": "npm run test:progress && npm run test:app && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03",
     "build:progress": "node scripts/build-progress-model.mjs",
-    "test:progress": "node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs",
-    "pretest": "npm run build:progress"
+    "test:progress": "node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs scripts/test-progress-queue.mjs",
+    "pretest": "npm run build:compiler && npm run build:progress",
+    "build:compiler": "node scripts/build-module-compiler.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",
@@ -50,7 +51,9 @@
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
     "@vitejs/plugin-rsc": "0.5.26",
+    "acorn": "8.16.0",
     "drizzle-kit": "0.31.10",
+    "esbuild-wasm": "0.28.2",
     "eslint": "9.39.4",
     "eslint-config-next": "16.3.4",
     "jsdom": "^30.1.1",

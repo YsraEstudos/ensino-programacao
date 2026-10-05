@@ -24,24 +24,27 @@
     });
     self.onmessage = async event => {
       try {
-        await new Function(`return (async () => {\n${event.data}\n})()`)();
+        if (event.data && typeof event.data.module === "string") {
+          const moduleURL = URL.createObjectURL(new Blob([event.data.module], {type: "text/javascript"}));
+          try { await import(moduleURL); } finally { URL.revokeObjectURL(moduleURL); }
+        } else await new Function(`return (async () => {\n${event.data}\n})()`)();
         send("result");
       } catch (error) { send("error", error); }
     };
   }
 
   // The iframe stays responsive even if the worker enters an infinite loop.
-  function frameMain(token, workerSource, code) {
+  function frameMain(token, workerSource, code, parentOrigin) {
     const blob = new Blob([workerSource], { type: "text/javascript" });
     const url = URL.createObjectURL(blob);
-    const send = (kind, text) => parent.postMessage({ token, kind, text }, "*");
+    const send = (kind, text) => parent.postMessage({ token, kind, text }, parentOrigin);
     let worker;
     const stop = () => {
       worker?.terminate();
       URL.revokeObjectURL(url);
     };
     addEventListener("message", event => {
-      if (event.source === parent && event.data?.token === token && event.data.kind === "stop") stop();
+      if (event.source === parent && event.origin === parentOrigin && event.data?.token === token && event.data.kind === "stop") stop();
     });
     addEventListener("pagehide", stop, { once: true });
     try {
@@ -71,7 +74,7 @@
     frame.setAttribute("aria-hidden", "true");
     frame.tabIndex = -1;
     frame.hidden = true;
-    const args = JSON.stringify([token, `(${workerMain.toString()})()`, code])
+    const args = JSON.stringify([token, `(${workerMain.toString()})()`, code, global.location.origin])
       .replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026");
     frame.srcdoc = `<!doctype html>
       <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' blob:; worker-src blob:; connect-src 'none'; img-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">

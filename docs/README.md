@@ -8,6 +8,14 @@
 
 Toda manutenção ocorre em `devpath-publish/`. O comando `npm.cmd run build:curriculum` substitui os geradores antigos de sincronização entre distribuições, incluindo `build-stage01.mjs` e `build-stage03.mjs`.
 
+## Planejamento atual
+
+- [Melhorias de engenharia — 05/10/2026](planos/2026-10-05-melhorias-engenharia.md): implementação local concluída, decisões e limites de verificação.
+
+- [Execução de módulos locais](especificacoes/executor-modulos.md).
+- [Persistência e sincronização](especificacoes/persistencia-progresso.md).
+- [Interface e carregamento](especificacoes/interface-e-carregamento.md).
+
 ## Registros históricos
 
 Estes documentos preservam as decisões e verificações de cada revisão. As instruções e referências aos antigos checkouts descrevem a época da auditoria; use os guias acima para trabalhar na estrutura atual.

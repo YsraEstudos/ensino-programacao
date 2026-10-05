@@ -1,0 +1,20 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import vm from 'node:vm';
+import { readFileSync } from 'node:fs';
+const w = {};
+w.window = w;
+vm.runInNewContext(readFileSync('public/progress-migrations.js', 'utf8'), w);
+test('legacy starter migration is pure, idempotent and preserves custom drafts', () => {
+    const original = { code: 'const nome="Ana";let pontos=0;pontos=5;const ativo=false;let volume=0;volume=7;const idioma="pt-BR";let tentativas=1;tentativas=2;', complete: true, passedCode: 'old', reflection: 'mine' };
+    const copy = JSON.stringify(original);
+    const migrated = w.DevPathProgressMigrations.stage01('01.04', original);
+    assert.equal(migrated.changed, true);
+    assert.equal(JSON.stringify(original), copy);
+    assert.equal(migrated.state.complete, false);
+    assert.match(migrated.state.code, /console.log/);
+    assert.equal(migrated.state.reflection, 'mine');
+    assert.equal(w.DevPathProgressMigrations.stage01('01.04', migrated.state).changed, false);
+    assert.equal(w.DevPathProgressMigrations.stage01('01.04', { code: 'console.log("custom")' }).changed, false);
+    assert.equal(w.DevPathProgressMigrations.stage01('01.05', original).changed, false);
+});
