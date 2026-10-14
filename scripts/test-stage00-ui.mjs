@@ -147,6 +147,7 @@ const aq=selector=>app.window.document.querySelector(selector);
 const afill=(selector,value)=>{const node=aq(selector);assert(node,selector);node.value=value;node.dispatchEvent(new app.window.Event('input',{bubbles:true}));};
 for(const item of lessons){
   app.window.location.hash=`#/javascript/${item.id}`;await settle();
+  aq('[data-learning-mode="learn"]').click();await settle();
   assert(aq('[data-s00-teaching]'),`${item.id}: application uses new renderer`);
   const first=aq('[data-s00-target]');first.click();assert.equal(app.window.document.activeElement.id,first.dataset.s00Target);
   if(item.id==='00.06'){aq('[data-s00-action="run"]').click();assert.match(aq('[data-s00-output]').textContent,/SyntaxError/);}
@@ -173,7 +174,27 @@ for(const item of lessons){
   assert.match(reloaded.window.document.querySelector('[data-s00-action="complete"]').textContent,/concluída/);
   reloaded.window.close();
 }
+const completedProgress=accountProgress;
+accountProgress={};accountRevision='"isolated-recall"';
+const recallApp=await loadApp();
+recallApp.window.location.hash='#/javascript/00.04';await settle();
+const rq=selector=>recallApp.window.document.querySelector(selector);
+rq('[data-learning-mode="recall"]').click();await settle();
+assert.equal(recallApp.window.document.querySelector('.course-lesson').dataset.learningMode,'recall','the choice is stored and rerendered');
+assert.equal(rq('.s00-argument-preview').hidden,true,'recall hides the argument demonstration');
+assert.equal(rq('[data-s00-lab-code]').hidden,true,'recall hides the worked message-action code');
+assert.equal(rq('[data-s00-lab-output]').hidden,true,'recall hides the worked message-action output');
+assert.equal(rq('[data-s00-lab-choice]').hidden,false,'recall keeps the lab question available');
+const help=rq('[data-learning-help-target="s00-argument-preview"]');assert(help,'the demonstration has an explicit help control');
+help.click();await settle();
+assert.equal(rq('.s00-argument-preview').hidden,false,'explicit help opens the requested demonstration');
+assert.equal(rq('[data-s00-lab-code]').hidden,true,'unrequested answer code remains closed');
+assert.equal(accountProgress.exerciseLearning['00.04'].assisted,true,'help is sticky on the current attempt');
+const recallReload=await loadApp();recallReload.window.location.hash='#/javascript/00.04';await settle();
+assert.equal(recallReload.window.document.querySelector('.s00-argument-preview').hidden,false,'sticky help remains available after reload');
+assert.equal(recallReload.window.document.querySelector('[data-s00-lab-choice]').hidden,false,'the recall challenge remains available after reload');
+recallReload.window.close();recallApp.window.close();
 // Existing historical attempts remain untouched by this editorial revision.
-assert.equal(Object.keys(accountProgress.exercisePredictions).filter(x=>x.endsWith('@v4')).length,9);
+assert.equal(Object.keys(completedProgress.exercisePredictions).filter(x=>x.endsWith('@v4')).length,9);
 app.window.close();
 console.log('Stage 00 app integration: all 9 activities completed through real click/input listeners and reloaded from account progress.');

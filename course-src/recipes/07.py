@@ -202,7 +202,7 @@ CONTENT = {
         "sets.operations",
         "main.js: export function compararPermissoes(a,b){ /* intersecao,diferenca,subconjunto */ }",
         "a={ler,editar}, b={ler} -> intersecao={ler}, diferença(a-b)={editar}, b subconjunto de a=true",
-        "a vazio -> intersecao/diferença vazias e a subconjunto de b=true; entradas preservadas",
+        "b vazio -> subconjunto=true (o vazio é subconjunto de qualquer conjunto); a vazio -> intersecao e diferença vazias; entradas preservadas",
         "Confundir diferença direcional ou supor que conjunto vazio não é subconjunto.",
         "a-b contém permissão exclusiva de b.",
         "De qual conjunto os elementos são removidos na diferença?",

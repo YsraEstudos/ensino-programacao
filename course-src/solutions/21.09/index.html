@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratório de performance</title>
+<main>
+  <h1>Laboratório de performance</h1>
+  <label for="tamanho">Tamanho da entrada</label>
+  <input id="tamanho" type="number" value="100000" min="1" max="200000">
+  <button id="medir" type="button">Medir</button>
+  <p id="mensagem" role="status" aria-live="polite">Informe um tamanho e selecione Medir.</p>
+  <table><thead><tr><th>Implementação</th><th>Mediana (ms)</th><th>Mín.</th><th>Máx.</th><th>Amostras</th></tr></thead><tbody id="resultados"></tbody></table>
+  <p>Memória aproximada: <span id="memoria">N/D</span> · Ambiente: <span id="ambiente"></span></p>
+</main>
+<script type="module" src="./lab.js"></script>
+</html>

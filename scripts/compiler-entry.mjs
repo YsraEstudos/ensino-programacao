@@ -1,3 +1,3 @@
-import { initialize, build } from 'esbuild-wasm/lib/browser.js';
+import { initialize, build, transform } from 'esbuild-wasm/lib/browser.js';
 import { parse } from 'acorn';
-globalThis.DevPathCompilerEngine = { initialize, build, parse };
+globalThis.DevPathCompilerEngine = { initialize, build, transform, parse };

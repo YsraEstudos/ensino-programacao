@@ -1,0 +1,1 @@
+export async function primeiroSucesso(promessas) { try { return {ok:true,valor:await Promise.any(promessas)}; } catch(erro) { return {ok:false,nome:erro.name,erros:erro.errors.map(item=>item.message)}; } }

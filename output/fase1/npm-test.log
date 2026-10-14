@@ -1,0 +1,1071 @@
+
+> devpath@0.1.0 pretest
+> npm run build:compiler && npm run build:progress
+
+
+> devpath@0.1.0 build:compiler
+> node scripts/build-module-compiler.mjs
+
+
+> devpath@0.1.0 build:progress
+> node scripts/build-progress-model.mjs
+
+
+> devpath@0.1.0 test
+> npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1
+
+
+> devpath@0.1.0 test:catalog
+> node --test scripts/test-course-catalog-validator.mjs
+
+✔ assessmentEnvironment is an intentional public field at every stage (2.1925ms)
+✔ Stage 03 generic fallback fields are limited to IDs outside dedicated contracts (0.4011ms)
+✔ assessmentEnvironment accepts only published environment identifiers (1.8441ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 178.0996
+
+> devpath@0.1.0 test:learning
+> node --test scripts/test-learning-progress.mjs scripts/test-learning-paths.mjs scripts/test-learning-metadata.mjs scripts/test-learning-coverage.mjs scripts/test-learning-paths-review.mjs scripts/test-learning-event-queue.mjs scripts/test-learning-sync-status.mjs scripts/test-learning-mode-confirm.mjs
+
+✔ reports a MAKE activity without a test as a coverage gap (3.0095ms)
+✔ uses published prerequisite and solution reference fields (0.9087ms)
+✔ prefers the additive learner activity graph over a dedicated textual requires field (0.2023ms)
+✔ treats an empty assessment object as a coverage gap (0.1792ms)
+✔ keeps a READ rubric as an editorial assessment (0.2315ms)
+✔ flags autoTested metadata that has no executable tests (0.2164ms)
+✔ does not infer execution from manifest metadata (0.2009ms)
+✔ checks alone do not declare executable tests (0.2219ms)
+✔ typecheck capability needs an explicit TypeScript entry or config and does not replace behavior tests (0.2481ms)
+✔ CLI uses requires fallback and test manifest fallback without claiming execution (176.0014ms)
+✔ CLI accepts a valid manifest and rejects a corrupt present manifest (362.0803ms)
+✔ counts only current browser and local runtime results with matching canonical fingerprints (28.9285ms)
+✔ rejects unknown, declared-only, unsupported, mismatched, labeled, and stale execution evidence (2.991ms)
+✔ CLI consumes evidence files and exposes valid and rejected counts (305.2991ms)
+✔ a help request made while an earlier edit is still being fingerprinted is not discarded as stale (88.9503ms)
+✔ a record whose clock is two hours ahead still receives a help request (2.2783ms)
+✔ a clock that moves backwards between two events keeps both, in request order (12.177ms)
+✔ events are applied in request order even when a later fingerprint finishes first (50.4122ms)
+✔ a rejected task is reported once and the events behind it still run (5.013ms)
+✔ accepts activity-ID prerequisites and dedicated hint exemption (2.6129ms)
+✔ rejects unknown, later, self, optional, duplicate, and cyclic prerequisites (2.4323ms)
+✔ requires metadata coverage and authored hints for generic activities (0.383ms)
+✔ checks runtime version distinctions and fallback declarations (0.8967ms)
+✔ compares complete Node semver tuples against the exact 24.0.0 floor (0.9488ms)
+✔ accepts the checked course feature matrix with standard, platform, and proposal classes (1.0575ms)
+✔ declining the learn-first choice on a demonstrated attempt sends nothing and keeps the demonstration (150.6913ms)
+✔ confirming the learn-first choice on a demonstrated attempt applies the downgrade the warning describes (24.1963ms)
+✔ after the attempt is evaluated, explanations open without recording help (153.4532ms)
+✔ before any submission, recall keeps the explanation closed (39.2065ms)
+✔ help after demonstration asks first, and declining leaves the attempt untouched (34.1053ms)
+✔ confirming help after demonstration sends the request (30.8703ms)
+✔ help keeps keyboard focus on the revealed explanation and announces it (52.8462ms)
+✔ help buttons expose the unit they control (28.4377ms)
+✔ a failed transfer submission reports the failure in the transfer status (38.1576ms)
+✔ an edit after study keeps the earlier study visible as history (23.7224ms)
+✔ all activity markup begins behind the learn/recall choice and preserves the original controls (168.339ms)
+✔ recall opens the challenge while hiding examples and offers explicit, unit-scoped help (31.362ms)
+✔ recall hides Stage 00 worked examples and environment demonstrations but keeps lab challenges available (36.4506ms)
+✔ adapter controls are not mistaken for the path button, and requested help stays unit-scoped in the current session (44.686ms)
+✔ demonstration UI is absent without a declared transfer and uses only the transfer rubric when present (47.0697ms)
+✔ historical mastery remains visible while the current attempt is pending (23.4153ms)
+✔ mode, help, assessment and transfer actions go through the injected learning bridge (43.7605ms)
+✔ the activity header shows the progress-model state as text, from the learning record only (45.3344ms)
+✔ the learn-first and recall choices are announced by pressed state and keep their text labels (22.9146ms)
+✔ help remains attached to the same attempt through edits and mode changes (3.9747ms)
+✔ a fresh independent attempt resets help even when its fingerprint is unchanged (1.8479ms)
+✔ a late or replayed callback cannot replace the current explicit attempt (0.8133ms)
+✔ assisted passing assessment is verified, and later failure keeps its versioned evidence (1.8362ms)
+✔ failed attempts remain attempted, while study without approval becomes studied (1.4864ms)
+✔ stale, unsupported, or failed evidence cannot promote and assistance merges monotonically (1.353ms)
+✔ help discovered by a merge downgrades current demonstration without discarding its evidence (2.1155ms)
+✔ sanitizer and merge derive sticky help from same-attempt help events (3.2283ms)
+✔ help before the 12-event window stays sticky in sanitizer and merge (1.7034ms)
+✔ content or assessment version changes invalidate only the current promotion (1.0841ms)
+✔ unknown versions and unsupported evidence sources cannot promote an attempt (0.5514ms)
+✔ sanitizer caps recent events, rejects invalid provenance, and migration preserves legacy data (3.4725ms)
+✔ help written for a diagnostic activity survives the reload path (save, reload, migrate, merge) (1.3136ms)
+✔ a declared transfer is its own state and never produces demonstrated (1.0612ms)
+✔ a rubric-declared demonstration is not promoted to demonstrated (0.4509ms)
+✔ a stored declared transfer saved as demonstrated is read back as transfer-declared (0.8609ms)
+✔ while the account sync is paused, every new save says the progress is kept on this device (116.3793ms)
+✔ a conflicting save names the conflict and keeps the attempt on this device (15.4218ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3333.4612
+
+> devpath@0.1.0 test:executors
+> node --test scripts/test-course-assessment.mjs scripts/test-course-controller.mjs scripts/test-course-dom.mjs scripts/test-course-network.mjs scripts/test-course-node-runtime.mjs scripts/test-course-runner.mjs scripts/test-course-test-runtime.mjs scripts/test-course-tests.mjs scripts/test-course-typecheck.mjs scripts/test-course-worker-preview.mjs scripts/test-module-graph.mjs scripts/test-project-export.mjs scripts/test-check-local-course-cli.mjs scripts/test-task-8a-evidence.mjs scripts/test-task-8a-review-fixes.mjs scripts/test-task-9-local-evidence.mjs scripts/test-task-9-typed-suite.mjs scripts/test-task-9-package-22-08.mjs
+
+✔ runs manifest-declared local reference commands in a disposable copy (1946.9655ms)
+✔ fails closed for missing IDs, non-local assessments, unsafe manifests, Git and install commands (58.5065ms)
+✔ --id 22.02 with no flags resolves the course-src reference and exits 0 (24861.5586ms)
+✔ behavior checks require a nonempty executable declaration (5.443ms)
+✔ empty and failing behavior suites never pass (4.0676ms)
+✔ studentSuite uses the mutation evaluator even when the published check is behavior (5.0472ms)
+✔ student implementation suites run against the submitted entry before mutant grading (2.1543ms)
+✔ student implementation suite also grades the corrected submission before mutants (2.3196ms)
+✔ studentSuite rejects an empty learner suite instead of using editorial tests (1.8437ms)
+✔ types gate behavior even for a JavaScript environment (1.7872ms)
+✔ typed learner suites retain declaration files and override them with each semantic mutant (2.418ms)
+✔ typecheck success permits behavior and normalizes result to passed (2.4354ms)
+✔ TypeScript behavior cannot run without the types check (3.4117ms)
+✔ TypeScript files cannot bypass type checks under a mislabeled JavaScript assessment (2.283ms)
+✔ adapter output cannot replace the caller source or fingerprint (2.7882ms)
+✔ behavior runner output keeps the caller source and fingerprint and normalizes test counts (2.3038ms)
+✔ DOM and network behavior do not fall back to JavaScript execution (1.836ms)
+✔ protected DOM behavior runs against submitted HTML and source (1.8667ms)
+✔ DOM mutation suites merge learner helpers and tests while protecting correct and mutant implementation paths (2.0279ms)
+✔ DOM inline suites use a synthetic test module at the declared test path (2.2761ms)
+✔ abort reaches the legacy runner stop callback and returns cancelled (1.5867ms)
+✔ local declarations do not become browser approvals without an execution adapter (1.4193ms)
+✔ unsupported node builtins remain an explicit unsupported assessment result (2.7584ms)
+✔ fingerprinting fails closed when SHA-256 is unavailable (1.7857ms)
+✔ expected diagnostics require an exact investigation match (13.1789ms)
+✔ manifest validation rejects checks without behavior evidence and accepts local commands (2.3716ms)
+✔ fingerprint includes activity, versions and sorted file contents (39.2157ms)
+✔ fingerprint muda quando muda: environment (2.3819ms)
+✔ fingerprint muda quando muda: version (1.5522ms)
+✔ fingerprint muda quando muda: checks (conjunto) (1.5369ms)
+✔ fingerprint muda quando muda: entryPath (1.0045ms)
+✔ fingerprint muda quando muda: typeEntryPath (1.3252ms)
+✔ fingerprint muda quando muda: testPath (0.9967ms)
+✔ fingerprint muda quando muda: testPaths (conteúdo da lista) (1.2289ms)
+✔ fingerprint muda quando muda: tests (conteúdo do teste protegido) (1.3509ms)
+✔ fingerprint muda quando muda: sourceTestPath (1.1158ms)
+✔ fingerprint muda quando muda: referenceDir (1.1874ms)
+✔ fingerprint muda quando muda: tsconfigPath (1.2308ms)
+✔ fingerprint muda quando muda: fixturesPath (1.2883ms)
+✔ fingerprint muda quando muda: fixtures.html (103.9806ms)
+✔ fingerprint muda quando muda: fixtures.workerEntries (3.3951ms)
+✔ fingerprint muda quando muda: fixtures.network (status) (1.3185ms)
+✔ fingerprint muda quando muda: inlinefixtures (1.1909ms)
+✔ fingerprint muda quando muda: timeoutMs (1.395ms)
+✔ fingerprint muda quando muda: argv (valor) (1.1137ms)
+✔ fingerprint muda quando muda: env (1.1007ms)
+✔ fingerprint muda quando muda: virtualCwd (1.1676ms)
+✔ fingerprint muda quando muda: runtime (1.052ms)
+✔ fingerprint muda quando muda: studentSuite (1.2053ms)
+✔ fingerprint muda quando muda: studentSuiteKind (1.3573ms)
+✔ fingerprint muda quando muda: behaviorTestPath (1.1568ms)
+✔ fingerprint muda quando muda: typecheckMutants (1.3931ms)
+✔ fingerprint muda quando muda: expectedDiagnostics (2.493ms)
+✔ fingerprint muda quando muda: local.commands (1.348ms)
+✔ fingerprint muda quando muda: local.evidence (1.2372ms)
+✔ fingerprint muda quando muda: rubric (1.2878ms)
+✔ fingerprint muda quando muda: transfer.id (1.1562ms)
+✔ fingerprint muda quando muda: transfer.files (conteúdo) (1.4629ms)
+✔ fingerprint muda quando muda: transfer.testPath (2.5079ms)
+✔ fingerprint muda quando muda: transfer.rubric (1.3132ms)
+✔ fingerprint muda quando muda: correctFiles (conteúdo) (1.1054ms)
+✔ fingerprint muda quando muda: correctFiles (caminho) (1.5853ms)
+✔ fingerprint muda quando muda: correctFiles (arquivo extra) (1.5146ms)
+✔ fingerprint muda quando muda: mutantDirs (conteúdo) (1.1588ms)
+✔ fingerprint muda quando muda: mutantDirs (id) (1.2351ms)
+✔ fingerprint muda quando muda: mutantDirs (mutante extra) (1.6935ms)
+✔ fingerprint muda quando muda: contractTypeFiles (conteúdo) (2.0176ms)
+✔ fingerprint muda quando muda: typeContractMutants (conteúdo) (1.2558ms)
+✔ fingerprint muda quando muda: typeContractMutants (id) (1.1491ms)
+✔ fingerprint muda com versões, atividade, variante e conteúdo do aluno (3.1119ms)
+✔ fingerprint é idêntico para entradas idênticas e não depende da ordem das chaves (1.9353ms)
+✔ listas de arquivos são ordenadas por caminho e não dependem da ordem de entrada (1.6604ms)
+✔ checks e expectedDiagnostics são ordem-independentes; argv, testPaths e rubric não (5.3569ms)
+✔ caminhos duplicados mantêm a ordem de entrada, porque o último arquivo vence (1.3221ms)
+✔ ausente e undefined são equivalentes; vazio é valor presente e gera hash diferente (3.5017ms)
+✔ campos editoriais e chaves desconhecidas não alteram o fingerprint (1.269ms)
+✔ a allowlist cobre todas as chaves dos manifestos de origem e publicado (13.0513ms)
+✔ a mesma tentativa com variante de transferência não reutiliza a prova da atividade original (12.0859ms)
+✔ fingerprint rejeita arquivos que não são lista (0.4595ms)
+✔ editing during an assessment cancels it and ignores the late passed callback (9.6256ms)
+✔ disposing or explicitly cancelling a run ignores its late passed callback (5.2499ms)
+✔ a changed draft cannot overwrite current evidence after the result arrives (1.7088ms)
+✔ an obsolete assessment callback cannot save after activity replacement while the current run can (5.0064ms)
+✔ assessment result fields are normalized to browser source and caller fingerprint (1.7458ms)
+✔ a type-only investigation names its real entry file and the TypeScript checker, not main.js (8.8322ms)
+✔ an autoTested activity with a JavaScript entry cites that entry file (3.9322ms)
+✔ an executable activity without published tests does not claim it is written analysis only (2.1213ms)
+✔ the curriculum build marks every behavior or mutation assessment as autoTested; type-only investigations stay rubric-completed (456.9588ms)
+✔ DOM runner exposes a browser-only assessment contract and rejects external files (4.813ms)
+✔ DOM runner reports unsupported outside a real document and does not fake DOM approval (1.5661ms)
+✔ DOM runner validates an entry and keeps the result contract for cancellation (1.547ms)
+✔ DOM runner keeps interactive form and CSS capabilities inside the opaque frame (0.8137ms)
+✔ DOM runner rejects an empty registered suite and unavailable test runtime (0.812ms)
+✔ loop guard stops while (true) with a clear Portuguese error within the limit (58.3245ms)
+✔ loop guard covers for(;;), do-while, brace-less bodies and for-in/for-of (202.5645ms)
+✔ loop guard leaves strings, templates, comments and regex literals untouched (11.5995ms)
+✔ finite loops still produce their results, including labels, continue and brace-less bodies (13.5263ms)
+✔ loop guard reports the instrumentation failure instead of running unguarded code (2.361ms)
+✔ loop guard limit is short enough to fire before the default DOM timeout (2.3144ms)
+✔ network fixtures preserve Response semantics for errors and invalid JSON (62.1527ms)
+✔ network fixtures support deterministic delay, abort, reset, and late out-of-order responses (4.919ms)
+✔ network fixtures never fall through to the real network (2.1023ms)
+✔ serialized network factory is self-contained in an opaque-like realm (3.9944ms)
+✔ an explicit late fixture can deliver an aborted old response for sequence-token tests (3.8468ms)
+✔ reset cancels an aborted late fixture before its delivery timer fires (3.9994ms)
+✔ virtual node runtime reads, writes and reports ENOENT inside its root (11.2273ms)
+✔ argv, env, output and reset are isolated between executions (4.7467ms)
+✔ only declared virtual node modules are available and path URLs resolve virtually (3.2282ms)
+✔ strict assertion subset preserves error classes, RegExp matching, undefined and NaN (13.4552ms)
+✔ virtual URLs preserve spaces and a declared virtual cwd without host filesystem access (2.0022ms)
+✔ serialized factory does not depend on the host Node module loader (4.7269ms)
+✔ browser worker executes a node-simulated virtual filesystem and process fixture (1615.2125ms)
+✔ local checker returns nonzero, missing executable and timeout without using a shell (7460.4308ms)
+✔ local checker rejects traversal and symlinked project files (38.3903ms)
+✔ local checker cleans its temporary copy when project validation throws (25.9628ms)
+✔ local checker bounds output, keeps metacharacters literal, and cleans temp copies after timeout (4099.1944ms)
+✔ local checker kills a timed out descendant and reports missing project dependencies (4044.2818ms)
+✔ runner executes multiline code, preserves script-like text, and reports syntax errors (1191.8111ms)
+✔ an infinite loop is terminated and does not prevent the next execution (665.0491ms)
+✔ output is bounded and cancellation releases the running worker (285.7652ms)
+✔ foreign sources, wrong tokens and late messages cannot finish an execution (172.2507ms)
+✔ worker creation failure reports an error and removes the sandbox (110.8884ms)
+✔ registered tests run after the code and report structured results (815.725ms)
+✔ registers nested tests, beforeEach, matchers and rejects (8.8419ms)
+✔ vi.fn and spyOn record calls and restore the original (3.4626ms)
+✔ fake timers advance deterministic callbacks and restore in finally (3.7979ms)
+✔ a rejected test fails while later tests continue and empty suites remain empty (3.6823ms)
+✔ afterEach failure marks only its own test and cleanup survives reuse (3.1517ms)
+✔ loose rejection is surfaced to the caller (3.8606ms)
+✔ student suites pass the correct implementation and kill every semantic mutant (4862.2788ms)
+✔ student-suite negatives reject empty/correct-failing, survivor, error and timeout mutants (4636.8657ms)
+✔ runner does not promote an unhandled top-level rejection (258.4802ms)
+✔ the published tests belong to flagged activities and the other way around (188.3167ms)
+✔ 16–19 affected transfer cards have distinct scenarios, boundaries, and specific criteria (133.822ms)
+✔ 15.01 reports only the six published intentional diagnostics (3687.5422ms)
+✔ 15.02 protected conformance tests reject a bad implementation and same-path always-pass edit (4012.0466ms)
+✔ 15.03 protected type assertions reject any and incorrect public signatures (3647.7074ms)
+✔ 15.02 and 15.07 protected assertions inspect exported signatures directly (3292.3669ms)
+✔ 19.04 reproduces the intentional distributive conditional diagnostic before correction (2512.0538ms)
+✔ 19.04 type-contract mutation does not count a missing protected export as a semantic kill (5269.2336ms)
+✔ 19.08 published run requires a meaningful submitted suite and catches a broken emitter (17674.209ms)
+✔ 17.03 published behavior tests and typecheck reject a compile-valid empty-result implementation (4593.6833ms)
+✔ 03.10: starter fails and reference solution passes (206.2ms)
+✔ 04.04: starter fails and reference solution passes (222.0518ms)
+✔ 04.05: starter fails and reference solution passes (204.9352ms)
+✔ 04.06: starter fails and reference solution passes (221.2201ms)
+✔ 04.07: starter fails and reference solution passes (206.7112ms)
+✔ 04.09: starter fails and reference solution passes (220.8991ms)
+✔ 04.11: starter fails and reference solution passes (204.4784ms)
+✔ 04.12: starter fails and reference solution passes (206.0047ms)
+✔ 04.13: starter fails and reference solution passes (222.2777ms)
+✔ 05.04: starter fails and reference solution passes (222.5475ms)
+✔ 05.06: starter fails and reference solution passes (189.4804ms)
+✔ 05.07: starter fails and reference solution passes (194.7255ms)
+✔ 05.10: starter fails and reference solution passes (208.5377ms)
+✔ 05.02: starter fails and reference solution passes (188.6235ms)
+✔ 05.05: starter fails and reference solution passes (220.311ms)
+✔ 05.08: starter fails and reference solution passes (223.1709ms)
+✔ 05.09: starter fails and reference solution passes (173.7618ms)
+✔ 06.04: starter fails and reference solution passes (205.3115ms)
+✔ 06.07: starter fails and reference solution passes (190.0752ms)
+✔ 06.08: starter fails and reference solution passes (205.1562ms)
+✔ 06.09: starter fails and reference solution passes (205.296ms)
+✔ 06.11: starter fails and reference solution passes (204.7514ms)
+✔ 07.02: starter fails and reference solution passes (222.3188ms)
+✔ 07.04: starter fails and reference solution passes (206.2127ms)
+✔ 07.05: starter fails and reference solution passes (220.7398ms)
+✔ 07.07: starter fails and reference solution passes (221.3456ms)
+✔ 07.10: starter fails and reference solution passes (205.0937ms)
+✔ 07.08: starter fails and reference solution passes (220.911ms)
+✔ 07.09: starter fails and reference solution passes (189.6058ms)
+✔ 08.03: starter fails and reference solution passes (220.9131ms)
+✔ 08.05: starter fails and reference solution passes (206.175ms)
+✔ 08.06: starter fails and reference solution passes (205.9446ms)
+✔ 08.08: starter fails and reference solution passes (205.7616ms)
+✔ 09.03: starter fails and reference solution passes (206.27ms)
+✔ 09.06: starter fails and reference solution passes (222.2186ms)
+✔ 09.08: starter fails and reference solution passes (208.8507ms)
+✔ 10.03: starter fails and reference solution passes (204.5921ms)
+✔ 10.04: starter fails and reference solution passes (187.7678ms)
+✔ 10.05: starter fails and reference solution passes (221.8083ms)
+✔ 10.08: starter fails and reference solution passes (203.9407ms)
+✔ 11.03: starter fails and reference solution passes (207.1925ms)
+undefined
+✔ 11.04: starter fails and reference solution passes (174.0734ms)
+✔ 11.06: starter fails and reference solution passes (158.8085ms)
+✔ 11.05: starter fails and reference solution passes (175.0089ms)
+✔ 11.07: starter fails and reference solution passes (173.9772ms)
+✔ 11.12: starter fails and reference solution passes (158.0784ms)
+✔ 11.08: starter fails and reference solution passes (457.8761ms)
+✔ 11.10: starter fails and reference solution passes (220.989ms)
+✔ 11.13: starter fails and reference solution passes (210.9242ms)
+✔ 12.03: starter fails and reference solution passes (285.5374ms)
+✔ 12.05: starter fails and reference solution passes (274.9167ms)
+✔ 12.06: starter fails and reference solution passes (622.3536ms)
+✔ 12.12: starter fails and reference solution passes (426.0387ms)
+✔ 12.08: starter fails and reference solution passes (315.2658ms)
+✔ 13.03: starter fails and reference solution passes (660.4487ms)
+✔ 13.05: starter fails and reference solution passes (269.219ms)
+✔ 13.06: starter fails and reference solution passes (332.9147ms)
+✔ 13.07: starter fails and reference solution passes (1212.0372ms)
+✔ 13.08: starter fails and reference solution passes (332.4821ms)
+✔ 13.09: starter fails and reference solution passes (722.7891ms)
+✔ 13.10: starter fails and reference solution passes (314.3175ms)
+✔ 13.13: starter fails and reference solution passes (565.866ms)
+✔ 13.14: starter fails and reference solution passes (308.2921ms)
+✔ 14.06: starter fails and reference solution passes (408.1961ms)
+✔ 14.08: starter fails and reference solution passes (395.3752ms)
+✔ 15.02: starter fails and reference solution passes (10037.5184ms)
+✔ 15.03: starter fails and reference solution passes (6435.5277ms)
+✔ 15.04: starter fails and reference solution passes (5161.8666ms)
+✔ 15.07: starter fails and reference solution passes (14319.177ms)
+✔ 15.08: starter fails and reference solution passes (4469.5262ms)
+✔ 15.11: starter fails and reference solution passes (2831.2473ms)
+✔ 16.02: starter fails and reference solution passes (3551.3011ms)
+✔ 16.03: starter fails and reference solution passes (3012.0207ms)
+✔ 16.09: starter fails and reference solution passes (2920.5992ms)
+✔ 16.04: starter fails and reference solution passes (2686.4759ms)
+✔ 16.05: starter fails and reference solution passes (2558.5613ms)
+✔ 16.10: starter fails and reference solution passes (3702.3137ms)
+✔ 16.06: starter fails and reference solution passes (5306.1391ms)
+✔ 16.07: starter fails and reference solution passes (3060.0589ms)
+✔ 16.08: starter fails and reference solution passes (5490.1103ms)
+✔ 17.03: starter fails and reference solution passes (5461.6559ms)
+✔ 17.04: starter fails and reference solution passes (4256.9126ms)
+✔ 17.05: starter fails and reference solution passes (2998.2468ms)
+✔ 17.07: starter fails and reference solution passes (3107.9512ms)
+✔ 17.11: starter fails and reference solution passes (3683.1999ms)
+✔ 17.08: starter fails and reference solution passes (4406.5658ms)
+✔ 18.03: starter fails and reference solution passes (3683.9856ms)
+✔ 18.04: starter fails and reference solution passes (2708.1947ms)
+✔ 18.05: starter fails and reference solution passes (3132.0469ms)
+✔ 18.07: starter fails and reference solution passes (3892.9213ms)
+✔ 18.08: starter fails and reference solution passes (4199.9515ms)
+✔ 18.10: starter fails and reference solution passes (3876.7602ms)
+✔ 19.03: starter fails and reference solution passes (3164.5338ms)
+✔ 19.04: starter fails and reference solution passes (2928.7677ms)
+✔ 19.05: starter fails and reference solution passes (2766.3572ms)
+✔ 19.08: starter fails and reference solution passes (4717.7179ms)
+✔ 19.09: starter fails and reference solution passes (3753.8435ms)
+✔ 20.01: starter fails and reference solution passes (388.0878ms)
+✔ 20.02: starter fails and reference solution passes (360.47ms)
+✔ 20.03: starter fails and reference solution passes (346.0171ms)
+✔ 20.04: starter fails and reference solution passes (439.611ms)
+✔ 20.05: starter fails and reference solution passes (359.8195ms)
+✔ 20.06: starter fails and reference solution passes (407.5442ms)
+✔ 20.07: starter fails and reference solution passes (389.3912ms)
+✔ 20.08: starter fails and reference solution passes (404.8417ms)
+✔ 20.09: starter fails and reference solution passes (895.0283ms)
+✔ 20.10: starter fails and reference solution passes (439.4069ms)
+✔ 21.02: starter fails and reference solution passes (654.6136ms)
+✔ 21.03: starter fails and reference solution passes (362.5262ms)
+✔ 21.04: starter fails and reference solution passes (423.3201ms)
+✔ 21.05: starter fails and reference solution passes (607.0282ms)
+✔ 21.06: starter fails and reference solution passes (613.1009ms)
+✔ 21.07: starter fails and reference solution passes (405.853ms)
+{
+  resultado: 450000,
+  reduce: undefined,
+  for: undefined,
+  memoria: 'N/D',
+  ambiente: 'Node.js/26'
+}
+{ erro: 'Entrada inválida: use uma lista de números finitos.' }
+✔ 21.09: starter fails and reference solution passes (167.8128ms)
+✔ 22.03: starter fails and reference solution passes (1752.4954ms)
+✔ 22.04: starter fails and reference solution passes (389.4462ms)
+✔ 22.11: starter fails and reference solution passes (4625.0533ms)
+✔ 22.05: starter fails and reference solution passes (389.2189ms)
+✔ 22.06: starter fails and reference solution passes (387.6037ms)
+✔ 22.07: starter fails and reference solution passes (8138.6218ms)
+✔ 23.02: starter fails and reference solution passes (387.9792ms)
+✔ 23.03: starter fails and reference solution passes (375.9246ms)
+✔ 23.04: starter fails and reference solution passes (379.039ms)
+✔ 23.10: starter fails and reference solution passes (591.6652ms)
+✔ 23.11: starter fails and reference solution passes (405.34ms)
+✔ 23.09: starter fails and reference solution passes (466.0311ms)
+✔ reports TS2322 with the virtual file, line and column (3895.9514ms)
+✔ accepts a valid strict TypeScript solution (4126.1863ms)
+✔ resolves a .js import to the corresponding virtual .ts module (3528.0957ms)
+✔ reports a semantic error from a secondary imported file (2932.468ms)
+✔ accepts a used ts-expect-error and reports an unused directive as TS2578 (3923.3192ms)
+✔ reports a missing requested lib as an unsupported environment (315.1671ms)
+✔ reports an unknown tsconfig option as unsupported (1585.4946ms)
+✔ classifies malformed, invalid and unavailable tsconfig as unsupported (7558.2716ms)
+✔ applies recursive include and exclude patterns to virtual files (1535.9185ms)
+✔ rejects duplicate normalized virtual exercise paths (293.8972ms)
+✔ requires equal types for expectTypeOf assertions without an any escape hatch (3755.5501ms)
+✔ resolves installed Node and undici declarations without permissive globals (3114.0473ms)
+✔ marks missing Node, undici and assertion declarations as unsupported (4627.7039ms)
+✔ does not allow any to mask a mismatched expectTypeOf assertion (1039.4512ms)
+✔ browser client returns worker results and terminates the worker (23.4982ms)
+✔ browser client terminates on cancellation and ignores late worker messages (1.5936ms)
+✔ browser client times out, aborts library fetch and discards late responses (7.0261ms)
+✔ bundled worker runs the virtual host in a browser-like context (1527.7881ms)
+✔ Worker preview rewrites local module and import.meta URLs and owns the assets (8.4141ms)
+✔ Worker preview terminates tracked workers on abort and rejects foreign entries (2.5243ms)
+✔ local imports, default exports, reexports, dynamic imports and cycles are bundled (938.8507ms)
+✔ external, missing, traversal and computed imports are rejected before execution (163.0613ms)
+✔ the compiler does not execute the learner code and preserves string export text (31.2657ms)
+✔ loaders are selected by extension for TypeScript and JSON modules (161.3251ms)
+✔ a JavaScript import specifier resolves to a corresponding TypeScript module (225.6499ms)
+✔ export preserves every draft path and content and adds a usable project guide (145.6084ms)
+✔ export keeps an authored README and appends checkpoint commands without replacing it (13.5573ms)
+✔ export rejects traversal, absolute, drive, URL, NUL, and colliding paths before packaging (54.8188ms)
+✔ export refuses missing declared entry, test, dependency, or incoherent lock before creating ZIP bytes (8.4397ms)
+✔ download creates a readable ZIP containing nested files and package metadata (39.7868ms)
+✔ downloaded ZIP opens and returns original UTF-8 files through Windows ZipArchive (3717.2571ms)
+✔ download triggers a browser anchor and releases its temporary object URL (3.5812ms)
+✔ exported JavaScript project runs in a clean contained temp directory with the existing local checker (2996.6662ms)
+✔ prepared TypeScript checkpoint locks are internally coherent and label the course proxy (15.6465ms)
+✔ exported DOM project is exercised structurally in a contained temporary copy (6657.8042ms)
+✔ exported TypeScript project typechecks with the installed checker from a clean temporary copy (4613.7894ms)
+✔ JS project export has the expected file list and coherent Node package metadata (2.2288ms)
+✔ DOM project export keeps browser files and does not invent Node package metadata (0.768ms)
+✔ TypeScript export lists the expected files and keeps tsconfig, scripts and typescript pin coherent (12.8455ms)
+✔ grader-only assessment fields never leave the exported assessment (1.8376ms)
+✔ the checkpoint mirror matches the source checkpoint definitions exactly (5.5662ms)
+✔ export button and Git block render only for eligible activities (27.8298ms)
+✔ Git checkpoints for local activities are rendered as copyable instructional commands (261.7926ms)
+✔ enhance places the button in the practice section and exports the current editor text (131.2785ms)
+✔ a failed export reports an error toast and re-enables the button (59.4297ms)
+✔ unknown exporter errors reach the learner as a Portuguese sentence, not the raw developer text (60.1589ms)
+✔ the export button stays focused and is marked busy while the package is prepared (63.8409ms)
+✔ the export never sends grader-only assessment fields, including the full declared list (0.8043ms)
+✔ enhance hands the declared checkpoint to the exporter (77.1934ms)
+✔ an ineligible activity receives no export button in the DOM (21.8452ms)
+undefined
+(node:50588) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:50588) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ Task 8A stages 11–14 evidence is complete (0.6747ms)
+✔ 14.07 requires runtime, official Promise.try source and observed callback timing (1.5196ms)
+node-version: PASS
+21.08-native-using: PASS
+21.08-native-using-node26: PASS
+22.08-clean-package-consumer: PASS
+22.09-source-runtime: PASS
+22.09-isolatedDeclarations: PASS
+22.07-type-suite-and-22.09-declaration-consumer: PASS
+23.07-capstone-reopen-tests: PASS
+23.07-strict-source-types: PASS
+23.08-capstone-versioned-contract: PASS
+23.08-strict-source-types: PASS
+✔ scripts\test-task-9-local-evidence.mjs (42042.1152ms)
+(node:58896) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  "kind": "passed",
+  "package": "@curso/centavos@0.1.0",
+  "runtime": "Node 26.7.0",
+  "temporaryConsumer": true,
+  "packedFiles": [
+    "LICENSE",
+    "README.md",
+    "dist/index.d.ts",
+    "dist/index.js",
+    "package.json"
+  ]
+}
+✔ scripts\test-task-9-package-22-08.mjs (31140.188ms)
+✔ 22.07 authored type suite compiles against correct declaration (790.8165ms)
+✔ 22.07 semantic declaration mutant is rejected: parse-any (373.8551ms)
+✔ 22.07 semantic declaration mutant is rejected: parse-unknown (327.025ms)
+✔ 22.07 semantic declaration mutant is rejected: overlapping-result (364.9296ms)
+✔ 22.07 semantic declaration mutant is rejected: wide-route (1174.7704ms)
+✔ 22.07 semantic declaration mutant is rejected: optional-baseurl (484.7465ms)
+✔ 22.07 semantic declaration mutant is rejected: wrong-result-shape (534.8902ms)
+✔ 22.07 wrong export or missing library is infrastructure, not a mutation kill (360.2421ms)
+✔ 22.09 isolated declaration package builds with native TypeScript and emits public signatures (7025.6483ms)
+ℹ tests 331
+ℹ suites 0
+ℹ pass 331
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 233818.5517
+
+> devpath@0.1.0 test:progress
+> node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs scripts/test-progress-queue.mjs
+
+DevPath progress load failed SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at savedProgress (C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\app\api\progress\route.ts:22:24)
+    at Object.GET (C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\app\api\progress\route.ts:35:90)
+    at async TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-progress-api.mjs:29:19)
+    at async Test.run (node:internal/test_runner/test:1404:7)
+    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+DevPath progress save failed SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at savedProgress (C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\app\api\progress\route.ts:22:24)
+    at Object.PUT (C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\app\api\progress\route.ts:60:13)
+    at async TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-progress-api.mjs:30:19)
+    at async Test.run (node:internal/test_runner/test:1404:7)
+    at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+✔ corrupt stored progress is reported and cannot be replaced by empty data (306.6774ms)
+✔ invalid JSON and non-object payloads return 400, missing revision returns 428 (130.8361ms)
+✔ two clients cannot overwrite each other from the same initial revision (113.479ms)
+✔ streaming request size is limited in bytes before parsing and cancels excess input (104.5373ms)
+✔ legacy valid rows load without a migration and return a revision (82.5259ms)
+✔ sanitized learning attempts roundtrip through the API beside legacy completion and drafts (94.9047ms)
+✔ failed initial loading never triggers automatic or navigation saves (237.0484ms)
+✔ save sends the loaded revision and a conflict preserves the pending attempt (264.4339ms)
+✔ reloading with a pending attempt does not silently erase or replace it (183.3695ms)
+✔ browser and server share exactly the same defaults with independent nested state (2.2341ms)
+✔ learning records are sanitized by known activity and retain explicit attempt evidence (2.2706ms)
+✔ evidence, schedules and versioned drafts are bounded without accepting prototype keys (1.3885ms)
+✔ blank or modified stage02 code cannot retain a successful completion (0.7909ms)
+✔ slow saves coalesce pending snapshots and use acknowledged revisions (77.6929ms)
+✔ recovery merges the offline attempt with the account and saves only after explicit resume (11.9219ms)
+✔ recovery requires downloading the combined-attempt backup before saving it (23.9476ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3616.0199
+
+> devpath@0.1.0 test:app
+> node --test scripts/test-app-maintenance.mjs scripts/test-review-schedule.mjs scripts/test-course-runner.mjs scripts/test-course-tests.mjs scripts/test-stage-registry.mjs scripts/test-module-graph.mjs scripts/test-progress-migrations.mjs
+
+✔ catalog counts follow the loaded catalog, including a smaller valid catalog (296.0283ms)
+✔ missing optional save indicator does not prevent rendering or saving (225.6689ms)
+✔ missing required module produces an actionable startup message (94.6887ms)
+✔ app state and functions do not leak into the global script scope (222.3906ms)
+✔ untrusted catalog text renders as text and malformed route identifiers are rejected (299.6609ms)
+✔ scheduled review advances once, saves its interval, and enables the next question (217.3588ms)
+✔ generic module activities expose execution instead of only written analysis (322.0923ms)
+✔ skip link focuses content without replacing the open exercise route (263.7256ms)
+✔ runner executes multiline code, preserves script-like text, and reports syntax errors (240.5027ms)
+✔ an infinite loop is terminated and does not prevent the next execution (303.1157ms)
+✔ output is bounded and cancellation releases the running worker (64.9618ms)
+✔ foreign sources, wrong tokens and late messages cannot finish an execution (33.7581ms)
+✔ worker creation failure reports an error and removes the sandbox (28.3706ms)
+✔ registered tests run after the code and report structured results (306.0305ms)
+✔ the published tests belong to flagged activities and the other way around (33.4345ms)
+✔ 16–19 affected transfer cards have distinct scenarios, boundaries, and specific criteria (5.7343ms)
+✔ 15.01 reports only the six published intentional diagnostics (1238.9565ms)
+✔ 15.02 protected conformance tests reject a bad implementation and same-path always-pass edit (1427.011ms)
+✔ 15.03 protected type assertions reject any and incorrect public signatures (1709.3281ms)
+✔ 15.02 and 15.07 protected assertions inspect exported signatures directly (1483.1583ms)
+✔ 19.04 reproduces the intentional distributive conditional diagnostic before correction (711.955ms)
+✔ 19.04 type-contract mutation does not count a missing protected export as a semantic kill (2152.6756ms)
+✔ 19.08 published run requires a meaningful submitted suite and catches a broken emitter (11467.8859ms)
+✔ 17.03 published behavior tests and typecheck reject a compile-valid empty-result implementation (4573.8826ms)
+✔ 03.10: starter fails and reference solution passes (232.1752ms)
+✔ 04.04: starter fails and reference solution passes (218.4733ms)
+✔ 04.05: starter fails and reference solution passes (215.7649ms)
+✔ 04.06: starter fails and reference solution passes (219.614ms)
+✔ 04.07: starter fails and reference solution passes (218.3141ms)
+✔ 04.09: starter fails and reference solution passes (202.9649ms)
+✔ 04.11: starter fails and reference solution passes (202.5962ms)
+✔ 04.12: starter fails and reference solution passes (202.3298ms)
+✔ 04.13: starter fails and reference solution passes (218.5042ms)
+✔ 05.04: starter fails and reference solution passes (202.3691ms)
+✔ 05.06: starter fails and reference solution passes (192.1326ms)
+✔ 05.07: starter fails and reference solution passes (202.0874ms)
+✔ 05.10: starter fails and reference solution passes (218.3686ms)
+✔ 05.02: starter fails and reference solution passes (220.1474ms)
+✔ 05.05: starter fails and reference solution passes (187.93ms)
+✔ 05.08: starter fails and reference solution passes (202.715ms)
+✔ 05.09: starter fails and reference solution passes (202.6687ms)
+✔ 06.04: starter fails and reference solution passes (220.0448ms)
+✔ 06.07: starter fails and reference solution passes (219.916ms)
+✔ 06.08: starter fails and reference solution passes (218.9548ms)
+✔ 06.09: starter fails and reference solution passes (220.5157ms)
+✔ 06.11: starter fails and reference solution passes (233.6691ms)
+✔ 07.02: starter fails and reference solution passes (250.3045ms)
+✔ 07.04: starter fails and reference solution passes (235.8305ms)
+✔ 07.05: starter fails and reference solution passes (200.5687ms)
+✔ 07.07: starter fails and reference solution passes (187.8871ms)
+✔ 07.10: starter fails and reference solution passes (233.3926ms)
+✔ 07.08: starter fails and reference solution passes (218.2471ms)
+✔ 07.09: starter fails and reference solution passes (219.9024ms)
+✔ 08.03: starter fails and reference solution passes (219.6004ms)
+✔ 08.05: starter fails and reference solution passes (219.4864ms)
+✔ 08.06: starter fails and reference solution passes (224.1282ms)
+✔ 08.08: starter fails and reference solution passes (234.9342ms)
+✔ 09.03: starter fails and reference solution passes (216.0278ms)
+✔ 09.06: starter fails and reference solution passes (233.367ms)
+✔ 09.08: starter fails and reference solution passes (187.8544ms)
+✔ 10.03: starter fails and reference solution passes (230.1794ms)
+✔ 10.04: starter fails and reference solution passes (200.0804ms)
+✔ 10.05: starter fails and reference solution passes (202.7688ms)
+✔ 10.08: starter fails and reference solution passes (202.0969ms)
+✔ 11.03: starter fails and reference solution passes (204.5258ms)
+undefined
+✔ 11.04: starter fails and reference solution passes (169.297ms)
+✔ 11.06: starter fails and reference solution passes (169.2585ms)
+✔ 11.05: starter fails and reference solution passes (139.9894ms)
+✔ 11.07: starter fails and reference solution passes (169.6187ms)
+✔ 11.12: starter fails and reference solution passes (141.9197ms)
+✔ 11.08: starter fails and reference solution passes (391.0067ms)
+✔ 11.10: starter fails and reference solution passes (219.5335ms)
+✔ 11.13: starter fails and reference solution passes (203.0812ms)
+✔ 12.03: starter fails and reference solution passes (246.6838ms)
+✔ 12.05: starter fails and reference solution passes (219.926ms)
+✔ 12.06: starter fails and reference solution passes (203.5327ms)
+✔ 12.12: starter fails and reference solution passes (219.5994ms)
+✔ 12.08: starter fails and reference solution passes (202.032ms)
+✔ 13.03: starter fails and reference solution passes (484.9519ms)
+✔ 13.05: starter fails and reference solution passes (201.6743ms)
+✔ 13.06: starter fails and reference solution passes (203.4406ms)
+✔ 13.07: starter fails and reference solution passes (530.518ms)
+✔ 13.08: starter fails and reference solution passes (203.0913ms)
+✔ 13.09: starter fails and reference solution passes (512.9394ms)
+✔ 13.10: starter fails and reference solution passes (172.0846ms)
+✔ 13.13: starter fails and reference solution passes (499.1777ms)
+✔ 13.14: starter fails and reference solution passes (219.0224ms)
+✔ 14.06: starter fails and reference solution passes (186.8137ms)
+✔ 14.08: starter fails and reference solution passes (200.8326ms)
+✔ 15.02: starter fails and reference solution passes (4161.2649ms)
+✔ 15.03: starter fails and reference solution passes (2527.6575ms)
+✔ 15.04: starter fails and reference solution passes (3156.1504ms)
+✔ 15.07: starter fails and reference solution passes (4906.9407ms)
+✔ 15.08: starter fails and reference solution passes (2607.3076ms)
+✔ 15.11: starter fails and reference solution passes (2635.8903ms)
+✔ 16.02: starter fails and reference solution passes (2373.4558ms)
+✔ 16.03: starter fails and reference solution passes (2742.5053ms)
+✔ 16.09: starter fails and reference solution passes (3414.5648ms)
+✔ 16.04: starter fails and reference solution passes (3053.0395ms)
+✔ 16.05: starter fails and reference solution passes (3496.9233ms)
+✔ 16.10: starter fails and reference solution passes (3070.7917ms)
+✔ 16.06: starter fails and reference solution passes (3364.9388ms)
+✔ 16.07: starter fails and reference solution passes (2602.4946ms)
+✔ 16.08: starter fails and reference solution passes (4764.1644ms)
+✔ 17.03: starter fails and reference solution passes (4241.1697ms)
+✔ 17.04: starter fails and reference solution passes (4872.1514ms)
+✔ 17.05: starter fails and reference solution passes (3002.6382ms)
+✔ 17.07: starter fails and reference solution passes (3078.6992ms)
+✔ 17.11: starter fails and reference solution passes (4328.4183ms)
+✔ 17.08: starter fails and reference solution passes (5233.5317ms)
+✔ 18.03: starter fails and reference solution passes (4053.6328ms)
+✔ 18.04: starter fails and reference solution passes (3174.1959ms)
+✔ 18.05: starter fails and reference solution passes (2852.619ms)
+✔ 18.07: starter fails and reference solution passes (4536.1241ms)
+✔ 18.08: starter fails and reference solution passes (4250.9907ms)
+✔ 18.10: starter fails and reference solution passes (4417.6517ms)
+✔ 19.03: starter fails and reference solution passes (2773.9874ms)
+✔ 19.04: starter fails and reference solution passes (2810.2678ms)
+✔ 19.05: starter fails and reference solution passes (3130.1832ms)
+✔ 19.08: starter fails and reference solution passes (4945.1864ms)
+✔ 19.09: starter fails and reference solution passes (3793.524ms)
+✔ 20.01: starter fails and reference solution passes (371.9998ms)
+✔ 20.02: starter fails and reference solution passes (444.4562ms)
+✔ 20.03: starter fails and reference solution passes (392.2815ms)
+✔ 20.04: starter fails and reference solution passes (497.5273ms)
+✔ 20.05: starter fails and reference solution passes (310.9374ms)
+✔ 20.06: starter fails and reference solution passes (404.1578ms)
+✔ 20.07: starter fails and reference solution passes (390.3802ms)
+✔ 20.08: starter fails and reference solution passes (405.8497ms)
+✔ 20.09: starter fails and reference solution passes (952.154ms)
+✔ 20.10: starter fails and reference solution passes (500.6247ms)
+✔ 21.02: starter fails and reference solution passes (721.5701ms)
+✔ 21.03: starter fails and reference solution passes (345.2289ms)
+✔ 21.04: starter fails and reference solution passes (418.5494ms)
+✔ 21.05: starter fails and reference solution passes (638.6129ms)
+✔ 21.06: starter fails and reference solution passes (573.2825ms)
+✔ 21.07: starter fails and reference solution passes (422.3714ms)
+{
+  resultado: 450000,
+  reduce: undefined,
+  for: undefined,
+  memoria: 'N/D',
+  ambiente: 'Node.js/26'
+}
+{ erro: 'Entrada inválida: use uma lista de números finitos.' }
+✔ 21.09: starter fails and reference solution passes (170.0947ms)
+✔ 22.03: starter fails and reference solution passes (2138.5198ms)
+✔ 22.04: starter fails and reference solution passes (435.4346ms)
+✔ 22.11: starter fails and reference solution passes (5932.8216ms)
+✔ 22.05: starter fails and reference solution passes (453.7703ms)
+✔ 22.06: starter fails and reference solution passes (450.5511ms)
+✔ 22.07: starter fails and reference solution passes (8386.765ms)
+✔ 23.02: starter fails and reference solution passes (446.6441ms)
+✔ 23.03: starter fails and reference solution passes (406.12ms)
+✔ 23.04: starter fails and reference solution passes (393.1204ms)
+✔ 23.10: starter fails and reference solution passes (590.5102ms)
+✔ 23.11: starter fails and reference solution passes (410.2299ms)
+✔ 23.09: starter fails and reference solution passes (404.704ms)
+✔ local imports, default exports, reexports, dynamic imports and cycles are bundled (564.33ms)
+✔ external, missing, traversal and computed imports are rejected before execution (94.4308ms)
+✔ the compiler does not execute the learner code and preserves string export text (33.3157ms)
+✔ loaders are selected by extension for TypeScript and JSON modules (54.5961ms)
+✔ a JavaScript import specifier resolves to a corresponding TypeScript module (53.2676ms)
+✔ legacy starter migration is pure, idempotent and preserves custom drafts (3.2914ms)
+✔ learning migration keeps legacy completion and drafts without inventing independent mastery (4.6086ms)
+✔ saved declared transfers stored as demonstrated load as transfer-declared, not demonstrated (2.1684ms)
+✔ success advances intervals, clamps the last interval, and leaves input unchanged (4.6654ms)
+✔ failure retries tomorrow and a subsequent success restarts at seven days (0.2455ms)
+✔ invalid stored interval is bounded and first completion starts at seven days (1.2698ms)
+✔ registry routes supported stages and uses the generic renderer for new stages (3.5139ms)
+✔ handlers receive the same context and a consumed click does not reach fallback (1.8578ms)
+ℹ tests 163
+ℹ suites 0
+ℹ pass 163
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 185292.9622
+
+> devpath@0.1.0 test:course-test-runtime
+> node --test scripts/test-course-test-runtime.mjs
+
+✔ registers nested tests, beforeEach, matchers and rejects (4.5237ms)
+✔ vi.fn and spyOn record calls and restore the original (1.5849ms)
+✔ fake timers advance deterministic callbacks and restore in finally (1.4245ms)
+✔ a rejected test fails while later tests continue and empty suites remain empty (2.8389ms)
+✔ afterEach failure marks only its own test and cleanup survives reuse (2.1649ms)
+✔ loose rejection is surfaced to the caller (2.6321ms)
+✔ student suites pass the correct implementation and kill every semantic mutant (1913.9462ms)
+✔ student-suite negatives reject empty/correct-failing, survivor, error and timeout mutants (2973.3444ms)
+✔ runner does not promote an unhandled top-level rejection (63.2025ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6693.959
+
+> devpath@0.1.0 test:course-node-runtime
+> node --test scripts/test-course-node-runtime.mjs
+
+✔ virtual node runtime reads, writes and reports ENOENT inside its root (3.5427ms)
+✔ argv, env, output and reset are isolated between executions (2.0144ms)
+✔ only declared virtual node modules are available and path URLs resolve virtually (1.8837ms)
+✔ strict assertion subset preserves error classes, RegExp matching, undefined and NaN (4.6878ms)
+✔ virtual URLs preserve spaces and a declared virtual cwd without host filesystem access (1.2677ms)
+✔ serialized factory does not depend on the host Node module loader (2.5824ms)
+✔ browser worker executes a node-simulated virtual filesystem and process fixture (1009.7243ms)
+✔ local checker returns nonzero, missing executable and timeout without using a shell (1848.8637ms)
+✔ local checker rejects traversal and symlinked project files (7.8984ms)
+✔ local checker cleans its temporary copy when project validation throws (5.407ms)
+✔ local checker bounds output, keeps metacharacters literal, and cleans temp copies after timeout (1450.0521ms)
+✔ local checker kills a timed out descendant and reports missing project dependencies (2764.6736ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 8786.2878
+
+> devpath@0.1.0 pretest:layout
+> npm run build:curriculum
+
+
+> devpath@0.1.0 build:curriculum
+> node scripts/build-curriculum-data.mjs
+
+Generated C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated\stage00-preparation.json from the canonical source at course-src/stage00-preparation.mjs.
+items=261 statuses={'contract_ready': 261}
+concepts=105 activities=261 edges=485 acyclic=yes
+mapped=90 P0=20 new_activities=55
+Complete curriculum: 261 activities, one editorial source, seven reproducible assets.
+Generated curriculum data in C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated
+
+> devpath@0.1.0 test:layout
+> node --test scripts/test-project-layout.mjs
+
+✔ one self-contained project retains the complete curriculum and latest revisions (257.4575ms)
+✔ public curriculum matches the current generated editorial data (241.5466ms)
+✔ generated curriculum intermediates live in the ignored generated directory (2.5779ms)
+✔ obsolete checkouts and the old static application are absent (1.1942ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 636.551
+
+> devpath@0.1.0 test:diagnostic
+> node --test scripts/test-diagnostic.mjs
+
+✔ D.01: unknown answers get explained feedback and allow completion (173.7932ms)
+✔ D.02: unknown answers get explained feedback and allow completion (81.9074ms)
+✔ D.03: unknown answers get explained feedback and allow completion (48.4096ms)
+✔ D.04: unknown answers get explained feedback and allow completion (39.5793ms)
+✔ D.05: unknown answers get explained feedback and allow completion (45.3135ms)
+✔ confidence is bounded, and legacy response text is preserved until an explicit edit (38.7066ms)
+✔ public diagnostic content matches the editorial source and every choice has beginner feedback (15.5663ms)
+✔ the actual D route loads its dedicated diagnostic and preserves Stage00 rendering (212.1809ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2223.2959
+
+> devpath@0.1.0 test:stage00
+> node scripts/test-stage00-content.mjs && node scripts/test-stage00-ui.mjs
+
+Stage 00 source: canonical sync and requested lesson experiences are present.
+Stage 00: all 9 explanations precede answers; navigation, execution, debugging, completion and persistence checked.
+Stage 00 app integration: all 9 activities completed through real click/input listeners and reloaded from account progress.
+
+> devpath@0.1.0 test:stage01
+> node --test scripts/test-stage01-runner.mjs scripts/test-stage01-checks.mjs scripts/test-stage01-content.mjs scripts/test-stage01-ui.mjs scripts/test-stage01-progress.mjs scripts/test-stage01-integration.mjs scripts/test-stage01-flow.mjs
+
+✔ Etapa01 has a working contract checker (1.1628ms)
+✔ 01.06 accepts the single interpolated expression requested by the prompt (1.9642ms)
+✔ 01.01: intended solution passes all public cases (0.3313ms)
+✔ 01.02: intended solution passes all public cases (0.4493ms)
+✔ 01.03: intended solution passes all public cases (0.5271ms)
+✔ 01.04: intended solution passes all public cases (0.731ms)
+✔ 01.05: intended solution passes all public cases (0.5023ms)
+✔ 01.06: intended solution passes all public cases (0.3802ms)
+✔ 01.07: intended solution passes all public cases (0.383ms)
+✔ 01.08: intended solution passes all public cases (0.8901ms)
+✔ 01.09: intended solution passes all public cases (0.579ms)
+✔ 01.07 rejects a constant output that ignores the inputs (0.7289ms)
+✔ 01.09 rejects a stale derived string and preserves zero in a passing program (0.7648ms)
+✔ 01.03 accepts independent permutations, rejects repeated orders and diagnostic block (0.714ms)
+✔ 01.04 rejects let everywhere even when the output matches (0.3483ms)
+✔ runtime failure and code from a different exercise never pass (0.612ms)
+Stage 01 preparation contract passed.
+✔ scripts\test-stage01-content.mjs (200.6743ms)
+✔ Etapa01 has a working contract checker (4.3671ms)
+✔ 01.06 accepts the single interpolated expression requested by the prompt (2.7644ms)
+✔ 01.01: intended solution passes all public cases (0.5246ms)
+✔ 01.02: intended solution passes all public cases (0.4762ms)
+✔ 01.03: intended solution passes all public cases (0.488ms)
+✔ 01.04: intended solution passes all public cases (0.4823ms)
+✔ 01.05: intended solution passes all public cases (0.2612ms)
+✔ 01.06: intended solution passes all public cases (0.3344ms)
+✔ 01.07: intended solution passes all public cases (0.4138ms)
+✔ 01.08: intended solution passes all public cases (0.7294ms)
+✔ 01.09: intended solution passes all public cases (0.5547ms)
+✔ 01.07 rejects a constant output that ignores the inputs (0.3618ms)
+✔ 01.09 rejects a stale derived string and preserves zero in a passing program (0.6242ms)
+✔ 01.03 accepts independent permutations, rejects repeated orders and diagnostic block (0.4638ms)
+✔ 01.04 rejects let everywhere even when the output matches (0.3577ms)
+✔ runtime failure and code from a different exercise never pass (0.5857ms)
+✔ completion read does not create or modify missing state (123.659ms)
+✔ restored completion flags cannot approve incorrect code (27.527ms)
+✔ mastery transfers reject a copied second value without the requested reassignment (32.1877ms)
+✔ 01.01: real UI requires prediction, passing code, explanation and explicit completion (135.3973ms)
+✔ 01.02: real UI requires prediction, passing code, explanation and explicit completion (102.7169ms)
+✔ 01.03: real UI requires prediction, passing code, explanation and explicit completion (118.1762ms)
+✔ 01.04: real UI requires prediction, passing code, explanation and explicit completion (130.9356ms)
+✔ 01.05: real UI requires prediction, passing code, explanation and explicit completion (75.7109ms)
+✔ 01.06: real UI requires prediction, passing code, explanation and explicit completion (63.6131ms)
+✔ 01.07: real UI requires prediction, passing code, explanation and explicit completion (63.0436ms)
+✔ 01.08: real UI requires prediction, passing code, explanation and explicit completion (76.1023ms)
+✔ 01.09: real UI requires prediction, passing code, explanation and explicit completion (127.1582ms)
+✔ blank controls preserve identifiers, allow correction, synchronize editor and survive render (37.5336ms)
+✔ removing every Parsons block keeps empty code, rather than restoring starter (44.6416ms)
+✔ all six declaration controls complete the actual starter without extra code (63.1881ms)
+✔ editing approved code removes old feedback and explains missing completion evidence (44.5888ms)
+✔ save predictions restores focus to the run control after replacing the lesson (25.9293ms)
+✔ declaration controls also update every declaration in a compact saved draft (54.7987ms)
+✔ legacy 01.04 starter gains its missing log while preserving learner choices (36.8046ms)
+✔ 01.02 actual app route teaches before prediction and loads dedicated controls (359.2326ms)
+✔ the catalog keeps Stage01 versions and beginner scaffolds (9.6081ms)
+✔ new stage01 state is sanitized independently of legacy history (1.6343ms)
+✔ editing approved code invalidates sanitized approval (0.3713ms)
+✔ malformed arrays and outdated states cannot erase or create completion (0.4046ms)
+✔ strings and counts are bounded and prototype keys rejected (0.3804ms)
+stage01 runner tests passed
+✔ scripts\test-stage01-runner.mjs (137.6791ms)
+Stage 01 UI red contract passed.
+Stage 01 UI real preparation and completion gates passed.
+✔ scripts\test-stage01-ui.mjs (1990.2896ms)
+ℹ tests 60
+ℹ suites 0
+ℹ pass 60
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3399.2728
+
+> devpath@0.1.0 pretest:stage02
+> npm run build:curriculum
+
+
+> devpath@0.1.0 build:curriculum
+> node scripts/build-curriculum-data.mjs
+
+Generated C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated\stage00-preparation.json from the canonical source at course-src/stage00-preparation.mjs.
+items=261 statuses={'contract_ready': 261}
+concepts=105 activities=261 edges=485 acyclic=yes
+mapped=90 P0=20 new_activities=55
+Complete curriculum: 261 activities, one editorial source, seven reproducible assets.
+Generated curriculum data in C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated
+
+> devpath@0.1.0 test:stage02
+> node --test scripts/test-stage02.mjs scripts/test-stage02-ui.mjs scripts/test-stage02-progress.mjs scripts/test-stage02-audit.mjs
+
+✔ every Stage 02 block teaches with executable examples before the first prediction (605.5681ms)
+✔ Number/Math bridge renders despite generated heading prefix (27.7028ms)
+✔ debug starter can be observed before predicting, without passing or completing (28.5665ms)
+✔ payment boundary: balance equal to cost must be sufficient (16.3607ms)
+✔ preferences must preserve ordinary and mixed present values (16.8452ms)
+✔ tolerance variable must follow each fixture resolution, not a constant (19.8831ms)
+✔ running focuses the results; opening hints focuses the newly opened hint (82.6248ms)
+✔ reload reopens incomplete saved predictions while preserving the draft (63.0345ms)
+✔ wrong classifications remain diagnostic and receive explicit comparison feedback (99.6434ms)
+✔ catalog completion rejects a saved approval that fails the current payment boundary (21.3228ms)
+✔ lesson journey keeps all five destinations accessible while practice is locked (35.1134ms)
+✔ all seventeen blocks show vocabulary, specific task steps and actual example output (361.4216ms)
+✔ canonical: sanitized server progress preserves long stage02 drafts and checks (3.0647ms)
+✔ stage02 executes operators and preserves string, bigint, NaN and signed zero (2.7509ms)
+✔ finite validation runs with overridden declared fixtures (0.5232ms)
+✔ unsupported global access and unbounded programs are rejected (0.3864ms)
+✔ logical operators short-circuit before evaluating missing identifiers (0.1763ms)
+✔ 02.01 block 1: all visible cases execute through the real interpreter (0.5022ms)
+✔ 02.01 block 2: all visible cases execute through the real interpreter (0.2065ms)
+✔ 02.01 block 3: all visible cases execute through the real interpreter (0.1784ms)
+✔ 02.02 block 1: all visible cases execute through the real interpreter (0.3446ms)
+✔ 02.03 block 1: all visible cases execute through the real interpreter (0.6283ms)
+✔ 02.04 block 1: all visible cases execute through the real interpreter (0.7808ms)
+✔ 02.05 block 1: all visible cases execute through the real interpreter (1.206ms)
+✔ 02.06 block 1: all visible cases execute through the real interpreter (0.3269ms)
+✔ 02.07 block 1: all visible cases execute through the real interpreter (0.2509ms)
+✔ 02.08 block 1: all visible cases execute through the real interpreter (0.6771ms)
+✔ 02.09 block 1: all visible cases execute through the real interpreter (0.4229ms)
+✔ 02.10 block 1: all visible cases execute through the real interpreter (0.2992ms)
+✔ 02.10 block 2: all visible cases execute through the real interpreter (0.1687ms)
+✔ 02.10 block 3: all visible cases execute through the real interpreter (0.2885ms)
+✔ 02.11 block 1: all visible cases execute through the real interpreter (0.1005ms)
+✔ 02.11 block 2: all visible cases execute through the real interpreter (0.1229ms)
+✔ 02.12 block 1: all visible cases execute through the real interpreter (0.8184ms)
+✔ common wrong solutions fail their actual public edge cases (1.6453ms)
+✔ completion requires predictions, understanding and exact checked code; legacy answers do not suffice (1.0578ms)
+✔ unsupported mixes mirror JavaScript syntax errors (0.2706ms)
+✔ numeric environment bounds expensive arithmetic and growing strings (0.5591ms)
+✔ 02.01: full UI flow gates, execution, completion and reload (2107.9907ms)
+✔ 02.02: full UI flow gates, execution, completion and reload (1828.9017ms)
+✔ 02.03: full UI flow gates, execution, completion and reload (600.653ms)
+✔ 02.04: full UI flow gates, execution, completion and reload (543.025ms)
+✔ 02.05: full UI flow gates, execution, completion and reload (483.9344ms)
+✔ 02.06: full UI flow gates, execution, completion and reload (431.1911ms)
+✔ 02.07: full UI flow gates, execution, completion and reload (445.4215ms)
+✔ 02.08: full UI flow gates, execution, completion and reload (394.6574ms)
+✔ 02.09: full UI flow gates, execution, completion and reload (379.7044ms)
+✔ 02.10: full UI flow gates, execution, completion and reload (746.9075ms)
+✔ 02.11: full UI flow gates, execution, completion and reload (764.8644ms)
+✔ 02.12: full UI flow gates, execution, completion and reload (394.7494ms)
+✔ Parsons controls support reordering, removal and assembly without dragging (374.9711ms)
+✔ editing checked code invalidates completion; stale next button must be disabled (400.6088ms)
+✔ stage02 executes operators and preserves string, bigint, NaN and signed zero (3.1269ms)
+✔ finite validation runs with overridden declared fixtures (0.6594ms)
+✔ unsupported global access and unbounded programs are rejected (0.5347ms)
+✔ logical operators short-circuit before evaluating missing identifiers (0.2712ms)
+✔ 02.01 block 1: all visible cases execute through the real interpreter (0.5475ms)
+✔ 02.01 block 2: all visible cases execute through the real interpreter (0.2381ms)
+✔ 02.01 block 3: all visible cases execute through the real interpreter (0.1332ms)
+✔ 02.02 block 1: all visible cases execute through the real interpreter (0.4633ms)
+✔ 02.03 block 1: all visible cases execute through the real interpreter (0.852ms)
+✔ 02.04 block 1: all visible cases execute through the real interpreter (1.5978ms)
+✔ 02.05 block 1: all visible cases execute through the real interpreter (1.738ms)
+✔ 02.06 block 1: all visible cases execute through the real interpreter (0.6044ms)
+✔ 02.07 block 1: all visible cases execute through the real interpreter (0.5908ms)
+✔ 02.08 block 1: all visible cases execute through the real interpreter (1.1173ms)
+✔ 02.09 block 1: all visible cases execute through the real interpreter (0.7496ms)
+✔ 02.10 block 1: all visible cases execute through the real interpreter (0.5615ms)
+✔ 02.10 block 2: all visible cases execute through the real interpreter (0.9365ms)
+✔ 02.10 block 3: all visible cases execute through the real interpreter (0.5392ms)
+✔ 02.11 block 1: all visible cases execute through the real interpreter (0.2295ms)
+✔ 02.11 block 2: all visible cases execute through the real interpreter (0.257ms)
+✔ 02.12 block 1: all visible cases execute through the real interpreter (1.0438ms)
+✔ common wrong solutions fail their actual public edge cases (1.6676ms)
+✔ completion requires predictions, understanding and exact checked code; legacy answers do not suffice (1.1071ms)
+✔ unsupported mixes mirror JavaScript syntax errors (0.2789ms)
+✔ numeric environment bounds expensive arithmetic and growing strings (0.8987ms)
+ℹ tests 77
+ℹ suites 0
+ℹ pass 77
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11867.4078
+
+> devpath@0.1.0 pretest:stage03
+> npm run build:curriculum
+
+
+> devpath@0.1.0 build:curriculum
+> node scripts/build-curriculum-data.mjs
+
+Generated C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated\stage00-preparation.json from the canonical source at course-src/stage00-preparation.mjs.
+items=261 statuses={'contract_ready': 261}
+concepts=105 activities=261 edges=485 acyclic=yes
+mapped=90 P0=20 new_activities=55
+Complete curriculum: 261 activities, one editorial source, seven reproducible assets.
+Generated curriculum data in C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated
+
+> devpath@0.1.0 test:stage03
+> node --test scripts/test-stage03-runner.mjs scripts/test-stage03-content.mjs scripts/test-stage03-ui.mjs scripts/test-stage03-progress.mjs scripts/test-stage03-scope.mjs scripts/test-stage03-runtime.mjs
+
+✔ all examples execute and correct varied implementations satisfy checks (310.5024ms)
+✔ counting cases detect equality, final endpoint and OR mistakes (21.0603ms)
+✔ battle rejects dead counterattack, negative HP and unbounded zero damage (25.3811ms)
+✔ queue detects missing empty-state guard (24.0654ms)
+✔ canonical: existing API retains Stage 03 versioned drafts, evidence and review (4.7767ms)
+✔ for continue still advances and break exits only its loop (4.0623ms)
+✔ switch selects default and supports fallthrough and strict comparison (0.7622ms)
+✔ while with no progress terminates evaluation without touching host globals (18.5295ms)
+✔ lexical scope, const and top level fixture substitution match the exercises (1.3327ms)
+ok - runs declarations, logs and flattened values
+ok - supports fixtures and uninitialized let
+ok - supports continue and break in nested loops
+ok - preserves const and supports switch cases
+ok - supports lexical for scope and local shadowing
+ok - bounds non-progress loops by the step or log budget
+ok - rejects unsupported APIs and arrays
+✔ scripts\test-stage03-runtime.mjs (185.1453ms)
+✔ Stage 03 count examples retain the corrected upper endpoint (311.9667ms)
+✔ generation preserves every authored ID and leaves source records untouched (373.355ms)
+✔ the nine dedicated activities teach before prediction with labeled inputs (318.0601ms)
+✔ trace needs correct table and supplied code; edits invalidate completion (107.767ms)
+✔ typing code preserves focus and empty drafts survive reload within API limits (46.8881ms)
+✔ Parsons buttons retain focus and independent branches may swap (52.0626ms)
+✔ matrix validates booleans instead of accepting arbitrary prose (66.4938ms)
+✔ code activities require fresh cases, minipractices and independent transfers (454.9151ms)
+✔ missing switch and incorrect revised code block completion (108.12ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3677.5895
+
+> devpath@0.1.0 test:phase1
+> node --test scripts/test-phase1-errors.mjs scripts/test-phase1-syntax.mjs scripts/test-phase1-types.mjs
+
+✔ Falhas previsíveis mantém IDs, arestas e avaliação na fonte canônica (1.7648ms)
+✔ o avaliador publicado reprova cada starter e aprova cada referência (2235.8031ms)
+✔ worked examples preserve punctuation inside inline code (2.6976ms)
+✔ the two activities publish canonical IDs, executable contracts, and prerequisite edges (0.614ms)
+✔ the dedicated Stage 03 bundle still contains exactly the original nine contracts (87.9193ms)
+✔ the browser assessment fails each starter and passes each reference (1868.8401ms)
+✔ 03.10 uses the generic site renderer and its dispatched input and hint handlers (1711.1891ms)
+✔ 17.11 and 22.11 are published in the requested positions with executable contracts (1.1484ms)
+✔ 17.11 starter fails and reference passes the published evaluator (10452.1547ms)
+✔ 22.11 starter fails and reference passes the published evaluator (5003.5161ms)
+✔ 22.11 public contracts reject weakened JSDoc types and any (6396.8712ms)
+✔ 17.11 checks erasable class syntax and preserves its protected type contracts (1352.7152ms)
+ℹ tests 12
+ℹ suites 0
+ℹ pass 12
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 25980.6949

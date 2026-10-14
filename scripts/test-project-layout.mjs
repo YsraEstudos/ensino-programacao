@@ -8,8 +8,10 @@ const json = path => JSON.parse(fs.readFileSync(new URL(path, project), 'utf8'))
 
 test('one self-contained project retains the complete curriculum and latest revisions', () => {
   const catalog = json('public/course-catalog.json');
-  assert.equal(catalog.length, 254);
-  assert.equal(new Set(catalog.map(item => item.id)).size, 254);
+  const sourceIds = json('course-src/.generated/resolved_preview.json').map(item => item.id);
+  assert.equal(catalog.length, sourceIds.length);
+  assert.deepEqual(catalog.map(item => item.id), sourceIds);
+  assert.equal(new Set(catalog.map(item => item.id)).size, sourceIds.length);
   assert.deepEqual([...new Set(catalog.map(item => item.stage))], ['D', ...Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'))]);
   assert(catalog.filter(item => item.stage === '01').every(item => item.preparation.conceptSteps.length >= 3));
   assert.equal(catalog.find(item => item.id === '03.09').contentVersion, 2);

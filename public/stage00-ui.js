@@ -702,6 +702,8 @@
         }
         context.progress.exerciseReflections ||= {};
         context.progress.exerciseReflections[item.id] = explanation.slice(0, 300);
+        void context.learning?.submitStudy?.(item, explanation);
+        void context.learning?.runAssessment?.(item, { kind: 'passed', source: 'local-declared' });
         context.progress.answers ||= {};
         context.progress.answers[item.id] = true;
         context.progress.completed ||= [];

@@ -1,0 +1,1 @@
+export function percorrer(){const resultados=[{value:1,done:false},{value:2,done:false},{value:'fim',done:true}];let chamadas=0;const iterador={next(){return resultados[chamadas++]??{value:undefined,done:true};},[Symbol.iterator](){return this;}};const primeira=[...iterador];const depois=chamadas;const segunda=[...iterador];return{primeira,depois,segunda,chamadas};}

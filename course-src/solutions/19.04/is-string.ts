@@ -1,0 +1,1 @@
+type Equal<A,B>=[A] extends [B]?[B] extends [A]?true:false:false; type Expect<T extends true>=T; export type IsString<T>=T extends string?true:false; export type Bug=Expect<Equal<IsString<string|number>,true|false>>; export type WholeString<T>=[T] extends [string]?true:false;

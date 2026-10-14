@@ -40,6 +40,7 @@ type RequestState =
 Em vez de três booleans independentes, cada variante carrega apenas os dados válidos naquele estado. O
 tipo reduz bugs de combinação.
 GATE DE DOMINIO
-Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
-justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
-parte do contrato.
+Avance com typecheck strict verde rodando `tsc --noEmit` no seu computador (o site ainda
+nao executa o compilador), testes runtime quando aplicavel, zero any/cast sem justificativa e
+um exercicio de transferencia de tipos feito sem dica. Type tests contam como parte do
+contrato. A conclusao no site e revisao propria.

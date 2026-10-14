@@ -38,6 +38,7 @@ const n = primeiro([1, 2, 3]); // number | undefined
 O ponto não é “usar generic”, e sim manter uma relação: o tipo de retorno depende do tipo dos elementos
 recebidos.
 GATE DE DOMINIO
-Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
-justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
-parte do contrato.
+Avance com typecheck strict verde rodando `tsc --noEmit` no seu computador (o site ainda
+nao executa o compilador), testes runtime quando aplicavel, zero any/cast sem justificativa e
+um exercicio de transferencia de tipos feito sem dica. Type tests contam como parte do
+contrato. A conclusao no site e revisao propria.

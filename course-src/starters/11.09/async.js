@@ -1,0 +1,1 @@
+window.ordem.push("async");

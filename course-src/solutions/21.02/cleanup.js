@@ -1,0 +1,1 @@
+export function montar(alvo,estado,aoClicar,api={setInterval,clearInterval}){if(estado.timer!==null)return;estado.timer=api.setInterval(()=>{},1000);alvo.addEventListener('click',aoClicar);}export function desmontar(alvo,estado,aoClicar,api={clearInterval}){if(estado.timer===null)return;alvo.removeEventListener('click',aoClicar);api.clearInterval(estado.timer);estado.timer=null;}

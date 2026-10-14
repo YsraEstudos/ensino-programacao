@@ -1,0 +1,152 @@
+{
+  "version": 1,
+  "04.01": {
+    "version": 1,
+    "cases": [
+      {
+        "a": "2",
+        "b": "undefined",
+        "c": "6",
+        "dPositivo": "4",
+        "dNegativo": "undefined",
+        "e": "null",
+        "f": "undefined",
+        "g": "2",
+        "h": "undefined"
+      }
+    ]
+  },
+  "05.01": {
+    "version": 1,
+    "cases": [
+      {
+        "a": "[1,2]",
+        "b": "[1,2]",
+        "c": "[1,2]",
+        "mesmaRaiz": "true",
+        "copiaIndependente": "true"
+      }
+    ]
+  },
+  "06.01": {
+    "version": 1,
+    "cases": [
+      {
+        "pontos": "2",
+        "ativo": "false",
+        "mesmaRaiz": "false",
+        "mesmoMeta": "true"
+      }
+    ]
+  },
+  "06.02": {
+    "version": 1,
+    "cases": [
+      {
+        "base.usuario.nome": "Bia",
+        "alias.itens": "[1,2]",
+        "copia.usuario.nome": "Bia",
+        "mesmaRaiz": "false",
+        "mesmoUsuario": "true"
+      }
+    ]
+  },
+  "08.01": {
+    "version": 1,
+    "cases": [
+      {
+        "crescimentos": "[\"O(1)\",\"O(n)\",\"O(n²)\",\"O(log n)\",\"O(n log n)\",\"O(log n)\",\"O(1)\",\"O(n)\"]"
+      }
+    ]
+  },
+  "08.07": {
+    "version": 1,
+    "cases": [
+      {
+        "ordem": "[\"A\",\"B\",\"C\",\"D\"]",
+        "caminho": "[\"A\",\"B\",\"D\"]"
+      }
+    ]
+  },
+  "09.01": {
+    "version": 1,
+    "cases": [
+      {
+        "fora": "1",
+        "bloco": "2",
+        "dentro": "3",
+        "soma": "6"
+      }
+    ]
+  },
+  "09.04": {
+    "version": 1,
+    "cases": [
+      {
+        "a": "1",
+        "b": "0"
+      }
+    ]
+  },
+  "10.01": {
+    "version": 1,
+    "cases": [
+      {
+        "metodo": "2",
+        "call": "7",
+        "solto": "TypeError",
+        "arrowCall": "undefined"
+      }
+    ]
+  },
+  "11.01": {
+    "version": 1,
+    "cases": [
+      {
+        "id": "published",
+        "version": 1,
+        "instructions": "Anote o target e os currentTarget na ordem bubble antes de executar.",
+        "fields": [
+          {
+            "id": "path",
+            "label": "target,currentTarget em sequência"
+          }
+        ]
+      }
+    ]
+  },
+  "12.01": {
+    "version": 1,
+    "cases": [
+      {
+        "id": "published",
+        "version": 1,
+        "instructions": "Registre os rótulos separados por vírgula antes de executar; depois compare a ordem observada.",
+        "outputFormat": "lines",
+        "fields": [
+          {
+            "id": "order",
+            "label": "Ordem dos logs"
+          }
+        ]
+      }
+    ]
+  },
+  "12.04": {
+    "version": 1,
+    "cases": [
+      {
+        "id": "published",
+        "version": 1,
+        "instructions": "Registre os rótulos separados por vírgula antes de executar; depois compare a ordem observada.",
+        "outputFormat": "lines",
+        "fields": [
+          {
+            "id": "order",
+            "label": "Ordem dos logs"
+          }
+        ]
+      }
+    ]
+  }
+}

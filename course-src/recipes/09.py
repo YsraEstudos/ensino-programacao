@@ -397,3 +397,10 @@ CONTENT = {
         docs="MDN Set: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set ; MDN Object.is(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is",
     ),
 }
+
+CONTENT["09.08"]["rubric"] = (
+    "Cada chamada de createStore mantém estado e listeners próprios; getState devolve o valor atual.",
+    "setState atualiza o estado e notifica uma única vez quando Object.is detecta mudança; estado igual não notifica.",
+    "subscribe devolve cancelamento idempotente; listener removido não recebe atualizações posteriores.",
+    "Dois testes de stores simultâneas demonstram isolamento, ordem das notificações e cancelamento de um listener durante emissão.",
+)

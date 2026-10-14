@@ -835,5 +835,767 @@ globalThis.DevPathDiagnosticPreparation = {
     ],
     "nextStep": "Mais adiante, pratique o ciclo hipótese, ferramenta e evidência ao investigar uma função.",
     "takeaway": "Investigar começa com uma hipótese e uma ferramenta escolhida pela evidência que falta."
+  },
+  "D.06": {
+    "introduction": "Explore o começo da trilha: acompanhar uma expressão e distinguir número de texto.",
+    "orientation": "Leia cada previsão antes de responder. O código é uma pergunta de estudo, não uma prova. Se uma ideia ainda for nova, escolha Ainda não sei e siga para a explicação.",
+    "code": "console.log(\"A\");\nconsole.log(4 + 1);\nconsole.log(\"B\");\nconst valor = 5;\nconst texto = \"5\";\ntypeof valor; typeof texto;",
+    "fields": [
+      {
+        "label": "As três chamadas escrevem nesta sequência",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "A, 5, B",
+            "label": "A, 5, B"
+          },
+          {
+            "value": "5, A, B",
+            "label": "5, A, B"
+          },
+          {
+            "value": "B, 5, A",
+            "label": "B, 5, A"
+          }
+        ],
+        "expected": "A, 5, B",
+        "explanation": "O primeiro console escreve A, a segunda chamada calcula 4 + 1 e escreve 5, e a terceira escreve B."
+      },
+      {
+        "label": "A segunda chamada escreve",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "5",
+            "label": "5"
+          },
+          {
+            "value": "4 + 1",
+            "label": "4 + 1"
+          },
+          {
+            "value": "\"5\"",
+            "label": "\"5\""
+          }
+        ],
+        "expected": "5",
+        "explanation": "A expressão 4 + 1 é calculada antes de console.log; sem aspas, a saída é o número 5."
+      },
+      {
+        "label": "As chamadas síncronas aparecem na ordem",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "em que estão no arquivo",
+            "label": "em que estão no arquivo"
+          },
+          {
+            "value": "alfabética",
+            "label": "alfabética"
+          },
+          {
+            "value": "escolhida pelo console",
+            "label": "escolhida pelo console"
+          }
+        ],
+        "expected": "em que estão no arquivo",
+        "explanation": "As três chamadas síncronas seguem a ordem textual: A, depois o resultado 5, e por fim B."
+      },
+      {
+        "label": "O tipo conceitual do valor sem aspas 5 é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "number",
+            "label": "number"
+          },
+          {
+            "value": "string",
+            "label": "string"
+          },
+          {
+            "value": "boolean",
+            "label": "boolean"
+          }
+        ],
+        "expected": "number",
+        "explanation": "O número 5 não tem aspas. Ele é um valor number."
+      },
+      {
+        "label": "typeof valor devolve",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "number",
+            "label": "number"
+          },
+          {
+            "value": "string",
+            "label": "string"
+          },
+          {
+            "value": "object",
+            "label": "object"
+          }
+        ],
+        "expected": "number",
+        "explanation": "A variável valor contém o número 5, então typeof devolve o rótulo number."
+      },
+      {
+        "label": "O tipo conceitual de texto é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "string",
+            "label": "string"
+          },
+          {
+            "value": "number",
+            "label": "number"
+          },
+          {
+            "value": "boolean",
+            "label": "boolean"
+          }
+        ],
+        "expected": "string",
+        "explanation": "As aspas fazem de \"5\" texto. Um algarismo escrito entre aspas é string."
+      }
+    ],
+    "coverage": {
+      "00.01": [
+        0,
+        1,
+        2
+      ],
+      "01.01": [
+        3,
+        4,
+        5
+      ]
+    },
+    "recommendation": {
+      "entry": "01.01",
+      "prerequisites": [
+        "00.01"
+      ]
+    },
+    "feedbackSteps": [
+      "Uma expressão numérica é calculada antes de ser impressa.",
+      "Chamadas síncronas seguem a ordem textual do arquivo.",
+      "Aspas distinguem o número 5 do texto \"5\".",
+      "typeof informa um rótulo de tipo; não transforma o valor."
+    ],
+    "nextStep": "Se estas ideias já estão familiares, a entrada sugerida é 01.01, que começa valores e typeof. Se não, 00.01 é um começo útil.",
+    "takeaway": "Este diagnóstico de estudo observa estas previsões. Ele não certifica a etapa nem é prova independente de domínio."
+  },
+  "D.07": {
+    "introduction": "Observe chamadas de função, mudanças em arrays e a intenção de cada método.",
+    "orientation": "Acompanhe o argumento, o valor retornado e o array em momentos separados. Você pode escolher Ainda não sei e aprender com o feedback.",
+    "code": "function dobro(n) { return n * 2; }\nconst valores = [2, 4];\nvalores.push(6);\nconst b = valores;\nb.push(8);\nconst c = valores.slice();\nc.push(10);\nvalores.filter(n => n > 2);",
+    "fields": [
+      {
+        "label": "dobro(3) devolve",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          },
+          {
+            "value": "uma linha no console",
+            "label": "uma linha no console"
+          }
+        ],
+        "expected": "6",
+        "explanation": "A função recebe 3, calcula 3 * 2 e devolve 6 por return."
+      },
+      {
+        "label": "Depois de push(6), valores contém",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "2, 4, 6",
+            "label": "2, 4, 6"
+          },
+          {
+            "value": "2, 4",
+            "label": "2, 4"
+          },
+          {
+            "value": "6",
+            "label": "6"
+          }
+        ],
+        "expected": "2, 4, 6",
+        "explanation": "push acrescenta o novo elemento ao array existente."
+      },
+      {
+        "label": "Depois de b = valores e b.push(8), valores contém",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "2, 4, 6, 8",
+            "label": "2, 4, 6, 8"
+          },
+          {
+            "value": "2, 4, 6",
+            "label": "2, 4, 6"
+          },
+          {
+            "value": "8",
+            "label": "8"
+          }
+        ],
+        "expected": "2, 4, 6, 8",
+        "explanation": "A atribuição b = valores copia a referência, não o array. b e valores apontam para o mesmo array; a mutação por b também aparece em valores."
+      },
+      {
+        "label": "Depois de c = valores.slice() e c.push(10), valores contém",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "2, 4, 6, 8",
+            "label": "2, 4, 6, 8"
+          },
+          {
+            "value": "2, 4, 6, 8, 10",
+            "label": "2, 4, 6, 8, 10"
+          },
+          {
+            "value": "10",
+            "label": "10"
+          }
+        ],
+        "expected": "2, 4, 6, 8",
+        "explanation": "slice cria outro array. Acrescentar 10 a c não altera a sequência de valores; as duas variáveis referenciam arrays diferentes."
+      },
+      {
+        "label": "Para criar um novo array só com valores maiores que 2, use",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "filter",
+            "label": "filter"
+          },
+          {
+            "value": "map",
+            "label": "map"
+          },
+          {
+            "value": "find",
+            "label": "find"
+          }
+        ],
+        "expected": "filter",
+        "explanation": "filter mantém os elementos que satisfazem uma condição e devolve um novo array."
+      },
+      {
+        "label": "Para transformar cada número em seu dobro e manter todos, use",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "map",
+            "label": "map"
+          },
+          {
+            "value": "filter",
+            "label": "filter"
+          },
+          {
+            "value": "find",
+            "label": "find"
+          }
+        ],
+        "expected": "map",
+        "explanation": "map transforma cada elemento e mantém uma posição correspondente no novo array."
+      },
+      {
+        "label": "Para obter o primeiro número maior que 2, use",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "find",
+            "label": "find"
+          },
+          {
+            "value": "filter",
+            "label": "filter"
+          },
+          {
+            "value": "reduce",
+            "label": "reduce"
+          }
+        ],
+        "expected": "find",
+        "explanation": "find devolve o primeiro elemento que satisfaz a condição."
+      }
+    ],
+    "coverage": {
+      "04.01": [
+        0
+      ],
+      "05.01": [
+        1,
+        2,
+        3
+      ],
+      "07.01": [
+        4,
+        5,
+        6
+      ]
+    },
+    "recommendation": {
+      "entry": "07.01",
+      "prerequisites": [
+        "04.01",
+        "05.01"
+      ]
+    },
+    "feedbackSteps": [
+      "return entrega um valor para a chamada; não imprime por si só.",
+      "push muda o conteúdo do array ao acrescentar um elemento.",
+      "filter seleciona, map transforma e find procura o primeiro correspondente.",
+      "Escolha o método conforme o resultado pedido."
+    ],
+    "nextStep": "Se as distinções estão claras, a entrada sugerida é 07.01, que compara métodos de array e suas intenções.",
+    "takeaway": "Este diagnóstico de estudo sugere uma entrada limitada para estes exemplos; não certifica o estágio inteiro nem prova implementação independente."
+  },
+  "D.08": {
+    "introduction": "Separe o que uma função retorna, o que uma referência contém e o que um diagnóstico de tipo diz.",
+    "orientation": "Leia os cartões como situações diferentes: valor retornado, acesso a campo, tipo estático e validação de dado recebido. Ainda não sei é uma resposta válida para estudar.",
+    "code": "type Pessoa = { nome: string; meta: { ativo: boolean } };\nfunction nome(p: Pessoa) { return p.nome; }\nconst pessoa = { nome: \"Lia\", meta: { ativo: true } };\nconst alias = pessoa;\nalias.nome = \"Noa\";\nconst copia = { ...pessoa };\ncopia.nome = \"Bia\";\ncopia.meta.ativo = false;\nconst entrada: unknown = JSON.parse(texto);",
+    "fields": [
+      {
+        "label": "nome({nome: \"Lia\"}) devolve",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "\"Lia\"",
+            "label": "\"Lia\""
+          },
+          {
+            "value": "Pessoa",
+            "label": "Pessoa"
+          },
+          {
+            "value": "uma validação em runtime",
+            "label": "uma validação em runtime"
+          }
+        ],
+        "expected": "\"Lia\"",
+        "explanation": "A função lê p.nome e retorna o valor desse campo."
+      },
+      {
+        "label": "Para ler nome de uma referência pessoa, a forma é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "pessoa.nome",
+            "label": "pessoa.nome"
+          },
+          {
+            "value": "Pessoa",
+            "label": "o tipo Pessoa"
+          },
+          {
+            "value": "typeof pessoa.nome",
+            "label": "typeof pessoa.nome"
+          }
+        ],
+        "expected": "pessoa.nome",
+        "explanation": "pessoa.nome acessa um campo do objeto referenciado; Pessoa é um tipo, não o valor do campo."
+      },
+      {
+        "label": "Depois de alias = pessoa e alias.nome = \"Noa\", pessoa.nome é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "\"Noa\"",
+            "label": "\"Noa\""
+          },
+          {
+            "value": "\"Lia\"",
+            "label": "\"Lia\""
+          },
+          {
+            "value": "\"Bia\"",
+            "label": "\"Bia\""
+          }
+        ],
+        "expected": "\"Noa\"",
+        "explanation": "Atribuir pessoa a alias copia a referência. A alteração feita por alias muda o mesmo objeto observado por pessoa."
+      },
+      {
+        "label": "Depois do spread copia = {...pessoa} e copia.nome = \"Bia\", pessoa.nome é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "\"Noa\"",
+            "label": "\"Noa\""
+          },
+          {
+            "value": "\"Bia\"",
+            "label": "\"Bia\""
+          },
+          {
+            "value": "\"Lia\"",
+            "label": "\"Lia\""
+          }
+        ],
+        "expected": "\"Noa\"",
+        "explanation": "O spread raso cria outro objeto de primeiro nível. Trocar copia.nome não troca pessoa.nome; campos aninhados ainda poderiam compartilhar referências."
+      },
+      {
+        "label": "Depois de copia.meta.ativo = false, pessoa.meta.ativo é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "false",
+            "label": "false"
+          },
+          {
+            "value": "true",
+            "label": "true"
+          },
+          {
+            "value": "undefined",
+            "label": "undefined"
+          }
+        ],
+        "expected": "false",
+        "explanation": "O spread copiou o objeto externo, mas `meta` continuou sendo a mesma referência aninhada. A alteração em copia.meta também aparece em pessoa.meta."
+      },
+      {
+        "label": "copia.meta === pessoa.meta é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "true",
+            "label": "true"
+          },
+          {
+            "value": "false",
+            "label": "false"
+          },
+          {
+            "value": "não pode ser comparado",
+            "label": "não pode ser comparado"
+          }
+        ],
+        "expected": "true",
+        "explanation": "O objeto meta é compartilhado: uma cópia rasa não duplica automaticamente os objetos internos."
+      },
+      {
+        "label": "Se uma string for atribuída a number, o primeiro lugar para procurar um erro é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "diagnóstico do TypeScript",
+            "label": "diagnóstico do TypeScript"
+          },
+          {
+            "value": "um teste de rede",
+            "label": "um teste de rede"
+          },
+          {
+            "value": "o layout do DOM",
+            "label": "o layout do DOM"
+          }
+        ],
+        "expected": "diagnóstico do TypeScript",
+        "explanation": "Uma incompatibilidade conhecida no código pode ser apontada pela checagem estática de tipos."
+      },
+      {
+        "label": "Para aceitar JSON externo como Pessoa, ainda é preciso",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "validar a forma em runtime",
+            "label": "validar a forma em runtime"
+          },
+          {
+            "value": "usar any e assumir",
+            "label": "usar any e assumir"
+          },
+          {
+            "value": "apenas renomear a variável",
+            "label": "apenas renomear a variável"
+          }
+        ],
+        "expected": "validar a forma em runtime",
+        "explanation": "unknown preserva a incerteza. A forma do dado externo precisa ser verificada durante a execução."
+      },
+      {
+        "label": "Um cast para any comprova que o dado externo é válido?",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "não",
+            "label": "não"
+          },
+          {
+            "value": "sim, sempre",
+            "label": "sim, sempre"
+          },
+          {
+            "value": "só no navegador",
+            "label": "só no navegador"
+          }
+        ],
+        "expected": "não",
+        "explanation": "Um cast muda o que o verificador aceita; ele não verifica os dados que chegam em runtime."
+      }
+    ],
+    "coverage": {
+      "04.01": [
+        0
+      ],
+      "06.01": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "15.01": [
+        6,
+        7,
+        8
+      ]
+    },
+    "recommendation": {
+      "entry": "15.01",
+      "prerequisites": [
+        "04.01",
+        "06.01"
+      ]
+    },
+    "feedbackSteps": [
+      "O valor retornado por uma chamada é diferente de uma saída no console.",
+      "Um tipo nomeado descreve a forma; a referência contém o objeto e seus campos.",
+      "O TypeScript pode apontar incompatibilidades estáticas no código.",
+      "Dados externos ainda exigem validação em runtime; any não fornece essa evidência."
+    ],
+    "nextStep": "Se estas distinções estão claras, a entrada sugerida é 15.01, que lê diagnósticos de tipo e separa compilação de validação runtime.",
+    "takeaway": "Este é um diagnóstico de estudo com casos fechados. Não certifica TypeScript nem substitui o compilador ou prova independente."
+  },
+  "D.09": {
+    "introduction": "Pense em uma hipótese de desempenho e na observação que poderia testá-la.",
+    "orientation": "Cada cenário sugere uma causa possível, mas uma hipótese não é uma medição. Escolha qual evidência ajudaria a distinguir causas; Ainda não sei também permite abrir o feedback.",
+    "code": "function processar(itens) {\n  return itens.map(item => transformar(item));\n}\n// Um resultado rápido ou lento precisa de uma medição contextualizada.",
+    "fields": [
+      {
+        "label": "processar(itens) devolve",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "o novo array criado por map",
+            "label": "o novo array criado por map"
+          },
+          {
+            "value": "uma medida de CPU",
+            "label": "uma medida de CPU"
+          },
+          {
+            "value": "um evento de rede",
+            "label": "um evento de rede"
+          }
+        ],
+        "expected": "o novo array criado por map",
+        "explanation": "map devolve um array novo com o resultado da transformação de cada item."
+      },
+      {
+        "label": "Uma tela espera muito antes de receber dados do servidor. Primeira hipótese",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "rede ou servidor",
+            "label": "rede ou servidor"
+          },
+          {
+            "value": "layout do DOM",
+            "label": "layout do DOM"
+          },
+          {
+            "value": "coleta de lixo",
+            "label": "coleta de lixo"
+          }
+        ],
+        "expected": "rede ou servidor",
+        "explanation": "Uma espera antes dos dados chegarem sugere investigar rede e servidor, mas a hipótese precisa de tempos medidos."
+      },
+      {
+        "label": "A página recebe dados, mas pausas longas coincidem com cálculo local. Meça primeiro",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "tempo de CPU e tarefas longas",
+            "label": "tempo de CPU e tarefas longas"
+          },
+          {
+            "value": "latência DNS apenas",
+            "label": "latência DNS apenas"
+          },
+          {
+            "value": "tamanho do bundle apenas",
+            "label": "tamanho do bundle apenas"
+          }
+        ],
+        "expected": "tempo de CPU e tarefas longas",
+        "explanation": "Se a pausa coincide com cálculo local, medir tarefas longas e CPU ajuda a testar a hipótese."
+      },
+      {
+        "label": "Um nó é removido da tela, mas a memória não cai. Uma alternativa é investigar",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "referências ainda retidas",
+            "label": "referências ainda retidas"
+          },
+          {
+            "value": "largura da rede",
+            "label": "largura da rede"
+          },
+          {
+            "value": "ordem alfabética dos logs",
+            "label": "ordem alfabética dos logs"
+          }
+        ],
+        "expected": "referências ainda retidas",
+        "explanation": "Uma referência ativa pode manter objetos alcançáveis mesmo depois que um nó sai da tela."
+      },
+      {
+        "label": "Uma renderização custa caro. Outra hipótese que merece medição é",
+        "options": [
+          {
+            "value": "unknown",
+            "label": "Ainda não sei"
+          },
+          {
+            "value": "layout e pintura do DOM",
+            "label": "layout e pintura do DOM"
+          },
+          {
+            "value": "somente a conexão DNS",
+            "label": "somente a conexão DNS"
+          },
+          {
+            "value": "somente o armazenamento local",
+            "label": "somente o armazenamento local"
+          }
+        ],
+        "expected": "layout e pintura do DOM",
+        "explanation": "Cálculo e layout podem competir como explicações; medir a etapa evita concluir apenas pela aparência."
+      }
+    ],
+    "coverage": {
+      "04.01": [
+        0
+      ],
+      "21.01": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "recommendation": {
+      "entry": "21.01",
+      "prerequisites": [
+        "04.01"
+      ]
+    },
+    "feedbackSteps": [
+      "Uma função retorna dados; uma medição descreve comportamento observado.",
+      "Rede, CPU, DOM, memória e I/O são hipóteses distintas.",
+      "Escolha uma métrica que possa refutar a primeira hipótese.",
+      "Cenários podem ter mais de uma causa; registre uma alternativa antes de concluir."
+    ],
+    "nextStep": "Se estas hipóteses e observações fazem sentido, a entrada sugerida é 21.01, que discute gargalos e medições.",
+    "takeaway": "Este diagnóstico de estudo não mede um sistema real nem prova profiling. A recomendação é limitada e não certifica o estágio avançado."
   }
 };

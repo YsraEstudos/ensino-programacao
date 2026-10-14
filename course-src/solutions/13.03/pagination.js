@@ -1,0 +1,1 @@
+export function paginar(items, page, size) { if (!Number.isInteger(page) || page < 1 || !Number.isInteger(size) || size < 1) throw new RangeError('page/size inválidos'); return items.slice((page - 1) * size, page * size); }

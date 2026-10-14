@@ -1,0 +1,1 @@
+Protocolo: preveja os valores de total ao entrar e depois de cada iteração para [1,-2,3]; execute; avance o debugger e registre a primeira divergência entre previsão e valor observado. Explique qual evidência do watch/breakpoint resolveu a dúvida.

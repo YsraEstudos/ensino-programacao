@@ -1,0 +1,39 @@
+PR #318 · "Ranking de vendedores com retry"
+
+--- a/src/ranking.ts
++++ b/src/ranking.ts
+@@ -1,22 +1,28 @@
+ import { buscarVendas } from "./api.js";
+
+-export async function carregarRanking(): Promise<Vendedor[]> {
+-  const vendas = await buscarVendas();
+-  return ordenar(vendas);
++export async function carregarRanking(): Promise<Vendedor[]> {
++  try {
++    const vendas: any = await buscarVendas();
++    return ordenar(vendas.itens);
++  } catch (erro) {
++    return tentarDeNovo();
++  }
+ }
+
+-function ordenar(vendedores: readonly Vendedor[]): Vendedor[] {
+-  return vendedores.toSorted((a, b) => b.total - a.total);
++function ordenar(vendedores: Vendedor[]): Vendedor[] {
++  return vendedores.sort((a, b) => b.total - a.total);
+ }
++
++async function tentarDeNovo(): Promise<Vendedor[]> {
++  await new Promise((r) => setTimeout(r, 1000));
++  return carregarRanking();
++}
+
+--- a/test/ranking.test.ts
++++ b/test/ranking.test.ts
+@@ -10,6 +10,12 @@
++test("tenta de novo depois de falha", async () => {
++  falharProximaChamada();
++  const inicio = Date.now();
++  await carregarRanking();
++  assert.ok(Date.now() - inicio >= 1000);
++});

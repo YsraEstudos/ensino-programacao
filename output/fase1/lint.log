@@ -1,0 +1,151 @@
+
+> devpath@0.1.0 lint
+> eslint . --ignore-pattern dist --ignore-pattern .next
+
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\13.09\no-retry\retry.js
+  1:40  warning  'attempts' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\13.13\submit-click-only\app.js
+  1:48  warning  'form' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\19.08\off-does-not-remove\emitter.ts
+  1:477  warning  'evento' is defined but never used    @typescript-eslint/no-unused-vars
+  1:486  warning  'listener' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\20.04\drop-receiver\proxy.js
+  1:85  warning  'receiver' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\22.07\parse-any\index.d.ts
+  1:101  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\mutants\23.10\service-ignores-limit\src\service\relatorio.js
+  1:78  warning  'limite' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\15.07\catalogo.ts
+  3:73  warning  '_apelido' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\15.11\perfil.ts
+  1:6  warning  'User' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\16.05\usuarios.ts
+  1:220  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  1:253  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\18.04\perfil.ts
+  1:6  warning  'UserRecord' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\19.03\unwrap.ts
+  2:98  error    Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  3:16  warning  'buscarData' is defined but only used as a type  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\19.05\on.ts
+  1:55  warning  'on' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\21.08\native-using.mjs
+  1:302  warning  'a' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  1:321  warning  'b' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  1:395  warning  'a' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  1:425  warning  'b' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\21.11\probe.mjs
+  1:75  warning  'resource' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\22.03\consumidor.ts
+  3:1  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+  5:1  warning  Expected an assignment or function call and instead saw an expression  @typescript-eslint/no-unused-expressions
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\22.07\tipos.test.ts
+   2:9  warning  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  10:6  warning  'SuccessValue' is defined but never used    @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\23.08\src\adapters\versao.ts
+  1:319  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\23.08\src\servico.ts
+  1:33   warning  'Estado' is defined but never used        @typescript-eslint/no-unused-vars
+  1:95   warning  'Evento' is defined but never used        @typescript-eslint/no-unused-vars
+  1:457  warning  'por' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\solutions\23.08\test\contrato.test.ts
+  1:605  error  'stored' is never reassigned. Use 'const' instead  prefer-const
+  1:852  error  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\tests\13.14.test.js
+  1:10  warning  'migrarV1ParaV2' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\tests\20.06.test.js
+  1:7  warning  'manualPipeline' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\tests\21.08.test.js
+  2:186  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\tests\22.07.types.ts
+   2:9  warning  'error' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  10:6  warning  'SuccessValue' is defined but never used    @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\tests\23.08.ts.js
+  1:852  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\app.js
+  218:35  warning  'target' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\course-controller.js
+  79:18  warning  'loadCourseTests' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\course-dom-runner.js
+  96:27  warning  'validated' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\course-network.js
+   4:9   warning  'localPath' is assigned a value but never used    @typescript-eslint/no-unused-vars
+   5:9   warning  'abortError' is assigned a value but never used   @typescript-eslint/no-unused-vars
+   6:9   warning  'asMethod' is assigned a value but never used     @typescript-eslint/no-unused-vars
+   7:9   warning  'asUrl' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  14:9   warning  'responseFor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  14:31  warning  'sequence' is defined but never used              @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\course-project-export.js
+  294:13  warning  'lv' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\public\course-test-runtime.js
+  76:27  warning  'fn' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  86:27  warning  'fn' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\check-task-8a-14-05-nodevirtual.mjs
+   2:25  warning  'readFile' is defined but never used                                                                     @typescript-eslint/no-unused-vars
+  14:3   error    Do not assign to the variable `module`. See: https://nextjs.org/docs/messages/no-assign-module-variable  @next/next/no-assign-module-variable
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\task-8b-stage15.mjs
+  169:9  warning  'runnable' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\task-8b-stages16-19.mjs
+  179:7  warning  'learnerSuites' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\task-9-canonical-regeneration.mjs
+  3:34  warning  'statSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\task-9-reference-gates.mjs
+   9:7  warning  'matches' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  52:9  warning  'testPath' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\test-course-typecheck.mjs
+    4:10  warning  'basename' is defined but never used             @typescript-eslint/no-unused-vars
+    4:20  warning  'dirname' is defined but never used              @typescript-eslint/no-unused-vars
+    4:35  warning  'relative' is defined but never used             @typescript-eslint/no-unused-vars
+    9:7   warning  'root' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  223:21  error    Unexpected aliasing of 'this' to local variable  @typescript-eslint/no-this-alias
+  244:21  error    Unexpected aliasing of 'this' to local variable  @typescript-eslint/no-this-alias
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\test-learning-paths.mjs
+  5:8  warning  'vm' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\test-project-export.mjs
+   11:7  warning  'projectRoot' is assigned a value but never used   @typescript-eslint/no-unused-vars
+  301:9  warning  'dependencies' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\scripts\typecheck-host.mjs
+  98:48  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 65 problems (11 errors, 54 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

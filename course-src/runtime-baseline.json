@@ -1,0 +1,75 @@
+{
+  "reviewed": "2026-10-10",
+  "nextReview": "2026-10-28",
+  "policy": "Fonte única do ambiente-alvo do curso. Receitas declaram um perfil (ou um rótulo antigo listado em aliases); o compilador publica o rótulo do perfil e falha com qualquer runtime desconhecido. Revisar em junho (nova edição do ECMAScript) e em outubro (troca de LTS do Node.js).",
+  "sources": {
+    "nodeReleaseSchedule": "https://nodejs.org/en/about/previous-releases",
+    "node24": "https://nodejs.org/pt-br/blog/release/v24.0.0",
+    "node26": "https://nodejs.org/en/blog/release/v26.0.0",
+    "ecmascript2026": "https://tc39.es/ecma262/2026/multipage/",
+    "typescript50": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
+    "typescript41": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html",
+    "typescript44": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html"
+  },
+  "ecmascript": "ECMAScript 2026",
+  "node": {
+    "primary": "24",
+    "minimum": "24",
+    "primaryMaintenanceFrom": "2026-10-20",
+    "next": "26",
+    "nextActiveLtsFrom": "2026-10-28"
+  },
+  "typescript": {
+    "course": "7.0",
+    "embeddedChecker": "6.0",
+    "note": "O curso ensina TypeScript 7.0; ferramentas e verificadores embutidos usam o checker 6.0 como proxy estático limitado. A suíte não deve tratar essa combinação como prova de equivalência completa entre versões."
+  },
+  "browsers": "navegadores evergreen, recursos Baseline amplamente disponíveis",
+  "profiles": {
+    "node": "Node.js {node} LTS · {ecmascript} · módulos ES",
+    "node-tooling": "Node.js {node} LTS · npm e ferramentas locais",
+    "node-vitest": "Node.js {node} LTS · Vitest (versão estável atual)",
+    "browser": "Navegadores evergreen · recursos Baseline amplamente disponíveis",
+    "browser-docs": "Navegador e documentação oficial",
+    "browser-readonly": "Leitura no navegador, sem execução",
+    "node-browser": "Node.js {node} LTS e navegadores evergreen",
+    "diagnostic": "Navegador ou Node.js {node} LTS",
+    "typescript": "TypeScript {typescript} strict · Node.js {node} LTS",
+    "typescript-package": "TypeScript {typescript} strict · Node.js {node} LTS · pacote ESM",
+    "git": "Git (versão estável atual)"
+  },
+  "aliases": {
+    "Node.js 24 LTS": "node",
+    "Node.js 24 LTS (ES modules)": "node",
+    "Node.js 24.x, módulos ES, sem DOM.": "node",
+    "Node.js 24.x, ECMAScript modules, sem DOM.": "node",
+    "Node.js": "node-tooling",
+    "Node.js 24 with a provisioned Vitest runner": "node-vitest",
+    "browser": "browser",
+    "browser evergreen": "browser",
+    "Browser (Fetch API)": "browser",
+    "Browser with official documentation": "browser-docs",
+    "browser-readonly": "browser-readonly",
+    "Node.js + browser": "node-browser",
+    "Node.js 24 + browser": "node-browser",
+    "Node.js 24 LTS + navegador moderno": "node-browser",
+    "browser or Node.js 24": "diagnostic",
+    "TypeScript 7.0 strict; Node.js 24 LTS": "typescript",
+    "TypeScript strict": "typescript",
+    "Node.js + TypeScript": "typescript-package",
+    "Git": "git"
+  },
+  "nodePolicy": {
+    "until": "2026-10-28",
+    "untilPolicy": "Até 28/10/2026: Node 24 como base e mínimo. Node 24 entra em manutenção em 20/10/2026, mas continua suportado como base até 28/10.",
+    "afterUntil": {
+      "primary": "26",
+      "minimum": "24",
+      "note": "Node 26 vira LTS ativo em 28/10/2026; rodar a suíte inteira nas duas versões."
+    },
+    "endOfLife": {
+      "24": "2028-04-30",
+      "22": "2027-04-30"
+    }
+  }
+}

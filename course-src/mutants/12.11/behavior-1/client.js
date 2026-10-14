@@ -1,0 +1,1 @@
+export async function inspecionar(resposta){const antes=resposta.bodyUsed,status=resposta.status,tipo=resposta.headers.get('Content-Type');try{const corpo=await resposta.json();return {status,tipo,antes,depois:resposta.bodyUsed,corpo};}catch(erro){return {status,tipo,antes,depois:antes,erro:erro.name};}}

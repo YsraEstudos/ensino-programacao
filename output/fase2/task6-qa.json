@@ -1,0 +1,57 @@
+{
+  "kind": "controlled-browser-qa",
+  "browser": "Microsoft Edge (msedge)",
+  "startedAt": "2026-10-14T15:43:55.651Z",
+  "baseUrl": "http://127.0.0.1:8765/devpath.html",
+  "focusMethod": "Disabled Playwright per-page focus emulation with CDP Emulation.setFocusEmulationEnabled(false) before navigation; no focus/blur events were synthesized.",
+  "scenarios": [
+    {
+      "name": "opt-in e duração por atividade",
+      "elapsedWallMilliseconds": 2978,
+      "activityMilliseconds": {
+        "04.01": 1423,
+        "04.02": 1438
+      },
+      "routeEvidence": {
+        "hash": "#/javascript/04.02",
+        "focused": true,
+        "visibility": "visible",
+        "panel": "Tempo de estudo Medir meu tempo com foco nesta atividadeGuardamos somente o ID da atividade e o tempo neste navegador. A medição pausa quando a aba fica oculta ou sem foco. Desligar apaga estes registros locais.04.02 · Tempo com foco: 1 s · Estimativa guiada: 14 minMedindo tempo com foco; este tempo não comprova aprendizado.",
+        "heading": "Retorno vs efeito"
+      }
+    },
+    {
+      "name": "pausa ao sair da atividade e retomada após reload",
+      "pausedOnCatalog": 0,
+      "beforeReload": 2768,
+      "afterReload": 4174
+    },
+    {
+      "name": "pausa quando a janela do Edge fica oculta",
+      "firstPageBefore": {
+        "focused": true,
+        "visibility": "visible"
+      },
+      "firstPageAfterMinimizeRequest": {
+        "focused": true,
+        "visibility": "visible",
+        "status": "Medindo tempo com foco; este tempo não comprova aprendizado.",
+        "events": []
+      },
+      "verdict": "not-observable",
+      "note": "Browser.setWindowBounds(minimized) não produziu mudança de foco/visibilidade observável no Edge controlado; nenhuma alegação de pausa por foco."
+    },
+    {
+      "name": "atualização entre abas não é ecoada e revogação é imediata",
+      "remoteUpdateEchoWrites": 0,
+      "remoteEvents": 1,
+      "remoteRevocationPropagated": true,
+      "storageAfterRevocation": null
+    }
+  ],
+  "limits": [
+    "QA controlado; não é amostra de aluno nem calibração de carga."
+  ],
+  "finishedAt": "2026-10-14T15:44:08.008Z",
+  "result": "passed-with-limits"
+}

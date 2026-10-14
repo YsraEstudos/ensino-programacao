@@ -49,3 +49,8 @@ course-src/.generated/
 __pycache__/
 *.pyc
 *.tsbuildinfo
+/output/learning-execution/
+/.claude/launch.json
+/.playwright-cli/
+/output/playwright/fase2/legacy-debug.js
+/output/playwright/fase2/legacy-debug.log

@@ -402,7 +402,7 @@ CONTENT = {
      'Leia tabela/nota oficial de suporte.',
      'Escolha fallback e compare quando fn é chamado e como throws são tratados.'), ('Ficha registra recurso, baseline, fonte oficial, data, decisão e alternativa. '
      'Fallback fiel chama fn dentro de try, converte retorno com Promise.resolve e exceção '
-     'com Promise.reject; documente que trocar o momento da chamada muda semântica.'), 'Avaliar Iterator helpers em runtime alvo -> usar, fallback ou adiar', 18, 'Node.js 24 LTS (ES modules)', ('Consulte fonte oficial para decidir se Iterator helpers cabem no runtime alvo. '
+     'com Promise.reject; documente que trocar o momento da chamada muda semântica.'), 'Avaliar Iterator helpers em runtime alvo -> usar, fallback ou adiar', 18, 'Node.js 24 LTS (ES modules)', ('Consulte fonte oficial para decidir se Promise.try cabe no runtime alvo. '
      'Registre suporte, fallback semanticamente equivalente ou motivo para adiar.',
      'Uma API moderna pode existir na especificação antes de estar disponível no runtime '
      'implantado; uma tabela oficial por versão responde à pergunta que o código sozinho '
@@ -580,21 +580,43 @@ CONTENT = {
 
 _LITERAL_STARTERS = {
     '14.12': "material.md: // src/main.js\nimport { soma } from './math.js';\nimport './style.css';\nconsole.log(soma(2, 3));\n\n// package.json declara type=module. O diretório dist ainda não existe.\n// Compare os arquivos-fonte com um bundle de saída fornecido pelo exercício.",
-    '14.13': "event-loop.js: const inicio = Date.now();\nfor (let i = 0; i < 1_000_000_000; i += 1) {}\nsetTimeout(() => console.log('timer', Date.now() - inicio), 0);\nconsole.log('sync', Date.now() - inicio);\n\n// Compare bloqueio síncrono com trabalho em pequenos lotes agendados.",
+    '14.13': "ordem-browser.js: // Snippet A — navegador (este arquivo roda no executor do site).\nconsole.log('A síncrono');\nsetTimeout(() => console.log('T timer'), 0);\nPromise.resolve().then(() => console.log('P promise'));\nconsole.log('B síncrono');\n\n// Snippet B — Node.js 24 LTS, rode localmente como node-ordem.mjs (ESM) e depois como node-ordem.cjs (CommonJS):\n//   console.log('A síncrono');\n//   setTimeout(() => console.log('T timer'), 0);\n//   Promise.resolve().then(() => console.log('P promise'));\n//   process.nextTick(() => console.log('N nextTick'));\n//   console.log('B síncrono');\n// Registre versão do Node (node --version), formato do módulo e a ordem observada em cada formato.",
     '14.01': "material.md: // grafo de import de valor\nA -> B\nB -> C\nC -> A\nD -> B\nE (sem dependências)\n\nDesenhe o ciclo e indique quais módulos pertencem ao ciclo. Depois considere um import de tipo isolado em D.",
     '14.02': "material.md: Bloco A: const argumentos = process.argv.slice(2);\nBloco B: const comando = argumentos[0];\nBloco C: const resultado = executarDominio(comando, argumentos.slice(1));\nBloco D: process.stdout.write(`${resultado}\\n`);\nBloco E: if (!comandos.has(comando)) { mostrarUso(); process.exitCode = 2; return; }\n\nContexto: function main(argv = process.argv) { /* ordenar blocos; domínio não lê process.argv */ }",
     '14.03': "package.json: {\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"TODO\",\n    \"test\": \"TODO\",\n    \"start\": \"TODO\"\n  }\n}\n\nArquivos existentes: src/main.js e test/app.test.js. Preencha somente os três comandos; o ambiente é Node.js 24 e usa node:test.",
     '14.04': "material.md: // math.cjs\nfunction soma(a, b) { return a + b; }\nmodule.exports = { soma };\n\n// app.cjs\nconst { soma } = require('./math.cjs');\nconsole.log(soma(2, 3));\n\nConverta o pacote para ESM no Node.js: package type module, exports/imports consistentes e extensão relativa explícita.",
     '14.05': "config.js: import { readFile } from 'node:fs/promises';\n\nexport async function carregarConfig() {\n  return JSON.parse(await readFile('./data/config.json', 'utf8'));\n}\n\n// BUG: o caminho é resolvido em relação ao cwd do processo. O arquivo fica ao lado do módulo.",
     '14.06': "config.js: export function loadConfig(env) {\n  const portTexto = env.PORT || '3000';\n  const logLevel = env.LOG_LEVEL || 'info';\n  const token = env.TOKEN;\n  // TODO: trate defaults, conversão/intervalo da porta e segredo exigido em produção.\n  // Nunca inclua token em erro ou log.\n}\n",
-    '14.07': "material.md: const quadrados = Iterator.from([1, 2, 3]).map((n) => n * n).toArray();\n\nRuntime declarado para a decisão: Node.js 24 LTS.\nConsulte documentação oficial de compatibilidade; registre fonte/data e escolha usar, fallback ou adiar. A sintaxe transpilada não garante a API em runtime.",
-    '14.08': "cli.js: export function executar(comando, repositorio) {\n  // TODO: separar parse de argv, regras de notas e adaptador de filesystem.\n  // Contrato: add cria; list preserva ordem; remove ausente retorna not-found.\n}\n\n// Fixtures: arquivo ausente e JSON corrompido devem produzir erro contextual sem sobrescrever dados.",
+    '14.07': "promise-try.js: // Runtime-alvo: Node.js 24 LTS. Registre a versão exata (node --version), a fonte oficial e a data da consulta.\nconst registro = [];\nconst callback = () => {\n  registro.push('callback executou');\n  throw new Error('falhou');\n};\n\n// A: API nativa, se existir no runtime-alvo.\nif (typeof Promise.try === 'function') {\n  registro.push('antes de A');\n  Promise.try(callback).catch((erro) => registro.push(`A rejeitou: ${erro.message}`));\n}\n\n// B: fallback fiel — chama fn agora e transforma throw síncrono em rejeição.\nfunction tentar(fn) {\n  try { return Promise.resolve(fn()); }\n  catch (erro) { return Promise.reject(erro); }\n}\nregistro.push('antes de B');\ntentar(callback).catch((erro) => registro.push(`B rejeitou: ${erro.message}`));\n\n// C: NÃO equivalente — adia fn para uma microtask.\nregistro.push('antes de C');\nPromise.resolve().then(callback).catch((erro) => registro.push(`C rejeitou: ${erro.message}`));\nregistro.push('fim do código síncrono');\n\nsetTimeout(() => console.log(registro.join('\\n')), 0);\n// TODO: preveja a ordem do registro e explique quando o callback roda em A, B e C.",
+    '14.08': "cli.js: export async function executar(comando, repositorio, argumentos = []) {\n  if (!repositorio || typeof repositorio[comando] !== 'function') return {status: 'usage', exitCode: 2};\n}\nexport async function salvarAtomico(fs, destino, conteudo) { await fs.writeFile(destino, conteudo); }\n\n// BUG: a gravação direta pode deixar dados parciais; o contrato exige temp e rename.",
     '14.09': "material.md: repositório descartável\nbranch main: README.md contém 'uso'\nbranch feature: README.md contém 'uso' e 'exemplo'\nworking tree: config.json modificado e segredo fictício visível no diff\n\nAntes de concluir merge/commit, inspecione status, diff staged e resultado combinado.",
     '14.10': "material.md: Traceie a sequência de três módulos abaixo.\n\n```js\n// a.js\nimport { valor } from './b.js';\nconsole.log('A', valor);\n\n// b.js\nexport const valor = await Promise.resolve(5);\n\n// c.js\nconst modulo = await import('./a.js');\nconsole.log('C', modulo.valor);\n```\n\nRegistre separadamente: vinculação do import nomeado; avaliação assíncrona de b.js; instante em que a Promise de import() de c.js resolve; e ordem dos logs. Não misture o grafo ilustrativo em um único arquivo executável.",
     '14.11': "package.json: {\n  \"dependencies\": { \"csv-choice-a\": \"^1.2.0\", \"csv-choice-b\": \"^3.0.0\" }\n}\n\nDossiê local compara licença, manutenção, tamanho, dependências transitivas, versão/lockfile e plano de atualização.",
 }
 for _card_id, _starter in _LITERAL_STARTERS.items():
     CONTENT[_card_id]["starter"] = _starter
+
+# Multi-file starters: every file that a declared command or the exercise text names must exist in the starter.
+# The literal "path: content" form only carries one file, so these are written as explicit file lists.
+def _split_starter(value: str) -> dict[str, str]:
+    path, _, content = value.partition(": ")
+    return {"path": path, "content": content}
+
+CONTENT["14.03"]["starter"] = [
+    {"path": "package.json", "content": '{\n  "name": "devpath-14-03",\n  "version": "1.0.0",\n  "type": "module",\n  "scripts": {\n    "dev": "TODO",\n    "test": "TODO",\n    "start": "TODO"\n  }\n}\n'},
+    {"path": "package-lock.json", "content": '{\n  "name": "devpath-14-03",\n  "version": "1.0.0",\n  "lockfileVersion": 3,\n  "requires": true,\n  "packages": {\n    "": {\n      "name": "devpath-14-03",\n      "version": "1.0.0"\n    }\n  }\n}\n'},
+    {"path": "src/main.js", "content": "// Ponto de entrada do app: implemente o módulo ESM neste arquivo.\nexport {};\n"},
+    {"path": "test/app.test.js", "content": "import test from 'node:test';\n\n// Escreva o teste do app com node:test; substitua este lembrete pelo caso real.\ntest.todo('app');\n"},
+    {"path": "README.md", "content": "# Projeto do app\n\nPreencha somente os comandos dev, test e start em package.json. Arquivos existentes: src/main.js e test/app.test.js. O ambiente é Node.js 24 e usa node:test.\n"},
+]
+CONTENT["14.05"]["starter"] = [
+    _split_starter(CONTENT["14.05"]["starter"]),
+    {"path": "test/config.test.js", "content": "import test from 'node:test';\n\n// Escreva os casos: cwd diferente, caminho com espaço e arquivo ausente com cause.\ntest.todo('carregarConfig');\n"},
+]
+CONTENT["14.08"]["starter"] = [
+    _split_starter(CONTENT["14.08"]["starter"]),
+    {"path": "test/cli.test.js", "content": "import test from 'node:test';\n\n// Escreva os testes de adicionar, listar, remover e das falhas de storage em diretório temporário.\ntest.todo('CLI de notas');\n"},
+]
 
 # A consulta de compatibilidade é extensão opt-in e usa o recurso realmente avaliado.
 CONTENT["14.07"]["optional"] = True
@@ -636,7 +658,7 @@ _OFFICIAL_DOCS = {
     '14.04': 'https://nodejs.org/api/esm.html',
     '14.05': 'https://nodejs.org/api/fs.html',
     '14.06': 'https://nodejs.org/api/process.html',
-    '14.07': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Iterator',
+    '14.07': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try',
     '14.08': 'https://nodejs.org/api/fs.html',
     '14.09': 'https://git-scm.com/docs/git-status',
     '14.10': 'https://nodejs.org/api/esm.html',
@@ -644,3 +666,14 @@ _OFFICIAL_DOCS = {
 }
 for _card_id, _official_url in _OFFICIAL_DOCS.items():
     CONTENT[_card_id]["docs"] = _official_url
+
+# Revisão editorial de 05/10/2026: enunciado, starter e contrato realinhados.
+CONTENT["14.07"]["content_version"] = 2
+CONTENT["14.13"]["content_version"] = 2
+
+CONTENT["14.08"]["rubric"] = (
+    "Entrega 1 — parse de add/list/remove fica na borda da CLI; serviço recebe argumentos explícitos e domínio não lê process.argv nem importa fs.",
+    "Entrega 2 — repository é injetável; testes comprovam ordem, remoção, not-found e rejeição antes de alterar o estado.",
+    "Entrega 3 — JSON inválido produz erro contextual e preserva os bytes; gravação escreve temporário no mesmo diretório e só então renomeia.",
+    "Entrega 4 — testes de domínio e adapter usam diretório temporário; checklist e reflexão registram comando, formato de dados e política de falha observada.",
+)

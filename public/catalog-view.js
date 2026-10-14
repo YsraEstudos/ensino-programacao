@@ -247,10 +247,11 @@
         <article
           class="catalog-learning-card ${ctx.isExerciseDone(item.id) ? "is-complete" : ""}">
           <div
-            class="catalog-learning-meta"><span>${ctx.esc(item.id)} · ${ctx.esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ` · ${order + 1} de ${core.length}`}</span><span>${ctx.isExerciseDone(item.id) ? "✓ concluído" : `estimativa ${ctx.esc(item.duration)}`}</span>
+            class="catalog-learning-meta"><span>${ctx.esc(item.id)} · ${ctx.esc(item.kind)}${item.optional ? " · EXTRA OPT-IN" : ` · ${order + 1} de ${core.length}`}${Number(item.stage) >= 4 ? (item.autoTested ? " · corrigido por testes" : " · revisão própria") : ""}</span><span>${ctx.isExerciseDone(item.id) ? "✓ concluído" : `estimativa ${ctx.esc(item.duration)}`}</span>
             </div>
             <h3>${ctx.esc(item.title)}
             </h3>
+            <p class="catalog-state-line"><span class="learning-state-caption">Estado:</span> ${window.DevPathLearningPaths?.badgeMarkup(ctx.progress?.exerciseLearning?.[item.id] || null) || ""}</p>
             <p>${ctx.renderInlineCode(item.firstResponse?.action || item.objective)}
             </p><a
               href="#/javascript/${ctx.esc(item.id)}"

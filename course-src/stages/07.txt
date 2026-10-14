@@ -39,6 +39,8 @@ const ativos = usuarios
 O aluno descreve em português a intenção de cada estágio. Só depois executa. Isso reforça leitura
 semântica em vez de decorar nomes de métodos.
 GATE DE DOMINIO
-Avance quando a implementacao principal e o mini-projeto passarem testes ocultos e voce
-conseguir explicar mutacao/estado/controle relevante. Uma dica estrutural e permitida apenas
-no projeto.
+Avance quando as atividades de implementacao e o mini-projeto passarem em todos os testes
+automaticos (a plataforma roda os testes no navegador e mostra quais falham e por que) e voce
+conseguir explicar mutacao/estado/controle relevante. Refatoracao, leitura e analise escrita
+seguem com revisao propria, pela rubrica. Os testes cobrem os exemplos e os casos de borda
+publicados no cartao; nao sao secretos. Uma dica estrutural e permitida apenas no projeto.

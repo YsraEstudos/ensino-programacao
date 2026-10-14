@@ -1,0 +1,1 @@
+export function montarWidget(document) { const form=document.querySelector('#f'); const input=document.querySelector('#text'); const list=document.querySelector('#list'); document.querySelector('#add').addEventListener('click',()=>{if(input.value){const li=document.createElement('li');li.textContent=input.value;list.append(li);}}); }

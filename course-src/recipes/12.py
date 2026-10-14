@@ -72,7 +72,7 @@ CONTENT = {
      'senão throw'),
     'op falha duas vezes e resolve na 3ª, max=3 -> 3 chamadas, resultado',
     ('max=1 com falha -> 1 chamada e erro original; delay só entre tentativas; max<=0 -> '
-     'RangeError'),
+     'rejeição de validação antes da primeira chamada'),
     'Repetir infinitamente ou esperar após última falha.',
     ('Defina se max conta tentativas totais.',
      'Incremente antes de executar op.',
@@ -84,6 +84,7 @@ CONTENT = {
         kind='PARSONS',
     estimated=10,
     runtime='Node.js 24 LTS',
+    requires=('errors.types',),
     **_lesson('async.retry', ('blocos embaralhados: attempt=0; try await op(); catch; se attempt<max await delay; '
      'senão throw'), 'Repetir infinitamente ou esperar após última falha.', ('Defina se max conta tentativas totais.',
      'Incremente antes de executar op.',
@@ -600,8 +601,8 @@ _LITERAL_STARTERS = {
     '12.08': "dashboard.js: export function criarDashboard(fetcher) {\n  // fetcher('/profile') e fetcher('/stats') retornam Response de fixtures locais.\n  // TODO: modelar loading/error/success, validar status e JSON e ignorar resposta antiga.\n}\n",
     '12.09': "material.md: const callback = () => 3;\nconst nativo = Promise.try(callback);\nconst comFallback = (() => {\n  try { return Promise.resolve(callback()); }\n  catch (erro) { return Promise.reject(erro); }\n})();\n\nCompare quando callback roda e como um throw síncrono vira rejeição. Promise.resolve().then(callback) adia a chamada para uma microtask.",
     '12.10': "material.md: // Troca 1\nRequest: GET /itens\nResponse: 200, Content-Type: application/json, body=[{\"id\":1}]\n\n// Troca 2\nRequest: POST /itens\nResponse: 201, Location: /itens/2, Content-Type: application/json, body={\"id\":2}\n\n// Troca 3\nRequest: GET /ausente\nResponse: 404, Content-Type: text/plain, body=not found\n\n// Troca 4\nResponse: 204 No Content, sem corpo.",
-    '12.11': "client.js: async function carregar(url, fetcher) {\n  const resposta = await fetcher(url);\n  return resposta.json();\n}\n\n// Fixture pública: status 503, Content-Type application/json, corpo {\"erro\":\"indisponível\"}.\n// O cliente também precisa tratar status, cabeçalho, JSON inválido e cancelamento.",
-    '12.12': "dates.js: const entradas = ['2025-03-08', '2025-03-08T00:30:00Z', '08/03/2025'];\nfor (const texto of entradas) {\n  console.log(texto, Date.parse(texto));\n}\n\n// Compare data ISO sem horário, instante UTC e formato local ambíguo.",
+    '12.11': "client.js: export async function carregar(url, fetcher) {\n  const resposta = await fetcher(url);\n  return resposta.json();\n}\n\n// Fixture pública: status 503, Content-Type application/json, corpo {\"erro\":\"indisponível\"}.\n// O cliente também precisa tratar status, cabeçalho, JSON inválido e cancelamento.",
+    '12.12': "dates.js: export function parseIsoDate(text) { return Date.parse(text); }\nexport function isFresh(savedMs, nowMs, ttlMs) { return nowMs - savedMs <= ttlMs; }\n\n// BUG: datas inválidas e TTL negativo não são tratados; o limite deveria ser exclusivo.",
     '12.13': "stream.js: async function* valores() {\n  yield 1;\n  await Promise.resolve();\n  yield 2;\n}\n\nasync function comparar() {\n  const vistos = [];\n  for await (const valor of valores()) {\n    vistos.push(valor);\n    console.log('parcial', vistos.join(','));\n  }\n  const completo = typeof Array.fromAsync === 'function'\n    ? await Array.fromAsync(valores())\n    : 'Array.fromAsync indisponível neste runtime';\n  console.log('coleção completa', completo);\n}\n\nreturn comparar();",
     '12.14': "material.md: const erros = [new Error('rede'), new Error('timeout')];\nconst erro = new AggregateError(erros, 'Todas as fontes falharam');\n\n// Inspecione message, errors e a diferença entre este erro agregado e o primeiro erro.",
 }
@@ -660,3 +661,10 @@ _OFFICIAL_DOCS = {
 }
 for _card_id, _official_url in _OFFICIAL_DOCS.items():
     CONTENT[_card_id]["docs"] = _official_url
+
+CONTENT["12.08"]["rubric"] = (
+    "Entrega 1 — API aceita fetcher injetado para /profile e /stats e valida response.ok, JSON e campos mínimos antes de atualizar a tela.",
+    "Entrega 2 — estados loading, error e success são observáveis; erro HTTP/JSON preserva a mensagem e retry inicia uma nova geração.",
+    "Entrega 3 — timeout/cancelamento encerra a espera e limpa o indicador; resposta antiga que termina por último não substitui a atual.",
+    "Entrega 4 — checklist registra sucesso, 404 cumprido, JSON inválido, retry, timeout e resposta fora de ordem; reflexão anota o comando e confirma que não houve rede real.",
+)

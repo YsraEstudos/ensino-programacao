@@ -1,0 +1,1 @@
+import{criarSlug,limitar,padroes,VERSAO,type Opcoes}from'./src/index.js';const accented:string=criarSlug('  Olá Mundo  ');const defaultLimit:string=limitar('x'.repeat(70));const customLimit:string=limitar('abcdefghijkl',5);const options:Opcoes=padroes;console.log(accented,defaultLimit.length,customLimit,options.separador,VERSAO);

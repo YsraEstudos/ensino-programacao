@@ -1,0 +1,1 @@
+{"compilerOptions":{"target":"ES2022","module":"ESNext","strict":true,"declaration":true,"isolatedDeclarations":true,"allowImportingTsExtensions":true,"rewriteRelativeImportExtensions":true,"outDir":"dist","rootDir":"src"},"include":["src/index.ts","src/interno.ts"]}

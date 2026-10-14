@@ -1,0 +1,174 @@
+ M .gitignore
+ M README.md
+ M course-src/bridges.md
+ M course-src/build-public-curriculum.mjs
+ M course-src/build_coverage.py
+ M course-src/compile_content.py
+ M course-src/publication-overrides.json
+ M course-src/recipes/00.py
+ M course-src/recipes/01.py
+ M course-src/recipes/02.py
+ M course-src/recipes/03.py
+ M course-src/recipes/04.py
+ M course-src/recipes/05.py
+ M course-src/recipes/06.py
+ M course-src/recipes/07.py
+ M course-src/recipes/08.py
+ M course-src/recipes/09.py
+ M course-src/recipes/10.py
+ M course-src/recipes/11.py
+ M course-src/recipes/12.py
+ M course-src/recipes/13.py
+ M course-src/recipes/14.py
+ M course-src/recipes/15.py
+ M course-src/recipes/16.py
+ M course-src/recipes/17.py
+ M course-src/recipes/18.py
+ M course-src/recipes/19.py
+ M course-src/recipes/20.py
+ M course-src/recipes/21.py
+ M course-src/stages/05.txt
+ M course-src/stages/06.txt
+ M course-src/stages/07.txt
+ M course-src/stages/08.txt
+ M course-src/stages/09.txt
+ M course-src/stages/10.txt
+ M course-src/stages/11.txt
+ M course-src/stages/12.txt
+ M course-src/stages/13.txt
+ M course-src/stages/14.txt
+ M course-src/stages/15.txt
+ M course-src/stages/16.txt
+ M course-src/stages/17.txt
+ M course-src/stages/18.txt
+ M course-src/stages/19.txt
+ M course-src/stages/20.txt
+ M course-src/stages/21.txt
+ M course-src/stages/22.txt
+ M course-src/stages/23.txt
+ M docs/README.md
+ M docs/organizacao-projeto.md
+ M eslint.config.mjs
+ M lib/course-exercise-ids.ts
+ M lib/progress-contract.json
+ M lib/progress-evidence.ts
+ M lib/progress-model.ts
+ M lib/progress-sanitize.ts
+ M package-lock.json
+ M package.json
+ M public/app.js
+ M public/catalog-view.js
+ M public/compiler-assets.js
+ M public/course-catalog.json
+ M public/course-controller.js
+ M public/course-runner.js
+ M public/devpath.html
+ M public/diagnostic-ui.js
+ M public/module-graph.js
+ M public/progress-migrations.js
+ M public/progress-model.js
+ M public/progress-sync.js
+ M public/stage00-preparation.js
+ M public/stage00-ui.js
+ M public/stage01-ui.js
+ M public/stage02-ui.js
+ M public/stage03-ui.js
+ M public/styles.css
+ M public/sync-notifications.js
+ M scripts/build-module-compiler.mjs
+ M scripts/build-progress-model.mjs
+ M scripts/compiler-entry.mjs
+ M scripts/test-course-runner.mjs
+ M scripts/test-module-graph.mjs
+ M scripts/test-progress-api.mjs
+ M scripts/test-progress-migrations.mjs
+ M scripts/test-progress-model.mjs
+ M scripts/test-progress-queue.mjs
+ M scripts/test-stage00-ui.mjs
+ M scripts/test-stage02-ui.mjs
+ M scripts/validate-course-catalog.mjs
+ M tsconfig.json
+?? .claude/
+?? course-src/assessments.json
+?? course-src/compatibility-overrides.json
+?? course-src/feature-matrix.json
+?? course-src/guided-preparation.mjs
+?? course-src/learning-metadata.json
+?? course-src/mutants/
+?? course-src/official-docs.json
+?? course-src/prerequisite-primers.json
+?? course-src/runtime-baseline.json
+?? course-src/solutions/
+?? course-src/starters/
+?? course-src/tests/
+?? docs/analise-curricular-2026-10-05.diagnostico-original.md
+?? docs/analise-curricular-2026-10-05.md
+?? docs/auditoria-atividades-2026-10-13/
+?? docs/planos/2026-10-09-plano-por-fases.md
+?? docs/planos/plano-mestre-diagnostico-integral-devpath.md
+?? docs/planos/plano-revisao-editorial-e-contexto.md
+?? docs/superpowers/
+?? lib/learning-progress.ts
+?? native-using.test.mjs
+?? public/course-assessment.js
+?? public/course-assessments.json
+?? public/course-dom-runner.js
+?? public/course-network.js
+?? public/course-node-runtime.js
+?? public/course-project-export.js
+?? public/course-test-runtime.js
+?? public/course-tests.json
+?? public/course-typechecker.js
+?? public/course-worker-preview.js
+?? public/learning-event-queue.js
+?? public/learning-paths.js
+?? public/learning-progress.js
+?? public/local-checkpoints.js
+?? public/local-project-panel.js
+?? scripts/browser-task6-check.js
+?? scripts/check-local-course-cli.mjs
+?? scripts/check-local-course.mjs
+?? scripts/check-task-8a-14-05-nodevirtual.mjs
+?? scripts/check-task-8a-14-08-native.mjs
+?? scripts/course-runner-harness.mjs
+?? scripts/learning-metadata.mjs
+?? scripts/report-learning-coverage.mjs
+?? scripts/task-8b-stage15.mjs
+?? scripts/task-8b-stages16-19.mjs
+?? scripts/task-9-canonical-regeneration.mjs
+?? scripts/task-9-dom-21-09.mjs
+?? scripts/task-9-readmes.mjs
+?? scripts/task-9-reference-gates.mjs
+?? scripts/task-9-remaining-assessments.mjs
+?? scripts/task-9-stage20.mjs
+?? scripts/task-9-stage21.mjs
+?? scripts/task-9-stage22.mjs
+?? scripts/task-9-stage23.mjs
+?? scripts/task-9-starter-gate.mjs
+?? scripts/test-check-local-course-cli.mjs
+?? scripts/test-course-assessment.mjs
+?? scripts/test-course-catalog-validator.mjs
+?? scripts/test-course-controller.mjs
+?? scripts/test-course-dom.mjs
+?? scripts/test-course-network.mjs
+?? scripts/test-course-node-runtime.mjs
+?? scripts/test-course-test-runtime.mjs
+?? scripts/test-course-tests.mjs
+?? scripts/test-course-typecheck.mjs
+?? scripts/test-course-worker-preview.mjs
+?? scripts/test-learning-coverage.mjs
+?? scripts/test-learning-event-queue.mjs
+?? scripts/test-learning-metadata.mjs
+?? scripts/test-learning-mode-confirm.mjs
+?? scripts/test-learning-paths-review.mjs
+?? scripts/test-learning-paths.mjs
+?? scripts/test-learning-progress.mjs
+?? scripts/test-learning-sync-status.mjs
+?? scripts/test-project-export.mjs
+?? scripts/test-task-8a-evidence.mjs
+?? scripts/test-task-8a-review-fixes.mjs
+?? scripts/test-task-9-local-evidence.mjs
+?? scripts/test-task-9-package-22-08.mjs
+?? scripts/test-task-9-typed-suite.mjs
+?? scripts/typecheck-entry.mjs
+?? scripts/typecheck-host.mjs

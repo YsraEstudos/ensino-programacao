@@ -1,0 +1,1 @@
+Repositório descartável: main tem README 'uso'; feature acrescenta 'exemplo'; working tree modifica config.json com segredo fictício. Inspecione status, diff staged, base e resultado combinado antes de concluir. Faça a atividade em Git local isolado.

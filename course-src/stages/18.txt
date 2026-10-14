@@ -37,6 +37,7 @@ function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
 O generic relaciona três coisas: objeto, chave válida e tipo do valor naquela chave. Esse padrão aparece
 em formulários, tabelas e APIs genéricas.
 GATE DE DOMINIO
-Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
-justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
-parte do contrato.
+Avance com typecheck strict verde rodando `tsc --noEmit` no seu computador (o site ainda
+nao executa o compilador), testes runtime quando aplicavel, zero any/cast sem justificativa e
+um exercicio de transferencia de tipos feito sem dica. Type tests contam como parte do
+contrato. A conclusao no site e revisao propria.

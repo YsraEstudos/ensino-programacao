@@ -1,0 +1,226 @@
+- generic [ref=e1]:
+  - link "Pular para o conteúdo" [ref=e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=e3]:
+    - complementary "Navegação principal" [ref=e4]:
+      - link "DevPath início" [ref=e5] [cursor=pointer]:
+        - /url: "#/home"
+        - generic [ref=e6]: </>
+        - generic [ref=e7]: devpath.
+      - generic [ref=e8]: ESPAÇO DE APRENDIZADO
+      - navigation [ref=e9]:
+        - link "Início" [ref=e10] [cursor=pointer]:
+          - /url: "#/home"
+          - generic [ref=e11]: ⌂
+          - text: Início
+        - link "Exercícios" [ref=e12] [cursor=pointer]:
+          - /url: "#/catalog"
+          - generic [ref=e13]: ▤
+          - text: Exercícios
+        - link "Revisão ↗" [ref=e14] [cursor=pointer]:
+          - /url: "#/review"
+          - generic [ref=e15]: ↻
+          - text: Revisão
+          - generic [ref=e16]: ↗
+      - generic [ref=e17]:
+        - text: SUA TRILHA ATIVA
+        - generic [ref=e18]: 01 / 01
+      - link "JavaScript · Exercícios Diagnóstico + etapas 00–23 · 261 atividades ›" [ref=e19] [cursor=pointer]:
+        - /url: "#/catalog"
+        - generic [ref=e21]:
+          - strong [ref=e22]: JavaScript · Exercícios
+          - generic [ref=e23]: Diagnóstico + etapas 00–23 · 261 atividades
+        - generic [ref=e24]: ›
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]: ✳
+          - paragraph [ref=e28]: Um pequeno passojá muda o que vocêconsegue construir.
+        - generic [ref=e29]:
+          - generic [ref=e30]: D
+          - generic [ref=e31]:
+            - strong [ref=e32]: Conta conectada
+            - generic [ref=e33]: Carregando perfil…
+          - button "Opções do perfil" [ref=e34] [cursor=pointer]: ···
+    - main [ref=e35]:
+      - generic [ref=e36]:
+        - navigation "Navegação estrutural" [ref=e37]:
+          - link "Seu espaço" [ref=e300] [cursor=pointer]:
+            - /url: "#/home"
+          - generic [ref=e301]: /
+          - link "JavaScript" [ref=e302] [cursor=pointer]:
+            - /url: "#/catalog"
+          - generic [ref=e303]: /
+          - link "Etapa 12" [ref=e304] [cursor=pointer]:
+            - /url: "#/javascript/12.01"
+          - generic [ref=e305]: /
+          - strong [ref=e306]: Ordem do event loop
+        - generic [ref=e41]:
+          - generic [ref=e42]: salvo neste navegador
+          - button "Sobre o DevPath" [ref=e44] [cursor=pointer]: "?"
+      - article [active] [ref=e308]:
+        - link "← Voltar à trilha de JavaScript" [ref=e309] [cursor=pointer]:
+          - /url: "#/catalog"
+        - paragraph [ref=e310]:
+          - generic [ref=e311]: "Estado desta atividade:"
+          - generic [ref=e312]: Estudada
+        - region [ref=e313]:
+          - generic [ref=e314]:
+            - text: ESCOLHA SEU CAMINHO
+            - heading "Como você quer começar?" [level=2] [ref=e315]
+            - paragraph [ref=e316]: Você pode estudar primeiro ou tentar recuperar a ideia de memória. Sua escolha fica salva nesta atividade.
+          - generic [ref=e317]:
+            - button "Aprender este conceito" [pressed] [ref=e318] [cursor=pointer]
+            - button "Tentar de memória" [ref=e319] [cursor=pointer]
+            - button "Começar nova tentativa de memória sem ajuda" [ref=e320] [cursor=pointer]
+        - region "Estado da aprendizagem" [ref=e321]:
+          - strong [ref=e322]: "Estado histórico: Estudada"
+          - generic [ref=e323]: A verificação pelos testes publicados está pendente ou desatualizada.
+          - generic [ref=e324]: "Origem da evidência atual: Aguardando avaliação · percurso com apoio registrado nesta tentativa"
+          - group "Rubrica declarada da avaliação" [ref=e325]:
+            - generic [ref=e327]:
+              - checkbox "registre A,B,P,T e explique fila de microtasks/timer com previsão anterior." [ref=e328]
+              - generic [ref=e329]: registre A,B,P,T e explique fila de microtasks/timer com previsão anterior.
+            - generic [ref=e330]: Marque os critérios após revisar sua resposta. A rubrica complementa o resultado técnico.
+        - generic [ref=e331]:
+          - generic [ref=e332]:
+            - generic [ref=e333]: JAVASCRIPT / ETAPA 12 · HTTP, PROMISES E TEMPO
+            - generic [ref=e334]: "12.01"
+          - heading "Ordem do event loop" [level=1] [ref=e335]
+          - paragraph [ref=e336]: Escreva uma linha para pilha atual, outra para microtasks e outra para a próxima task antes de prever a ordem.
+          - generic [ref=e337]:
+            - generic [ref=e338]: 6 min · no seu ritmo
+            - generic [ref=e340]: Atividade 3 de 12 · PREDICT
+            - generic [ref=e341]: Uma ideia por vez
+        - navigation "Roteiro da atividade" [ref=e342]:
+          - generic [ref=e343]:
+            - generic [ref=e344]: SEU CAMINHO NESTA ATIVIDADE
+            - generic [ref=e345]: Aprender
+          - generic [ref=e346]:
+            - button "01 Aprender Entenda a ideia" [ref=e347] [cursor=pointer]:
+              - generic [ref=e348]: "01"
+              - generic [ref=e349]:
+                - strong [ref=e350]: Aprender
+                - generic [ref=e351]: Entenda a ideia
+            - button "02 Desafio Conheça a tarefa" [ref=e352] [cursor=pointer]:
+              - generic [ref=e353]: "02"
+              - generic [ref=e354]:
+                - strong [ref=e355]: Desafio
+                - generic [ref=e356]: Conheça a tarefa
+            - button "03 Prever Pense antes de rodar" [ref=e357] [cursor=pointer]:
+              - generic [ref=e358]: "03"
+              - generic [ref=e359]:
+                - strong [ref=e360]: Prever
+                - generic [ref=e361]: Pense antes de rodar
+            - button "04 Praticar Confira no código" [ref=e362] [cursor=pointer]:
+              - generic [ref=e363]: "04"
+              - generic [ref=e364]:
+                - strong [ref=e365]: Praticar
+                - generic [ref=e366]: Confira no código
+            - button "05 Explicar Conte o raciocínio" [ref=e367] [cursor=pointer]:
+              - generic [ref=e368]: "05"
+              - generic [ref=e369]:
+                - strong [ref=e370]: Explicar
+                - generic [ref=e371]: Conte o raciocínio
+        - paragraph [ref=e372]: Leia a explicação e o exemplo resolvido. Depois registre sua previsão, pratique e explique o que descobriu. A previsão pode estar errada; ela serve para você comparar seu raciocínio.
+        - generic [ref=e373]:
+          - text: "01"
+          - generic [ref=e374]: PASSO 01 · SEU ROTEIRO
+          - heading "Entenda a ideia, passo a passo" [level=2] [ref=e375]
+          - paragraph [ref=e376]: Execute a pilha síncrona. Depois drene fila de microtasks. Então processe a próxima task.
+          - list [ref=e377]:
+            - listitem [ref=e378]:
+              - generic [ref=e379]: "1"
+              - paragraph [ref=e380]: Execute a pilha síncrona.
+            - listitem [ref=e381]:
+              - generic [ref=e382]: "2"
+              - paragraph [ref=e383]: Depois drene fila de microtasks.
+            - listitem [ref=e384]:
+              - generic [ref=e385]: "3"
+              - paragraph [ref=e386]: Então processe a próxima task.
+            - listitem [ref=e387]:
+              - generic [ref=e388]: "4"
+              - paragraph [ref=e389]: Preveja a ordem entre uma resposta já resolvida e uma notificação de interface agendada por timer; identifique cada fila.
+          - heading "Exemplo resolvido" [level=3] [ref=e390]
+          - list [ref=e391]:
+            - listitem [ref=e392]: Um log síncrono antes e depois de queueMicrotask permanece na mesma pilha; a microtask roda após essa pilha e antes do callback setTimeout.
+          - complementary [ref=e393]:
+            - heading "Guarde esta ideia" [level=3] [ref=e394]
+            - paragraph [ref=e395]: Tratar timeout 0 como execução imediata.
+            - paragraph [ref=e396]: Preveja a ordem entre uma resposta já resolvida e uma notificação de interface agendada por timer; identifique cada fila.
+        - generic [ref=e397]:
+          - text: "02"
+          - generic [ref=e398]: PASSO 02 · SEU ROTEIRO
+          - heading "Conheça o desafio" [level=2] [ref=e399]
+          - paragraph [ref=e400]: Sem executar, preveja a ordem dos logs e explique por que atraso zero não torna um timer síncrono.
+          - list [ref=e401]:
+            - listitem [ref=e402]: Sem executar, preveja a ordem dos logs e explique por que atraso zero não torna um timer síncrono.
+          - generic [ref=e403]:
+            - strong [ref=e404]: Como responder
+            - paragraph [ref=e405]: Linha do tempo com ordenação textual e controles de mover para cima/baixo por teclado.
+          - group [ref=e406]:
+            - generic "Casos de borda que fazem parte do contrato" [ref=e407] [cursor=pointer]
+            - paragraph [ref=e408]: "Leia antes de implementar: estes comportamentos também serão conferidos."
+            - list [ref=e409]:
+              - listitem [ref=e410]: dois then encadeados e timer -> microtasks drenam antes do timer, com FIFO entre microtasks agendadas
+          - group [ref=e411]:
+            - generic "Materiais desta atividade" [ref=e412] [cursor=pointer]
+          - generic [ref=e413]:
+            - generic [ref=e414]: LEIA O ARQUIVO ANTES DE RESPONDER
+            - generic [ref=e415]:
+              - generic [ref=e416]: main.js
+              - code [ref=e418]: console.log('A'); setTimeout(() => console.log('T'), 0); Promise.resolve().then(() => console.log('P')); console.log('B');
+        - generic [ref=e419]:
+          - text: "03"
+          - generic [ref=e420]: PASSO 03 · SEU ROTEIRO
+          - heading "Prever antes de executar" [level=2] [ref=e421]
+          - paragraph [ref=e422]: Escreva uma linha para pilha atual, outra para microtasks e outra para a próxima task antes de prever a ordem. Antes de executar ou abrir a explicação.
+          - generic [ref=e423]:
+            - paragraph [ref=e424]: Registre os rótulos separados por vírgula antes de executar; depois compare a ordem observada.
+            - generic [ref=e426]:
+              - generic [ref=e427]: Ordem dos logs
+              - textbox "Ordem dos logs" [ref=e428]
+          - button "Registrar resposta" [ref=e429] [cursor=pointer]:
+            - text: Registrar resposta
+            - generic [ref=e430]: →
+        - generic [ref=e431]:
+          - text: "04"
+          - generic [ref=e432]: PASSO 04 · SEU ROTEIRO
+          - heading "Sua vez de praticar" [level=2] [ref=e433]
+          - status [ref=e434]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - generic [ref=e435]:
+          - text: "05"
+          - generic [ref=e436]: PASSO 05 · SEU ROTEIRO
+          - heading "Explique o que você descobriu" [level=2] [ref=e437]
+          - status [ref=e438]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - navigation "Sequência de estudo" [ref=e439]:
+          - link "← 12.11 · Response tem corpo consumível" [ref=e440] [cursor=pointer]:
+            - /url: "#/javascript/12.11"
+          - link "Ver trilha" [ref=e441] [cursor=pointer]:
+            - /url: "#/catalog"
+          - link "12.04 · Microtask vs task →" [ref=e442] [cursor=pointer]:
+            - /url: "#/javascript/12.04"
+        - region [ref=e443]:
+          - heading "Tarefa de transferência independente" [level=2] [ref=e444]
+          - paragraph [ref=e445]: Use o novo caso abaixo. A avaliação é feita pela rubrica declarada e não reaproveita o resultado do exercício principal.
+          - list [ref=e446]:
+            - listitem [ref=e447]:
+              - code [ref=e448]: transfer.md
+              - text: ": # Transferência 12.01 Tarefa independente — Cenário independente: CLI com log, timer e continuação Promise. Critérios já publicados: ordem observada e motivo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados. A entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+          - generic [ref=e449]:
+            - text: Explique e aplique a ideia neste caso
+            - textbox "Explique e aplique a ideia neste caso" [ref=e450]:
+              - /placeholder: Descreva a decisão e por que ela se aplica ao novo caso.
+          - group "Rubrica declarada" [ref=e451]:
+            - generic [ref=e453]:
+              - checkbox "ordem observada e motivo" [ref=e454]
+              - generic [ref=e455]: ordem observada e motivo
+            - generic [ref=e456]:
+              - 'checkbox "Casos avaliáveis: Cenário independente: CLI com log, timer e continuação Promise. Critérios já publicados: ordem observada e motivo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados." [ref=e457]'
+              - generic [ref=e458]: "Casos avaliáveis: Cenário independente: CLI com log, timer e continuação Promise. Critérios já publicados: ordem observada e motivo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+          - status [ref=e459]: Conclua uma avaliação principal atual antes de registrar a transferência.
+          - button "Registrar transferência" [disabled] [ref=e460]
+          - status [ref=e461]
+      - generic [ref=e259]:
+        - generic [ref=e260]: DEVPATH ✳ APRENDA CONSTRUINDO
+        - generic [ref=e261]: "Prévia local: seu progresso fica neste navegador."
+  - status

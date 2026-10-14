@@ -1,0 +1,10 @@
+import { RAIO_PADRAO_METROS, dentroDoRaio } from "../domain/raio.js";
+
+export function gerarRelatorio(repositorio, raioMetros = RAIO_PADRAO_METROS) {
+  const dentro = [];
+  const fora = [];
+  for (const entrega of repositorio.listar()) {
+    (dentroDoRaio(entrega.distanciaMetros, raioMetros) ? dentro : fora).push(entrega.id);
+  }
+  return { raioMetros, dentro, fora };
+}

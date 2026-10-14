@@ -1,0 +1,1 @@
+export function validar({ nome, quantidade }) { return quantidade ? { ok: true, nome: String(nome).trim(), quantidade } : { ok: false, erros: { quantidade: 'inválida' }, valores: { nome, quantidade } }; }

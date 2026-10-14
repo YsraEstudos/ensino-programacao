@@ -7,7 +7,8 @@ Carga
 Nivel curricular
 2.0/5
 PRE-REQUISITOS
-Funcoes, loops, arrays. Trilha paralela: nao bloqueia DOM/async.
+Funcoes, loops, arrays, objetos (06) e Map/Set (07): as atividades usam Set.has, Map de
+adjacencia e nos de arvore como objetos. Trilha paralela: nao bloqueia DOM/async.
 Resultados de aprendizagem
 • Quebrar problemas em casos e subproblemas.
 • Escrever pseudocódigo antes de casos médios/difíceis.
@@ -47,5 +48,5 @@ aluno contrasta com busca linear e discute pré-condição de ordenação.
 
 GATE DE DOMINIO
 TRILHA PARALELA: esta etapa nao bloqueia o avanco para DOM/async. Dominio recomendado:
-resolver implementacao + uma questao de complexidade + um problema de transferencia
-sem dica estrutural.
+resolver as atividades de implementacao (corrigidas por testes automaticos) + uma questao de
+complexidade + um problema de transferencia sem dica estrutural.

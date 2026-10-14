@@ -1,0 +1,69 @@
+
+> devpath@0.1.0 test:phase2
+> node --test scripts/test-phase2-core.mjs scripts/test-phase2-artifacts.mjs scripts/test-phase2-dynamic.mjs scripts/test-phase2-rubrics.mjs scripts/test-phase2-contracts.mjs scripts/test-phase2-feedback.mjs scripts/test-phase2-diagnostic.mjs scripts/test-phase2-study-time.mjs scripts/test-phase2-study-time-ui.mjs scripts/test-phase2-prior-attempts.mjs scripts/test-phase2-workers.mjs
+
+Phase 2 artifacts contract passed: 19 prose starters, 15 executable decisions, 44 declared decisions, structured predictions, and bundle evidence.
+✔ scripts\test-phase2-artifacts.mjs (403.1527ms)
+Task 4 contracts: 156 suites, 1045 annotated assertions, 998 stable case IDs.
+✔ scripts\test-phase2-contracts.mjs (526.8865ms)
+Task 1 core contracts passed for 69 activities (17 materialized starters, 30 assessments added).
+✔ scripts\test-phase2-core.mjs (8089.4764ms)
+✔ D catalog appends four bands and keeps the published prerequisites explicit (2.4031ms)
+✔ each new diagnostic accepts unknown for study and renders the bounded, non-certifying recommendation (5.656ms)
+✔ an incomplete prediction cannot be submitted, while each complete band maps only to its declared entry (1580.8319ms)
+✔ unknown and wrong answers can be studied but never recommend an entry (182.861ms)
+✔ a plausible but incorrect prediction keeps feedback available and blocks the mapped entry (132.5408ms)
+✔ out-of-order synchronous output blocks the foundational entry but still shows the explanation (103.2099ms)
+✔ alias and shallow-copy misconceptions block the competencies they are meant to cover (557.577ms)
+✔ help requested before submitting blocks eligibility while preserving study feedback (75.0611ms)
+✔ only a correct, complete, unassisted recall recommends its mapped entry and survives reload (97.651ms)
+✔ post-feedback edit marks only the new answer assisted; reverting and a new recall cannot reuse the old snapshot (148.6411ms)
+✔ 16.01 protected type contract accepts the reference and rejects the learner starter (2929.255ms)
+✔ 16.01 internal control mutant is rejected by protected assertions (926.4239ms)
+✔ 17.02 protected type contract accepts the reference and rejects the learner starter (1506.4403ms)
+✔ 17.02 internal control mutant is rejected by protected assertions (901.3144ms)
+✔ 18.02 protected type contract accepts the reference and rejects the learner starter (1373.5278ms)
+✔ 19.01 protected type contract accepts the reference and rejects the learner starter (1325.761ms)
+✔ 19.01 internal control mutant is rejected by protected assertions (669.0429ms)
+✔ 19.02 protected type contract accepts the reference and rejects the learner starter (1369.8842ms)
+✔ 19.02 internal control mutant is rejected by protected assertions (644.3264ms)
+✔ 19.06 protected type contract accepts the reference and rejects the learner starter (1430.6445ms)
+✔ 19.06 internal control mutant is rejected by protected assertions (698.5229ms)
+✔ 18.02 inlined protected behavior resolves patch.ts from its synthetic root and executes the real suite (451.8888ms)
+✔ all converted JavaScript references pass their protected suites in a local DOM-capable harness (751.1783ms)
+✔ older freeform predictions and incomplete structured predictions stay preserved (1.8092ms)
+✔ 12.01 timer demonstration emits and compares the observed log order (126.4873ms)
+✔ 12.04 timer demonstration emits and compares the observed log order (121.862ms)
+✔ first semantic mismatch binds by case id, reports safe values and never reevaluates captured input (6.5065ms)
+✔ module graph binds the annotated matcher to the correct ID and worker runtime once (1028.7851ms)
+✔ first failure preserves not/resolves/rejects semantics and does not invent input values (57.4667ms)
+✔ assessment exposes semantic feedback only for a failed behavioral result (39.6802ms)
+✔ old version data remains readable without being copied into the current attempt (6.1433ms)
+✔ versioned older attempts and multi-file draft strings are shown as saved, with no migration (1.9873ms)
+✔ no panel for unchanged versions, unknown IDs or empty historical values (1.8238ms)
+Phase 2 rubric and capstone gate passed.
+✔ scripts\test-phase2-rubrics.mjs (673.2939ms)
+✔ UI requires opt-in and counts only current visible focused activity across navigation and dispose (155.6695ms)
+✔ storage revocation stops this tab immediately and never recreates the opted-out record (28.5517ms)
+✔ restoring a page from navigation resumes measurement without counting its absence (26.5327ms)
+✔ normal remote updates do not write back and start a cross-tab storage event loop (26.9802ms)
+✔ opt-out clears records, unrelated storage survives, and denied persistence is reported accurately (47.7679ms)
+✔ time is off by default and records only consented visible focused activity time (6.4328ms)
+✔ navigation, reload and opt-out preserve totals then erase local records (4.1089ms)
+✔ malformed storage and denied persistence do not break learning (2.5191ms)
+✔ missing storage reports failed persistence while the counter works in memory (1.9954ms)
+✔ two tabs preserve separate activity totals and cannot restore revoked consent (1.742ms)
+Browser check prepared at output\fase2\workers\task7-browser-check.js; execute it with the Task 7 Playwright CLI session after the site assets are wired.
+✔ 21.04 reference passes the LRU contract (1443.8932ms)
+✔ 21.04 mutant fifo-hit is rejected by the new suite (183.466ms)
+✔ 21.04 mutant fn-throw-poisons-cache is rejected by the new suite (153.9538ms)
+✔ the immutable old 21.04 suite survives fn-throw-poisons-cache (141.2125ms)
+✔ 21.05 async fallback works when Worker is unavailable (157.4876ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 52
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 18642.0739

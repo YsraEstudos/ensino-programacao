@@ -1,0 +1,4 @@
+import {test} from 'node:test'; import assert from 'node:assert/strict'; import {userFromResponse} from './perfil.ts';
+test('aceita payload válido',async()=>/*@case 16.04.aceita-payload-valido-072b69c6*/assert.deepEqual(await userFromResponse({json:async()=>({id:1,name:'Ana'})}),{id:1,name:'Ana'}));
+test('valida os campos do usuário',async()=>{for(const body of [null,[],{id:'1',name:'A'},{id:1,name:2}]){let error;try{await userFromResponse({json:async()=>body});}catch(caught){error=caught;}/*@case 16.04.valida-os-campos-do-usuario-f9b24304*/assert.ok(error);}});
+test('preserva como cause o erro de parse original',async()=>{const cause=new Error('json');let observed;try{await userFromResponse({json:async()=>{throw cause;}});}catch(error){observed=error;}/*@case 16.04.preserva-como-cause-o-erro-d-f5732906*/assert.equal(observed?.cause,cause);});

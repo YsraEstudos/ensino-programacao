@@ -1,0 +1,110 @@
+
+> devpath@0.1.0 prebuild
+> node scripts/prebuild.mjs
+
+Generated C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated\stage00-preparation.json from the canonical source at course-src/stage00-preparation.mjs.
+items=261 statuses={'contract_ready': 261}
+concepts=105 activities=261 edges=485 acyclic=yes
+mapped=90 P0=20 new_activities=55
+Complete curriculum: 261 activities, one editorial source, seven reproducible assets.
+Generated curriculum data in C:\Users\israe\OneDrive\Desktop\Projetos\RPG\devpath-publish\course-src\.generated
+Complete curriculum: 261 activities, one editorial source, seven reproducible assets.
+{
+  "activities": 261,
+  "stages": {
+    "10": 8,
+    "11": 14,
+    "12": 14,
+    "13": 14,
+    "14": 13,
+    "15": 10,
+    "16": 10,
+    "17": 10,
+    "18": 10,
+    "19": 9,
+    "20": 10,
+    "21": 11,
+    "22": 11,
+    "23": 11,
+    "D": 5,
+    "00": 9,
+    "01": 9,
+    "02": 12,
+    "03": 10,
+    "04": 13,
+    "05": 11,
+    "06": 11,
+    "07": 10,
+    "08": 8,
+    "09": 8
+  },
+  "correctAnswerPositions": {
+    "3": [
+      75,
+      75,
+      75
+    ],
+    "4": [
+      7,
+      7,
+      7,
+      6
+    ]
+  },
+  "apiIdsMatch": true
+}
+Curriculum source: 261 cards; 0 warning(s), 0 error(s).
+
+> devpath@0.1.0 build
+> node scripts/run-framework.mjs build
+
+
+  vinext build  (Vite 8.0.13)
+
+(node:20744) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[1/5] analyze client references...
+[2K
+transforming...✓ 350 modules transformed.
+rendering chunks...
+[PLUGIN_TIMINGS] Your build spent significant time in plugins. Here is a breakdown:
+  - vinext:middleware-server-only (19%)
+  - rsc:virtual-client-package (14%)
+  - vinext:og-inline-fetch-assets (13%)
+  - rsc:use-client (10%)
+  - rsc:scan-strip (9%)
+See https://rolldown.rs/options/checks#plugintimings for more details.
+
+✓ built in 4.50s
+[2/5] analyze server references...
+[2K
+transforming...✓ 130 modules transformed.
+rendering chunks...
+✓ built in 222ms
+[3/5] build rsc environment...
+[2K
+transforming...✓ 347 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 770ms
+[4/5] build client environment...
+[2K
+transforming...✓ 138 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 645ms
+[5/5] build ssr environment...
+[2K
+transforming...✓ 132 modules transformed.
+rendering chunks...
+computing gzip size...
+✓ built in 392ms
+[0m
+  Route (app)
+  ┌ ƒ /            
+  ├ λ /api/profile 
+  └ λ /api/progress
+
+  λ API  ƒ Dynamic
+  Build complete. Run `vinext start` to start the production server.
+

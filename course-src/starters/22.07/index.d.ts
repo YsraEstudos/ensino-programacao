@@ -1,0 +1,9 @@
+// Superfície pública do pacote sob teste.
+export type Result<T> = { ok: true; value: T } | { ok: false; error: string };
+
+export declare function parse(input: string): Result<number>;
+
+export declare class Client {
+  constructor(baseUrl: string);
+  get(path: `/${string}`): Promise<Result<unknown>>;
+}

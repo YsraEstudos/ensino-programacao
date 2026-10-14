@@ -1,0 +1,1 @@
+export type Result<T>={ok:true;value:T}|{ok:false;error:string};export declare function parse(input:string):Result<number>;export declare function on(evento:string,listener:(resultado:Result<number>)=>void):()=>boolean;

@@ -68,38 +68,40 @@ def _lesson(skill, starter, misconception, _hints, _solution, transfer, estimate
 CONTENT = {
 "13.14": C(
     'testing.evolving_project',
-    ('Kanban já possui migração V1→V2 de 11.13: V1 array [{text,done}] vira '
-     '{version:2,tasks:[{id,text,status}]}; esta change request cria migrateV2ToV3 '
-     'acrescentando priority; fixtures V1,V2, parcial e inválida'),
-    ("fixture V2 com tarefa A -> V3 mantém A e priority='normal'; fluxo legado V1 -> "
-     'reutiliza V1→V2 e depois V2→V3'),
-    ('save V2 com priority high, registro parcial, texto HTML e fluxo por teclado -> '
-     'prioridade e itens válidos são preservados, aviso é emitido sem apagar storage; '
-     'conteúdo HTML permanece literal; foco e regressões existentes continuam corretos'),
-    ('Reimplementar V1→V2 ou assumir que persistência antiga já tem estrutura V2; perder '
-     'dados ou acessibilidade anterior.'),
-    ('Mantenha a migração V1→V2 existente e cubra-a com teste.',
-     'Implemente a nova migração V2→V3 como função pura; prioridade ausente vira normal.',
-     'Componha V1→V2→V3 no loader e teste UI, storage e regressões antigas.'),
-    ("Implemente migrateV2ToV3 pura para adicionar priority='normal' quando ausente e "
-     'preservar high/normal existentes. Loader aceita V1,V2,V3, aplica V1→V2 já existente '
-     'e então V2→V3, valida registros individualmente e grava versão atual só após '
-     'conversão segura. Mantenha testes antigos e documente changelog/regressões.'),
+    ('Kanban com V1 de 11.08 {version:1,tasks:[{id,text,status}]} e migração V1→V2 de 11.13 '
+     "(acrescenta priority='normal'); esta change request cria migrarV2ParaV3, que acrescenta "
+     'tags; fixtures V1, V2, V3, parcial e inválida'),
+    ("V2 {version:2,tasks:[{id:'t1',text:'Ler pauta',status:'todo',priority:'high'}]} -> V3 "
+     'mantém id/text/status/priority e acrescenta tags:[]; V1 -> passa por V1→V2 e depois V2→V3'),
+    ('tags válidas existentes -> preservadas; tags inválidas -> [] com aviso; registro parcial '
+     '-> descartado com aviso sem perder os demais; V3 -> não migra de novo; JSON inválido -> '
+     'storage não é sobrescrito; texto HTML -> literal; teclado, foco e persistência sem regressão'),
+    ('Reimplementar V1→V2, converter V1 direto para V3 ou reaplicar uma migração a um save que '
+     'já está na versão atual; perder dados ou acessibilidade anterior.'),
+    ('Cubra com teste a migração V1→V2 de 11.13 antes de mudar qualquer coisa.',
+     'Implemente migrarV2ParaV3 como função pura: tags ausente vira [], priority não muda.',
+     'Componha V1→V2→V3 no loader e rode as regressões de domínio, DOM e persistência.'),
+    ('Implemente migrarV2ParaV3 pura: acrescente tags:[] quando ausente, preserve tags válidas '
+     '(array de strings não vazias) e todos os campos V2. O loader aceita V1, V2 e V3, aplica '
+     'V1→V2 de 11.13 e depois V2→V3, valida cada registro, reporta os descartados e só grava V3 '
+     'após conversão segura. Mantenha os testes antigos e acrescente casos V1, V2, V3, parcial '
+     'e inválido.'),
     'Catálogo de estoque V2→V3 com reorderThreshold -> V1 e V2 migram pela cadeia preservando itens e controles acessíveis',
     kind='MODIFY',
     runtime='browser',
     estimated=75,
-    **_lesson('testing.evolving_project', ('Kanban já possui migração V1→V2 de 11.13: V1 array [{text,done}] vira '
-     '{version:2,tasks:[{id,text,status}]}; esta change request cria migrateV2ToV3 '
-     'acrescentando priority; fixtures V1,V2, parcial e inválida'), ('Reimplementar V1→V2 ou assumir que persistência antiga já tem estrutura V2; perder '
-     'dados ou acessibilidade anterior.'), ('Mantenha a migração V1→V2 existente e cubra-a com teste.',
-     'Implemente a nova migração V2→V3 como função pura; prioridade ausente vira normal.',
-     'Componha V1→V2→V3 no loader e teste UI, storage e regressões antigas.'), ("Implemente migrateV2ToV3 pura para adicionar priority='normal' quando ausente e "
-     'preservar high/normal existentes. Loader aceita V1,V2,V3, aplica V1→V2 já existente '
-     'e então V2→V3, valida registros individualmente e grava versão atual só após '
-     'conversão segura. Mantenha testes antigos e documente changelog/regressões.'), 'Catálogo de estoque V2→V3 com reorderThreshold -> V1 e V2 migram pela cadeia preservando itens e controles acessíveis', 75, 'browser', ('Implemente V2→V3 como evolução incremental do Kanban existente. Preserve o migrador '
-     'V1→V2 e demonstre que formatos antigos percorrem a sequência sem perder '
-     'compatibilidade da interface.',
+    **_lesson('testing.evolving_project', ('Kanban com V1 de 11.08 {version:1,tasks:[{id,text,status}]} e migração V1→V2 de 11.13 '
+     "(acrescenta priority='normal'); esta change request cria migrarV2ParaV3, que acrescenta "
+     'tags; fixtures V1, V2, V3, parcial e inválida'), ('Reimplementar V1→V2, converter V1 direto para V3 ou reaplicar uma migração a um save que '
+     'já está na versão atual; perder dados ou acessibilidade anterior.'), ('Cubra com teste a migração V1→V2 de 11.13 antes de mudar qualquer coisa.',
+     'Implemente migrarV2ParaV3 como função pura: tags ausente vira [], priority não muda.',
+     'Componha V1→V2→V3 no loader e rode as regressões de domínio, DOM e persistência.'), ('Implemente migrarV2ParaV3 pura: acrescente tags:[] quando ausente, preserve tags válidas '
+     '(array de strings não vazias) e todos os campos V2. O loader aceita V1, V2 e V3, aplica '
+     'V1→V2 de 11.13 e depois V2→V3, valida cada registro, reporta os descartados e só grava V3 '
+     'após conversão segura. Mantenha os testes antigos e acrescente casos V1, V2, V3, parcial '
+     'e inválido.'), 'Catálogo de estoque V2→V3 com reorderThreshold -> V1 e V2 migram pela cadeia preservando itens e controles acessíveis', 75, 'browser', ('Implemente V2→V3 (campo tags) como evolução incremental do Kanban existente. Preserve o '
+     'migrador V1→V2 de 11.13 e demonstre que formatos antigos percorrem a cadeia sem perder '
+     'dados nem compatibilidade da interface.',
      'Uma lista de compras V2 pode ganhar um campo opcional de categoria na V3; a migração '
      'pode preencher um padrão sem reescrever a transformação que já atualiza V1 para V2.',
      'Registre a responsabilidade de cada etapa da cadeia de migração e quais versões o '
@@ -415,9 +417,9 @@ CONTENT = {
           load={"novelty": 2, "syntax": 2, "composition": 2, "state": 1, "debugging": 2, "files": 2, "reading": 2, "independence": 2, "tools": 3}),
 "13.08": C(
     'testing.library_contract',
-    'utilitários clamp, unique, paginate em módulo ESM; API documentada com erros',
-    'clamp(2,0,3), unique([1,1,2]), paginate([1,2,3],2,2) -> 2,[1,2],[3]',
-    ('clamp min>max -> RangeError; unique preserva ordem e SameValueZero; paginate page '
+    'utilitários clamp, unique, paginar em módulo ESM; API documentada com erros',
+    'clamp(2,0,3), unique([1,1,2]), paginar([1,2,3],2,2) -> 2,[1,2],[3]',
+    ('clamp min>max -> RangeError; unique preserva ordem e SameValueZero; paginar page '
      'inválida -> RangeError; sem mutação'),
     'Cobertura percentual sem verificar semântica de bordas.',
     ('Declare contratos públicos e erros.',
@@ -429,7 +431,7 @@ CONTENT = {
     kind='PROJECT',
     estimated=90,
     runtime='Node.js 24 with a provisioned Vitest runner',
-    **_lesson('testing.library_contract', 'utilitários clamp, unique, paginate em módulo ESM; API documentada com erros', 'Cobertura percentual sem verificar semântica de bordas.', ('Declare contratos públicos e erros.',
+    **_lesson('testing.library_contract', 'utilitários clamp, unique, paginar em módulo ESM; API documentada com erros', 'Cobertura percentual sem verificar semântica de bordas.', ('Declare contratos públicos e erros.',
      'Teste exemplo, borda, erro e não mutação por função.',
      'Separe implementação de suíte e documentação curta.'), ('Entregue três exports com JSDoc, Vitest cobrindo contratos e README de '
      'entradas/erros; revisão avalia cenários além da métrica.'), 'Módulo de moeda/intervalos com API -> suíte equivalente para bordas e erros', 90, 'Node.js 24 with a provisioned Vitest runner', ('Documente contratos de três funções e escreva testes para exemplos, bordas, erros e '
@@ -440,7 +442,7 @@ CONTENT = {
      'pode mudar antes de escolher testes.',
      'Matriz por função × categoria de contrato, editor JSDoc/teste e relatório acessível '
      'de cenários.',
-     'Módulo ESM com clamp/unique/paginate, runner Vitest, README de API e console local.',
+     'Módulo ESM com clamp/unique/paginar, runner Vitest, README de API e console local.',
      'O que uma alta cobertura percentual demonstra diretamente?',
      'Que muitas das linhas medidas foram executadas, sem provar que todos os contratos foram verificados.',
      'Que todos os resultados, erros e efeitos da API tenham sido testados.',
@@ -608,18 +610,27 @@ CONTENT = {
 
 
 _LITERAL_STARTERS = {
-    '13.14': "migration.test.js: import { migrarV1ParaV2, migrarV2ParaV3 } from './migration.js';\n\nconst v2 = { version: 2, tasks: [{ id: 't1', text: 'Ler pauta', status: 'todo' }] };\n\n// Projeto evolutivo: o Kanban de 11.08 já lê/grava V1; 11.13 fornece a migração V1→V2.\n// Esta mudança adiciona V2→V3 com priority. Preserve o loader e as regressões anteriores.\n// TODO: acrescente casos V1, V2, V3, registro parcial e registro inválido.\n",
-    '13.13': "form.test.js: import { describe, it, expect } from 'vitest';\n\n// DOM fornecido: form rotulado, input, botão submit, lista e região aria-live.\n// TODO: teste submit por Enter, foco/erro, inserção de '<img>' como texto e remoção por delegação.\n// Separe verificações automatizadas de avaliação manual com leitor de tela.\n",
+    '13.14': [
+        {"path": "migration.js", "content": "export function migrarV1ParaV2(value) { /* TODO: reutilize a migração existente de 11.13 */ }\nexport function migrarV2ParaV3(value) { /* TODO: acrescente tags sem perder prioridade */ }\nexport function carregar(storage, warn = () => {}) { /* TODO: validar por registro e gravar somente V3 válido */ }"},
+        {"path": "migration.test.js", "content": "import { migrarV1ParaV2, migrarV2ParaV3, carregar } from './migration.js';\n\n// V1 (11.08): { version: 1, tasks: [{ id, text, status }] }\n// V2 (11.13): acrescenta priority ('normal' por padrão)\n// V3 (esta change request): acrescenta tags, um array de strings ([] por padrão)\n\nconst v1 = { version: 1, tasks: [{ id: 't1', text: 'Ler pauta', status: 'todo' }] };\nconst v2 = { version: 2, tasks: [{ id: 't1', text: 'Ler pauta', status: 'todo', priority: 'high' }] };\n\n// TODO: mantenha os testes de 11.13 e acrescente V1→V3, V2→V3, V3 sem nova migração,\n// tags inválidas, registro parcial e JSON inválido.\n"},
+    ],
+    '13.13': [
+        {"path": "app.js", "content": "export function montarWidget(document) { /* TODO: associe submit, foco, texto literal e delegação */ }"},
+        {"path": "tests/13.13.test.js", "content": "import {montarWidget} from '../app.js';\ndescribe('suíte DOM do widget', () => {\n  test('mantém associação de rótulo e botão de submit', () => { montarWidget(document); expect(document.querySelector('label[for=text]')).toBeTruthy(); expect(document.querySelector('#add[type=submit]')).toBeTruthy(); });\n});"},
+    ],
     '13.01': "material.md: Teste: expect(paginar([1, 2, 3], 2, 2)).toEqual([3]);\nResultado recebido: [2, 3]\n\nA falha localiza uma divergência entre a saída esperada e recebida; ainda não identifica a causa.",
     '13.02': "material.md: Bloco A: if (typeof dividendo !== 'number' || !Number.isFinite(dividendo)) throw new TypeError('dividendo inválido');\nBloco B: if (typeof divisor !== 'number' || !Number.isFinite(divisor)) throw new TypeError('divisor inválido');\nBloco C: if (divisor === 0) throw new RangeError('divisor não pode ser zero');\nBloco D: return dividendo / divisor;\n\nContexto: function dividir(dividendo, divisor) { /* ordenar blocos; toda validação precede a divisão */ }",
     '13.03': "pagination.test.js: import { paginar } from './pagination.js';\n\ndescribe('paginar', () => {\n  it('retorna a primeira página', () => {\n    expect(paginar([1, 2, 3], 1, 2)).toEqual([1, 2]);\n  });\n});\n\n// Complete a suíte para contratos de borda; page e size são inteiros 1-based.",
     '13.04': "debug.js: export function somaPositivos(valores) {\n  let total = 0;\n  for (const valor of valores) {\n    if (valor > 0) total += valor;\n  }\n  return total;\n}\n\n// Preveja os estados de total para [1, -2, 3] antes de avançar o debugger.",
     '13.05': "filtro.js: export function manterDefinidos(valores) {\n  const resultado = [];\n  for (const valor of valores) {\n    if (valor) resultado.push(valor); // BUG: remove valores válidos falsy, como 0 e false.\n  }\n  return resultado;\n}\n\n// Contrato: remover somente undefined; preservar 0, false, null, strings e sua ordem.",
     '13.06': "parser.js: export function parseLinha(texto) {\n  // Formato: chave=valor;chave=valor. \\; representa ; literal e \\\\ representa \\ literal.\n  // Chave repetida: último valor vence. Segmento sem '=' ou escape incompleto: SyntaxError.\n  // Entrada vazia retorna {}.\n}\n",
-    '13.07': "clamp.js: export function clamp(valor, minimo, maximo) {\n  if (minimo > maximo) throw new RangeError('intervalo inválido');\n  return valor; // BUG: deveria limitar o valor aos extremos.\n}\n\n// Primeiro escreva um teste que falhe para clamp(-5, 0, 10); depois corrija.",
+    '13.07': [
+        {"path": "clamp.js", "content": "export function clamp(valor, minimo, maximo) {\n  if (minimo > maximo) throw new RangeError('intervalo inválido');\n  return valor; // BUG: deveria limitar o valor aos extremos.\n}\n\n// Primeiro escreva um teste que falhe para clamp(-5, 0, 10); depois corrija."},
+        {"path": "tests/clamp.test.js", "content": "import {clamp} from '../clamp.js';\ndescribe('clamp regression', () => { test('lower-bound regression', () => { expect(clamp(-5, 0, 10)).toBe(0); }); });"},
+    ],
     '13.08': "library.js: export function clamp(valor, minimo, maximo) {}\nexport function unique(valores) {}\nexport function paginar(valores, pagina, tamanho) {}\n\n// API ESM pública; registre entrada, saída, erros, mutação e ordem para cada função.",
-    '13.09': "retry.test.js: import { retry } from './retry.js';\nimport { vi, expect, it } from 'vitest';\n\n// retry(op, max, delay) recebe operação e timer injetáveis.\n// TODO: use fake timers para verificar falha transitória, limite e restauração dos mocks.",
-    '13.10': "service.js: export async function carregarConfiguracao(readFile) {\n  try {\n    return await readFile();\n  } catch (erro) {\n    throw new Error('Falha ao carregar configuração', { cause: erro });\n  }\n}\n\n// A interface deve mostrar a mensagem contextual; logs de diagnóstico podem inspecionar cause.",
+    '13.09': "retry.test.js: import { retry } from './retry.js';\nimport { vi, expect, it } from 'vitest';\n\nit('retorna o resultado de uma operação bem-sucedida', async () => {\n  const operation = vi.fn(async () => 'ok');\n  const timer = (fn, ms) => { fn(); return 1; };\n  expect(await retry(operation, 2, 10, timer)).toBe('ok');\n});\n\n// Amplie para falha transitória, limite de tentativas, atraso e limpeza entre testes.",
+    '13.10': "service.js: export async function carregarConfiguracao(readFile) {\n  try {\n    return await readFile();\n  } catch (erro) {\n    throw new Error(String(erro));\n  }\n}\n\n// BUG: a causa original foi descartada e o texto externo pode expor detalhes indevidos.",
     '13.11': "indices.js: const itens = ['a', 'b', 'c'];\nconsole.log(itens.at(0));\nconsole.log(itens.at(-1));\nconsole.log(itens.at(3));\n\n// Compare índice fora dos limites, índice negativo e o uso equivalente com bracket access.",
     '13.12': "material.md: Falha: teste de retry expira após 5 s.\nEvidências disponíveis: log de chamadas, relógio do teste e stack trace.\nHipótese inicial: timer real foi usado junto com relógio falso.\n\nEscolha a ferramenta que pode confirmar a hipótese e anote o que ela não prova.",
 }
@@ -629,18 +640,18 @@ for _card_id, _starter in _LITERAL_STARTERS.items():
 # A etapa 13 estende as versões existentes do Kanban; o catálogo de estoque é só transferência.
 CONTENT["13.14"]["starter"] = _LITERAL_STARTERS["13.14"]
 CONTENT["13.14"]["solution"] = (
-    "Implemente migrateV2ToV3 como função pura: acrescente priority='normal' apenas quando "
-    "ausente, preservando valores válidos existentes. O loader aceita V1, V2 e V3, aplica "
+    "Implemente migrarV2ParaV3 como função pura: acrescente tags:[] quando ausente, preserve "
+    "tags válidas e todos os campos V2, inclusive priority. O loader aceita V1, V2 e V3, aplica "
     "a migração V1→V2 de 11.13 a entradas V1 e depois V2→V3; valida por registro e só "
     "grava V3 após conversão segura. Preserve os testes e a interface existentes."
 )
 CONTENT["13.14"]["hidden"] = (
-    "V1 do Kanban 11.08 -> passa pela migração V1→V2 de 11.13 e então V2→V3; V2 adiciona "
-    "priority='normal'; priority='high' permanece high; registro parcial é reportado sem "
-    "perder outros itens; V3 não migra novamente"
+    "V1 do Kanban 11.08 -> passa por V1→V2 de 11.13 e então V2→V3; V2 com priority='high' -> "
+    "V3 mantém high e recebe tags:[]; tags inválidas -> [] com aviso; registro parcial é "
+    "reportado sem perder outros itens; V3 não migra novamente; JSON inválido não sobrescreve storage"
 )
 CONTENT["13.14"]["failure"] = (
-    "A versão V1 não percorre as duas migrações; tarefas ou priority='high' se perdem, ou "
+    "A versão V1 não percorre as duas migrações; tarefas, priority ou tags se perdem, ou "
     "V3 é convertido de novo ao carregar."
 )
 
@@ -695,3 +706,6 @@ _OFFICIAL_DOCS = {
 }
 for _card_id, _official_url in _OFFICIAL_DOCS.items():
     CONTENT[_card_id]["docs"] = _official_url
+
+# Revisão editorial de 05/10/2026: enunciado, starter e contrato realinhados.
+CONTENT["13.14"]["content_version"] = 2

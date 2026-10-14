@@ -378,6 +378,8 @@
                 note(root, '[data-s03-complete-status]', 'Explique com pelo menos 16 caracteres e confira todos os critérios.', false);
                 return true;
             }
+            void ctx.learning?.submitStudy?.(item, reflection);
+            void ctx.learning?.runAssessment?.(item, { kind: 'passed', source: 'local-declared' });
             ctx.progress.exerciseReflections ||= {};
             ctx.progress.exerciseReflections[key(item)] = reflection.slice(0, 600);
             ctx.progress.answers ||= {};

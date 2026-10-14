@@ -1,0 +1,1 @@
+export async function criarDashboard(fetcher) { const [a,b] = await Promise.all([fetcher('/profile'), fetcher('/stats')]); return { status: 'success', profile: await a.json(), stats: await b.json() }; }

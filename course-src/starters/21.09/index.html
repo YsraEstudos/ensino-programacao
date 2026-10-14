@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<title>Laboratório de performance</title>
+<h1>Laboratório de performance</h1>
+<label>Tamanho da entrada <input id="tamanho" type="number" value="100000" min="1"></label>
+<button id="medir" type="button">Medir</button>
+<p id="mensagem" role="status"></p>
+<table>
+  <thead><tr><th>Implementação</th><th>Mediana (ms)</th><th>Mín.</th><th>Máx.</th><th>Amostras</th></tr></thead>
+  <tbody id="resultados"></tbody>
+</table>
+<p>Memória aproximada: <span id="memoria">N/D</span> · Ambiente: <span id="ambiente"></span></p>
+<script type="module">
+  import { comparar } from "./lab.js";
+  // complete: ao clicar em Medir, gere a entrada, chame comparar e preencha a tabela com textContent.
+  // Entrada inválida mostra a mensagem em #mensagem sem travar a página.
+</script>
+</html>

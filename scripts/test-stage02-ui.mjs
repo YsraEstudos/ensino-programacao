@@ -6,11 +6,12 @@ import {JSDOM} from 'jsdom';
 import {solutions} from './test-stage02.mjs';
 const root=new URL('../public/',import.meta.url);
 const catalog=JSON.parse(readFileSync(new URL('course-catalog.json',root),'utf8'));
+const assessments=JSON.parse(readFileSync(new URL('course-assessments.json',root),'utf8'));
 const settle=async()=>{for(let i=0;i<3;i++)await new Promise(resolve=>setImmediate(resolve));};
 async function load(saved){
   const dom=new JSDOM(readFileSync(new URL('devpath.html',root),'utf8'),{url:'http://localhost:8000/devpath.html',runScripts:'outside-only'});
   let accountRequests=0;
-  dom.window.fetch=async url=>{if(url==='/course-catalog.json')return {ok:true,json:async()=>catalog};accountRequests++;throw Error('Account API should not run in local preview');};
+  dom.window.fetch=async url=>{if(url==='/course-catalog.json')return {ok:true,json:async()=>catalog};if(url==='/course-assessments.json')return {ok:true,json:async()=>assessments};accountRequests++;throw Error('Account API should not run in local preview');};
   if(saved)dom.window.localStorage.setItem('devpath-local-preview-v1',saved);
   for(const name of [...dom.window.document.querySelectorAll('script[src]')].map(script => new URL(script.src).pathname.slice(1)))dom.window.eval(withPublicDependencies(readFileSync(new URL(name,root),'utf8')));
   await settle();
@@ -24,7 +25,7 @@ const multi=new Set(['02.01','02.10','02.11']);
 for(const [id,blocks] of Object.entries(solutions))test(`${id}: full UI flow gates, execution, completion and reload`,async()=>{
   const {dom,q,click,fill,accountRequests}=await load();
   try{
-    dom.window.location.hash=`#/javascript/${id}`;await settle();
+    dom.window.location.hash=`#/javascript/${id}`;await settle();q('[data-learning-mode="recall"]').click();await settle();
     assert(q('[data-s02-action="complete"]').disabled);
     for(const [index,source] of blocks.entries()){
       assert(!q('[data-s02-code]'),'Editor must not open before prediction and understanding');
@@ -33,6 +34,7 @@ for(const [id,blocks] of Object.entries(solutions))test(`${id}: full UI flow gat
       if(config.rows){const predictions=config.cases.flatMap(entry=>entry.expected);config.rows.forEach((_,i)=>{fill(`[data-s02-row="${i}"]`,dom.window.DevPathStage02Runner.format(predictions[i]));fill(`[data-s02-type="${i}"]`,typeof predictions[i]);if(config.classifications && i%2===0){fill(`[data-s02-falsy="${i}"]`,'sim');fill(`[data-s02-nullish="${i}"]`,i===6||i===8?'sim':'não');}});}
       else fill('[data-s02-prediction]','Prevejo as saídas e a validade para cada entrada publicada.');
       click('predict');
+      assert(q('input[name="s02-understanding"]'), `Predict did not reveal understanding UI for ${id}: mode=${q('.course-lesson')?.dataset.learningMode}; button=${q('[data-s02-action="predict"]')?.textContent}; state=${JSON.stringify(JSON.parse(dom.window.localStorage.getItem('devpath-local-preview-v1')||'{}').stage02?.[id])}`);
       const answer=multi.has(id)?0:catalog.find(item=>item.id===id).review.answer;
       q(`input[name="s02-understanding"][value="${(answer+1)%3}"]`).checked=true;
       click('understand');assert(!q('[data-s02-code]'),'Incorrect understanding must not unlock code');
@@ -71,7 +73,7 @@ for(const [id,blocks] of Object.entries(solutions))test(`${id}: full UI flow gat
 test('Parsons controls support reordering, removal and assembly without dragging',async()=>{
   const {dom,q,click,fill}=await load();
   try{
-    dom.window.location.hash='#/javascript/02.03';await settle();
+    dom.window.location.hash='#/javascript/02.03';await settle();q('[data-learning-mode="recall"]').click();await settle();
     fill('[data-s02-prediction]','Ambas as condições precisam ser verdadeiras.');click('predict');
     q(`input[name="s02-understanding"][value="${catalog.find(item=>item.id==='02.03').review.answer}"]`).checked=true;click('understand');
     // C,D,A,E,B -> A,B,C,D, using only the exposed controls.
@@ -88,7 +90,7 @@ test('Parsons controls support reordering, removal and assembly without dragging
 test('editing checked code invalidates completion; stale next button must be disabled',async()=>{
   const {dom,q,click,fill}=await load();
   try{
-    dom.window.location.hash='#/javascript/02.01';await settle();
+    dom.window.location.hash='#/javascript/02.01';await settle();q('[data-learning-mode="recall"]').click();await settle();
     for(let i=0;i<6;i++){fill(`[data-s02-row="${i}"]`,'0');fill(`[data-s02-type="${i}"]`,'number');}click('predict');
     q('input[name="s02-understanding"][value="0"]').checked=true;click('understand');
     fill('[data-s02-code]',solutions['02.01'][0]);click('run');

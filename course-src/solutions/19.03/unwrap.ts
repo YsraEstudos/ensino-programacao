@@ -1,0 +1,3 @@
+type Equal<A,B>=(<T>()=>T extends A?1:2) extends (<T>()=>T extends B?1:2)?true:false; type Expect<T extends true>=T;
+export type Unwrap<T>=T extends Promise<infer V>?V:T; export type FnResult<T>=T extends (...args:any[])=>infer R?R:never;
+async function buscarData():Promise<Date>{return new Date(0);} export type T1=Expect<Equal<Unwrap<Promise<number>>,number>>; export type T2=Expect<Equal<Unwrap<number>,number>>; export type T3=Expect<Equal<FnResult<()=>string>,string>>; export type T4=Expect<Equal<FnResult<typeof buscarData>,Promise<Date>>>; export type T5=Expect<Equal<Awaited<FnResult<typeof buscarData>>,Date>>;

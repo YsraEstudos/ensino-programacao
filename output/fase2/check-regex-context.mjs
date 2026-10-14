@@ -1,0 +1,13 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import {webcrypto} from 'node:crypto';
+import {parse} from 'acorn';
+const scope = {crypto: webcrypto, TextEncoder};
+scope.window = scope;
+vm.runInNewContext(fs.readFileSync('public/course-assessment.js', 'utf8'), scope);
+const source = marker => `test('regex',()=>{let matched=false;if(true) /[/*@case 04.04.${marker}*/]/.test('b') && (matched=true);expect(matched).toBe(false);});`;
+for (const marker of ['a', 'b']) parse(source(marker), {ecmaVersion: 'latest', sourceType: 'module'});
+const fingerprint = tests => scope.DevPathAssessment.canonicalFingerprint({activityId: '04.04', files: [], assessment: {environment: 'javascript', version: 1, checks: ['behavior'], testPath: '__devpath_tests__.js', tests}});
+const [a, b] = await Promise.all([fingerprint(source('a')), fingerprint(source('b'))]);
+console.log(JSON.stringify({validJavaScript: true, regexChangeIgnored: a === b}));
+if (a === b) process.exitCode = 1;

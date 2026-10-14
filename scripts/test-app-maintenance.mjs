@@ -6,6 +6,7 @@ import {JSDOM} from 'jsdom';
 
 const root = new URL('../public/', import.meta.url);
 const catalog = JSON.parse(readFileSync(new URL('course-catalog.json', root)));
+const sourceIds = JSON.parse(readFileSync(new URL('../course-src/.generated/resolved_preview.json', root))).map(item => item.id);
 const settle = async () => { for (let i = 0; i < 5; i++) await new Promise(resolve => setImmediate(resolve)); };
 
 async function load({items = catalog, missingStatus = false, missingModule = false, saved = {}} = {}) {
@@ -36,7 +37,7 @@ test('catalog counts follow the loaded catalog, including a smaller valid catalo
 test('missing optional save indicator does not prevent rendering or saving', async () => {
   const dom = await load({missingStatus: true});
   try {
-    assert.equal(dom.window.document.querySelectorAll('.catalog-learning-card').length, 254);
+    assert.equal(dom.window.document.querySelectorAll('.catalog-learning-card').length, sourceIds.length);
     const saved = JSON.parse(dom.window.localStorage.getItem('devpath-local-preview-v1'));
     assert.equal(saved.activeDays.length, 1);
   } finally { dom.window.close(); }
@@ -72,7 +73,9 @@ test('untrusted catalog text renders as text and malformed route identifiers are
 });
 
 test('scheduled review advances once, saves its interval, and enables the next question', async () => {
-  const item = catalog.find(item => item.stage === '04');
+  // A declared reading keeps this scheduler fixture independent of executable grading.
+  // 04.01 now has a versioned starter; its old completion cannot stand for version 2.
+  const item = catalog.find(item => item.id === '04.02');
   const dom = await load({saved: {
     answers: {[item.id]: true}, reviewSchedule: {[item.id]: {intervalIndex: 0, dueAt: 1}}
   }});

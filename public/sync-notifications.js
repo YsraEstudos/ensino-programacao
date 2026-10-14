@@ -20,7 +20,7 @@
             const action = document.createElement("button");
             action.type = "button";
             action.className = "button-secondary";
-            action.textContent = state === "recovery" ? "Usar progresso da conta"
+            action.textContent = state === "recovery" ? "Salvar tentativa combinada"
                 : state === "paused" ? "Tentar salvar novamente" : "Recarregar progresso da conta";
             action.disabled = state === "recovery";
             download.addEventListener("click", () => {

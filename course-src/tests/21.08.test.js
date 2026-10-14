@@ -1,0 +1,3 @@
+import{usarRecursos}from'./recurso.js';
+test('LIFO after body failure',async()=>{const log=[],r=x=>({[Symbol.dispose](){log.push(x)}});let caught=false;try{await usarRecursos([r('A'),r('B')],()=>{throw Error('body')});}catch(e){caught=true;}/*@case 21.08.lifo-after-body-failure-02b40de5*/expect(caught).toBe(true);/*@case 21.08.lifo-after-body-failure-d018c7b4*/expect(log).toEqual(['B','A']);});
+test('async cleanup is awaited',async()=>{let done=false;const v=await usarRecursos([{[Symbol.asyncDispose]:async()=>{await Promise.resolve();done=true}}],()=>42);/*@case 21.08.async-cleanup-is-awaited-57a29e75*/expect(done).toBe(true);/*@case 21.08.async-cleanup-is-awaited-5beaf444*/expect(v).toBe(42);});

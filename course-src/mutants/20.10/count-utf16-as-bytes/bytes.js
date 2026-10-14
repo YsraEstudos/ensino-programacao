@@ -1,0 +1,1 @@
+export function medirTexto(text){const bytes=new TextEncoder().encode(text);return {textLength:text.length,byteLength:text.length,bytes,decoded:new TextDecoder().decode(bytes)};} export function decodificar(bytes,{fatal=false}={}){return new TextDecoder("utf-8",{fatal}).decode(bytes);}

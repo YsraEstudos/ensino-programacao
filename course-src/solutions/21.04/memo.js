@@ -1,0 +1,1 @@
+export function memoizeLRU(fn,limit=2){const m=new Map();return function(k){if(limit<=0)return fn.call(this,k);if(m.has(k)){const v=m.get(k);m.delete(k);m.set(k,v);return v;}const v=fn.call(this,k);m.set(k,v);if(m.size>limit)m.delete(m.keys().next().value);return v;};}

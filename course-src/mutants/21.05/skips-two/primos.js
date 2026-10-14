@@ -1,0 +1,1 @@
+export function contarPrimos(n){if(!Number.isInteger(n)||n<0)throw new RangeError('n must be a nonnegative integer');let total=0;for(let i=3;i<=n;i++){let p=true;for(let d=2;d*d<=i;d++)if(i%d===0){p=false;break;}if(p)total++;}return total;}

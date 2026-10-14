@@ -1,0 +1,1 @@
+export function dividir(dividendo,divisor){if(typeof dividendo!=='number'||!Number.isFinite(dividendo))throw new TypeError('dividendo inválido');if(typeof divisor!=='number'||!Number.isFinite(divisor))throw new TypeError('divisor inválido');if(divisor===0)throw new RangeError('divisor não pode ser zero');return dividendo/divisor;}

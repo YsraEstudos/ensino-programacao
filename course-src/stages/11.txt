@@ -51,6 +51,8 @@ OBRIGATORIA
 Antes dos exercicios DOM: 30-60 min de HTML minimo (elementos, atributos, id/class, form,
 label, input, button, arvore). O aluno nao precisa dominar CSS para continuar.
 GATE DE DOMINIO
-Avance quando o projeto passar testes, incluir pelo menos uma sessao de debugging
-documentada e resistir a uma pequena mudanca de requisito. Erros de acessibilidade/async
-que quebram o contrato bloqueiam o gate.
+Avance quando o projeto cumprir os exemplos e casos de borda publicados, voce registrar
+por escrito uma sessao de debugging (hipotese, evidencia, causa, correcao) e o projeto
+resistir a uma pequena mudanca de requisito. O site nao verifica esses itens: a conclusao e
+revisao propria, com testes rodados no seu computador quando o cartao pedir. Erros de
+acessibilidade/async que quebram o contrato bloqueiam o gate.

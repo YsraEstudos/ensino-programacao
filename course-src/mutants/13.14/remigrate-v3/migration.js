@@ -1,0 +1,1 @@
+export function migrarV1ParaV2(v){return {...v,version:2};} export function migrarV2ParaV3(v){return {...v,version:3,tasks:(v.tasks||[]).map(t=>({...t,tags:[]}))};} export function carregar(v){return migrarV2ParaV3(v);}

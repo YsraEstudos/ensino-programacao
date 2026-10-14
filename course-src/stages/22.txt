@@ -47,4 +47,4 @@ como exemplos comparaveis, nao como requisito universal da linguagem.
 GATE DE DOMINIO
 Avance quando conseguir justificar o uso da tecnica avancada e demonstrar alternativa mais
 simples quando ela existe. Medicao/compatibilidade/runtime validation sao parte do gate
-quando relevantes.
+quando relevantes e sao executadas no seu ambiente local; a conclusao no site e revisao propria.

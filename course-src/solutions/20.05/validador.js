@@ -1,0 +1,3 @@
+export function validarAge(value) { if (!Number.isInteger(value) || value < 0 || value > 150) throw new RangeError("age fora do intervalo"); return value; }
+export function validarUser(user) { return new Proxy(user, {set(target,key,value,receiver) { if (key === "age") validarAge(value); return Reflect.set(target,key,value,receiver); }}); }
+export function updateUser(current, patch) { const next = {...current, ...patch}; if (Object.hasOwn(patch,"age")) validarAge(next.age); return next; }

@@ -1,5 +1,5 @@
-ETAPA 04 - Funções, parâmetros, retorno
-e decomposição
+ETAPA 04 - Funções, retorno, decomposição
+e erros previsíveis
 Faixa
 Fundamentos II
 Carga
@@ -13,8 +13,10 @@ Resultados de aprendizagem
 • Escrever funções pequenas com responsabilidade clara.
 • Usar parâmetros padrão e rest em contexto simples.
 • Entender funções como valores sem mergulhar ainda em closures.
+• Validar entradas com guard clauses e distinguir TypeError de RangeError.
+• Usar try/catch/finally e decidir entre retorno normal e exceção.
 Conceitos nucleares
-function declaration · function expression · arrow function · return · parâmetros · default/rest · pureza
+function declaration · function expression · arrow function · return · parâmetros · default/rest · pureza · throw · TypeError/RangeError · try/catch/finally
 introdutória · decomposição · separar calculo de apresentacao · Intl.NumberFormat como formatacao
 Modelo mental aprofundado
 Funcoes sao o primeiro grande salto de abstracao. A explicacao separa declaracao, chamada, parametros,
@@ -26,10 +28,17 @@ aumentar contagem de abstractions.
 Intl.NumberFormat aparece como ferramenta de apresentacao. O curso deixa explicito que formatar
 moeda e uma coisa e realizar aritmetica monetaria exata e outra. toFixed pode servir para demonstracoes
 numericas, mas nao deve ser tratado como solucao universal de dinheiro.
+Guard clauses verificam o contrato antes do trabalho principal. TypeError aponta tipo ou forma
+incompatível; RangeError aponta valor fora do domínio. Retorne um valor para resultado esperado,
+como uma busca sem correspondência, e lance erro quando a operação não puder cumprir o contrato.
+try/catch pode acrescentar contexto a uma falha conhecida, enquanto finally reserva limpeza para
+todos os caminhos. Não converta falhas desconhecidas em sucesso silencioso.
 Erros e concepcoes que a etapa deve revelar
 • console.log no lugar de return.
 • Funcao que mistura calculo, I/O e formatacao sem necessidade.
 • Abstracao prematura com parametros que ninguem entende.
+• Lançar para uma ausência esperada ou retornar um valor padrão para esconder entrada inválida.
+• Capturar toda exceção sem preservar causas ou deixar recursos sem limpeza no caminho de erro.
 Exemplo resolvido - decompor cálculo e apresentação
 function subtotal(preco, qtd) {
   return preco * qtd;

@@ -1,0 +1,226 @@
+- generic [ref=f2e1]:
+  - link "Pular para o conteúdo" [ref=f2e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f2e3]:
+    - complementary "Navegação principal" [ref=f2e4]:
+      - link "DevPath início" [ref=f2e5] [cursor=pointer]:
+        - /url: "#/home"
+        - generic [ref=f2e6]: </>
+        - generic [ref=f2e7]: devpath.
+      - generic [ref=f2e8]: ESPAÇO DE APRENDIZADO
+      - navigation [ref=f2e9]:
+        - link "Início" [ref=f2e10] [cursor=pointer]:
+          - /url: "#/home"
+          - generic [ref=f2e11]: ⌂
+          - text: Início
+        - link "Exercícios" [ref=f2e12] [cursor=pointer]:
+          - /url: "#/catalog"
+          - generic [ref=f2e13]: ▤
+          - text: Exercícios
+        - link "Revisão ↗" [ref=f2e14] [cursor=pointer]:
+          - /url: "#/review"
+          - generic [ref=f2e15]: ↻
+          - text: Revisão
+          - generic [ref=f2e16]: ↗
+      - generic [ref=f2e17]:
+        - text: SUA TRILHA ATIVA
+        - generic [ref=f2e18]: 01 / 01
+      - link "JavaScript · Exercícios Diagnóstico + etapas 00–23 · 261 atividades ›" [ref=f2e19] [cursor=pointer]:
+        - /url: "#/catalog"
+        - generic [ref=f2e21]:
+          - strong [ref=f2e22]: JavaScript · Exercícios
+          - generic [ref=f2e23]: Diagnóstico + etapas 00–23 · 261 atividades
+        - generic [ref=f2e24]: ›
+      - generic [ref=f2e25]:
+        - generic [ref=f2e26]:
+          - generic [ref=f2e27]: ✳
+          - paragraph [ref=f2e28]: Um pequeno passojá muda o que vocêconsegue construir.
+        - generic [ref=f2e29]:
+          - generic [ref=f2e30]: D
+          - generic [ref=f2e31]:
+            - strong [ref=f2e32]: Conta conectada
+            - generic [ref=f2e33]: Carregando perfil…
+          - button "Opções do perfil" [ref=f2e34] [cursor=pointer]: ···
+    - main [ref=f2e35]:
+      - generic [ref=f2e36]:
+        - navigation "Navegação estrutural" [ref=f2e37]:
+          - link "Seu espaço" [ref=f2e65] [cursor=pointer]:
+            - /url: "#/home"
+          - generic [ref=f2e66]: /
+          - link "JavaScript" [ref=f2e67] [cursor=pointer]:
+            - /url: "#/catalog"
+          - generic [ref=f2e68]: /
+          - link "Etapa 12" [ref=f2e69] [cursor=pointer]:
+            - /url: "#/javascript/12.01"
+          - generic [ref=f2e70]: /
+          - strong [ref=f2e71]: Microtask vs task
+        - generic [ref=f2e45]:
+          - generic [ref=f2e46]: salvo neste navegador
+          - button "Sobre o DevPath" [ref=f2e48] [cursor=pointer]: "?"
+      - article [active] [ref=f2e73]:
+        - link "← Voltar à trilha de JavaScript" [ref=f2e74] [cursor=pointer]:
+          - /url: "#/catalog"
+        - paragraph [ref=f2e75]:
+          - generic [ref=f2e76]: "Estado desta atividade:"
+          - generic [ref=f2e77]: Estudada
+        - region [ref=f2e78]:
+          - generic [ref=f2e79]:
+            - text: ESCOLHA SEU CAMINHO
+            - heading "Como você quer começar?" [level=2] [ref=f2e80]
+            - paragraph [ref=f2e81]: Você pode estudar primeiro ou tentar recuperar a ideia de memória. Sua escolha fica salva nesta atividade.
+          - generic [ref=f2e82]:
+            - button "Aprender este conceito" [pressed] [ref=f2e83] [cursor=pointer]
+            - button "Tentar de memória" [ref=f2e84] [cursor=pointer]
+            - button "Começar nova tentativa de memória sem ajuda" [ref=f2e85] [cursor=pointer]
+        - region "Estado da aprendizagem" [ref=f2e86]:
+          - strong [ref=f2e87]: "Estado histórico: Estudada"
+          - generic [ref=f2e88]: A verificação pelos testes publicados está pendente ou desatualizada.
+          - generic [ref=f2e89]: "Origem da evidência atual: Aguardando avaliação · percurso com apoio registrado nesta tentativa"
+          - group "Rubrica declarada da avaliação" [ref=f2e90]:
+            - generic [ref=f2e92]:
+              - checkbox "traceie A,B,P1,Q,P2,T e justifique FIFO entre microtasks aninhadas." [ref=f2e93]
+              - generic [ref=f2e94]: traceie A,B,P1,Q,P2,T e justifique FIFO entre microtasks aninhadas.
+            - generic [ref=f2e95]: Marque os critérios após revisar sua resposta. A rubrica complementa o resultado técnico.
+        - generic [ref=f2e96]:
+          - generic [ref=f2e97]:
+            - generic [ref=f2e98]: JAVASCRIPT / ETAPA 12 · HTTP, PROMISES E TEMPO
+            - generic [ref=f2e99]: "12.04"
+          - heading "Microtask vs task" [level=1] [ref=f2e100]
+          - paragraph [ref=f2e101]: Desenhe a fila após cada agendamento e só escreva a ordem final quando as instruções síncronas terminarem.
+          - generic [ref=f2e102]:
+            - generic [ref=f2e103]: 9 min · no seu ritmo
+            - generic [ref=f2e105]: Atividade 4 de 12 · TRACE
+            - generic [ref=f2e106]: Uma ideia por vez
+        - navigation "Roteiro da atividade" [ref=f2e107]:
+          - generic [ref=f2e108]:
+            - generic [ref=f2e109]: SEU CAMINHO NESTA ATIVIDADE
+            - generic [ref=f2e110]: Aprender
+          - generic [ref=f2e111]:
+            - button "01 Aprender Entenda a ideia" [ref=f2e112] [cursor=pointer]:
+              - generic [ref=f2e113]: "01"
+              - generic [ref=f2e114]:
+                - strong [ref=f2e115]: Aprender
+                - generic [ref=f2e116]: Entenda a ideia
+            - button "02 Desafio Conheça a tarefa" [ref=f2e117] [cursor=pointer]:
+              - generic [ref=f2e118]: "02"
+              - generic [ref=f2e119]:
+                - strong [ref=f2e120]: Desafio
+                - generic [ref=f2e121]: Conheça a tarefa
+            - button "03 Prever Pense antes de rodar" [ref=f2e122] [cursor=pointer]:
+              - generic [ref=f2e123]: "03"
+              - generic [ref=f2e124]:
+                - strong [ref=f2e125]: Prever
+                - generic [ref=f2e126]: Pense antes de rodar
+            - button "04 Praticar Confira no código" [ref=f2e127] [cursor=pointer]:
+              - generic [ref=f2e128]: "04"
+              - generic [ref=f2e129]:
+                - strong [ref=f2e130]: Praticar
+                - generic [ref=f2e131]: Confira no código
+            - button "05 Explicar Conte o raciocínio" [ref=f2e132] [cursor=pointer]:
+              - generic [ref=f2e133]: "05"
+              - generic [ref=f2e134]:
+                - strong [ref=f2e135]: Explicar
+                - generic [ref=f2e136]: Conte o raciocínio
+        - paragraph [ref=f2e137]: Leia a explicação e o exemplo resolvido. Depois registre sua previsão, pratique e explique o que descobriu. A previsão pode estar errada; ela serve para você comparar seu raciocínio.
+        - generic [ref=f2e138]:
+          - text: "01"
+          - generic [ref=f2e139]: PASSO 01 · SEU ROTEIRO
+          - heading "Entenda a ideia, passo a passo" [level=2] [ref=f2e140]
+          - paragraph [ref=f2e141]: Marque execução síncrona primeiro. Adicione microtasks à fila na ordem de agendamento. Task T só roda após esvaziar a fila.
+          - list [ref=f2e142]:
+            - listitem [ref=f2e143]:
+              - generic [ref=f2e144]: "1"
+              - paragraph [ref=f2e145]: Marque execução síncrona primeiro.
+            - listitem [ref=f2e146]:
+              - generic [ref=f2e147]: "2"
+              - paragraph [ref=f2e148]: Adicione microtasks à fila na ordem de agendamento.
+            - listitem [ref=f2e149]:
+              - generic [ref=f2e150]: "3"
+              - paragraph [ref=f2e151]: Task T só roda após esvaziar a fila.
+            - listitem [ref=f2e152]:
+              - generic [ref=f2e153]: "4"
+              - paragraph [ref=f2e154]: Trace uma atualização assíncrona que agenda uma segunda microtask antes de uma notificação atrasada.
+          - heading "Exemplo resolvido" [level=3] [ref=f2e155]
+          - list [ref=f2e156]:
+            - listitem [ref=f2e157]: Se um callback de Promise enfileira outra microtask enquanto uma já espera, a que aguardava conserva sua posição; a nova é anexada ao fim.
+          - complementary [ref=f2e158]:
+            - heading "Guarde esta ideia" [level=3] [ref=f2e159]
+            - paragraph [ref=f2e160]: Supor que novas microtasks pulam à frente das que já estavam na fila.
+            - paragraph [ref=f2e161]: Trace uma atualização assíncrona que agenda uma segunda microtask antes de uma notificação atrasada.
+        - generic [ref=f2e162]:
+          - text: "02"
+          - generic [ref=f2e163]: PASSO 02 · SEU ROTEIRO
+          - heading "Conheça o desafio" [level=2] [ref=f2e164]
+          - paragraph [ref=f2e165]: Trace pilha síncrona, fila FIFO de microtasks e task do timer, incluindo uma microtask agendada por outra.
+          - list [ref=f2e166]:
+            - listitem [ref=f2e167]: Trace pilha síncrona, fila FIFO de microtasks e task do timer, incluindo uma microtask agendada por outra.
+          - generic [ref=f2e168]:
+            - strong [ref=f2e169]: Como responder
+            - paragraph [ref=f2e170]: Tabela de fila com controles adicionar/remover passo a passo e registro textual; teclado percorre todas as ações.
+          - group [ref=f2e171]:
+            - generic "Casos de borda que fazem parte do contrato" [ref=f2e172] [cursor=pointer]
+            - paragraph [ref=f2e173]: "Leia antes de implementar: estes comportamentos também serão conferidos."
+            - list [ref=f2e174]:
+              - listitem [ref=f2e175]: P1 agenda P2 durante execução -> A,B,P1,Q,P2,T
+          - group [ref=f2e176]:
+            - generic "Materiais desta atividade" [ref=f2e177] [cursor=pointer]
+          - generic [ref=f2e178]:
+            - generic [ref=f2e179]: LEIA O ARQUIVO ANTES DE RESPONDER
+            - generic [ref=f2e180]:
+              - generic [ref=f2e181]: main.js
+              - code [ref=f2e183]: "console.log('A'); Promise.resolve().then(() => { console.log('P1'); Promise.resolve().then(() => console.log('P2')); }); queueMicrotask(() => console.log('Q')); setTimeout(() => console.log('T'), 0); console.log('B');"
+        - generic [ref=f2e184]:
+          - text: "03"
+          - generic [ref=f2e185]: PASSO 03 · SEU ROTEIRO
+          - heading "Prever antes de executar" [level=2] [ref=f2e186]
+          - paragraph [ref=f2e187]: Desenhe a fila após cada agendamento e só escreva a ordem final quando as instruções síncronas terminarem. Antes de executar ou abrir a explicação.
+          - generic [ref=f2e188]:
+            - paragraph [ref=f2e189]: Registre os rótulos separados por vírgula antes de executar; depois compare a ordem observada.
+            - generic [ref=f2e191]:
+              - generic [ref=f2e192]: Ordem dos logs
+              - textbox "Ordem dos logs" [ref=f2e193]
+          - button "Registrar resposta" [ref=f2e194] [cursor=pointer]:
+            - text: Registrar resposta
+            - generic [ref=f2e195]: →
+        - generic [ref=f2e196]:
+          - text: "04"
+          - generic [ref=f2e197]: PASSO 04 · SEU ROTEIRO
+          - heading "Sua vez de praticar" [level=2] [ref=f2e198]
+          - status [ref=f2e199]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - generic [ref=f2e200]:
+          - text: "05"
+          - generic [ref=f2e201]: PASSO 05 · SEU ROTEIRO
+          - heading "Explique o que você descobriu" [level=2] [ref=f2e202]
+          - status [ref=f2e203]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - navigation "Sequência de estudo" [ref=f2e204]:
+          - link "← 12.01 · Ordem do event loop" [ref=f2e205] [cursor=pointer]:
+            - /url: "#/javascript/12.01"
+          - link "Ver trilha" [ref=f2e206] [cursor=pointer]:
+            - /url: "#/catalog"
+          - link "12.02 · Parsons de retry →" [ref=f2e207] [cursor=pointer]:
+            - /url: "#/javascript/12.02"
+        - region [ref=f2e208]:
+          - heading "Tarefa de transferência independente" [level=2] [ref=f2e209]
+          - paragraph [ref=f2e210]: Use o novo caso abaixo. A avaliação é feita pela rubrica declarada e não reaproveita o resultado do exercício principal.
+          - list [ref=f2e211]:
+            - listitem [ref=f2e212]:
+              - code [ref=f2e213]: transfer.md
+              - text: ": # Transferência 12.04 Tarefa independente — Cenário independente: Flush assíncrono de UI que agenda trabalho durante microtask. Critérios já publicados: trace e primeira divergência. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados. A entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+          - generic [ref=f2e214]:
+            - text: Explique e aplique a ideia neste caso
+            - textbox "Explique e aplique a ideia neste caso" [ref=f2e215]:
+              - /placeholder: Descreva a decisão e por que ela se aplica ao novo caso.
+          - group "Rubrica declarada" [ref=f2e216]:
+            - generic [ref=f2e218]:
+              - checkbox "trace e primeira divergência" [ref=f2e219]
+              - generic [ref=f2e220]: trace e primeira divergência
+            - generic [ref=f2e221]:
+              - 'checkbox "Casos avaliáveis: Cenário independente: Flush assíncrono de UI que agenda trabalho durante microtask. Critérios já publicados: trace e primeira divergência. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados." [ref=f2e222]'
+              - generic [ref=f2e223]: "Casos avaliáveis: Cenário independente: Flush assíncrono de UI que agenda trabalho durante microtask. Critérios já publicados: trace e primeira divergência. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+          - status [ref=f2e224]: Conclua uma avaliação principal atual antes de registrar a transferência.
+          - button "Registrar transferência" [disabled] [ref=f2e225]
+          - status [ref=f2e226]
+      - generic [ref=f2e62]:
+        - generic [ref=f2e63]: DEVPATH ✳ APRENDA CONSTRUINDO
+        - generic [ref=f2e64]: "Prévia local: seu progresso fica neste navegador."
+  - status

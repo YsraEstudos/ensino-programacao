@@ -1,0 +1,1 @@
+export const RAIO_PADRAO_METROS=5000;export function dentroDoRaio(distanciaMetros,raioMetros=RAIO_PADRAO_METROS){if(!Number.isFinite(distanciaMetros)||distanciaMetros<0)throw new RangeError('distância inválida');if(!Number.isFinite(raioMetros)||raioMetros<0)throw new RangeError('raio inválido');return distanciaMetros<=raioMetros;}

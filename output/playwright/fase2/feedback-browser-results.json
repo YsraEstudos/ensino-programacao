@@ -1,0 +1,27 @@
+{
+  "id": "04.04",
+  "browserVersion": "155.0.4283.45",
+  "firstFailure": {
+    "caseId": "04.04.media-de-dois-numeros-exempl-422f69a5",
+    "testName": "media › média de dois números (exemplo público)",
+    "matcher": "toBe",
+    "negated": false,
+    "inputExpression": "media(...values)",
+    "inputRuntime": [
+      2,
+      4
+    ],
+    "expected": 3,
+    "observed": 6,
+    "contractRule": "media(...values) toBe 3",
+    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(__devpathCaptureInput(\"04.04.media-de-dois-numeros-exempl-422f69a5\", values, () => media(...values))).toBe(3)",
+    "sourceTestPath": "tests/04.04.test.js"
+  },
+  "output": "\nTestes (8):\n✗ media › média de dois números (exemplo público)\n    esperado 3 (mesmo valor); recebido 6\n✗ media › zeros e resultado fracionário\n    esperado 1.5 (mesmo valor); recebido 3\n✓ clamp › acima do máximo vira o máximo\n✓ clamp › abaixo do mínimo vira o mínimo\n✓ clamp › dentro do intervalo e nos limites não muda\n✓ saudacao › exemplo público\n✓ saudacao › nome vazio mantém a vírgula e o espaço\n✓ as funções devolvem valores e não imprimem\n6 de 8 testes passaram.\n\nPrimeira divergência · 04.04.media-de-dois-numeros-exempl-422f69a5 · media › média de dois números (exemplo público)\nmedia(...values) toBe 3\nEntrada observada: [2,4]\nEsperado: 3\nObservado: 6\nPróxima investigação: Confira a expressão de entrada e a comparação toBe deste caso: expect(__devpathCaptureInput(\"04.04.media-de-dois-numeros-exempl-422f69a5\", values, () => media(...values))).toBe(3)\n\nCorrija o trabalho e tente novamente antes de concluir.",
+  "failedStored": true,
+  "feedbackReloadPreserved": true,
+  "correctedReferencePassed": true,
+  "annotationOnlyHashEqual": true,
+  "semanticHashChanged": true,
+  "pageErrors": []
+}

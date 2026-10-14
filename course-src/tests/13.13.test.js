@@ -1,0 +1,10 @@
+import {montarWidget} from './app.js';
+const markup = '<form id="f"><label for="text">Texto</label><input id="text"><button id="add" type="submit">Adicionar</button><ul id="list"></ul><p id="error" aria-live="polite"></p></form>';
+const submit = () => document.querySelector('#f').dispatchEvent(new Event('submit', {bubbles: true, cancelable: true}));
+describe('suíte DOM do widget', () => {
+  beforeEach(() => { document.body.innerHTML = markup; });
+  test('submit inválido foca campo e anuncia', () => { montarWidget(document); const input = document.querySelector('#text'); input.value = ''; submit(); /*@case 13.13.submit-invalido-foca-campo-e-4afbf109*/expect(document.activeElement).toBe(input); /*@case 13.13.submit-invalido-foca-campo-e-78c11729*/expect(document.querySelector('#error').textContent).toContain('obrigatório'); });
+  test('texto não vira HTML e sucesso insere item', () => { montarWidget(document); const input = document.querySelector('#text'); input.value = '<img src=x>'; submit(); const item = document.querySelector('#list li'); /*@case 13.13.texto-nao-vira-html-e-sucess-e689b918*/expect(item.firstChild.textContent).toBe('<img src=x>'); /*@case 13.13.texto-nao-vira-html-e-sucess-44abb318*/expect(item.querySelector('img')).toBe(null); });
+  test('delegação remove usando descendente', () => { montarWidget(document); const input = document.querySelector('#text'); input.value = 'a'; submit(); const item = document.querySelector('#list li'); const button = item.querySelector('button'); const span = document.createElement('span'); button.append(span); span.dispatchEvent(new Event('click', {bubbles: true})); /*@case 13.13.delegacao-remove-usando-desc-e7683ad4*/expect(document.querySelector('#list li')).toBe(null); });
+  test('associação label e botão submit permanecem nativos', () => { montarWidget(document); /*@case 13.13.associacao-label-e-botao-sub-deb3f367*/expect(document.querySelector('label[for=text]')).toBeTruthy(); /*@case 13.13.associacao-label-e-botao-sub-33a8c052*/expect(document.querySelector('#add[type=submit]')).toBeTruthy(); });
+});

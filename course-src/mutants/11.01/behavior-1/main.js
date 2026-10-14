@@ -1,0 +1,1 @@
+export function observarClique(root) { const log=[]; for (const id of ['alvo']) root.querySelector('#'+id).addEventListener('click',event=>log.push({target:event.target.id,currentTarget:event.currentTarget.id})); return log; }

@@ -1,0 +1,1 @@
+{"version":3,"file":"details-DIqtiVVa.js","names":[],"sources":["../../source/details.js"],"sourcesContent":["export const descrever = total => `Detalhes carregados: total ${total}`;\n"],"mappings":"AAAA,IAAa,EAAY,GAAS,8BAA8B"}

@@ -1,0 +1,95 @@
+
+> devpath@0.1.0 test:phase2
+> node --test scripts/test-phase2-core.mjs scripts/test-phase2-artifacts.mjs scripts/test-phase2-dynamic.mjs scripts/test-phase2-rubrics.mjs scripts/test-phase2-contracts.mjs scripts/test-phase2-feedback.mjs scripts/test-phase2-diagnostic.mjs scripts/test-phase2-study-time.mjs scripts/test-phase2-study-time-ui.mjs scripts/test-phase2-prior-attempts.mjs scripts/test-phase2-workers.mjs
+
+Phase 2 artifacts contract passed: 19 prose starters, 15 executable decisions, 44 declared decisions, structured predictions, and bundle evidence.
+✔ scripts\test-phase2-artifacts.mjs (350.8796ms)
+Task 4 contracts: 156 suites, 1045 annotated assertions, 998 stable case IDs.
+✔ scripts\test-phase2-contracts.mjs (488.8527ms)
+Task 1 core contracts passed for 69 activities (17 materialized starters, 30 assessments added).
+✔ scripts\test-phase2-core.mjs (7822.7485ms)
+✔ D catalog appends four bands and keeps the published prerequisites explicit (3.304ms)
+✔ each new diagnostic accepts unknown for study and renders the bounded, non-certifying recommendation (0.7494ms)
+✔ an incomplete prediction cannot be submitted, while each complete band maps only to its declared entry (1433.372ms)
+✔ unknown and wrong answers can be studied but never recommend an entry (181.3223ms)
+✔ a plausible but incorrect prediction keeps feedback available and blocks the mapped entry (126.3673ms)
+✔ out-of-order synchronous output blocks the foundational entry but still shows the explanation (106.4379ms)
+✔ alias and shallow-copy misconceptions block the competencies they are meant to cover (677.9767ms)
+✔ help requested before submitting blocks eligibility while preserving study feedback (100.1ms)
+✔ only a correct, complete, unassisted recall recommends its mapped entry and survives reload (88.1385ms)
+✔ post-feedback edit marks only the new answer assisted; reverting and a new recall cannot reuse the old snapshot (184.1519ms)
+✔ 16.01 protected type contract accepts the reference and rejects the learner starter (3007.9816ms)
+✔ 16.01 internal control mutant is rejected by protected assertions (897.9507ms)
+✔ 17.02 protected type contract accepts the reference and rejects the learner starter (1509.9563ms)
+✔ 17.02 internal control mutant is rejected by protected assertions (778.3729ms)
+✔ 18.02 protected type contract accepts the reference and rejects the learner starter (1600.9061ms)
+✔ 19.01 protected type contract accepts the reference and rejects the learner starter (1333.7762ms)
+✔ 19.01 internal control mutant is rejected by protected assertions (696.0284ms)
+✔ 19.02 protected type contract accepts the reference and rejects the learner starter (1314.4571ms)
+✔ 19.02 internal control mutant is rejected by protected assertions (647.2058ms)
+✔ 19.06 protected type contract accepts the reference and rejects the learner starter (1525.5201ms)
+✔ 19.06 internal control mutant is rejected by protected assertions (656.2873ms)
+✖ 18.02 inlined protected behavior resolves patch.ts from its synthetic root and executes the real suite (304.6709ms)
+✖ all converted JavaScript references pass their protected suites in a local DOM-capable harness (26.2308ms)
+✔ older freeform predictions and incomplete structured predictions stay preserved (1.9217ms)
+✔ 12.01 timer demonstration emits and compares the observed log order (185.0463ms)
+✔ 12.04 timer demonstration emits and compares the observed log order (146.1975ms)
+✔ first semantic mismatch binds by case id, reports safe values and never reevaluates captured input (5.257ms)
+✔ module graph binds the annotated matcher to the correct ID and worker runtime once (887.6482ms)
+✔ first failure preserves not/resolves/rejects semantics and does not invent input values (26.043ms)
+✔ assessment exposes semantic feedback only for a failed behavioral result (23.0855ms)
+✔ old version data remains readable without being copied into the current attempt (4.8047ms)
+✔ versioned older attempts and multi-file draft strings are shown as saved, with no migration (1.9913ms)
+✔ no panel for unchanged versions, unknown IDs or empty historical values (1.7916ms)
+Phase 2 rubric and capstone gate passed.
+✔ scripts\test-phase2-rubrics.mjs (611.7697ms)
+✔ UI requires opt-in and counts only current visible focused activity across navigation and dispose (142.9032ms)
+✔ storage revocation stops this tab immediately and never recreates the opted-out record (22.4264ms)
+✔ restoring a page from navigation resumes measurement without counting its absence (24.2377ms)
+✔ normal remote updates do not write back and start a cross-tab storage event loop (20.5629ms)
+✔ opt-out clears records, unrelated storage survives, and denied persistence is reported accurately (47.3473ms)
+✔ time is off by default and records only consented visible focused activity time (6.2483ms)
+✔ navigation, reload and opt-out preserve totals then erase local records (3.3782ms)
+✔ malformed storage and denied persistence do not break learning (2.5093ms)
+✔ missing storage reports failed persistence while the counter works in memory (1.8092ms)
+✔ two tabs preserve separate activity totals and cannot restore revoked consent (2.1369ms)
+Browser check prepared at output\fase2\workers\task7-browser-check.js; execute it with the Task 7 Playwright CLI session after the site assets are wired.
+✔ 21.04 reference passes the LRU contract (1195.2941ms)
+✔ 21.04 mutant fifo-hit is rejected by the new suite (189.244ms)
+✔ 21.04 mutant fn-throw-poisons-cache is rejected by the new suite (186.3768ms)
+✔ the immutable old 21.04 suite survives fn-throw-poisons-cache (157.8291ms)
+✔ 21.05 async fallback works when Worker is unavailable (188.5585ms)
+ℹ tests 52
+ℹ suites 0
+ℹ pass 50
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 17649.4175
+
+✖ failing tests:
+
+test at scripts\test-phase2-dynamic.mjs:42:1
+✖ 18.02 inlined protected behavior resolves patch.ts from its synthetic root and executes the real suite (304.6709ms)
+  Error: Caso público 18.02.retorna-copia-preserva-campo-f632d513 ausente ao executar __devpath_protected_behavior__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-phase2-dynamic.mjs:48:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at scripts\test-phase2-dynamic.mjs:60:1
+✖ all converted JavaScript references pass their protected suites in a local DOM-capable harness (26.2308ms)
+  Error: Caso público 11.01.preserva-target-e-a-ordem-bu-da9cf1f8 ausente ao executar tests/11.01.test.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-phase2-dynamic.mjs:70:31)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1397:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:969:18)
+      at Test.postRun (node:internal/test_runner/test:1537:19)
+      at Test.run (node:internal/test_runner/test:1462:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)

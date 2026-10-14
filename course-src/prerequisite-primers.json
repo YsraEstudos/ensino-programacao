@@ -1,0 +1,100 @@
+{
+  "_comment": "Explicações curtas para recursos que uma atividade usa antes da aula completa. Cada entrada aponta onde o assunto é ensinado de verdade. Ao mover o conteúdo para a etapa certa, retire a entrada.",
+  "04.02": [
+    "`[...a]` cria um array novo com os mesmos itens de `a` (spread, aprofundado na etapa 06); o array original não muda.",
+    "`a.push(1)` acrescenta 1 ao final do próprio array `a` e devolve o novo tamanho; quem tiver referência a `a` vê a mudança (arrays na etapa 05).",
+    "`++n` soma 1 a `n` e devolve o valor já somado; `n++` também soma, mas devolve o valor anterior."
+  ],
+  "04.05": [
+    "`{ style: 'currency', currency: 'BRL' }` é um objeto literal usado como pacote de opções nomeadas: cada chave configura um aspecto do formatador. Objetos são estudados na etapa 06; aqui basta escrever as chaves que a documentação de `Intl.NumberFormat` lista."
+  ],
+  "04.07": [
+    "`export function nome(...)` deixa a função disponível para outro arquivo, como o avaliador, importá-la com `import { nome } from './main.js'`. Módulos são estudados na etapa 14; até lá, mantenha o `export` que o arquivo inicial já traz."
+  ],
+  "04.11": [
+    "`export function validarPercentual(...)` deixa a função disponível ao avaliador; preserve `export` e a assinatura que o starter já apresenta.",
+    "`throw new TypeError('mensagem')` encerra a chamada e entrega o erro ao chamador. TypeError descreve um tipo incompatível; RangeError descreve um Number fora da faixa permitida. Uma guard clause valida primeiro e retorna ou lança antes do cálculo principal."
+  ],
+  "04.12": [
+    "`export function nome(...)` mantém a função importável pelo avaliador; preserve `export` e os parâmetros do starter.",
+    "`JSON.parse(texto)` transforma texto JSON em valor JavaScript; texto malformado lança SyntaxError. A expressão `erro instanceof SyntaxError` identifica essa classe para contextualizá-la.",
+    "A forma é `try { operação } catch (erro) { tratamento } finally { limpeza }`. catch recebe o erro lançado no try; finally executa antes do retorno ou da propagação do erro. Deixe return e throw fora de finally para não substituir o resultado nem esconder a falha original.",
+    "`ler` e `liberar` são funções recebidas como argumentos: a primeira é chamada para obter o texto, a segunda para limpar o recurso em todos os caminhos."
+  ],
+  "04.13": [
+    "`export function taxaDeEntrega(...)` deixa a função disponível ao avaliador; preserve `export` e a assinatura do starter.",
+    "Uma guard clause rejeita argumento inválido antes das decisões normais. Use `throw new TypeError('mensagem')` quando a chamada viola o contrato; retorne null quando a opção está bem formada, mas não tem resultado cadastrado."
+  ],
+  "05.03": [
+    "`partes.filter(parte => parte !== '')` chama a função entre parênteses uma vez para cada item e monta um array novo só com os itens cujo callback retorna um valor truthy — neste exemplo, `true`. É o mesmo que um `for...of` com `if` e `push`; funções como argumento são estudadas na etapa 07."
+  ],
+  "05.04": [
+    "`return { primeira: 0, ultima: 2 }` devolve um objeto com duas propriedades nomeadas; quem chama lê `resultado.primeira` e `resultado.ultima`. Objetos são estudados na etapa 06; aqui basta preencher os dois valores."
+  ],
+  "05.06": [
+    "`Object.freeze(array)` impede alterar as propriedades do array, mas é superficial: objetos dentro dele não são congelados. Neste starter, `sort` e `reverse` tentam reescrever posições e lançam `TypeError` mesmo fora do modo estrito."
+  ],
+  "05.07": [
+    "`throw new TypeError('mensagem')` interrompe a função e entrega o erro a quem chamou; o código depois do `throw` não roda. `TypeError` indica um valor do tipo ou formato errado. Retome a unidade Falhas previsíveis (04.11–04.13) para lançamento e tratamento com try/catch/finally; a etapa 13 aprofunda depuração, cause e testes."
+  ],
+  "06.06": [
+    "`JSON.parse` lança `SyntaxError` quando o texto não é JSON válido. `try { ... } catch (erro) { ... }` executa o bloco `catch` quando algo dentro do `try` lança, e o programa continua a partir dali.",
+    "`Map` e `Set` são coleções da etapa 07: `JSON.stringify` não os converte sozinho. Converta antes: `[...mapa]` (pares `[chave, valor]`) e `new Map(pares)` na volta; `[...set]` e `new Set(valores)` fazem o mesmo para um `Set`."
+  ],
+  "06.08": [
+    "`JSON.parse` lança `SyntaxError` quando o texto não é JSON válido; envolva a leitura em `try { ... } catch (erro) { ... }` para escolher o que fazer com a falha."
+  ],
+  "06.09": [
+    "`try { ... } catch (erro) { ... }` captura o erro lançado por `JSON.parse` com texto inválido.",
+    "`Map` e `Set` (etapa 07) não viram JSON diretamente: salve `[...colecao]` e reconstrua com `new Map(...)` ou `new Set(...)`."
+  ],
+  "06.07": [
+    "Objetos comuns herdam propriedades do protótipo (etapa 10). Em `{ __proto__: valor }`, a forma especial do literal define o protótipo se `valor` for objeto ou `null`; `obj.__proto__ = valor` pode acionar o setter herdado de um objeto comum. Já `{ ['__proto__']: valor }` cria uma chave de dados. Este contrato pede um objeto indexado: use `Object.create(null)`, sem protótipo; `Map` só serviria se a API mudasse para retornar um `Map`."
+  ],
+  "06.10": [
+    "`Object.create(base)` cria um objeto vazio cujo protótipo é `base`: ler uma chave que ele não tem consulta `base`. `Object.hasOwn(obj, chave)` diz se a chave é do próprio objeto. O modelo completo de protótipos é a etapa 10."
+  ],
+  "03.10": [
+    "`export function resumirNota(pontos)` é um invólucro pronto para que o avaliador importe a função; preserve `export`, o nome e o parâmetro e altere somente o corpo indicado. Funções exportadas para módulos são aprofundadas na etapa 14.",
+    "`{ faixa, situacao }` cria um objeto com duas propriedades; a forma curta usa cada variável também como nome da propriedade. Objetos são aprofundados na etapa 06; aqui, mantenha os nomes pedidos pelo contrato."
+  ],
+  "06.11": [
+    "`export function resumirPerfil(usuario)` é o invólucro pronto para que o avaliador importe a função; preserve `export`, o nome e o parâmetro e implemente o retorno pedido. Módulos são aprofundados na etapa 14."
+  ],
+  "09.05": [
+    "`var` é a forma antiga de declarar variáveis: vale para a função inteira, não para o bloco, e sua declaração é içada. Os callbacks deste loop executam depois e leem o mesmo binding `i`, que terminou em `3`; declarar `i` com `let` no `for` cria um binding por iteração. Em código novo, prefira `const` e `let`."
+  ],
+  "10.01": [
+    "`obj?.x` lê `x` só se `obj` não for `null` nem `undefined`; nesse caso o resultado é `undefined` em vez de um `TypeError`. `obj?.metodo()` chama o método só se `obj` existir."
+  ],
+  "12.02": [
+      "Revise 04.11: `TypeError` descreve argumento de tipo incorreto e `RangeError` um Number fora do domínio. Em retry, rejeite max inválido com `RangeError` antes de chamar a operação. Dentro de uma função `async`, `await` numa Promise rejeitada lança o erro naquela linha. `try { await ... } catch (erro) { ... }` captura essa rejeição como captura um `throw` comum. `throw` interrompe a função e a Promise dela rejeita."
+  ],
+  "12.05": [
+    "`throw new Error('mensagem')` dentro de uma função `async` faz a Promise devolvida rejeitar; quem chamou captura com `try/catch` em volta do `await`."
+  ],
+  "12.13": [
+    "`async function*` produz valores um de cada vez e pode usar `await` entre eles; `for await (const item of fonte)` consome esses valores esperando cada um. Generators são estudados na etapa 20."
+  ],
+  "15.06": [
+    "As interfaces `A` e `B` com a mesma propriedade pública são compatíveis pela forma (tipagem estrutural). Em classes, membros `private` só são compatíveis quando vêm da mesma declaração de origem; uma classe derivada preserva essa origem. Interfaces e aliases `type` também podem descrever a mesma forma; suas diferenças ficam para a etapa 17."
+  ],
+  "16.04": [
+    "`Promise<User>` é um tipo com parâmetro: a Promise que, quando resolvida, entrega um `User`. `Array<number>` é a mesma ideia para listas (igual a `number[]`). Escrever seus próprios tipos com parâmetro é o assunto da etapa 17."
+  ],
+  "16.06": [
+    "`typeof STATUS` (numa posição de tipo) pega o tipo da constante `STATUS`; `[number]` pega o tipo de qualquer item desse array. Com `as const`, o resultado é a união dos literais: `'idle' | 'loading' | 'done'`. Indexed access é aprofundado na etapa 18."
+  ],
+  "17.08": [
+    "A atividade anterior distinguiu `private`, `readonly` e `implements`. Neste Cache, `#entradas` e `#agora` usam privacidade runtime do JavaScript; o constructor recebe uma função normal e atribui `this.#agora = agora`. O Cache não usa `readonly` nem parameter properties."
+  ],
+  "19.01": [
+    "`condicao ? valorSeVerdadeiro : valorSeFalso` é o operador ternário do JavaScript: uma expressão que escolhe um entre dois valores. Tipos condicionais usam a mesma forma, `A extends B ? X : Y`, só que a pergunta é \"A cabe em B?\"."
+  ],
+  "22.05": [
+    "Arquivos `.js` podem ser verificados sem renomeá-los: `// @ts-check` habilita a checagem por arquivo e `checkJs: true` habilita a checagem dos JavaScript incluídos no projeto. JSDoc como `/** @param {number} x @returns {string} */` informa os tipos; o typecheck não substitui testes de comportamento."
+  ],
+  "22.11": [
+    "JSDoc pode tipar uma função JavaScript sem converter o arquivo para `.ts`. `// @ts-check` ativa checagem naquele arquivo; neste exercício, `checkJs: true` no `tsconfig` oferece a mesma checagem em escopo de projeto."
+  ]
+}

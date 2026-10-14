@@ -1,0 +1,1 @@
+import assert from'node:assert/strict';import{test}from'node:test';import{executar}from'./native-using.mjs';test('native using/await using dispose once in LIFO order',async()=>{assert.deepEqual(await executar(),['abriu A','abriu B','trabalho','fechou B','fechou A','abriu A','abriu B','trabalho async','fechou B','fechou A']);});

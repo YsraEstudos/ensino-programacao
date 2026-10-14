@@ -1,0 +1,1 @@
+import{mkdirSync}from'node:fs';import{execFileSync}from'node:child_process';mkdirSync('dist',{recursive:true});execFileSync(process.execPath,['node_modules/typescript/bin/tsc','-p','tsconfig.build.json'],{stdio:'inherit'});

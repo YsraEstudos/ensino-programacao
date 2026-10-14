@@ -1,0 +1,1 @@
+export function loadConfig(env) { if (env.NODE_ENV === 'production' && !env.TOKEN) throw new Error(`token ${env.TOKEN}`); return { port: Number(env.PORT || 3000), logLevel: env.LOG_LEVEL || 'info', token: env.TOKEN }; }

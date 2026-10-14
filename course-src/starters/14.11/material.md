@@ -1,0 +1,1 @@
+Dossiê comparativo de duas bibliotecas CSV: licença, manutenção, tamanho, dependências transitivas, lockfile, testes e custo futuro. Escolha com evidência verificável; execução local de pacote não decide adequação.

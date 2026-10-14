@@ -1,0 +1,2 @@
+export type UserId=string & {readonly __brand:"UserId"}; export type OrderId=string & {readonly __brand:"OrderId"};
+export function makeUserId(text:string):UserId { if(!/^u\d+$/.test(text)) throw new RangeError("ID de usuário inválido"); return text as UserId; } export function makeOrderId(text:string):OrderId { if(!/^o\d+$/.test(text)) throw new RangeError("ID de pedido inválido"); return text as OrderId; } export function getUser(id:UserId):string{return "usuário "+id;}

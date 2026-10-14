@@ -1,0 +1,78 @@
+- generic [ref=f4e1]:
+  - link "Pular para o conteúdo" [ref=f4e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f4e3]:
+    - complementary "Navegação principal" [ref=f4e4]:
+      - link "DevPath início" [ref=f4e5] [cursor=pointer]:
+        - /url: "#/home"
+        - generic [ref=f4e6]: </>
+        - generic [ref=f4e7]: devpath.
+      - generic [ref=f4e8]: ESPAÇO DE APRENDIZADO
+      - navigation [ref=f4e9]:
+        - link "Início" [ref=f4e10] [cursor=pointer]:
+          - /url: "#/home"
+          - generic [ref=f4e11]: ⌂
+          - text: Início
+        - link "Exercícios" [ref=f4e12] [cursor=pointer]:
+          - /url: "#/catalog"
+          - generic [ref=f4e13]: ▤
+          - text: Exercícios
+        - link "Revisão ↗" [ref=f4e14] [cursor=pointer]:
+          - /url: "#/review"
+          - generic [ref=f4e15]: ↻
+          - text: Revisão
+          - generic [ref=f4e16]: ↗
+      - generic [ref=f4e17]:
+        - text: SUA TRILHA ATIVA
+        - generic [ref=f4e18]: 01 / 01
+      - link "JavaScript · Exercícios Diagnóstico + etapas 00–23 · 261 atividades ›" [ref=f4e19] [cursor=pointer]:
+        - /url: "#/catalog"
+        - generic [ref=f4e21]:
+          - strong [ref=f4e22]: JavaScript · Exercícios
+          - generic [ref=f4e23]: Diagnóstico + etapas 00–23 · 261 atividades
+        - generic [ref=f4e24]: ›
+      - generic [ref=f4e25]:
+        - generic [ref=f4e26]:
+          - generic [ref=f4e27]: ✳
+          - paragraph [ref=f4e28]: Um pequeno passojá muda o que vocêconsegue construir.
+        - generic [ref=f4e29]:
+          - generic [ref=f4e30]: D
+          - generic [ref=f4e31]:
+            - strong [ref=f4e32]: Conta conectada
+            - generic [ref=f4e33]: Carregando perfil…
+          - button "Opções do perfil" [ref=f4e34] [cursor=pointer]: ···
+    - main [active] [ref=f4e35]:
+      - generic [ref=f4e36]:
+        - navigation "Navegação estrutural" [ref=f4e37]:
+          - link "Seu espaço" [ref=f4e38] [cursor=pointer]:
+            - /url: "#/home"
+          - generic [ref=f4e39]: /
+          - link "JavaScript" [ref=f4e40] [cursor=pointer]:
+            - /url: "#/catalog"
+          - generic [ref=f4e41]: /
+          - link "Etapa 14" [ref=f4e42] [cursor=pointer]:
+            - /url: "#/javascript/14.01"
+          - generic [ref=f4e43]: /
+          - strong [ref=f4e44]: Por que existe um bundler?
+        - generic [ref=f4e45]:
+          - generic [ref=f4e46]: prévia local · progresso neste navegador
+          - button "Sobre o DevPath" [ref=f4e48] [cursor=pointer]: "?"
+      - article [ref=f4e50]:
+        - link "← Voltar à trilha de JavaScript" [ref=f4e51] [cursor=pointer]:
+          - /url: "#/catalog"
+        - paragraph [ref=f4e52]:
+          - generic [ref=f4e53]: "Estado desta atividade:"
+          - generic [ref=f4e54]: Ainda não iniciada
+        - region [ref=f4e55]:
+          - generic [ref=f4e56]:
+            - text: ESCOLHA SEU CAMINHO
+            - heading "Como você quer começar?" [level=2] [ref=f4e57]
+            - paragraph [ref=f4e58]: Você pode estudar primeiro ou tentar recuperar a ideia de memória. Sua escolha fica salva nesta atividade.
+          - generic [ref=f4e59]:
+            - button "Aprender este conceito" [ref=f4e60] [cursor=pointer]
+            - button "Tentar de memória" [ref=f4e61] [cursor=pointer]
+        - text: 01 02 03 04 05
+      - generic [ref=f4e62]:
+        - generic [ref=f4e63]: DEVPATH ✳ APRENDA CONSTRUINDO
+        - generic [ref=f4e64]: "Prévia local: seu progresso fica neste navegador."
+  - status

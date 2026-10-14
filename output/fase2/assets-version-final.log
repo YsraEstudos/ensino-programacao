@@ -1,0 +1,4 @@
+
+> devpath@0.1.0 assets:version
+> node scripts/update-asset-versions.mjs
+

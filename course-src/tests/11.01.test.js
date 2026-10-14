@@ -1,0 +1,6 @@
+import {observarClique,observarControles} from './main.js';
+describe('propagação de eventos',()=>{
+ test('preserva target e a ordem bubble dos currentTarget',()=>{const root=document.createElement('div');root.innerHTML='<article id="pai"><a id="filho" href="#"><span id="alvo">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));/*@case 11.01.preserva-target-e-a-ordem-bu-da9cf1f8*/expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]);});
+ test('stopPropagation mantém listeners do mesmo alvo e remove o bubble ancestral',()=>{const root=document.createElement('div');root.innerHTML='<span id="alvo"></span>';const log=observarControles(root,'stop');root.querySelector('#alvo').click();/*@case 11.01.stoppropagation-mantem-liste-7af9f78d*/expect(log).toEqual(['capture','target-1','target-controle','target-3']);});
+ test('stopImmediatePropagation também interrompe listeners irmãos',()=>{const root=document.createElement('div');root.innerHTML='<span id="alvo"></span>';const log=observarControles(root,'immediate');root.querySelector('#alvo').click();/*@case 11.01.stopimmediatepropagation-tam-06380d85*/expect(log).toEqual(['capture','target-1','target-controle']);});
+});

@@ -1,0 +1,1 @@
+export function montarItem(lista,mensagem){const item=document.createElement('li');const texto=document.createTextNode(mensagem);const botao=document.createElement('button');botao.type='button';botao.textContent='Remover';botao.addEventListener('click',()=>item.remove());item.append(texto,botao);lista.append(item);return item;}

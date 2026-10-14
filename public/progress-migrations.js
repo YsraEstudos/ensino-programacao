@@ -8,5 +8,8 @@
             return { state, changed: false };
         return { changed: true, state: { ...state, code: state.code + '\nconsole.log(nome, pontos, ativo, volume, idioma, tentativas);', passedCode: null, complete: false } };
     }
-    global.DevPathProgressMigrations = Object.freeze({ stage01 });
+    function migrateLegacyLearning(progress, catalog, assessments) {
+        return global.DevPathLearningProgress.migrateLegacyLearning(progress, catalog, assessments);
+    }
+    global.DevPathProgressMigrations = Object.freeze({ stage01, migrateLegacyLearning });
 })(globalThis);

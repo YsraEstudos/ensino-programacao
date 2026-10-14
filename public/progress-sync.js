@@ -1,7 +1,7 @@
 (function (global) {
   "use strict";
 
-  function create({ snapshot, status, issue }) {
+  function create({ snapshot, status, issue, merge }) {
     let state = "loading";
     let loaded = false;
     let revision;
@@ -34,15 +34,37 @@
       revision = data.revision;
       backupKey = `devpath-pending:${data.accountKey}`;
       loaded = true;
-      state = pending() ? "recovery" : "ready";
-      if (state === "recovery") issue(state, "Existe uma tentativa não sincronizada desta aba. Baixe a cópia antes de continuar com o progresso da conta.");
-      return data.progress;
+      const backup = pending();
+      if (!backup) {
+        state = "ready";
+        return data.progress;
+      }
+      state = "recovery";
+      let recovered = data.progress;
+      try {
+        const saved = JSON.parse(backup);
+        if (saved?.progress && typeof saved.progress === "object" && !Array.isArray(saved.progress)) {
+          recovered = typeof merge === "function" ? merge(saved.progress, data.progress) : { ...data.progress, ...saved.progress };
+        }
+      } catch { /* The original backup remains available for download. */ }
+      issue(state, "Há uma tentativa não sincronizada. Ela foi combinada com o progresso da conta; baixe a cópia antes de salvar o resultado combinado.");
+      return recovered;
     }
 
     function save(source) {
-      if (!loaded || state === "recovery") return;
+      if (!loaded) return;
+      // Every save while not synchronized updates the status, so the learner never sees "salvando…" stay on screen.
+      if (state === "recovery") {
+        status("alterações guardadas neste dispositivo; escolha como continuar a sincronização");
+        return;
+      }
       preserve();
-      if (state !== "ready") return;
+      if (state !== "ready") {
+        status(state === "conflict"
+          ? "alterações guardadas neste dispositivo; conflito de sincronização"
+          : "alterações guardadas neste dispositivo; sincronização pausada");
+        return;
+      }
       pendingSource = source;
       status("salvando…");
       if (saving) return;
@@ -89,6 +111,7 @@
         clearBackup();
         state = "ready";
         issue(null);
+        save(snapshot());
       }
     });
   }

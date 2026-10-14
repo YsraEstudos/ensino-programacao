@@ -5,6 +5,7 @@ import { sanitizeEvidence, sanitizeSchedules } from "./progress-evidence";
 import { record, text, validDate, validTimestamp, boundedInteger } from "./progress-values";
 import { sanitizeStage01Progress } from "./stage01-progress";
 import { sanitizeStage02Progress } from "./stage02-progress";
+import { sanitizeLearningRecord } from "./learning-progress";
 
 const exerciseIds = new Set<string>(courseExerciseIds);
 const slugs = new Set(["web", "html", "css", ...exerciseIds]);
@@ -56,6 +57,14 @@ function sanitizeExerciseData(input: Record<string, unknown>, clean: UserProgres
   }
   for (const [key, value] of Object.entries(record(input.warmupCompleted))) {
     if (isExerciseDataKey(key) && typeof value === "boolean") clean.warmupCompleted[key] = value;
+  }
+  let learningCount = 0;
+  for (const [id, value] of Object.entries(record(input.exerciseLearning))) {
+    if (!exerciseIds.has(id) || learningCount >= limits.learningRecords) continue;
+    const learning = sanitizeLearningRecord(value);
+    if (!learning) continue;
+    clean.exerciseLearning[id] = learning;
+    learningCount++;
   }
 }
 

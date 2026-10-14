@@ -11,6 +11,7 @@
   "exercisePredictions": {},
   "exerciseReflections": {},
   "exerciseEvidence": {},
+  "exerciseLearning": {},
   "warmupCompleted": {},
   "reviewSchedule": {},
   "stage01": {},
@@ -23,7 +24,7 @@
   const limits = Object.freeze({
   "codeChars": 12000,
   "stage02PredictionChars": 2000,
-  "draftChars": 2500,
+  "draftChars": 12000,
   "predictionChars": 400,
   "reflectionChars": 600,
   "stage01ReflectionChars": 1200,
@@ -40,7 +41,14 @@
   "predictionRows": 12,
   "transferCount": 2,
   "transferIdChars": 30,
-  "secondOrderChars": 80
+  "secondOrderChars": 80,
+  "learningEvents": 12,
+  "learningAttemptHistory": 1000,
+  "learningEvidenceHistory": 300,
+  "learningRecords": 300,
+  "learningIdChars": 96,
+  "learningFingerprintChars": 128,
+  "learningPayloadChars": 200000
 });
   global.DevPathProgressModel = Object.freeze({ create: () => JSON.parse(JSON.stringify(defaults)), limits });
 })(globalThis);

@@ -1,0 +1,4 @@
+import {test} from 'node:test'; import assert from 'node:assert/strict'; import {makeUserId,makeOrderId,getUser} from './ids.ts';
+test('IDs válidos são aceitos e brands permanecem strings',()=>{const user=makeUserId('u12');const order=makeOrderId('o34');/*@case 19.09.ids-validos-sao-aceitos-e-br-9bdb45d6*/assert.equal(getUser(user),'usuário u12');/*@case 19.09.ids-validos-sao-aceitos-e-br-27111f16*/assert.equal(typeof order,'string');});
+test('makeUserId rejeita prefixo ou formato incorreto',()=>{/*@case 19.09.makeuserid-rejeita-prefixo-o-9f27b2d0*/assert.throws(()=>makeUserId('o12'),RangeError);/*@case 19.09.makeuserid-rejeita-prefixo-o-515820b9*/assert.throws(()=>makeUserId('u'),RangeError);});
+test('makeOrderId rejeita prefixo ou formato incorreto',()=>{/*@case 19.09.makeorderid-rejeita-prefixo--0c3c10c3*/assert.throws(()=>makeOrderId('u12'),RangeError);/*@case 19.09.makeorderid-rejeita-prefixo--51f12061*/assert.throws(()=>makeOrderId('o1x'),RangeError);});

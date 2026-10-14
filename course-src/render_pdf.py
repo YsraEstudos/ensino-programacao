@@ -30,12 +30,64 @@ MANIFEST = OUT / "manifesto_exercicios_site_3a_edicao.json"
 records = json.loads((GENERATED_DIR / "resolved_preview.json").read_text(encoding="utf-8"))
 coverage = json.loads((GENERATED_DIR / "audit_coverage.json").read_text(encoding="utf-8"))
 graph = json.loads((GENERATED_DIR / "concept_graph.json").read_text(encoding="utf-8"))
-assert len(records) == 254 and len(coverage) == 90
+audit_requirements = json.loads((ROOT / "audit_requirements.json").read_text(encoding="utf-8"))
+
+# Carregar o catálogo publicado do site para incorporar overrides editoriais, primers e revisões ativas
+CATALOG_PATH = PROJECT / "public" / "course-catalog.json"
+catalog_by_id = {}
+if CATALOG_PATH.exists():
+    for item in json.loads(CATALOG_PATH.read_text(encoding="utf-8")):
+        catalog_by_id[item["id"]] = item
+
+for record in records:
+    cat = catalog_by_id.get(record["id"])
+    if cat:
+        if cat.get("title"):
+            record["title"] = cat["title"]
+        learner = record.setdefault("learner", {})
+        if cat.get("prompt"):
+            learner["prompt"] = cat["prompt"]
+        if cat.get("objective"):
+            learner["objective"] = cat["objective"]
+        elif cat.get("firstResponse", {}).get("action"):
+            learner["objective"] = cat["firstResponse"]["action"]
+        if cat.get("starterFiles"):
+            learner["starter_files"] = cat["starterFiles"]
+        if cat.get("examples"):
+            learner["public_examples"] = cat["examples"]
+        if cat.get("checks"):
+            learner["public_tests"] = cat["checks"]
+        if cat.get("constraints"):
+            learner["constraints"] = cat["constraints"]
+        if cat.get("edgeCases"):
+            learner["edge_contract"] = cat["edgeCases"]
+        if cat.get("explanation"):
+            learner["explanation"] = cat["explanation"]
+        if cat.get("interaction"):
+            learner["interaction"] = cat["interaction"]
+        if cat.get("rubric"):
+            learner["visible_rubric"] = cat["rubric"]
+        if cat.get("resources"):
+            learner["resources"] = cat["resources"]
+        if cat.get("primers"):
+            record["primers"] = cat["primers"]
+        if cat.get("review"):
+            record["review"] = cat["review"]
+        if cat.get("autoTested"):
+            record["autoTested"] = True
+
+record_ids = [record["id"] for record in records]
+assert len(record_ids) == len(set(record_ids))
+assert [item["id"] for item in coverage] == [item["id"] for item in audit_requirements]
 assert all(r["status"] == "contract_ready" for r in records)
+activity_count = len(records)
+audit_count = len(coverage)
+stage_count = len({record["stage"] for record in records if record["stage"] != "D"})
+diagnostic_count = sum(record["stage"] == "D" for record in records)
 
 source_files = ([ROOT / "site_spec.md", ROOT / "implementation_protocol.md", ROOT / "bridges.md",
                  ROOT / "extras.py", ROOT / "compile_content.py", ROOT / "build_graph.py",
-                 ROOT / "build_coverage.py"] + sorted((ROOT / "recipes").glob("[0-9D]*.py")))
+                 ROOT / "build_coverage.py"] + ([ROOT / "publication-overrides.json"] if (ROOT / "publication-overrides.json").exists() else []) + sorted((ROOT / "recipes").glob("[0-9D]*.py")))
 digest = hashlib.sha256()
 for path in source_files:
     digest.update(path.name.encode("utf-8"))
@@ -102,10 +154,10 @@ def line(label_text: str, value: str, style="card_body") -> list:
     return [label(label_text), P(value or "—", style)]
 
 class Book(BaseDocTemplate):
-    def __init__(self, path: Path):
+    def __init__(self, path: Path, activity_count: int, audit_count: int):
         super().__init__(str(path), pagesize=A4, leftMargin=40, rightMargin=40,
                          topMargin=47, bottomMargin=43, title="JavaScript + TypeScript — Roteiro do Site — 3ª edição",
-                         author="Especificação curricular", subject="Contratos editoriais de 254 exercícios")
+                         author="Especificação curricular", subject=f"Contratos editoriais de {activity_count} exercícios e {audit_count} observações")
         frame = Frame(self.leftMargin, self.bottomMargin, self.width, self.height,
                       leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=0, id="normal")
         self.addPageTemplates(PageTemplate(id="dark", frames=frame, onPage=self.draw_page))
@@ -194,7 +246,7 @@ STAGES = {
 }
 
 def card(item: dict) -> list:
-    L, X = item["learner"], item["platform"]
+    L, X = item["learner"], item.get("platform", {})
     did = item["id"]
     title = P(f"{did}  {item['title']}", "card_title")
     title.bookmark_key = "item-" + did.replace(".", "-")
@@ -208,35 +260,102 @@ def card(item: dict) -> list:
     flow = [title,
             P(f"{item['kind']}{' · TRILHA OPCIONAL' if item.get('optional') else ''} · {item['estimated_minutes']} min (estimativa, sem nota por velocidade) · "
               f"{item['runtime']} · dificuldade multidimensional {d['display']}/5", "card_meta"),
-            P("Competência: " + item["primary_skill"] + "  |  Requer: " + (", ".join(item["requires"]) or "nenhum") +
-              "  |  Introduz: " + ", ".join(item["introduces"]), "card_small"),
+            P("Competência: " + item["primary_skill"] + "  |  Requer: " + (", ".join(item.get("requires", [])) or "nenhum") +
+              "  |  Introduz: " + ", ".join(item.get("introduces", [])), "card_small"),
             P("Eixos: " + " · ".join(dims), "card_small"),
             label("VISÃO DO ALUNO", "#6EF0DA"),
-            P(L["prompt"]),
-            *line("Material/arquivo inicial", " | ".join(f["path"] + ": " + f["content"] for f in L["starter_files"])),
-            *line("Exemplo e resultado público", " | ".join(c["given"] + " → " + c["expected"] for c in L["public_examples"])),
-            *line("Bordas e erros publicados", " | ".join(L["edge_contract"])),
-            *line("Teste público e aprovação visível", L["public_tests"][0]["scoring"]),
-            *line("Restrições e documentação", ("; ".join(L["constraints"]) + ". " if L["constraints"] else "") + L["docs_policy"], "card_small"),
-            label("VISÃO DA PLATAFORMA / REVISOR", "#C8B4FF"),
-            *line("Caso reservado dentro do contrato público", " | ".join(c["given"] + " → " + c["expected"] for c in X["hidden_cases"])),
-            *line("Concepção errada e falha observável", X["misconception_target"] + "  /  " + X["observable_failure"]),
-            *line("Pergunta diagnóstica", X["diagnostic_question"]),
-            *line("Pistas graduais", "1. " + X["hints"]["conceptual"] + "  2. " + X["hints"]["decomposition"] +
-                  "  3. " + X["hints"]["analogous_example"]),
-            *line("Solução de referência explicada", X["worked_solution"]["explanation"]),
-            *line("Transferência em outro contexto", X["transfer"]["prompt"]),
-            *line("Evidência de domínio", " ".join(X["mastery_evidence"]), "card_small"),
-            P("Compatibilidade: " + item["compatibility"] + "  |  Próxima sugestão: " +
-              (", ".join(X["next_ids"]) or "conclusão da trilha"), "card_small"),
-            P("Telemetria: " + ", ".join(X["telemetry"]), "card_small")]
+            P(L["prompt"])]
+
+    if L.get("objective"):
+        flow.extend(line("Objetivo da atividade", L["objective"]))
+
+    exp = L.get("explanation")
+    if isinstance(exp, dict):
+        exp_lines = []
+        if exp.get("mental_model"):
+            exp_lines.append(f"• Modelo mental: {exp['mental_model']}")
+        if exp.get("worked_example"):
+            exp_lines.append(f"• Exemplo resolvido: {exp['worked_example']}")
+        if exp.get("common_trap"):
+            exp_lines.append(f"• Armadilha comum: {exp['common_trap']}")
+        if exp.get("why_it_matters"):
+            exp_lines.append(f"• Por que importa: {exp['why_it_matters']}")
+        if exp_lines:
+            flow.extend(line("Explicação e modelo mental", "\n".join(exp_lines)))
+    elif isinstance(exp, str) and exp.strip():
+        flow.extend(line("Explicação e modelo mental", exp))
+
+    starters = L.get("starter_files") or []
+    flow.extend(line("Material/arquivo inicial", " | ".join(f["path"] + ": " + f["content"] for f in starters) if starters else "Início limpo (sem arquivo prévio)"))
+
+    examples = L.get("public_examples") or []
+    flow.extend(line("Exemplo e resultado público", " | ".join(c.get("given", "") + " → " + c.get("expected", "") for c in examples) if examples else "Especificado no enunciado"))
+
+    edges = L.get("edge_contract") or []
+    flow.extend(line("Bordas e erros publicados", " | ".join(edges) if edges else "Comportamento padrão"))
+
+    tests = L.get("public_tests") or []
+    scoring = "Verificação de conformidade"
+    if tests and isinstance(tests[0], dict) and "scoring" in tests[0]:
+        scoring = tests[0]["scoring"]
+    elif item.get("autoTested"):
+        scoring = "Verificado por testes executáveis automatizados"
+    flow.extend(line("Teste público e aprovação visível", scoring))
+
+    constraints = L.get("constraints") or []
+    policy = L.get("docs_policy") or ""
+    const_text = ("; ".join(constraints) + ". " if constraints else "") + policy
+    if const_text.strip():
+        flow.extend(line("Restrições e documentação", const_text, "card_small"))
+
+    if item.get("primers"):
+        flow.extend(line("Conceitos prévios (Primers)", " | ".join(item["primers"]), "card_small"))
+
+    rev = item.get("review")
+    if rev and isinstance(rev, dict) and rev.get("prompt"):
+        flow.append(label("REVISÃO ATIVA (QUIZ DE FIXAÇÃO DO SITE)", "#FFC77F"))
+        flow.append(P(rev["prompt"], "card_body"))
+        choices = rev.get("choices", [])
+        ans = rev.get("answer", -1)
+        choice_lines = []
+        for idx, choice in enumerate(choices):
+            prefix = "✓ (Correta) " if idx == ans else "• "
+            choice_lines.append(f"{prefix}{choice}")
+        flow.append(P("\n".join(choice_lines), "card_body"))
+        if rev.get("correctFeedback"):
+            flow.extend(line("Por que a resposta está certa", rev["correctFeedback"], "card_small"))
+        if rev.get("incorrectFeedback"):
+            flow.extend(line("Armadilha da alternativa incorreta", rev["incorrectFeedback"], "card_small"))
+
+    flow.append(label("VISÃO DA PLATAFORMA / REVISOR", "#C8B4FF"))
+    hidden = X.get("hidden_cases") or []
+    flow.extend(line("Caso reservado dentro do contrato público", " | ".join(c.get("given", "") + " → " + c.get("expected", "") for c in hidden) if hidden else "Sem casos reservados adicionais"))
+    flow.extend(line("Concepção errada e falha observável", (X.get("misconception_target") or "—") + "  /  " + (X.get("observable_failure") or "—")))
+    flow.extend(line("Pergunta diagnóstica", X.get("diagnostic_question") or "—"))
+
+    hints = X.get("hints") or {}
+    hint_str = "1. " + hints.get("conceptual", "—") + "  2. " + hints.get("decomposition", "—") + "  3. " + hints.get("analogous_example", "—")
+    flow.extend(line("Pistas graduais", hint_str))
+
+    solution = X.get("worked_solution") or {}
+    flow.extend(line("Solução de referência explicada", solution.get("explanation") or "—"))
+
+    transfer = X.get("transfer") or {}
+    flow.extend(line("Transferência em outro contexto", transfer.get("prompt") or "—"))
+
+    mastery = X.get("mastery_evidence") or []
+    flow.extend(line("Evidência de domínio", " ".join(mastery) if mastery else "—", "card_small"))
+
+    flow.append(P("Compatibilidade: " + (item.get("compatibility") or "—") + "  |  Próxima sugestão: " +
+                  (", ".join(X.get("next_ids") or []) or "conclusão da trilha"), "card_small"))
+    flow.append(P("Telemetria: " + (", ".join(X.get("telemetry") or []) or "padrão"), "card_small"))
     return flow
 
 flow = []
 flow.extend([Spacer(1, 72), P("CADERNO EDITORIAL · 28 SET 2026", "cover_small"),
              P("JavaScript +\nTypeScript", "cover_title"),
              P("Do zero ao avançado · Roteiro completo do site · 3ª edição AMOLED", "cover_sub"),
-             P("254 atividades ativas em 24 etapas e um diagnóstico; 90 observações de auditoria rastreadas. "
+             P(f"{activity_count} atividades ativas em {stage_count} etapas e {diagnostic_count} itens de diagnóstico; {audit_count} observações de auditoria rastreadas. "
                "Cada atividade explicita o que o aluno vê e o contrato da plataforma. Esta é a fonte para "
                "implementar o site, atividade por atividade.", "cover_sub"),
              Spacer(1, 25),
@@ -301,7 +420,7 @@ for stage in STAGES:
         flow.extend(card(item))
     flow.append(PageBreak())
 
-flow.append(heading("Rastreabilidade das 90 observações", 1, "audit"))
+flow.append(heading(f"Rastreabilidade das {audit_count} observações", 1, "audit"))
 flow.append(P("A tabela registra onde cada pedido foi incorporado editorialmente. Ela não confunde o contrato do PDF "
               "com um exercício já implementado no site. Novos IDs correspondentes aparecem quando aplicável."))
 for entry in coverage:
@@ -331,7 +450,7 @@ sources = [
 for title, url in sources:
     flow.append(Paragraph(f'<link href="{html.escape(url)}" color="#6EF0DA">{html.escape(title)}</link>', styles["body"]))
 
-book = Book(PDF)
+book = Book(PDF, activity_count, audit_count)
 book.build(flow)
 print(f"pdf={PDF}")
 print(f"manifest={MANIFEST}")

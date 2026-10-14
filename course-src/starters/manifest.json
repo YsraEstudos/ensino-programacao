@@ -1,0 +1,1192 @@
+{
+  "04.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.05": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.06": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.11": {
+    "version": 1,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.12": {
+    "version": 1,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.13": {
+    "version": 1,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.06": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.09": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.08": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.09": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.05": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.07": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.08": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.09": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.10": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.05": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.05": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.08": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "15.01": {
+    "version": 2,
+    "files": [
+      "diagnosticos.ts",
+      "matriz.md",
+      "tsconfig.json"
+    ]
+  },
+  "15.02": {
+    "version": 2,
+    "files": [
+      "config.ts",
+      "tsconfig.json"
+    ]
+  },
+  "15.03": {
+    "version": 2,
+    "files": [
+      "usuario.ts",
+      "tsconfig.json"
+    ]
+  },
+  "15.04": {
+    "version": 2,
+    "files": [
+      "perfil.ts",
+      "tsconfig.json"
+    ]
+  },
+  "15.06": {
+    "version": 2,
+    "files": [
+      "formas.ts"
+    ]
+  },
+  "15.07": {
+    "version": 2,
+    "files": [
+      "catalogo.ts",
+      "tsconfig.json"
+    ]
+  },
+  "15.08": {
+    "version": 2,
+    "files": [
+      "paginacao.js",
+      "paginacao.test.js",
+      "tsconfig.json",
+      "package.json",
+      "assessment.tsconfig.json",
+      "package-lock.json"
+    ]
+  },
+  "15.09": {
+    "version": 2,
+    "files": [
+      "inventario.ts"
+    ]
+  },
+  "15.10": {
+    "version": 2,
+    "files": [
+      "cartao.ts"
+    ]
+  },
+  "15.11": {
+    "version": 2,
+    "files": [
+      "perfil.ts",
+      "tsconfig.json"
+    ]
+  },
+  "16.01": {
+    "version": 2,
+    "files": [
+      "search.ts"
+    ],
+    "readonlyFiles": [
+      {
+        "path": "busca.ts",
+        "label": "Arquivo inicial original para comparação com a união discriminada."
+      }
+    ]
+  },
+  "16.02": {
+    "version": 2,
+    "files": [
+      "preco.ts"
+    ]
+  },
+  "16.03": {
+    "version": 2,
+    "files": [
+      "pagamento.ts"
+    ]
+  },
+  "16.04": {
+    "version": 2,
+    "files": [
+      "perfil.ts"
+    ]
+  },
+  "16.05": {
+    "version": 2,
+    "files": [
+      "usuarios.ts"
+    ]
+  },
+  "16.06": {
+    "version": 2,
+    "files": [
+      "acesso.ts"
+    ]
+  },
+  "16.07": {
+    "version": 2,
+    "files": [
+      "formas.ts"
+    ]
+  },
+  "16.08": {
+    "version": 2,
+    "files": [
+      "upload.ts",
+      "upload.test.ts",
+      "tsconfig.json",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "16.09": {
+    "version": 2,
+    "files": [
+      "eventos.ts"
+    ]
+  },
+  "16.10": {
+    "version": 2,
+    "files": [
+      "pedido.ts"
+    ]
+  },
+  "17.01": {
+    "version": 2,
+    "files": [
+      "apis.ts"
+    ]
+  },
+  "17.02": {
+    "version": 2,
+    "files": [
+      "repository.ts"
+    ],
+    "readonlyFiles": [
+      {
+        "path": "repositorio.ts",
+        "label": "Blocos embaralhados originais para reconstrução do contrato genérico."
+      }
+    ]
+  },
+  "17.03": {
+    "version": 2,
+    "files": [
+      "colecoes.ts"
+    ]
+  },
+  "17.04": {
+    "version": 2,
+    "files": [
+      "busca.ts"
+    ]
+  },
+  "17.05": {
+    "version": 2,
+    "files": [
+      "soma.ts"
+    ]
+  },
+  "17.06": {
+    "version": 2,
+    "files": [
+      "assinaturas.ts"
+    ]
+  },
+  "17.07": {
+    "version": 2,
+    "files": [
+      "rotas.ts"
+    ]
+  },
+  "17.11": {
+    "version": 1,
+    "files": [
+      "main.ts",
+      "package.json",
+      "tsconfig.json"
+    ]
+  },
+  "17.08": {
+    "version": 2,
+    "files": [
+      "cache.ts",
+      "cache.test.ts",
+      "tsconfig.json",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "17.09": {
+    "version": 2,
+    "files": [
+      "formas.ts"
+    ]
+  },
+  "18.01": {
+    "version": 2,
+    "files": [
+      "tipos.ts"
+    ]
+  },
+  "18.02": {
+    "version": 2,
+    "files": [
+      "patch.ts"
+    ]
+  },
+  "18.03": {
+    "version": 2,
+    "files": [
+      "acesso.ts"
+    ]
+  },
+  "18.04": {
+    "version": 2,
+    "files": [
+      "perfil.ts"
+    ]
+  },
+  "18.05": {
+    "version": 2,
+    "files": [
+      "handlers.ts"
+    ]
+  },
+  "18.06": {
+    "version": 2,
+    "files": [
+      "rotas.ts"
+    ]
+  },
+  "18.07": {
+    "version": 2,
+    "files": [
+      "usuarios.ts"
+    ]
+  },
+  "18.08": {
+    "version": 2,
+    "files": [
+      "filtros.ts"
+    ]
+  },
+  "18.09": {
+    "version": 2,
+    "files": [
+      "consumidor.ts",
+      "side.ts"
+    ]
+  },
+  "18.10": {
+    "version": 2,
+    "files": [
+      "api.ts"
+    ]
+  },
+  "19.01": {
+    "version": 2,
+    "files": [
+      "flags.ts"
+    ]
+  },
+  "19.02": {
+    "version": 2,
+    "files": [
+      "element.ts"
+    ]
+  },
+  "19.03": {
+    "version": 2,
+    "files": [
+      "unwrap.ts"
+    ]
+  },
+  "19.04": {
+    "version": 2,
+    "files": [
+      "is-string.ts"
+    ]
+  },
+  "19.05": {
+    "version": 2,
+    "files": [
+      "on.ts"
+    ]
+  },
+  "19.06": {
+    "version": 2,
+    "files": [
+      "mutable.ts"
+    ]
+  },
+  "19.07": {
+    "version": 2,
+    "files": [
+      "json.ts"
+    ]
+  },
+  "19.08": {
+    "version": 2,
+    "files": [
+      "emitter.ts",
+      "emitter.test.ts",
+      "tsconfig.json",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "19.09": {
+    "version": 2,
+    "files": [
+      "ids.ts"
+    ]
+  },
+  "20.01": {
+    "version": 2,
+    "files": [
+      "protocolo.js"
+    ]
+  },
+  "20.02": {
+    "version": 2,
+    "files": [
+      "walk.js"
+    ]
+  },
+  "20.03": {
+    "version": 2,
+    "files": [
+      "range.js"
+    ]
+  },
+  "20.04": {
+    "version": 2,
+    "files": [
+      "proxy.js"
+    ]
+  },
+  "20.05": {
+    "version": 2,
+    "files": [
+      "validador.js"
+    ]
+  },
+  "20.06": {
+    "version": 2,
+    "files": [
+      "pipelines.js"
+    ]
+  },
+  "20.07": {
+    "version": 2,
+    "files": [
+      "colecao-async.js"
+    ]
+  },
+  "20.08": {
+    "version": 2,
+    "files": [
+      "testes.js",
+      "pipeline.js"
+    ]
+  },
+  "20.09": {
+    "version": 2,
+    "files": [
+      "stream.js"
+    ]
+  },
+  "20.10": {
+    "version": 2,
+    "files": [
+      "bytes.js"
+    ]
+  },
+  "21.01": {
+    "version": 2,
+    "files": [
+      "cenarios.md"
+    ]
+  },
+  "21.02": {
+    "version": 2,
+    "files": [
+      "cleanup.js"
+    ]
+  },
+  "21.03": {
+    "version": 2,
+    "files": [
+      "benchmark.js"
+    ]
+  },
+  "21.04": {
+    "version": 2,
+    "files": [
+      "memo.js"
+    ]
+  },
+  "21.05": {
+    "version": 2,
+    "files": [
+      "primos.js",
+      "worker.js",
+      "main.js"
+    ]
+  },
+  "21.06": {
+    "version": 2,
+    "files": [
+      "metadados.js"
+    ]
+  },
+  "21.07": {
+    "version": 2,
+    "files": [
+      "tempo.js"
+    ]
+  },
+  "21.08": {
+    "version": 2,
+    "files": [
+      "recurso.js",
+      "native-using.test.mjs"
+    ]
+  },
+  "21.09": {
+    "version": 2,
+    "files": [
+      "lab.js",
+      "index.html"
+    ]
+  },
+  "21.10": {
+    "version": 2,
+    "files": [
+      "transferir.js"
+    ]
+  },
+  "21.11": {
+    "version": 2,
+    "files": [
+      "descarte.js",
+      "probe.mjs"
+    ]
+  },
+  "22.01": {
+    "version": 2,
+    "files": [
+      "lib.js",
+      "lib.d.ts",
+      "consumidor.ts"
+    ]
+  },
+  "22.02": {
+    "version": 2,
+    "files": [
+      "blocos.md",
+      "package.json",
+      "package-lock.json"
+    ]
+  },
+  "22.03": {
+    "version": 2,
+    "files": [
+      "parser.js",
+      "parser.d.ts",
+      "consumidor.ts"
+    ]
+  },
+  "22.04": {
+    "version": 2,
+    "files": [
+      "patch.js"
+    ]
+  },
+  "22.11": {
+    "version": 1,
+    "files": [
+      "main.js",
+      "tsconfig.json"
+    ]
+  },
+  "22.05": {
+    "version": 2,
+    "files": [
+      "a.js",
+      "b.js",
+      "c.js",
+      "plano.md"
+    ]
+  },
+  "22.06": {
+    "version": 2,
+    "files": [
+      "pagamento.js"
+    ]
+  },
+  "22.07": {
+    "version": 2,
+    "files": [
+      "tipos.test.ts",
+      "index.d.ts"
+    ]
+  },
+  "22.08": {
+    "version": 2,
+    "files": [
+      "src/index.ts",
+      "src/index.test.ts",
+      "package.json",
+      "tsconfig.json",
+      "README.md",
+      "consumidor/main.mjs",
+      "package-lock.json"
+    ]
+  },
+  "22.09": {
+    "version": 2,
+    "files": [
+      "src/index.ts",
+      "src/interno.ts",
+      "tsconfig.json",
+      "package.json",
+      "package-lock.json",
+      "src/index.test.ts"
+    ]
+  },
+  "22.10": {
+    "version": 2,
+    "files": [
+      "roteiro.md",
+      "packages/core/src/index.ts",
+      "packages/core/tsconfig.json",
+      "packages/app/src/main.ts",
+      "packages/app/tsconfig.json"
+    ]
+  },
+  "23.01": {
+    "version": 2,
+    "files": [
+      "pedidos.js",
+      "diagrama.md"
+    ]
+  },
+  "23.02": {
+    "version": 2,
+    "files": [
+      "fluxo.js"
+    ]
+  },
+  "23.03": {
+    "version": 2,
+    "files": [
+      "contrato.js"
+    ]
+  },
+  "23.04": {
+    "version": 2,
+    "files": [
+      "legado.js",
+      "legado.test.js"
+    ]
+  },
+  "23.05": {
+    "version": 2,
+    "files": [
+      "pr.diff",
+      "revisao.md"
+    ]
+  },
+  "23.06": {
+    "version": 2,
+    "files": [
+      "bordas.md"
+    ]
+  },
+  "23.07": {
+    "version": 2,
+    "files": [
+      "mudanca.md",
+      "src/reabrir.ts",
+      "package-lock.json",
+      "package.json",
+      "src/adapters/memoria.ts",
+      "src/dominio.ts",
+      "src/portas.ts",
+      "test/reabrir.test.ts"
+    ]
+  },
+  "23.08": {
+    "version": 2,
+    "files": [
+      "README.md",
+      "src/dominio.ts",
+      "src/portas.ts",
+      "src/adapters/memoria.ts",
+      "test/contrato.test.ts",
+      "package.json",
+      "tsconfig.json",
+      "src/adapters/versao.ts",
+      "src/servico.ts",
+      "package-lock.json"
+    ]
+  },
+  "23.09": {
+    "version": 2,
+    "files": [
+      "operacao.js"
+    ]
+  },
+  "23.10": {
+    "version": 2,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "src/main.js",
+      "src/ui/tabela.js",
+      "src/ui/formatar-limite.js",
+      "src/service/relatorio.js",
+      "src/domain/limite.js",
+      "src/storage/memoria.js",
+      "test/limite.test.js",
+      "test/relatorio.test.js"
+    ]
+  },
+  "23.11": {
+    "version": 2,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "src/main.js",
+      "src/ui/tabela.js",
+      "src/ui/formatar-raio.js",
+      "src/service/relatorio.js",
+      "src/domain/raio.js",
+      "src/storage/memoria.js",
+      "test/raio.test.js",
+      "test/relatorio.test.js"
+    ]
+  },
+  "03.10": {
+    "version": 1,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.11": {
+    "version": 1,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.03": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "07.06": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "08.07": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "09.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "09.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "09.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "09.05": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "09.07": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.06": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "10.07": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.10": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "04.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "05.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "06.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "11.01": {
+    "version": 2,
+    "files": [
+      "index.html",
+      "main.js"
+    ]
+  },
+  "11.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "11.09": {
+    "version": 2,
+    "files": [
+      "index.html",
+      "defer.js",
+      "async.js",
+      "module.js"
+    ]
+  },
+  "11.11": {
+    "version": 2,
+    "files": [
+      "index.html",
+      "main.js"
+    ]
+  },
+  "11.14": {
+    "version": 2,
+    "files": [
+      "index.html",
+      "main.js"
+    ]
+  },
+  "12.01": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "12.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "12.04": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "12.07": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "12.09": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "12.10": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "12.11": {
+    "version": 2,
+    "files": [
+      "client.js"
+    ]
+  },
+  "12.13": {
+    "version": 2,
+    "files": [
+      "stream.js"
+    ]
+  },
+  "12.14": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "13.01": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "13.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "13.04": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "13.11": {
+    "version": 2,
+    "files": [
+      "indices.js"
+    ]
+  },
+  "13.12": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.01": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.02": {
+    "version": 2,
+    "files": [
+      "main.js"
+    ]
+  },
+  "14.03": {
+    "version": 2,
+    "files": [
+      "package.json",
+      "package-lock.json",
+      "src/main.js",
+      "test/app.test.js",
+      "README.md"
+    ]
+  },
+  "14.04": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.05": {
+    "version": 2,
+    "files": [
+      "config.js"
+    ]
+  },
+  "14.07": {
+    "version": 2,
+    "files": [
+      "promise-try.js"
+    ]
+  },
+  "14.09": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.10": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.11": {
+    "version": 2,
+    "files": [
+      "material.md"
+    ]
+  },
+  "14.12": {
+    "version": 2,
+    "files": [
+      "src/index.html",
+      "src/main.js",
+      "src/math.js",
+      "src/details.js",
+      "src/style.css"
+    ],
+    "readonlyFiles": [
+      {
+        "path": "bundle/index.html",
+        "label": "HTML de saída real produzido pelo Vite"
+      },
+      {
+        "path": "bundle/assets/index.js",
+        "label": "Bundle inicial minificado com source map"
+      },
+      {
+        "path": "bundle/assets/index.js.map",
+        "label": "Mapa de origem do chunk inicial"
+      },
+      {
+        "path": "bundle/assets/index.css",
+        "label": "CSS emitido pelo build"
+      },
+      {
+        "path": "bundle/assets/details.js",
+        "label": "Chunk dinâmico emitido pelo build"
+      },
+      {
+        "path": "bundle/assets/details.js.map",
+        "label": "Mapa de origem do chunk dinâmico"
+      },
+      {
+        "path": "bundle/provenance.md",
+        "label": "Proveniência e comando do build"
+      }
+    ]
+  },
+  "14.13": {
+    "version": 2,
+    "files": [
+      "ordem-browser.js"
+    ]
+  }
+}

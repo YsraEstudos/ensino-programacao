@@ -1,0 +1,1573 @@
+{
+  "_comment": "Additive learner-facing graph. requires contains actual activity IDs; dedicated stages cite their authored renderer as the hint source.",
+  "D.01": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.02": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.03": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.04": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.05": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.06": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.07": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.08": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "D.09": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/diagnostic-preparation.mjs and the dedicated diagnostic renderer; generic hints are intentionally suppressed."
+  },
+  "00.01": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.02": {
+    "requires": [
+      "00.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.03": {
+    "requires": [
+      "00.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.04": {
+    "requires": [
+      "00.01",
+      "00.03"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.07": {
+    "requires": [],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.05": {
+    "requires": [
+      "00.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.06": {
+    "requires": [
+      "00.01",
+      "00.07"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.08": {
+    "requires": [
+      "00.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "00.09": {
+    "requires": [
+      "00.01",
+      "00.03"
+    ],
+    "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
+  },
+  "01.01": {
+    "requires": [
+      "00.01"
+    ]
+  },
+  "01.02": {
+    "requires": [
+      "01.01"
+    ]
+  },
+  "01.03": {
+    "requires": [
+      "01.02"
+    ]
+  },
+  "01.04": {
+    "requires": [
+      "01.02"
+    ]
+  },
+  "01.05": {
+    "requires": []
+  },
+  "01.06": {
+    "requires": [
+      "01.01"
+    ]
+  },
+  "01.07": {
+    "requires": [
+      "01.06"
+    ]
+  },
+  "01.08": {
+    "requires": [
+      "01.04",
+      "01.06"
+    ]
+  },
+  "01.09": {
+    "requires": [
+      "01.02",
+      "01.04",
+      "01.06"
+    ]
+  },
+  "02.01": {
+    "requires": [
+      "01.01"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.02": {
+    "requires": [
+      "01.01",
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.03": {
+    "requires": [
+      "01.01",
+      "02.01",
+      "02.02"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.04": {
+    "requires": [
+      "01.01",
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.05": {
+    "requires": [
+      "01.01",
+      "02.01",
+      "02.04"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.06": {
+    "requires": [
+      "01.01",
+      "02.02"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.07": {
+    "requires": [
+      "01.01",
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.08": {
+    "requires": [
+      "01.01",
+      "02.02"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.09": {
+    "requires": [
+      "01.01",
+      "02.01",
+      "02.08",
+      "02.06"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.10": {
+    "requires": [
+      "01.01",
+      "02.01",
+      "02.04"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.11": {
+    "requires": [
+      "01.01",
+      "02.10",
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "02.12": {
+    "requires": [
+      "01.01",
+      "02.10",
+      "02.11"
+    ],
+    "hintExemption": "Authored source: course-src/recipes/02.py lesson hints and the dedicated Stage 02 renderer; generic hints are intentionally suppressed."
+  },
+  "03.04": {
+    "requires": [
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.05": {
+    "requires": [
+      "02.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.01": {
+    "requires": [
+      "02.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.02": {
+    "requires": [
+      "02.01",
+      "03.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed.",
+    "graphNote": "03.01 is already a prerequisite in the effective Stage 03 sequence. The dedicated Stage 03 preparation contract supplies the execution-table explanation, so no additional forward edge is needed."
+  },
+  "03.03": {
+    "requires": [
+      "02.01",
+      "03.04",
+      "03.01"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed.",
+    "graphNote": "03.01 is already a prerequisite in the effective Stage 03 sequence. The dedicated Stage 03 preparation contract supplies the ordered-block explanation, so no additional forward edge is needed."
+  },
+  "03.06": {
+    "requires": [
+      "02.01",
+      "03.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.07": {
+    "requires": [
+      "02.01",
+      "03.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.08": {
+    "requires": [
+      "02.01",
+      "03.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.09": {
+    "requires": [
+      "02.01",
+      "03.01",
+      "03.04"
+    ],
+    "hintExemption": "Authored source: course-src/stage03-contract.mjs and the dedicated Stage 03 renderer; generic hints are intentionally suppressed."
+  },
+  "03.10": {
+    "requires": [
+      "02.01",
+      "03.04"
+    ]
+  },
+  "04.01": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.02": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.03": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.04": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.05": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.06": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.07": {
+    "requires": [
+      "03.04"
+    ]
+  },
+  "04.08": {
+    "requires": [
+      "04.07"
+    ]
+  },
+  "04.09": {
+    "requires": [
+      "04.07"
+    ]
+  },
+  "04.10": {
+    "requires": [
+      "04.07"
+    ]
+  },
+  "04.11": {
+    "requires": [
+      "04.07"
+    ]
+  },
+  "04.12": {
+    "requires": [
+      "04.11"
+    ]
+  },
+  "04.13": {
+    "requires": [
+      "04.12"
+    ]
+  },
+  "05.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.03": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.04": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.06": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.07": {
+    "requires": [
+      "04.11"
+    ]
+  },
+  "05.10": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.02": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.05": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.08": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "05.09": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "06.01": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.02": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.03": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.04": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.05": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.06": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.07": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.08": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.09": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.10": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "06.11": {
+    "requires": [
+      "06.10"
+    ]
+  },
+  "07.01": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.02": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.03": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.04": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.05": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.06": {
+    "requires": [
+      "04.01",
+      "05.01",
+      "03.10"
+    ]
+  },
+  "07.07": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.10": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.08": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "07.09": {
+    "requires": [
+      "04.01",
+      "05.01"
+    ]
+  },
+  "08.01": {
+    "requires": [
+      "03.01",
+      "05.01",
+      "07.05"
+    ]
+  },
+  "08.02": {
+    "requires": [
+      "03.01",
+      "05.01",
+      "06.01"
+    ]
+  },
+  "08.03": {
+    "requires": [
+      "03.01",
+      "05.01"
+    ]
+  },
+  "08.04": {
+    "requires": [
+      "03.01",
+      "05.01"
+    ]
+  },
+  "08.05": {
+    "requires": [
+      "03.01",
+      "05.01"
+    ]
+  },
+  "08.06": {
+    "requires": [
+      "03.01",
+      "05.01",
+      "07.05"
+    ]
+  },
+  "08.07": {
+    "requires": [
+      "03.01",
+      "05.01",
+      "07.05"
+    ]
+  },
+  "08.08": {
+    "requires": [
+      "03.01",
+      "05.01",
+      "07.05"
+    ]
+  },
+  "09.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "09.02": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "09.03": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "09.04": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "09.05": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "09.06": {
+    "requires": [
+      "04.01",
+      "09.02",
+      "07.05"
+    ]
+  },
+  "09.07": {
+    "requires": [
+      "04.01",
+      "07.05"
+    ]
+  },
+  "09.08": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "10.01": {
+    "requires": [
+      "06.01",
+      "04.01",
+      "06.11"
+    ]
+  },
+  "10.02": {
+    "requires": [
+      "06.01",
+      "04.01"
+    ]
+  },
+  "10.03": {
+    "requires": [
+      "06.01",
+      "04.01"
+    ]
+  },
+  "10.04": {
+    "requires": [
+      "06.01",
+      "04.01",
+      "10.01"
+    ]
+  },
+  "10.05": {
+    "requires": [
+      "06.01",
+      "04.01",
+      "10.02",
+      "10.01"
+    ]
+  },
+  "10.06": {
+    "requires": [
+      "06.01",
+      "04.01"
+    ]
+  },
+  "10.07": {
+    "requires": [
+      "06.01",
+      "04.01"
+    ]
+  },
+  "10.08": {
+    "requires": [
+      "06.01",
+      "04.01"
+    ]
+  },
+  "11.09": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.01": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.11": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.14": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.02": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.03": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.04": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.06": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.05": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.07": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.12": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.08": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "11.10": {
+    "requires": [
+      "06.01",
+      "00.08",
+      "11.08"
+    ]
+  },
+  "11.13": {
+    "requires": [
+      "06.01",
+      "00.08"
+    ]
+  },
+  "12.10": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.04": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.02": {
+    "requires": [
+      "04.11",
+      "04.12"
+    ]
+  },
+  "12.03": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.05": {
+    "requires": [
+      "04.12"
+    ]
+  },
+  "12.06": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.07": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.09": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.12": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.13": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.14": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "12.08": {
+    "requires": [
+      "04.01",
+      "12.01",
+      "12.02",
+      "12.06"
+    ]
+  },
+  "13.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.02": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.03": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.04": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.05": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.06": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.07": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.08": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.09": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.10": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.12": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.13": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "13.14": {
+    "requires": [
+      "04.01",
+      "11.13",
+      "13.07"
+    ]
+  },
+  "14.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.02": {
+    "requires": [
+      "04.01",
+      "14.01"
+    ]
+  },
+  "14.03": {
+    "requires": [
+      "04.01",
+      "14.01"
+    ]
+  },
+  "14.04": {
+    "requires": [
+      "04.01",
+      "14.01"
+    ]
+  },
+  "14.05": {
+    "requires": [
+      "04.01",
+      "14.01"
+    ]
+  },
+  "14.06": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.07": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.08": {
+    "requires": [
+      "04.01",
+      "14.02",
+      "14.03"
+    ]
+  },
+  "14.09": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.10": {
+    "requires": [
+      "04.01",
+      "14.01",
+      "14.04"
+    ]
+  },
+  "14.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.12": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "14.13": {
+    "requires": [
+      "04.01",
+      "12.01",
+      "14.04"
+    ]
+  },
+  "15.01": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.02": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.03": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.04": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.06": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.07": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.08": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.09": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.10": {
+    "requires": [
+      "04.01",
+      "06.01"
+    ]
+  },
+  "15.11": {
+    "requires": [
+      "04.01",
+      "06.01",
+      "15.04"
+    ]
+  },
+  "16.01": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "16.02": {
+    "requires": [
+      "15.01",
+      "16.01"
+    ]
+  },
+  "16.03": {
+    "requires": [
+      "15.01",
+      "16.01"
+    ]
+  },
+  "16.09": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "16.04": {
+    "requires": [
+      "15.01",
+      "16.02"
+    ]
+  },
+  "16.05": {
+    "requires": [
+      "15.01",
+      "16.02"
+    ]
+  },
+  "16.10": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "16.06": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "16.07": {
+    "requires": [
+      "15.01",
+      "16.01",
+      "16.09"
+    ]
+  },
+  "16.08": {
+    "requires": [
+      "15.01",
+      "16.01",
+      "16.09"
+    ]
+  },
+  "17.01": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "17.02": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "17.03": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "17.04": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "17.05": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "17.06": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "17.07": {
+    "requires": [
+      "15.01"
+    ]
+  },
+  "17.11": {
+    "requires": [
+      "15.01",
+      "17.02"
+    ]
+  },
+  "17.08": {
+    "requires": [
+      "15.01",
+      "17.02",
+      "17.11"
+    ]
+  },
+  "17.09": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "18.01": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "18.02": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "18.03": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.01"
+    ]
+  },
+  "18.04": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.01"
+    ]
+  },
+  "18.05": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "18.06": {
+    "requires": [
+      "15.01",
+      "17.01"
+    ]
+  },
+  "18.07": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.01"
+    ]
+  },
+  "18.08": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.06"
+    ]
+  },
+  "18.09": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.01"
+    ]
+  },
+  "18.10": {
+    "requires": [
+      "15.01",
+      "17.01",
+      "18.01"
+    ]
+  },
+  "19.01": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04",
+      "03.10"
+    ]
+  },
+  "19.02": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.03": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.04": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.05": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.06": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.07": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.08": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "19.09": {
+    "requires": [
+      "17.01",
+      "18.03",
+      "18.04"
+    ]
+  },
+  "20.01": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "20.02": {
+    "requires": [
+      "05.01",
+      "20.01"
+    ]
+  },
+  "20.03": {
+    "requires": [
+      "05.01",
+      "20.01"
+    ]
+  },
+  "20.04": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "20.05": {
+    "requires": [
+      "05.01"
+    ]
+  },
+  "20.06": {
+    "requires": [
+      "05.01",
+      "20.01"
+    ]
+  },
+  "20.07": {
+    "requires": [
+      "05.01"
+    ],
+    "primerSource": "course-src/prerequisite-primers.json:12.13 (optional async-iteration primer; it informs without becoming a mandatory dependency).",
+    "graphNote": "The authored async-iteration activity 12.13 is optional, so this card uses its primer/source without gating progress on an optional activity."
+  },
+  "20.08": {
+    "requires": [
+      "05.01",
+      "20.01"
+    ]
+  },
+  "20.09": {
+    "requires": [
+      "05.01"
+    ],
+    "primerSource": "course-src/prerequisite-primers.json:12.13 (optional async-iteration primer; it informs without becoming a mandatory dependency).",
+    "graphNote": "The authored async-iteration activity 12.13 is optional, so this card uses its primer/source without gating progress on an optional activity."
+  },
+  "20.10": {
+    "requires": [
+      "05.01",
+      "05.11"
+    ]
+  },
+  "21.01": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "21.02": {
+    "requires": [
+      "04.01",
+      "21.01"
+    ]
+  },
+  "21.03": {
+    "requires": [
+      "04.01",
+      "21.01"
+    ]
+  },
+  "21.04": {
+    "requires": [
+      "04.01",
+      "21.01"
+    ]
+  },
+  "21.05": {
+    "requires": [
+      "04.01",
+      "21.01"
+    ]
+  },
+  "21.06": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "21.07": {
+    "requires": [
+      "04.01",
+      "21.01"
+    ]
+  },
+  "21.08": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "21.09": {
+    "requires": [
+      "04.01",
+      "21.01",
+      "21.03"
+    ]
+  },
+  "21.10": {
+    "requires": [
+      "04.01",
+      "21.05"
+    ]
+  },
+  "21.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "22.01": {
+    "requires": [
+      "15.01",
+      "14.04"
+    ]
+  },
+  "22.02": {
+    "requires": [
+      "15.01",
+      "14.04"
+    ]
+  },
+  "22.03": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.01"
+    ]
+  },
+  "22.04": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.01"
+    ]
+  },
+  "22.11": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.01"
+    ]
+  },
+  "22.05": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.01",
+      "22.11"
+    ]
+  },
+  "22.06": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.01"
+    ]
+  },
+  "22.07": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.02"
+    ]
+  },
+  "22.08": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.02",
+      "22.07"
+    ]
+  },
+  "22.09": {
+    "requires": [
+      "15.01",
+      "14.04",
+      "22.02"
+    ]
+  },
+  "22.10": {
+    "requires": [
+      "15.01",
+      "14.04"
+    ]
+  },
+  "23.01": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ]
+  },
+  "23.02": {
+    "requires": [
+      "04.01",
+      "13.03",
+      "23.01"
+    ]
+  },
+  "23.03": {
+    "requires": [
+      "04.01",
+      "13.03",
+      "23.01"
+    ]
+  },
+  "23.04": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ]
+  },
+  "23.05": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ]
+  },
+  "23.06": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ]
+  },
+  "23.10": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ]
+  },
+  "23.11": {
+    "requires": [
+      "04.01",
+      "13.03",
+      "23.10"
+    ]
+  },
+  "23.08": {
+    "requires": [
+      "04.01",
+      "13.03",
+      "23.01",
+      "23.03"
+    ]
+  },
+  "23.09": {
+    "requires": [
+      "04.01",
+      "13.03",
+      "23.06"
+    ]
+  },
+  "23.07": {
+    "requires": [
+      "04.01",
+      "13.03"
+    ],
+    "graphNote": "This change request is prepared by the earlier 04.01 return/boundary and 13.03 behavior-evidence providers; its authored three-step ladder in course-src/recipes/23.py covers actor authorization, operation boundaries, and atomic audit failure. The capstone and observability cards remain non-mandatory context so this focused change can be practiced independently."
+  }
+}
+

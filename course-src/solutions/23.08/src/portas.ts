@@ -1,0 +1,1 @@
+import type{Estado}from'./dominio.ts';export type Evento={tipo:string;entidadeId:string;por:string;em:string};export interface Repositorio{carregar():Promise<Estado>;salvar(estado:Estado):Promise<void>;salvarComEvento(estado:Estado,eventos:readonly Evento[]):Promise<void>;carregarEventos():Promise<readonly Evento[]>;}

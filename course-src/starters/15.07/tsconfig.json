@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2024",
+    "module": "preserve",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noEmit": true
+  },
+  "files": ["catalogo.ts"]
+}

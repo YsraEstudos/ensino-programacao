@@ -1,0 +1,1 @@
+export function validarPagamento(p){if(typeof p!=='object'||p===null)return{ok:false,erros:['payload precisa ser objeto']};const amount=Number(p.amount);if(!p.id||!Number.isFinite(amount))return{ok:false,erros:['inválido']};return{ok:true,valor:{id:p.id,amount}};}

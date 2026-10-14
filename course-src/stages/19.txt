@@ -38,6 +38,7 @@ type Getters<T> = {
 O exemplo só entra depois que keyof/mapped types estão sólidos. A avaliação inclui legibilidade e limite de
 complexidade, não apenas “funciona”.
 GATE DE DOMINIO
-Avance com typecheck strict verde, testes runtime quando aplicavel, zero any/cast sem
-justificativa e um exercicio de transferencia de tipos feito sem dica. Type tests contam como
-parte do contrato.
+Avance com typecheck strict verde rodando `tsc --noEmit` no seu computador (o site ainda
+nao executa o compilador), testes runtime quando aplicavel, zero any/cast sem justificativa e
+um exercicio de transferencia de tipos feito sem dica. Type tests contam como parte do
+contrato. A conclusao no site e revisao propria.

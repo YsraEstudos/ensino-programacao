@@ -1,0 +1,8 @@
+import { executar, salvarAtomico } from './cli.js';
+describe('CLI de notas com repositório injetável', () => {
+  function repo() { const notes = []; return { async add(text) { const note = { id: String(notes.length + 1), text }; notes.push(note); return note; }, async list() { return [...notes]; }, async remove(id) { const i = notes.findIndex(note => note.id === id); if (i < 0) return { status: 'not-found' }; return { status: 'removed', note: notes.splice(i, 1)[0] }; } }; }
+  test('add/list preservam ordem', async () => { const r = repo(); await executar('add', r, ['A']); await executar('add', r, ['B']); /*@case 14.08.add-list-preservam-ordem-cff40da2*/expect(await executar('list', r, [])).toEqual([{ id: '1', text: 'A' }, { id: '2', text: 'B' }]); });
+  test('remove inexistente retorna not-found', async () => { /*@case 14.08.remove-inexistente-retorna-n-abc5a3c6*/expect(await executar('remove', repo(), ['99'])).toEqual({ status: 'not-found' }); });
+  test('domínio não depende de process.argv', async () => { const r = repo(); /*@case 14.08.dominio-nao-depende-de-proce-26f2ac6d*/expect(await executar('add', r, ['A'])).toEqual({ id: '1', text: 'A' }); });
+  test('persistência usa temp e rename na ordem', async () => { const calls = []; const fs = { async writeFile(path, text) { calls.push(['write', path, text]); }, async rename(from, to) { calls.push(['rename', from, to]); } }; await salvarAtomico(fs, 'data.json', '{"ok":true}'); /*@case 14.08.persistencia-usa-temp-e-rena-9537c567*/expect(calls.map(call => call[0])).toEqual(['write', 'rename']); /*@case 14.08.persistencia-usa-temp-e-rena-8476390f*/expect(calls[1][1]).toContain('.tmp'); /*@case 14.08.persistencia-usa-temp-e-rena-e3d7d227*/expect(calls[1][2]).toBe('data.json'); });
+});

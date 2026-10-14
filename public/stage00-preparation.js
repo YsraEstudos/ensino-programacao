@@ -677,6 +677,11 @@
             p.exerciseEvidence[k].rubric = [...root().querySelectorAll('[data-s00-rubric]:checked')].map(input => Number(input.value));
             p.exerciseReflections ||= {};
             p.exerciseReflections[k] = root().querySelector('[data-s00-reflection]').value.slice(0, 600);
+            void context.learning?.submitStudy?.(item, p.exerciseReflections[k]);
+            void context.learning?.runAssessment?.(item, {
+                kind: 'passed',
+                source: writing(item) ? 'rubric-declared' : 'local-declared'
+            });
             p.answers ||= {};
             p.answers[item.id] = true;
             p.exerciseVersions ||= {};

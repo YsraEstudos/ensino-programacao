@@ -1,0 +1,1 @@
+export type Result<T>={ok:boolean;value?:T;error?:string};export declare function parse(input:string):Result<number>;export declare class Client{constructor(baseUrl:string);get(path:`/${string}`):Promise<Result<unknown>>;}

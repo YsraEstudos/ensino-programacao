@@ -1,0 +1,2 @@
+import {dividir} from './main.js';
+describe('guardas antes do cálculo',()=>{test('aceita divisão finita',()=>/*@case 13.02.aceita-divisao-finita-4486ede5*/expect(dividir(8,2)).toBe(4));test('rejeita cada entrada inválida antes de dividir',()=>{/*@case 13.02.rejeita-cada-entrada-invalid-ddafb936*/expect(()=>dividir(NaN,2)).toThrow(TypeError);/*@case 13.02.rejeita-cada-entrada-invalid-bf1ac1f9*/expect(()=>dividir(8,Infinity)).toThrow(TypeError);/*@case 13.02.rejeita-cada-entrada-invalid-a02f7aef*/expect(()=>dividir(8,0)).toThrow(RangeError);});});

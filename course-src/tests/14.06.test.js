@@ -1,0 +1,6 @@
+import { loadConfig } from './config.js';
+describe('loadConfig', () => {
+  test('defaults and valid port', () => { /*@case 14.06.defaults-and-valid-port-6891b4fe*/expect(loadConfig({})).toEqual({ port: 3000, logLevel: 'info' }); /*@case 14.06.defaults-and-valid-port-486beac3*/expect(loadConfig({ PORT: '8080', LOG_LEVEL: 'debug' })).toEqual({ port: 8080, logLevel: 'debug' }); });
+  test('blank/invalid ports are rejected correctly', () => { /*@case 14.06.blank-invalid-ports-are-reje-eee9a3f0*/expect(loadConfig({ PORT: '  ' }).port).toBe(3000); for (const PORT of ['abc', '0', '65536', '2.5']) /*@case 14.06.blank-invalid-ports-are-reje-bc28df46*/expect(() => loadConfig({ PORT })).toThrow(RangeError); });
+  test('unknown log level and production secret are rejected safely', () => { /*@case 14.06.unknown-log-level-and-produc-8ac00c51*/expect(() => loadConfig({ LOG_LEVEL: 'verbose' })).toThrow(RangeError); /*@case 14.06.unknown-log-level-and-produc-78dfa306*/expect(() => loadConfig({ NODE_ENV: 'production' })).toThrow(/TOKEN obrigatório/); try { loadConfig({ NODE_ENV: 'production', TOKEN: 'segredo' }); } catch (error) { /*@case 14.06.unknown-log-level-and-produc-4561fd23*/expect(error.message.includes('segredo')).toBe(false); } });
+});

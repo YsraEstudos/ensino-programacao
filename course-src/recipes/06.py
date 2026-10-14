@@ -371,4 +371,38 @@ CONTENT = {
 
         prompt='Compare in, Object.hasOwn, Object.keys e descritor nas propriedades indicadas. Preencha a matriz prevista antes de rodar e explique próprio versus herdado.',
     ),
+    "06.11": E(
+        "objects.optional_access_defaults",
+        'main.js: export function resumirPerfil(usuario) { return { nome: usuario?.perfil?.nome ?? "Visitante", pontos: usuario?.perfil?.pontos ?? 100, ativo: usuario?.perfil?.ativo ?? true, mensagem: usuario?.perfil?.mensagem ?? "Sem mensagem" }; }',
+        'usuario={perfil:{nome:"Ana",pontos:0,ativo:false,mensagem:""}} -> {nome:"Ana",pontos:0,ativo:false,mensagem:""}',
+        'usuario=null -> {nome:"Visitante",pontos:100,ativo:true,mensagem:"Sem mensagem"}; usuario={perfil:{}} -> mesmos padrões; pontos=undefined usa 100, mas pontos=0 permanece 0; perfil="inválido" ou [] -> null',
+        'Usar && ou || para acessar campo opcional; usar || como padrão apaga valores válidos 0, false e string vazia; confiar em ?. como validação de tipo.',
+        'O acesso a usuario.perfil falha quando usuario é null; defaults com || substituem zero, false e ""; ?. acessa com segurança, mas não valida perfil como objeto.',
+        'Qual operador interrompe o acesso quando o caminho não existe, qual valor indica ausência e que guard clause rejeita perfil que não é um registro?',
+        ('Encadeie usuario?.perfil?.campo para que cada acesso possa estar ausente.', 'Use ?? para fornecer padrão apenas se o resultado for null ou undefined.', 'Antes das leituras, retorne null se perfil presente não for objeto ou for array; ?. não valida tipos. Confira 0, false e "".'),
+        'Optional chaining retorna undefined quando uma parte do caminho é null/undefined; nullish coalescing escolhe o padrão somente para null/undefined e conserva 0, false e "". Nenhum deles confirma o tipo dos valores.',
+        'perfil={nome:"",pontos:0,ativo:false,mensagem:""} -> conserva nome:"", pontos:0, ativo:false e mensagem:""; usuario=null -> padrões nome:"Visitante", pontos:100, ativo:true, mensagem:"Sem mensagem"',
+        prompt='Implemente resumirPerfil(usuario) com acesso opcional ao objeto perfil. Se perfil estiver presente, valide que seja um objeto não-array; retorne null para outro tipo. Quando cada campo estiver ausente/null, use nome:"Visitante", pontos:100, ativo:true e mensagem:"Sem mensagem". Uma configuração pode ser 0, false ou ""; conserve esses valores, aplicando padrão somente a null/undefined.',
+        kind="MAKE", estimated=20, load={"novelty": 3, "syntax": 3, "composition": 2, "state": 2, "debugging": 3, "files": 2, "reading": 3, "independence": 2, "tools": 1},
+        constraints=("Não use encadeamentos com && para acessar perfil.", "Não use || para aplicar os padrões.", "Perfil ausente/null é permitido; perfil presente deve ser objeto não-array, senão retorne null.", "A função deve retornar as quatro propriedades no contrato quando perfil for válido."),
+        rubric=("Encadeamento ?. protege usuario, perfil e cada leitura opcional.", "?? aplica cada valor padrão somente a null/undefined.", "A saída preserva 0, false e string vazia.", "Uma guard clause retorna null para perfil que não é registro; ?. não substitui validação."),
+        explanation={
+            'mental_model': 'Optional chaining `obj?.campo` interrompe o acesso quando obj é null ou undefined e devolve undefined. Nullish coalescing `valor ?? padrao` usa o padrão apenas para null ou undefined; 0, false e "" continuam sendo valores presentes. Esses operadores não validam se o valor tem o tipo esperado.',
+            'worked_example': 'Em `config?.som?.volume ?? 5`, caminho ausente produz 5, mas volume=0 permanece 0. Do mesmo modo, `config?.avisos?.ativo ?? true` conserva false. Um guard clause separado confere o tipo de `config` antes de ler suas propriedades.',
+            'common_trap': '`||` escolhe o padrão para qualquer valor falsy, incluindo 0, false e ""; `?.` evita erro de acesso quando algo é nullish, mas não confirma que o valor é um objeto válido.',
+            'why_it_matters': 'Preferências e dados recebidos podem omitir ramos inteiros; valores falsy também podem representar escolhas válidas do usuário.'
+        },
+        first_response='Preveja o resultado para usuario ausente e para perfil com 0, false, "" e tipo inválido antes de executar.',
+        first_response_timing='Depois de ler o exemplo e o primer de função exportada, antes de executar ou pedir dica.',
+        interaction='Edite o código e compare cada campo retornado. Os testes automáticos conferem ausência, valores falsy e perfil inválido; o uso de ?. e ?? é conferido por você na autoavaliação.',
+        resources=('MDN Optional chaining: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining', 'MDN Nullish coalescing: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing'),
+        review={
+            'prompt': 'Qual expressão fornece um padrão quando pontos é 0, preservando esse zero?',
+            'choices': ['pontos ?? 100', 'pontos || 100', 'pontos && 100'],
+            'answer': 'pontos ?? 100',
+            'feedback_correct': 'Correto: ?? troca somente null e undefined; zero é mantido.',
+            'feedback_incorrect': '|| considera 0 falsy e o substituiria; && também não é operador de padrão.'
+        },
+        transfer_prompt='Leia preferências de conta opcional. usuario={perfil:{nome:"",notificacoes:false,atalho:""}} -> {nome:"", notificacoes:false, atalho:""}; usuario={perfil:"inválido"} -> null; usuario=null -> nome padrão. Explique por que || mudaria duas escolhas válidas.',
+        runtime='Node.js 24 LTS', compatibility='Optional chaining e nullish coalescing fazem parte do JavaScript padrão no Node.js 24 LTS; sem dependências externas.'),
 }

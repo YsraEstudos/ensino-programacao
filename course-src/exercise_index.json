@@ -288,6 +288,14 @@
     "audit_ids": []
   },
   {
+    "id": "03.10",
+    "title": "Ternário ou if?",
+    "stage": "03",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": []
+  },
+  {
     "id": "04.01",
     "title": "Preveja retornos",
     "stage": "04",
@@ -357,6 +365,30 @@
     "stage": "04",
     "kind": "PROJECT",
     "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.11",
+    "title": "Validar percentual",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.12",
+    "title": "Falha com contexto e limpeza",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "04.13",
+    "title": "Retorno esperado ou erro",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "third_edition",
     "audit_ids": []
   },
   {
@@ -509,6 +541,14 @@
     "stage": "06",
     "kind": "PROJECT",
     "origin": "second_edition",
+    "audit_ids": []
+  },
+  {
+    "id": "06.11",
+    "title": "Acessos opcionais e padrões precisos",
+    "stage": "06",
+    "kind": "MAKE",
+    "origin": "third_edition",
     "audit_ids": []
   },
   {
@@ -1224,6 +1264,14 @@
     "audit_ids": []
   },
   {
+    "id": "17.11",
+    "title": "Classes: visibilidade e propriedades apagáveis",
+    "stage": "17",
+    "kind": "PROJECT",
+    "origin": "phase1",
+    "audit_ids": []
+  },
+  {
     "id": "17.08",
     "title": "Microprojeto - cache genérico",
     "stage": "17",
@@ -1538,6 +1586,14 @@
     "origin": "second_edition",
     "audit_ids": [],
     "prompt": "Remover monkey patch global desnecessário ou isolá-lo com documentação e escopo."
+  },
+  {
+    "id": "22.11",
+    "title": "JSDoc e verificação de JavaScript",
+    "stage": "22",
+    "kind": "MAKE",
+    "origin": "phase1",
+    "audit_ids": []
   },
   {
     "id": "22.05",

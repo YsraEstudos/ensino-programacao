@@ -1,0 +1,1 @@
+export function instalar({botao,rolagem,painel,copiarTexto,observarRolagem,atualizarPainel,controller=new AbortController()}){botao.addEventListener('click',copiarTexto);rolagem.addEventListener('wheel',observarRolagem);painel.addEventListener('click',atualizarPainel);return controller;}

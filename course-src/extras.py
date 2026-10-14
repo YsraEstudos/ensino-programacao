@@ -59,4 +59,8 @@ DIAGNOSTIC = [
     ("D.03", "Fluxo de decisão", "TRACE", "Leia uma regra if/else e preveja o ramo em duas entradas.", [41, 47]),
     ("D.04", "Função e retorno", "READ", "Identifique entrada, retorno e efeito de uma função curta.", [41, 53]),
     ("D.05", "Localize a falha", "INVESTIGATE", "Escolha leitura, Run ou teste para localizar uma falha curta e explique sua escolha.", [41, 50]),
+    ("D.06", "Fundamentos · um primeiro retrato", "PREDICT", "Preveja uma expressão síncrona e distinga o número 5 do texto \"5\".", [41, 43]),
+    ("D.07", "Intermediário · funções e arrays", "READ", "Preveja um retorno, acompanhe um array e associe map, filter e find ao resultado desejado.", [41, 50, 53]),
+    ("D.08", "TypeScript · tipos e limites da verificação", "READ", "Separe retorno, acesso a propriedade, diagnóstico estático e validação em runtime.", [41, 53]),
+    ("D.09", "Avançado · hipóteses e medições", "INVESTIGATE", "Classifique hipóteses de desempenho e indique uma observação mensurável e alternativa.", [41, 50]),
 ]

@@ -1,0 +1,1 @@
+A importa binding nomeado de B; B exporta valor via top-level await; C faz import('./A.js'). Traceie linking, avaliação assíncrona, resolução de import() e logs separadamente. Registre runtime/formato e não una os snippets em um arquivo.

@@ -13,6 +13,26 @@ from generated_data import GENERATED_DIR
 
 ROOT = Path(__file__).resolve().parent
 PROJECT = ROOT.parent
+BASELINE = json.loads((ROOT / "runtime-baseline.json").read_text(encoding="utf-8"))
+# Compatibility text for cards whose recipe does not declare one; generic text is rejected below.
+COMPATIBILITY_OVERRIDES = json.loads((ROOT / "compatibility-overrides.json").read_text(encoding="utf-8"))
+GENERIC_COMPATIBILITY = "Recursos básicos; confirmar cada API recente no runtime declarado"
+# Tracked APIs with Node.js versions from @mdn/browser-compat-data (see feature-matrix.json source).
+FEATURE_MATRIX = json.loads((ROOT / "feature-matrix.json").read_text(encoding="utf-8"))
+LEARNING_METADATA = json.loads((ROOT / "learning-metadata.json").read_text(encoding="utf-8"))
+
+def runtime_label(declared: str, eid: str) -> str:
+    """Publish one label per runtime profile, filled from the single target-environment file."""
+    profile = declared if declared in BASELINE["profiles"] else BASELINE["aliases"].get(declared)
+    if profile is None:
+        raise ValueError(f"Unknown runtime for {eid}: {declared!r}; add a profile or alias to runtime-baseline.json")
+    values = {
+        "node": BASELINE["node"]["primary"],
+        "ecmascript": BASELINE["ecmascript"],
+        "typescript": BASELINE["typescript"]["course"],
+        "browsers": BASELINE["browsers"],
+    }
+    return BASELINE["profiles"][profile].format(**values)
 DIMENSIONS = (
     "novelty", "syntax", "composition", "state", "debugging",
     "files", "reading", "independence", "tools",
@@ -20,7 +40,7 @@ DIMENSIONS = (
 SCOPED_STAGES = {f"{i:02d}" for i in range(21)}
 OPTIONAL_EXERCISE_IDS = {
     "05.05", "09.07", "12.09", "12.13", "14.07", "17.07",
-    "20.02", "20.04", "20.05", "20.06", "20.07", "21.06",
+    "20.04", "20.05", "20.06", "20.07", "21.06", "21.08", "21.11",
 }
 EXPLANATION_FIELDS = {"mental_model", "worked_example", "common_trap", "why_it_matters"}
 ACTIVE_RECALL_SCHEDULE = ["D+7", "D+21"]
@@ -98,7 +118,7 @@ STAGE_INTRODUCES = {
            "bindings.textual_profile"],
     "02": ["operators.basic", "number.model", "math.basic"],
     "03": ["control.branch", "control.loop"],
-    "04": ["functions.return", "functions.decomposition"],
+    "04": ["functions.return", "functions.decomposition", "errors.throw", "errors.types"],
     "05": ["arrays.basic", "strings.basic", "regex.basic", "unicode.basic", "callbacks.basic"],
     "06": ["objects.identity", "objects.own", "serialization.json", "errors.try_catch"],
     "07": ["arrays.pipeline", "mapset.basic"],
@@ -107,7 +127,7 @@ STAGE_INTRODUCES = {
     "10": ["this.binding", "prototype.chain", "classes.basic"],
     "11": ["dom.basic", "events.propagation", "forms.basic", "storage.versioned", "modules.browser"],
     "12": ["async.promise", "http.basic", "fetch.basic", "date.time", "async.iterables"],
-    "13": ["testing.behavior", "debugging.tools", "errors.throw", "errors.types", "errors.cause"],
+    "13": ["testing.behavior", "debugging.tools", "errors.cause"],
     "14": ["modules.project_structure", "node.basics", "git.basics", "npm.safety"],
     "15": ["ts.basic", "ts.unknown", "ts.readonly"],
     "16": ["ts.unions", "ts.narrowing", "validation.manual"],
@@ -124,10 +144,12 @@ SEQUENCE_OVERRIDES = {
     "03": ["03.04", "03.05", "03.01", "03.02", "03.03", "03.06", "03.07", "03.08", "03.09"],
     "05": ["05.01", "05.03", "05.04", "05.06", "05.07", "05.10", "05.11", "05.02", "05.05", "05.08", "05.09"],
     "07": ["07.01", "07.02", "07.03", "07.04", "07.05", "07.06", "07.07", "07.10", "07.08", "07.09"],
-    "11": ["11.09", "11.01", "11.11", "11.14", "11.02", "11.03", "11.04", "11.05", "11.06", "11.07", "11.12", "11.10", "11.08", "11.13"],
+    "11": ["11.09", "11.01", "11.11", "11.14", "11.02", "11.03", "11.04", "11.06", "11.05", "11.07", "11.12", "11.08", "11.10", "11.13"],
     "12": ["12.10", "12.11", "12.01", "12.04", "12.02", "12.03", "12.05", "12.06", "12.07", "12.09", "12.12", "12.13", "12.14", "12.08"],
     "16": ["16.01", "16.02", "16.03", "16.09", "16.04", "16.05", "16.10", "16.06", "16.07", "16.08"],
-    "23": ["23.01", "23.02", "23.03", "23.04", "23.05", "23.06", "23.10", "23.11", "23.07", "23.09", "23.08"],
+    "17": ["17.01", "17.02", "17.03", "17.04", "17.05", "17.06", "17.07", "17.11", "17.08", "17.09"],
+    "22": ["22.01", "22.02", "22.03", "22.04", "22.11", "22.05", "22.06", "22.07", "22.08", "22.09", "22.10"],
+    "23": ["23.01", "23.02", "23.03", "23.04", "23.05", "23.06", "23.10", "23.11", "23.08", "23.09", "23.07"],
 }
 
 def detect_kind(label: str) -> str:
@@ -143,7 +165,9 @@ def case(value: str) -> dict[str, str]:
     assert given.strip() and expected.strip()
     return {"given": given.strip(), "expected": expected.strip()}
 
-def file_from_starter(value: str) -> list[dict[str, str]]:
+def file_from_starter(value: str | list[dict[str, str]]) -> list[dict[str, str]]:
+    if isinstance(value, list):
+        return [dict(file) for file in value]
     first, _, rest = value.partition(": ")
     if re.fullmatch(r"[\w.-]+\.(?:js|ts|json|html|css|md)", first):
         return [{"path": first, "content": rest}]
@@ -163,7 +187,91 @@ def load_recipes() -> dict[str, dict]:
             if eid in merged:
                 raise ValueError(f"Duplicate recipe: {eid}")
             merged[eid] = value
+    apply_starter_directories(merged)
     return merged
+
+def apply_starter_directories(recipes: dict[str, dict]) -> None:
+    """Real starter files live in starters/<id>/; the manifest fixes file order and content version."""
+    base = ROOT / "starters"
+    manifest_path = base / "manifest.json"
+    if not manifest_path.exists():
+        return
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    folders = {path.name for path in base.iterdir() if path.is_dir()}
+    if folders != set(manifest):
+        raise ValueError(f"starters/ folders and manifest differ: {sorted(folders ^ set(manifest))}")
+    for eid, entry in manifest.items():
+        if eid not in recipes:
+            raise ValueError(f"Starter for unknown activity {eid}")
+        readonly = entry.get("readonlyFiles", [])
+        readonly_paths = [file.get("path") for file in readonly]
+        if any(not isinstance(path, str) or not path or path.startswith("/") or "\\" in path or any(part in ("", ".", "..") for part in path.split("/")) for path in readonly_paths):
+            raise ValueError(f"Read-only starter paths for {eid} must be safe relative paths")
+        if len(readonly_paths) != len(set(readonly_paths)) or any(not isinstance(file.get("label"), str) or not file["label"].strip() for file in readonly):
+            raise ValueError(f"Read-only starter files for {eid} need unique paths and visible labels")
+        on_disk = sorted(str(path.relative_to(base / eid)).replace("\\", "/") for path in (base / eid).rglob("*") if path.is_file())
+        if sorted([*entry["files"], *readonly_paths]) != on_disk:
+            raise ValueError(f"Starter files for {eid} differ from manifest: {on_disk}")
+        recipes[eid]["starter"] = [
+            {"path": name, "content": (base / eid / name).read_text(encoding="utf-8").replace("\r\n", "\n").rstrip("\n") + "\n"}
+            for name in entry["files"]
+        ]
+        recipes[eid]["read_only_files"] = [
+            {"path": file["path"], "label": file["label"], "content": (base / eid / file["path"]).read_text(encoding="utf-8").replace("\r\n", "\n").rstrip("\n") + "\n"}
+            for file in readonly
+        ]
+        if int(entry["version"]) < int(recipes[eid].get("content_version") or 1):
+            raise ValueError(f"Starter version for {eid} is older than the recipe version")
+        recipes[eid]["content_version"] = int(entry["version"])
+
+def check_feature_matrix(records: list[dict]) -> None:
+    """Apply the runtime baseline to every cited feature using full semver tuples."""
+    exceptions = FEATURE_MATRIX.get("exceptions", {})
+    markers = tuple(FEATURE_MATRIX["markers"])
+    def node_version(value: str) -> tuple[int, int, int] | None:
+        if value == "não suportado":
+            return None
+        parts = value.split(".")
+        assert len(parts) == 3 and all(part.isdigit() for part in parts), f"Invalid Node feature version: {value}"
+        return tuple(int(part) for part in parts)
+    minimum_text = str(BASELINE["node"]["minimum"])
+    current_text = str(BASELINE["node"].get("next", BASELINE["node"]["primary"]))
+    minimum = tuple(int(part) for part in (minimum_text.split(".") + ["0", "0"])[:3])
+    current = tuple(int(part) for part in (current_text.split(".") + ["0", "0"])[:3])
+    for record in records:
+        if record["id"] in exceptions:
+            continue
+        text = json.dumps(record["learner"], ensure_ascii=False)
+        for entry in FEATURE_MATRIX["entries"]:
+            if not any(token in text for token in entry["match"]):
+                continue
+            names = [token.lstrip(".").rstrip("(") for token in entry["match"]]
+            assert any(name in record["compatibility"] for name in names), f"{record['id']}: compatibility must name {entry['label']}"
+            node = entry["nodeVersionAdded"]
+            added = node_version(node)
+            assert added is None or added <= current, f"{record['id']}: {entry['label']} is newer than the current Node baseline"
+            above_minimum = added is None or added > minimum
+            assert not above_minimum or any(marker in record["compatibility"] for marker in markers), f"{record['id']}: {entry['label']} is above the Node {minimum_text} floor; declare a fallback or feature detection"
+
+def check_learning_metadata(records: list[dict]) -> None:
+    """Keep the additive learner-ID graph complete and acyclic before publication."""
+    metadata = {key: value for key, value in LEARNING_METADATA.items() if key != "_comment"}
+    positions = {record["id"]: index for index, record in enumerate(records)}
+    assert set(metadata) == set(positions), "learning-metadata.json must cover exactly the compiled activities"
+    optional = {record["id"] for record in records if record.get("optional")}
+    for activity_id, entry in metadata.items():
+        requires = entry.get("requires", [])
+        assert isinstance(requires, list) and all(isinstance(target, str) for target in requires), f"Invalid requires for {activity_id}"
+        assert len(requires) == len(set(requires)), f"Duplicate prerequisite for {activity_id}"
+        for target in requires:
+            assert target in positions, f"Unknown prerequisite {target} for {activity_id}"
+            assert target not in optional, f"Optional activity {target} cannot be a prerequisite of {activity_id}"
+            assert positions[target] < positions[activity_id], f"Later activity {target} cannot be a prerequisite of {activity_id}"
+        if "hintExemption" in entry:
+            assert isinstance(entry["hintExemption"], str) and len(entry["hintExemption"].strip()) >= 12, f"Invalid hintExemption for {activity_id}"
+        for field in ("primerSource", "graphNote"):
+            if field in entry:
+                assert isinstance(entry[field], str) and entry[field].strip(), f"Invalid {field} for {activity_id}"
 
 def make_records() -> list[dict]:
     # This index contains identity/ordering metadata only; exercise content lives in recipes.
@@ -223,6 +331,12 @@ def make_records() -> list[dict]:
             scoring = "Confira os casos publicados antes e depois da mudança; explique o que alterou e por que as saídas cumprem o contrato."
         elif stage == "02" and kind == "MAKE":
             scoring = "Aceite qualquer cálculo que cumpra as entradas e saídas publicadas; não exigir tratamento de erro fora do domínio declarado."
+        elif kind in ("MAKE", "PROJECT"):
+            if recipe["rubric"]:
+                scoring = "Critérios desta atividade: " + " ".join(recipe["rubric"])
+            else:
+                scoring = (f"Resultado observável: {recipe['public']}. Borda a conferir: {recipe['hidden']}. "
+                           f"Entrega esperada: {recipe['solution']}")
         load = dict(zip(DIMENSIONS, KIND_BASE[kind]))
         load.update(recipe["load"])
         assert set(load) == set(DIMENSIONS) and all(isinstance(v, int) and 1 <= v <= 5 for v in load.values())
@@ -232,8 +346,10 @@ def make_records() -> list[dict]:
             next_ids = ["23.01", "22.10"]
         elif eid == "22.10":
             next_ids = ["23.01"]
-        runtime = recipe["runtime"] or ("browser evergreen" if stage == "11" else "Node.js 24 LTS")
-        compatibility = recipe["compatibility"] or "Recursos básicos; confirmar cada API recente no runtime declarado"
+        runtime = runtime_label(recipe["runtime"] or ("browser" if stage == "11" else "node"), eid)
+        declared = recipe["compatibility"]
+        compatibility = COMPATIBILITY_OVERRIDES.get(eid) or ("" if declared in (None, "", GENERIC_COMPATIBILITY) else declared)
+        assert compatibility and compatibility != GENERIC_COMPATIBILITY, f"{eid}: compatibility must name the runtime and the APIs it needs"
         learner_prompt = recipe["prompt"] or draft["learner"]["prompt"]
         assert learner_prompt and " -> " in recipe["public"] and " -> " in recipe["hidden"], eid
         review = recipe["review"]
@@ -279,12 +395,15 @@ def make_records() -> list[dict]:
                 "resources": list(recipe["resources"]),
                 "starter_files": file_from_starter(recipe["starter"]),
                 "assets": list(recipe["assets"]),
+                "read_only_files": list(recipe.get("read_only_files", [])),
                 "public_examples": [case(recipe["public"])],
                 "public_tests": [{"fixture": case(recipe["public"]), "scoring": scoring}],
                 "edge_contract": [recipe["hidden"]],
                 "constraints": list(recipe["constraints"]),
+                # The visible checklist contains activity-specific criteria only.
+                # Generic scoring guidance remains beside tests and evidence metadata.
                 "visible_rubric": list(recipe["rubric"]) if stage == "01" else [x for x in [draft.get("legacy_reference", {}).get("expected", ""),
-                                              *recipe["rubric"], scoring] if x],
+                                              *recipe["rubric"]] if x],
                 "docs_policy": recipe["docs"] or
                                ("Documentação oficial indicada por link e seção" if stage in ("D", "00", "01", "02", "03", "04") else
                                 "Nome da API ou fonte oficial; aluno localiza detalhes"),
@@ -349,6 +468,8 @@ def apply_stage00_preparation(output: list[dict[str, Any]]) -> list[dict[str, An
 
 if __name__ == "__main__":
     resolved = make_records()
+    check_feature_matrix(resolved)
+    check_learning_metadata(resolved)
     counts = Counter(item["status"] for item in resolved)
     (GENERATED_DIR / "resolved_preview.json").write_text(json.dumps(resolved, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"items={len(resolved)} statuses={dict(counts)}")

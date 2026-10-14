@@ -1,0 +1,24 @@
+{
+  "name": "@curso/centavos",
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/___",
+      "default": "./dist/___"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test src/index.test.ts",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "typescript": "6.0.3"
+  }
+}

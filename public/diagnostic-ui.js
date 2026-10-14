@@ -3,6 +3,7 @@
     const esc = value => global.DevPathTeachingUtils.escapeHTML(value ?? "");
     const configFor = item => global.DevPathDiagnosticPreparation[item.id];
     const key = item => Number(item.contentVersion || 1) > 1 ? `${item.id}@v${item.contentVersion}` : item.id;
+    const expandedDiagnostic = item => /^D\.0[6-9]$/.test(item.id);
     function readState(item, progress) {
         let saved;
         try {
@@ -11,17 +12,42 @@
         catch {
             saved = {};
         }
-        const config = configFor(item);
+        const config = configFor(item), expanded = expandedDiagnostic(item);
         return {
-            answers: config.fields.map((field, index) => field.options.some(option => option.value === saved?.answers?.[index]) ? saved.answers[index] : ''),
-            confidence: typeof saved?.confidence === 'number' && Number.isInteger(saved.confidence) && saved.confidence >= 0 && saved.confidence <= 100 ? saved.confidence : null,
+            answers: config.fields.map((field, index) => {
+                const answer = expanded && saved?.v === 1 ? saved.a?.[index] : saved?.answers?.[index];
+                return field.options.some(option => option.value === answer) ? answer : '';
+            }),
+            confidence: typeof (expanded && saved?.v === 1 ? saved?.c : saved?.confidence) === 'number'
+                && Number.isInteger(expanded && saved?.v === 1 ? saved.c : saved.confidence)
+                && (expanded && saved?.v === 1 ? saved.c : saved.confidence) >= 0
+                && (expanded && saved?.v === 1 ? saved.c : saved.confidence) <= 100
+                ? (expanded && saved?.v === 1 ? saved.c : saved.confidence) : null,
+            revision: expanded && Number.isInteger(saved?.r) && saved.r >= 0 ? saved.r : 0,
         };
     }
     const ready = state => state.answers.every(Boolean) && state.confidence !== null;
-    const reviewed = (item, progress, state) => ready(state) && progress.exerciseEvidence?.[key(item)]?.status === 'written' && progress.exerciseEvidence[key(item)].output === JSON.stringify(state);
+    function snapshot(item, state) {
+        return expandedDiagnostic(item) ? JSON.stringify({v:1,a:state.answers,c:state.confidence,r:state.revision})
+            : JSON.stringify({answers:state.answers,confidence:state.confidence});
+    }
+    function latestSubmission(item, progress) {
+        return progress.exerciseEvidence?.[key(item)]?.diagnostic?.submissions?.at(-1) || null;
+    }
+    function reviewed(item, progress, state) {
+        if (!ready(state)) return false;
+        const evidence = progress.exerciseEvidence?.[key(item)];
+        if (evidence?.status !== 'written' || evidence.output !== snapshot(item,state)) return false;
+        if (!expandedDiagnostic(item)) return true;
+        const latest = latestSubmission(item,progress), record = progress.exerciseLearning?.[item.id];
+        if (!latest || latest.snapshot !== evidence.output || latest.revision !== state.revision
+            || latest.contentVersion !== Number(item.contentVersion || 1)) return false;
+        if (record?.mode === 'recall' && latest.attemptId !== record.attemptId) return false;
+        return true;
+    }
     const canComplete = (item, progress, state) => reviewed(item, progress, state) && progress.warmupCompleted?.[key(item)] === true;
     const labelFor = (field, value) => field.options.find(option => option.value === value)?.label || 'Ainda sem resposta';
-    function feedback(item, state) {
+    function feedback(item, state, submission) {
         const config = configFor(item);
         return `
       
@@ -47,7 +73,7 @@
       
       <p>${esc(field.explanation)}</p></article>`).join('')}
       
-      </div>
+      </div>${expandedDiagnostic(item) ? `<aside class="diagnostic-recommendation" data-diagnostic-recommendation><strong>${submission?.recommendations?.length ? `Entrada sugerida: ${esc(submission.recommendations[0])}` : 'Sem sugestão de entrada para esta tentativa'}</strong><p>${submission?.recommendations?.length ? `A sugestão limitada considera os campos deste diagnóstico que cobrem ${esc(Object.keys(submission.coverage || {}).join(', '))}. Ela não certifica uma etapa, não conclui atividades anteriores e não é prova independente.` : 'Você ainda pode estudar e concluir o diagnóstico. Campos desconhecidos, ausentes, incorretos ou uma tentativa assistida não liberam uma entrada.'}</p></aside>` : ''}
       
       <h3>Acompanhe o raciocínio
       
@@ -68,13 +94,15 @@
     function render(item, ctx = {}) {
         const progress = ctx.progress || (ctx.progress = {}), config = configFor(item), state = readState(item, progress);
         const done = progress.answers?.[item.id] === true && Number(progress.exerciseVersions?.[item.id] || 1) === Number(item.contentVersion || 1);
-        const didReview = reviewed(item, progress, state);
+        const didReview = reviewed(item, progress, state), submission = latestSubmission(item,progress);
         const activities = ctx.activities || [], index = activities.findIndex(entry => entry.id === item.id);
         const next = activities[index + 1];
+        const diagnosticIndex = activities.filter(entry => entry.stage === 'D').findIndex(entry => entry.id === item.id) + 1;
+        const diagnosticCount = activities.filter(entry => entry.stage === 'D').length || 9;
         const journey = [['look', 'Observar', 'Leia com calma'], ['answer', 'Responder', 'Registre uma hipótese'], ['review', 'Conferir', 'Entenda o resultado']];
         const prior = progress.exercisePredictions?.[key(item)];
         let legacy = '';
-        if (prior && !prior.startsWith('{"answers":'))
+        if (prior && !prior.startsWith('{"answers":') && !(expandedDiagnostic(item) && prior.startsWith('{"v":1,"a":')))
             legacy = `
       
       <details
@@ -126,7 +154,7 @@
        
         class="s00-hero-meta"><span><i
        
-        aria-hidden="true"></i>${esc(item.duration)} · no seu ritmo</span><span>${item.id.slice(-1)} de 5 · sem nota</span><span>${done ? 'Diagnóstico registrado' : 'Não exige estudo prévio'}</span>
+        aria-hidden="true"></i>${esc(item.duration)} · no seu ritmo</span><span>${diagnosticIndex || item.id.slice(-1)} de ${diagnosticCount} · sem nota</span><span>${done ? 'Diagnóstico registrado' : 'Não exige estudo prévio'}</span>
       
       </div>
       
@@ -293,7 +321,7 @@
       
       </h2>
       
-      <div data-diagnostic-feedback>${didReview ? feedback(item, state) : '<p>Registre suas respostas no passo anterior para comparar suas hipóteses com a explicação resolvida.</p>'}
+      <div data-diagnostic-feedback>${didReview ? feedback(item, state, submission) : '<p>Registre suas respostas no passo anterior para comparar suas hipóteses com a explicação resolvida.</p>'}
       
       </div>
       
@@ -342,6 +370,37 @@
         target?.focus?.({ preventScroll: true });
         target?.scrollIntoView?.({ block: 'nearest', behavior: 'auto' });
     }
+    function saveState(item, progress, state) {
+        (progress.exercisePredictions ||= {})[key(item)] = snapshot(item,state);
+    }
+    function markEditedAttemptAssisted(item, progress, state, ctx) {
+        if (!expandedDiagnostic(item) || !reviewed(item,progress,state)) return;
+        const record = ctx.learning?.record?.(item) || progress.exerciseLearning?.[item.id];
+        if (record?.mode !== 'recall' || !record.attemptId) return;
+        const evidence = progress.exerciseEvidence?.[key(item)];
+        if (!evidence) return;
+        const diagnostic = evidence.diagnostic || {assistedAttemptIds:[],submissions:[]};
+        if (!diagnostic.assistedAttemptIds.includes(record.attemptId)) {
+            diagnostic.assistedAttemptIds = [...diagnostic.assistedAttemptIds,record.attemptId].slice(-20);
+            evidence.diagnostic = diagnostic;
+            Promise.resolve(ctx.learning?.requestHelp?.(item,'diagnostic-response-edit')).catch(() => {});
+        }
+    }
+    function submissionFor(item, state, progress, snapshotValue) {
+        const config = configFor(item), record = progress.exerciseLearning?.[item.id] || null;
+        const diagnostic = progress.exerciseEvidence?.[key(item)]?.diagnostic || {assistedAttemptIds:[],submissions:[]};
+        const attemptId = record?.mode === 'recall' ? String(record.attemptId || '') : '';
+        const assisted = record?.assisted === true || (attemptId && diagnostic.assistedAttemptIds.includes(attemptId));
+        const mode = record?.mode === 'recall' || record?.mode === 'learn' ? record.mode : 'none';
+        const coverage = Object.fromEntries(Object.entries(config.coverage).map(([activityId,indices]) => [activityId,
+            indices.every(index => state.answers[index] === config.fields[index]?.expected)]));
+        const allCorrect = state.answers.length === config.fields.length && config.fields.every((field,index) => state.answers[index] === field.expected);
+        const independent = mode === 'recall' && record?.attemptIndependent === true;
+        const recommendations = independent && !assisted && allCorrect && Object.values(coverage).every(Boolean)
+            ? [config.recommendation.entry] : [];
+        return {attemptId,revision:state.revision,contentVersion:Number(item.contentVersion || 1),snapshot:snapshotValue,
+            mode,independent,assisted:Boolean(assisted),coverage,recommendations,recordedAt:new Date().toISOString()};
+    }
     function handleInput(event, item, ctx = {}) {
         const target = event.target;
         if (!target.matches('[data-diagnostic-field], [data-diagnostic-confidence], [data-diagnostic-reviewed], [data-diagnostic-reflection]'))
@@ -355,13 +414,22 @@
             root.querySelector('[data-diagnostic-action="complete"]').disabled = !canComplete(item, progress, state);
         }
         else {
+            const hadFeedback = expandedDiagnostic(item) && reviewed(item,progress,state);
+            if (hadFeedback) markEditedAttemptAssisted(item,progress,state,ctx);
+            let changed = false;
             if (target.matches('[data-diagnostic-field]')) {
                 const i = Number(target.dataset.diagnosticField);
-                state.answers[i] = configFor(item).fields[i]?.options.some(option => option.value === target.value) ? target.value : '';
+                const next = configFor(item).fields[i]?.options.some(option => option.value === target.value) ? target.value : '';
+                changed = state.answers[i] !== next;
+                state.answers[i] = next;
             }
-            else
-                state.confidence = target.value.trim() !== '' && Number.isInteger(Number(target.value)) && Number(target.value) >= 0 && Number(target.value) <= 100 ? Number(target.value) : null;
-            (progress.exercisePredictions ||= {})[key(item)] = JSON.stringify(state);
+            else {
+                const next = target.value.trim() !== '' && Number.isInteger(Number(target.value)) && Number(target.value) >= 0 && Number(target.value) <= 100 ? Number(target.value) : null;
+                changed = state.confidence !== next;
+                state.confidence = next;
+            }
+            if (expandedDiagnostic(item) && changed) state.revision += 1;
+            saveState(item,progress,state);
             (progress.warmupCompleted ||= {})[key(item)] = false;
             (progress.answers ||= {})[item.id] = false;
             root.querySelector('[data-diagnostic-finish]').hidden = true;
@@ -383,8 +451,9 @@
             destination.focus?.({ preventScroll: true });
         }
         else if (action === 'unknown') {
-            const unknown = { answers: configFor(item).fields.map(() => 'unknown'), confidence: 0 };
-            (progress.exercisePredictions ||= {})[key(item)] = JSON.stringify(unknown);
+            const unknown = { answers: configFor(item).fields.map(() => 'unknown'), confidence: 0, revision: state.revision + (expandedDiagnostic(item) ? 1 : 0) };
+            if (expandedDiagnostic(item)) markEditedAttemptAssisted(item,progress,state,ctx);
+            saveState(item,progress,unknown);
             (progress.warmupCompleted ||= {})[key(item)] = false;
             (progress.answers ||= {})[item.id] = false;
             ctx.saveProgress?.();
@@ -398,12 +467,21 @@
                 root.querySelector(missing >= 0 ? `[data-diagnostic-field="${missing}"]` : '[data-diagnostic-confidence]')?.focus();
                 return true;
             }
-            const previous = progress.exerciseEvidence?.[key(item)];
-            (progress.exerciseEvidence ||= {})[key(item)] = { status: 'written', runResult: 'guided', output: JSON.stringify(state), rubric: [], runCount: (previous?.runCount || 0) + 1, recordedAt: new Date().toISOString() };
+            const previous = progress.exerciseEvidence?.[key(item)], output = snapshot(item,state);
+            const evidence = { status: 'written', runResult: 'guided', output, rubric: [], runCount: Math.min(100000,(previous?.runCount || 0) + 1), recordedAt: new Date().toISOString() };
+            if (expandedDiagnostic(item)) {
+                const submission = submissionFor(item,state,progress,output);
+                const oldDiagnostic = previous?.diagnostic || {assistedAttemptIds:[],submissions:[]};
+                evidence.diagnostic = {assistedAttemptIds:[...oldDiagnostic.assistedAttemptIds],submissions:[...oldDiagnostic.submissions,submission].slice(-20)};
+            }
+            (progress.exerciseEvidence ||= {})[key(item)] = evidence;
             ctx.saveProgress?.();
             rerender(item, ctx, '#diagnostic-review');
         }
         else if (action === 'complete' && canComplete(item, progress, state)) {
+            const reflection = progress.exerciseReflections?.[key(item)] || '';
+            const submittedResponse = reflection.trim().length >= 16 ? reflection : progress.exerciseEvidence?.[key(item)]?.output || '';
+            void ctx.learning?.submitStudy?.(item, submittedResponse);
             const wasDone = progress.answers?.[item.id] === true;
             (progress.answers ||= {})[item.id] = true;
             (progress.exerciseVersions ||= {})[item.id] = item.contentVersion || 1;

@@ -1,0 +1,16 @@
+{
+  "id": "04.01",
+  "historicalFieldsReadableEscaped": true,
+  "independentRecallHiddenUntilHelp": true,
+  "helpRecorded": true,
+  "reloadPreservedSeparateKeys": true,
+  "saved": {
+    "oldDraft": "<script>historical draft</script>",
+    "currentDraft": "QA current draft",
+    "oldPrediction": "historical prediction <img src=x>",
+    "oldReflection": "historical reflection",
+    "currentReflection": "QA current reflection",
+    "assisted": true
+  },
+  "pageErrors": []
+}

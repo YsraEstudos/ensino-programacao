@@ -701,6 +701,8 @@
                 ctx.toast('Confira todos os blocos e escreva sua explicação antes de concluir.');
                 return true;
             }
+            void ctx.learning?.submitStudy?.(item, state.reflection);
+            void ctx.learning?.runAssessment?.(item, { kind: 'passed', source: 'local-declared' });
             state.complete = true;
             ctx.progress.exerciseReflections ||= {};
             ctx.progress.exerciseReflections[item.id] = state.reflection;

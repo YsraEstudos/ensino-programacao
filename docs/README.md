@@ -6,11 +6,19 @@
 - [Organização do projeto e fontes canônicas](organizacao-projeto.md).
 - [Como adicionar um exercício](guia-adicionar-exercicio.md).
 
+## Escopo da carga horária — revisão de 14/10/2026
+
+O catálogo publicado nesta revisão tem 265 atividades e a soma de seus campos `duration` é 6.722 minutos (112 h 02 min). Esse total representa somente a estimativa de trabalho guiado cadastrada nas atividades; não é uma medição de quanto estudantes levam.
+
+A faixa declarada de 370–500 horas é tratada aqui como uma faixa provisória de planejamento que pode incluir, além das atividades guiadas, leitura da documentação oficial, prática externa, retomadas e retakes, e projetos. Esta revisão explicita esse escopo agora; não há evidência de uma decomposição histórica dessas horas em cada componente. A diferença entre os totais não foi alocada matematicamente e não se deriva um multiplicador. A faixa ainda não foi calibrada com dados de estudantes.
+
+O medidor opcional do site registra tempo local com foco por atividade e apresenta separadamente a estimativa guiada. Sessões controladas de QA verificam o funcionamento técnico, mas não validam a faixa de planejamento nem substituem observação de estudantes.
+
 Toda manutenção ocorre em `devpath-publish/`. O comando `npm.cmd run build:curriculum` substitui os geradores antigos de sincronização entre distribuições, incluindo `build-stage01.mjs` e `build-stage03.mjs`.
 
 ## Planejamento atual
 
-- [Melhorias de engenharia — 05/10/2026](planos/2026-10-05-melhorias-engenharia.md): implementação local concluída, decisões e limites de verificação.
+- [Análise curricular — 05/10/2026](analise-curricular-2026-10-05.md): pré-requisitos ocultos, erros de conteúdo, lacunas até o nível sênior e plano priorizado.
 
 - [Execução de módulos locais](especificacoes/executor-modulos.md).
 - [Persistência e sincronização](especificacoes/persistencia-progresso.md).

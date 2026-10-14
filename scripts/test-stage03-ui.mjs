@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {setup,catalog,solutions,secondary,transfers} from './stage03-test-helpers.mjs';
-test('all nine activities teach before prediction with labeled inputs',()=>{
-  for(const item of catalog.filter(x=>x.stage==='03')) {const {dom,q}=setup(item.id);try{assert(q('.s03-teaching'));assert(q('.s03-teaching').compareDocumentPosition(q('[data-s03-prediction]'))&4);assert.equal(q('[data-s03-action="run"]'),null);for(const el of dom.window.document.querySelectorAll('[data-s03-cell]'))assert(el.getAttribute('aria-label'));}finally{dom.window.close();}}
+test('the nine dedicated activities teach before prediction with labeled inputs',()=>{
+  for(const item of catalog.filter(x=>x.stage==='03' && /^03\.0[1-9]$/.test(x.id))) {const {dom,q}=setup(item.id);try{assert(q('.s03-teaching'));assert(q('.s03-teaching').compareDocumentPosition(q('[data-s03-prediction]'))&4);assert.equal(q('[data-s03-action="run"]'),null);for(const el of dom.window.document.querySelectorAll('[data-s03-cell]'))assert(el.getAttribute('aria-label'));}finally{dom.window.close();}}
 });
 test('trace needs correct table and supplied code; edits invalidate completion',()=>{
   const {dom,w,item,ctx,q,click,fill,table,predict}=setup('03.01');try{

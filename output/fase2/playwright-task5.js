@@ -1,0 +1,147 @@
+async (page) => {
+  const base = 'http://127.0.0.1:8765';
+  const entries = {'D.06':'01.01','D.07':'07.01','D.08':'15.01','D.09':'21.01'};
+  const results = [];
+  const assert = (condition, message) => { if (!condition) throw new Error(message); };
+  const seedToken = `task5_${Date.now()}`;
+  await page.addInitScript(token => {
+    if (window.top !== window) return;
+    const marker = `__${token}`;
+    if (sessionStorage.getItem(marker) === '1') return;
+    localStorage.removeItem('devpath-local-preview-v1');
+    sessionStorage.setItem(marker, '1');
+  }, seedToken);
+  const goto = async id => {
+    await page.goto(`${base}/#/javascript/${id}`);
+    await page.locator('[data-diagnostic-id]').waitFor({state:'visible',timeout:15000});
+  };
+  const clearActivity = async id => {
+    const resetToken = `task5_clear_${id}_${Date.now()}`;
+    await page.addInitScript(({token,activityId}) => {
+      if (window.top !== window || sessionStorage.getItem(token) === '1') return;
+      const key='devpath-local-preview-v1', progress=JSON.parse(localStorage.getItem(key)||'{}');
+      for (const field of ['exerciseLearning','exerciseEvidence','exercisePredictions','exerciseReflections','warmupCompleted','answers','exerciseVersions','attempts','reviewSchedule']) {
+        if (progress[field]) delete progress[field][activityId];
+      }
+      progress.completed=(progress.completed||[]).filter(item=>item!==activityId);
+      localStorage.setItem(key,JSON.stringify(progress));
+      sessionStorage.setItem(token,'1');
+    },{token:resetToken,activityId:id});
+    await page.reload();
+    await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  };
+  const beginRecall = async id => {
+    await goto(id);
+    const choose = page.locator('button[data-learning-mode="recall"]');
+    if (await choose.isVisible().catch(() => false)) {
+      await choose.click();
+    }
+    await page.waitForFunction(activityId => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseLearning?.[activityId]?.mode === 'recall',id,{timeout:15000});
+    await page.waitForFunction(activityId => document.querySelector(`[data-diagnostic-id="${activityId}"]`)?.dataset.learningMode === 'recall',id,{timeout:15000});
+    const mode = await page.locator('[data-diagnostic-id]').getAttribute('data-learning-mode');
+    assert(mode === 'recall', `${id}: recall mode was not selected in the learning record and rendered activity`);
+  };
+  const answerCorrectly = async id => {
+    const answers = await page.evaluate(diagnosticId =>
+      window.DevPathDiagnosticPreparation[diagnosticId].fields.map(field => field.expected), id);
+    for (let index=0; index<answers.length; index++) {
+      await page.locator(`[data-diagnostic-field="${index}"]`).selectOption(answers[index]);
+    }
+    await page.locator('[data-diagnostic-confidence]').fill('80');
+  };
+  const submit = async () => {
+    await page.locator('[data-diagnostic-action="check"]').click();
+    await page.locator('[data-diagnostic-feedback]').getByText('Resposta explicada:',{exact:false}).first().waitFor({state:'visible'});
+  };
+  const recommendationText = async () => (await page.locator('[data-diagnostic-recommendation]').innerText()).replace(/\s+/g,' ').trim();
+
+  await page.goto(base);
+
+  for (const [id,entry] of Object.entries(entries)) {
+    await beginRecall(id);
+    await answerCorrectly(id);
+    await submit();
+    const text = await recommendationText();
+    assert(text.includes(`Entrada sugerida: ${entry}`), `${id}: expected only its mapped entry; got ${text}`);
+    assert(text.includes('sugestão limitada') && text.includes('não certifica uma etapa') && text.includes('não é prova independente'),
+      `${id}: bounded recommendation disclaimer missing from actual UI text: ${text}`);
+    const saved = await page.evaluate(activityId => {
+      const progress = JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}');
+      const item = window.DevPathDiagnosticPreparation[activityId];
+      const entry = progress.exerciseEvidence?.[activityId]?.diagnostic?.submissions?.at(-1);
+      return {entry,verified:progress.exerciseLearning?.[activityId]?.verifiedEvidence};
+    }, id);
+    assert(saved.entry?.independent === true && saved.entry?.recommendations?.[0] === entry, `${id}: submission did not persist its recommendation`);
+    assert(!saved.verified, `${id}: diagnostic must not create verified evidence`);
+    await page.reload();
+    await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+    assert((await recommendationText()).includes(`Entrada sugerida: ${entry}`), `${id}: feedback did not survive reload`);
+    results.push(`${id}: elegível, limitado a ${entry}, persistido após reload`);
+  }
+
+  await clearActivity('D.06');
+  await beginRecall('D.06');
+  await page.locator('[data-diagnostic-action="unknown"]').click();
+  await page.locator('[data-diagnostic-action="check"]').click();
+  assert((await recommendationText()).includes('Sem sugestão'), 'unknown answers should still open study feedback without a recommendation');
+  await page.locator('[data-diagnostic-reviewed]').check();
+  await page.locator('[data-diagnostic-action="complete"]').click();
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseLearning?.['D.06']?.state === 'studied');
+  assert((await page.locator('[data-diagnostic-completion-note]').innerText()).includes('registro está salvo'), 'unknown answers should allow completing study');
+  await page.reload();
+  await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  const studiedAfterReload = await page.evaluate(() => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseLearning?.['D.06']?.state);
+  assert(studiedAfterReload === 'studied', 'optional-reflection completion must persist the studied learning state');
+  results.push('D.06: unknown abre feedback e permite concluir estudo sem entrada sugerida');
+
+  await clearActivity('D.07');
+  await beginRecall('D.07');
+  const help = page.locator('[data-learning-help-target]').first();
+  await help.waitFor({state:'visible',timeout:10000});
+  page.once('dialog', dialog => dialog.accept());
+  await help.click();
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseLearning?.['D.07']?.assisted === true);
+  await answerCorrectly('D.07');
+  await submit();
+  assert((await recommendationText()).includes('Sem sugestão'), 'help before submission must block recommendation');
+  await page.reload();
+  await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  assert((await recommendationText()).includes('Sem sugestão'), 'pre-submit assistance must survive reload');
+  results.push('D.07: ajuda explícita antes do envio bloqueia a entrada e persiste');
+
+  await clearActivity('D.08');
+  await beginRecall('D.08');
+  await answerCorrectly('D.08');
+  await submit();
+  assert((await recommendationText()).includes('Entrada sugerida: 15.01'), 'D.08 should initially recommend its mapped entry');
+  const original = await page.locator('[data-diagnostic-field="0"]').inputValue();
+  const alternative = await page.locator('[data-diagnostic-field="0"] option:not([value=""]):not([value="unknown"])').evaluateAll((options,value) => options.find(option => option.value !== value)?.value,original);
+  await page.locator('[data-diagnostic-field="0"]').selectOption(alternative);
+  await page.waitForFunction(() => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseEvidence?.['D.08']?.diagnostic?.assistedAttemptIds?.length > 0);
+  assert(await page.locator('[data-diagnostic-finish]').isHidden(), 'editing after feedback must close stale feedback');
+  assert(await page.locator('[data-diagnostic-feedback]').innerText().then(text => text.includes('Suas respostas mudaram')), 'editing should explain that a new submission is needed');
+  await page.reload();
+  await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  assert(await page.locator('[data-diagnostic-finish]').isHidden(), 'edited draft must not reuse the previous snapshot after reload');
+  const current = await page.locator('[data-diagnostic-field="0"]').inputValue();
+  await page.locator('[data-diagnostic-field="0"]').selectOption(original);
+  assert(await page.locator('[data-diagnostic-finish]').isHidden(), 'reverting to the old value must not restore prior feedback');
+  await submit();
+  assert((await recommendationText()).includes('Sem sugestão'), 'the edited/resubmitted answer must be assisted');
+  const latest = await page.evaluate(() => JSON.parse(localStorage.getItem('devpath-local-preview-v1') || '{}').exerciseEvidence?.['D.08']?.diagnostic?.submissions?.at(-1));
+  assert(latest?.assisted === true && latest.recommendations.length === 0, 'assistance and ineligibility must be saved on the new answer');
+  results.push('D.08: edição/reversão exige novo envio assistido; histórico anterior não é invalidado');
+
+  await page.locator('[data-learning-new-attempt]').click();
+  await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  assert(await page.locator('[data-diagnostic-finish]').isHidden(), 'a new recall attempt must not reuse old feedback');
+  await page.reload();
+  await page.locator('[data-diagnostic-id]').waitFor({state:'visible'});
+  assert(await page.locator('[data-diagnostic-finish]').isHidden(), 'new-attempt feedback boundary must survive reload');
+  await answerCorrectly('D.08');
+  await submit();
+  assert((await recommendationText()).includes('Entrada sugerida: 15.01'), 'explicit resubmission in a new independent attempt should restore eligibility');
+  results.push('D.08: novo recall sem snapshot antigo até reenvio explícito; reenvio independente recupera a sugestão');
+
+  return JSON.stringify({base,checks:results,limitations:['QA manual assistido no Edge; não é validação com alunos nem prova de transferência.']},null,2);
+}

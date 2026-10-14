@@ -1,57 +1,6 @@
-import {withPublicDependencies} from './public-test-source.mjs';
+import {setup} from './course-runner-harness.mjs';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
 import test from 'node:test';
-import vm from 'node:vm';
-import {Worker as NodeWorker} from 'node:worker_threads';
-import {JSDOM} from 'jsdom';
-
-// Execute the actual iframe bootstrap with real worker threads. Browser checks
-// additionally cover the sandbox and CSP, which jsdom does not implement.
-function setup({failWorker = false} = {}) {
-  const dom = new JSDOM('<body></body>', {url: 'http://localhost', runScripts: 'outside-only'});
-  const w = dom.window;
-  const workers = new Set();
-  const terminate = worker => { workers.delete(worker); void worker.terminate(); };
-  w.document.body.append = frame => {
-    w.document.body.appendChild(frame);
-    const source = frame.srcdoc.match(/<script>([\s\S]*)<\/script>/)[1];
-    const events = new Map();
-    const urls = new Map();
-    const parent = {postMessage(data) {
-      w.dispatchEvent(new w.MessageEvent('message', {source: frame.contentWindow, data}));
-    }};
-    const originalRemove = frame.remove.bind(frame);
-    frame.remove = () => { events.get('pagehide')?.(); originalRemove(); };
-    class Worker {
-      constructor(url) {
-        if (failWorker) throw new Error("Worker indisponível");
-        this.thread = new NodeWorker(`
-          const {parentPort} = require('node:worker_threads');
-          globalThis.self = globalThis;
-          self.postMessage = data => parentPort.postMessage(data);
-          parentPort.on('message', data => self.onmessage({data}));
-          ${urls.get(url)}
-        `, {eval: true});
-        workers.add(this.thread);
-        this.thread.on('message', data => this.onmessage?.({data}));
-        this.thread.on('error', error => this.onerror?.({message: error.message, preventDefault() {}}));
-      }
-      postMessage(data) { this.thread.postMessage(data); }
-      terminate() { terminate(this.thread); }
-    }
-    vm.runInNewContext(source, {
-      Blob: class {constructor(parts) { this.source = parts.join(''); }},
-      URL: {createObjectURL(blob) {const key = String(urls.size); urls.set(key, blob.source); return key;}, revokeObjectURL(key) {urls.delete(key);}},
-      Worker, parent, addEventListener(name, callback) {events.set(name, callback);}
-    });
-  };
-  w.eval(withPublicDependencies(readFileSync(new URL('../public/course-runner.js', import.meta.url), 'utf8')));
-  const run = (code, timeoutMs = 2000) => new Promise(resolve => {
-    w.DevPathCourseRunner.run(code, (kind, text) => resolve({kind, text}), {timeoutMs});
-  });
-  return {w, run, workers, close() {for (const worker of workers) terminate(worker); dom.window.close();}};
-}
 
 test('runner executes multiline code, preserves script-like text, and reports syntax errors', async () => {
   const env = setup();
@@ -103,3 +52,21 @@ test('foreign sources, wrong tokens and late messages cannot finish an execution
 });
 
 test('worker creation failure reports an error and removes the sandbox',async()=>{const env=setup({failWorker:true});try{const result=await env.run('console.log(1)');assert.equal(result.kind,'error');assert.match(result.text,/Worker indisponível/);assert.equal(env.w.document.querySelectorAll('iframe').length,0);}finally{env.close();}});
+
+test('registered tests run after the code and report structured results', async () => {
+  const env = setup();
+  try {
+    const run = code => new Promise(resolve => env.w.DevPathCourseRunner.run(code, (kind, text, tests) => resolve({kind, text, tests})));
+    const passing = await run('describe("soma",()=>{test("dois mais dois",()=>expect(2+2).toBe(4));test("listas",()=>expect([1,{a:NaN}]).toEqual([1,{a:NaN}]))});test("erro",()=>expect(()=>{throw new RangeError("x")}).toThrow(RangeError));test("negação",()=>expect(1).not.toBe(2));');
+    assert.equal(passing.kind, 'result');
+    assert.deepEqual(passing.tests, {passed: 4, failed: 0, total: 4});
+    assert.match(passing.text, /✓ soma › dois mais dois/);
+    const failing = await run('console.log("saída própria");test("falha",()=>expect([1,2]).toEqual([1,3]));test("ok",()=>expect(true).toBeTruthy());test("não lançou",()=>expect(()=>1).toThrow());');
+    assert.equal(failing.kind, 'result');
+    assert.deepEqual(failing.tests, {passed: 1, failed: 2, total: 3});
+    assert.match(failing.text, /saída própria/);
+    assert.match(failing.text, /✗ falha\n {4}esperado \[1,3\]; recebido \[1,2\]/);
+    assert.match(failing.text, /nada foi lançado/);
+    assert.equal((await run('console.log(1)')).tests, undefined);
+  } finally {env.close();}
+});

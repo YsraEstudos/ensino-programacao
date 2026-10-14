@@ -1,0 +1,1 @@
+export function render(document, state, list) { localStorage.setItem('bad', JSON.stringify(state)); list.replaceChildren(...state.tasks.map(task => { const item=document.createElement('li'); item.textContent=task.text; return item; })); }

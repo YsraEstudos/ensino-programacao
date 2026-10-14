@@ -1,0 +1,1 @@
+export function benchmark(fn,{warmups=5,runs=9}={}){for(let i=0;i<warmups;i++)fn();const amostras=[];for(let i=0;i<runs;i++){const inicio=performance.now();fn();amostras.push(performance.now()-inicio);}return{amostras,mediana:amostras.reduce((a,b)=>a+b,0)/amostras.length};}

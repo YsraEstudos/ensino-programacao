@@ -1,0 +1,15 @@
+# Pré-flight para diagnósticos e tempo
+
+Fontes dos diagnósticos: course-src/recipes/D.py e diagnostic-preparation.mjs; build gera public/diagnostic-preparation.js. Renderer dedicado: public/diagnostic-ui.js, dispatch em public/app.js. D.01–D.05 devem permanecer. Novos IDs entram também em learning-metadata.json e na lista de IDs do progresso gerada pelo build. O renderer tinha contador fixo de cinco diagnósticos.
+
+A configuração atual só cobre saídas síncronas, tipos/typeof, limite de if, retorno versus console e escolha de ferramenta. Quatro faixas precisam de questões próprias. Recomendar entrada limitada em 01, 07, 15 e21, com matriz explícita de pré-competências e campos usados, é mais honesto que dispensar uma etapa inteira de dezenas de horas. Nenhuma recomendação marca exercícios anteriores concluídos nem apaga rascunhos. Não certificar domínio por questionário de estudo.
+
+As respostas são registradas antes do feedback. Ajuda antes do envio bloqueia elegibilidade daquela tentativa; feedback posterior não muda retroativamente a resposta já enviada, mas alteração após explicação é tentativa assistida. Reusar attempt/assisted de exerciseLearning quando possível. Derivar recomendação de dados já suportados, ou atualizar o contrato/sanitização caso haja campo novo; não depender de um campo local que a API removeria silenciosamente.
+
+O diagnóstico original persiste JSON em exercisePredictions com limite400. Valores compactos podem ser necessários nas novas faixas; não mudar as respostas literais de D.01–D.05. Testes legados de choices podem limitar sua regra de label==value aos IDs antigos. Todas as faixas devem ter alternativa “Ainda não sei”, feedback, possibilidade de concluir estudo sem elegibilidade e testes de respostas faltantes, erro, ajuda e sucesso de cobertura.
+
+Para tempo, root preparou public/study-time.js e scripts/test-phase2-study-time.mjs (4/4 e revisão aprovada somente do núcleo). API create({storage,now}) oferece activity(id|null), presence({visible,focused}), consent(bool), flush(), snapshot(). Store separado devpath-study-time-v1, sem respostas/código/reflexões e fora do progresso sincronizado. Off por padrão; opt-out para e apaga; storage indisponível retorna false e não bloqueia estudo.
+
+Falta ligar script e UI ao app: consentimento explícito, indicador medido versus estimado, eventos blur/focus/visibilitychange/pagehide/rota, flush periódico e cleanup. Conferir revogação de consentimento entre abas via storage event: outra aba não deve reativar medição depois do opt-out. Não perder totais quando outro contador compartilha storage; acrescentar caso real se a integração expuser essa condição.
+
+Task6 também precisa comparar a soma atual de duration com370–500h, explicar docs/prática externa/projetos/retomadas sem inventar multiplicador validado e fazer primeira sessão cronometrada no navegador real. Identificar a origem como QA e registrar foco/visibilidade observados. Uma sessão QA não calibra carga com alunos nem satisfaz evidência de aprendizado.

@@ -1,0 +1,1 @@
+export async function usarRecursos(rs,body){const xs=[...rs];let value,error;try{value=await body();}catch(e){error=e;}for(const r of xs){try{if(r[Symbol.asyncDispose])await r[Symbol.asyncDispose]();else if(r[Symbol.dispose])r[Symbol.dispose]();}catch(e){error=error?new AggregateError([error,e]):e;}}if(error)throw error;return value;}

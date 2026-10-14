@@ -1,0 +1,394 @@
+{
+  "_comment": "Matriz de recursos: versão em que cada API chegou ao Node.js (MDN browser-compat-data) e à versão do Chrome. Edição ECMAScript conforme a análise curricular, seção 8. Usada pelo build para exigir que cartões que citam uma API declarem sua compatibilidade.",
+  "source": {
+    "package": "@mdn/browser-compat-data",
+    "version": "8.1.5",
+    "consultadoEm": "2026-10-10",
+    "primarySources": {
+      "ecmascript": "https://tc39.es/ecma262/2026/multipage/",
+      "nodeReleases": "https://nodejs.org/en/about/previous-releases",
+      "node24": "https://nodejs.org/pt-br/blog/release/v24.0.0",
+      "node26": "https://nodejs.org/en/blog/release/v26.0.0",
+      "typescript50": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
+      "typescript41": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html",
+    "typescript44": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html",
+    "baseline": "https://web.dev/baseline"
+    },
+  "browserBaseline": {
+    "status": "unknown",
+    "reason": "A versão do Chrome isolada não comprova a condição Baseline entre navegadores; a matriz ainda não verificou a tabela completa de disponibilidade.",
+    "source": "https://web.dev/baseline",
+    "consultadoEm": "2026-10-10"
+  },
+    "classifications": {
+      "ecmascript": "ECMAScript standard",
+      "web-node-api": "Web/Node platform API",
+      "runtime-proposal": "runtime proposal outside the ECMAScript edition"
+    }
+  },
+  "baseline": {
+    "node": "24",
+    "nodeNext": "26"
+  },
+  "entries": [
+    {
+      "label": "Math.sumPrecise",
+      "edition": "ES2026",
+      "match": [
+        "Math.sumPrecise"
+      ],
+      "nodeVersionAdded": "não suportado",
+      "chromeVersionAdded": "147",
+      "bcdPath": "javascript.builtins.Math.sumPrecise",
+      "compatibility": "fallback required on Node 24; feature detection before use",
+      "availableInLocalNode26": false,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Iterator.concat",
+      "edition": "ES2026",
+      "match": [
+        "Iterator.concat"
+      ],
+      "nodeVersionAdded": "26.0.0",
+      "chromeVersionAdded": "146",
+      "bcdPath": "javascript.builtins.Iterator.concat",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Array.fromAsync",
+      "edition": "ES2026",
+      "match": [
+        "Array.fromAsync"
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "121",
+      "bcdPath": "javascript.builtins.Array.fromAsync",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Error.isError",
+      "edition": "ES2026",
+      "match": [
+        "Error.isError"
+      ],
+      "nodeVersionAdded": "24.3.0",
+      "chromeVersionAdded": "134",
+      "bcdPath": "javascript.builtins.Error.isError",
+      "compatibility": "fallback required on Node 24",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Map.prototype.getOrInsert",
+      "edition": "ES2026",
+      "match": [
+        "getOrInsert("
+      ],
+      "nodeVersionAdded": "26.0.0",
+      "chromeVersionAdded": "145",
+      "bcdPath": "javascript.builtins.Map.getOrInsert",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Map.prototype.getOrInsertComputed",
+      "edition": "ES2026",
+      "match": [
+        "getOrInsertComputed"
+      ],
+      "nodeVersionAdded": "26.0.0",
+      "chromeVersionAdded": "145",
+      "bcdPath": "javascript.builtins.Map.getOrInsertComputed",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Uint8Array base64/hex",
+      "edition": "ES2026",
+      "match": [
+        "toBase64",
+        "fromBase64",
+        "toHex",
+        "fromHex"
+      ],
+      "nodeVersionAdded": "25.0.0",
+      "chromeVersionAdded": "140",
+      "bcdPath": "javascript.builtins.Uint8Array.toBase64",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "JSON.rawJSON",
+      "edition": "ES2026",
+      "match": [
+        "JSON.rawJSON"
+      ],
+      "nodeVersionAdded": "21.0.0",
+      "chromeVersionAdded": "114",
+      "bcdPath": "javascript.builtins.JSON.rawJSON",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Set.prototype.union",
+      "edition": "ES2025",
+      "match": [
+        ".union("
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "122",
+      "bcdPath": "javascript.builtins.Set.union",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Set.prototype.intersection",
+      "edition": "ES2025",
+      "match": [
+        ".intersection("
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "122",
+      "bcdPath": "javascript.builtins.Set.intersection",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Set.prototype.difference",
+      "edition": "ES2025",
+      "match": [
+        ".difference("
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "122",
+      "bcdPath": "javascript.builtins.Set.difference",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Set.prototype.isSubsetOf",
+      "edition": "ES2025",
+      "match": [
+        "isSubsetOf("
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "122",
+      "bcdPath": "javascript.builtins.Set.isSubsetOf",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Promise.try",
+      "edition": "ES2025",
+      "match": [
+        "Promise.try"
+      ],
+      "nodeVersionAdded": "23.0.0",
+      "chromeVersionAdded": "128",
+      "bcdPath": "javascript.builtins.Promise.try",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "RegExp.escape",
+      "edition": "ES2025",
+      "match": [
+        "RegExp.escape"
+      ],
+      "nodeVersionAdded": "24.0.0",
+      "chromeVersionAdded": "136",
+      "bcdPath": "javascript.builtins.RegExp.escape",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Float16Array",
+      "edition": "ES2025",
+      "match": [
+        "Float16Array"
+      ],
+      "nodeVersionAdded": "24.0.0",
+      "chromeVersionAdded": "135",
+      "bcdPath": "javascript.builtins.Float16Array",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Iterator helpers",
+      "edition": "ES2025",
+      "match": [
+        "Iterator.from(",
+        ".toArray(",
+        ".take(",
+        ".drop("
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "122",
+      "bcdPath": "javascript.builtins.Iterator.map",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Promise.withResolvers",
+      "edition": "ES2024",
+      "match": [
+        "Promise.withResolvers"
+      ],
+      "nodeVersionAdded": "22.0.0",
+      "chromeVersionAdded": "119",
+      "bcdPath": "javascript.builtins.Promise.withResolvers",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Object.groupBy",
+      "edition": "ES2024",
+      "match": [
+        "Object.groupBy"
+      ],
+      "nodeVersionAdded": "21.0.0",
+      "chromeVersionAdded": "117",
+      "bcdPath": "javascript.builtins.Object.groupBy",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Map.groupBy",
+      "edition": "ES2024",
+      "match": [
+        "Map.groupBy"
+      ],
+      "nodeVersionAdded": "21.0.0",
+      "chromeVersionAdded": "117",
+      "bcdPath": "javascript.builtins.Map.groupBy",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "String isWellFormed/toWellFormed",
+      "edition": "ES2024",
+      "match": [
+        "isWellFormed",
+        "toWellFormed"
+      ],
+      "nodeVersionAdded": "20.0.0",
+      "chromeVersionAdded": "111",
+      "bcdPath": "javascript.builtins.String.isWellFormed",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Array toSorted/toReversed/toSpliced/with",
+      "edition": "ES2023",
+      "match": [
+        "toSorted(",
+        "toReversed(",
+        "toSpliced("
+      ],
+      "nodeVersionAdded": "20.0.0",
+      "chromeVersionAdded": "110",
+      "bcdPath": "javascript.builtins.Array.toSorted",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Error.cause",
+      "edition": "ES2022",
+      "match": [
+        "{ cause",
+        "cause:",
+        ".cause"
+      ],
+      "nodeVersionAdded": "16.9.0",
+      "chromeVersionAdded": "93",
+      "bcdPath": "javascript.builtins.Error.cause",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Intl.Segmenter",
+      "edition": "ES2022",
+      "match": [
+        "Intl.Segmenter"
+      ],
+      "nodeVersionAdded": "16.0.0",
+      "chromeVersionAdded": "87",
+      "bcdPath": "javascript.builtins.Intl.Segmenter",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "AggregateError",
+      "edition": "ES2021",
+      "match": [
+        "AggregateError"
+      ],
+      "nodeVersionAdded": "15.0.0",
+      "chromeVersionAdded": "85",
+      "bcdPath": "javascript.builtins.AggregateError",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript"
+    },
+    {
+      "label": "Temporal",
+      "edition": "fora do ES2026",
+      "match": [
+        "Temporal"
+      ],
+      "nodeVersionAdded": "26.0.0",
+      "chromeVersionAdded": "144",
+      "bcdPath": "javascript.builtins.Temporal",
+      "availableInLocalNode26": true,
+      "sourceType": "runtime-proposal"
+    },
+    {
+      "label": "structuredClone",
+      "edition": "API Web/Node",
+      "match": [
+        "structuredClone"
+      ],
+      "nodeVersionAdded": "17.0.0",
+      "chromeVersionAdded": "98",
+      "bcdPath": "api.structuredClone",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api"
+    },
+    {
+      "label": "AbortSignal.timeout",
+      "edition": "API Web/Node",
+      "match": [
+        "AbortSignal.timeout"
+      ],
+      "nodeVersionAdded": "17.3.0",
+      "chromeVersionAdded": "124",
+      "bcdPath": "api.AbortSignal.timeout_static",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api"
+    },
+    {
+      "label": "AbortSignal.any",
+      "edition": "API Web/Node",
+      "match": [
+        "AbortSignal.any"
+      ],
+      "nodeVersionAdded": "20.3.0",
+      "chromeVersionAdded": "116",
+      "bcdPath": "api.AbortSignal.any_static",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api"
+    }
+  ],
+  "markers": [
+    "feature detection",
+    "fallback",
+    "opcional",
+    "confirmar"
+  ],
+  "exceptions": {
+    "20.08": "Pipeline próprio do exercício: `.map`, `.filter` e `.take` são métodos do código do aluno, não Iterator helpers."
+  }
+}
+

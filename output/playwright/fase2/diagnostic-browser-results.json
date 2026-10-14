@@ -1,0 +1,16 @@
+{
+  "base": "http://127.0.0.1:8765",
+  "checks": [
+    "D.06: elegível, limitado a 01.01, persistido após reload",
+    "D.07: elegível, limitado a 07.01, persistido após reload",
+    "D.08: elegível, limitado a 15.01, persistido após reload",
+    "D.09: elegível, limitado a 21.01, persistido após reload",
+    "D.06: unknown abre feedback e permite concluir estudo sem entrada sugerida",
+    "D.07: ajuda explícita antes do envio bloqueia a entrada e persiste",
+    "D.08: edição/reversão exige novo envio assistido; histórico anterior não é invalidado",
+    "D.08: novo recall sem snapshot antigo até reenvio explícito; reenvio independente recupera a sugestão"
+  ],
+  "limitations": [
+    "QA manual assistido no Edge; não é validação com alunos nem prova de transferência."
+  ]
+}

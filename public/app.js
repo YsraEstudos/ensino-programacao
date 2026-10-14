@@ -12,7 +12,9 @@
         DevPathCourseController: ["create"],
         DevPathStageRegistry: ["create"],
         DevPathModuleGraph: ["buildModuleGraph"],
+        DevPathAssessment: ["run"],
         DevPathProgressMigrations: ["stage01"],
+        DevPathLearningProgress: ["transitionLearning", "mergeProgressSnapshots"],
         DevPathStage00UI: ["renderExercise", "handleClick", "handleInput", "handleDrag", "flushDraft"],
         DevPathStage00Preparation: ["render", "sync", "handleClick", "handleInput"],
         DevPathStage01UI: ["render", "complete", "handleClick", "handleInput"],
@@ -23,7 +25,9 @@
         DevPathCourseRunner: ["run"],
         DevPathProgressModel: ["create"],
         DevPathProgressSync: ["create"],
-        DevPathTeachingUtils: ["escapeHTML"]
+        DevPathTeachingUtils: ["escapeHTML"],
+        DevPathLearningPaths: ["decorate", "handleClick", "handleInput"],
+        DevPathLearningEventQueue: ["create"]
     };
     const missing = Object.entries(contracts).filter(([name, methods]) => methods.some(method => typeof window[name]?.[method] !== "function")).map(([name]) => name);
     if (!Array.isArray(window.DevPathStage00UI?.activities))
@@ -43,6 +47,7 @@
     let progress = blankProgress();
     let activityById;
     let curriculumActivities = stage00UI.activities.map(item => ({ ...item, stage: item.id.slice(0, 2) }));
+    let curriculumAssessments = {};
     let selectedCatalogFilter = "Todas";
     let selectedStageFilter = "Todas";
     let catalogSearch = "";
@@ -81,7 +86,9 @@
         get activityById() { return activityById; }, set activityById(value) { activityById = value; },
         get courseSaveTimer() { return courseSaveTimer; }, set courseSaveTimer(value) { courseSaveTimer = value; },
         get cancelCourseRun() { return cancelCourseRun; }, set cancelCourseRun(value) { cancelCourseRun = value; },
-        get courseRunner() { return courseRunner; }
+        get courseRunner() { return courseRunner; },
+        get learning() { return learningContext; },
+        get assessments() { return curriculumAssessments; }
     };
     const syncNotificationsController = window.DevPathSyncNotifications.create(appContext);
     const appRouterController = window.DevPathAppRouter.create(appContext);
@@ -90,6 +97,7 @@
     const courseController = window.DevPathCourseController.create(appContext);
     const progressSync = window.DevPathProgressSync.create({
         snapshot: () => JSON.stringify(progress),
+        merge: (local, remote) => window.DevPathLearningProgress.mergeProgressSnapshots(local, remote),
         status: setSaveStatus,
         issue: showSyncIssue
     });
@@ -127,6 +135,124 @@
                 item.learner === undefined);
     }
     function catalogStageLabel(...args) { return catalogViewController.catalogStageLabel(...args); }
+    function migrateLoadedProgress(value) {
+        return window.DevPathProgressMigrations.migrateLegacyLearning(value, curriculumActivities, curriculumAssessments);
+    }
+    function transitionLearning(activityId, event, context = {}) {
+        const activity = activityById?.get(activityId);
+        if (!activity || !event || typeof event !== "object") return null;
+        const assessment = curriculumAssessments[activityId] || {};
+        const at = typeof event.at === "string" ? event.at : new Date().toISOString();
+        const input = { ...event, at };
+        const learningContext = {
+            contentVersion: Number.isInteger(context.contentVersion) ? context.contentVersion : activity.contentVersion || 0,
+            assessmentVersion: Number.isInteger(context.assessmentVersion) ? context.assessmentVersion : assessment.version || 0,
+            fingerprint: event.fingerprint,
+            independent: context.independent === true,
+            assessmentPassed: context.assessmentPassed === true,
+            ...(context.mode === "recall" || context.mode === "learn" ? { mode: context.mode } : {})
+        };
+        const current = progress.exerciseLearning?.[activityId] || null;
+        const next = window.DevPathLearningProgress.transitionLearning(current, input, learningContext);
+        progress.exerciseLearning = { ...(progress.exerciseLearning || {}), [activityId]: next };
+        saveProgress();
+        return next;
+    }
+    let learningEventSequence = 0;
+    const newLearningId = () => `${Date.now().toString(36)}-${(++learningEventSequence).toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    function learningFiles(item, supplied) {
+        if (Array.isArray(supplied)) return supplied;
+        const editors = [...view.querySelectorAll(`[data-course-editor="${esc(item.id)}"]`)];
+        if (editors.length) return editors.map(editor => ({path: editor.dataset.courseFile, content: editor.value}));
+        const fields = [...view.querySelectorAll('.course-lesson input:not([type="checkbox"]), .course-lesson textarea, .course-lesson select')]
+            .filter(field => !field.closest('[data-learning-transfer]') && !field.matches('[data-course-reflection]'));
+        if (fields.length) return [{path: 'learning-response.json', content: JSON.stringify(fields.map(field => ({id: field.id || field.name || field.dataset.action || field.className, value: field.value, checked: field.checked}))) }];
+        return (item.starterFiles || []).map(file => ({path: file.path, content: file.content}));
+    }
+    async function learningFingerprint(item, supplied) {
+        const assessment = curriculumAssessments[item.id];
+        const files = learningFiles(item, supplied);
+        const payload = JSON.stringify({activityId:item.id, contentVersion:item.contentVersion || 1, assessmentVersion:assessment?.version || 1, assessment, files});
+        if (window.DevPathAssessment?.canonicalFingerprint) {
+            try { return await window.DevPathAssessment.canonicalFingerprint({activityId: item.id, contentVersion: item.contentVersion || 1, assessmentVersion: assessment?.version || 1, assessment, files}); }
+            catch { /* Test and restricted contexts may not expose WebCrypto; keep a deterministic local fingerprint. */ }
+        }
+        let hash = 2166136261;
+        for (let index = 0; index < payload.length; index++) hash = Math.imul(hash ^ payload.charCodeAt(index), 16777619);
+        return `local-${(hash >>> 0).toString(16).padStart(8, '0')}`;
+    }
+    function learningRecord(item) { return progress.exerciseLearning?.[item.id] || null; }
+    // Every learning event goes through one queue. The queue stamps `at` when an event is applied, so a slow fingerprint
+    // on an earlier edit cannot make a later help request look stale to the reducer. Caller-supplied `at` is ignored.
+    const learningQueue = window.DevPathLearningEventQueue.create({
+        onError: () => toast('Não foi possível salvar esta ação agora. Tente novamente.')
+    });
+    function learningEvent(item, kind, {attemptId, fingerprint, source = 'rubric-declared', assisted, mode, independent, assessmentPassed = false} = {}) {
+        return learningQueue.run(async ({stamp}) => {
+            const record = learningRecord(item);
+            // Floor at the record's own clock so a record written by a device with a fast clock is never considered newer.
+            const at = stamp(record?.currentUpdatedAt);
+            const eventAttemptId = attemptId || record?.attemptId || newLearningId();
+            const resolvedFingerprint = fingerprint || await learningFingerprint(item);
+            const event = {id: newLearningId(), kind, attemptId: eventAttemptId, at, fingerprint: resolvedFingerprint, source, ...(typeof assisted === 'boolean' ? {assisted} : {})};
+            return transitionLearning(item.id, event, {contentVersion: item.contentVersion || 1, assessmentVersion: curriculumAssessments[item.id]?.version || 1, fingerprint: resolvedFingerprint, independent: independent ?? record?.attemptIndependent ?? (mode === 'recall'), assessmentPassed, ...(mode ? {mode} : {})});
+        });
+    }
+    const learningContext = Object.freeze({
+        transition: transitionLearning, record: learningRecord, fingerprint: learningFingerprint,
+        startLearning: async (item, mode) => {
+            if (!item || !['learn','recall'].includes(mode)) return null;
+            const current = learningRecord(item);
+            if (current?.mode === mode && (mode !== 'learn' || current.state !== 'attempted')) return current;
+            const at = new Date().toISOString();
+            const fingerprint = await learningFingerprint(item);
+            // "Aprender este conceito" marks the concept as studied; "Tentar de memória" starts an unhelped attempt.
+            return learningEvent(item, mode === 'learn' ? 'studied' : 'attempted', {at, attemptId: current?.attemptId || newLearningId(), fingerprint, source: 'rubric-declared', mode, independent: current ? current.attemptIndependent : mode === 'recall'});
+        },
+        startIndependentAttempt: async item => {
+            if (!item) return null;
+            const at = new Date().toISOString(), attemptId = newLearningId(), fingerprint = await learningFingerprint(item);
+            return learningEvent(item, 'attempted', {at, attemptId, fingerprint, source:'rubric-declared', mode:'recall', independent:true});
+        },
+        recordAttempt: (item, options = {}) => learningRecord(item) ? learningEvent(item, 'attempted', {...options, at: options.at || new Date().toISOString(), source: options.source || 'rubric-declared', mode: learningRecord(item)?.mode}) : null,
+        requestHelp: async (item, target) => {
+            const record = learningRecord(item);
+            if (!record) return null;
+            return learningEvent(item, 'help', {at: new Date().toISOString(), attemptId: record.attemptId, source: 'rubric-declared', assisted: true, mode: record.mode, independent: record.attemptIndependent});
+        },
+        submitStudy: async (item, response) => {
+            if (typeof response !== 'string' || response.trim().length < 16) return null;
+            const record = learningRecord(item);
+            if (!record) return null;
+            return learningEvent(item, 'studied', {at: new Date().toISOString(), attemptId: record.attemptId, source: 'rubric-declared', mode: record.mode, independent: record.attemptIndependent});
+        },
+        runAssessment: async (item, result, options = {}) => {
+            const record = learningRecord(item), assessment = curriculumAssessments[item.id];
+            if (!record || !assessment || !result || result.kind !== 'passed') return null;
+            const rubric = Array.isArray(assessment.rubric) ? assessment.rubric : [];
+            const checked = [...view.querySelectorAll(`[data-learning-rubric]:checked`)].length;
+            const declaredRubricComplete = options.declaredRubricComplete === true ||
+                Boolean(assessment.expectedDiagnostics?.length && rubric.length > 0 && checked === rubric.length);
+            if (assessment.expectedDiagnostics?.length && !declaredRubricComplete) return null;
+            const source = ['browser','local-declared','rubric-declared'].includes(result.source) ? result.source : assessment?.environment === 'rubric' ? 'rubric-declared' : 'local-declared';
+            const at = options.at || new Date().toISOString(), attemptId = options.attemptId || record.attemptId;
+            const fingerprint = options.fingerprint || result.fingerprint || await learningFingerprint(item);
+            return learningEvent(item, 'verified', {at, attemptId, fingerprint, source, mode: record.mode, independent: record.attemptIndependent, assessmentPassed: true});
+        },
+        runTransfer: async (item, transfer, evidence = {}) => {
+            const assessment = curriculumAssessments[item.id];
+            if (!transfer || assessment?.transfer?.id !== transfer.id || !Array.isArray(transfer.rubric) || !transfer.rubric.length || evidence.response?.trim().length < 40 || evidence.checked?.length !== transfer.rubric.length) return {accepted: false};
+            const principal = learningRecord(item), principalEvidence = principal?.verifiedEvidence;
+            if (!principalEvidence || principalEvidence.attemptId !== principal.attemptId || principalEvidence.fingerprint !== principal.currentFingerprint || principalEvidence.contentVersion !== (item.contentVersion || 1) || principalEvidence.assessmentVersion !== (assessment?.version || 1) || principal.assisted) return {accepted:false};
+            const at = new Date().toISOString(), attemptId = newLearningId(), files = [...(transfer.files || []), {path:'transfer-response.md', content:evidence.response.trim()}];
+            const fingerprint = await learningFingerprint(item, files);
+            const began = await learningEvent(item, 'attempted', {at, attemptId, fingerprint, source:'rubric-declared', mode:'recall', independent:true});
+            if (began?.attemptId !== attemptId || began.assisted) return {accepted:false};
+            // The rubric is declared, not executed, so the answer is a declared transfer and never "demonstrated".
+            const completed = await learningEvent(item, 'transfer-declared', {at:new Date(Date.parse(at)+1).toISOString(), attemptId, fingerprint, source:'rubric-declared', mode:'recall', independent:true, assessmentPassed:false});
+            return {accepted:completed?.state === 'transfer-declared'};
+        }
+    });
     async function initialize() {
         try {
             const response = await fetch("/course-catalog.json", { cache: "no-store" });
@@ -138,13 +264,22 @@
             }
         }
         catch { /* Keep the existing starter catalog if the expanded course asset is unavailable. */ }
+        try {
+            const response = await fetch("/course-assessments.json", { cache: "no-store" });
+            if (response.ok) {
+                const data = await response.json();
+                if (data && typeof data === "object" && !Array.isArray(data)) curriculumAssessments = data.assessment || data;
+            }
+        }
+        catch { /* Legacy migration remains conservative without the assessment manifest. */ }
         activityById = new Map(curriculumActivities.map(item => [item.id, item]));
+        startStudyTime();
         const pathSummary = document.querySelector(".side-path small");
         if (pathSummary)
             pathSummary.textContent = `${catalogStageLabel()} · ${curriculumActivities.length} atividades`;
         if (localPreview) {
             try {
-                progress = { ...blankProgress(), ...JSON.parse(localStorage.getItem(localProgressKey) || "{}") };
+                progress = migrateLoadedProgress({ ...blankProgress(), ...JSON.parse(localStorage.getItem(localProgressKey) || "{}") });
             }
             catch {
                 progress = blankProgress();
@@ -155,7 +290,7 @@
             return;
         }
         try {
-            progress = { ...blankProgress(), ...await progressSync.load() };
+            progress = migrateLoadedProgress({ ...blankProgress(), ...await progressSync.load() });
             setSaveStatus("progresso sincronizado");
         }
         catch {
@@ -176,6 +311,23 @@
             avatar.textContent = Array.from(displayName)[0]?.toLocaleUpperCase("pt-BR") || "D";
         }
         catch { /* The protected app can load without optional profile display. */ }
+    }
+    function startStudyTime() {
+        const root = document.querySelector("#study-time-root");
+        if (!root || typeof window.DevPathStudyTime?.create !== "function" || typeof window.DevPathStudyTimeUI?.create !== "function")
+            return;
+        let storage = null;
+        try { storage = window.localStorage; }
+        catch { /* A denied storage getter must not block the course. */ }
+        const counter = window.DevPathStudyTime.create({storage, now: () => performance.now()});
+        window.DevPathStudyTimeUI.create({
+            counter,
+            root,
+            getActivity: () => {
+                const route = routeInfo();
+                return route.name === "javascript" && route.id ? activityById?.get(route.id) || null : null;
+            }
+        });
     }
     function recordActiveDay() {
         if (!localPreview && !progressSync.ready)
@@ -249,7 +401,12 @@
         window.DevPathLearningJourney?.sync(view);
         document.querySelector("#main").focus({ preventScroll: true });
     }
-    function stageContext() { return { progress, activities: curriculumActivities, saveProgress, scheduleSave: scheduleCourseSave, render, toast }; }
+    function stageContext() { return { progress, activities: curriculumActivities, assessments: curriculumAssessments, learning: learningContext, saveProgress, scheduleSave: scheduleCourseSave, render, toast }; }
+    const genericCourseAdapter = {
+        render: item => renderCurriculumLesson(item),
+        handleClick: (event, item) => courseController.handleClick(event, item),
+        handleInput: (event, item) => courseController.handleInput(event, item)
+    };
     const stageRegistry = window.DevPathStageRegistry.create([
         ["D", window.DevPathDiagnosticUI],
         ["00", {
@@ -260,7 +417,7 @@
                 handleInput: (event, item, ctx) => item.preparation && window.DevPathStage00Preparation.handleInput(event, item, ctx)
             }],
         ["01", window.DevPathStage01UI], ["02", window.DevPathStage02UI], ["03", window.DevPathStage03UI]
-    ], { render: item => renderCurriculumLesson(item) });
+    ], genericCourseAdapter, [["03.10", genericCourseAdapter]]);
     function dispatchStageEvent(event) {
         const route = routeInfo();
         if (route.name !== "javascript" || !route.id)
@@ -268,6 +425,10 @@
         const item = activityById?.get(route.id);
         if (!item)
             return false;
+        const context = stageContext();
+        if (event.type === "click" && window.DevPathLearningPaths.handleClick(event, item, context, view))
+            return true;
+        if (event.type !== "click") window.DevPathLearningPaths.handleInput(event, item, context);
         const adapter = stageRegistry.resolve(item);
         const name = event.type === "click" ? "handleClick" : "handleInput";
         if (event.type === "change" && !["D", "01", "03"].includes(item.stage))
@@ -291,8 +452,14 @@
         }
         setBreadcrumb("JavaScript", item.stage === "D" ? "Diagnóstico" : `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
         const adapter = stageRegistry.resolve(item);
-        view.innerHTML = adapter.render(item, stageContext());
+        view.innerHTML = window.DevPathLearningPaths.decorate(item, adapter.render(item, stageContext()), stageContext());
         adapter.sync?.(item, stageContext());
+        window.DevPathLocalProjectPanel?.enhance(view, item, {
+            assessment: curriculumAssessments[id],
+            loadDraft: draftItem => courseController.loadCourseDraft(draftItem),
+            toast,
+            exporter: window.DevPathCourseProjectExport
+        });
     }
     function renderHome(...args) { return catalogViewController.renderHome(...args); }
     function renderCatalog(...args) { return catalogViewController.renderCatalog(...args); }
@@ -319,17 +486,26 @@
         const firstResponse = event.target.closest("[data-course-first-response]");
         if (firstResponse) {
             const id = firstResponse.dataset.courseFirstResponse;
-            const response = view.querySelector(`[data-first-response-input="${esc(id)}"]`)?.value.trim() || "";
+            const predictionRoot = view.querySelector(`[data-structured-prediction]`);
+            const structuredAnswers = predictionRoot && window.DevPathStructuredPredictions?.read(predictionRoot);
+            const response = structuredAnswers
+                ? window.DevPathStructuredPredictions.serialize({version: Number(predictionRoot.dataset.structuredPrediction) || 1, fields: Object.keys(structuredAnswers).map(fieldId => ({id: fieldId}))}, structuredAnswers)
+                : view.querySelector(`[data-first-response-input="${esc(id)}"]`)?.value.trim() || "";
             if (!response) {
                 toast("Registre uma primeira resposta antes de abrir a explicação.");
+                return;
+            }
+            if (response.length > limits.predictionChars) {
+                toast(`A resposta passou do limite de ${limits.predictionChars} caracteres. Encurte um ou mais campos; nada foi registrado.`);
                 return;
             }
             progress.exercisePredictions ||= {};
             const item = activityById.get(id);
             const key = exerciseProgressKey(item);
-            progress.exercisePredictions[key] = response.slice(0, limits.predictionChars);
+            progress.exercisePredictions[key] = response;
             progress.warmupCompleted ||= {};
             progress.warmupCompleted[key] = true;
+            courseController.predictionSaved(id);
             saveProgress();
             render();
             return;

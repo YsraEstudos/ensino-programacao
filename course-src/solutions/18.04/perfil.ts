@@ -1,0 +1,1 @@
+type UserRecord={id:string;name:string;email:string;passwordHash:string;avatarUrl:string;lastLoginIp:string;createdAt:string}; export type ProfileSummary={id:string;name:string;avatarUrl?:string}; export type ProfileCard=ProfileSummary;

@@ -1,0 +1,264 @@
+- generic [ref=f4e1]:
+  - link "Pular para o conteúdo" [ref=f4e2] [cursor=pointer]:
+    - /url: "#main"
+  - generic [ref=f4e3]:
+    - complementary "Navegação principal" [ref=f4e4]:
+      - link "DevPath início" [ref=f4e5] [cursor=pointer]:
+        - /url: "#/home"
+        - generic [ref=f4e6]: </>
+        - generic [ref=f4e7]: devpath.
+      - generic [ref=f4e8]: ESPAÇO DE APRENDIZADO
+      - navigation [ref=f4e9]:
+        - link "Início" [ref=f4e10] [cursor=pointer]:
+          - /url: "#/home"
+          - generic [ref=f4e11]: ⌂
+          - text: Início
+        - link "Exercícios" [ref=f4e12] [cursor=pointer]:
+          - /url: "#/catalog"
+          - generic [ref=f4e13]: ▤
+          - text: Exercícios
+        - link "Revisão ↗" [ref=f4e14] [cursor=pointer]:
+          - /url: "#/review"
+          - generic [ref=f4e15]: ↻
+          - text: Revisão
+          - generic [ref=f4e16]: ↗
+      - generic [ref=f4e17]:
+        - text: SUA TRILHA ATIVA
+        - generic [ref=f4e18]: 01 / 01
+      - link "JavaScript · Exercícios Diagnóstico + etapas 00–23 · 261 atividades ›" [ref=f4e19] [cursor=pointer]:
+        - /url: "#/catalog"
+        - generic [ref=f4e21]:
+          - strong [ref=f4e22]: JavaScript · Exercícios
+          - generic [ref=f4e23]: Diagnóstico + etapas 00–23 · 261 atividades
+        - generic [ref=f4e24]: ›
+      - generic [ref=f4e25]:
+        - generic [ref=f4e26]:
+          - generic [ref=f4e27]: ✳
+          - paragraph [ref=f4e28]: Um pequeno passojá muda o que vocêconsegue construir.
+        - generic [ref=f4e29]:
+          - generic [ref=f4e30]: D
+          - generic [ref=f4e31]:
+            - strong [ref=f4e32]: Conta conectada
+            - generic [ref=f4e33]: Carregando perfil…
+          - button "Opções do perfil" [ref=f4e34] [cursor=pointer]: ···
+    - main [ref=f4e35]:
+      - generic [ref=f4e36]:
+        - navigation "Navegação estrutural" [ref=f4e37]:
+          - link "Seu espaço" [ref=f4e65] [cursor=pointer]:
+            - /url: "#/home"
+          - generic [ref=f4e66]: /
+          - link "JavaScript" [ref=f4e67] [cursor=pointer]:
+            - /url: "#/catalog"
+          - generic [ref=f4e68]: /
+          - link "Etapa 14" [ref=f4e69] [cursor=pointer]:
+            - /url: "#/javascript/14.01"
+          - generic [ref=f4e70]: /
+          - strong [ref=f4e71]: Por que existe um bundler?
+        - generic [ref=f4e45]:
+          - generic [ref=f4e46]: salvo neste navegador
+          - button "Sobre o DevPath" [ref=f4e48] [cursor=pointer]: "?"
+      - article [active] [ref=f4e73]:
+        - link "← Voltar à trilha de JavaScript" [ref=f4e74] [cursor=pointer]:
+          - /url: "#/catalog"
+        - paragraph [ref=f4e75]:
+          - generic [ref=f4e76]: "Estado desta atividade:"
+          - generic [ref=f4e77]: Estudada
+        - region [ref=f4e78]:
+          - generic [ref=f4e79]:
+            - text: ESCOLHA SEU CAMINHO
+            - heading "Como você quer começar?" [level=2] [ref=f4e80]
+            - paragraph [ref=f4e81]: Você pode estudar primeiro ou tentar recuperar a ideia de memória. Sua escolha fica salva nesta atividade.
+          - generic [ref=f4e82]:
+            - button "Aprender este conceito" [pressed] [ref=f4e83] [cursor=pointer]
+            - button "Tentar de memória" [ref=f4e84] [cursor=pointer]
+            - button "Começar nova tentativa de memória sem ajuda" [ref=f4e85] [cursor=pointer]
+        - region "Estado da aprendizagem" [ref=f4e86]:
+          - strong [ref=f4e87]: "Estado histórico: Estudada"
+          - generic [ref=f4e88]: A verificação pelos testes publicados está pendente ou desatualizada.
+          - generic [ref=f4e89]: "Origem da evidência atual: Aguardando avaliação · percurso com apoio registrado nesta tentativa"
+          - group "Rubrica declarada da avaliação" [ref=f4e90]:
+            - generic [ref=f4e92]:
+              - checkbox "separe transformação de build, artefatos/source map e validação runtime; trate chunk dinâmico como dependente da ferramenta." [ref=f4e93]
+              - generic [ref=f4e94]: separe transformação de build, artefatos/source map e validação runtime; trate chunk dinâmico como dependente da ferramenta.
+            - generic [ref=f4e95]: Marque os critérios após revisar sua resposta. A rubrica complementa o resultado técnico.
+        - generic [ref=f4e96]:
+          - generic [ref=f4e97]:
+            - generic [ref=f4e98]: JAVASCRIPT / ETAPA 14 · MÓDULOS, NODE E FERRAMENTAS
+            - generic [ref=f4e99]: "14.12"
+          - heading "Por que existe um bundler?" [level=1] [ref=f4e100]
+          - paragraph [ref=f4e101]: Antes do build, anote os arquivos esperados e quais evidências mostrariam transformação, divisão e depuração do código.
+          - generic [ref=f4e102]:
+            - generic [ref=f4e103]: 12 min · no seu ritmo
+            - generic [ref=f4e105]: Atividade 11 de 12 · COMPARE
+            - generic [ref=f4e106]: Uma ideia por vez
+        - navigation "Roteiro da atividade" [ref=f4e107]:
+          - generic [ref=f4e108]:
+            - generic [ref=f4e109]: SEU CAMINHO NESTA ATIVIDADE
+            - generic [ref=f4e110]: Aprender
+          - generic [ref=f4e111]:
+            - button "01 Aprender Entenda a ideia" [ref=f4e112] [cursor=pointer]:
+              - generic [ref=f4e113]: "01"
+              - generic [ref=f4e114]:
+                - strong [ref=f4e115]: Aprender
+                - generic [ref=f4e116]: Entenda a ideia
+            - button "02 Desafio Conheça a tarefa" [ref=f4e117] [cursor=pointer]:
+              - generic [ref=f4e118]: "02"
+              - generic [ref=f4e119]:
+                - strong [ref=f4e120]: Desafio
+                - generic [ref=f4e121]: Conheça a tarefa
+            - button "03 Prever Pense antes de rodar" [ref=f4e122] [cursor=pointer]:
+              - generic [ref=f4e123]: "03"
+              - generic [ref=f4e124]:
+                - strong [ref=f4e125]: Prever
+                - generic [ref=f4e126]: Pense antes de rodar
+            - button "04 Praticar Confira no código" [ref=f4e127] [cursor=pointer]:
+              - generic [ref=f4e128]: "04"
+              - generic [ref=f4e129]:
+                - strong [ref=f4e130]: Praticar
+                - generic [ref=f4e131]: Confira no código
+            - button "05 Explicar Conte o raciocínio" [ref=f4e132] [cursor=pointer]:
+              - generic [ref=f4e133]: "05"
+              - generic [ref=f4e134]:
+                - strong [ref=f4e135]: Explicar
+                - generic [ref=f4e136]: Conte o raciocínio
+        - paragraph [ref=f4e137]: Leia a explicação e o exemplo resolvido. Depois registre sua previsão, pratique e explique o que descobriu. A previsão pode estar errada; ela serve para você comparar seu raciocínio.
+        - generic [ref=f4e138]:
+          - text: "01"
+          - generic [ref=f4e139]: PASSO 01 · SEU ROTEIRO
+          - heading "Entenda a ideia, passo a passo" [level=2] [ref=f4e140]
+          - paragraph [ref=f4e141]: Ferramentas de build transformam e organizam arquivos para distribuição; isso é uma etapa de produção, separada da semântica do programa em runtime.
+          - list [ref=f4e142]:
+            - listitem [ref=f4e143]:
+              - generic [ref=f4e144]: "1"
+              - paragraph [ref=f4e145]: Ferramentas de build transformam e organizam arquivos para distribuição; isso é uma etapa de produção, separada da semântica do programa em runtime.
+            - listitem [ref=f4e146]:
+              - generic [ref=f4e147]: "2"
+              - paragraph [ref=f4e148]: Esse raciocínio reaparece em Empacotar widget pequeno com CSS.
+          - heading "Exemplo resolvido" [level=3] [ref=f4e149]
+          - list [ref=f4e150]:
+            - listitem [ref=f4e151]: Um mapa interativo pode importar uma imagem e um módulo de dados; o build pode emitir arquivos de saída e manter um mapa de origem que aponta para o módulo original.
+          - complementary [ref=f4e152]:
+            - heading "Guarde esta ideia" [level=3] [ref=f4e153]
+            - paragraph [ref=f4e154]: "Armadilha: Achar que bundler é requisito da linguagem ESM ou que substitui testes. Volte à regra pertinente e explique qual evidência a sustenta."
+            - paragraph [ref=f4e155]: Esse raciocínio reaparece em Empacotar widget pequeno com CSS. Reconhecer o mesmo mecanismo permite reutilizá-lo sem copiar a implementação.
+        - generic [ref=f4e156]:
+          - text: "02"
+          - generic [ref=f4e157]: PASSO 02 · SEU ROTEIRO
+          - heading "Conheça o desafio" [level=2] [ref=f4e158]
+          - paragraph [ref=f4e159]: "Analise o que o bundler transforma e o que continua sendo responsabilidade do runtime. Compare os arquivos de origem com a saída e registre os limites da ferramenta. Starter de trabalho: projeto ESM main.js importa math.js e style.css; configuração mínima de bundler; comparar source/output Registre sua primeira decisão antes de executar; depois compare previsão, evidência e justificativa."
+          - list [ref=f4e160]:
+            - listitem [ref=f4e161]: Analise o que o bundler transforma e o que continua sendo responsabilidade do runtime.
+            - listitem [ref=f4e162]: Compare os arquivos de origem com a saída e registre os limites da ferramenta.
+            - listitem [ref=f4e163]: "Starter de trabalho: projeto ESM main.js importa math.js e style.css; configuração mínima de bundler; comparar source/output Registre sua primeira decisão antes de executar; depois compare previsão, evidência e justificativa."
+          - generic [ref=f4e164]:
+            - strong [ref=f4e165]: Como responder
+            - paragraph [ref=f4e166]: Comparador árvore-fonte/artefatos, painel de configuração e perguntas textuais sobre source map; tudo navegável por teclado. Todas as ações funcionam por teclado e as mudanças são anunciadas em texto; nenhuma resposta depende apenas de cor ou arraste.
+          - group [ref=f4e167]:
+            - generic "Casos de borda que fazem parte do contrato" [ref=f4e168] [cursor=pointer]
+            - paragraph [ref=f4e169]: "Leia antes de implementar: estes comportamentos também serão conferidos."
+            - list [ref=f4e170]:
+              - listitem [ref=f4e171]: import dinâmico -> chunk separado se ferramenta/config permitir; build sem sourcemap -> depuração menos clara; bundle não valida dados runtime
+          - group [ref=f4e172]:
+            - generic "Materiais desta atividade" [ref=f4e173] [cursor=pointer]
+          - generic [ref=f4e174]:
+            - generic [ref=f4e175]: LEIA O ARQUIVO ANTES DE RESPONDER
+            - generic [ref=f4e176]:
+              - generic [ref=f4e177]: src/index.html
+              - code [ref=f4e179]: <!doctype html><html><head><meta charset="UTF-8"><script type="module" src="/main.js"></script></head><body><button id="details">Detalhes</button><p id="result"></p></body></html>
+            - generic [ref=f4e180]:
+              - generic [ref=f4e181]: src/main.js
+              - code [ref=f4e183]: "import { soma } from './math.js'; import './style.css'; import { mostrarDetalhe } from './details.js'; document.querySelector('#result').textContent = String(soma(2, 3)); document.querySelector('#details').addEventListener('click', mostrarDetalhe);"
+            - generic [ref=f4e184]:
+              - generic [ref=f4e185]: src/math.js
+              - code [ref=f4e187]: "export function soma(a, b) { return a + b; } export function multiplicar(a, b) { return a * b; }"
+            - generic [ref=f4e188]:
+              - generic [ref=f4e189]: src/details.js
+              - code [ref=f4e191]: "export function mostrarDetalhe() { document.querySelector('#result').textContent = '5 detalhes'; }"
+            - generic [ref=f4e192]:
+              - generic [ref=f4e193]: src/style.css
+              - code [ref=f4e195]: "body { font: 1rem sans-serif; } button { color: navy; }"
+            - heading "Artefatos somente leitura para comparar" [level=3] [ref=f4e196]
+            - paragraph [ref=f4e197]: Abra os arquivos de saída e a proveniência do build. Eles foram preparados a partir deste exemplo antes da atividade.
+            - group [ref=f4e198]:
+              - generic [ref=f4e199]:
+                - text: HTML de saída real produzido pelo Vite ·
+                - code [ref=f4e200]: bundle/index.html
+            - group [ref=f4e201]:
+              - generic [ref=f4e202]:
+                - text: Bundle inicial minificado com source map ·
+                - code [ref=f4e203]: bundle/assets/index.js
+            - group [ref=f4e204]:
+              - generic [ref=f4e205]:
+                - text: Mapa de origem do chunk inicial ·
+                - code [ref=f4e206]: bundle/assets/index.js.map
+            - group [ref=f4e207]:
+              - generic [ref=f4e208]:
+                - text: CSS emitido pelo build ·
+                - code [ref=f4e209]: bundle/assets/index.css
+            - group [ref=f4e210]:
+              - generic [ref=f4e211]:
+                - text: Chunk dinâmico emitido pelo build ·
+                - code [ref=f4e212]: bundle/assets/details.js
+            - group [ref=f4e213]:
+              - generic [ref=f4e214]:
+                - text: Mapa de origem do chunk dinâmico ·
+                - code [ref=f4e215]: bundle/assets/details.js.map
+            - group [ref=f4e216]:
+              - generic [ref=f4e217]:
+                - text: Proveniência e comando do build ·
+                - code [ref=f4e218]: bundle/provenance.md
+        - generic [ref=f4e219]:
+          - text: "03"
+          - generic [ref=f4e220]: PASSO 03 · SEU ROTEIRO
+          - heading "Prever antes de executar" [level=2] [ref=f4e221]
+          - paragraph [ref=f4e222]: Antes do build, anote os arquivos esperados e quais evidências mostrariam transformação, divisão e depuração do código. Reserve os primeiros 2 min de 12 min para esse registro, antes de executar ou abrir qualquer resposta-modelo.
+          - generic [ref=f4e223]:
+            - generic [ref=f4e224]: Sua primeira resposta
+            - generic [ref=f4e225]: Reserve os primeiros 2 min de 12 min para esse registro, antes de executar ou abrir qualquer resposta-modelo.
+            - textbox "Sua primeira resposta Reserve os primeiros 2 min de 12 min para esse registro, antes de executar ou abrir qualquer resposta-modelo." [ref=f4e226]:
+              - /placeholder: Escreva sua previsão, hipótese ou primeira decisão…
+          - button "Registrar resposta" [ref=f4e227] [cursor=pointer]:
+            - text: Registrar resposta
+            - generic [ref=f4e228]: →
+        - generic [ref=f4e229]:
+          - text: "04"
+          - generic [ref=f4e230]: PASSO 04 · SEU ROTEIRO
+          - heading "Sua vez de praticar" [level=2] [ref=f4e231]
+          - status [ref=f4e232]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - generic [ref=f4e233]:
+          - text: "05"
+          - generic [ref=f4e234]: PASSO 05 · SEU ROTEIRO
+          - heading "Explique o que você descobriu" [level=2] [ref=f4e235]
+          - status [ref=f4e236]: Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final.
+        - navigation "Sequência de estudo" [ref=f4e237]:
+          - link "← 14.11 · Devo instalar esta dependência?" [ref=f4e238] [cursor=pointer]:
+            - /url: "#/javascript/14.11"
+          - link "Ver trilha" [ref=f4e239] [cursor=pointer]:
+            - /url: "#/catalog"
+          - link "14.13 · Event loop em dois runtimes →" [ref=f4e240] [cursor=pointer]:
+            - /url: "#/javascript/14.13"
+        - region [ref=f4e241]:
+          - heading "Tarefa de transferência independente" [level=2] [ref=f4e242]
+          - paragraph [ref=f4e243]: Use o novo caso abaixo. A avaliação é feita pela rubrica declarada e não reaproveita o resultado do exercício principal.
+          - list [ref=f4e244]:
+            - listitem [ref=f4e245]:
+              - code [ref=f4e246]: transfer.md
+              - text: ": # Transferência 14.12 Tarefa independente — Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados. A entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+          - generic [ref=f4e247]:
+            - text: Explique e aplique a ideia neste caso
+            - textbox "Explique e aplique a ideia neste caso" [ref=f4e248]:
+              - /placeholder: Descreva a decisão e por que ela se aplica ao novo caso.
+          - group "Rubrica declarada" [ref=f4e249]:
+            - generic [ref=f4e251]:
+              - checkbox "comparação semântica e limites" [ref=f4e252]
+              - generic [ref=f4e253]: comparação semântica e limites
+            - generic [ref=f4e254]:
+              - 'checkbox "Casos avaliáveis: Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados." [ref=f4e255]'
+              - generic [ref=f4e256]: "Casos avaliáveis: Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+          - status [ref=f4e257]: Conclua uma avaliação principal atual antes de registrar a transferência.
+          - button "Registrar transferência" [disabled] [ref=f4e258]
+          - status [ref=f4e259]
+      - generic [ref=f4e62]:
+        - generic [ref=f4e63]: DEVPATH ✳ APRENDA CONSTRUINDO
+        - generic [ref=f4e64]: "Prévia local: seu progresso fica neste navegador."
+  - status

@@ -1,0 +1,1 @@
+export function lerPedido(json){const value=JSON.parse(json);if(!value||typeof value!=='object'||!Number.isFinite(value.quantidade)||!Number.isInteger(value.quantidade))throw new TypeError('pedido inválido');return value;}

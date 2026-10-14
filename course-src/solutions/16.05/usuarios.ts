@@ -1,0 +1,1 @@
+export type User={id:number;name:string}; export function isUser(x:unknown):x is User {if(typeof x!=="object"||x===null||Array.isArray(x))return false;return Object.hasOwn(x,"id")&&Object.hasOwn(x,"name")&&typeof (x as any).id==="number"&&typeof (x as any).name==="string";} export const usuarios:User[]=[];

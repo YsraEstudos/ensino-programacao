@@ -125,6 +125,34 @@
       "incorrectFeedback": "Combine uma reprodução pequena com a ferramenta adequada à divergência observada: inspecione o estado no ponto em que o loop se comporta diferente do esperado."
     }
   },
+  "D.06": {
+    "objective": "Preveja a expressão síncrona e distinga número, texto e rótulo de typeof.",
+    "firstResponse": {"action":"Registre a saída prevista e classifique cada valor sem aspas ou com aspas.","timing":"Depois de ler o trecho e antes de abrir o feedback."},
+    "explanation": {"mental_model":"Uma expressão é calculada antes da chamada síncrona imprimir. Aspas formam texto, e typeof devolve um rótulo sobre o valor.","worked_example":"4 + 1 resulta em 5; 5 é number; \"5\" é string.","common_trap":"Ler uma expressão como texto ou classificar o valor só pela aparência do algarismo.","why_it_matters":"Ler valores e saídas com precisão prepara a interpretação de variáveis e expressões."},
+    "interaction":"Mostre um trecho curto e perguntas fechadas com alternativa Ainda não sei. O feedback ensina cada distinção e pode ser lido sem editar código.",
+    "review": {"prompt":"O que ocorre antes de console.log mostrar o resultado de 4 + 1?","choices":["O JavaScript calcula a expressão, que vale 5.","A expressão vira o texto literal 4 + 1.","typeof troca o número por uma string antes da soma."],"answer":0,"correctFeedback":"Correto. A soma é calculada antes da chamada escrever 5.","incorrectFeedback":"Sem aspas, 4 + 1 é uma expressão numérica. Ela é calculada antes do log."}
+  },
+  "D.07": {
+    "objective": "Acompanhe retorno e estado de array e escolha método pelo resultado solicitado.",
+    "firstResponse": {"action":"Registre o retorno, a mudança do array e qual operação atende a cada pedido.","timing":"Depois de ler as perguntas e antes de ver a explicação."},
+    "explanation": {"mental_model":"return entrega um valor; push altera um array; map transforma todos, filter seleciona e find procura o primeiro correspondente.","worked_example":"dobro(3) retorna 6. Depois de push(6), [2,4] passa a [2,4,6]. filter(n > 2) produz [4,6].","common_trap":"Confundir valor retornado com saída ou selecionar um método sem verificar o formato pedido.","why_it_matters":"Escolher métodos pelo resultado desejado reduz erros em operações de coleção."},
+    "interaction":"Apresente cartões de previsão com alternativas fechadas, inclusive Ainda não sei. A explicação acompanha a chamada e o array separadamente.",
+    "review": {"prompt":"Qual combinação corresponde a transformar todos os elementos, selecionar vários ou obter o primeiro que combina?","choices":["map, filter e find","filter, find e map","find, map e filter"],"answer":0,"correctFeedback":"Correto: map transforma, filter seleciona e find devolve o primeiro correspondente.","incorrectFeedback":"Pense no formato de retorno: map cria valores transformados, filter mantém vários itens e find retorna um único item."}
+  },
+  "D.08": {
+    "objective": "Separe retorno, acesso a propriedades, checagem estática e validação de dados externos.",
+    "firstResponse": {"action":"Classifique cada situação como retorno, acesso a campo, diagnóstico estático ou validação em runtime.","timing":"Depois de ler os cartões e antes de consultar o feedback."},
+    "explanation": {"mental_model":"Um tipo descreve formas esperadas durante a checagem estática; ele não confirma a forma de JSON recebido em runtime.","worked_example":"pessoa.nome lê um campo. Uma string atribuída a number pode gerar erro do TypeScript. JSON externo começa como unknown e precisa de validação.","common_trap":"Usar any ou cast como se provasse que um dado externo é válido.","why_it_matters":"Separar esses limites ajuda a escolher entre corrigir código e validar entradas reais."},
+    "interaction":"Use perguntas curtas sobre trechos TypeScript e JSON, sem exigir compilação. Cada resposta abre uma explicação independente.",
+    "review": {"prompt":"O cast de um objeto externo para Pessoa prova que ele contém uma propriedade nome válida?","choices":["Não; o dado ainda precisa ser validado em runtime.","Sim; o cast executa a validação e corrige os campos.","Sim, mas apenas quando o objeto vem de JSON."],"answer":0,"correctFeedback":"Correto. O cast muda a expectativa do compilador, mas não inspeciona os dados externos em runtime.","incorrectFeedback":"A checagem estática não executa uma validação do JSON recebido. Verifique a forma do dado em runtime."}
+  },
+  "D.09": {
+    "objective": "Classifique hipóteses de desempenho e indique observações que podem testá-las.",
+    "firstResponse": {"action":"Para cada cenário, escolha uma hipótese inicial e uma observação capaz de distingui-la de uma alternativa.","timing":"Depois de ler os cenários, antes de consultar o feedback."},
+    "explanation": {"mental_model":"Uma causa de desempenho é uma hipótese até que uma medida contextualizada a apoie. CPU, rede, DOM, memória e I/O podem competir como explicações.","worked_example":"Uma espera antes da resposta sugere medir rede e servidor; pausas durante cálculo local sugerem medir CPU e tarefas longas.","common_trap":"Concluir a causa apenas pela aparência da lentidão ou ignorar explicações alternativas.","why_it_matters":"Métricas que podem refutar uma hipótese evitam otimizações baseadas em palpite."},
+    "interaction":"Mostre cenários com opções de hipótese e observação. O feedback reforça que os exemplos não substituem medição real.",
+    "review": {"prompt":"Como testar a hipótese de que uma pausa coincide com trabalho local de CPU?","choices":["Medir tarefas longas e tempo de CPU durante a pausa.","Medir somente a latência DNS em outro momento.","Contar nomes de variáveis no arquivo sem observar a execução."],"answer":0,"correctFeedback":"Correto. A medida deve observar o período e o recurso que a hipótese aponta.","incorrectFeedback":"Escolha uma métrica ligada à hipótese e ao instante da pausa; uma observação distante não distingue a causa."}
+  },
   "04.01": {
     "review": {
       "prompt": "Ao depurar uma função chamada dentro de outra expressão, qual evidência mostra o valor que a expressão consumirá?",
@@ -1161,80 +1189,84 @@
     }
   },
   "13.14": {
-    "objective": "Retome o migrador V1→V2 implementado em 11.13 e estenda o contrato V2 para incluir priority='normal' por padrão, mantendo campos, IDs e regressões já existentes; também cubra saves parciais, texto literal, teclado, foco e persistência.",
-    "prompt": "Evolua o Kanban conforme a change request do roteiro: saves V1 continuam migrando para V2, agora com priority='normal' em cada tarefa. Reuse a migração V1→V2 de 11.13 e preserve text, status, IDs estáveis e todas as regressões antigas. Saves V2 já produzidos por 11.13, mas sem priority, continuam válidos: complete o default sem reaplicar a conversão V1 nem gerar novos IDs. Não crie V3. Recupere tarefas válidas de save parcial com aviso; trate JSON totalmente inválido conforme o contrato anterior; mantenha texto HTML literal, teclado, foco e persistência. Entregue a alteração localizada e os testes de domínio, DOM e regressão antes de publicar.",
+    "objective": "Liste o que V1 (11.08) e V2 (11.13) já garantem e o que a V3 acrescenta (tags) antes de alterar o loader.",
+    "prompt": "Evolua o Kanban conforme a change request: a V3 acrescenta tags, um array de strings que vale [] quando ausente. Reuse a migração V1→V2 de 11.13 (que já acrescenta priority='normal') e crie migrarV2ParaV3 como função pura. Saves V1 percorrem V1→V2→V3; saves V2 percorrem só V2→V3; saves V3 não migram de novo. Preserve id, text, status e priority. Tags inválidas viram [] com aviso; registros parciais são descartados com aviso sem perder os válidos; JSON totalmente inválido segue o contrato anterior e não sobrescreve o storage. Mantenha texto HTML literal, teclado, foco e persistência. Entregue a alteração localizada e os testes de domínio, DOM e regressão.",
     "firstResponse": {
-      "action": "Registre que 11.13 já converte V1 para V2; liste os campos e comportamentos que precisam permanecer e o default de priority que será acrescentado.",
+      "action": "Registre a cadeia V1→V2→V3: o que cada migração acrescenta, quais versões o loader aceita e quais testes antigos precisam continuar verdes.",
       "timing": "Nos primeiros 4 minutos de 75, antes de alterar o loader ou abrir a solução."
     },
     "explanation": {
       "mental_model": "Uma mudança de projeto convive com comportamento já utilizado. Evoluir exige preservar compatibilidade e tornar as novas regras observáveis.",
-      "worked_example": "Uma lista de compras V1 pode ganhar priority ao passar para V2; a migração preserva os itens antigos e fornece um padrão para o campo novo.",
-      "common_trap": "Armadilha: Reimplementar V1→V2 ou assumir que persistência antiga já tem estrutura V2; perder dados ou acessibilidade anterior. Volte à regra pertinente e explique qual evidência a sustenta.",
+      "worked_example": "Uma lista de compras V2 pode ganhar categoria na V3. A migração V2→V3 preenche um padrão; um save V1 primeiro passa pela migração V1→V2 já existente e só depois pela nova, sem reescrever a anterior.",
+      "common_trap": "Armadilha: converter V1 direto para V3, reimplementar V1→V2 ou migrar de novo um save que já está na V3. Cada etapa tem contrato próprio e testes próprios.",
       "why_it_matters": "Esse raciocínio reaparece em Catálogo de estoque V2→V3 com reorderThreshold. Reconhecer o mesmo mecanismo permite reutilizá-lo sem copiar a implementação."
     },
     "resources": [
-      "Baseline de 11.13: migrador V1→V2 e testes de regressão existentes.",
-      "Fixtures a fornecer no cartão: save V1, save V2 sem priority, save parcial e JSON inválido; storage e navegador isolados do perfil pessoal.",
-      "Suíte de aceitação do projeto para migração, DOM, teclado, foco e persistência; não usar storage pessoal."
+      "Baseline de 11.13: migrador V1→V2 (priority='normal') e testes de regressão existentes.",
+      "Fixtures do cartão: save V1, save V2 com priority='high', save V3, save parcial e JSON inválido; storage isolado do perfil pessoal.",
+      "Suíte de aceitação do projeto para migração, DOM, teclado, foco e persistência."
     ],
     "examples": [
       {
-        "given": "Save V1 [{text:'A',done:false}]",
-        "expected": "V2 preserva A com ID estável e status A fazer, acrescenta priority='normal' e mantém os dados após reload."
+        "given": "Save V1 {version:1,tasks:[{id:'t1',text:'Ler pauta',status:'todo'}]}",
+        "expected": "Passa por V1→V2 e V2→V3: {version:3,tasks:[{id:'t1',text:'Ler pauta',status:'todo',priority:'normal',tags:[]}]}."
       },
       {
-        "given": "Save V2 de 11.13 com tarefa {id:'a1',text:'A',status:'todo'} e sem priority",
-        "expected": "Continua sendo lido como V2; mantém id/text/status, completa priority='normal' sem recriar ID nem repetir a conversão V1."
+        "given": "Save V2 {version:2,tasks:[{id:'t1',text:'Ler pauta',status:'todo',priority:'high'}]}",
+        "expected": "Passa só por V2→V3: mantém priority='high' e o id, acrescenta tags:[]."
+      },
+      {
+        "given": "Save V3 com tags ['urgente'] carregado duas vezes",
+        "expected": "Nenhuma migração é aplicada; o resultado é idêntico nas duas leituras."
       }
     ],
     "checks": [
       {
         "fixture": {
-          "given": "Save V1 com tarefas válidas e campos text/done",
-          "expected": "Migração para V2 conserva tarefas, IDs estáveis e status; cada tarefa recebe priority='normal'."
+          "given": "Save V1 com tarefas válidas",
+          "expected": "Chega à V3 com ids, text, status, priority='normal' e tags:[]."
         },
-        "scoring": "A suíte de 11.13 continua verde; os campos V1→V2 anteriores permanecem inalterados."
+        "scoring": "A suíte de 11.13 continua verde e a cadeia V1→V2→V3 é coberta por teste."
       },
       {
         "fixture": {
-          "given": "Save V2 de 11.13 sem o campo priority, carregado mais de uma vez",
-          "expected": "O loader mantém V2 e os IDs existentes, aplica priority='normal' uma única vez e não reaplica a migração V1."
+          "given": "Save V2 com priority='high' e sem tags",
+          "expected": "V3 mantém high, recebe tags:[] e não reaplica V1→V2."
         },
-        "scoring": "Leitura idempotente; sem perda, duplicação de ID ou regressão no contrato de 11.13."
+        "scoring": "Migração idempotente; sem perda, duplicação de id ou regressão no contrato de 11.13."
       },
       {
         "fixture": {
-          "given": "Save parcial com tarefas válidas e inválidas",
-          "expected": "Tarefas válidas sobrevivem e a interface mostra aviso para registros descartados."
+          "given": "Save com tags inválidas e um registro parcial",
+          "expected": "Tags inválidas viram [] com aviso; o registro parcial é descartado com aviso e os demais sobrevivem."
         },
-        "scoring": "Regressão de migração cobre recuperação parcial sem apagar dados válidos."
+        "scoring": "Recuperação parcial sem apagar dados válidos."
       },
       {
         "fixture": {
-          "given": "Texto de tarefa com marcação HTML e operação da interface por teclado seguida de reload",
-          "expected": "Texto aparece literalmente; fluxo de teclado/foco e persistência continuam funcionando."
+          "given": "Texto com marcação HTML, operação por teclado e reload",
+          "expected": "Texto aparece literalmente; teclado, foco e persistência continuam funcionando."
         },
         "scoring": "Testes antigos de DOM, teclado, foco e persistência permanecem verdes junto aos novos casos."
       }
     ],
     "rubric": [
-      "V1 continua migrando para V2 com prioridade normal, IDs estáveis e campos anteriores preservados.",
-      "V2 antigo sem priority continua legível sem reaplicar a migração V1; regressões de 11.13 passam.",
-      "Save parcial conserva itens válidos e avisa; texto, teclado, foco e persistência não regridem.",
-      "A alteração é localizada e coberta por testes de domínio, DOM e regressão antes da publicação."
+      "V1 percorre V1→V2→V3 e V2 percorre só V2→V3, preservando id, text, status e priority.",
+      "Saves V3 não migram de novo; tags inválidas e registros parciais geram aviso sem perder itens válidos.",
+      "JSON inválido não sobrescreve o storage; texto, teclado, foco e persistência não regridem.",
+      "A alteração é localizada e coberta por testes de domínio, DOM e regressão."
     ],
     "review": {
-      "prompt": "Como acrescentar a prioridade pedida sem quebrar o contrato V1→V2 de 11.13?",
+      "prompt": "Como acrescentar tags na V3 sem quebrar o contrato V1→V2 de 11.13?",
       "choices": [
-        "Substituir o migrador por uma conversão direta V1→V3 e remover o caminho V2 de 11.13.",
-        "Reusar a migração V1→V2, preservar id/text/status e preencher priority='normal'; aceitar V2 antigo sem reaplicar a migração.",
-        "Recriar IDs e descartar saves V2 que ainda não tenham priority.",
-        "Sobrescrever todos os registros parciais com uma lista vazia para simplificar a nova versão."
+        "Substituir o migrador por uma conversão direta V1→V3 e remover o caminho V2.",
+        "Criar migrarV2ParaV3 pura e encadear V1→V2→V3 no loader, sem migrar de novo saves que já estão na V3.",
+        "Recriar ids e descartar saves V2 que ainda não tenham tags.",
+        "Sobrescrever registros parciais com uma lista vazia para simplificar a nova versão."
       ],
       "answer": 1,
-      "correctFeedback": "A extensão mantém o contrato V1→V2 de 11.13 e adiciona o default sem reinterpretar um save V2 como V1.",
-      "incorrectFeedback": "Preserve os campos, IDs e migração já usados por 11.13. A prioridade nova precisa de default retrocompatível para V2 antigo; descartar ou converter novamente pode perder dados."
+      "correctFeedback": "A cadeia preserva cada contrato anterior e torna a nova migração testável isoladamente.",
+      "incorrectFeedback": "Preserve a migração de 11.13 e encadeie a nova. Converter direto, recriar ids ou descartar registros perde dados."
     }
   },
   "14.01": {
@@ -1291,7 +1323,7 @@
   },
   "14.07": {
     "objective": "Consulte documentação oficial para decidir se Promise.try está disponível no runtime baseline definido; registre runtime, versão, data da consulta, assinatura, parâmetros, retorno e erros antes de escolher uso ou fallback.",
-    "prompt": "Avalie Promise.try no runtime-alvo Node.js 24 LTS consultando uma fonte oficial. Registre versão e data da consulta, assinatura, parâmetros, retorno e tratamento de erros. Se Promise.try estiver disponível, justifique o uso no exercício. Se não estiver, use exatamente o fallback descrito no roteiro: Promise.resolve().then(fn). Explique e teste a diferença de timing: then agenda fn como microtask, portanto não afirme equivalência de execução síncrona sem requisito e evidência. Não troque o recurso principal por Iterator helpers.",
+    "prompt": "Avalie Promise.try no runtime-alvo Node.js 24 LTS consultando uma fonte oficial. Registre versão exata, data da consulta, assinatura, parâmetros, retorno e tratamento de erros. Execute promise-try.js e compare três caminhos: A (Promise.try nativo), B (fallback fiel: chama fn dentro de try e converte retorno/exceção com Promise.resolve/Promise.reject) e C (Promise.resolve().then(fn), que adia fn para uma microtask). Decida entre usar a API, usar o fallback B ou adiar, e explique por que C não é equivalente.",
     "resources": [
       "MDN Promise.try(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/try",
       "MDN Promise.prototype.then(): https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then",
@@ -1299,28 +1331,28 @@
     ],
     "examples": [
       {
-        "given": "Promise.try está documentada como disponível na versão baseline consultada",
-        "expected": "Registrar a fonte, versão e data; usar Promise.try e comprovar assinatura, retorno e erro conforme a documentação oficial."
+        "given": "Promise.try está documentada como disponível na versão do runtime-alvo",
+        "expected": "Registrar fonte, versão e data; usar Promise.try e mostrar que o callback roda antes de 'antes de B' e que o throw síncrono vira rejeição."
       },
       {
-        "given": "Promise.try não está disponível na versão baseline consultada",
-        "expected": "Usar o fallback do roteiro Promise.resolve().then(fn) para o caso documentado; registrar que fn é agendada como microtask e não alegar timing idêntico ao de Promise.try."
+        "given": "Promise.try não está disponível no runtime-alvo",
+        "expected": "Usar o fallback B, que chama fn imediatamente; registrar que C adia fn para uma microtask e por isso não é equivalente."
       }
     ],
     "checks": [
       {
         "fixture": {
           "given": "Promise.try disponível segundo documentação oficial do runtime e versão registrados",
-          "expected": "Decisão de uso documentada, com assinatura, parâmetros, retorno e erros verificados."
+          "expected": "Decisão de uso documentada, com assinatura, retorno e erro síncrono verificados na execução."
         },
-        "scoring": "A fonte oficial e o runtime/versão sustentam a decisão; a prova curta cobre retorno e erro síncrono."
+        "scoring": "A fonte oficial e o runtime/versão sustentam a decisão; o registro mostra quando o callback roda."
       },
       {
         "fixture": {
-          "given": "Promise.try indisponível no runtime baseline documentado",
-          "expected": "Fallback Promise.resolve().then(fn) e diferença de agendamento explicitamente registrada."
+          "given": "Promise.try indisponível no runtime documentado",
+          "expected": "Fallback B adotado e diferença de agendamento de C explicitamente registrada."
         },
-        "scoring": "O fallback corresponde ao roteiro e a atividade não o declara equivalente em timing sem prova."
+        "scoring": "O fallback preserva o momento da chamada; C não é apresentado como equivalente."
       }
     ],
     "review": {
@@ -1431,12 +1463,6 @@
       "TypeScript Handbook, Type Compatibility — https://www.typescriptlang.org/docs/handbook/type-compatibility.html",
       "TypeScript Handbook, Excess Property Checks — https://www.typescriptlang.org/docs/handbook/2/objects.html#excess-property-checks",
       "TypeScript Playground — https://www.typescriptlang.org/play/"
-    ],
-    "starterFiles": [
-      {
-        "path": "material.md",
-        "content": "material.md: interface A{id:string}; interface B{id:string}; teste atribuição A->B e B->A; depois altere B.id para number; compare literal fresco com propriedade extra e variável intermediária"
-      }
     ],
     "examples": [
       {
@@ -1671,12 +1697,6 @@
       "why_it_matters": "Tipos relacionais precisos deixam APIs reutilizáveis sem ocultar quais partes são escolhas de design."
     },
     "interaction": "Reordene os blocos de pair<K,V> e wrap<T> antes de Repository<T extends Entity>; preencha e compile cada helper. Depois confira a chave string, a preservação do tipo específico da entidade e o resultado da busca ausente. Os blocos independentes não exigem ordem entre si. Tudo funciona por teclado; leitor de tela anuncia bloco, posição e diagnóstico.",
-    "starterFiles": [
-      {
-        "path": "material.md",
-        "content": "blocos pair<K,V>, wrap<T>, interface Entity{id:string}, Repository<T extends Entity> com Map<string,T>; organize helpers antes de Repository"
-      }
-    ],
     "examples": [
       {
         "given": "pair('a',2); repo.save({id:'u1',name:'A'}); get('u1')",
@@ -1937,12 +1957,6 @@
       "common_trap": "Contar o value terminal como elemento ou achar que done:true exige ausência de value.",
       "why_it_matters": "Entender o protocolo separa valores iterados de metadados ou retornos consumidos manualmente."
     },
-    "starterFiles": [
-      {
-        "path": "material.md",
-        "content": "iterator next() devolve {value:1,done:false},{value:2,done:false},{done:true}; rastrear for...of"
-      }
-    ],
     "examples": [
       {
         "given": "for...of sobre o iterator descrito no starter",
@@ -2150,12 +2164,6 @@
     },
     "interaction": "Peça uma tabela textual de operação, chaves presentes e ordem de recência antes e depois da correção. Inclua campos para política e casos de borda; permita respostas digitadas.",
     "resources": [],
-    "starterFiles": [
-      {
-        "path": "material.md",
-        "content": "memoize de Map sem limite; adicionar LRU max=2 ou TTL declarado"
-      }
-    ],
     "examples": [
       {
         "given": "chaves A,B; ler A; inserir C",

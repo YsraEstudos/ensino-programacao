@@ -1,0 +1,1 @@
+const comandos=new Set(['somar']); export function executarDominio(comando,args){if(comando==='somar')return String(Number(args[0])+Number(args[1]));throw new Error('comando inválido');} export function main(argv,io){const args=argv.slice(2);if(!comandos.has(args[0])){io.write('Uso: somar <a> <b>\n');return 0;}io.write(executarDominio(args[0],args.slice(1))+'\n');return 0;}

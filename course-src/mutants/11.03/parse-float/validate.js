@@ -1,0 +1,1 @@
+export function validar({ nome, quantidade }) { const n = parseFloat(quantidade); return Number.isNaN(n) ? { ok: false, erros: { quantidade: 'inválida' }, valores: { nome, quantidade } } : { ok: true, nome: String(nome).trim(), quantidade: n }; }

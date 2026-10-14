@@ -1,0 +1,45 @@
+{
+  "results": [
+    {
+      "id": "09.08",
+      "criteria": 4,
+      "oldSameCountChecksIgnored": true,
+      "originalDraftReflectionVisible": true,
+      "currentChecksAndDeliveryRestored": true,
+      "pageErrors": []
+    },
+    {
+      "id": "11.08",
+      "criteria": 4,
+      "oldSameCountChecksIgnored": true,
+      "originalDraftReflectionVisible": true,
+      "currentChecksAndDeliveryRestored": true,
+      "pageErrors": []
+    },
+    {
+      "id": "12.08",
+      "criteria": 4,
+      "oldSameCountChecksIgnored": true,
+      "originalDraftReflectionVisible": true,
+      "currentChecksAndDeliveryRestored": true,
+      "pageErrors": []
+    },
+    {
+      "id": "14.08",
+      "criteria": 4,
+      "oldSameCountChecksIgnored": true,
+      "originalDraftReflectionVisible": true,
+      "currentChecksAndDeliveryRestored": true,
+      "pageErrors": []
+    },
+    {
+      "id": "23.08",
+      "criteria": 4,
+      "oldSameCountChecksIgnored": true,
+      "originalDraftReflectionVisible": true,
+      "currentChecksAndDeliveryRestored": true,
+      "pageErrors": []
+    }
+  ],
+  "note": "UI persistence QA; this does not establish project correctness or independent mastery."
+}

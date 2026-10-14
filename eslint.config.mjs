@@ -16,6 +16,8 @@ const eslintConfig = defineConfig([
     "work/**",
     "output/**",
     "next-env.d.ts",
+    // Learner starter files are intentionally incomplete or buggy.
+    "course-src/starters/**",
   ]),
 ]);
 

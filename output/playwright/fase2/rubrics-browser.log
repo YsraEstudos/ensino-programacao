@@ -1,0 +1,8 @@
+
+╔════════════════════════════════════════════════════════════════════╗
+║ Update available for @playwright/cli: 0.1.18 → 0.1.22              ║
+║ Run `npm install -g @playwright/cli@latest` (global) or            ║
+║ `npm install --save-dev @playwright/cli@latest` (local) to update. ║
+╚════════════════════════════════════════════════════════════════════╝
+
+{"results":[{"id":"09.08","criteria":4,"oldSameCountChecksIgnored":true,"originalDraftReflectionVisible":true,"currentChecksAndDeliveryRestored":true,"pageErrors":[]},{"id":"11.08","criteria":4,"oldSameCountChecksIgnored":true,"originalDraftReflectionVisible":true,"currentChecksAndDeliveryRestored":true,"pageErrors":[]},{"id":"12.08","criteria":4,"oldSameCountChecksIgnored":true,"originalDraftReflectionVisible":true,"currentChecksAndDeliveryRestored":true,"pageErrors":[]},{"id":"14.08","criteria":4,"oldSameCountChecksIgnored":true,"originalDraftReflectionVisible":true,"currentChecksAndDeliveryRestored":true,"pageErrors":[]},{"id":"23.08","criteria":4,"oldSameCountChecksIgnored":true,"originalDraftReflectionVisible":true,"currentChecksAndDeliveryRestored":true,"pageErrors":[]}],"note":"UI persistence QA; this does not establish project correctness or independent mastery."}

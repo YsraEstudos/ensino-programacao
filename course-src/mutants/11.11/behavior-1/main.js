@@ -1,0 +1,1 @@
+export function instalar(menu,item){const log=[];item.addEventListener('click',()=>log.push('item-1'));item.addEventListener('click',event=>{if(event.target.matches('[data-parar]'))event.stopImmediatePropagation();});item.addEventListener('click',()=>log.push('item-3'));menu.addEventListener('click',()=>log.push('menu'));return {log};}

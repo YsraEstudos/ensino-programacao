@@ -1,0 +1,1 @@
+export type Config={port:number}; export function parseConfig(raw:unknown):Config { if(typeof raw!=='object'||raw===null)return {port:3000}; const value=(raw as {port?:unknown}).port; if(value===undefined)return {port:3000}; const port=Number(value); if(!Number.isInteger(port)||port<1||port>65535)throw new RangeError('Porta inválida'); return {port}; }

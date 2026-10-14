@@ -1,0 +1,1056 @@
+
+> devpath@0.1.0 pretest
+> npm run build:compiler && npm run build:progress
+
+
+> devpath@0.1.0 build:compiler
+> node scripts/build-module-compiler.mjs
+
+
+> devpath@0.1.0 build:progress
+> node scripts/build-progress-model.mjs
+
+
+> devpath@0.1.0 test
+> npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1
+
+
+> devpath@0.1.0 test:catalog
+> node --test scripts/test-course-catalog-validator.mjs
+
+✔ assessmentEnvironment is an intentional public field at every stage (0.7032ms)
+✔ rubricFingerprint is a public identity field for the current visible checklist (0.1172ms)
+✔ Stage 03 generic fallback fields are limited to IDs outside dedicated contracts (0.1644ms)
+✔ assessmentEnvironment accepts only published environment identifiers (0.4513ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 4
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 155.1855
+
+> devpath@0.1.0 test:learning
+> node --test scripts/test-learning-progress.mjs scripts/test-learning-paths.mjs scripts/test-learning-metadata.mjs scripts/test-learning-coverage.mjs scripts/test-learning-paths-review.mjs scripts/test-learning-event-queue.mjs scripts/test-learning-sync-status.mjs scripts/test-learning-mode-confirm.mjs
+
+✔ reports a MAKE activity without a test as a coverage gap (3.8814ms)
+✔ uses published prerequisite and solution reference fields (1.0095ms)
+✔ prefers the additive learner activity graph over a dedicated textual requires field (0.2146ms)
+✔ treats an empty assessment object as a coverage gap (0.1759ms)
+✔ keeps a READ rubric as an editorial assessment (0.2686ms)
+✔ flags autoTested metadata that has no executable tests (0.3429ms)
+✔ does not infer execution from manifest metadata (0.3531ms)
+✔ checks alone do not declare executable tests (0.3873ms)
+✔ typecheck capability needs an explicit TypeScript entry or config and does not replace behavior tests (0.4209ms)
+✔ CLI uses requires fallback and test manifest fallback without claiming execution (209.7546ms)
+✔ CLI accepts a valid manifest and rejects a corrupt present manifest (381.9299ms)
+✔ counts only current browser and local runtime results with matching canonical fingerprints (31.2758ms)
+✔ rejects unknown, declared-only, unsupported, mismatched, labeled, and stale execution evidence (2.9643ms)
+✔ CLI consumes evidence files and exposes valid and rejected counts (294.0771ms)
+✔ a help request made while an earlier edit is still being fingerprinted is not discarded as stale (79.3376ms)
+✔ a record whose clock is two hours ahead still receives a help request (3.0863ms)
+✔ a clock that moves backwards between two events keeps both, in request order (9.3406ms)
+✔ events are applied in request order even when a later fingerprint finishes first (47.3039ms)
+✔ a rejected task is reported once and the events behind it still run (4.5079ms)
+✔ accepts activity-ID prerequisites and dedicated hint exemption (3.4045ms)
+✔ rejects unknown, later, self, optional, duplicate, and cyclic prerequisites (2.7915ms)
+✔ requires metadata coverage and authored hints for generic activities (0.8366ms)
+✔ checks runtime version distinctions and fallback declarations (1.6099ms)
+✔ compares complete Node semver tuples against the exact 24.0.0 floor (1.6489ms)
+✔ accepts the checked course feature matrix with standard, platform, and proposal classes (1.4049ms)
+✔ declining the learn-first choice on a demonstrated attempt sends nothing and keeps the demonstration (153.9995ms)
+✔ confirming the learn-first choice on a demonstrated attempt applies the downgrade the warning describes (26.2118ms)
+✔ after the attempt is evaluated, explanations open without recording help (179.9519ms)
+✔ before any submission, recall keeps the explanation closed (29.326ms)
+✔ help after demonstration asks first, and declining leaves the attempt untouched (34.836ms)
+✔ confirming help after demonstration sends the request (28.0829ms)
+✔ help keeps keyboard focus on the revealed explanation and announces it (47.2309ms)
+✔ help buttons expose the unit they control (26.0764ms)
+✔ a failed transfer submission reports the failure in the transfer status (39.5604ms)
+✔ an edit after study keeps the earlier study visible as history (25.1286ms)
+✔ all activity markup begins behind the learn/recall choice and preserves the original controls (148.7514ms)
+✔ recall opens the challenge while hiding examples and offers explicit, unit-scoped help (35.7572ms)
+✔ recall hides Stage 00 worked examples and environment demonstrations but keeps lab challenges available (33.4111ms)
+✔ adapter controls are not mistaken for the path button, and requested help stays unit-scoped in the current session (44.5478ms)
+✔ demonstration UI is absent without a declared transfer and uses only the transfer rubric when present (42.053ms)
+✔ historical mastery remains visible while the current attempt is pending (26.1112ms)
+✔ mode, help, assessment and transfer actions go through the injected learning bridge (37.1615ms)
+✔ the activity header shows the progress-model state as text, from the learning record only (56.2743ms)
+✔ the learn-first and recall choices are announced by pressed state and keep their text labels (20.767ms)
+✔ help remains attached to the same attempt through edits and mode changes (3.9595ms)
+✔ a fresh independent attempt resets help even when its fingerprint is unchanged (2.5276ms)
+✔ a late or replayed callback cannot replace the current explicit attempt (0.8214ms)
+✔ assisted passing assessment is verified, and later failure keeps its versioned evidence (1.6191ms)
+✔ failed attempts remain attempted, while study without approval becomes studied (0.5467ms)
+✔ stale, unsupported, or failed evidence cannot promote and assistance merges monotonically (1.0322ms)
+✔ help discovered by a merge downgrades current demonstration without discarding its evidence (0.942ms)
+✔ sanitizer and merge derive sticky help from same-attempt help events (0.9346ms)
+✔ help before the 12-event window stays sticky in sanitizer and merge (2.02ms)
+✔ content or assessment version changes invalidate only the current promotion (0.7371ms)
+✔ unknown versions and unsupported evidence sources cannot promote an attempt (0.5264ms)
+✔ sanitizer caps recent events, rejects invalid provenance, and migration preserves legacy data (3.5434ms)
+✔ help written for a diagnostic activity survives the reload path (save, reload, migrate, merge) (1.1776ms)
+✔ a declared transfer is its own state and never produces demonstrated (0.8228ms)
+✔ a rubric-declared demonstration is not promoted to demonstrated (0.4989ms)
+✔ a stored declared transfer saved as demonstrated is read back as transfer-declared (0.5435ms)
+✔ while the account sync is paused, every new save says the progress is kept on this device (106.332ms)
+✔ a conflicting save names the conflict and keeps the attempt on this device (17.1304ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3169.6139
+
+> devpath@0.1.0 test:executors
+> node --test scripts/test-course-assessment.mjs scripts/test-course-controller.mjs scripts/test-course-dom.mjs scripts/test-course-network.mjs scripts/test-course-node-runtime.mjs scripts/test-course-runner.mjs scripts/test-course-test-runtime.mjs scripts/test-course-tests.mjs scripts/test-course-typecheck.mjs scripts/test-course-worker-preview.mjs scripts/test-module-graph.mjs scripts/test-project-export.mjs scripts/test-check-local-course-cli.mjs scripts/test-task-8a-evidence.mjs scripts/test-task-8a-review-fixes.mjs scripts/test-task-9-local-evidence.mjs scripts/test-task-9-typed-suite.mjs scripts/test-task-9-package-22-08.mjs
+
+✔ runs manifest-declared local reference commands in a disposable copy (2313.8554ms)
+✔ fails closed for missing IDs, non-local assessments, unsafe manifests, Git and install commands (48.2719ms)
+✔ --id 22.02 with no flags resolves the course-src reference and exits 0 (28520.0262ms)
+✔ behavior checks require a nonempty executable declaration (4.2632ms)
+✔ empty and failing behavior suites never pass (3.6159ms)
+✔ studentSuite uses the mutation evaluator even when the published check is behavior (3.6481ms)
+✔ student implementation suites run against the submitted entry before mutant grading (2.4016ms)
+✔ student implementation suite also grades the corrected submission before mutants (3.8705ms)
+✔ studentSuite rejects an empty learner suite instead of using editorial tests (1.8407ms)
+✔ types gate behavior even for a JavaScript environment (1.8939ms)
+✔ typed learner suites retain declaration files and override them with each semantic mutant (2.7552ms)
+✔ typecheck success permits behavior and normalizes result to passed (2.2478ms)
+✔ TypeScript behavior cannot run without the types check (3.1258ms)
+✔ TypeScript files cannot bypass type checks under a mislabeled JavaScript assessment (1.6511ms)
+✔ adapter output cannot replace the caller source or fingerprint (2.5643ms)
+✔ behavior runner output keeps the caller source and fingerprint and normalizes test counts (1.6209ms)
+✔ DOM and network behavior do not fall back to JavaScript execution (1.3015ms)
+✔ protected DOM behavior runs against submitted HTML and source (2.368ms)
+✔ DOM mutation suites merge learner helpers and tests while protecting correct and mutant implementation paths (2.0825ms)
+✔ DOM inline suites use a synthetic test module at the declared test path (1.8074ms)
+✔ abort reaches the legacy runner stop callback and returns cancelled (1.3534ms)
+✔ local declarations do not become browser approvals without an execution adapter (1.8546ms)
+✔ unsupported node builtins remain an explicit unsupported assessment result (2.1858ms)
+✔ fingerprinting fails closed when SHA-256 is unavailable (2.4932ms)
+✔ expected diagnostics require an exact investigation match (13.9488ms)
+✔ manifest validation rejects checks without behavior evidence and accepts local commands (1.7381ms)
+✔ fingerprint includes activity, versions and sorted file contents (28.4404ms)
+✔ anotação exata de caso não muda fingerprint de suite reconhecida (16.4358ms)
+✔ fingerprint preserva regex depois de controle e bloco, sem confundir strings, templates ou comentários (17.969ms)
+✔ fingerprint conservatively retains markers when parsing is unavailable or JavaScript is invalid (6.9085ms)
+✔ removing an annotation preserves a lexical separator between adjacent tokens (9.2117ms)
+✔ separator handling preserves Unicode return names and division/addition token boundaries (12.0223ms)
+✔ fingerprint muda quando muda: environment (2.3065ms)
+✔ fingerprint muda quando muda: version (2.157ms)
+✔ fingerprint muda quando muda: checks (conjunto) (2.0629ms)
+✔ fingerprint muda quando muda: entryPath (1.356ms)
+✔ fingerprint muda quando muda: typeEntryPath (67.4605ms)
+✔ fingerprint muda quando muda: testPath (1.6542ms)
+✔ fingerprint muda quando muda: testPaths (conteúdo da lista) (1.3941ms)
+✔ fingerprint muda quando muda: tests (conteúdo do teste protegido) (2.3214ms)
+✔ fingerprint muda quando muda: sourceTestPath (1.4163ms)
+✔ fingerprint muda quando muda: referenceDir (1.7015ms)
+✔ fingerprint muda quando muda: tsconfigPath (1.3175ms)
+✔ fingerprint muda quando muda: fixturesPath (1.3361ms)
+✔ fingerprint muda quando muda: fixtures.html (1.5006ms)
+✔ fingerprint muda quando muda: fixtures.workerEntries (1.4158ms)
+✔ fingerprint muda quando muda: fixtures.network (status) (1.3968ms)
+✔ fingerprint muda quando muda: inlinefixtures (3.0486ms)
+✔ fingerprint muda quando muda: timeoutMs (1.5057ms)
+✔ fingerprint muda quando muda: argv (valor) (1.3203ms)
+✔ fingerprint muda quando muda: env (1.1208ms)
+✔ fingerprint muda quando muda: virtualCwd (1.7134ms)
+✔ fingerprint muda quando muda: runtime (1.505ms)
+✔ fingerprint muda quando muda: studentSuite (2.3239ms)
+✔ fingerprint muda quando muda: studentSuiteKind (1.6489ms)
+✔ fingerprint muda quando muda: behaviorTestPath (1.4907ms)
+✔ fingerprint muda quando muda: typecheckMutants (1.5587ms)
+✔ fingerprint muda quando muda: expectedDiagnostics (1.3753ms)
+✔ fingerprint muda quando muda: local.commands (1.3409ms)
+✔ fingerprint muda quando muda: local.evidence (2.4019ms)
+✔ fingerprint muda quando muda: rubric (1.2241ms)
+✔ fingerprint muda quando muda: transfer.id (1.3872ms)
+✔ fingerprint muda quando muda: transfer.files (conteúdo) (1.8093ms)
+✔ fingerprint muda quando muda: transfer.testPath (2.1499ms)
+✔ fingerprint muda quando muda: transfer.rubric (2.3475ms)
+✔ fingerprint muda quando muda: correctFiles (conteúdo) (2.3228ms)
+✔ fingerprint muda quando muda: correctFiles (caminho) (1.3034ms)
+✔ fingerprint muda quando muda: correctFiles (arquivo extra) (1.2421ms)
+✔ fingerprint muda quando muda: mutantDirs (conteúdo) (2.7024ms)
+✔ fingerprint muda quando muda: mutantDirs (id) (1.2861ms)
+✔ fingerprint muda quando muda: mutantDirs (mutante extra) (2.5948ms)
+✔ fingerprint muda quando muda: contractTypeFiles (conteúdo) (1.5239ms)
+✔ fingerprint muda quando muda: typeContractMutants (conteúdo) (1.7534ms)
+✔ fingerprint muda quando muda: typeContractMutants (id) (1.2756ms)
+✔ fingerprint muda quando muda: predictionTable (campos e instruções que definem respostas) (1.265ms)
+✔ fingerprint muda com versões, atividade, variante e conteúdo do aluno (6.0665ms)
+✔ fingerprint é idêntico para entradas idênticas e não depende da ordem das chaves (2.5168ms)
+✔ listas de arquivos são ordenadas por caminho e não dependem da ordem de entrada (7.3237ms)
+✔ checks e expectedDiagnostics são ordem-independentes; argv, testPaths e rubric não (8.3176ms)
+✔ caminhos duplicados mantêm a ordem de entrada, porque o último arquivo vence (3.4271ms)
+✔ ausente e undefined são equivalentes; vazio é valor presente e gera hash diferente (3.5821ms)
+✔ campos editoriais e chaves desconhecidas não alteram o fingerprint (1.2593ms)
+✔ a allowlist cobre todas as chaves dos manifestos de origem e publicado (31.2044ms)
+✔ a mesma tentativa com variante de transferência não reutiliza a prova da atividade original (2.5817ms)
+✔ fingerprint rejeita arquivos que não são lista (0.6013ms)
+✔ adicionar o campo novo à allowlist não altera fingerprints históricos sem predictionTable (9.6249ms)
+✔ editing during an assessment cancels it and ignores the late passed callback (6.5481ms)
+✔ disposing or explicitly cancelling a run ignores its late passed callback (5.0893ms)
+✔ a changed draft cannot overwrite current evidence after the result arrives (2.2827ms)
+✔ an obsolete assessment callback cannot save after activity replacement while the current run can (4.916ms)
+✔ assessment result fields are normalized to browser source and caller fingerprint (2.1889ms)
+✔ first semantic divergence is displayed and persisted with the run evidence (2.6256ms)
+✔ same-count rubric edits keep old checks historical until explicit recheck (12.989ms)
+✔ legacy freeform prediction remains visible until explicit structured replacement (6.8848ms)
+✔ prediction table version mismatch stays visible and does not unlock execution (17.4607ms)
+✔ a type-only investigation names its real entry file and the TypeScript checker, not main.js (15.4265ms)
+✔ an autoTested activity with a JavaScript entry cites that entry file (15.2796ms)
+✔ an executable activity without published tests does not claim it is written analysis only (2.963ms)
+✔ the curriculum build marks every behavior or mutation assessment as autoTested; type-only investigations stay rubric-completed (607.4853ms)
+✔ DOM runner exposes a browser-only assessment contract and rejects external files (5.2179ms)
+✔ DOM runner reports unsupported outside a real document and does not fake DOM approval (1.4622ms)
+✔ DOM runner validates an entry and keeps the result contract for cancellation (1.2254ms)
+✔ DOM runner keeps interactive form and CSS capabilities inside the opaque frame (0.6698ms)
+✔ DOM runner rejects an empty registered suite and unavailable test runtime (0.7927ms)
+✔ loop guard stops while (true) with a clear Portuguese error within the limit (57.4629ms)
+✔ loop guard covers for(;;), do-while, brace-less bodies and for-in/for-of (211.1104ms)
+✔ loop guard leaves strings, templates, comments and regex literals untouched (6.8341ms)
+✔ finite loops still produce their results, including labels, continue and brace-less bodies (14.0169ms)
+✔ loop guard reports the instrumentation failure instead of running unguarded code (3.1688ms)
+✔ loop guard limit is short enough to fire before the default DOM timeout (2.3768ms)
+✔ network fixtures preserve Response semantics for errors and invalid JSON (69.4531ms)
+✔ network fixtures support deterministic delay, abort, reset, and late out-of-order responses (6.207ms)
+✔ network fixtures never fall through to the real network (2.4307ms)
+✔ serialized network factory is self-contained in an opaque-like realm (6.4686ms)
+✔ an explicit late fixture can deliver an aborted old response for sequence-token tests (3.2277ms)
+✔ reset cancels an aborted late fixture before its delivery timer fires (2.2352ms)
+✔ virtual node runtime reads, writes and reports ENOENT inside its root (10.095ms)
+✔ argv, env, output and reset are isolated between executions (6.8294ms)
+✔ only declared virtual node modules are available and path URLs resolve virtually (4.6065ms)
+✔ strict assertion subset preserves error classes, RegExp matching, undefined and NaN (20.2965ms)
+✔ virtual URLs preserve spaces and a declared virtual cwd without host filesystem access (3.2073ms)
+✔ serialized factory does not depend on the host Node module loader (7.2522ms)
+✔ browser worker executes a node-simulated virtual filesystem and process fixture (1832.6296ms)
+✔ local checker returns nonzero, missing executable and timeout without using a shell (11911.1707ms)
+✔ local checker rejects traversal and symlinked project files (37.0093ms)
+✔ local checker cleans its temporary copy when project validation throws (24.5912ms)
+✔ local checker bounds output, keeps metacharacters literal, and cleans temp copies after timeout (5388.1617ms)
+✔ local checker kills a timed out descendant and reports missing project dependencies (5387.402ms)
+✔ runner executes multiline code, preserves script-like text, and reports syntax errors (621.6052ms)
+✔ an infinite loop is terminated and does not prevent the next execution (581.6776ms)
+✔ output is bounded and cancellation releases the running worker (911.3534ms)
+✔ foreign sources, wrong tokens and late messages cannot finish an execution (99.9048ms)
+✔ worker creation failure reports an error and removes the sandbox (61.157ms)
+✔ registered tests run after the code and report structured results (752.5209ms)
+✔ registers nested tests, beforeEach, matchers and rejects (11.5325ms)
+✔ vi.fn and spyOn record calls and restore the original (3.5681ms)
+✔ fake timers advance deterministic callbacks and restore in finally (3.2432ms)
+✔ a rejected test fails while later tests continue and empty suites remain empty (5.068ms)
+✔ afterEach failure marks only its own test and cleanup survives reuse (8.3149ms)
+✔ loose rejection is surfaced to the caller (5.824ms)
+✔ student suites pass the correct implementation and kill every semantic mutant (5351.3768ms)
+✔ student-suite negatives reject empty/correct-failing, survivor, error and timeout mutants (5508.1805ms)
+✔ runner does not promote an unhandled top-level rejection (855.6101ms)
+✔ the published tests belong to flagged activities and the other way around (223.4956ms)
+✔ 16–19 affected transfer cards have distinct scenarios, boundaries, and specific criteria (61.5362ms)
+✔ 15.01 reports only the six published intentional diagnostics (5727.3737ms)
+✔ 15.02 protected conformance tests reject a bad implementation and same-path always-pass edit (6307.8302ms)
+✔ 15.03 protected type assertions reject any and incorrect public signatures (4511.0804ms)
+✔ 15.02 and 15.07 protected assertions inspect exported signatures directly (4563.2379ms)
+✔ 19.04 reproduces the intentional distributive conditional diagnostic before correction (1804.3367ms)
+✔ 19.04 type-contract mutation does not count a missing protected export as a semantic kill (6417.2976ms)
+✔ 19.08 published run requires a meaningful submitted suite and catches a broken emitter (19036.2892ms)
+✔ 17.03 published behavior tests and typecheck reject a compile-valid empty-result implementation (4852.5301ms)
+✔ 03.10: starter fails and reference solution passes (216.0982ms)
+✖ 04.01: starter fails and reference solution passes (107.785ms)
+✔ 04.03: starter fails and reference solution passes (215.9459ms)
+✔ 04.04: starter fails and reference solution passes (203.5619ms)
+✔ 04.05: starter fails and reference solution passes (233.6458ms)
+✔ 04.06: starter fails and reference solution passes (216.5769ms)
+✔ 04.07: starter fails and reference solution passes (191.7364ms)
+✔ 04.08: starter fails and reference solution passes (204.5436ms)
+✔ 04.09: starter fails and reference solution passes (186.6507ms)
+✖ 04.10: starter fails and reference solution passes (93.5147ms)
+✔ 04.11: starter fails and reference solution passes (204.5324ms)
+✔ 04.12: starter fails and reference solution passes (218.2201ms)
+✔ 04.13: starter fails and reference solution passes (248.8752ms)
+✖ 05.01: starter fails and reference solution passes (109.2048ms)
+✔ 05.03: starter fails and reference solution passes (231.532ms)
+✔ 05.04: starter fails and reference solution passes (234.9415ms)
+✔ 05.06: starter fails and reference solution passes (220.4989ms)
+✔ 05.07: starter fails and reference solution passes (215.6631ms)
+✔ 05.10: starter fails and reference solution passes (217.4661ms)
+✔ 05.02: starter fails and reference solution passes (203.622ms)
+✔ 05.05: starter fails and reference solution passes (202.7847ms)
+✔ 05.08: starter fails and reference solution passes (201.9402ms)
+✔ 05.09: starter fails and reference solution passes (233.5858ms)
+✖ 06.01: starter fails and reference solution passes (109.4139ms)
+✖ 06.02: starter fails and reference solution passes (109.2605ms)
+✔ 06.03: starter fails and reference solution passes (224.9173ms)
+✔ 06.04: starter fails and reference solution passes (202.2611ms)
+✔ 06.07: starter fails and reference solution passes (187.0297ms)
+✔ 06.08: starter fails and reference solution passes (202.878ms)
+✔ 06.09: starter fails and reference solution passes (187.7548ms)
+✔ 06.11: starter fails and reference solution passes (201.6454ms)
+✔ 07.02: starter fails and reference solution passes (184.6242ms)
+✔ 07.03: starter fails and reference solution passes (217.8853ms)
+✔ 07.04: starter fails and reference solution passes (173.032ms)
+✔ 07.05: starter fails and reference solution passes (187.3466ms)
+✔ 07.06: starter fails and reference solution passes (219.0986ms)
+✔ 07.07: starter fails and reference solution passes (207.2449ms)
+✔ 07.10: starter fails and reference solution passes (202.1227ms)
+✔ 07.08: starter fails and reference solution passes (217.198ms)
+✔ 07.09: starter fails and reference solution passes (204.7129ms)
+✖ 08.01: starter fails and reference solution passes (123.417ms)
+✔ 08.02: starter fails and reference solution passes (250.4745ms)
+✔ 08.03: starter fails and reference solution passes (217.5805ms)
+✔ 08.05: starter fails and reference solution passes (235.7891ms)
+✔ 08.06: starter fails and reference solution passes (234.0565ms)
+✖ 08.07: starter fails and reference solution passes (141.5671ms)
+✔ 08.08: starter fails and reference solution passes (347.136ms)
+✖ 09.01: starter fails and reference solution passes (225.9499ms)
+✔ 09.02: starter fails and reference solution passes (371.5955ms)
+✔ 09.03: starter fails and reference solution passes (330.1802ms)
+✖ 09.04: starter fails and reference solution passes (170.4883ms)
+✔ 09.05: starter fails and reference solution passes (277.2918ms)
+✔ 09.06: starter fails and reference solution passes (263.9883ms)
+✔ 09.08: starter fails and reference solution passes (280.8696ms)
+✖ 10.01: starter fails and reference solution passes (123.7541ms)
+✔ 10.02: starter fails and reference solution passes (234.3316ms)
+✔ 10.03: starter fails and reference solution passes (230.7093ms)
+✔ 10.04: starter fails and reference solution passes (218.1313ms)
+✔ 10.05: starter fails and reference solution passes (232.4911ms)
+✔ 10.06: starter fails and reference solution passes (235.3511ms)
+✔ 10.07: starter fails and reference solution passes (233.8737ms)
+✔ 10.08: starter fails and reference solution passes (220.4433ms)
+✖ 11.01: starter fails and reference solution passes (30.3314ms)
+✖ 11.11: starter fails and reference solution passes (15.0543ms)
+✖ 11.14: starter fails and reference solution passes (18.4955ms)
+✖ 11.02: starter fails and reference solution passes (12.3152ms)
+✔ 11.03: starter fails and reference solution passes (203.7627ms)
+✖ 11.04: starter fails and reference solution passes (15.4283ms)
+✖ 11.06: starter fails and reference solution passes (16.3129ms)
+✖ 11.05: starter fails and reference solution passes (12.3233ms)
+✖ 11.07: starter fails and reference solution passes (16.0481ms)
+✖ 11.12: starter fails and reference solution passes (18.9043ms)
+✖ 11.08: starter fails and reference solution passes (23.3103ms)
+✔ 11.10: starter fails and reference solution passes (208.8176ms)
+✔ 11.13: starter fails and reference solution passes (218.3938ms)
+✖ 12.11: starter fails and reference solution passes (10.6051ms)
+✔ 12.02: starter fails and reference solution passes (332.8907ms)
+✔ 12.03: starter fails and reference solution passes (248.9538ms)
+✔ 12.05: starter fails and reference solution passes (218.2173ms)
+✔ 12.06: starter fails and reference solution passes (203.8578ms)
+✔ 12.12: starter fails and reference solution passes (202.3892ms)
+✖ 12.14: starter fails and reference solution passes (218.347ms)
+✔ 12.08: starter fails and reference solution passes (211.8133ms)
+✔ 13.02: starter fails and reference solution passes (345.3035ms)
+✔ 13.03: starter fails and reference solution passes (510.4095ms)
+✔ 13.05: starter fails and reference solution passes (230.7313ms)
+✔ 13.06: starter fails and reference solution passes (214.7915ms)
+✔ 13.07: starter fails and reference solution passes (544.8485ms)
+✔ 13.08: starter fails and reference solution passes (217.4531ms)
+✔ 13.09: starter fails and reference solution passes (528.5273ms)
+✔ 13.10: starter fails and reference solution passes (232.5033ms)
+✔ 13.13: starter fails and reference solution passes (501.8256ms)
+✔ 13.14: starter fails and reference solution passes (235.6122ms)
+✔ 14.02: starter fails and reference solution passes (328.539ms)
+✔ 14.06: starter fails and reference solution passes (203.3919ms)
+✔ 14.08: starter fails and reference solution passes (187.1813ms)
+✔ 15.02: starter fails and reference solution passes (4201.9087ms)
+✔ 15.03: starter fails and reference solution passes (2357.8606ms)
+✔ 15.04: starter fails and reference solution passes (2314.5808ms)
+✔ 15.07: starter fails and reference solution passes (3862.9399ms)
+✔ 15.08: starter fails and reference solution passes (2456.5822ms)
+✔ 15.11: starter fails and reference solution passes (2948.991ms)
+✔ 16.01: starter fails and reference solution passes (3051.5664ms)
+✔ 16.02: starter fails and reference solution passes (2705.996ms)
+✔ 16.03: starter fails and reference solution passes (2698.8435ms)
+✔ 16.09: starter fails and reference solution passes (3076.5039ms)
+✔ 16.04: starter fails and reference solution passes (2703.3654ms)
+✔ 16.05: starter fails and reference solution passes (2728.1189ms)
+✔ 16.10: starter fails and reference solution passes (2604.1589ms)
+✔ 16.06: starter fails and reference solution passes (2663.4251ms)
+✔ 16.07: starter fails and reference solution passes (2357.0071ms)
+✔ 16.08: starter fails and reference solution passes (5963.0023ms)
+✔ 17.02: starter fails and reference solution passes (2731.1597ms)
+✔ 17.03: starter fails and reference solution passes (4286.9478ms)
+✔ 17.04: starter fails and reference solution passes (4093.777ms)
+✔ 17.05: starter fails and reference solution passes (3457.307ms)
+✔ 17.07: starter fails and reference solution passes (2852.3139ms)
+✔ 17.11: starter fails and reference solution passes (4875.2978ms)
+✔ 17.08: starter fails and reference solution passes (6646.4816ms)
+✔ 18.02: starter fails and reference solution passes (1717.2853ms)
+✔ 18.03: starter fails and reference solution passes (5277.6802ms)
+✔ 18.04: starter fails and reference solution passes (3213.4627ms)
+✔ 18.05: starter fails and reference solution passes (3083.3565ms)
+✔ 18.07: starter fails and reference solution passes (4112.6705ms)
+✔ 18.08: starter fails and reference solution passes (3927.7245ms)
+✔ 18.10: starter fails and reference solution passes (3896.5221ms)
+✔ 19.01: starter fails and reference solution passes (2779.9215ms)
+✔ 19.02: starter fails and reference solution passes (2763.1792ms)
+✔ 19.03: starter fails and reference solution passes (2932.7186ms)
+✔ 19.04: starter fails and reference solution passes (2877.2197ms)
+✔ 19.05: starter fails and reference solution passes (2784.9408ms)
+✔ 19.06: starter fails and reference solution passes (3664.4918ms)
+✔ 19.08: starter fails and reference solution passes (5088.1807ms)
+✔ 19.09: starter fails and reference solution passes (4758.4299ms)
+✔ 20.01: starter fails and reference solution passes (422.4535ms)
+✔ 20.02: starter fails and reference solution passes (404.1166ms)
+✔ 20.03: starter fails and reference solution passes (374.0496ms)
+✔ 20.04: starter fails and reference solution passes (424.7041ms)
+✔ 20.05: starter fails and reference solution passes (373.4944ms)
+✔ 20.06: starter fails and reference solution passes (424.5593ms)
+✔ 20.07: starter fails and reference solution passes (450.0047ms)
+✔ 20.08: starter fails and reference solution passes (404.7274ms)
+✔ 20.09: starter fails and reference solution passes (858.8596ms)
+✔ 20.10: starter fails and reference solution passes (463.7816ms)
+✔ 21.02: starter fails and reference solution passes (619.0158ms)
+✔ 21.03: starter fails and reference solution passes (375.4581ms)
+✖ 21.04: starter fails and reference solution passes (41.6812ms)
+✖ 21.05: starter fails and reference solution passes (14.8526ms)
+✔ 21.06: starter fails and reference solution passes (681.0553ms)
+✔ 21.07: starter fails and reference solution passes (437.496ms)
+✖ 21.09: starter fails and reference solution passes (18.1726ms)
+✔ 22.03: starter fails and reference solution passes (1681.3908ms)
+✔ 22.04: starter fails and reference solution passes (422.7576ms)
+✔ 22.11: starter fails and reference solution passes (4502.7574ms)
+✔ 22.05: starter fails and reference solution passes (405.815ms)
+✔ 22.06: starter fails and reference solution passes (404.9034ms)
+✔ 22.07: starter fails and reference solution passes (8648.0195ms)
+✔ 23.02: starter fails and reference solution passes (428.4564ms)
+✔ 23.03: starter fails and reference solution passes (441.1577ms)
+✔ 23.04: starter fails and reference solution passes (466.8962ms)
+✔ 23.10: starter fails and reference solution passes (653.084ms)
+✔ 23.11: starter fails and reference solution passes (404.872ms)
+✔ 23.09: starter fails and reference solution passes (438.9651ms)
+✔ reports TS2322 with the virtual file, line and column (4361.6581ms)
+✔ accepts a valid strict TypeScript solution (3809.8279ms)
+✔ resolves a .js import to the corresponding virtual .ts module (3019.1755ms)
+✔ reports a semantic error from a secondary imported file (5273.5196ms)
+✔ accepts a used ts-expect-error and reports an unused directive as TS2578 (4975.593ms)
+✔ reports a missing requested lib as an unsupported environment (327.598ms)
+✔ reports an unknown tsconfig option as unsupported (2036.2212ms)
+✔ classifies malformed, invalid and unavailable tsconfig as unsupported (6385.3595ms)
+✔ applies recursive include and exclude patterns to virtual files (1663.1702ms)
+✔ rejects duplicate normalized virtual exercise paths (209.7973ms)
+✔ requires equal types for expectTypeOf assertions without an any escape hatch (5147.4649ms)
+✔ resolves installed Node and undici declarations without permissive globals (4141.1041ms)
+✔ marks missing Node, undici and assertion declarations as unsupported (4982.9483ms)
+✔ does not allow any to mask a mismatched expectTypeOf assertion (1392.9602ms)
+✔ browser client returns worker results and terminates the worker (24.1938ms)
+✔ browser client terminates on cancellation and ignores late worker messages (2.2598ms)
+✔ browser client times out, aborts library fetch and discards late responses (7.4742ms)
+✔ bundled worker runs the virtual host in a browser-like context (1491.112ms)
+✔ Worker preview rewrites local module and import.meta URLs and owns the assets (8.4875ms)
+✔ Worker preview terminates tracked workers on abort and rejects foreign entries (2.3204ms)
+✔ local imports, default exports, reexports, dynamic imports and cycles are bundled (952.2032ms)
+✔ external, missing, traversal and computed imports are rejected before execution (322.612ms)
+✔ the compiler does not execute the learner code and preserves string export text (45.1432ms)
+✔ loaders are selected by extension for TypeScript and JSON modules (124.2132ms)
+✔ a JavaScript import specifier resolves to a corresponding TypeScript module (86.7866ms)
+✔ concurrent marker preparation shares one compiler script load (4.7889ms)
+✔ fingerprinting before module compilation reuses and captures the loaded compiler engine (211.0384ms)
+✔ export preserves every draft path and content and adds a usable project guide (30.2898ms)
+✔ export keeps an authored README and appends checkpoint commands without replacing it (1.9534ms)
+✔ export rejects traversal, absolute, drive, URL, NUL, and colliding paths before packaging (6.723ms)
+✔ export refuses missing declared entry, test, dependency, or incoherent lock before creating ZIP bytes (3.4055ms)
+✔ download creates a readable ZIP containing nested files and package metadata (7.9473ms)
+✔ downloaded ZIP opens and returns original UTF-8 files through Windows ZipArchive (7122.4359ms)
+✔ download triggers a browser anchor and releases its temporary object URL (1.4632ms)
+✔ exported JavaScript project runs in a clean contained temp directory with the existing local checker (6636.3351ms)
+✔ prepared TypeScript checkpoint locks are internally coherent and label the course proxy (49.65ms)
+✔ exported DOM project is exercised structurally in a contained temporary copy (5907.011ms)
+✔ exported TypeScript project typechecks with the installed checker from a clean temporary copy (5194.1641ms)
+✔ JS project export has the expected file list and coherent Node package metadata (0.657ms)
+✔ DOM project export keeps browser files and does not invent Node package metadata (0.6374ms)
+✔ TypeScript export lists the expected files and keeps tsconfig, scripts and typescript pin coherent (6.043ms)
+✔ grader-only assessment fields never leave the exported assessment (0.9276ms)
+✔ the checkpoint mirror matches the source checkpoint definitions exactly (5.7285ms)
+✔ export button and Git block render only for eligible activities (32.1707ms)
+✔ Git checkpoints for local activities are rendered as copyable instructional commands (222.2315ms)
+✔ enhance places the button in the practice section and exports the current editor text (130.4359ms)
+✔ a failed export reports an error toast and re-enables the button (61.898ms)
+✔ unknown exporter errors reach the learner as a Portuguese sentence, not the raw developer text (60.7095ms)
+✔ the export button stays focused and is marked busy while the package is prepared (79.3145ms)
+✔ the export never sends grader-only assessment fields, including the full declared list (0.8348ms)
+✔ enhance hands the declared checkpoint to the exporter (61.8293ms)
+✔ an ineligible activity receives no export button in the DOM (23.0201ms)
+(node:40632) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:40632) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+34 !== 25
+
+    at file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-task-8a-evidence.mjs:168:8 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 34,
+  expected: 25,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v26.7.0
+✖ scripts\test-task-8a-evidence.mjs (52051.7699ms)
+✔ 14.07 requires runtime, official Promise.try source and observed callback timing (3.697ms)
+node-version: PASS
+21.08-native-using: PASS
+21.08-native-using-node26: PASS
+22.08-clean-package-consumer: PASS
+22.09-source-runtime: PASS
+22.09-isolatedDeclarations: PASS
+22.07-type-suite-and-22.09-declaration-consumer: PASS
+23.07-capstone-reopen-tests: PASS
+23.07-strict-source-types: PASS
+23.08-capstone-versioned-contract: PASS
+23.08-strict-source-types: PASS
+✔ scripts\test-task-9-local-evidence.mjs (47331.4241ms)
+(node:50084) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+{
+  "kind": "passed",
+  "package": "@curso/centavos@0.1.0",
+  "runtime": "Node 26.7.0",
+  "temporaryConsumer": true,
+  "packedFiles": [
+    "LICENSE",
+    "README.md",
+    "dist/index.d.ts",
+    "dist/index.js",
+    "package.json"
+  ]
+}
+✔ scripts\test-task-9-package-22-08.mjs (32670.1261ms)
+✔ 22.07 authored type suite compiles against correct declaration (819.311ms)
+✔ 22.07 semantic declaration mutant is rejected: parse-any (494.036ms)
+✔ 22.07 semantic declaration mutant is rejected: parse-unknown (334.9378ms)
+✔ 22.07 semantic declaration mutant is rejected: overlapping-result (336.6701ms)
+✔ 22.07 semantic declaration mutant is rejected: wide-route (533.8797ms)
+✔ 22.07 semantic declaration mutant is rejected: optional-baseurl (1113.5594ms)
+✔ 22.07 semantic declaration mutant is rejected: wrong-result-shape (549.8334ms)
+✔ 22.07 wrong export or missing library is infrastructure, not a mutation kill (441.6269ms)
+✔ 22.09 isolated declaration package builds with native TypeScript and emits public signatures (8855.2623ms)
+ℹ tests 381
+ℹ suites 0
+ℹ pass 355
+ℹ fail 26
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 236261.2368
+
+✖ failing tests:
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 04.01: starter fails and reference solution passes (107.785ms)
+  AssertionError [ERR_ASSERTION]: 04.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 04.10: starter fails and reference solution passes (93.5147ms)
+  AssertionError [ERR_ASSERTION]: 04.10: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 05.01: starter fails and reference solution passes (109.2048ms)
+  AssertionError [ERR_ASSERTION]: 05.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 06.01: starter fails and reference solution passes (109.4139ms)
+  AssertionError [ERR_ASSERTION]: 06.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 06.02: starter fails and reference solution passes (109.2605ms)
+  AssertionError [ERR_ASSERTION]: 06.02: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 08.01: starter fails and reference solution passes (123.417ms)
+  AssertionError [ERR_ASSERTION]: 08.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 08.07: starter fails and reference solution passes (141.5671ms)
+  AssertionError [ERR_ASSERTION]: 08.07: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 09.01: starter fails and reference solution passes (225.9499ms)
+  AssertionError [ERR_ASSERTION]: 09.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 09.04: starter fails and reference solution passes (170.4883ms)
+  AssertionError [ERR_ASSERTION]: 09.04: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 10.01: starter fails and reference solution passes (123.7541ms)
+  AssertionError [ERR_ASSERTION]: 10.01: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.01: starter fails and reference solution passes (30.3314ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.01.preserva-target-e-a-ordem-bu-da9cf1f8 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.11: starter fails and reference solution passes (15.0543ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.11.percorre-captura-listeners-d-99448a91 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.14: starter fails and reference solution passes (18.4955ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.14.once-roda-uma-vez-passive-na-bbb7d8f2 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.02: starter fails and reference solution passes (12.3152ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.02.usa-texto-literal-e-remove-a-56fa109a ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.04: starter fails and reference solution passes (15.4283ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.04.le-campo-simples-e-valores-r-0b7e57f0 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.06: starter fails and reference solution passes (16.3129ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.06.remove-botao-e-span-descende-65323520 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.05: starter fails and reference solution passes (12.3233ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.05.rerender-nao-duplica-acao-e--7d95853f ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.07: starter fails and reference solution passes (16.0481ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.07.associacoes-e-submit-nativo-924d94ef ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.12: starter fails and reference solution passes (18.9043ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.12.mantem-tags-como-texto-liter-1d412d9d ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 11.08: starter fails and reference solution passes (23.3103ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 11.08.mantem-o-formulario-rotulo-t-0ba34394 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:35:133)
+      at Object.run (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:55:48)
+      at Object.run (evalmachine.<anonymous>:491:57)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:70:46)
+      at async TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:22)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 12.11: starter fails and reference solution passes (10.6051ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 12.11.registra-consumo-e-nao-le-co-c66e9469 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 12.14: starter fails and reference solution passes (218.347ms)
+  AssertionError [ERR_ASSERTION]: 12.14: the unmodified starter must not pass its tests
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:312:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 21.04: starter fails and reference solution passes (41.6812ms)
+  AssertionError [ERR_ASSERTION]: Error: Build failed with 1 error:
+  node_modules/esbuild-wasm/lib/main.js:1492:27: ERROR: [plugin: exercise-files] O import sai dos arquivos do exercício.
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 21.05: starter fails and reference solution passes (14.8526ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 21.05.primes-public-api ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-course-tests.mjs:303:3
+✖ 21.09: starter fails and reference solution passes (18.1726ms)
+  AssertionError [ERR_ASSERTION]: Error: Caso público 21.09.sum-equivalence-and-finite-i-4444a7f8 ausente ao executar __devpath_dom_tests__.js.
+      at instrumentAssertionCases (evalmachine.<anonymous>:136:41)
+      at Object.buildModuleGraph (evalmachine.<anonymous>:173:29)
+      at Object.buildModuleGraph (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:75:68)
+      at execute (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:89:48)
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:316:28)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7)
+  []
+  
+  'error' !== 'result'
+  
+      at TestContext.<anonymous> (file:///C:/Users/israe/OneDrive/Desktop/Projetos/RPG/devpath-publish/scripts/test-course-tests.mjs:317:14)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:969:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 'error',
+    expected: 'result',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at scripts\test-task-8a-evidence.mjs:1:1
+✖ scripts\test-task-8a-evidence.mjs (52051.7699ms)
+  'test failed'

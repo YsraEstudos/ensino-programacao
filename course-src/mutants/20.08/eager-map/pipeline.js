@@ -1,0 +1,1 @@
+export function pipeline(source){return {map(fn){return {filter(predicate){return {take(count){return [...source].map(fn).filter(predicate).slice(0,count);},[Symbol.iterator](){return this.take(Infinity)[Symbol.iterator]();}};}};}};}

@@ -1,0 +1,3 @@
+import {observar} from "./proxy.js";
+test("delegação lê valor normal e símbolo sem reentrada",()=>{const proxy=observar({x:2});/*@case 20.04.delegacao-le-valor-normal-e--eb506882*/expect(proxy.x).toBe(2);/*@case 20.04.delegacao-le-valor-normal-e--94ed430d*/expect(proxy[Symbol.toStringTag]).toBe(undefined);});
+test("getter herdado recebe o proxy como this",()=>{let proxy;const proto={get dono(){return this===proxy;},get dobro(){return this.base*2;}};const target=Object.assign(Object.create(proto),{base:5});proxy=observar(target);/*@case 20.04.getter-herdado-recebe-o-prox-99c78d9b*/expect(proxy.dono).toBe(true);/*@case 20.04.getter-herdado-recebe-o-prox-45dc27d3*/expect(proxy.dobro).toBe(10);});

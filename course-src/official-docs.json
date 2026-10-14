@@ -1,0 +1,121 @@
+{
+  "_comment": "Documentação oficial por atividade: [título, url, seção, pergunta]. O título não pode ter ':'; a seção não pode ter ':' nem '.'; o build publica como recurso e a página mostra em 'Consulta opcional'.",
+  "21.01": [
+    ["Chrome DevTools · Performance", "https://developer.chrome.com/docs/devtools/performance", "Analyze runtime performance", "Que trecho do gravador separa tempo de script, layout e rede?"],
+    ["Chrome DevTools · Memória", "https://developer.chrome.com/docs/devtools/memory-problems", "Identify JS heap memory leaks", "Como confirmar que o heap cresce a cada navegação?"]
+  ],
+  "04.11": [
+    ["MDN Error", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error", "Error types", "Quando TypeError e RangeError descrevem causas diferentes?"]
+  ],
+  "04.12": [
+    ["MDN try catch", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch", "The finally block", "Por que finally roda quando o bloco try lança?"]
+  ],
+  "04.13": [
+    ["MDN throw", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw", "Description", "Como uma função informa uma entrada inválida ao chamador?"]
+  ],
+  "21.02": [
+    ["MDN · removeEventListener", "https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener", "Matching event listeners for removal", "Por que uma função criada na hora não remove o listener original?"],
+    ["MDN · clearInterval", "https://developer.mozilla.org/en-US/docs/Web/API/Window/clearInterval", "Syntax", "O que acontece ao chamar clearInterval duas vezes com o mesmo id?"]
+  ],
+  "21.03": [
+    ["MDN · performance now", "https://developer.mozilla.org/en-US/docs/Web/API/Performance/now", "Description", "Por que performance.now é preferível a Date.now para medir duração?"]
+  ],
+  "21.04": [
+    ["MDN · Map", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map", "Description", "Em que ordem keys() devolve as chaves e como isso ajuda numa política LRU?"]
+  ],
+  "21.05": [
+    ["MDN · Usando Web Workers", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers", "Dedicated workers", "Como o worker recebe e devolve mensagens, e como encerrá-lo?"]
+  ],
+  "21.06": [
+    ["MDN · WeakMap", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap", "Why WeakMap", "Por que um WeakMap não tem size nem permite enumerar as chaves?"]
+  ],
+  "21.07": [
+    ["MDN · setTimeout", "https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout", "Reasons for delays longer than specified", "Por que o atraso real pode ser maior que o pedido?"]
+  ],
+  "21.08": [
+    ["MDN · using", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/using", "Description", "Em que ordem os recursos declarados com using são descartados?"],
+    ["MDN · Gerenciamento de recursos", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Resource_management", "The using declaration", "Como fica o mesmo código com try e finally quando o runtime não tem using?"]
+  ],
+  "21.09": [
+    ["MDN · Performance API", "https://developer.mozilla.org/en-US/docs/Web/API/Performance_API", "High precision timing", "Quais limites de precisão o navegador impõe às medições?"]
+  ],
+  "21.10": [
+    ["MDN · Objetos transferíveis", "https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Transferable_objects", "Transferring objects between threads", "O que acontece com o buffer no emissor depois da transferência?"],
+    ["MDN · structuredClone", "https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone", "Parameters", "Como a opção transfer muda o resultado?"]
+  ],
+  "21.11": [
+    ["MDN · SuppressedError", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SuppressedError", "Instance properties", "Qual erro fica em error e qual fica em suppressed?"],
+    ["MDN · AggregateError", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AggregateError", "Instance properties", "Onde ficam as falhas individuais?"]
+  ],
+  "22.01": [
+    ["TypeScript · Arquivos de declaração", "https://www.typescriptlang.org/docs/handbook/declaration-files/introduction.html", "Introduction", "Quem garante que um arquivo d.ts descreve o JavaScript real?"]
+  ],
+  "22.02": [
+    ["Node.js · Pontos de entrada de pacotes", "https://nodejs.org/api/packages.html#package-entry-points", "Package entry points", "Como exports limita o que o consumidor pode importar?"],
+    ["TypeScript · Referência de módulos", "https://www.typescriptlang.org/docs/handbook/modules/reference.html", "packagejson exports", "Como o TypeScript escolhe a condição types?"]
+  ],
+  "22.03": [
+    ["TypeScript · Declarações por exemplo", "https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html", "Functions", "Como declarar uma função exportada que devolve uma union?"]
+  ],
+  "22.04": [
+    ["TypeScript · Mesclagem de declarações", "https://www.typescriptlang.org/docs/handbook/declaration-merging.html", "Global augmentation", "O que declare global muda e qual o alcance dessa mudança?"]
+  ],
+  "22.05": [
+    ["TypeScript · Migrando de JavaScript", "https://www.typescriptlang.org/docs/handbook/migrating-from-javascript.html", "Early benefits", "Como allowJs e checkJs permitem migrar aos poucos?"],
+    ["TypeScript · Tipos em JSDoc", "https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html", "param and returns", "Como anotar parâmetros e retorno sem renomear o arquivo?"]
+  ],
+  "22.06": [
+    ["Zod", "https://zod.dev/", "Basic usage", "Como safeParse informa a falha sem lançar?"],
+    ["Valibot", "https://valibot.dev/", "Guides", "Por que o tamanho no bundle é um critério de escolha?"]
+  ],
+  "22.07": [
+    ["TypeScript · Comentários de verificação", "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-9.html", "ts-expect-error comments", "O que o compilador diz quando a linha anotada não tem mais erro?"]
+  ],
+  "22.08": [
+    ["npm · npm pack", "https://docs.npmjs.com/cli/v11/commands/npm-pack", "Description", "Que arquivos entram no tarball e como conferir antes de publicar?"],
+    ["Node.js · Pontos de entrada de pacotes", "https://nodejs.org/api/packages.html#package-entry-points", "Conditional exports", "Por que types vem antes de default?"]
+  ],
+  "22.09": [
+    ["TypeScript · isolatedDeclarations", "https://www.typescriptlang.org/tsconfig/#isolatedDeclarations", "isolatedDeclarations", "Que anotações a opção passa a exigir nos exports?"]
+  ],
+  "22.10": [
+    ["TypeScript · Project References", "https://www.typescriptlang.org/docs/handbook/project-references.html", "composite", "Por que o projeto referenciado precisa de composite?"]
+  ],
+  "23.01": [
+    ["MDN · Error cause", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause", "Description", "Como cause preserva o contexto técnico ao atravessar camadas?"]
+  ],
+  "23.02": [
+    ["OWASP · Validação de entrada", "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html", "Goals of Input Validation", "Por que validar antes de qualquer mutação?"]
+  ],
+  "23.03": [
+    ["TypeScript · Unions e narrowing", "https://www.typescriptlang.org/docs/handbook/2/narrowing.html", "Discriminated unions", "Como modelar status de forma que estados inválidos não compilem?"]
+  ],
+  "23.04": [
+    ["Node.js · Executor de testes", "https://nodejs.org/api/test.html", "Running tests from the command line", "Como rodar só a suíte afetada a cada passo da refatoração?"]
+  ],
+  "23.05": [
+    ["Google · Guia de revisão de código", "https://google.github.io/eng-practices/review/reviewer/", "What to look for in a code review", "O que distingue um achado de uma preferência pessoal?"],
+    ["MDN · Array toSorted", "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted", "Description", "Qual a diferença observável entre sort e toSorted?"]
+  ],
+  "23.06": [
+    ["OWASP · Validação de entrada", "https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html", "Implementing Input Validation", "Onde cada fonte externa deve ser validada?"],
+    ["MDN · textContent", "https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent", "Differences from innerHTML", "Por que textContent evita interpretar markup vindo de fora?"]
+  ],
+  "23.10": [
+    ["Node.js · Executor de testes", "https://nodejs.org/api/test.html", "Running tests from the command line", "Como achar e rodar o teste que cobre a regra?"]
+  ],
+  "23.11": [
+    ["Node.js · Executor de testes", "https://nodejs.org/api/test.html", "Running tests from the command line", "Como rodar um teste novo isolado antes de corrigir?"]
+  ],
+  "23.08": [
+    ["Node.js · Executor de testes", "https://nodejs.org/api/test.html", "Describe and it aliases", "Como organizar uma suíte de contrato que roda para vários adapters?"],
+    ["Node.js · Módulos TypeScript", "https://nodejs.org/api/typescript.html", "Type stripping", "Que sintaxe TypeScript o Node.js roda direto e qual exige compilação?"]
+  ],
+  "23.09": [
+    ["OWASP · Logging", "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html", "Data to exclude", "Que dados nunca devem aparecer em um log?"],
+    ["MDN · crypto randomUUID", "https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID", "Return value", "Um identificador de correlação é segredo?"]
+  ],
+  "23.07": [
+    ["OWASP · Autorização", "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html", "Enforce Least Privileges", "Onde a checagem de papel precisa acontecer para não depender da interface?"]
+  ]
+}

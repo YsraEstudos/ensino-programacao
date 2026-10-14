@@ -14,7 +14,7 @@ npm.cmd run lint
 npm.cmd run build
 ```
 
-Requisitos: Node.js 22.13 ou posterior e Python 3 disponível como `python`. O build do currículo usa Python; `DEVPATH_PYTHON` pode indicar outro executável. O projeto usa o lockfile para instalar versões reproduzíveis.
+Requisitos: Node.js 24 LTS ou posterior e Python 3 disponível como `python`. O build do currículo usa Python; `DEVPATH_PYTHON` pode indicar outro executável. O projeto usa o lockfile para instalar versões reproduzíveis.
 
 O modo local salva o progresso no navegador. O site autenticado utiliza a API e o banco D1 associados à conta.
 
@@ -30,6 +30,10 @@ npm.cmd run check:curriculum
 Depois de editar receitas ou fontes pedagógicas, execute `npm.cmd run build:curriculum`. O comando atualiza os intermediários locais em `course-src/.generated/` e regenera o currículo público a partir das fontes canônicas.
 
 Consulte [docs/organizacao-projeto.md](docs/organizacao-projeto.md) para conhecer as fontes, saídas e regras de geração.
+
+## Ambiente-alvo do curso
+
+`course-src/runtime-baseline.json` é a fonte única das versões ensinadas: edição do ECMAScript, Node.js principal e mínimo, TypeScript do curso e do verificador embutido, critério de navegador e os perfis de runtime. Cada receita declara um perfil (ou um rótulo antigo listado em `aliases`); o compilador publica o rótulo correspondente e falha com runtime desconhecido. Para trocar de versão (por exemplo, Node.js 26 LTS depois de 28/10/2026), altere esse arquivo e execute `npm.cmd run build:curriculum`. Revise o arquivo em junho (nova edição do ECMAScript) e em outubro (troca de LTS do Node.js).
 
 ## Convenções e documentação
 

@@ -1,0 +1,1 @@
+export type Perfil={nome:string;tema:'claro'|'escuro'}; export type Usuario={id:number;nome:string;perfil:Perfil}; export function aplicarPatch<T extends object>(base:T,patch:T):T{return {...base,...patch};}

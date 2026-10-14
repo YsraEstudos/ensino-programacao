@@ -44,6 +44,7 @@ O capstone final deve permitir trocar UI, storage ou API sem reescrever regras c
 contrato, mas validação runtime protege as bordas externas.
 
 GATE DE DOMINIO
-CAPSTONE: use a rubrica completa. O projeto precisa passar testes, typecheck, revisao de
-acessibilidade quando houver UI, auditoria de trust boundaries e uma mudanca surpresa sem
-regressao. Nao existe limite artificial de "uma dica".
+CAPSTONE: use a rubrica completa. O projeto precisa passar testes e typecheck rodados no seu
+computador, revisao de acessibilidade quando houver UI, auditoria de trust boundaries e uma
+mudanca surpresa sem regressao. O site registra sua evidencia e sua autoavaliacao; ele nao
+executa esses testes. Nao existe limite artificial de "uma dica".

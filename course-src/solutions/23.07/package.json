@@ -1,0 +1,1 @@
+{"name":"devpath-tasks-capstone","private":true,"type":"module","scripts":{"test":"node --experimental-strip-types --test test/contrato.test.ts","typecheck":"tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions src/dominio.ts src/portas.ts src/adapters/memoria.ts src/reabrir.ts"}}

@@ -1,0 +1,6 @@
+import { carregarConfiguracao } from './service.js';
+describe('carregarConfiguracao', () => {
+  test('preserva causa e usa mensagem pública', async () => { const cause = new Error('ECONNRESET token=segredo'); await /*@case 13.10.preserva-causa-e-usa-mensage-b46f3cb0*/expect(carregarConfiguracao(() => Promise.reject(cause))).rejects.toThrow('Falha ao carregar configuração'); try { await carregarConfiguracao(() => Promise.reject(cause)); } catch (error) { /*@case 13.10.preserva-causa-e-usa-mensage-f49cfed6*/expect(error.cause).toBe(cause); /*@case 13.10.preserva-causa-e-usa-mensage-0ba4eb0d*/expect(error.message.includes('segredo')).toBe(false); } });
+  test('normaliza erro que não é Error sem expor conteúdo', async () => { try { await carregarConfiguracao(() => Promise.reject('token-secreto')); } catch (error) { /*@case 13.10.normaliza-erro-que-nao-e-err-45b74369*/expect(error).toBeInstanceOf(Error); /*@case 13.10.normaliza-erro-que-nao-e-err-c5764c0c*/expect(error.cause).toBe('token-secreto'); /*@case 13.10.normaliza-erro-que-nao-e-err-5dd824df*/expect(error.message.includes('token')).toBe(false); } });
+  test('preserva sucesso', async () => { const value = { port: 3000 }; /*@case 13.10.preserva-sucesso-e33b5491*/expect(await carregarConfiguracao(() => Promise.resolve(value))).toBe(value); });
+});

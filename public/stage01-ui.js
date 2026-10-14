@@ -640,6 +640,8 @@
         if (action === 'complete') {
             if (completionReady(item, p)) {
                 p.complete = true;
+                void ctx.learning?.submitStudy?.(item, p.reflection || '');
+                void ctx.learning?.runAssessment?.(item, { kind: 'passed', source: 'local-declared' });
                 ctx.progress.answers ||= {};
                 ctx.progress.answers[item.id] = true;
                 ctx.progress.completed ||= [];

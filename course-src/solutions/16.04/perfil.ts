@@ -1,0 +1,2 @@
+export type User={id:number;name:string}; export type RespostaHttp={json():Promise<unknown>};
+export async function userFromResponse(response:RespostaHttp):Promise<User> {let raw:unknown;try{raw=await response.json();}catch(error){throw new Error("Falha ao ler JSON",{cause:error});} if(typeof raw!=="object"||raw===null||!("id" in raw)||typeof raw.id!=="number")throw new TypeError("Campo id inválido"); if(!("name" in raw)||typeof raw.name!=="string")throw new TypeError("Campo name inválido"); return {id:raw.id,name:raw.name};}

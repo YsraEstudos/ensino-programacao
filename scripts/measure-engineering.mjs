@@ -9,7 +9,7 @@ const catalog = JSON.parse(readFileSync('public/course-catalog.json', 'utf8'));
 const db = new DatabaseSync(':memory:');
 db.exec('CREATE TABLE progress (id INTEGER PRIMARY KEY, data TEXT)');
 const progress = [];
-for (const count of [10, 127, 254]) {
+for (const count of [...new Set([10, Math.ceil(catalog.length / 2), catalog.length])].sort((a, b) => a - b)) {
     const source = createEmptyProgress();
     for (const item of catalog.slice(0, count)) {
         source.exerciseDrafts[item.id] = 'const tentativa = "dados sintéticos";\n'.repeat(20);

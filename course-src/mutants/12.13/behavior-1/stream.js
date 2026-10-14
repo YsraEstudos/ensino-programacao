@@ -1,0 +1,1 @@
+export async function* valores(){yield 1;await Promise.resolve();yield 2;} export async function consumir(informar){const vistos=[];for await(const valor of valores())vistos.push(valor);informar([...vistos]);return vistos;}

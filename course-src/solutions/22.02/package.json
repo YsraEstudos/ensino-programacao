@@ -1,0 +1,1 @@
+{"name":"@curso/soma","version":"1.0.0","type":"module","exports":{".":{"types":"./dist/index.d.ts","default":"./dist/index.js"}},"scripts":{"build":"node scripts/build.mjs","prepack":"npm run build"},"devDependencies":{"typescript":"6.0.3"}}

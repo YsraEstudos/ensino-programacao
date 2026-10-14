@@ -1,0 +1,1 @@
+export function criarCache(calcular){const cache=new WeakMap();let calculos=0;return{metaDe(node){if(cache.has(node))return cache.get(node);const value=calcular(node,++calculos);cache.set(node,value);return value;},get calculos(){return calculos;}};}export function cachePorId(){return new Map();}

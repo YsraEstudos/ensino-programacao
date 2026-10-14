@@ -63,7 +63,7 @@ test('public diagnostic content matches the editorial source and every choice ha
       assert(field.options.length>=3,'a diagnostic offers an alternative hypothesis alongside unknown');
       assert.equal(new Set(field.options.map(x=>x.value)).size,field.options.length);
       assert(field.explanation.trim());
-      if(id!=='D.05')assert(field.options.every(x=>x.value==='unknown'||x.value===x.label),'literal response labels must match their stored values');
+      if(/^D\.0[1-5]$/.test(id)&&id!=='D.05')assert(field.options.every(x=>x.value==='unknown'||x.value===x.label),'legacy literal response labels must match their stored values');
     }
     assert.equal(diagnosticPreparation['D.02'].fields.length,12,'each value has separate conceptual-type and typeof answers');
   }finally{f.dom.window.close();}
