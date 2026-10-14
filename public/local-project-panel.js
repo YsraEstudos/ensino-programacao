@@ -32,6 +32,12 @@
     return steps.map(step => (/^git\s/.test(step) ? step : `# ${step}`)).join('\n');
   }
 
+  function reviewStepFor(checkpoint) {
+    const review = checkpoint?.reviewStep;
+    if (!review?.required || !Array.isArray(review.steps) || !review.steps.length) return null;
+    return review.steps;
+  }
+
   // Exporter messages are English developer text; the learner sees a Portuguese reason instead.
   const EXPORT_ERRORS = [
     [/safe relative path|must be relative|cannot escape|no filename|unsafe to extract/, 'um caminho de arquivo não é permitido neste projeto.'],
@@ -95,6 +101,11 @@
     if (!isEligible(item, options.assessment, checkpoint)) return '';
     const id = esc(item.id);
     const git = gitBlockFor(checkpoint);
+    const reviewSteps = reviewStepFor(checkpoint);
+    const referenceActivityIds = Array.isArray(checkpoint?.referenceActivityIds) ? checkpoint.referenceActivityIds : [];
+    const referenceMarkup = referenceActivityIds.length
+      ? `<p class="local-checkpoint-references">Referência: ${referenceActivityIds.map(referenceId => `<a href="#/javascript/${esc(referenceId)}">Atividade ${esc(referenceId)}</a>`).join(', ')}</p>`
+      : '';
     let gitMarkup = '';
     if (git?.required) {
       gitMarkup = `
@@ -112,13 +123,18 @@
           <p>${esc(git.reason)}</p>
         </div>`;
     }
+    const reviewMarkup = reviewSteps
+      ? `<div class="local-review" data-local-review="${id}"><h4>Revisão de código (instrucional)</h4><p>Registre problemas com localização, prioridade, impacto e evidência. A checagem do projeto valida a estrutura, não a qualidade semântica dos comentários.</p><ol>${reviewSteps.map(step => `<li>${esc(step)}</li>`).join('')}</ol></div>`
+      : '';
     return `
       <section class="local-project-panel" data-local-project="${id}" aria-labelledby="local-project-title-${id}">
         <h3 id="local-project-title-${id}">Projeto para a sua máquina</h3>
         <p id="local-project-desc-${id}">Baixa um ZIP com os arquivos atuais deste exercício, um README com os comandos, a configuração declarada e os testes. O app não executa o projeto: rode-o no seu computador.</p>
+        ${referenceMarkup}
         <button type="button" class="button-secondary" data-local-export="${id}" aria-describedby="local-project-desc-${id}">Exportar projeto para máquina local</button>
         <p class="local-status" role="status" aria-live="polite" data-local-export-status="${id}"></p>
         ${gitMarkup}
+        ${reviewMarkup}
       </section>`;
   }
 
@@ -173,5 +189,5 @@
     return node;
   }
 
-  return Object.freeze({isEligible, gitBlockFor, gitText, collectFiles, exportAssessment, exportCurrent, renderPanel, enhance});
+  return Object.freeze({isEligible, gitBlockFor, gitText, reviewStepFor, collectFiles, exportAssessment, exportCurrent, renderPanel, enhance});
 });

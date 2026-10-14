@@ -49,3 +49,7 @@ GATE DE DOMINIO
 Avance quando conseguir justificar o uso da tecnica avancada e demonstrar alternativa mais
 simples quando ela existe. Medicao/compatibilidade/runtime validation sao parte do gate
 quando relevantes e sao executadas no seu ambiente local; a conclusao no site e revisao propria.
+
+DEVTOOLS PERFORMANCE
+21.12 grava uma interação reproduzível e observa marks, tarefas e layout na aba Performance.
+Uma gravação é uma amostra do ambiente declarado, não prova universal de causa ou melhoria.

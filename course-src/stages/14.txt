@@ -45,3 +45,11 @@ por escrito uma sessao de debugging (hipotese, evidencia, causa, correcao) e o p
 resistir a uma pequena mudanca de requisito. O site nao verifica esses itens: a conclusao e
 revisao propria, com testes rodados no seu computador quando o cartao pedir. Erros de
 acessibilidade/async que quebram o contrato bloqueiam o gate.
+
+FERRAMENTAS DE PROJETO LOCAL
+14.14 separa execução TypeScript, checagem com tsc e transformação com tsx/bundler; Node
+type stripping exige sintaxe apagável e erasableSyntaxOnly ajuda a impor esse limite. 14.15
+pratica ESLint 9+ com flat config e Prettier em comandos distintos. 14.16 cria, executa e
+gera build com Vite. 14.17 configura GitHub Actions com npm ci, lint, typecheck e testes.
+14.18 compara semver, lockfile, npm ci, npm audit e riscos de scripts postinstall. As
+instalações e envios são executados pelo aluno em cópias locais; o site não os executa.

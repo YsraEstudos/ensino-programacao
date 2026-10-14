@@ -1,0 +1,7 @@
+{
+  "name": "untrusted-example",
+  "version": "1.2.3",
+  "scripts": {
+    "postinstall": "node install.js"
+  }
+}

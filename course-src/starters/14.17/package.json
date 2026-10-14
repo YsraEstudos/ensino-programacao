@@ -1,0 +1,11 @@
+{
+  "name": "devpath-14-17",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "node scripts/gate.mjs lint",
+    "typecheck": "node scripts/gate.mjs typecheck",
+    "test": "node --test"
+  }
+}

@@ -1568,6 +1568,58 @@
       "13.03"
     ],
     "graphNote": "This change request is prepared by the earlier 04.01 return/boundary and 13.03 behavior-evidence providers; its authored three-step ladder in course-src/recipes/23.py covers actor authorization, operation boundaries, and atomic audit failure. The capstone and observability cards remain non-mandatory context so this focused change can be practiced independently."
+  },
+  "07.11": {
+    "requires": [
+      "04.01"
+    ]
+  },
+  "07.12": {
+    "requires": [
+      "07.11"
+    ]
+  },
+  "12.15": {
+    "requires": [
+      "04.01",
+      "12.01"
+    ]
+  },
+  "12.16": {
+    "requires": [
+      "12.08"
+    ]
+  },
+  "14.14": {
+    "requires": [
+      "04.01",
+      "14.04"
+    ]
+  },
+  "14.15": {
+    "requires": [
+      "14.03"
+    ]
+  },
+  "14.16": {
+    "requires": [
+      "14.03",
+      "14.12"
+    ]
+  },
+  "14.17": {
+    "requires": [
+      "14.15"
+    ]
+  },
+  "14.18": {
+    "requires": [
+      "14.03"
+    ]
+  },
+  "21.12": {
+    "requires": [
+      "21.03"
+    ]
   }
 }
-

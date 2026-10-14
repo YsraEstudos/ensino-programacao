@@ -55,3 +55,8 @@ por escrito uma sessao de debugging (hipotese, evidencia, causa, correcao) e o p
 resistir a uma pequena mudanca de requisito. O site nao verifica esses itens: a conclusao e
 revisao propria, com testes rodados no seu computador quando o cartao pedir. Erros de
 acessibilidade/async que quebram o contrato bloqueiam o gate.
+
+FERRAMENTAS LOCAIS
+12.15 leva a suíte para fora da plataforma: instale Vitest no projeto, rode uma vez e observe
+watch mode. 12.16 usa uma fixture HTTP local para investigar status, timing e CORS na aba
+Network; capture o cenário no próprio navegador e rotule a conclusão como evidência declarada.

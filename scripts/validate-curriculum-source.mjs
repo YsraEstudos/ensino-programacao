@@ -4,9 +4,11 @@ import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 import { fileURLToPath } from "node:url";
+import { localAssessmentCommandIssues } from "./local-assessment-validation.mjs";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SOURCE = path.resolve(SCRIPT_DIR, "../course-src/.generated/resolved_preview.json");
+const DEFAULT_ASSESSMENTS = path.resolve(SCRIPT_DIR, "../course-src/assessments.json");
 const TIMEOUT_MS = 1_000;
 const ALLOWED_STATUSES = new Set(["DRAFT", "NEEDS_CONTRACT", "CONTRACT_READY", "IMPLEMENTED", "REVIEW", "READY", "RETIRED"]);
 const EXTENSION_APIS = [
@@ -511,8 +513,12 @@ async function run() {
   const graphPath = path.join(path.dirname(sourcePath), "concept_graph.json");
   const cards = loadJson(sourcePath, "curriculum source");
   const graph = loadJson(graphPath, "concept graph");
+  const assessments = loadJson(path.resolve(process.env.DEVPATH_ASSESSMENTS_SOURCE || DEFAULT_ASSESSMENTS), "assessment source");
   if (!Array.isArray(cards)) throw new Error("Curriculum source must be a JSON array.");
   const findings = [];
+  for (const issue of localAssessmentCommandIssues(assessments)) {
+    addFinding(findings, "READY", issue.id, issue.code, issue.message, {alwaysFatal: true});
+  }
   await validateGraph(cards, graph, findings);
   const counts = findings.reduce((result, finding) => {
     result[finding.severity] = (result[finding.severity] || 0) + 1;

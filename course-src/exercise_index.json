@@ -1702,5 +1702,95 @@
     "origin": "second_edition",
     "audit_ids": [],
     "prompt": "Construir aplicação ou biblioteca de porte médio com JS/TS, API interna tipada, persistência substituível, testes e documentação."
+  },
+  {
+    "id": "07.11",
+    "title": "Primeiro histórico Git local",
+    "stage": "07",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Inicializar um repositório local e registrar uma mudança revisável."
+  },
+  {
+    "id": "07.12",
+    "title": "Revisão de PR e resposta a comentários",
+    "stage": "07",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Identificar defeitos em diff, priorizar comentários e responder a uma revisão recebida."
+  },
+  {
+    "id": "12.15",
+    "title": "Vitest no projeto local",
+    "stage": "12",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Instalar Vitest, executar a suíte e observar o modo watch."
+  },
+  {
+    "id": "12.16",
+    "title": "DevTools Network: status, timing e CORS",
+    "stage": "12",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Investigar respostas HTTP, tempo e política CORS no navegador."
+  },
+  {
+    "id": "14.14",
+    "title": "Projeto TypeScript local",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Configurar tsc, erasableSyntaxOnly e escolher Node, tsx ou bundler."
+  },
+  {
+    "id": "14.15",
+    "title": "ESLint flat config e Prettier",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Corrigir uma regra de lint e separar lint de formatação."
+  },
+  {
+    "id": "14.16",
+    "title": "Vite: servidor e build",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Criar, executar e gerar um build com Vite."
+  },
+  {
+    "id": "14.17",
+    "title": "CI mínima com GitHub Actions",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Executar lint, typecheck e testes em push e pull request."
+  },
+  {
+    "id": "14.18",
+    "title": "Semver, npm ci e risco de dependências",
+    "stage": "14",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Interpretar ranges, lockfile, audit e scripts de instalação."
+  },
+  {
+    "id": "21.12",
+    "title": "DevTools Performance: gravação e hipótese",
+    "stage": "21",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Medir uma interação repetível antes de propor uma otimização."
   }
 ]

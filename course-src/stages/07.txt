@@ -44,3 +44,11 @@ automaticos (a plataforma roda os testes no navegador e mostra quais falham e po
 conseguir explicar mutacao/estado/controle relevante. Refatoracao, leitura e analise escrita
 seguem com revisao propria, pela rubrica. Os testes cobrem os exemplos e os casos de borda
 publicados no cartao; nao sao secretos. Uma dica estrutural e permitida apenas no projeto.
+
+FERRAMENTAS LOCAIS E COLABORACAO
+No fim da etapa, 07.11 inicia um repositório Git dentro da cópia exportada e pratica status,
+add, commit, diff e log. O commit fica local até um push explícito. 07.12 apresenta um PR
+simulado: identifique de 3 a 5 problemas, priorize comentários com evidência e responda a
+sugestões recebidas com justificativa. A verificação automática confere apenas a estrutura;
+a qualidade da revisão e as decisões são evidência declarada pelo aluno. Projetos posteriores
+repetem commits e revisão; a partir da etapa 11 entram branches, merge, conflitos e PR.

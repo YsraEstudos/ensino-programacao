@@ -17,8 +17,9 @@ const publishedTests = JSON.parse(readFileSync(join(root, 'public/course-tests.j
 const baselineCatalog = JSON.parse(readFileSync(join(root, 'output/fase2/catalog-before.json'), 'utf8'));
 const task2Report = readFileSync(join(root, 'output/fase2/task2-report.md'), 'utf8');
 const requestedActivity = process.env.DEVPATH_TASK8_ACTIVITY;
+const phase2ActivityIds = new Set(baselineCatalog.map(item => item.id));
 const target = catalog.filter(item => ['11', '12', '13', '14'].includes(item.stage)
-  && (!requestedActivity || item.id === requestedActivity));
+  && (requestedActivity ? item.id === requestedActivity : phase2ActivityIds.has(item.id)));
 const observationalStarterPassKinds = new Map([
   ['11.01', 'TRACE'], ['11.11', 'COMPARE'], ['11.14', 'COMPARE'],
   ['12.11', 'INVESTIGATE'], ['12.14', 'PREDICT'],

@@ -24409,5 +24409,252 @@
     ],
     "evidenceLabel": "rubric-declared",
     "evidenceNote": "Leitura e execução do artefato apoiam a análise; a avaliação depende destes critérios humanos e não recebe nota automática."
+  },
+  "07.11": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/07.11",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "saída de npm test",
+        "git status limpo",
+        "git log com os dois commits",
+        "git diff revisado"
+      ]
+    }
+  },
+  "07.12": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/07.12",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "3–5 comentários priorizados com evidência e sugestão",
+        "decisão e justificativa para cada comentário recebido",
+        "saída do teste estrutural",
+        "diff autoral revisado"
+      ]
+    }
+  },
+  "12.15": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/12.15",
+    "local": {
+      "commands": [
+        [
+          "node",
+          "scripts/verify-vitest.mjs"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "resultado de npm test depois da instalação de Vitest",
+        "watch mode reagindo a uma mudança e encerrado no terminal",
+        "scripts e devDependency declarados",
+        "evidência de execução local declarada pelo aluno"
+      ]
+    }
+  },
+  "12.16": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/12.16",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "npm test",
+        "Network status e timing de 200/404",
+        "erro CORS observado e explicado",
+        "captura do navegador declarada pelo aluno"
+      ]
+    }
+  },
+  "14.14": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/14.14",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        [
+          "node",
+          "src/index.ts"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "npm test",
+        "npm run typecheck",
+        "saída de node src/index.ts",
+        "comparação explicada entre Node, tsc, tsx e bundler"
+      ]
+    }
+  },
+  "14.15": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/14.15",
+    "local": {
+      "commands": [
+        [
+          "node",
+          "scripts/verify-tooling.mjs"
+        ],
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "regra de lint escolhida e causa corrigida",
+        "npm run lint",
+        "npm run format:check",
+        "diferença entre lint e formatação explicada"
+      ]
+    }
+  },
+  "14.16": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/14.16",
+    "local": {
+      "commands": [
+        [
+          "node",
+          "scripts/verify-vite.mjs"
+        ],
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "npm run dev e URL local",
+        "página abriu no navegador",
+        "npm run build e arquivos em dist/",
+        "diferença entre servidor e artefato explicada"
+      ]
+    }
+  },
+  "14.17": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/14.17",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "saída dos três gates locais",
+        "workflow com node 24 e npm ci",
+        "CI verde após push/PR quando executada no GitHub",
+        "limite da evidência registrado"
+      ]
+    }
+  },
+  "14.18": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/14.18",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "comparação escrita de ^, ~ e major",
+        "npm ci e npm audit observados",
+        "lockfile revisado",
+        "postinstall analisado como dado sem executá-lo"
+      ]
+    }
+  },
+  "21.12": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "referenceDir": "solutions/21.12",
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "test"
+        ]
+      ],
+      "evidenceLabel": "learner-declared",
+      "evidence": [
+        "npm test",
+        "gravação Performance com cenário repetível",
+        "marks e trabalho de layout interpretados",
+        "hipótese e limites da medida declarados"
+      ]
+    }
   }
 }

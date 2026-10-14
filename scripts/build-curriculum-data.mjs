@@ -10,6 +10,7 @@ const steps = [
   [python, ['course-src/build_graph.py']],
   [python, ['course-src/build_coverage.py']],
   [process.execPath, ['course-src/build-public-curriculum.mjs']],
+  [process.execPath, ['scripts/build-local-checkpoints.mjs']],
 ];
 
 for (const [command, args] of steps) {

@@ -1,0 +1,1 @@
+document.querySelector('#run').addEventListener('click', () => { performance.mark('scenario:start'); let value = 0; for (let index = 0; index < 2_000_000; index += 1) value += index % 7; performance.mark('scenario:end'); performance.measure('scenario:work', 'scenario:start', 'scenario:end'); document.querySelector('#result').textContent = `valor=${value}`; });

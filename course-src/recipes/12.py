@@ -589,6 +589,50 @@ CONTENT = {
          ),
 }
 
+CONTENT["12.15"] = C(
+    "tooling.vitest_local",
+    "package.json: instale Vitest como dependência de desenvolvimento, rode a suíte e abra watch mode.",
+    "npm test -> suíte Vitest aprovada; npm run test:watch -> processo interativo observa mudanças; npm ci reproduz o lockfile",
+    "teste quebrado -> comando retorna falha; lockfile ausente -> npm ci não reproduz; watch não deve ser confundido com uma execução única em CI",
+    "Achar que os testes executados no site já instalaram ou configuraram Vitest no computador do aluno.",
+    ("Crie um projeto npm e mantenha o lockfile junto do package.json.", "Instale Vitest como devDependency e declare scripts test e test:watch.", "Rode uma vez e observe o modo watch; feche-o pelo terminal."),
+    "O starter mostra a estrutura e o script de verificação sem instalar pacotes. No projeto exportado, execute npm init -y, npm install -D vitest, configure test e test:watch, rode npm test e observe watch até encerrar com Ctrl+C. A instalação é uma ação explícita do aluno, fora do verificador automático.",
+    "função local -> suíte Vitest repetível com execução única e modo watch observado.",
+    kind="PROJECT", title="Instale e rode Vitest localmente", runtime="Node.js 24 LTS",
+    compatibility="O exemplo requer Node.js 24 LTS e uma versão compatível de Vitest instalada no projeto do aluno; o verificador estrutural não instala dependências.",
+    estimated=40,
+    first_response="Anote o que o site executou para você e o que ainda falta instalar no seu projeto.", first_response_timing="Antes de alterar package.json.",
+    interaction="Projeto exportável com package.json, teste de exemplo e terminal local para instalação, execução e modo watch.",
+    transfer_prompt="Configure Vitest numa função própria, rode a suíte e observe watch; explique como o lockfile deixa a instalação reproduzível.",
+    explanation={"mental_model": "Vitest é um runner do projeto local: package scripts declaram execução única e watch, enquanto dependência e lockfile registram a instalação.", "worked_example": "Instale Vitest em devDependencies, escreva um teste importando função local, rode a suíte uma vez e observe nova execução depois de editar o teste.", "common_trap": "O executor do curso não instala o pacote no computador do aluno nem cria scripts do projeto.", "why_it_matters": "Reproduzir testes fora da plataforma ajuda a validar alterações no próprio fluxo de desenvolvimento."},
+    review={"prompt": "O que muda entre vitest run e vitest?", "choices": ("Um roda uma vez e o outro observa mudanças em desenvolvimento", "Ambos instalam Vitest", "Watch mode substitui package-lock"), "answer": "Um roda uma vez e o outro observa mudanças em desenvolvimento", "feedback_correct": "Scripts separados deixam explícitos execução única e modo interativo.", "feedback_incorrect": "Os comandos executam o runner; instalação e lockfile são etapas distintas."},
+    prompt="Configure Vitest no projeto exportado: inicialize npm, instale Vitest como dependência de desenvolvimento, rode a suíte com npm test e depois observe o watch mode até pará-lo no terminal.",
+    resources=("Vitest Getting Started: https://vitest.dev/guide/", "Vitest CLI e watch mode: https://vitest.dev/guide/cli"),
+    rubric=("package.json declara Vitest em devDependencies, scripts de teste e type module coerente.", "npm test executa a suíte e a saída observada é registrada.", "Watch mode reage a uma mudança e é encerrado pelo terminal.", "A evidência de execução local é identificada como declarada pelo aluno."),
+)
+
+CONTENT["12.16"] = C(
+    "devtools.network_panel",
+    "src/server.mjs e src/app.js: abra a página local, gere respostas 200/404 e compare status, timing e CORS na aba Network.",
+    "GET /api/items -> 200 JSON; GET /api/missing -> 404; requisição cross-origin sem permissão -> bloqueio CORS visível no Console/Network",
+    "404 -> status não informa duração; falha CORS -> política do navegador, não prova que o servidor esteve indisponível; timing inclui etapas distintas",
+    "Concluir que toda resposta 404 ou falha CORS é defeito de conexão, sem separar status, política e tempo.",
+    ("Inicie o servidor e registre a URL de origem.", "Na aba Network, habilite Preserve log e compare status e duração.", "Use a requisição CORS preparada e separe console, resposta do servidor e política do navegador."),
+    "O projeto local expõe fixture determinística sem rede externa. Execute npm test para validar respostas e cabeçalhos; depois abra a página servida e investigue cada solicitação na aba Network. O verificador não automatiza DevTools: a captura e a explicação são evidência declarada.",
+    "tela lenta -> hipótese separada por Network status, timing e política de origem.",
+    kind="PROJECT", title="Investigue requisições na aba Network", runtime="browser",
+    compatibility="A fixture usa HTTP local e APIs de fetch disponíveis em navegadores evergreen; CORS é observado no navegador e não é simulado pelo teste Node.",
+    estimated=35,
+    first_response="Registre uma hipótese: a demora vem de rede, status ou execução no cliente?", first_response_timing="Antes de abrir Network.",
+    interaction="Página local com botões nomeados para gerar requests 200, 404 e CORS; resultado textual acessível e captura manual em DevTools.",
+    transfer_prompt="Investigue uma API diferente usando status, timing e cabeçalhos; registre origem, hipótese e limites da observação.",
+    explanation={"mental_model": "Network separa requests, status, cabeçalhos e etapas de tempo; CORS é uma decisão do navegador baseada na política de origem.", "worked_example": "Compare uma resposta 200 JSON com um 404 e uma chamada de outra origem; olhe status, timing e mensagem CORS em lugares diferentes.", "common_trap": "A aba não converte status HTTP em latência e CORS não demonstra que o servidor caiu.", "why_it_matters": "Investigar a camada certa reduz mudanças aleatórias em clientes, servidores e configurações de origem."},
+    review={"prompt": "O que uma mensagem CORS permite concluir?", "choices": ("O navegador bloqueou acesso por política de origem", "O servidor necessariamente está offline", "A resposta demorou demais"), "answer": "O navegador bloqueou acesso por política de origem", "feedback_correct": "CORS descreve a política de acesso entre origens observada pelo navegador.", "feedback_incorrect": "CORS não prova indisponibilidade nem mede latência."},
+    prompt="Inicie o servidor local, abra a aba Network e registre status, duração e cabeçalhos das respostas 200 e 404. Acione a fixture cross-origin e explique o erro CORS como política do navegador, com evidência observada.",
+    resources=("Chrome DevTools, Network panel: https://developer.chrome.com/docs/devtools/network/", "MDN, CORS: https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS"),
+    rubric=("Registra status e duração como observações diferentes para as requisições de fixture.", "Explica quais etapas de timing foram observadas sem inferir causalidade de uma medida isolada.", "Distingue resposta HTTP de bloqueio CORS e identifica a origem de cada mensagem.", "Captura e conclusões são rotuladas como evidência declarada do navegador local."),
+)
+
 
 _LITERAL_STARTERS = {
     '12.01': "main.js: console.log('A');\nsetTimeout(() => console.log('T'), 0);\nPromise.resolve().then(() => console.log('P'));\nconsole.log('B');",

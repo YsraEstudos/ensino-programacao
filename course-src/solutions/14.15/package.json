@@ -1,0 +1,15 @@
+{
+  "name": "devpath-14-15",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint src",
+    "format:check": "prettier --check src",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}

@@ -1,4 +1,4 @@
-from recipe_api import E
+from recipe_api import C, E
 
 CONTENT = {
     "07.01": E(
@@ -493,3 +493,47 @@ CONTENT = {
         load={"novelty": 3, "syntax": 3, "composition": 4, "state": 3, "debugging": 3, "files": 2, "reading": 3, "independence": 3, "tools": 2},
     ),
 }
+
+CONTENT["07.11"] = C(
+    "git.first_repository",
+    "README.md: registre as metas do inventario e inicialize o historico Git deste projeto exportado.",
+    "cópia limpa -> git init; primeiro commit contém README, package, src e test; segundo commit registra mudança pequena com diff revisado",
+    "git status após commits -> árvore limpa; git log mostra ambos; git diff --check não encontra whitespace; arquivo original do repositório não é incluído",
+    "Achar que git add ou commit envia mudanças para um servidor remoto.",
+    ("Extraia primeiro o ZIP para uma pasta própria e confirme o diretório atual.", "Use status e diff para inspecionar o que será guardado.", "Um commit registra o snapshot local; log mostra a sequência."),
+    "Na cópia exportada, inicialize repositório, faça commit inicial, altere README, revise diff, crie segundo commit e confira status/log. O Git não publica nada sozinho.",
+    "README revisado -> dois commits locais pequenos e recuperáveis no log.",
+    kind="PROJECT", title="Crie o primeiro histórico Git", runtime="Node.js 24 LTS",
+    compatibility="O projeto usa APIs JavaScript padrão do Node.js 24 LTS; Git é executado manualmente pelo aluno em uma cópia local.",
+    estimated=35,
+    first_response="Escreva os três comandos Git que espera usar antes de abrir o terminal.", first_response_timing="Antes do primeiro comando Git.",
+    interaction="Projeto exportável com arquivos legíveis e terminal local; os comandos Git são copiados/seguidos pelo aluno e não são executados pelo site.",
+    transfer_prompt="Inicie um segundo repositório local para outra pequena ferramenta; entregue uma sequência equivalente de commits e explique o que permanece apenas no computador.",
+    explanation={"mental_model": "Git registra snapshots locais e compara mudanças; cada commit tem identidade e mensagem, mas não publica no remoto.", "worked_example": "Inicialize o repositório na cópia exportada, verifique status, adicione arquivos selecionados, faça um commit, altere uma linha, examine diff e registre novo snapshot.", "common_trap": "Adicionar tudo sem revisar pode incluir arquivos alheios; confundir commit com push apaga a fronteira entre histórico local e publicação.", "why_it_matters": "Histórico pequeno e legível facilita recuperar decisões e revisar mudanças sem alterar o projeto original."},
+    review={"prompt": "O que um commit confirma?", "choices": ("Um snapshot local do histórico", "Publicação automática do código", "Instalação de dependências"), "answer": "Um snapshot local do histórico", "feedback_correct": "Commit grava um snapshot no repositório local; publicar exige ação remota separada.", "feedback_incorrect": "Commit grava um snapshot local; inspecte log e status para observar o limite."},
+    prompt="No fim desta atividade, inicie um repositório Git dentro da cópia exportada, faça o primeiro commit, altere o README e faça um segundo commit. Use status, diff, log e explique por que commit não significa publicar.",
+    resources=("Git documentation: https://git-scm.com/docs/gittutorial", "GitHub Docs sobre commits: https://docs.github.com/en/get-started/using-git/about-git"),
+    rubric=("O repositório Git é inicializado dentro da cópia exportada e o primeiro status é explicado.", "O primeiro commit inclui somente arquivos do projeto e recebe uma mensagem descritiva.", "Uma mudança pequena é inspecionada com git diff e registrada em segundo commit.", "git log e git status são usados para confirmar histórico e árvore limpa; a evidência é declarada pelo aluno."),
+)
+
+CONTENT["07.12"] = C(
+    "review.pull_request_basics",
+    "review/PR.md: leia a mudança proposta e escreva 3 a 5 comentários com prioridade, evidência e sugestão.",
+    "review completo -> 4 achados priorizados; duas sugestões recebidas -> uma aceita e uma rejeitada, ambas com justificativa",
+    "0, 2 ou 6 achados -> fora do contrato; comentário sem evidência ou prioridade -> incompleto; sugestão rejeitada sem razão -> incompleto",
+    "Tratar revisão como preferência pessoal, aprovação automática ou lista sem evidência reproduzível.",
+    ("Leia o diff completo antes de comentar.", "Anote linha, impacto e reprodução; ordene por prioridade.", "Para cada sugestão recebida, aceite ou rejeite e explique o efeito no contrato."),
+    "Revise o PR simulado com quatro defeitos, registre entre três e cinco comentários P0–P3 com evidência e sugestão, depois responda às duas observações recebidas com decisão e justificativa. A checagem automática verifica somente estrutura e contagem, não a qualidade semântica.",
+    "diff de inventário -> comentários priorizados com evidência e respostas justificadas a uma revisão recebida.",
+    kind="PROJECT", title="Revise um PR e responda à revisão", runtime="Node.js 24 LTS",
+    compatibility="Os testes usam node:test no Node.js 24 LTS; revisão semântica exige leitura humana do diff e os comentários são evidência declarada.",
+    estimated=50,
+    first_response="Registre qual problema do PR parece mais importante e por qual evidência.", first_response_timing="Antes de consultar a rubrica.",
+    interaction="Diff e templates Markdown editáveis, com teste estrutural local; resposta pode ser escrita por teclado e não depende de cor.",
+    transfer_prompt="Revise um diff curto de outra funcionalidade, escreva até cinco comentários priorizados e responda a duas sugestões sem tratá-las como ordens automáticas.",
+    explanation={"mental_model": "Revisão conecta uma afirmação de código a uma linha, um impacto e uma evidência reproduzível; a decisão final continua humana.", "worked_example": "Uma revisão comenta truncamento de centavos com exemplo concreto, prioriza impacto no resultado e propõe representação de dinheiro explícita.", "common_trap": "Preferência de estilo sem efeito observável não é defeito; comentário sem localização ou justificativa é difícil de agir.", "why_it_matters": "Revisar e responder com contexto melhora qualidade técnica e colaboração sem transformar sugestões em comandos cegos."},
+    review={"prompt": "Que estrutura torna um comentário de revisão acionável?", "choices": ("Localização, impacto, evidência e sugestão priorizada", "Preferência pessoal sem exemplo", "Aprovação sem leitura do diff"), "answer": "Localização, impacto, evidência e sugestão priorizada", "feedback_correct": "A pessoa autora consegue localizar, reproduzir e avaliar o comentário.", "feedback_incorrect": "Comentários acionáveis precisam apontar evidência e impacto no contrato."},
+    prompt="Leia o PR simulado, identifique de 3 a 5 problemas reais e escreva comentários priorizados com evidência. Depois decida, com justificativa, se aceita ou rejeita cada comentário recebido no próprio projeto.",
+    resources=("GitHub Docs, About pull requests: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests", "GitHub Docs, reviewing proposed changes: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests"),
+    rubric=("A revisão contém de 3 a 5 comentários com prioridade, localização, impacto, evidência e sugestão.", "Comentários tratam de defeitos verificáveis, não de gosto pessoal; bloqueadores precedem refinamentos.", "Cada sugestão recebida tem decisão aceita/rejeitada e justificativa ligada ao contrato.", "O relatório declara que a validação automática mede estrutura, enquanto a qualidade depende da revisão humana."),
+)

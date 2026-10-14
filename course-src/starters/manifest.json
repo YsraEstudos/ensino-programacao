@@ -1188,5 +1188,114 @@
     "files": [
       "ordem-browser.js"
     ]
+  },
+  "07.11": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "src/inventory.js",
+      "test/inventory.test.js"
+    ]
+  },
+  "07.12": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "review/PR.md",
+      "review/my-review.md",
+      "review/decisions.md",
+      "test/review.test.js"
+    ]
+  },
+  "12.15": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "src/soma.js",
+      "test/soma.test.js",
+      "scripts/verify-vitest.mjs"
+    ]
+  },
+  "12.16": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "index.html",
+      "src/app.js",
+      "src/server.mjs",
+      "test/network.test.js"
+    ]
+  },
+  "14.14": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "package-lock.json",
+      "tsconfig.json",
+      "src/index.ts",
+      "test/index.test.mjs"
+    ]
+  },
+  "14.15": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "eslint.config.js",
+      ".prettierrc.json",
+      "src/index.js",
+      "scripts/verify-tooling.mjs",
+      "test/tooling.test.js"
+    ]
+  },
+  "14.16": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "index.html",
+      "src/main.js",
+      "src/mensagem.js",
+      "vite.config.js",
+      "scripts/verify-vite.mjs",
+      "test/vite.test.js"
+    ]
+  },
+  "14.17": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "package-lock.json",
+      ".github/workflows/ci.yml",
+      "scripts/gate.mjs",
+      "test/ci.test.js"
+    ]
+  },
+  "14.18": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "package-lock.json",
+      "samples/package-with-postinstall.json",
+      "test/dependency-policy.test.js"
+    ]
+  },
+  "21.12": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "package.json",
+      "index.html",
+      "src/app.js",
+      "src/server.mjs",
+      "test/performance.test.js"
+    ]
   }
 }

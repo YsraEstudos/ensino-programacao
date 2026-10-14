@@ -215,7 +215,7 @@ test('exported JavaScript project runs in a clean contained temp directory with 
 });
 
 test('prepared TypeScript checkpoint locks are internally coherent and label the course proxy', async () => {
-  const definitions = JSON.parse(await readFile(new URL('../output/learning-execution/task-12-checkpoints.json', import.meta.url), 'utf8'));
+const definitions = JSON.parse(await readFile(new URL('../course-src/local-checkpoints.json', import.meta.url), 'utf8'));
   const commonFiles = [
     {path: 'src/paginacao.ts', content: 'export const paginaAtual = (pagina: number): number => pagina;\n'},
     {path: 'test/paginacao.test.js', content: 'export {};\n'},
@@ -437,7 +437,7 @@ test('grader-only assessment fields never leave the exported assessment', () => 
 });
 
 test('the checkpoint mirror matches the source checkpoint definitions exactly', async () => {
-  const source = JSON.parse(await readFile(new URL('../output/learning-execution/task-12-checkpoints.json', import.meta.url), 'utf8'));
+  const source = JSON.parse(await readFile(new URL('../course-src/local-checkpoints.json', import.meta.url), 'utf8'));
   assert.deepEqual(JSON.parse(JSON.stringify(checkpoints.targets)), source.targets);
 });
 
