@@ -65,7 +65,8 @@
   },
   "00.05": {
     "requires": [
-      "00.01"
+      "00.01",
+      "00.04"
     ],
     "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
   },
@@ -78,7 +79,8 @@
   },
   "00.08": {
     "requires": [
-      "00.01"
+      "00.01",
+      "00.05"
     ],
     "hintExemption": "Authored source: course-src/stage00-preparation.mjs and the dedicated Stage 00 renderer; generic hints are intentionally suppressed."
   },

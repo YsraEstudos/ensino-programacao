@@ -6,7 +6,7 @@ Estas aulas curtas entram no site antes das atividades indicadas. Em cada ponte,
 
 JavaScript é a linguagem. Navegador e Node.js são ambientes que executam JavaScript e oferecem APIs diferentes. `console.log('A'); console.log(2 + 3); console.log('B')` produz A, 5, B nesta ordem: cada chamada é síncrona e o programa passa à próxima instrução depois que a anterior termina. O console é saída observável, não o próprio código. Um `SyntaxError` impede analisar o programa; um erro em execução surge depois que o programa começou; uma saída incorreta pode ocorrer sem exceção. No primeiro contato, leia a mensagem, a linha e a menor expressão que a explica antes de tentar uma alteração. A microponte HTML da etapa 00 apresenta elemento, atributo, hierarquia, `id`, `class`, `input`, `button`, `form` e `label`, somente como pré-requisito explícito para a etapa 11.
 
-Este site usa Node.js em modo ES Module para carregar os arquivos dos exercícios. Nas fichas iniciais, `export function nome(...)` apenas identifica a função que o executor chama; o aluno prevê e altera o corpo da função, sem configurar imports ou `package.json`. A organização de vários módulos, imports, exports e configuração de projeto é ensinada formalmente na etapa 14.
+Nesta etapa, o site executa o arquivo principal do exercício (normalmente `main.js`) e mostra na área de saída as mensagens que cada `console.log` pedir. Você não precisa configurar nada: cada exercício mostra os arquivos de que precisa e os executa um de cada vez, sem configuração de projeto. Como organizar um programa em vários arquivos será estudado com calma em etapas posteriores.
 
 ## Ponte 01 — Valores, bindings e reatribuição
 

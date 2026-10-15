@@ -547,7 +547,7 @@
       }
     },
     {
-      "variantId": "var.00.09.escolha-total-const",
+      "variantId": "var.00.09.escolha-troca-zero",
       "conceptId": "execution.explain_program",
       "sourceActivityId": "00.09",
       "prerequisites": [
@@ -561,28 +561,28 @@
         "07",
         "11"
       ],
-      "transferDecision": "O programa guarda dois valores em const e os usa em contas e em mensagens. O aluno precisa explicar o que cada const guarda e o que cada chamada calcula, e não apenas reconhecer a sintaxe de const, porque a mesma explicação muda quando os valores mudam.",
+      "transferDecision": "O programa mostra três mensagens com números. O aluno precisa explicar qual chamada muda quando o 3 vira 0 e por que as outras duas continuam iguais, e não apenas repetir a saída anterior.",
       "contentVersion": 1,
-      "prompt": "Antes de executar, explique o que cada const guarda e decida o que cada linha mostra. Verifique qual conta acontece dentro de cada chamada.",
-      "code": "const dias = 3;\nconst diaria = 40;\nconsole.log('Total:', dias * diaria);\nconsole.log('Dias:', dias);\n",
+      "prompt": "Antes de executar, escolha a saída do programa depois de trocar o 3 da primeira chamada por 0, mantendo as três chamadas no arquivo.",
+      "code": "console.log('Dias:', 3);\nconsole.log('Multa:', 40);\nconsole.log('Fim');\n",
       "choices": [
-        "Total: 43 e depois Dias: 3, porque dias + diaria é calculado antes do produto.",
-        "Total: 120 e Dias: 40, porque as duas linhas usam diaria.",
-        "Erro, porque um const só pode ser lido uma vez por programa.",
-        "Total: 120 e Dias: 3, nessa ordem."
+        "Multa: 40 e Fim, porque a linha Dias some.",
+        "Dias: 3, Multa: 0 e Fim, porque o zero passa para a linha seguinte.",
+        "Dias: 0, Multa: 40 e Fim, nessa ordem.",
+        "Erro, porque console.log não aceita o número 0."
       ],
-      "answer": 3,
+      "answer": 2,
       "feedback": {
-        "correct": "dias guarda 3 e diaria guarda 40. A primeira chamada calcula 3 * 40 = 120 antes de mostrar; a segunda mostra o valor de dias, 3.",
+        "correct": "O 0 substitui o 3 dentro da mesma chamada Dias:. As chamadas Multa: e Fim continuam iguais e na mesma ordem.",
         "byChoice": {
-          "0": "A conta da primeira chamada é multiplicação: dias * diaria dá 120, não a soma 43.",
-          "1": "A segunda chamada mostra dias, que vale 3, não diaria.",
-          "2": "Ler um const várias vezes é normal. const só impede trocar o valor do nome, não de lê-lo."
+          "0": "A linha Dias não some: a chamada continua no arquivo e só o número muda.",
+          "1": "O zero não passa para outra linha; ele é o novo valor da chamada Dias:.",
+          "3": "console.log aceita números, inclusive zero. Escrever 0 sem aspas é um número."
         }
       }
     },
     {
-      "variantId": "var.00.09.predicao-recibo-const",
+      "variantId": "var.00.09.predicao-zero-itens",
       "conceptId": "execution.explain_program",
       "sourceActivityId": "00.09",
       "prerequisites": [
@@ -596,11 +596,11 @@
         "07",
         "11"
       ],
-      "transferDecision": "Os mesmos dois const aparecem em três mensagens com contas diferentes, e uma delas soma os valores em vez de multiplicá-los. O aluno precisa explicar cada linha a partir dos valores guardados, o que é diferente de repetir o padrão de declarar e mostrar.",
+      "transferDecision": "A chamada da quantidade aparece com o número 0 e o aluno precisa ver que o rótulo continua na saída. O erro comum é achar que zerar a quantidade exige apagar a linha.",
       "contentVersion": 1,
-      "prompt": "Preveja as três linhas antes de executar. Explique para cada chamada qual valor de const ela usa e qual conta é feita, antes de confirmar pela execução.",
-      "code": "const preco = 25;\nconst quantidade = 4;\nconsole.log('Subtotal:', preco * quantidade);\nconsole.log('Itens:', quantidade, 'de', preco);\nconsole.log(preco + quantidade);\n",
-      "expectedOutput": "Subtotal: 100\nItens: 4 de 25\n29"
+      "prompt": "Preveja as três linhas antes de executar. Explique por que a linha Itens: continua aparecendo mesmo com o valor zero.",
+      "code": "console.log('Recibo');\nconsole.log('Itens:', 0);\nconsole.log('Fim');\n",
+      "expectedOutput": "Recibo\nItens: 0\nFim"
     }
   ]
 }

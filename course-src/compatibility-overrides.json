@@ -17,7 +17,7 @@
   "00.06": "Erro de sintaxe com aspas e leitura da mensagem do Node.js 24 LTS; nenhuma API recente.",
   "00.07": "`console.log` com texto e número, no Node.js 24 LTS.",
   "00.08": "HTML5 padrão e árvore de elementos (`label`, `input`, `id`, `class`); leitura sem script, em qualquer navegador evergreen.",
-  "00.09": "`console.log` com variáveis `const` e `let` no Node.js 24 LTS; sem APIs além da saída padrão.",
+  "00.09": "`console.log` com texto entre aspas, números e ordem das chamadas no Node.js 24 LTS; sem APIs além da saída padrão.",
   "02.01": "Operadores aritméticos, de comparação e lógicos (`**`, `===`, `&&`) da linguagem ECMAScript 2026; sem API nova.",
   "02.02": "Operadores `||` e `??` (ES2020) e a lista de valores falsy; verificado no Node.js 24 LTS.",
   "02.03": "Operadores lógicos `&&`, `||`, `!` e comparações estritas; sem API nova.",
