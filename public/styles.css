@@ -181,6 +181,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .course-complete-note, .course-gate-note { padding: 12px 14px; border-radius: 6px; color: #d9e5b2; background: #263326; font-size: 10px; line-height: 1.6; }
 .course-lesson-footer { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
 .course-lesson-footer .button-secondary { max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exercise-next-nav { display: flex; justify-content: flex-end; margin: 16px 0 28px; }
+.exercise-next-nav .button-primary { min-height: 44px; text-decoration: none; }
+.exercise-next-nav .button-primary:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 
 @media (max-width: 1000px) {
   .catalog-tools { grid-template-columns: 1fr 180px; }
@@ -195,6 +198,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .course-lesson-hero, .course-prompt-panel, .course-explanation-panel, .course-practice-panel { padding: 18px; }
   .course-lesson-footer { align-items: stretch; flex-direction: column; }
   .course-lesson-footer .button-secondary { max-width: none; }
+  .exercise-next-nav .button-primary { width: 100%; }
   .course-complete-row { align-items: flex-start; flex-direction: column; }
 }
 .icon-button { width: 31px; height: 31px; border: 0; border-radius: 50%; background: transparent; color: #77796f; cursor: pointer; transition: background .2s, color .2s; }
