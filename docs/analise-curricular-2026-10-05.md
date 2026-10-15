@@ -390,13 +390,39 @@ Criar em `scripts/` (e incluir em `check:curriculum`):
 - Cada tema do núcleo tem uma atividade obrigatória com teste que falha com o starter e passa com a referência.
 - Regex, `reduce` e Promises têm ao menos duas variações executáveis.
 
+**Resultado técnico — 14/10/2026.** Catálogo: 275 → 289 atividades (14 novas: 04.14, 05.12–05.15, 07.13, 09.09, 10.09, 12.17–12.20, 13.15, 21.13; ver tabela). 13 suítes executáveis e 1 rubrica declarada (05.14).
+
+| Item | Resultado verificado | Limite restante |
+|---|---|---|
+| Pré-requisito: validador de conceitos | O validador AST existente (`concept_graph.json`) passou a reprovar, em todos os cartões, conceito usado antes da etapa que o ensina, salvo com primer publicado (`course-src/concept-coverage.json`). 04.01 deixou de ter 2 avisos. | Detecta uso em código, não em prosa; a prosa foi auditada à mão (4.14). A lista de conceitos não foi registrada à mão nas 289 atividades. |
+| 4.1 Regex | 05.12 (grupos nomeados e âncoras), 05.13 (`matchAll`; flags g, i, v), 05.14 (regex × parser). | 05.14 tem rubrica declarada; não há suíte executável. |
+| 4.2 `reduce` | 07.13, antes de 07.06. | — |
+| 4.3 `localeCompare` | Adiado para a fase 15 do plano mestre, em que 07.03 é reescrita (caso João/Joao). | Não executado nesta fase. |
+| 4.4 Promises | 12.17: Promise a partir de callback error-first; a rejeição chega ao `await`. | — |
+| 4.5 Retry seguro | 12.18: backoff com teto, jitter injetável, pool de concorrência e espera injetada. | Os testes não usam tempo real. |
+| 4.6 Erros | 13.15: subclasse com `name` e `cause`; `Error.isError` com fallback declarado. A matriz já registra 24.3.0. | — |
+| 4.7 `URL` | 12.19: `URL` e `URLSearchParams`; o prefixo da base é preservado. | — |
+| 4.8 `Intl` | 05.15 (`Intl.Segmenter`); 12.20 (`PluralRules` e `RelativeTimeFormat`). | A saída de plural depende dos dados ICU; os testes evitam o caso 0. |
+| 4.9 Getters/setters | 10.09: get e set, e `Object.defineProperty`. | — |
+| 4.10 Padrões e rest | 04.14. | — |
+| 4.11 Proxy | 20.04 passa a obrigatória, porque Proxy e Reflect são conceitos nucleares da etapa 20. 20.05 segue opcional. | — |
+| 4.12 Vitest × `node:test` | Não tratado nesta fase: o item cabe à fase 19 do plano mestre e à decisão D3. | — |
+| 4.13 Tagged templates e `EventTarget` | 09.09 e 21.13, ambas opcionais. | — |
+| 4.14 Pré-requisitos abertos | Auditoria: `AbortController` (ensinado em 11.14), `FormData` (11.04), `RegExp.escape` (05.05), `cause` (13.10), `Object.hasOwn` (06.10, com primer; a ocorrência em 06.07 é só link), `Error.isError` (13.15), `import()` e top-level await (14.10). Primers de `import.meta` em 07.12, 12.15 e 12.16, e de `noUncheckedIndexedAccess` em 15.01. | — |
+
+Verificação: `build:curriculum` e `check:curriculum` com 289 cartões, 0 avisos e 0 erros; `test-phase4-curriculum.mjs` com 7/7; `test-phase2-core.mjs` com o limite de 04–10 atualizado de 71 para 79. Suíte completa: `npm test` concluído com saída 0; nenhuma suíte com falha, e 2 testes marcados como pulados (skip).
+
+Não houve verificação no Chromium desta fase: o avaliador foi exercitado pelo replay Node do publicador. As atividades novas não têm mutantes. Não houve commit, push ou deploy.
+
 ---
 
 ### Fase 5: Recursos atuais da linguagem e do runtime
 
 **Por que vem aqui.** Recursos novos só ajudam depois que os fundamentos estão firmes (§8.2, item 7, do diagnóstico original). Cada recurso entra como opcional, a menos que esteja ligado a uma competência do núcleo.
 
-**Pré-requisito da fase.** A matriz `course-src/feature-matrix.json` e o detector de recursos de `scripts/validate-curriculum-source.mjs` não cadastram os recursos abaixo. Antes de cada item, cadastrar o recurso com a versão mínima de Node e de navegador. Quando essa versão estiver acima do piso declarado (M.2), definir *feature detection* e fallback.
+**Escopo e classificação.** 05.11, 06.06, 07.07, 09.06, 12.06/12.08 e 20.10 são atividades obrigatórias. As APIs opcionais desta fase entram em atividades separadas, com IDs novos e pré-requisitos explícitos, depois da prática tradicional correspondente. Notas informativas podem ficar nos cartões existentes, mas não entram no teste nem condicionam sua conclusão. Uma API só passa a obrigatória com justificativa registrada de competência do núcleo e atualização explícita do contrato e da avaliação. Não reclassificar uma atividade obrigatória inteira como opcional para acomodar uma extensão.
+
+**Pré-requisito da fase.** Conferir e completar os cadastros da matriz `course-src/feature-matrix.json`, a detecção por `match` usada em `scripts/learning-metadata.mjs` e o detector de extensões de `scripts/validate-curriculum-source.mjs`. Os recursos abaixo ainda precisam de cadastro na matriz; `DisposableStack` já é reconhecido pelo detector de extensões, portanto não duplicar esse reconhecimento. Registrar suporte mínimo e fonte oficial por ambiente aplicável; para APIs exclusivas de Node, marcar navegador como **não aplicável**. Para recursos de navegador, registrar a disponibilidade entre os navegadores-alvo, sem tratar uma versão de Chrome como prova de Baseline. Quando o recurso não existir no piso declarado (M.2) ou no navegador-alvo, definir e testar *feature detection* e fallback.
 
 - `#campo in obj`;
 - `import.meta.dirname`/`filename`;
@@ -405,20 +431,52 @@ Criar em `scripts/` (e incluir em `check:curriculum`):
 - `require(esm)`;
 - `DisposableStack` e `SuppressedError`.
 
+O contexto de origem do reviver precisa de cadastro e detecção próprios: a entrada de `JSON.rawJSON` não comprova o suporte ao argumento `context.source` de `JSON.parse`. O validador atual da matriz aceita palavras como `fallback`, `compat` e `opcional` no campo de compatibilidade; isso é uma verificação editorial, não evidência de que o fallback funciona. A fase deve acrescentar testes que exercitem o caminho nativo e o caminho sem o recurso. Para sintaxe que o ambiente não consegue analisar, como `using`, separar os arquivos/perfis de execução; um `if` dentro do mesmo arquivo não evita um erro de parse.
+
 | # | Etapa | O que corrigir | Benefício para o aluno |
 |---|---|---|---|
-| 5.1 | 02.11/02.12 | Nota sobre `Math.sumPrecise` (ES2026, ainda sem suporte no Node 24/26), deixando claro que não resolve dinheiro. | O aluno não acha que um recurso novo resolve aritmética monetária. |
-| 5.2 | 05 | `String.prototype.isWellFormed`/`toWellFormed` (ES2024) em 05.11. | Ensina a detectar texto corrompido antes de enviá-lo a APIs. |
-| 5.3 | 06 e 13 | `JSON.rawJSON` e o contexto de origem do reviver (ES2026) em 06.06, se o runtime suportar. `Error.isError` vai para a unidade de erros (1.1) ou para a 13 (4.6). A matriz exige Node 24.3.0 para ele e marca "fallback required on Node 24". | O aluno aprende cada recurso no assunto a que ele pertence. |
-| 5.4 | 07.07 e 09.06/09.07 | `Map.prototype.getOrInsert`/`getOrInsertComputed` (ES2026) depois da versão com `has/get/set`, com *feature detection*. | Mostra a evolução da linguagem a partir de um padrão que o aluno já escreveu à mão. |
-| 5.5 | 10 | Verificação de marca com `#campo in obj` (ES2022), junto com campos privados. | Forma segura de checar a origem de um objeto. |
-| 5.6 | 12 | `Promise.withResolvers`, `AbortSignal.timeout` e `AbortSignal.any` em 12.06/12.08. Os três estão na matriz, mas nenhum aparece nos cartões. | Cancelamento e timeout com as APIs atuais. |
-| 5.7 | 14 | 14.05 com `import.meta.dirname`/`filename`; 14.06 com `--env-file`/`process.loadEnvFile`; 14.03 com `node --run`; 14.04 com `require(esm)`. | O aluno usa o Node como ele é em 2026. |
-| 5.8 | 20 | Iterator helpers (20.06): tornar obrigatório só se pipelines lazy fizerem parte do núcleo da etapa 20. `toBase64`/`fromBase64`/`toHex` (ES2026) em 20.10, como opcional. | O aluno pratica o que vai usar, sem obrigações justificadas só pela disponibilidade. |
+| 5.1 | 02.11/02.12 | Nota informativa sobre `Math.sumPrecise` (ES2026), deixando claro que não resolve dinheiro. A matriz atual registra ausência de suporte no Node 24/26; reconferir as versões exatas antes de publicar. Enquanto indisponível no ambiente escolhido, não exigir execução da API nem apresentá-la como habilidade verificada. | O aluno não acha que um recurso novo resolve aritmética monetária. |
+| 5.2 | 05 | Extensão opcional após 05.11 com `String.prototype.isWellFormed`/`toWellFormed` (ES2024). Exercitar pares válidos e surrogates isolados; mostrar que `toWellFormed` substitui os isolados por U+FFFD, com perda de informação. Não confundir com normalização NFC nem com recuperação de texto corrompido. | O aluno identifica strings UTF-16 malformadas e escolhe entre rejeitar a entrada e aceitar a substituição antes de enviá-la a APIs. |
+| 5.3 | 06 e 13 | Extensão opcional após 06.06 para `JSON.rawJSON` e o contexto de origem do reviver (ES2026), com contrato próprio: preservar um inteiro fora da faixa segura a partir do texto de origem e serializá-lo sem conversão prévia para Number. Manter parse inválido e perdas no round-trip como foco de 06.06. `Error.isError` já foi implementado em 13.15 na Fase 4: conferir a integração e testar o fallback existente, sem criar outra unidade. A matriz exige Node 24.3.0 para ele. | O aluno distingue parse, preservação de precisão e serialização, sem acumular assuntos no cartão introdutório de JSON. |
+| 5.4 | 07 e 09 | Extensões opcionais após 07.07 e 09.06 para `Map.prototype.getOrInsert`/`getOrInsertComputed` (ES2026), depois da versão com `has/get/set`. Testar chaves ausentes, valores falsy/undefined já armazenados e execução da fábrica somente no miss, nos caminhos nativo e fallback. 09.07 continua tratando WeakMap; não substituir sua comparação por APIs de Map. | Mostra a evolução da linguagem a partir de um padrão que o aluno já escreveu à mão. |
+| 5.5 | 10 | Verificação de marca com `#campo in obj` (ES2022), junto com campos privados. Explicar que verifica a presença da marca privada declarada naquele escopo; não é validação dos dados nem garantia geral de origem/confiabilidade do objeto. | O aluno verifica a marca privada antes de acessar o campo e entende o limite dessa verificação. |
+| 5.6 | 12 | Extensões opcionais após 12.06/12.08 para `Promise.withResolvers`, `AbortSignal.timeout` e `AbortSignal.any`. Os três estão na matriz, mas precisam de prática avaliada. Preservar os contratos obrigatórios de busca/dashboard; testar sucesso, cancelamento prévio, timeout e resposta obsoleta com fixtures, além dos caminhos de compatibilidade aplicáveis. | Cancelamento e timeout com as APIs atuais, sem perder a prática do modelo tradicional. |
+| 5.7 | 14 | Extensões opcionais com Node real: após 14.05, `import.meta.dirname`/`filename` em módulos locais `file:`, mantendo a alternativa com `import.meta.url`; após 14.06, `--env-file`/`process.loadEnvFile`, separando carregamento de ambiente da função pura `loadConfig(env)`; após 14.03, comparar `node --run` com `npm run`, incluindo a ausência de execução automática de scripts pre/post no primeiro; após 14.04, `require(esm)` para módulos síncronos, com caso de falha por top-level await no grafo e alternativa com `import()`. O executor Node simulado não suporta `require` nem comprova comandos de CLI: registrar comandos, versões, saídas e códigos de saída em execução local/CI. | O aluno escolhe as APIs de Node conhecendo suas restrições e verifica o comportamento fora do simulador. |
+| 5.8 | 20 | Iterator helpers (20.06): tornar obrigatório só se pipelines lazy fizerem parte do núcleo da etapa 20. Criar extensão opcional após 20.10 para `toBase64`/`fromBase64`/`toHex` (ES2026), com round-trip de bytes e testes de compatibilidade; manter UTF-8 e a diferença entre bytes e comprimento da string como contrato obrigatório de 20.10. | O aluno pratica o que vai usar, sem obrigações justificadas só pela disponibilidade. |
 | 5.9 | 21 | `DisposableStack` e `SuppressedError` junto com `using`, depois do cleanup tradicional. | O aluno aprende a liberar recursos de forma garantida, com o modelo clássico primeiro. |
 | 5.10 | 23 | Capstone com `.nvmrc`/`.node-version` e `packageManager` além de `engines`, e CI com a matriz Node principal + piso. Atividade "atualizar de Node 24 para 26 sem regressão". | Reproduz a manutenção real de projetos. |
 
-**Critério de saída.** Cada recurso novo está cadastrado na matriz e no detector, classificado como núcleo ou opcional, e tem teste no Node principal e no piso declarado.
+**Critérios de saída.**
+
+- Cada recurso tem cadastro e detecção adequados, classificação (núcleo, extensão opcional ou nota informativa), ambiente de execução, versões exatas, fonte oficial e estratégia de compatibilidade. O detector reconhece um exemplo de uso de cada recurso; o validador rejeita um exemplo que omite a estratégia quando ela é necessária.
+- Cada atividade executável tem teste que falha com o starter e passa com a referência. Quando há fallback, exercitar o caminho nativo e a ausência do recurso por injeção controlada, sem alterar globals compartilhados; executar também no piso real quando ele não oferece a API. Para sintaxe indisponível, conferir o perfil/arquivo alternativo.
+- Recursos com Node como alvo têm testes no Node principal e no piso **exato** declarado, após resolver M.2. Se as duas versões coincidirem, registrar essa condição; repetir a matriz após a troca de principal em M.1. Comandos de CLI, ambiente e interoperabilidade ESM/CJS são executados em Node real, com saídas e códigos de saída registrados.
+- Recursos com navegador como alvo são executados no avaliador real do site e nos navegadores declarados como suportados, registrando versões e limitações. Um teste em Node ou só em Chromium não comprova compatibilidade entre navegadores. Havendo interação, executar também o fluxo do aluno: abrir, implementar, avaliar e conferir o feedback.
+- Notas informativas como 5.1 exigem revisão factual, fonte e data de consulta; ficam dispensadas de execução nativa enquanto a API estiver indisponível no ambiente-alvo e não geram evidência de habilidade verificada.
+- As extensões opcionais não condicionam a conclusão dos cartões obrigatórios de origem. Reexecutar suas avaliações para comprovar que os contratos do núcleo foram preservados. Em 13.15, conferir a avaliação existente de `Error.isError` e seu fallback, sem duplicar conteúdo.
+
+**Fontes para as restrições ensinadas.** [Node: módulos ESM](https://nodejs.org/api/esm.html) (`file:` e `require` de ESM síncrono); [Node: limitações de `node --run`](https://nodejs.org/api/cli.html#intentional-limitations); [TC39: strings Unicode bem formadas](https://tc39.es/proposal-is-usv-string/) (substituição por U+FFFD); [TC39: marca de campos privados](https://github.com/tc39/proposal-private-fields-in-in).
+
+**Resultado técnico — 14/10/2026.** Catálogo: 289 → 302 atividades (13 novas: 05.16, 06.12, 07.14, 09.10, 10.10, 12.21, 14.19–14.22, 20.11, 21.14, 23.12). Todas as novas são opcionais; nenhuma é pré-requisito de atividade do núcleo.
+
+| Item | Resultado verificado | Limite restante |
+|---|---|---|
+| Pré-requisito: matriz | Seis recursos novos cadastrados em `course-src/feature-matrix.json`, mais o contexto de origem do reviver: `#campo in obj`, `import.meta.dirname`/`filename` (20.11, conferido na documentação), `process.loadEnvFile`/`--env-file` (20.12; `--env-file` 20.6, conferido), `node --run` (22.3, conferido por busca), `require(esm)` (22.12 sem flag, conferido), `DisposableStack`/`SuppressedError` (24.0) e `context.source` (21.0). A detecção por `match` fica em `scripts/learning-metadata.mjs`; o detector de extensões em `scripts/validate-curriculum-source.mjs` ganhou nove padrões. | Não confirmados na fonte oficial: `#campo in obj` (16.4.0, de memória), `context.source` (21.0.0) e `DisposableStack` no Node 24 (fonte secundária). Conferir na BCD antes de publicar. |
+| Pré-requisito: detector | Um teste reconhece um exemplo de cada um dos nove padrões em um cartão obrigatório e exige classificação opcional. | Detecta código, não prosa. |
+| 5.1 `Math.sumPrecise` | Nota informativa em `compatibility-overrides.json` para 02.11, com fonte (matriz, 10/10/2026), dizendo que a API não está no Node 24 nem no 26 local e não resolve aritmética monetária. | A fonte não foi reconsultada nesta fase. 02.12 não foi alterada. |
+| 5.2 `isWellFormed`/`toWellFormed` | 05.16, opcional, depois de 05.11. Starter reprova; referência passa. | Não há gate de navegador. |
+| 5.3 `JSON.rawJSON` e reviver | 06.12, opcional, depois de 06.06. O caminho com e sem o recurso passa por `suportaPreservacao(json)`, com o objeto JSON injetado, sem alterar globais. | A integração de `Error.isError` em 13.15 não foi tratada: a referência tem o fallback, mas a suíte não o exercita, e testá-lo exigiria um parâmetro de injeção no contrato público de 13.15. Pendência. |
+| 5.4 `getOrInsert` e `getOrInsertComputed` | 07.14, depois de 07.07, e 09.10, depois de 09.06, ambas opcionais. Testam chaves ausentes, valores falsy e undefined já guardados, e a fábrica só no miss. O caminho sem o método é testado sobrescrevendo a propriedade da própria instância. | 09.07 segue sem alteração. No Node 26 o método é nativo; o fallback é testado só sobre a instância. |
+| 5.5 `#campo in obj` | 10.10, opcional, depois de 10.09. Testa a marca contra `instanceof` e o caso de `Object.create`. | Não há gate de navegador. |
+| 5.6 Promises e AbortSignal | 12.21, opcional, depois de 12.06: cancelamento prévio, timeout, cancelamento em espera e resposta obsoleta, com fixtures. 12.06 e 12.08 não foram alteradas. | Os testes usam fetch falso, sem rede real. |
+| 5.7 APIs de Node | 14.19 (`import.meta`, depois de 14.05), 14.20 (`loadEnvFile`, depois de 14.06), 14.21 (`node --run`, depois de 14.03) e 14.22 (`require(esm)` e top-level await, depois de 14.04). São checkpoints locais: os comandos declarados rodam numa cópia limpa da referência e as saídas esperadas são conferidas. | Executado só no Node 26.7.0, o único instalado. O piso 24.0.0 não foi testado (M.2). A função de validação de 14.20 se chama `lerConfig(env)`, não `loadConfig(env)` como no plano: `loadConfig` já existe em 14.06, na mesma etapa. |
+| 5.8 Iterator helpers e Base64/hex | Decisão: 20.06 continua opcional, porque 20.08 pratica pipelines lazy com geradores do próprio aluno (exceção registrada na matriz). 20.11 (`toBase64`, `fromBase64`, `toHex`), opcional, depois de 20.10, com o caminho sem `toBase64` e `toHex` testado. | `Uint8Array.fromBase64` não tem fallback testado: a API é estática e testá-la exigiria alterar o global. |
+| 5.9 `DisposableStack` e `SuppressedError` | 21.14, opcional, depois de 21.08 (`using`) e de 21.02 (cleanup), como checkpoint local, porque o executor do site não analisa `using`. `SuppressedError` continua em 21.11. | Node 24 vem de fonte secundária. |
+| 5.10 Runtime do projeto | 23.12, opcional, avaliação declarada (rubrica), depois de 23.07: `engines`, `.nvmrc`, `packageManager` e matriz de CI com piso e principal. | A plataforma não executa a CI do aluno; a troca para Node 26 segue o calendário de M.1. |
+
+Verificação: `npm run build:curriculum` e `npm run check:curriculum` com 302 cartões, 0 avisos e 0 erros. `test-phase5-curriculum.mjs` com 9/9; `test-phase2-core.mjs` com o limite de 04–10 atualizado de 79 para 84; `test-phase4-curriculum.mjs` mantido. A suíte completa (`npm test`) foi executada em background ao fim desta fase; o resultado está registrado abaixo. `npm run assets:version` rodou sem erros após as mudanças em `public/`.
+
+Limites da entrega: as sete atividades executáveis foram exercitadas pelo avaliador publicado em Node (jsdom e workers), não no Chromium: não houve gate de navegador nesta fase. Os checkpoints locais rodaram apenas no Node 26.7.0. O piso de Node 24.0.0 (M.2) não foi testado. Nenhuma atividade foi publicada, comitada ou implantada.
 
 ---
 

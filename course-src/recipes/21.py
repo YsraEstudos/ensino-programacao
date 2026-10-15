@@ -1,4 +1,4 @@
-from recipe_api import C
+from recipe_api import C, E
 
 CONTENT = {
 "21.01": C("performance.bottleneck_class", "seis cenários: loop pesado, fetch lento, layout thrash, heap crescente, leitura arquivo, JSON parse grande", "loop/JSON parse -> CPU; fetch -> rede; layout thrash -> DOM; heap crescente -> memória", "arquivo local -> I/O; gargalo pode combinar fontes e hipótese exige medição; otimização antes da medição não comprovada", "Prescrever cache ou worker para toda lentidão sem diagnóstico.", ("Separe onde tempo é gasto.", "Escolha métrica/ferramenta para a hipótese.", "Só então proponha intervenção proporcional."), "Matriz classifica seis cenários, indica observação mensurável e uma hipótese alternativa por caso.", "Tela lenta com API e render -> medir rede e DOM separadamente",kind="PREDICT", load={"novelty": 3, "syntax": 1, "composition": 3, "state": 2, "debugging": 2, "files": 1, "reading": 4, "independence": 3, "tools": 3}),
@@ -34,4 +34,83 @@ CONTENT["21.12"] = C(
     prompt="Abra a página local e grave uma interação repetível na aba Performance. Localize as User Timing marks, uma tarefa longa limitada e trabalho de layout; escreva hipótese, evidência e limite da gravação sem afirmar melhora universal.",
     resources=("Chrome DevTools, Performance overview: https://developer.chrome.com/docs/devtools/performance/", "MDN, User Timing API: https://developer.mozilla.org/en-US/docs/Web/API/Performance_API/User_timing"),
     rubric=("Cenário, ambiente e interação gravada são declarados para interpretar a medição.", "Marcações, tarefas e layout são lidos como categorias distintas na gravação.", "Hipótese de gargalo aponta evidência concreta e não transforma uma amostra em regra universal.", "Uma intervenção pequena é comparada no mesmo cenário e a incerteza é registrada."),
+)
+
+
+# Fase 4 (análise curricular, item 4.13): EventTarget (opcional), com cancelamento por AbortSignal.
+CONTENT["21.13"] = E(
+    "events.event_target",
+    "main.js: export function criarContador() { /* EventTarget que emite 'mudou' com detail.valor a cada incremento */ return { valor: 0, incrementar() {} }; } export function ouvirAte(emissor, tratador, sinal) { /* remova a escuta quando o sinal for abortado */ }",
+    'criarContador().incrementar() -> evento mudou com detail.valor 1; depois valor -> 1',
+    'ouvirAte(contador, tratador, sinal) -> após sinal.abort(), o próximo incremento não chama tratador',
+    "Esquecer que removeEventListener precisa da mesma função e, por isso, deixar um assinante ativo depois de sair.",
+    "Depois do abort, o tratador continua recebendo eventos e a contagem de chamadas passa de 1.",
+    "Como o assinante garante que deixa de receber eventos depois de cancelar a escuta?",
+    ("EventTarget é o mesmo modelo de eventos do navegador: emissor, listeners e CustomEvent com detail.", "Passe { signal } para addEventListener: quando o sinal é abortado, o listener é removido automaticamente.", "Exemplo parecido: emissor.addEventListener('x', fn, { once: true }) executa fn no primeiro disparo e remove o ouvinte depois."),
+    "export function criarContador() { const emissor = new EventTarget(); let valor = 0; return { get valor() { return valor; }, incrementar() { valor += 1; emissor.dispatchEvent(new CustomEvent('mudou', { detail: { valor } })); }, addEventListener: (...args) => emissor.addEventListener(...args) }; } export function ouvirAte(emissor, tratador, sinal) { emissor.addEventListener('mudou', tratador, { signal: sinal }); }",
+    "Temporizador de sessão -> evento 'expirou'; componente cancelado -> não recebe o evento",
+    kind="MAKE", optional=True, estimated=24, load={"novelty": 4, "syntax": 3, "composition": 3, "state": 3, "debugging": 2, "files": 1, "reading": 3, "independence": 3, "tools": 2},
+    runtime="Node.js + browser",
+    compatibility="EventTarget, CustomEvent e AbortSignal estão nos navegadores atuais e no Node.js 24. Atividade opcional: a escuta por signal é o contrato do exercício.",
+    explanation={
+        "mental_model": "EventTarget é a forma padrão de emitir eventos; CustomEvent leva dados em detail. O assinante controla a própria escuta com signal ou removeEventListener.",
+        "worked_example": "Depois de um incrementar() e de abort(), a escuta registrada com signal é removida. O próximo incremento dispara o evento, mas nenhum tratador recebe.",
+        "common_trap": "Passar uma função nova para removeEventListener: a remoção não encontra o tratador original e ele continua ativo.",
+        "why_it_matters": "Ouvintes que não são removidos causam lentidão e comportamento duplicado em interfaces longas.",
+    },
+    first_response="Escreva quem cria a escuta, quem a cancela e quando, antes de implementar.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Diagrama textual de emissor e assinantes, com o estado de cada escuta; ações de disparo e cancelamento por botões acessíveis.",
+    resources=("MDN: EventTarget — https://developer.mozilla.org/docs/Web/API/EventTarget", "MDN: AbortSignal — https://developer.mozilla.org/docs/Web/API/AbortSignal"),
+    review={
+        "prompt": "Qual opção de addEventListener remove o ouvinte quando um AbortSignal é abortado?",
+        "choices": ["signal", "once", "capture"],
+        "answer": "signal",
+        "feedback_correct": "signal liga a escuta a um AbortController; ao abortar, o ouvinte é removido.",
+        "feedback_incorrect": "once remove o ouvinte depois do primeiro disparo; capture muda a fase de propagação.",
+    },
+    transfer_prompt="Crie um temporizador de sessão com evento 'expirou' e permita que um componente cancele a própria escuta com AbortSignal. Teste que o componente cancelado não recebe o evento.",
+    prompt="Implemente criarContador e ouvirAte com EventTarget e AbortSignal. Antes de executar, diga quantas vezes o tratador é chamado se o sinal for abortado depois do primeiro incremento.",
+)
+
+
+from recipe_api import E as _E21
+
+# Fase 5 (análise curricular, item 5.9): DisposableStack junto com using, depois do cleanup tradicional de 21.08.
+# Checkpoint local: a sintaxe using não é analisada pelo executor do site; o comando roda em Node real.
+CONTENT["21.14"] = _E21(
+    "resources.disposable_stack",
+    "Crie recursos.mjs com criarRecurso(nome, log), executarComPilha(nomes, log) usando DisposableStack, e falhasSuprimidas() que mostra SuppressedError.",
+    "executarComPilha(['A', 'B'], []) -> ['trabalho', 'fechou B', 'fechou A'] (ordem inversa, depois do trabalho)",
+    "falhasSuprimidas() -> nome SuppressedError, error com 'falha ao fechar' e suppressed com 'falha do trabalho'",
+    "Achar que um recurso é fechado em ordem de criação, ou que a falha do descarte substitui a falha do corpo sem ser registrada.",
+    "A ordem do log mostra A antes de B; a falha original some quando o descarte também falha, e o erro registrado é só o do fechamento.",
+    "Em que ordem a pilha descarta os recursos e onde fica a falha do corpo quando o descarte também falha?",
+    ("A pilha descarta do último para o primeiro, como um conjunto de pratos guardados em pilha.", "Registre cada recurso com use(); ao sair do bloco, DisposableStack fecha tudo em ordem inversa. Para a falha dupla, leia error e suppressed do SuppressedError.", "Exemplo parecido: fechar uma conexão antes de fechar o pool que a criou, na ordem contrária à abertura."),
+    "executarComPilha registra os recursos com pilha.use e deixa o bloco fechá-los em ordem inversa; falhasSuprimidas lê error (falha do descarte) e suppressed (falha original) do SuppressedError.",
+    "Dois recursos em pilha com falha no segundo -> primeiro fechado antes da falha propagar; erro é SuppressedError",
+    kind="MAKE", estimated=20, load={"novelty": 4, "syntax": 3, "composition": 3, "state": 3, "debugging": 3, "files": 2, "reading": 2, "independence": 3, "tools": 3},
+    runtime="Node.js 24 LTS (ES modules)",
+    compatibility="DisposableStack e SuppressedError estão no Node.js 24 segundo fonte secundária a confirmar na documentação oficial. Em runtime sem suporte, use fallback com try/finally e registre a diferença. Esta atividade roda em Node real, não no executor do site.",
+    optional=True,
+    explanation={
+        "mental_model": "DisposableStack agrupa recursos que sabem se fechar. Quando o bloco termina, os recursos são fechados em ordem inversa. Se o fechamento também falha durante uma falha do corpo, SuppressedError guarda as duas falhas.",
+        "worked_example": "Com A e B registrados, o log fica 'trabalho', 'fechou B', 'fechou A'. Se o corpo lança 'falha do trabalho' e o fechamento lança 'falha ao fechar', o erro é SuppressedError com as duas mensagens.",
+        "common_trap": "Confiar que a falha do corpo sempre chega ao chamador: se o fechamento também falha, o erro visível é o SuppressedError.",
+        "why_it_matters": "Conexões, arquivos e locks precisam ser fechados mesmo quando o trabalho falha. A pilha de recursos organiza esse fechamento e preserva as duas causas.",
+    },
+    first_response="Antes de rodar, escreva a ordem em que A e B devem ser fechados e por que a ordem inversa é a regra.",
+    first_response_timing="Antes do primeiro comando.",
+    interaction="Checkpoint local: saída do log e do erro registrada pelo aluno, com o código de saída do teste.",
+    resources=("TC39: explicit resource management — https://github.com/tc39/proposal-explicit-resource-management", "MDN: SuppressedError — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/SuppressedError"),
+    review={
+        "prompt": "Quando o corpo e o descarte falham, qual propriedade de SuppressedError guarda a falha original?",
+        "choices": ["suppressed", "error", "cause"],
+        "answer": "suppressed",
+        "feedback_correct": "error guarda a falha do descarte e suppressed guarda a falha original do corpo.",
+        "feedback_incorrect": "error é a falha mais recente, do descarte; cause não é propriedade de SuppressedError.",
+    },
+    transfer_prompt="Abra dois recursos em uma pilha, force a falha do segundo e registre a ordem de fechamento. Explique qual erro o chamador recebe.",
+    prompt="Crie recursos.mjs e rode node --test recursos.test.mjs. Antes do Run, escreva a ordem de fechamento de A e B e qual erro falhasSuprimidas deve mostrar.",
+    rubric=("Registra o comando, a versão do Node e o código de saída do teste.", "Explica a ordem de fechamento da pilha e por que ela é inversa.", "Identifica error e suppressed em SuppressedError."),
 )

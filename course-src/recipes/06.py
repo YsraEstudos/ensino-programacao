@@ -406,3 +406,41 @@ CONTENT = {
         transfer_prompt='Leia preferências de conta opcional. usuario={perfil:{nome:"",notificacoes:false,atalho:""}} -> {nome:"", notificacoes:false, atalho:""}; usuario={perfil:"inválido"} -> null; usuario=null -> nome padrão. Explique por que || mudaria duas escolhas válidas.',
         runtime='Node.js 24 LTS', compatibility='Optional chaining e nullish coalescing fazem parte do JavaScript padrão no Node.js 24 LTS; sem dependências externas.'),
 }
+
+
+# Fase 5 (análise curricular, item 5.3): extensão opcional de JSON.rawJSON e do contexto de origem do reviver, depois de 06.06.
+CONTENT["06.12"] = E(
+    "serialization.raw_numbers",
+    "main.js: export function lerIdPreservado(texto) { /* JSON.parse com reviver e context.source */ return JSON.parse(texto); } export function serializarComId(objeto) { /* JSON.rawJSON para o id */ return JSON.stringify(objeto); }",
+    'lerIdPreservado(texto com id 12345678901234567890 e nome Ana) -> {id: "12345678901234567890", nome: "Ana"}; serializarComId({id: "12345678901234567890", nome: "Ana"}) -> texto com o id sem aspas',
+    'lerIdPreservado com id 1.50 -> id "1.50"; ida e volta de 9007199254740993 devolve o mesmo texto; JSON inválido lança SyntaxError',
+    "Achar que JSON.parse preserva todos os dígitos de um número grande, ou que JSON.stringify serializa um número cru quando recebe string.",
+    "JSON.parse converte 12345678901234567890 em Number e perde os últimos dígitos; a saída não acusa a perda.",
+    "Qual informação do texto original o reviver recebe para o campo id?",
+    ("O problema é a conversão para Number. O reviver recebe o texto de origem do valor como terceiro argumento.", "Guarde context.source quando a chave for 'id' e devolva o valor original sem alterá-lo.", "Exemplo parecido: JSON.rawJSON('1.50') serializa 1.50 sem virar 1.5, porque o texto é usado como está."),
+    "lerIdPreservado guarda context.source da chave id e devolve o objeto com esse texto; serializarComId envolve o id com JSON.rawJSON, que o stringify emite sem aspas e sem conversão prévia.",
+    "Registro com id de 20 dígitos e nome -> mesmo texto na volta, com os 20 dígitos intactos",
+    kind="MAKE", estimated=20, load={"novelty": 4, "syntax": 3, "composition": 2, "state": 1, "debugging": 3, "files": 1, "reading": 3, "independence": 3, "tools": 2},
+    runtime="Node.js 24 LTS + navegador moderno",
+    compatibility="JSON.rawJSON e o contexto de origem do reviver (context.source) são ES2026 e estão no Node.js 21+ e no baseline 24. Sem o recurso, suportaPreservacao devolve false (feature detection) e a atividade declara que o número volta a ser Number.",
+    optional=True,
+    explanation={
+        "mental_model": "JSON.parse converte o texto em valores JavaScript; para números fora da faixa segura, a conversão já perdeu dígitos. O reviver pode ler o texto de origem antes dessa perda, e JSON.rawJSON permite serializar o texto sem conversão.",
+        "worked_example": "Em um JSON com id 12345678901234567890, o reviver recebe context.source igual a '12345678901234567890' para a chave id. Ao serializar com JSON.rawJSON, o número sai com os mesmos dígitos.",
+        "common_trap": "Usar Number como se preservasse dígitos: a conversão já aconteceu quando o reviver recebe o valor, e o texto de origem é a única fonte exata.",
+        "why_it_matters": "Identificadores longos de APIs e bancos chegam como número no JSON; uma conversão silenciosa troca o identificador e o registro passa a apontar para outro item.",
+    },
+    first_response="Antes de editar, escreva o que JSON.parse devolve para 12345678901234567890 e quantos dígitos continuam exatos.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Dois painéis lado a lado: texto de entrada e objeto resultante, com a grafia de cada número destacada.",
+    resources=("MDN: JSON.rawJSON — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/JSON/rawJSON", "MDN: JSON.parse, reviver e context.source — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse"),
+    review={
+        "prompt": "Qual argumento do reviver de JSON.parse contém o texto original do valor?",
+        "choices": ["context.source", "value", "this"],
+        "answer": "context.source",
+        "feedback_correct": "context.source traz o texto de origem do valor primitivo antes da conversão para Number.",
+        "feedback_incorrect": "value já é o número convertido e this não traz o texto; o texto de origem vem em context.source.",
+    },
+    transfer_prompt="Leia um registro com id de 20 dígitos, altere só o nome e grave de volta. Diga qual linha do seu código garante que o id não passou por Number.",
+    prompt="Implemente lerIdPreservado e serializarComId usando context.source e JSON.rawJSON. Antes de executar, preveja quantos dígitos JSON.parse simples devolve para 12345678901234567890.",
+)

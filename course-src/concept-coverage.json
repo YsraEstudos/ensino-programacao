@@ -1,0 +1,4 @@
+{
+  "_comment": "Conceitos que o starter de uma atividade usa e que o próprio cartão explica com um primer (course-src/prerequisite-primers.json) antes da prática. scripts/validate-curriculum-source.mjs aceita o uso só nesses casos; em qualquer outro caso, usar um conceito antes da etapa que o introduz quebra o build (AST_PREREQUISITE_UNDECLARED).",
+  "04.01": ["arrays.pipeline", "callbacks.basic"]
+}

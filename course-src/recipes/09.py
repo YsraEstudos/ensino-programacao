@@ -404,3 +404,78 @@ CONTENT["09.08"]["rubric"] = (
     "subscribe devolve cancelamento idempotente; listener removido não recebe atualizações posteriores.",
     "Dois testes de stores simultâneas demonstram isolamento, ordem das notificações e cancelamento de um listener durante emissão.",
 )
+
+
+# Fase 4 (análise curricular, item 4.13): tagged templates (opcional), na etapa de funções.
+CONTENT["09.09"] = E(
+    "functions.tagged_template",
+    "main.js: export function html(strings, ...valores) { /* intercale strings fixas e valores escapados */ return ''; }",
+    'html`<p>${"Ana"}</p>` -> "<p>Ana</p>"; html`${42}` -> "42"',
+    'html`${"<script>"}` -> "&lt;script&gt;"',
+    "Tratar o resultado da tag como se já fosse seguro, ou escapar a string final em vez de escapar só os valores.",
+    "Com o valor '<script>', a versão sem escape devolve uma tag real no lugar de texto; o contrato exige que o valor vire texto.",
+    "Quais partes do template são fixas e quais são valores, e qual delas a tag deve escapar?",
+    ("Uma tag recebe o array de partes fixas e os valores interpolados como argumentos separados.", "Percorra as partes e, entre elas, inclua o valor com escape. Escape só os valores, nunca as partes fixas.", "Exemplo parecido: const negrito = (s, v) => `<b>${v}</b>` mostra a forma da tag; a sua troca só os caracteres &, <, >, \" e '."),
+    "const ESCAPES = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', \"'\": '&#39;'}; const escapar = valor => String(valor).replace(/[&<>\"']/g, c => ESCAPES[c]); export function html(strings, ...valores) { let saida = ''; strings.forEach((parte, i) => { saida += parte; if (i < valores.length) saida += escapar(valores[i]); }); return saida; }",
+    "Linha de tabela com nome e observação -> valores escapados; aspas viram entidades",
+    kind="MAKE", optional=True, estimated=22, load={"novelty": 4, "syntax": 3, "composition": 3, "state": 1, "debugging": 2, "files": 1, "reading": 3, "independence": 3, "tools": 2},
+    runtime="Node.js 24.x, módulos ES, sem DOM.",
+    compatibility="Tagged templates são ES2015 e estão no baseline. O escape cobre texto HTML e aspas; não substitui as regras de atributos sem aspas, URLs ou scripts.",
+    explanation={
+        "mental_model": "Uma tag recebe as partes fixas do template e os valores como argumentos separados. Como o código sabe quais pedaços são seus e quais vêm de fora, ele escapa só os valores.",
+        "worked_example": "Em html`<p>${nome}</p>` com nome = '<b>x</b>', a tag recebe ['<p>', '</p>'] e ['<b>x</b>']; a saída é '<p>&lt;b&gt;x&lt;/b&gt;</p>'.",
+        "common_trap": "Escapar a string final não funciona: depois de concatenar, não há como saber qual parte veio de fora. O escape também não substitui o contexto correto (atributo sem aspas, URL, script).",
+        "why_it_matters": "A tag separa código de dados no ponto em que a concatenação costuma misturá-los. É a base de bibliotecas de SQL, estilos e templates.",
+    },
+    first_response="Escreva quais argumentos a tag recebe em html`<p>${x}</p>` antes de implementar.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Editor com prévia textual da saída e lista das partes e valores recebidos pela tag, navegável por teclado.",
+    resources=("MDN: template literals e tagged templates — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Template_literals", "OWASP: Cross Site Scripting Prevention — https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html"),
+    review={
+        "prompt": "Numa tag, o que o primeiro argumento contém?",
+        "choices": ["As partes fixas do template, sem os valores interpolados", "O texto final já concatenado", "Somente o último valor interpolado"],
+        "answer": "As partes fixas do template, sem os valores interpolados",
+        "feedback_correct": "strings guarda as partes fixas; os valores chegam em argumentos separados.",
+        "feedback_incorrect": "A saída final ainda não existe quando a tag começa, e os valores chegam separados.",
+    },
+    transfer_prompt="Escreva uma tag que monte uma linha de tabela com nome e observação do usuário, escapando todos os valores. Inclua um caso com aspas e explique por que o escape não cobre atributos sem aspas nem URLs.",
+    prompt="Implemente html como tag que escapa os valores e preserva as partes fixas. Antes de executar, diga o que a tag recebe em html`<b>${x}</b>` e qual parte você não deve escapar.",
+)
+
+
+# Fase 5 (análise curricular, item 5.4): extensão opcional de Map.prototype.getOrInsertComputed, depois de 09.06 (cache simples).
+CONTENT["09.10"] = E(
+    "closures.get_or_insert_computed",
+    "main.js: export function obterOuCalcular(mapa, chave, fabrica) { /* use getOrInsertComputed; senão has, set e get */ return fabrica(); } export function criarMemo(calcular) { /* cache com obterOuCalcular */ return chave => calcular(chave); }",
+    'criarMemo(n => n*2)(4) -> 8 nas duas chamadas com uma só execução da função; valor 0 guardado não recalcula',
+    "obterOuCalcular com chave existente -> não roda a fábrica; caminho sem getOrInsertComputed -> calcula uma vez e reaproveita",
+    "Criar a fábrica já executada, por exemplo getOrInsertComputed(chave, calcular(chave)), o que roda o cálculo a cada chamada.",
+    "Com calcular(chave) escrito diretamente, a contagem de chamadas sobe a cada uso e o cache não reduz trabalho.",
+    "Quando a fábrica deve rodar: antes ou só quando a chave falta?",
+    ("A fábrica é uma função que você passa, não o resultado. Ela só deve rodar quando a chave falta.", "Passe () => calcular(chave) como fábrica e deixe getOrInsertComputed decidir quando chamá-la.", "Exemplo parecido: um contador de chamadas dentro da fábrica mostra se o cache está funcionando."),
+    "obterOuCalcular usa getOrInsertComputed quando existe; senão has, set e get. criarMemo cria um Map privado e passa a fábrica () => calcular(chave) para cada chave.",
+    "Taxa de câmbio consultada duas vezes -> uma só chamada da fábrica e o mesmo valor nas duas",
+    kind="MAKE", estimated=18, load={"novelty": 3, "syntax": 2, "composition": 3, "state": 3, "debugging": 2, "files": 1, "reading": 2, "independence": 3, "tools": 2},
+    runtime="Node.js 24 LTS + navegador moderno",
+    compatibility="Map.prototype.getOrInsertComputed é ES2026 e chega ao Node.js 26. No Node.js 24, use feature detection e o fallback com has, set e get, que esta atividade testa com o método desligado.",
+    optional=True,
+    explanation={
+        "mental_model": "getOrInsertComputed(chave, fabrica) chama a fábrica apenas quando a chave falta e grava o que ela devolve. Uma closure guarda o Map e a função original entre chamadas.",
+        "worked_example": "Com criarMemo(n => n*2), a primeira chamada para 4 roda a função e grava 8; a segunda devolve 8 do Map sem rodar a função de novo.",
+        "common_trap": "Passar o resultado em vez da fábrica: getOrInsertComputed(chave, calcular(chave)) já roda o cálculo antes de checar o Map.",
+        "why_it_matters": "Memoização reduz trabalho repetido em consultas e cálculos caros, e a closure é o mecanismo que mantém o cache privado.",
+    },
+    first_response="Antes de editar, diga quantas vezes calcular roda se você chamar a função memoizada duas vezes com a mesma chave.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Painel com a chave, o valor no cache e um contador de chamadas da função original.",
+    resources=("MDN: Map.prototype.getOrInsertComputed — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map/getOrInsertComputed", "MDN: closures — https://developer.mozilla.org/docs/Web/JavaScript/Closures"),
+    review={
+        "prompt": "Qual argumento de getOrInsertComputed deve ser uma função?",
+        "choices": ["O segundo, a fábrica", "O primeiro, a chave", "Nenhum, ambos são valores"],
+        "answer": "O segundo, a fábrica",
+        "feedback_correct": "A fábrica só roda quando a chave falta; por isso é uma função, e não o valor pronto.",
+        "feedback_incorrect": "A chave é o primeiro argumento, e a fábrica é o segundo: uma função que devolve o valor.",
+    },
+    transfer_prompt="Crie um memo para uma função que lê uma taxa de câmbio e explique por que a fábrica precisa ser uma função e não o resultado pronto.",
+    prompt="Implemente obterOuCalcular e criarMemo. Antes de executar, diga quantas vezes a função original roda para a mesma chave e por que a fábrica é passada como função.",
+)

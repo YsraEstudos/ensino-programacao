@@ -9,6 +9,7 @@ import { localAssessmentCommandIssues } from "./local-assessment-validation.mjs"
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_SOURCE = path.resolve(SCRIPT_DIR, "../course-src/.generated/resolved_preview.json");
 const DEFAULT_ASSESSMENTS = path.resolve(SCRIPT_DIR, "../course-src/assessments.json");
+const DEFAULT_PRIMER_COVERAGE = path.resolve(SCRIPT_DIR, "../course-src/concept-coverage.json");
 const TIMEOUT_MS = 1_000;
 const ALLOWED_STATUSES = new Set(["DRAFT", "NEEDS_CONTRACT", "CONTRACT_READY", "IMPLEMENTED", "REVIEW", "READY", "RETIRED"]);
 const EXTENSION_APIS = [
@@ -18,6 +19,17 @@ const EXTENSION_APIS = [
   ["using declarations", /\b(?:await\s+)?using\s+\w+/],
   ["DisposableStack", /\b(?:Async)?DisposableStack\b/],
   ["Symbol.dispose", /\bSymbol\.(?:asyncDispose|dispose)\b/],
+  // Fase 5 (análise curricular, pré-requisito): recursos das versões atuais precisam de classificação opcional e estratégia de compatibilidade.
+  ["private brand check", /#[A-Za-z_]\w*\s+in\s+[\w$.]+/],
+  ["import.meta.dirname/filename", /\bimport\.meta\.(?:dirname|filename)\b/],
+  ["process.loadEnvFile/--env-file", /\bloadEnvFile\s*\(|--env-file/],
+  ["node --run", /\bnode\s+--run\b/],
+  ["require(esm)", /\brequire\(\s*['"][^'"]+\.mjs['"]\s*\)/],
+  ["JSON.parse reviver context", /\bcontext\.source\b|\bJSON\.rawJSON\b/],
+  ["Map.getOrInsert", /\.getOrInsert(?:Computed)?\(/],
+  ["String well-formed methods", /\.(?:isWellFormed|toWellFormed)\(/],
+  ["Promise.withResolvers/AbortSignal timeout or any", /\bPromise\.withResolvers\b|\bAbortSignal\.(?:timeout|any)\b/],
+  ["Uint8Array base64/hex", /\.(?:toBase64|toHex)\(|\bUint8Array\.fromBase64\b/],
 ];
 
 function parseArgs(argv) {
@@ -326,6 +338,16 @@ function validateDag(edges, status, findings) {
   }
 }
 
+let primerCoverage = null;
+// Concepts that a card explains with a primer, keyed by activity ID (see course-src/concept-coverage.json).
+function primerCoverageFor(itemId) {
+  if (!primerCoverage) {
+    const coverage = loadJson(path.resolve(process.env.DEVPATH_PRIMER_COVERAGE || DEFAULT_PRIMER_COVERAGE), "primer coverage");
+    primerCoverage = new Map(Object.entries(coverage).filter(([key]) => !key.startsWith("_")));
+  }
+  return primerCoverage.get(itemId) || [];
+}
+
 function validateCardCode(item, status, findings, featureMapper) {
   const snippets = [];
   const extensionApis = new Set();
@@ -351,10 +373,13 @@ function validateCardCode(item, status, findings, featureMapper) {
   const introduces = item.introduces || [];
   const availableSkills = [...requires, ...introduces];
   const itemStageRank = stageRank(item.stage);
+  const primerCovered = new Set(primerCoverageFor(item.id));
   for (const conceptId of detected) {
     const concept = featureMapper.concepts.has(conceptId);
     if (!concept) continue;
     if (matchesConceptAlias(availableSkills, conceptId)) continue;
+    // A primer published on the card explains the concept before the practice (Fase 4, pré-requisito).
+    if (primerCovered.has(conceptId)) continue;
     const conceptEntry = featureMapper.conceptById.get(conceptId);
     const skillStages = [...(featureMapper.skillIntroductionStage?.entries() || [])]
       .filter(([skill]) => matchesConceptAlias([skill], conceptId))
@@ -366,7 +391,8 @@ function validateCardCode(item, status, findings, featureMapper) {
     // The diagnostic stage intentionally samples prior knowledge without gating it.
     if (item.stage === "D" || (earliestStage && stageRank(earliestStage) <= itemStageRank)) continue;
     if (!requires.includes(conceptId)) {
-      addFinding(findings, status, item.id, "AST_PREREQUISITE_UNDECLARED", `Starter/example uses ${conceptId}, but it is neither declared by this card nor known to be introduced in an earlier stage${earliestStage ? ` (graph says stage ${earliestStage})` : ""}.`);
+      // Fatal for every card: an undeclared concept used before its stage breaks the build (Fase 4, pré-requisito).
+      addFinding(findings, status, item.id, "AST_PREREQUISITE_UNDECLARED", `Starter/example uses ${conceptId}, but it is neither declared by this card, covered by a published primer, nor known to be introduced in an earlier stage${earliestStage ? ` (graph says stage ${earliestStage})` : ""}.`, { alwaysFatal: true });
     }
   }
   if (item.optional !== undefined && typeof item.optional !== "boolean") addFinding(findings, status, item.id, "OPTIONAL_NOT_BOOLEAN", "optional must be a boolean when present.");

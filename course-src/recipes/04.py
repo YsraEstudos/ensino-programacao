@@ -212,3 +212,39 @@ CONTENT["04.09"]["starter"] = [
     _split_starter(CONTENT["04.09"]["starter"]),
     {"path": "test/main.test.js", "content": "import test from 'node:test';\n\n// Escreva os casos de ataque, defesa e resumo, incluindo nível zero e nome vazio.\ntest.todo('resumo de ficha');\n"},
 ]
+
+# Fase 4 (análise curricular, item 4.10): parâmetros padrão e rest.
+CONTENT["04.14"] = E(
+    "functions.defaults_rest",
+    "main.js: export function saudar(nome = ..., saudacao = ...); export function somarTudo(...numeros); export function criarPedido(item, quantidade = ..., desconto = ...)",
+    'saudar() -> "Olá, visitante!"; saudar("Ana") -> "Olá, Ana!"; somarTudo() -> 0; somarTudo(1, 2, 3) -> 6',
+    'criarPedido("caneca", 0) -> {item:"caneca", quantidade:0, desconto:0}; saudar(null) -> "Olá, null!"',
+    "Usar || para preencher padrão e tratar 0, '' ou null como ausência; ler o rest como se fosse uma lista criada à mão.",
+    "criarPedido('caneca', 0) devolve quantidade 1 porque 0 foi tratado como ausente.",
+    "Qual valor ativa o padrão de um parâmetro?",
+    ("Um parâmetro com padrão recebe o valor padrão somente quando o argumento correspondente é undefined.", "Escreva uma linha por parâmetro: padrão, ordem e o que acontece com 0 e null.", "Um rest como ...numeros entrega um array com os argumentos restantes; sem argumentos, o array está vazio."),
+    "saudar usa padrões simples; somarTudo percorre numeros com for...of e acumula; criarPedido usa desconto = 0 como terceiro parâmetro com padrão. Nenhum padrão é aplicado por || nem por verificação de falsy.",
+    "Taxa de envio com padrões para região e prazo -> o padrão entra só quando o argumento não foi informado",
+    kind="MAKE", estimated=18, load={"novelty": 2, "syntax": 3, "composition": 2, "state": 1, "debugging": 2, "files": 2, "reading": 2, "independence": 2, "tools": 2},
+    runtime="Node.js 24.x, módulos ES, sem DOM.",
+    compatibility="Parâmetros padrão e rest fazem parte do ECMAScript desde 2015; o baseline cobre todos os casos.",
+    explanation={
+        "mental_model": "Um parâmetro com padrão só se preenche quando o argumento é undefined. Rest reúne os argumentos restantes num array real. Nenhum dos dois depende de arguments.",
+        "worked_example": "Em criarPedido('caneca', 0), o segundo argumento é 0, que não é undefined: a quantidade fica 0, e o padrão 1 não entra. Em criarPedido('caneca'), o padrão 1 é usado.",
+        "common_trap": "Escrever quantidade = quantidade || 1 trata 0, '' e null como ausência e troca um valor válido por 1.",
+        "why_it_matters": "Padrões que engolem valores válidos produzem pedidos, saldos e mensagens errados sem erro visível.",
+    },
+    first_response="Escreva, para cada chamada pública, o valor que o parâmetro recebe quando ele é omitido e quando recebe 0 ou null.",
+    first_response_timing="Antes de executar o starter.",
+    interaction="Tabela de chamadas previstas e resultados, com colunas nomeadas e anúncio textual de cada divergência; editor de código acessível por teclado.",
+    resources=("MDN: parâmetros padrão — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/Default_parameters", "MDN: parâmetros rest — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/rest_parameters"),
+    review={
+        "prompt": "Qual chamada aplica o padrão do parâmetro quantidade = 1?",
+        "choices": ["criarPedido('caneca', undefined)", "criarPedido('caneca', 0)", "criarPedido('caneca', null)"],
+        "answer": "criarPedido('caneca', undefined)",
+        "feedback_correct": "Só undefined ativa o padrão; 0 e null são valores explícitos.",
+        "feedback_incorrect": "Padrões se aplicam a undefined. 0 e null são argumentos válidos e não ativam o padrão.",
+    },
+    transfer_prompt="Escreva uma função de frete com padrão para região e uma função que soma taxas recebidas em número variável. Cubra argumento omitido, 0 e lista vazia nos testes.",
+    prompt="Implemente as três funções com padrões e rest. Antes de executar, preveja a saída de criarPedido('caneca', 0) e explique por que o padrão não entra.",
+)

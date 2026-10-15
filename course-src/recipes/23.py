@@ -13,3 +13,43 @@ CONTENT = {
 "23.08": C("architecture.capstone", "escolha app de tarefas ou biblioteca de pedidos; contrato: domínio, adapter persistência, UI/CLI, API interna TS, testes/docs", "criar/listar/mover/remover item -> estado e persistência consistentes; build e typecheck passam", "dado externo inválido -> rejeição antes de mutar; storage falha -> erro público sem segredo/cause técnico; restart -> recuperação; teste de contrato substitui adapter", "Entregar telas bonitas sem contrato de dados, fronteiras e regressões.", ("Defina MVP e casos observáveis.", "Separe portas, domínio e adapters.", "Entregue testes de domínio, integração, typecheck e README de execução."), "Capstone inclui diagrama, contratos, implementação, testes, operação local e duas decisões arquiteturais justificadas; rubrica avalia funcionalidade e mudança.", "Substituir adapter JSON por memória/IndexedDB -> domínio e suíte de contrato preservados",kind="PROJECT",runtime="Node.js + browser",estimated=360,load={"novelty":5,"syntax":4,"composition":5,"state":5,"debugging":5,"files":5,"reading":4,"independence":5,"tools":5}),
 "23.09": C("operations.safe_observability", "operação salvar com ID correlacionável, duração monotônica, níveis log e Error.cause; token secreto em contexto", "sucesso -> log id/duração/status sem token; falha -> log técnico com cause e mensagem pública segura", "timeout e erro de validação -> níveis distintos; IDs não são segredo; redator remove Authorization/token/cookies inclusive objetos aninhados", "Logar objeto de request inteiro ou perder causa técnica para ocultar segredo.", ("Defina campos permitidos de log.", "Use clock monotônico e correlation ID.", "Redija dados sensíveis e preserve cause no erro técnico."), "Instrumente start/end/fail com estrutura estável, redact explícito e relatório de reprodução sem token; teste falha controlada.", "Operação de upload falha -> rastreio por ID sem credencial",kind="PROJECT",estimated=55,load={"novelty":4,"syntax":3,"composition":4,"state":4,"debugging":4,"files":3,"reading":4,"independence":4,"tools":4}),
 }
+
+
+from recipe_api import E as _E23
+
+# Fase 5 (análise curricular, item 5.10): atualização de runtime do projeto, depois do fechamento da etapa 23.
+CONTENT["23.12"] = _E23(
+    "architecture.runtime_maintenance",
+    "Projeto da etapa 23 com package.json: declare engines, .nvmrc (ou .node-version), packageManager e uma CI com a matriz Node principal e o piso.",
+    "projeto com engines, .nvmrc e packageManager -> CI roda npm test em cada versão da matriz",
+    "migração de Node 24 para 26 -> npm test verde no piso e no principal, com a troca em commit separado",
+    "Declarar só engines e achar que o projeto está fixado na versão de runtime que a equipe usa.",
+    "Sem .nvmrc e packageManager, dois colaboradores rodam versões diferentes e a CI passa numa máquina e falha em outra.",
+    "Quais arquivos fixam a versão do runtime e do gerenciador de pacotes, além de engines?",
+    ("engines é um aviso para o instalador; o que fixa o ambiente de trabalho é outro conjunto de arquivos.", "Use .nvmrc para a versão de desenvolvimento, packageManager para o gerenciador e uma matriz de CI com o principal e o piso.", "Exemplo parecido: uma biblioteca testa o piso suportado e o runtime atual para saber se a troca quebra algo."),
+    "O projeto declara o piso em engines, a versão de trabalho em .nvmrc e o gerenciador em packageManager; a CI roda a suíte nas duas versões. A migração para Node 26 entra como mudança própria, com testes verdes nos dois.",
+    "Projeto de Node 24 com CI só no principal -> matriz com piso e principal, e migração registrada",
+    kind="PROJECT", estimated=45, load={"novelty": 3, "syntax": 2, "composition": 4, "state": 3, "debugging": 3, "files": 4, "reading": 3, "independence": 4, "tools": 4},
+    runtime="Node.js",
+    compatibility="Declaração de versões em engines, .nvmrc, .node-version e packageManager. A atividade é declarada: a plataforma não executa a CI do aluno, e a troca de principal segue o calendário de M.1.",
+    optional=True,
+    explanation={
+        "mental_model": "Um projeto declara três coisas sobre o ambiente: o piso que suporta (engines), a versão em que é desenvolvido (.nvmrc) e o gerenciador de pacotes (packageManager). A CI testa as versões que o projeto promete.",
+        "worked_example": "Com engines >=24.0.0 e .nvmrc com 26, a equipe desenvolve no 26 e a CI testa no 24 e no 26. Uma mudança que só funciona no 26 aparece no job do piso.",
+        "common_trap": "Trocar a versão de desenvolvimento sem rodar o piso: o código passa localmente e quebra para quem usa a versão mínima declarada.",
+        "why_it_matters": "A manutenção real de um projeto inclui trocar de runtime sem quebrar quem ainda usa a versão anterior. Esta atividade treina isso com evidência.",
+    },
+    first_response="Antes de editar, escreva qual versão de Node o projeto suporta (piso) e qual versão a equipe usa no desenvolvimento, e onde cada uma é declarada.",
+    first_response_timing="Antes de alterar qualquer arquivo.",
+    interaction="Tabela com a matriz de CI, as versões declaradas em cada arquivo e o resultado de cada job.",
+    resources=("Node.js: calendário de releases — https://github.com/nodejs/Release", "npm: campo engines — https://docs.npmjs.com/cli/v10/configuring-npm/package-json#engines", "Corepack: packageManager — https://nodejs.org/api/corepack.html"),
+    rubric=("Declara o piso em engines, a versão de desenvolvimento em .nvmrc e o gerenciador em packageManager, com justificativa.", "Mostra a matriz de CI com o principal e o piso, e o resultado de npm test em cada uma.", "Registra a migração de Node 24 para 26 como mudança separada, com comandos, saídas e códigos de saída antes e depois."),
+    review={
+        "prompt": "Qual arquivo fixa a versão de Node usada no desenvolvimento, além de engines?",
+        "choices": [".nvmrc", "package-lock.json", "README.md"],
+        "answer": ".nvmrc",
+        "feedback_correct": ".nvmrc (ou .node-version) fixa a versão de desenvolvimento; engines declara o piso.",
+        "feedback_incorrect": "package-lock.json registra dependências e README.md é documentação; a versão de desenvolvimento fica em .nvmrc.",
+    },
+    prompt="Declare as versões do projeto e configure a CI com a matriz. Antes de migrar para Node 26, escreva o que o piso precisa continuar suportando e por que ele não pode ser só o principal.",
+)

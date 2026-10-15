@@ -15,6 +15,7 @@
     "test:phase1": "node --test scripts/test-phase1-errors.mjs scripts/test-phase1-syntax.mjs scripts/test-phase1-types.mjs",
     "test:phase2": "node --test scripts/test-phase2-core.mjs scripts/test-phase2-artifacts.mjs scripts/test-phase2-dynamic.mjs scripts/test-phase2-rubrics.mjs scripts/test-phase2-contracts.mjs scripts/test-phase2-feedback.mjs scripts/test-phase2-diagnostic.mjs scripts/test-phase2-study-time.mjs scripts/test-phase2-study-time-ui.mjs scripts/test-phase2-prior-attempts.mjs scripts/test-phase2-workers.mjs",
     "test:phase3": "node --test scripts/test-phase3-checkpoints.mjs scripts/test-phase3-local-assessment-validation.mjs scripts/test-phase3-curriculum.mjs",
+    "test:phase4": "node --test scripts/test-phase4-curriculum.mjs",
     "report:learning": "node scripts/report-learning-coverage.mjs",
     "test:stage02": "node --test scripts/test-stage02.mjs scripts/test-stage02-ui.mjs scripts/test-stage02-progress.mjs scripts/test-stage02-audit.mjs",
     "install:ci": "node scripts/install-ci.mjs",
@@ -40,11 +41,12 @@
     "test:layout": "node --test scripts/test-project-layout.mjs",
     "pretest:layout": "npm run build:curriculum",
     "pretest:stage02": "npm run build:curriculum",
-    "test": "npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1 && npm run test:phase2 && npm run test:phase3",
+    "test": "npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1 && npm run test:phase2 && npm run test:phase3 && npm run test:phase4 && npm run test:phase5",
     "build:progress": "node scripts/build-progress-model.mjs",
     "test:progress": "node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs scripts/test-progress-queue.mjs",
     "pretest": "npm run build:compiler && npm run build:progress",
-    "build:compiler": "node scripts/build-module-compiler.mjs"
+    "build:compiler": "node scripts/build-module-compiler.mjs",
+    "test:phase5": "node --test scripts/test-phase5-curriculum.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

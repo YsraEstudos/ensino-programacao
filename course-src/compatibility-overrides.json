@@ -28,7 +28,7 @@
   "02.08": "`??` (ES2020) para preservar `0`, `''` e `false`; Node.js 24 LTS.",
   "02.09": "Parâmetros padrão (ES2015), `??` (ES2020) e aritmética básica; Node.js 24 LTS.",
   "02.10": "`Math.floor`, `Math.ceil`, `Math.round`, `Math.trunc`, `Math.min`, `Math.max`, `Math.abs` e `Math.random`; disponíveis em todos os runtimes do curso.",
-  "02.11": "Número de ponto flutuante de dupla precisão (IEEE 754); `Number.EPSILON` (ES2015) para comparação com tolerância.",
+  "02.11": "Número de ponto flutuante de dupla precisão (IEEE 754); `Number.EPSILON` (ES2015) para comparação com tolerância. Math.sumPrecise (ES2026): nota informativa, não habilidade verificada. Fonte: matriz de recursos (MDN BCD 8.1.5, consultada em 10/10/2026; não reconsultada na Fase 5). Não existe no Node.js 24 nem no 26 local, e não resolve aritmética monetária: use centavos inteiros ou BigInt.",
   "02.12": "`Math.abs` e `Number.EPSILON` (ES2015) para tolerância; a política de aceitação pertence ao exercício, não a uma API.",
   "21.01": "`performance.now()` disponível no navegador e no Node.js 24 LTS (`perf_hooks`); a classificação de gargalos não usa API.",
   "21.02": "`setTimeout`, `setInterval`, `clearInterval`, `addEventListener` e `removeEventListener`; Baseline no navegador e timers globais do Node.js 24 LTS.",

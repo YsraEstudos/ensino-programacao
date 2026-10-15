@@ -537,3 +537,78 @@ CONTENT["07.12"] = C(
     resources=("GitHub Docs, About pull requests: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests", "GitHub Docs, reviewing proposed changes: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests"),
     rubric=("A revisão contém de 3 a 5 comentários com prioridade, localização, impacto, evidência e sugestão.", "Comentários tratam de defeitos verificáveis, não de gosto pessoal; bloqueadores precedem refinamentos.", "Cada sugestão recebida tem decisão aceita/rejeitada e justificativa ligada ao contrato.", "O relatório declara que a validação automática mede estrutura, enquanto a qualidade depende da revisão humana."),
 )
+
+
+# Fase 4 (análise curricular, item 4.2): escrever o próprio reduce com acumulador explícito, antes de refatorar reduce (07.06).
+CONTENT["07.13"] = E(
+    "functions.reduce_accumulator",
+    "main.js: export function meuReduce(lista, funcao, ...inicial) { /* acumule sem usar Array.prototype.reduce */ return undefined; }",
+    'meuReduce([1, 2, 3], (acc, n) => acc + n, 0) -> 6; meuReduce([], (acc, n) => acc + n, 10) -> 10',
+    'meuReduce(["a", "b"], (acc, letra, indice) => acc + indice + letra, "") -> "0a1b"; meuReduce([], (acc, n) => acc + n) -> lança TypeError',
+    "Começar o acumulador com o primeiro item sem tratar a lista vazia, ou passar o índice errado ao callback.",
+    "Com lista vazia e sem valor inicial, a versão ingênua devolve undefined ou um erro obscuro; o contrato exige TypeError explícito.",
+    "Qual é o acumulador inicial quando o chamador informa um valor, e o que acontece quando não informa?",
+    ("reduce percorre a lista carregando um acumulador: cada chamada devolve o novo acumulador para a próxima.", "Verifique se há valor inicial olhando o rest. Sem valor inicial, o acumulador começa no primeiro item e o laço começa no segundo.", "Exemplo parecido: let total = 0; for (const n of numeros) total += n; é um acumulador explícito, sem reduce."),
+    "export function meuReduce(lista, funcao, ...inicial) { const temInicial = inicial.length > 0; if (!temInicial && lista.length === 0) throw new TypeError('lista vazia sem valor inicial'); let acumulado = temInicial ? inicial[0] : lista[0]; for (let indice = temInicial ? 0 : 1; indice < lista.length; indice += 1) acumulado = funcao(acumulado, lista[indice], indice); return acumulado; }",
+    "Notas por faixa -> acumulador objeto com valor inicial explícito; lista vazia -> objeto inicial",
+    kind="MAKE", estimated=22, load={"novelty": 3, "syntax": 3, "composition": 3, "state": 3, "debugging": 2, "files": 1, "reading": 2, "independence": 3, "tools": 2},
+    runtime="Node.js 24.x, módulos ES, sem DOM.",
+    compatibility="Atividade de JavaScript puro, sem depender de Array.prototype.reduce; usa rest parameters (04.14) e um laço for.",
+    explanation={
+        "mental_model": "reduce é um laço que carrega um acumulador. Dois dados decidem o resultado: o valor inicial e a função que devolve o próximo acumulador.",
+        "worked_example": "Em [1, 2, 3] com inicial 0: acc vai de 0 a 1, depois 3, depois 6. Sem inicial, acc começa em 1 e a soma começa no segundo item. Com [] e sem inicial, não existe acumulador válido.",
+        "common_trap": "Esquecer de devolver o acumulador: sem return, o próximo passo recebe undefined.",
+        "why_it_matters": "Quase toda agregação (totais, grupos, máximos) é um acumulador. Entender o contrato antes da abreviação evita erros silenciosos.",
+    },
+    first_response="Antes de codificar, escreva o acumulador inicial de cada caso público e o que a função deve devolver.",
+    first_response_timing="Antes de executar o starter.",
+    interaction="Tabela de acumuladores por passo, com anúncio textual; editor de código acessível por teclado.",
+    resources=("MDN: Array.prototype.reduce — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce",),
+    review={
+        "prompt": "Em reduce sem valor inicial e com lista vazia, o que acontece?",
+        "choices": ["Lança TypeError", "Devolve zero", "Devolve a própria lista"],
+        "answer": "Lança TypeError",
+        "feedback_correct": "Sem acumulador inicial nem item, não existe valor para devolver; o contrato lança TypeError.",
+        "feedback_incorrect": "Nenhum valor é inventado: o acumulador vem do valor inicial ou do primeiro item.",
+    },
+    transfer_prompt="Escreva um agrupador de notas por faixa com acumulador explícito, sem Array.prototype.reduce. Explique o valor inicial escolhido e o que o chamador vê com lista vazia.",
+    prompt="Implemente meuReduce sem usar Array.prototype.reduce. Antes de executar, escreva o acumulador de cada passo do caso com inicial 0 e diga o que acontece com lista vazia sem inicial.",
+)
+
+
+# Fase 5 (análise curricular, item 5.4): extensão opcional de Map.prototype.getOrInsert, depois de 07.07.
+CONTENT["07.14"] = E(
+    "mapset.get_or_insert",
+    "main.js: export function obterOuInserir(mapa, chave, valorPadrao) { /* use getOrInsert quando existir; senão has, get e set */ return valorPadrao; } export function contarTipos(itens) { /* Map com a contagem de item.tipo */ return new Map(); }",
+    'contarTipos([{tipo:"livro"},{tipo:"filme"},{tipo:"livro"}]) -> livro: 2, filme: 1; obterOuInserir com a:1 e chave a -> 1',
+    "obterOuInserir com chave ausente -> insere o padrão; 0, \"\" e undefined já guardados -> voltam sem substituição; caminho sem getOrInsert -> mesmo resultado",
+    "Usar get(chave) ?? padrão, que trata um valor guardado como undefined ou falsy como ausente, ou esquecer de gravar o valor inserido.",
+    "Com 0 já guardado, a versão com ?? devolve o padrão e a contagem sobrescreve o valor atual sem aviso.",
+    "Quando o padrão deve ser gravado e quando o valor guardado deve ser preservado?",
+    ("Pergunte primeiro se a chave existe; o valor guardado vence, mesmo que seja 0 ou undefined.", "Escreva if (mapa.has(chave)) return mapa.get(chave); antes de set. Para a contagem, use obterOuInserir(contagem, tipo, 0) e depois set com +1.", "Exemplo parecido: contar palavras com um Map sempre começa cada palavra nova de 0, sem ler o valor anterior como ausente."),
+    "obterOuInserir usa getOrInsert quando a função existe; senão has e set gravam o padrão só no miss. contarTipos lê a contagem atual com obterOuInserir e grava atual + 1.",
+    "Palavras agrupadas por tamanho -> Map com contagem a partir de zero, sem sobrescrever 0 guardado",
+    kind="MAKE", estimated=18, load={"novelty": 3, "syntax": 2, "composition": 2, "state": 2, "debugging": 2, "files": 1, "reading": 2, "independence": 3, "tools": 2},
+    runtime="Node.js 24 LTS + navegador moderno",
+    compatibility="Map.prototype.getOrInsert é ES2026 e chega ao Node.js 26. No Node.js 24, use feature detection e o fallback com has, get e set, que esta atividade testa com o método desligado.",
+    optional=True,
+    explanation={
+        "mental_model": "getOrInsert(chave, padrão) é a forma de dizer 'leia, e se faltar, grave este padrão' em uma chamada. O fallback faz as mesmas três etapas com has, get e set.",
+        "worked_example": "Com um Map que tem 'a' -> 1, obterOuInserir(mapa, 'a', 99) devolve 1 e não altera nada; com 'b' ausente, grava 99 e devolve 99.",
+        "common_trap": "Usar ?? no lugar de has: 0, '' e undefined guardados viram padrão e o estado é sobrescrito.",
+        "why_it_matters": "Contadores e agrupamentos aparecem em quase todo relatório. A diferença entre ausente e falsy é o tipo de bug que só aparece com dados reais.",
+    },
+    first_response="Antes de editar, escreva o resultado de obterOuInserir para uma chave com valor 0 guardado e para uma chave ausente.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Tabela com o Map antes e depois de cada chamada, e a indicação de qual caminho (nativo ou fallback) foi usado.",
+    resources=("MDN: Map.prototype.getOrInsert — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map/getOrInsert", "MDN: Map — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Map"),
+    review={
+        "prompt": "Um Map já tem a chave 'x' com valor 0. O que getOrInsert('x', 5) devolve?",
+        "choices": ["0", "5", "undefined"],
+        "answer": "0",
+        "feedback_correct": "A chave existe, então o valor guardado volta e nada é gravado.",
+        "feedback_incorrect": "5 é o padrão e só vale quando a chave falta; undefined não é o caso, porque a chave existe.",
+    },
+    transfer_prompt="Conte palavras por tamanho com obterOuInserir e explique por que a contagem zero guardada não pode ser tratada como ausente.",
+    prompt="Implemente obterOuInserir e contarTipos. Antes de executar, diga o que getOrInsert('x', 5) devolve quando 'x' já tem 0 e por que o fallback usa has.",
+)

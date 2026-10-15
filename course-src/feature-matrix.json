@@ -11,15 +11,15 @@
       "node26": "https://nodejs.org/en/blog/release/v26.0.0",
       "typescript50": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-5-0.html",
       "typescript41": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html",
-    "typescript44": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html",
-    "baseline": "https://web.dev/baseline"
+      "typescript44": "https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-4.html",
+      "baseline": "https://web.dev/baseline"
     },
-  "browserBaseline": {
-    "status": "unknown",
-    "reason": "A versão do Chrome isolada não comprova a condição Baseline entre navegadores; a matriz ainda não verificou a tabela completa de disponibilidade.",
-    "source": "https://web.dev/baseline",
-    "consultadoEm": "2026-10-10"
-  },
+    "browserBaseline": {
+      "status": "unknown",
+      "reason": "A versão do Chrome isolada não comprova a condição Baseline entre navegadores; a matriz ainda não verificou a tabela completa de disponibilidade.",
+      "source": "https://web.dev/baseline",
+      "consultadoEm": "2026-10-10"
+    },
     "classifications": {
       "ecmascript": "ECMAScript standard",
       "web-node-api": "Web/Node platform API",
@@ -379,6 +379,107 @@
       "bcdPath": "api.AbortSignal.any_static",
       "availableInLocalNode26": true,
       "sourceType": "web-node-api"
+    },
+    {
+      "label": "Marca privada com #campo in obj",
+      "edition": "ES2022",
+      "match": [
+        "#saldo in valor"
+      ],
+      "nodeVersionAdded": "16.4.0",
+      "chromeVersionAdded": "91",
+      "bcdPath": "javascript.operators.in",
+      "compatibility": "`#saldo in valor` (ES2022) verifica a marca do campo privado; disponível no Node.js 24 e nos navegadores atuais. Não valida os dados do objeto.",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript",
+      "fonte": "versão a conferir na BCD antes de publicar"
+    },
+    {
+      "label": "import.meta.dirname e import.meta.filename",
+      "edition": "API Node.js",
+      "match": [
+        "import.meta.dirname",
+        "import.meta.filename"
+      ],
+      "nodeVersionAdded": "20.11.0",
+      "chromeVersionAdded": "não aplicável",
+      "bcdPath": "não aplicável (exclusivo de Node)",
+      "compatibility": "import.meta.dirname e import.meta.filename (Node.js 20.11 e 21.2; estáveis no 24). Não se aplicam ao navegador; use import.meta.url.",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api",
+      "fonte": "https://nodejs.org/api/esm.html (conferido em 14/10/2026)"
+    },
+    {
+      "label": "process.loadEnvFile e --env-file",
+      "edition": "API Node.js",
+      "match": [
+        "loadEnvFile",
+        "--env-file"
+      ],
+      "nodeVersionAdded": "20.12.0",
+      "chromeVersionAdded": "não aplicável",
+      "bcdPath": "não aplicável (exclusivo de Node)",
+      "compatibility": "process.loadEnvFile (Node.js 20.12 e 21.7; flag --env-file desde 20.6). Não existe no navegador; o carregamento deve ficar separado de loadConfig(env).",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api",
+      "fonte": "https://nodejs.org/api/process.html (versões conferidas em 14/10/2026 por busca; página truncada)"
+    },
+    {
+      "label": "node --run",
+      "edition": "API Node.js",
+      "match": [
+        "node --run"
+      ],
+      "nodeVersionAdded": "22.3.0",
+      "chromeVersionAdded": "não aplicável",
+      "bcdPath": "não aplicável (CLI de Node)",
+      "compatibility": "node --run (Node.js 22.3, estável no 24) executa scripts do package.json sem rodar os scripts pre/post do npm run. Versão 20.15 não confirmada.",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api",
+      "fonte": "https://nodejs.org/api/cli.html (versão confirmada em 14/10/2026 por busca)"
+    },
+    {
+      "label": "require(esm)",
+      "edition": "API Node.js",
+      "match": [
+        "require(esm)"
+      ],
+      "nodeVersionAdded": "22.12.0",
+      "chromeVersionAdded": "não aplicável",
+      "bcdPath": "não aplicável (módulos de Node)",
+      "compatibility": "require(esm) (Node.js 22.0 com flag; liberado sem flag em 22.12 e no 24). Módulo com top-level await lança ERR_REQUIRE_ASYNC_MODULE; a alternativa é import().",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api",
+      "fonte": "https://nodejs.org/api/modules.html (conferido em 14/10/2026)"
+    },
+    {
+      "label": "DisposableStack e SuppressedError",
+      "edition": "ES2026",
+      "match": [
+        "DisposableStack",
+        "SuppressedError"
+      ],
+      "nodeVersionAdded": "24.0.0",
+      "chromeVersionAdded": "não verificado",
+      "bcdPath": "javascript.builtins.DisposableStack",
+      "compatibility": "DisposableStack e SuppressedError (explicit resource management) estão no Node.js 24 segundo fonte secundária a confirmar na documentação oficial; em runtime sem suporte, use fallback com try/finally.",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript",
+      "fonte": "https://v8.dev/features/explicit-resource-management (fonte secundária; conferir Node 24 antes de publicar)"
+    },
+    {
+      "label": "JSON.parse com context.source no reviver",
+      "edition": "ES2026",
+      "match": [
+        "context.source"
+      ],
+      "nodeVersionAdded": "21.0.0",
+      "chromeVersionAdded": "114",
+      "bcdPath": "javascript.builtins.JSON.parse",
+      "compatibility": "context.source no reviver de JSON.parse (ES2026, junto com JSON.rawJSON) está no Node.js 21+ e no baseline 24. Sem o recurso, feature detection (suportaPreservacao) devolve false e o número volta a ser Number.",
+      "availableInLocalNode26": true,
+      "sourceType": "ecmascript",
+      "fonte": "versão a conferir na BCD antes de publicar"
     }
   ],
   "markers": [
@@ -391,4 +492,3 @@
     "20.08": "Pipeline próprio do exercício: `.map`, `.filter` e `.take` são métodos do código do aluno, não Iterator helpers."
   }
 }
-

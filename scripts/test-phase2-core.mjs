@@ -21,7 +21,7 @@ const initialIds = initialCatalog.filter(item => Number(item.stage) >= 4 && Numb
 const initiallyMissing = initialIds.filter(id => !initialAssessments[id]);
 const missing = ids.filter(id => !assessments[id]);
 
-assert.equal(ids.length, 71, 'the effective compiled 04–10 catalog includes the three earlier additions and two Fase 3 Git activities');
+assert.equal(ids.length, 84, 'the effective compiled 04–10 catalog includes the three earlier additions, two Fase 3 Git activities, eight Fase 4 additions (04.14, 05.12–05.15, 07.13, 09.09, 10.09) and five Fase 5 additions (05.16, 06.12, 07.14, 09.10, 10.10)');
 assert.equal(initiallyMissing.length, 30, `expected initial assessment gap: ${initiallyMissing.join(', ')}`);
 assert.equal(missing.length, 0, `04–10 activities without assessment: ${missing.join(', ')}`);
 

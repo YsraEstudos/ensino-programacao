@@ -68,7 +68,7 @@
     "`obj?.x` lê `x` só se `obj` não for `null` nem `undefined`; nesse caso o resultado é `undefined` em vez de um `TypeError`. `obj?.metodo()` chama o método só se `obj` existir."
   ],
   "12.02": [
-      "Revise 04.11: `TypeError` descreve argumento de tipo incorreto e `RangeError` um Number fora do domínio. Em retry, rejeite max inválido com `RangeError` antes de chamar a operação. Dentro de uma função `async`, `await` numa Promise rejeitada lança o erro naquela linha. `try { await ... } catch (erro) { ... }` captura essa rejeição como captura um `throw` comum. `throw` interrompe a função e a Promise dela rejeita."
+    "Revise 04.11: `TypeError` descreve argumento de tipo incorreto e `RangeError` um Number fora do domínio. Em retry, rejeite max inválido com `RangeError` antes de chamar a operação. Dentro de uma função `async`, `await` numa Promise rejeitada lança o erro naquela linha. `try { await ... } catch (erro) { ... }` captura essa rejeição como captura um `throw` comum. `throw` interrompe a função e a Promise dela rejeita."
   ],
   "12.05": [
     "`throw new Error('mensagem')` dentro de uma função `async` faz a Promise devolvida rejeitar; quem chamou captura com `try/catch` em volta do `await`."
@@ -96,5 +96,20 @@
   ],
   "22.11": [
     "JSDoc pode tipar uma função JavaScript sem converter o arquivo para `.ts`. `// @ts-check` ativa checagem naquele arquivo; neste exercício, `checkJs: true` no `tsconfig` oferece a mesma checagem em escopo de projeto."
+  ],
+  "04.01": [
+    "`Object.entries(resultado).map(([chave, valor]) => ...)` chama a arrow uma vez por par e devolve um array novo: a arrow é um callback, recebe o par como argumento e o que ela devolve vira um item do resultado. Callbacks e métodos de array são estudados na etapa 05; aqui a linha só formata a saída do starter."
+  ],
+  "07.12": [
+    "`new URL('../review/my-review.md', import.meta.url)` resolve um caminho relativo ao próprio arquivo do teste. `import.meta` é o objeto que um módulo ESM recebe com dados sobre ele mesmo; a etapa 14 (14.05) estuda `import.meta` em detalhe."
+  ],
+  "12.15": [
+    "`new URL('../package.json', import.meta.url)` lê um arquivo a partir da pasta do script, e não da pasta de onde o comando foi executado. `import.meta.url` é a URL do próprio módulo; a etapa 14 (14.05) estuda `import.meta`."
+  ],
+  "12.16": [
+    "`new URL('../', import.meta.url)` cria a URL da pasta do projeto a partir do arquivo atual. `import.meta.url` é a URL do próprio módulo ESM; a etapa 14 (14.05) estuda `import.meta`."
+  ],
+  "15.01": [
+    "`\"noUncheckedIndexedAccess\": true` no tsconfig faz `lista[i]` ter tipo `T | undefined`, porque o índice pode estar fora do array. A flag é estudada na etapa 15 (15.07); aqui ela aparece apenas na configuração do projeto."
   ]
 }

@@ -1,4 +1,4 @@
-from recipe_api import C
+from recipe_api import C, E
 
 CONTENT = {
     "10.01": C(
@@ -381,3 +381,78 @@ CONTENT = {
         docs="MDN Classes: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes",
     ),
 }
+
+
+# Fase 4 (análise curricular, item 4.9): getters, setters e Object.defineProperty.
+CONTENT["10.09"] = E(
+    "objects.accessors_define",
+    "main.js: export function criarConta(id, saldoInicial) { /* retorne objeto com saldo (get/set) e id somente leitura e oculto */ return {}; }",
+    'criarConta("c1", 10).saldo -> 10; conta.saldo = 25 -> conta.saldo 25',
+    'criarConta("c2", -5) -> lança RangeError; Object.keys(criarConta("c1", 10)) -> ["saldo"]',
+    "Tratar id como propriedade comum, que aparece em Object.keys e pode ser reescrita; validar só no construtor e esquecer o setter.",
+    "Object.keys mostra id, e o saldo aceita valor negativo depois da criação; o contrato pede que o setter rejeite.",
+    "Qual trecho decide se a escrita em saldo é aceita, e qual atributo impede reescrever id?",
+    ("Getter e setter são funções ligadas a uma propriedade: a leitura chama get e a escrita chama set.", "Use uma variável local para o saldo, um set que lança RangeError para valor negativo e Object.defineProperty para id com enumerable e writable falsos.", "Exemplo parecido: Object.defineProperty(obj, 'x', {value: 1, writable: false}) torna x somente leitura; escrever nele em código estrito lança TypeError."),
+    "export function criarConta(id, saldoInicial) { let saldo = 0; const conta = { get saldo() { return saldo; }, set saldo(valor) { if (valor < 0) throw new RangeError('saldo não pode ser negativo'); saldo = valor; } }; Object.defineProperty(conta, 'id', { value: id, enumerable: false, writable: false }); conta.saldo = saldoInicial; return conta; }",
+    "Sensor em Celsius -> leitura derivada em Fahrenheit; abaixo de -273.15 -> RangeError",
+    kind="MAKE", estimated=20, load={"novelty": 3, "syntax": 3, "composition": 3, "state": 3, "debugging": 2, "files": 1, "reading": 2, "independence": 3, "tools": 2},
+    runtime="Node.js 24.x, módulos ES, sem DOM.",
+    compatibility="Getters, setters e Object.defineProperty são ES5 e estão no baseline. Módulos são estritos, então atribuições inválidas lançam erro.",
+    explanation={
+        "mental_model": "Uma propriedade pode ser dado (value) ou comportamento (get e set). Getters e setters mantêm a sintaxe de propriedade e o controle de uma função. defineProperty define os atributos que o literal não expõe: enumerable e writable.",
+        "worked_example": "Em criarConta('c1', 10), conta.saldo lê a variável interna; conta.saldo = -1 chama o setter, que lança RangeError. Object.keys ignora id porque ele foi definido como não enumerável.",
+        "common_trap": "Definir só get: em código estrito (módulos são estritos), atribuir ao saldo lança TypeError; em código solto, a escrita some em silêncio.",
+        "why_it_matters": "Propriedades com validação permitem que o restante do código use conta.saldo sem saber que existe uma regra. É assim que bibliotecas controlam estado.",
+    },
+    first_response="Liste quais propriedades são dados, quais são get/set e quais atributos cada uma precisa ter.",
+    first_response_timing="Antes de executar o starter.",
+    interaction="Tabela de propriedades com atributos (enumerável, gravável) preenchida antes do código; leitura e escrita aparecem em painel textual.",
+    resources=("MDN: get — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Functions/get", "MDN: Object.defineProperty — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty"),
+    review={
+        "prompt": "Com Object.defineProperty(obj, 'id', {value: 'c1'}) e sem outros atributos, o que acontece com Object.keys(obj) e com obj.id = 'c2' em código estrito?",
+        "choices": ["id não aparece em Object.keys e a escrita lança TypeError", "id aparece em Object.keys e a escrita é aceita", "id aparece em Object.keys e a escrita lança RangeError"],
+        "answer": "id não aparece em Object.keys e a escrita lança TypeError",
+        "feedback_correct": "Os atributos não informados valem false; por isso a chave fica oculta e a escrita falha em código estrito.",
+        "feedback_incorrect": "Atributos não informados em defineProperty valem false: a propriedade fica oculta e somente leitura.",
+    },
+    transfer_prompt="Crie um sensor com leitura derivada de Fahrenheit a partir de Celsius e um setter que rejeita abaixo de -273.15. Mostre que a propriedade derivada não aparece em Object.keys e que id não pode ser reescrito.",
+    prompt="Implemente criarConta com get e set de saldo e id definido por defineProperty. Antes de executar, diga quais chaves Object.keys deve listar e por que a escrita em id falharia.",
+)
+
+
+# Fase 5 (análise curricular, item 5.5): extensão opcional de marca privada com #campo in obj, depois de 10.09.
+CONTENT["10.10"] = E(
+    "classes.private_brand",
+    "main.js: export class Conta { #saldo = 0; depositar(valor) { /* acumula em #saldo */ return this; } get saldo() { return this.#saldo; } static ehConta(valor) { /* use #saldo in valor, não instanceof */ return valor instanceof Conta; } }",
+    'Conta.ehConta(new Conta()) -> true; new Conta().depositar(10).depositar(5).saldo -> 15',
+    'Conta.ehConta({saldo: 10}) -> false; Conta.ehConta(Object.create(Conta.prototype)) -> false; Conta.ehConta(null) -> false sem erro',
+    "Usar instanceof ou checar a propriedade pública saldo para decidir se um objeto é uma Conta.",
+    "Object.create(Conta.prototype) passa no instanceof, mas não tem o campo privado; a versão com instanceof responde true e a regra aceita um impostor.",
+    "Qual pergunta #saldo in valor responde que instanceof não responde?",
+    ("A marca privada pertence à classe que criou o objeto. Procure a presença de #saldo, não o prototype.", "Use typeof valor === 'object' && valor !== null antes de #saldo in valor, porque o operador lança TypeError para primitivos.", "Exemplo parecido: #saldo in {saldo: 10} é false, porque a propriedade pública não é o campo privado."),
+    "ehConta testa typeof e null antes de #saldo in valor; a verificação responde se o objeto recebeu o campo #saldo na construção da classe, e não se os dados são válidos.",
+    "Objeto com o formato de Conta, sem a marca -> false; instância real de Conta -> true",
+    kind="MAKE", estimated=18, load={"novelty": 3, "syntax": 3, "composition": 2, "state": 2, "debugging": 2, "files": 1, "reading": 2, "independence": 3, "tools": 2},
+    runtime="Node.js 24 LTS + navegador moderno",
+    compatibility="`#saldo in valor` (ES2022) verifica a marca do campo privado; está no Node.js 24 e nos navegadores atuais. A verificação não valida os dados do objeto.",
+    optional=True,
+    explanation={
+        "mental_model": "Um campo privado pertence à classe que o declarou. #campo in obj pergunta se aquele objeto recebeu a marca do campo durante a construção, e não se ele tem dados válidos.",
+        "worked_example": "Conta.ehConta(new Conta()) é true porque o construtor criou #saldo. Um objeto literal com a propriedade saldo é false, porque não tem a marca.",
+        "common_trap": "Tratar a marca como validação: #saldo in valor diz quem criou o objeto, não se o saldo é positivo ou se os dados estão corretos.",
+        "why_it_matters": "A marca permite aceitar só instâncias confiáveis de uma classe, sem depender de propriedades públicas que qualquer objeto pode imitar.",
+    },
+    first_response="Antes de editar, diga se um objeto com a mesma forma de Conta, mas criado com Object.create, deve ser aceito, e por quê.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Tabela de exemplos com o resultado de ehConta, e a coluna que indica se o objeto tem a marca.",
+    resources=("MDN: operador in — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Operators/in", "MDN: campos privados — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Classes/Private_class_fields"),
+    review={
+        "prompt": "Qual objeto passa em #saldo in valor?",
+        "choices": ["Uma instância criada pelo construtor de Conta", "Um objeto literal com saldo", "Um objeto criado com Object.create(Conta.prototype)"],
+        "answer": "Uma instância criada pelo construtor de Conta",
+        "feedback_correct": "Só o construtor cria a marca do campo privado; o resto da forma não conta.",
+        "feedback_incorrect": "Propriedade pública e prototype não criam o campo privado; só a construção da classe cria a marca.",
+    },
+    transfer_prompt="Explique por que #saldo in valor é melhor que instanceof para aceitar apenas instâncias de uma classe, e cite um caso em que a verificação não basta.",
+    prompt="Implemente ehConta usando #saldo in valor. Antes de executar, preveja o resultado para {saldo: 10} e para Object.create(Conta.prototype).",
+)

@@ -1,4 +1,4 @@
-from recipe_api import C
+from recipe_api import C, E
 _MENTAL_MODELS = {'testing.evolving_project': 'Uma mudança de projeto convive com comportamento já utilizado. '
                              'Evoluir exige preservar compatibilidade e tornar as novas regras '
                              'observáveis.',
@@ -709,3 +709,40 @@ for _card_id, _official_url in _OFFICIAL_DOCS.items():
 
 # Revisão editorial de 05/10/2026: enunciado, starter e contrato realinhados.
 CONTENT["13.14"]["content_version"] = 2
+
+
+# Fase 4 (análise curricular, item 4.6): subclasses de Error com cause e Error.isError com fallback (item 5.3).
+CONTENT["13.15"] = E(
+    "errors.custom_cause",
+    "main.js: export class ErroPagamento extends Error { /* defina name e repasse as opções (cause) ao super */ } export function pagar(valor, gateway) { return undefined; } export function ehErro(valor) { return false; }",
+    'pagar(10, {cobrar: v => v}) -> 10; pagar(0, {cobrar: v => v}) -> lança ErroPagamento "valor deve ser positivo"',
+    'pagar(5, {cobrar() { throw new Error("recusado"); }}) -> ErroPagamento com cause.message "recusado"; ehErro({name: "Error", message: "x"}) -> false',
+    "Relançar o erro do gateway sem contexto, criar classe de erro sem name e sem cause, ou identificar erro só pela mensagem.",
+    "A camada de cima recebe 'recusado' sem saber que a falha veio da cobrança; o erro não tem tipo nem causa para distinguir falha de cobrança de valor inválido.",
+    "Como o chamador distingue um erro de domínio de uma falha técnica sem perder a causa original?",
+    ("Um erro de domínio é uma classe própria; cause guarda o erro original sem misturar mensagens.", "Em super(mensagem, { cause }) a causa fica em error.cause. Para checar se algo é erro, use Error.isError quando existir e instanceof Error como fallback.", "Exemplo parecido: class ErroCadastro extends Error { constructor(m, o) { super(m, o); this.name = 'ErroCadastro'; } }."),
+    "export class ErroPagamento extends Error { constructor(mensagem, opcoes) { super(mensagem, opcoes); this.name = 'ErroPagamento'; } } export function pagar(valor, gateway) { if (valor <= 0) throw new ErroPagamento('valor deve ser positivo'); try { return gateway.cobrar(valor); } catch (erro) { throw new ErroPagamento('falha ao cobrar', { cause: erro }); } } export function ehErro(valor) { return typeof Error.isError === 'function' ? Error.isError(valor) : valor instanceof Error; }",
+    "Falha ao ler configuração -> erro de domínio com cause apontando para o erro do sistema de arquivos",
+    kind="MAKE", estimated=24, load={"novelty": 4, "syntax": 3, "composition": 3, "state": 2, "debugging": 3, "files": 2, "reading": 3, "independence": 3, "tools": 2},
+    runtime="Node.js 24.x, módulos ES, sem DOM.",
+    compatibility="Error cause é ES2022. Error.isError exige Node.js 24.3.0 e está marcado na matriz de recursos; sem ele, a atividade usa instanceof Error como fallback declarado.",
+    explanation={
+        "mental_model": "Um erro tem tipo (classe), mensagem e causa. Subclasses dão tipo ao que o domínio precisa tratar; cause prende o erro original para quem depura, sem reescrever a mensagem.",
+        "worked_example": "Quando gateway.cobrar lança Error('recusado'), pagar captura o erro e lança ErroPagamento('falha ao cobrar', {cause}); o chamador lê error.cause.message.",
+        "common_trap": "Esquecer this.name: o erro continua com o nome 'Error' e a classe fica invisível em logs. Também é comum distinguir erros só pelo texto da mensagem.",
+        "why_it_matters": "Tratar cada tipo de falha do jeito certo depende de identificar o tipo sem ler texto. A causa evita perder o que originou a falha.",
+    },
+    first_response="Escreva as duas categorias de erro que pagar pode lançar e o que cada uma deve carregar.",
+    first_response_timing="Antes do primeiro Run.",
+    interaction="Lista de erros lançados com tipo, mensagem e causa lado a lado, anunciada em texto.",
+    resources=("MDN: Error.cause — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error/cause", "MDN: Error.isError — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error/isError"),
+    review={
+        "prompt": "Qual chamada preserva o erro original sem trocar a mensagem do novo erro?",
+        "choices": ["new ErroPagamento('falha ao cobrar', { cause: erro })", "new ErroPagamento(erro.message)", "throw erro"],
+        "answer": "new ErroPagamento('falha ao cobrar', { cause: erro })",
+        "feedback_correct": "A opção cause guarda o erro original em error.cause, e a mensagem continua a da camada atual.",
+        "feedback_incorrect": "Repassar só a mensagem perde o objeto original; relançar o erro não diz em que camada a falha foi tratada.",
+    },
+    transfer_prompt="Crie um erro de domínio para falha ao ler configuração que preserve a causa do sistema de arquivos. Mostre no teste que error.cause aponta para o erro original e que name identifica a classe.",
+    prompt="Implemente ErroPagamento, pagar e ehErro. Antes de executar, diga qual name e qual cause um erro lançado pelo gateway deve ter ao chegar ao chamador.",
+)

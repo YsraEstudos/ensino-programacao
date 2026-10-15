@@ -1,0 +1,9 @@
+{
+  "name": "scripts-devpath-14-21",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "presaudacao": "node -e \"console.log('antes do script')\"",
+    "saudacao": "node saudacao.mjs"
+  }
+}

@@ -1792,5 +1792,248 @@
     "origin": "third_edition",
     "audit_ids": [],
     "prompt": "Medir uma interação repetível antes de propor uma otimização."
+  },
+  {
+    "id": "04.14",
+    "title": "Parâmetros padrão e rest",
+    "stage": "04",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente as três funções com padrões e rest. Antes de executar, preveja a saída de criarPedido('caneca', 0) e explique por que o padrão não entra."
+  },
+  {
+    "id": "05.12",
+    "title": "Troque datas com grupos nomeados",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente formatarData com replace e grupos nomeados. Antes de executar, preveja o resultado de 'dia 2026-10-14' e diga qual âncora impede a troca."
+  },
+  {
+    "id": "05.13",
+    "title": "Pares e consoantes com matchAll e flags",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente extrairPares com matchAll e consoantes com a flag v. Antes de executar, diga por que matchAll sem g falha."
+  },
+  {
+    "id": "05.14",
+    "title": "Regex ou parser?",
+    "stage": "05",
+    "kind": "COMPARE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Compare as duas abordagens para as linhas dadas. Escreva a regra de decisão, um exemplo que a regex não resolve e o critério de validação que você usaria antes de escolher."
+  },
+  {
+    "id": "05.15",
+    "title": "Conte grafemas com Intl.Segmenter",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente contarGraficos com Intl.Segmenter. Antes de executar, preveja o resultado de 'e' com acento combinante e de uma bandeira, e diga qual medida (unidades, code points ou grafemas) responde cada pergunta."
+  },
+  {
+    "id": "07.13",
+    "title": "Escreva o seu reduce",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente meuReduce sem usar Array.prototype.reduce. Antes de executar, escreva o acumulador de cada passo do caso com inicial 0 e diga o que acontece com lista vazia sem inicial."
+  },
+  {
+    "id": "09.09",
+    "title": "Tag que escapa texto",
+    "stage": "09",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente html como tag que escapa os valores e preserva as partes fixas. Antes de executar, diga o que a tag recebe em html`<b>${x}</b>` e qual parte você não deve escapar."
+  },
+  {
+    "id": "10.09",
+    "title": "Getter, setter e propriedade oculta",
+    "stage": "10",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente criarConta com get e set de saldo e id definido por defineProperty. Antes de executar, diga quais chaves Object.keys deve listar e por que a escrita em id falharia."
+  },
+  {
+    "id": "12.17",
+    "title": "Promise a partir de callback",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente esperar e promisify. Antes de executar, preveja o que o chamador recebe quando o callback chama cb(new RangeError(...))."
+  },
+  {
+    "id": "12.18",
+    "title": "Retry com backoff e concorrência",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente atrasoExponencial, limitarConcorrencia e comRetry. Antes de executar, calcule a espera da tentativa 9 e diga quantas tarefas podem estar em voo com limite 2."
+  },
+  {
+    "id": "12.19",
+    "title": "Monte URLs com URLSearchParams",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente montarUrl e lerPagina. Antes de executar, escreva a URL final com caminho 'busca' e com '/busca' e explique a diferença."
+  },
+  {
+    "id": "12.20",
+    "title": "Plural e tempo relativo com Intl",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente rotuloItens e tempoRelativo com Intl. Antes de executar, diga qual categoria pt-BR devolve para 1 e para 5, e o que numeric auto muda em -1 dia."
+  },
+  {
+    "id": "13.15",
+    "title": "Erro de domínio com causa",
+    "stage": "13",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente ErroPagamento, pagar e ehErro. Antes de executar, diga qual name e qual cause um erro lançado pelo gateway deve ter ao chegar ao chamador."
+  },
+  {
+    "id": "21.13",
+    "title": "Ouvintes com EventTarget",
+    "stage": "21",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente criarContador e ouvirAte com EventTarget e AbortSignal. Antes de executar, diga quantas vezes o tratador é chamado se o sinal for abortado depois do primeiro incremento."
+  },
+  {
+    "id": "05.16",
+    "title": "Texto UTF-16 bem formado",
+    "stage": "05",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Detecte surrogate isolado com isWellFormed e troque por U+FFFD com toWellFormed, dizendo se houve substituição."
+  },
+  {
+    "id": "06.12",
+    "title": "Número grande preservado no JSON",
+    "stage": "06",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Leia um id de 20 dígitos com context.source do reviver e serialize com JSON.rawJSON sem perder dígitos."
+  },
+  {
+    "id": "07.14",
+    "title": "Contagem com getOrInsert",
+    "stage": "07",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente obterOuInserir com getOrInsert(chave, padrão) e um caminho sem o método, e conte tipos com um Map."
+  },
+  {
+    "id": "09.10",
+    "title": "Memo com getOrInsertComputed",
+    "stage": "09",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente obterOuCalcular com getOrInsertComputed(chave, fabrica) e criarMemo com uma closure; a fábrica só roda no miss."
+  },
+  {
+    "id": "10.10",
+    "title": "Marca privada com #campo in obj",
+    "stage": "10",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente ehConta com #saldo in valor, sem instanceof, e trate primitivos sem lançar erro."
+  },
+  {
+    "id": "12.21",
+    "title": "Cancelar, expirar e descartar respostas",
+    "stage": "12",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente buscarComLimite com AbortSignal.any e AbortSignal.timeout, criarBuscaAtual para descartar respostas obsoletas e adiarResposta com Promise.withResolvers()."
+  },
+  {
+    "id": "14.19",
+    "title": "Caminhos com import.meta",
+    "stage": "14",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Crie caminhos.mjs com import.meta.dirname e import.meta.filename, e rode node --test de outra pasta."
+  },
+  {
+    "id": "14.20",
+    "title": "Configuração com loadEnvFile",
+    "stage": "14",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Crie config.mjs com process.loadEnvFile e uma função pura lerConfig(env) que valida PORTA."
+  },
+  {
+    "id": "14.21",
+    "title": "node --run e npm run",
+    "stage": "14",
+    "kind": "COMPARE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Compare node --run saudacao com npm run saudacao, observando o script pre."
+  },
+  {
+    "id": "14.22",
+    "title": "require(esm) e top-level await",
+    "stage": "14",
+    "kind": "COMPARE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Carregue ESM síncrono com require(), observe ERR_REQUIRE_ASYNC_MODULE e use import() para o módulo com await."
+  },
+  {
+    "id": "20.11",
+    "title": "Base64 e hexadecimal sobre bytes",
+    "stage": "20",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente paraBase64, deBase64 e paraHex sobre bytes UTF-8, com o caminho de fallback para runtimes sem toBase64 e toHex."
+  },
+  {
+    "id": "21.14",
+    "title": "Pilha de recursos com DisposableStack",
+    "stage": "21",
+    "kind": "MAKE",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Registre recursos em DisposableStack, verifique a ordem de fechamento e leia error e suppressed do SuppressedError."
+  },
+  {
+    "id": "23.12",
+    "title": "Atualize o runtime do projeto",
+    "stage": "23",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Declare engines, .nvmrc e packageManager, configure a CI com piso e principal, e migre de Node 24 para 26 sem regressão."
   }
 ]
