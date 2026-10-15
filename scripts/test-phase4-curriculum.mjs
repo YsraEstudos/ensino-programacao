@@ -14,9 +14,8 @@ import {setup} from './course-runner-harness.mjs';
 // com starter que reprova e referência que aprova, e ordem publicada que respeita os pré-requisitos.
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = file => JSON.parse(readFileSync(path.join(root, file), 'utf8'));
-const NEW_JS = ['04.14', '05.12', '05.13', '05.15', '07.13', '09.09', '10.09', '12.17', '12.18', '12.19', '12.20', '13.15', '21.13'];
-const NEW_RUBRIC = ['05.14'];
-const NEW_ALL = [...NEW_JS, ...NEW_RUBRIC];
+const NEW_JS = ['04.14', '05.12', '05.13', '05.14', '05.15', '07.13', '09.09', '10.09', '12.17', '12.18', '12.19', '12.20', '13.15', '21.13'];
+const NEW_ALL = [...NEW_JS];
 
 const catalog = read('public/course-catalog.json');
 const assessments = read('public/course-assessments.json');
@@ -120,9 +119,10 @@ test('as atividades novas são publicadas com os metadados e a avaliação decla
     assert(assessments[id]?.tests, `${id} publishes its executable assessment`);
     assert(sourceAssessments[id].assertionCases?.length > 0, `${id} has annotated assertion cases`);
   }
-  assert.equal(sourceAssessments['05.14'].environment, 'rubric');
+  assert.equal(sourceAssessments['05.14'].environment, 'javascript');
+  assert.equal(sourceAssessments['05.14'].rubric.length, 3, '05.14 preserves its conceptual rubric');
   assert.equal(assessments['05.14'].rubric.length, 3, '05.14 publishes three rubric criteria');
-  assert.equal(sourceAssessments['05.14'].evidenceLabel, 'rubric-declared');
+  assert.notEqual(sourceAssessments['05.14'].evidenceLabel, 'rubric-declared');
 });
 
 // Um starter pode cumprir uma borda do contrato (por exemplo, texto sem data permanece igual); basta um teste reprová-lo.
@@ -146,7 +146,28 @@ test('o avaliador publicado reprova cada starter novo e aprova a referência', a
       assert(starter.tests.failed > 0, `${id} starter passes every behavior check`);
     }
   } finally {
-    env.close();
+    await env.close();
+  }
+});
+
+test('4.3: o avaliador usa colação portuguesa no desempate por nome', async () => {
+  const env = setup();
+  try {
+    const evaluator = assessmentContext(env);
+    const item = catalog.find(entry => entry.id === '07.03');
+    const assessment = assessments['07.03'];
+    const reference = await evaluator.DevPathAssessment.run({
+      item, assessment, files: solutionFiles(sourceAssessments['07.03'].referenceDir), fingerprint: 'phase4-locale-reference',
+    });
+    const starter = await evaluator.DevPathAssessment.run({
+      item, assessment, files: item.starterFiles, fingerprint: 'phase4-locale-starter',
+    });
+    assert.equal(reference.kind, 'passed', `07.03 reference: ${reference.text}`);
+    assert.equal(reference.tests.failed, 0, '07.03 reference failed tests');
+    assert.equal(starter.kind, 'failed', `07.03 starter should fail behavior checks: ${starter.text}`);
+    assert(starter.tests.failed > 0, '07.03 starter passes every behavior check');
+  } finally {
+    await env.close();
   }
 });
 

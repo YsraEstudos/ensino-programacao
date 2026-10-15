@@ -6,7 +6,7 @@ import {JSDOM} from 'jsdom';
 
 // Execute the actual iframe bootstrap with real worker threads. Browser checks
 // additionally cover the sandbox and CSP, which jsdom does not implement.
-export function setup({failWorker = false} = {}) {
+export function setup({failWorker = false, withoutErrorIsError = false} = {}) {
   const dom = new JSDOM('<body></body>', {url: 'http://localhost', runScripts: 'outside-only'});
   const w = dom.window;
   const workers = new Set();
@@ -27,6 +27,7 @@ export function setup({failWorker = false} = {}) {
         this.thread = new NodeWorker(`
           const {parentPort} = require('node:worker_threads');
           globalThis.self = globalThis;
+          if (${withoutErrorIsError}) Object.defineProperty(Error, 'isError', {value: undefined, configurable: true});
           self.postMessage = data => parentPort.postMessage(data);
           parentPort.on('message', data => self.onmessage({data}));
           const rejectionListeners = new Map();

@@ -74,10 +74,10 @@
       "match": [
         "Error.isError"
       ],
-      "nodeVersionAdded": "24.3.0",
+      "nodeVersionAdded": "24.0.0",
       "chromeVersionAdded": "134",
       "bcdPath": "javascript.builtins.Error.isError",
-      "compatibility": "fallback required on Node 24",
+      "compatibility": "fallback tested when Error.isError is unavailable",
       "availableInLocalNode26": true,
       "sourceType": "ecmascript"
     },

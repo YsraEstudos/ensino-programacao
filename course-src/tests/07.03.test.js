@@ -12,3 +12,10 @@ test('pontua partidas válidas e ordena por pontos decrescentes e nome crescente
     {id: 'low', jogador: 'Bia', valida: true, pontos: 1},
   ])).toEqual(['top', 'middle', 'low']);
 });
+
+test('desempata nomes com acentos segundo a colação pt-BR', () => {
+  /*@case 07.03.desempata-nomes-com-acentos--78d10848*/expect(ranking([
+    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},
+    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},
+  ])).toEqual(['agata', 'bruno']);
+});

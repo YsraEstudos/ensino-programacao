@@ -99,7 +99,7 @@ A última verificação independente rodou os três validadores e obteve 254 car
 | 03 sem prática de `switch` | Corrigido | 03.04 pratica `switch` |
 | Runtime TS inconsistente | Corrigido | Ver 2.1 |
 | 14.03 usa `node:test` enquanto a 13 adota Vitest | **Aberto** | Item 4.12 |
-| 07.03 sem `localeCompare`/`Intl.Collator` | **Aberto** | Item 4.3 |
+| 07.03 sem `localeCompare`/`Intl.Collator` | Corrigido em 15/10/2026 | Item 4.3 |
 
 ### 2.4 Pré-requisitos ocultos (§2 original): estado das 28 linhas
 
@@ -134,6 +134,7 @@ Em cada item, **"O que corrigir"** diz exatamente o que muda e onde, e **"Benef�
 | **Passo zero** | Remover os limites fixos que impedem acrescentar atividades | Antes de tudo; poucas horas |
 | **Fase 0** | Corrigir os sinais que enganam o aluno hoje e o travamento por laço infinito no DOM | Primeira entrega; poucos dias |
 | **Fases 1–2** | Sequência dos pré-requisitos; código inicial, avaliação e rubricas nas etapas 04–14 | Logo depois; é o que mais impacta o aluno |
+| **Fase 2.5 → 6.0** | Gates de qualidade e correções do gerador transportados do plano mestre | Fechamento pendente incorporado ao início da Fase 6; depois, gates aplicados às entregas seguintes |
 | **Fase 3** | Ambiente real e ferramentas, por marco de faixa | Em paralelo com as Fases 1–2, por marco |
 | **Fases 4–8** | Expansão de conteúdo, recursos, prática, especializações e plataforma | Ajustada conforme resultados observados com alunos |
 | **Trilha M** | Manutenção com data ou sem urgência: troca de LTS do Node, piso de versão, fingerprint, TS 6 × 7, cancelamento completo | Em paralelo, sem bloquear as fases |
@@ -308,7 +309,9 @@ Assim, os entregáveis de engenharia e seus gates estão implementados. O crité
 
 ### Fase 2.5: Gates e gerador transportados do plano mestre
 
-Itens das fases 4 e 6 do plano mestre, transcritos sem alteração. Ficam fora da Fase 2 para que ela mantenha o escopo original. Executar depois da Fase 2 e antes da Fase 3.
+Itens das fases 4 e 6 do plano mestre. Ficam fora da Fase 2 para que ela mantenha o escopo original. **Reprogramação em 15/10/2026, por solicitação do usuário:** executar a verificação e o fechamento desta fase no bloco **6.0**, antes dos itens 6.1–6.4. Esta ordem substitui a previsão anterior de execução antes da Fase 3.
+
+**Estado verificado em 15/10/2026: sem fechamento integral comprovado.** O checklist abaixo permanece aberto e não há registro de aceite completo da Fase 2.5. Há entregas parciais reaproveitáveis: `course-src/build-public-curriculum.mjs` já copia `assessment.rubric` para o cartão, e `scripts/validate-course-catalog.mjs` já valida o intervalo de `review.answer`. Isso não comprova os demais gates nem todas as correções editoriais. Em 6.0, conferir cada item no código e no catálogo atuais, registrar as evidências e implementar apenas o que faltar; preservar as entregas já verificadas.
 
 #### 2.5.1 Gates de qualidade em modo aviso (transportado do plano mestre, fase 4)
 
@@ -400,7 +403,7 @@ Criar em `scripts/` (e incluir em `check:curriculum`):
 | 4.3 `localeCompare` | Adiado para a fase 15 do plano mestre, em que 07.03 é reescrita (caso João/Joao). | Não executado nesta fase. |
 | 4.4 Promises | 12.17: Promise a partir de callback error-first; a rejeição chega ao `await`. | — |
 | 4.5 Retry seguro | 12.18: backoff com teto, jitter injetável, pool de concorrência e espera injetada. | Os testes não usam tempo real. |
-| 4.6 Erros | 13.15: subclasse com `name` e `cause`; `Error.isError` com fallback declarado. A matriz já registra 24.3.0. | — |
+| 4.6 Erros | 13.15: subclasse com `name` e `cause`; `Error.isError` com fallback declarado. A matriz registrava 24.3.0 em 14/10; corrigido para 24.0.0 em 15/10. | — |
 | 4.7 `URL` | 12.19: `URL` e `URLSearchParams`; o prefixo da base é preservado. | — |
 | 4.8 `Intl` | 05.15 (`Intl.Segmenter`); 12.20 (`PluralRules` e `RelativeTimeFormat`). | A saída de plural depende dos dados ICU; os testes evitam o caso 0. |
 | 4.9 Getters/setters | 10.09: get e set, e `Object.defineProperty`. | — |
@@ -413,6 +416,8 @@ Criar em `scripts/` (e incluir em `check:curriculum`):
 Verificação: `build:curriculum` e `check:curriculum` com 289 cartões, 0 avisos e 0 erros; `test-phase4-curriculum.mjs` com 7/7; `test-phase2-core.mjs` com o limite de 04–10 atualizado de 71 para 79. Suíte completa: `npm test` concluído com saída 0; nenhuma suíte com falha, e 2 testes marcados como pulados (skip).
 
 Não houve verificação no Chromium desta fase: o avaliador foi exercitado pelo replay Node do publicador. As atividades novas não têm mutantes. Não houve commit, push ou deploy.
+
+**Atualização técnica — 15/10/2026.** 05.14 passou a ter contrato JavaScript e suíte comportamental executável: a referência passa e o starter falha; os três critérios conceituais da rubrica foram preservados. 07.03 agora desempata nomes com `localeCompare(..., 'pt-BR')`; o teste cobre `Ágata` antes de `Bruno` com a mesma pontuação, e o avaliador confirma referência aprovada e starter reprovado. `test-phase4-curriculum.mjs` passou no Node 24.0.0 e no Node 26.7.0. Isso fecha localmente os pontos 4.1 e 4.3; sem publicação, commit ou deploy.
 
 ---
 
@@ -437,7 +442,7 @@ O contexto de origem do reviver precisa de cadastro e detecção próprios: a en
 |---|---|---|---|
 | 5.1 | 02.11/02.12 | Nota informativa sobre `Math.sumPrecise` (ES2026), deixando claro que não resolve dinheiro. A matriz atual registra ausência de suporte no Node 24/26; reconferir as versões exatas antes de publicar. Enquanto indisponível no ambiente escolhido, não exigir execução da API nem apresentá-la como habilidade verificada. | O aluno não acha que um recurso novo resolve aritmética monetária. |
 | 5.2 | 05 | Extensão opcional após 05.11 com `String.prototype.isWellFormed`/`toWellFormed` (ES2024). Exercitar pares válidos e surrogates isolados; mostrar que `toWellFormed` substitui os isolados por U+FFFD, com perda de informação. Não confundir com normalização NFC nem com recuperação de texto corrompido. | O aluno identifica strings UTF-16 malformadas e escolhe entre rejeitar a entrada e aceitar a substituição antes de enviá-la a APIs. |
-| 5.3 | 06 e 13 | Extensão opcional após 06.06 para `JSON.rawJSON` e o contexto de origem do reviver (ES2026), com contrato próprio: preservar um inteiro fora da faixa segura a partir do texto de origem e serializá-lo sem conversão prévia para Number. Manter parse inválido e perdas no round-trip como foco de 06.06. `Error.isError` já foi implementado em 13.15 na Fase 4: conferir a integração e testar o fallback existente, sem criar outra unidade. A matriz exige Node 24.3.0 para ele. | O aluno distingue parse, preservação de precisão e serialização, sem acumular assuntos no cartão introdutório de JSON. |
+| 5.3 | 06 e 13 | Extensão opcional após 06.06 para `JSON.rawJSON` e o contexto de origem do reviver (ES2026), com contrato próprio: preservar um inteiro fora da faixa segura a partir do texto de origem e serializá-lo sem conversão prévia para Number. Manter parse inválido e perdas no round-trip como foco de 06.06. `Error.isError` já foi implementado em 13.15 na Fase 4: conferir a integração e testar o fallback existente, sem criar outra unidade. A matriz registra Node 24.0.0; o fallback deve ser exercitado em realm isolado. | O aluno distingue parse, preservação de precisão e serialização, sem acumular assuntos no cartão introdutório de JSON. |
 | 5.4 | 07 e 09 | Extensões opcionais após 07.07 e 09.06 para `Map.prototype.getOrInsert`/`getOrInsertComputed` (ES2026), depois da versão com `has/get/set`. Testar chaves ausentes, valores falsy/undefined já armazenados e execução da fábrica somente no miss, nos caminhos nativo e fallback. 09.07 continua tratando WeakMap; não substituir sua comparação por APIs de Map. | Mostra a evolução da linguagem a partir de um padrão que o aluno já escreveu à mão. |
 | 5.5 | 10 | Verificação de marca com `#campo in obj` (ES2022), junto com campos privados. Explicar que verifica a presença da marca privada declarada naquele escopo; não é validação dos dados nem garantia geral de origem/confiabilidade do objeto. | O aluno verifica a marca privada antes de acessar o campo e entende o limite dessa verificação. |
 | 5.6 | 12 | Extensões opcionais após 12.06/12.08 para `Promise.withResolvers`, `AbortSignal.timeout` e `AbortSignal.any`. Os três estão na matriz, mas precisam de prática avaliada. Preservar os contratos obrigatórios de busca/dashboard; testar sucesso, cancelamento prévio, timeout e resposta obsoleta com fixtures, além dos caminhos de compatibilidade aplicáveis. | Cancelamento e timeout com as APIs atuais, sem perder a prática do modelo tradicional. |
@@ -478,24 +483,50 @@ Verificação: `npm run build:curriculum` e `npm run check:curriculum` com 302 c
 
 Limites da entrega: as sete atividades executáveis foram exercitadas pelo avaliador publicado em Node (jsdom e workers), não no Chromium: não houve gate de navegador nesta fase. Os checkpoints locais rodaram apenas no Node 26.7.0. O piso de Node 24.0.0 (M.2) não foi testado. Nenhuma atividade foi publicada, comitada ou implantada.
 
+**Revalidação técnica — 15/10/2026.**
+
+- **5.2 e gate de navegador:** `scripts/browser-phase5-check.js` executou no Playwright/Chrome 155.0.0.0 (Windows). O fluxo de 05.16 abriu a atividade, registrou a previsão, aceitou uma implementação, executou os testes e exibiu `3 de 3 testes passaram`. No mesmo navegador, as sete referências (05.16, 06.12, 07.14, 09.10, 10.10, 12.21 e 20.11) passaram; os sete starters falharam como esperado. O fluxo manual também foi conferido no Edge local. Isso não comprova outros navegadores ou versões.
+- **5.3, `Error.isError`:** a suíte de 13.15 passou integrada ao avaliador publicado com a propriedade `Error.isError` forçada a `undefined` apenas no worker isolado: 5/5 testes de comportamento. O teste separado em VM confirma que o fallback reconhece instâncias reais e rejeita objetos apenas parecidos com erro. Node 24.0.0 também expõe a API nativamente; a nota oficial da [versão 24.0.0 do Node.js](https://nodejs.org/pt-br/blog/release/v24.0.0) lista `Error.isError` entre os recursos incluídos no V8 13.6. Corrigimos a matriz de `24.3.0` para `24.0.0`; o fallback segue coberto em runtimes sem a API.
+- **5.7 e piso exato:** os testes curriculares das Fases 4 e 5 passaram no Node 24.0.0; os checkpoints 14.19–14.22 também passaram com `node` e `npm` resolvidos para esse binário. A suíte completa do repositório ainda não foi executada no piso exato, então M.2 permanece aberto nesse escopo mais amplo.
+- **Validação local:** `npm run check:curriculum` terminou com 302 atividades, 0 avisos e 0 erros; `npm run assets:version` terminou sem erro. Nada foi publicado, comitado ou implantado.
+
+Os pontos 5.2, 5.3 e os checkpoints de 5.7 listados acima estão cobertos. A Fase 5 inteira continua sem fechamento global: permanecem, entre outros limites já registrados, a revisão da fonte factual de 5.1, a ausência de teste do fallback estático de `Uint8Array.fromBase64` em 20.11 e a fonte secundária usada para 21.14.
+
 ---
 
 ### Fase 6: Prática variada e retenção
 
+**Estado.** Sem execução registrada nesta seção. Os itens abaixo são requisitos planejados. A Fase 2.5, sem fechamento integral comprovado, foi incorporada como bloco inicial **6.0**; seu fechamento faz parte da Fase 6, com evidências registradas por item.
+
 **Por que vem aqui.** O banco de variações e a revisão executável dão escala à prática depois que o núcleo está avaliável.
+
+**6.0 — Concluir a Fase 2.5 antes da expansão.** Usar os checklists 2.5.1 e 2.5.2 acima como escopo rastreável, preservando sua numeração. Primeiro classificar cada item como já comprovado, parcial ou pendente, com arquivo e evidência; depois concluir os pendentes. Entregar os gates de contrato oculto, arquivos de solução publicada, starter/referência, mutantes e texto, integrados a `check:curriculum`, com contagens de avisos registradas. Concluir as correções de feedback, transferências, links, títulos, rubricas, interação e coerência dos identificadores. Respeitar o modo aviso previsto em 2.5.1 e a promoção a erro dos gates de título e feedback repetido em 2.5.2, além dos gates já promovidos em seus escopos. Registrar os resultados no registro de execução da Fase 6. Somente após comprovar as saídas de 2.5.1 e 2.5.2, iniciar 6.1–6.4; correções de P.2 e levantamento de cobertura podem ocorrer durante 6.0.
+
+**Dependências de entrada.** Resolver P.2 antes de ampliar o banco: conferir o limite de registros no cliente e no servidor e provar que o progresso acima do limite antigo sobrevive a salvar, sincronizar e recarregar. Ter mais de 300 atividades no catálogo não prova perda de progresso de todo aluno; o descarte ocorre quando o limite de registros de aprendizagem é ultrapassado. Reutilizar o grafo e o validador de conceitos da Fase 4 para validar as novas tarefas. Eles não definem quais conceitos pertencem ao núcleo e não substituem a checagem dos pré-requisitos já estudados por cada aluno.
+
+**Escopo e volume antes da autoria.** Produzir um mapa de cobertura com os IDs dos conceitos do núcleo, justificativa da classificação, atividades existentes que já os praticam, variantes previstas, pré-requisitos e forma de avaliação. Conceitos isentos de implementação recebem justificativa e avaliação adequada ao objetivo. Contar atividades reaproveitadas e novas, estimar autoria e tempo de prática e priorizar lacunas de cobertura e dificuldades observadas. As 3–5 variações são o total por conceito, não necessariamente 3–5 atividades novas. As 370–500 h são uma estimativa ainda sem calibração (2.7), não um teto; recalcular a carga do catálogo e separar prática obrigatória de revisão sob demanda.
 
 | # | Item | O que corrigir | Benefício para o aluno |
 |---|---|---|---|
-| 6.1 | Banco de exercícios isomórficos | Para cada conceito central, 3–5 variações com dados e domínios diferentes, estruturalmente relacionadas, sem apenas trocar nomes. | O aluno prova que entendeu a estrutura, não que memorizou um exemplo. |
-| 6.2 | Revisão espaçada com recuperação ativa | `review-schedule.js` passa a alternar formatos: múltipla escolha que exige previsão ou raciocínio, previsão de código novo, correção curta e mini-implementação. A múltipla escolha continua útil quando exige recuperação ativa; o problema atual é depender só dela e de perguntas de reconhecimento. | Recuperação ativa em formatos variados fixa o aprendizado no longo prazo, conforme o guia do IES citado nas referências. |
-| 6.3 | Katas intercalados | Exercícios curtos de etapas anteriores misturados às novas. | A prática intercalada obriga o aluno a escolher a ferramenta certa. |
-| 6.4 | Ler código alheio cedo | Hoje o primeiro mini-repositório é a 23.10. Acrescentar uma investigação em código alheio nas faixas 07, 11, 14 e 18. | Ler código existente é a maior parte do trabalho real. |
+| 6.1 | Banco de exercícios isomórficos | Para cada conceito listado no mapa, 3–5 variações com dados e domínios diferentes, estruturalmente relacionadas. Registrar qual decisão o aluno precisa transferir e por que a variante não é só troca de nomes ou números. Preservar IDs existentes e identificar cada variante de forma estável, vinculada ao conceito e à atividade de origem. Variantes dentro de uma atividade não aumentam automaticamente a contagem de atividades concluídas. | O aluno pratica a mesma estrutura em situações diferentes, com cobertura explícita. |
+| 6.2 | Revisão espaçada com recuperação ativa | Manter em `public/review-schedule.js` o cálculo de datas e definir a seleção de variantes, interface e correção em `public/review-controller.js`, com os contratos publicados pelo build. Alternar múltipla escolha de previsão ou raciocínio, previsão de código novo, correção curta e mini-implementação. Para cada formato, publicar contrato de resposta, feedback e avaliador; execução usa o runner adequado. Preservar inicialmente os intervalos existentes de 7, 14, 30 e 60 dias, com retorno no dia seguinte após erro. Evitar repetição imediata da mesma variante enquanto houver alternativa elegível e registrar a política de alternância entre sessões. | O aluno recupera e aplica o conteúdo em formatos variados. Espaçamento e recuperação são fundamentados nas recomendações 1 e 5b do IES; o efeito da combinação específica de formatos do DevPath será acompanhado com alunos. |
+| 6.3 | Katas intercalados | Mapear katas curtos dos conceitos anteriores às faixas 07, 11, 14 e 18 e misturá-los à prática dessas faixas. Publicar cobertura, quantidade por faixa e limite por sessão. Selecionar somente tarefas cujos pré-requisitos o aluno já estudou; quando houver pelo menos dois conceitos elegíveis, a sessão deve misturá-los. Não anunciar no enunciado qual método deve ser escolhido. Com apenas um conceito elegível, oferecer prática simples e identificá-la como tal. | O aluno precisa escolher a ferramenta adequada ao problema e retoma conteúdos anteriores. |
+| 6.4 | Investigar código alheio cedo | Complementar a revisão de PR de 3.2, já presente em 07.12, e o repositório de 07.11. A 23.10 já pede investigar uma regra entre dez arquivos; antecipar investigações graduais nas faixas 07, 11, 14 e 18, reaproveitando material quando pertinente. Exigir rastrear uma regra ou reproduzir uma falha, localizar a causa e justificar a evidência; quando houver mudança, verificar o comportamento e as regressões relevantes. Usar repositórios didáticos autorais; se houver reutilização externa, registrar origem, autoria e licença. | O aluno aprende a compreender e modificar uma base existente, além de comentar um diff. |
+
+**Persistência e significado da evidência.** Antes de conectar os formatos à interface, definir o contrato de variante e tentativa: IDs estáveis, versão do conteúdo, formato, resposta ou rascunho, resultado, ajuda utilizada e histórico suficiente para alternar variantes entre sessões. Salvar e sanitizar esse contrato no cliente e no servidor, com limites explícitos e compatibilidade com os agendamentos antigos. Hoje `reviewSchedule` preserva apenas intervalo, vencimento e última revisão; campos novos precisam de suporte em toda a sincronização. Uma revisão não concede `demonstrated` automaticamente. Respostas por rubrica continuam declaradas; execução aprovada recebe o rótulo correspondente, conforme 0.2–0.3, preservando as evidências anteriores como histórico.
+
+**Onde editar e rastrear.** Seguir a tabela global 'Onde editar' do plano mestre para receitas, starters, soluções e avaliações, sem editar espelhos gerados. A integração envolve também `course-src/build-public-curriculum.mjs`, `public/review-controller.js`, `public/review-schedule.js`, os contratos e sanitizadores de progresso em `lib/` e seus assets gerados. Criar um registro de execução da Fase 6 que ligue cada item 6.x ao mapa de conceitos, IDs de atividades/variantes, arquivos alterados, testes e evidências de navegador. Os lotes do mestre são citados quando houver reaproveitamento ou correção de atividade existente; a expansão nova é rastreada por esse registro.
 
 **Critério de saída.**
 
-- Cada conceito do núcleo tem pelo menos 3 variações executáveis, cada uma com teste que falha com o starter e passa com a referência.
-- Um teste do agendador comprova que a fila de revisão sorteia formatos variados.
-- Há uma investigação em código alheio em cada faixa listada.
+- **6.0 / Fase 2.5:** todos os itens de 2.5.1 e 2.5.2 conferidos e fechados com evidências atuais; gates integrados, contagens registradas e saídas editoriais comprovadas. O registro distingue entregas reaproveitadas das implementadas nesta fase. O fechamento da Fase 6 fica bloqueado enquanto esse bloco estiver pendente.
+- **Entrada e cobertura:** P.2 comprovado no cliente e no servidor; mapa completo com escopo, volume, carga estimada e justificativas de reaproveitamento ou isenção.
+- **6.1:** cada conceito de implementação do núcleo tem pelo menos 3 variações executáveis. Cada uma tem teste que reprova o starter incompleto ou defeituoso e aprova a referência; respostas incorretas representativas também reprovam. Nos formatos de previsão ou leitura, a execução fornece o resultado de referência e o avaliador distingue resposta correta de erro conhecido. A revisão editorial confirma que a diferença exige transferência e não só renomeação.
+- **6.2:** testes com relógio controlado cobrem os intervalos existentes, erro e recuperação posterior; seleção com semente controlada ou regra determinística cobre alternância entre formatos e variantes, ausência de repetição imediata quando há alternativa e funcionamento após recarga. Cada formato avalia respostas corretas e incorretas e permite corrigir após feedback sem promover evidência declarada a `demonstrated`.
+- **6.3:** o mapa explicita quantidade e cobertura dos katas nas quatro faixas. Testes comprovam mistura de pelo menos dois conceitos quando elegíveis, exclusão de pré-requisitos ainda não estudados, limite por sessão e comportamento com nenhuma ou apenas uma opção elegível.
+- **6.4:** há uma investigação avaliada em cada faixa listada, com evidências de rastreamento ou reprodução e localização da causa. Quando houver mudança, o teste reproduz o problema antes e passa depois, preservando os comportamentos relevantes. Avaliações por rubrica são identificadas como declaradas.
+- **Integração:** fluxos reais de navegador cobrem os quatro formatos, entrada por teclado, feedback, rascunho e retomada após recarga; testes de persistência cobrem sanitização, compatibilidade com progresso antigo e sincronização do novo contrato entre cliente e servidor. A homologação em contas segue o gate de ativação de 0.5.
+- **Limite da conclusão:** os gates acima comprovam funcionamento e cobertura, não retenção efetiva. Registrar como será acompanhada, com alunos, a recuperação sem ajuda após intervalos e em variantes ainda não vistas, reutilizando os eventos disponíveis e a política de 2.7. Resultados de retenção permanecem pendentes até haver observação real.
 
 ---
 
@@ -558,7 +589,7 @@ Completar uma trilha não comprova senioridade. A trilha é o contexto onde o al
 | # | Item | Quando | O que fazer | Benefício para o aluno |
 |---|---|---|---|---|
 | M.1 | Troca de LTS do Node | Janela de 28/10/2026 | `course-src/runtime-baseline.json` já define "até 28/10: Node 24 como base e mínimo". Depois de 28/10: 26 como principal e 24 como mínimo. Atualizar o baseline e os rótulos `runtime` dos cartões. **Não mudar `engines.node`:** `">=24.0.0"` já é o piso. Varrer os textos escritos à mão: "Node.js 24" aparece nos starters de 10 atividades (00.05, 14.03, 14.07, 14.13, 15.09, 16.08, 17.09, 18.09, 21.08, 22.08) e em 165 textos de `prompt`/`compatibility`. Antes, conferir quais são gerados a partir do baseline. Usar a troca como exemplo na etapa 00. | O aluno aprende no runtime que vai encontrar no trabalho, sem cartões que se contradizem. |
-| M.2 | Piso de Node comprovado | Junto com M.1 | Os testes rodam no 24.19.0, mas o piso declarado é 24.0.0, e há recursos que só existem em versões intermediárias (por exemplo, `Error.isError` em 24.3.0). Rodar a suíte no 24.0.0 ou subir o piso para a menor versão de fato testada. | O aluno com uma versão mais antiga do Node 24 não encontra erros que o curso diz não existirem. |
+| M.2 | Piso de Node comprovado | Junto com M.1 | A suíte completa já registrada rodou no 24.19.0. Em 15/10, as suítes curriculares das Fases 4 e 5 e os checkpoints de Node da Fase 5 passaram no 24.0.0 exato. Rodar também `npm test` completo nesse piso ou limitar formalmente o escopo da garantia. | O aluno com uma versão mais antiga do Node 24 não encontra erros que o curso diz não existirem. |
 | M.3 | Cancelamento completo no DOM | Sem urgência | O guarda de laços (0.4) não cobre recursão profunda, regex catastrófica nem chamadas bloqueantes. Avaliar isolamento real, por exemplo um iframe servido de outra origem com isolamento de processo, sem quebrar a execução offline e a pré-visualização interativa. | Elimina os travamentos que o guarda de laços não pega. |
 | M.4 | Versão do executor nas evidências | Sem urgência | O esquema `devpath-assessment-fingerprint/2` (`public/course-assessment.js:43`) inclui `contentVersion`, `assessmentVersion` e a avaliação, mas não a versão do executor nem a do verificador. Guardar essas versões **ao lado** da evidência, fora do hash, para não invalidar o progresso de novo. Decidir caso a caso se uma mudança de executor exige revalidação. | Permite reavaliar evidências antigas quando o executor mudar, sem apagar o progresso do aluno sem necessidade. |
 | M.5 | Checker TS 6 × TS 7 | Sem urgência; antes de migrar o verificador | O baseline já chama o checker 6.0 de "proxy estático limitado". A Microsoft condiciona a compatibilidade entre 6 e 7 a configurações como `stableTypeOrdering` e à ausência de `ignoreDeprecations`. Verificar se o host do site repassa essas opções, rodar um conjunto representativo de exercícios no TS 7 real e registrar as divergências. Avisar no cartão quando o diagnóstico do site puder diferir do TS 7. Além disso, mostrar no cartão de TypeScript a versão ensinada (lida de `course-src/runtime-baseline.json`) e a versão do verificador (lida do asset gerado, sem texto fixo). Corrigir a frase 'TS 5.0+' do contrato 15.07, mantendo a nota histórica de `const` type parameters em 17.07. | O aluno não fica confuso quando o projeto local mostra um erro diferente do que viu no site. |
@@ -578,6 +609,7 @@ Completar uma trilha não comprova senioridade. A trilha é o contexto onde o al
 | 0 | Sinais honestos e sem travamento | "O que a tela me diz é verdade, e ela não vai congelar?" |
 | 1 | Sequência sem pré-requisitos ocultos | "Tenho base para o que está sendo pedido?" |
 | 2 | Código inicial, avaliação e feedback em 04–14 | "Tenho código para trabalhar, sei se acertei e por que errei?" |
+| 2.5 → 6.0 | Gates de qualidade e correções do gerador, com fechamento no início da Fase 6 | "As próximas mudanças preservam a qualidade do conteúdo e da avaliação?" |
 | 3 | Ambiente real, por marco de faixa | "Consigo trabalhar fora do site?" |
 | 4 | Lacunas da linguagem | "Conheço o que vou encontrar em código real?" |
 | 5 | Recursos atuais | "Uso a linguagem como ela é hoje, quando isso importa?" |
@@ -677,7 +709,7 @@ Verificações finais de 11/10/2026: `npm test` 735/735 no Node 26.7.0 e no 24.1
 
 - **JavaScript:** ECMAScript 2026 (aprovado em 30/06/2026). Temporal não faz parte do ES2026 e entra só onde o runtime-alvo oferecer suporte.
 - **TypeScript:** 7.0 é a versão ensinada (estável desde 08/07/2026). O site usa o checker 6.0 como **proxy estático limitado**, como registra `course-src/runtime-baseline.json`. A compatibilidade entre 6 e 7 depende de configurações como `stableTypeOrdering` e da ausência de `ignoreDeprecations`, segundo o anúncio oficial do TS 7.0. Por isso, o diagnóstico do site não deve ser tratado como equivalente ao TS 7 sem a comparação do item M.5. Migrar o verificador quando o 7.1 publicar uma API programática estável.
-- **Node.js:** o 24 entra em manutenção em 20/10/2026 e o 26 vira LTS ativo em 28/10/2026. Até 28/10, o Node 24 é a base e o mínimo. Depois, 26 como principal e 24 como mínimo (item M.1). `engines.node` declara `>=24.0.0`, mas a suíte foi executada no 24.19.0, e testar no 24.19 não comprova suporte ao 24.0 (item M.2). Revisar a cada outubro (troca de LTS) e a cada junho (nova edição do ECMAScript).
+- **Node.js:** o 24 entra em manutenção em 20/10/2026 e o 26 vira LTS ativo em 28/10/2026. Até 28/10, o Node 24 é a base e o mínimo. Depois, 26 como principal e 24 como mínimo (item M.1). `engines.node` declara `>=24.0.0`; em 15/10, as suítes curriculares das Fases 4 e 5 passaram no 24.0.0, mas o `npm test` completo ainda não rodou nesse piso (item M.2). Revisar a cada outubro (troca de LTS) e a cada junho (nova edição do ECMAScript).
 
 ## Apêndice C: como recalcular
 
@@ -714,7 +746,7 @@ rg -n "254|ids.length,42|learningRecords|learningEvidenceHistory" course-src/bui
 ## Referências
 
 **Aprendizagem**
-- IES, *Practice Guide* sobre exemplos resolvidos, resolução de problemas e recuperação espaçada: <https://ies.ed.gov/ncee/wwc/PracticeGuide/1>
+- IES, *Organizing Instruction and Study to Improve Student Learning*: recomendação 1 (espaçar a aprendizagem no tempo) e 5b (quizzes com recuperação ativa para retomar conteúdos-chave), usadas na Fase 6. A recomendação 2 trata de alternar exemplos resolvidos e resolução de problemas; não comprova por si só o efeito de misturar conceitos ou formatos no DevPath. <https://ies.ed.gov/ncee/wwc/PracticeGuide/1>
 
 **Linguagens e runtimes**
 - Ecma International, TC39: <https://ecma-international.org/technical-committees/tc39/>

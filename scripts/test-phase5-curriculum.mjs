@@ -133,7 +133,37 @@ test('o avaliador publicado reprova cada starter novo e aprova a referência', a
       assert(starter.tests.failed > 0, `${id} starter passes every behavior check`);
     }
   } finally {
-    env.close();
+    await env.close();
+  }
+});
+
+test('5.3: Error.isError ausente usa o fallback em realm isolado', () => {
+  class ErrorSemIsError extends Error {}
+  Object.defineProperty(ErrorSemIsError, 'isError', {value: undefined, configurable: true});
+  const realm = vm.createContext({Error: ErrorSemIsError});
+  const solution = readFileSync(path.join(root, 'course-src/solutions/13.15/main.js'), 'utf8')
+    .replace(/^export /gm, '');
+  vm.runInContext(solution, realm, {filename: '13.15/main.js'});
+
+  const errorValue = vm.runInContext("new Error('fallback')", realm);
+  assert.equal(realm.ehErro(errorValue), true, 'fallback accepts a real Error instance');
+  assert.equal(realm.ehErro({name: 'Error', message: 'x'}), false, 'fallback rejects error-shaped objects');
+});
+
+test('5.3: a avaliação publicada de 13.15 passa com o fallback isolado', async () => {
+  const env = setup({withoutErrorIsError: true});
+  try {
+    const evaluator = assessmentContext(env);
+    const item = catalog.find(candidate => candidate.id === '13.15');
+    const assessment = assessments['13.15'];
+    const result = await evaluator.DevPathAssessment.run({
+      item, assessment, files: solutionFiles('solutions/13.15'), fingerprint: 'phase5-error-is-error-fallback',
+    });
+    assert.equal(result.kind, 'passed', `13.15 fallback: ${result.text}`);
+    assert.equal(result.tests.failed, 0);
+    assert.equal(result.tests.total, 5);
+  } finally {
+    await env.close();
   }
 });
 

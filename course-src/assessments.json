@@ -23422,6 +23422,22 @@
         "assertionOffset": 451,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
+      },
+      {
+        "id": "07.03.desempata-nomes-com-acentos--78d10848",
+        "sourceTestPath": "tests/07.03.test.js",
+        "testName": "desempata nomes com acentos segundo a colação pt-BR",
+        "inputExpression": "ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ])",
+        "matcher": "toEqual",
+        "expectedExpression": "['agata', 'bruno']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ])).toEqual(['agata', 'bruno'])",
+        "contractRule": "ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ]) toEqual ['agata', 'bruno']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ])).toEqual(['agata', 'bruno'])",
+        "assertionOffset": 761
       }
     ]
   },
@@ -24963,18 +24979,84 @@
     ]
   },
   "05.14": {
-    "version": 1,
+    "version": 2,
     "checks": [
-      "rubric"
+      "behavior"
     ],
-    "environment": "rubric",
+    "environment": "javascript",
+    "testPath": "tests/05.14.test.js",
+    "referenceDir": "solutions/05.14",
     "rubric": [
       "Compara regex e parser com um exemplo concreto de cada.",
       "Identifica o que a regex não representa: estado entre aspas e escapes.",
       "Justifica a escolha pelo formato, com o campo ou a posição que falharia."
     ],
-    "evidenceLabel": "rubric-declared",
-    "evidenceNote": "A comparação é conceitual: a plataforma não executa a regex nem o parser desta atividade. A rubrica revisa a justificativa do aluno, e a evidência é declarada."
+    "assertionCases": [
+      {
+        "id": "05.14.separa-campos-simples-pela-v-730b442c",
+        "sourceTestPath": "tests/05.14.test.js",
+        "testName": "separa campos simples pela vírgula",
+        "inputExpression": "parsearLinhaCsv('ana,recife,10')",
+        "matcher": "toEqual",
+        "expectedExpression": "['ana', 'recife', '10']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(parsearLinhaCsv('ana,recife,10')).toEqual(['ana', 'recife', '10'])",
+        "contractRule": "parsearLinhaCsv('ana,recife,10') toEqual ['ana', 'recife', '10']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(parsearLinhaCsv('ana,recife,10')).toEqual(['ana', 'recife', '10'])",
+        "assertionOffset": 137
+      },
+      {
+        "id": "05.14.mantem-virgula-dentro-de-cam-99be9dee",
+        "sourceTestPath": "tests/05.14.test.js",
+        "testName": "mantém vírgula dentro de campo entre aspas",
+        "inputExpression": "parsearLinhaCsv('ana,\"Rua A, 10\",recife')",
+        "matcher": "toEqual",
+        "expectedExpression": "['ana', 'Rua A, 10', 'recife']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(parsearLinhaCsv('ana,\"Rua A, 10\",recife')).toEqual(['ana', 'Rua A, 10', 'recife'])",
+        "contractRule": "parsearLinhaCsv('ana,\"Rua A, 10\",recife') toEqual ['ana', 'Rua A, 10', 'recife']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(parsearLinhaCsv('ana,\"Rua A, 10\",recife')).toEqual(['ana', 'Rua A, 10', 'recife'])",
+        "assertionOffset": 284
+      },
+      {
+        "id": "05.14.converte-aspas-duplicadas-no-28393ac1",
+        "sourceTestPath": "tests/05.14.test.js",
+        "testName": "converte aspas duplicadas no conteúdo do campo",
+        "inputExpression": "parsearLinhaCsv('\"O \"\"Guia\"\", A\",Santos')",
+        "matcher": "toEqual",
+        "expectedExpression": "['O \"Guia\", A', 'Santos']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(parsearLinhaCsv('\"O \"\"Guia\"\", A\",Santos')).toEqual(['O \"Guia\", A', 'Santos'])",
+        "contractRule": "parsearLinhaCsv('\"O \"\"Guia\"\", A\",Santos') toEqual ['O \"Guia\", A', 'Santos']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(parsearLinhaCsv('\"O \"\"Guia\"\", A\",Santos')).toEqual(['O \"Guia\", A', 'Santos'])",
+        "assertionOffset": 451
+      },
+      {
+        "id": "05.14.rejeita-campo-entre-aspas-se-5d140e1d",
+        "sourceTestPath": "tests/05.14.test.js",
+        "testName": "rejeita campo entre aspas sem fechamento",
+        "inputExpression": "() => parsearLinhaCsv('ana,\"Rua A, 10')",
+        "matcher": "toThrow",
+        "expectedExpression": "SyntaxError",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(() => parsearLinhaCsv('ana,\"Rua A, 10')).toThrow(SyntaxError)",
+        "contractRule": "() => parsearLinhaCsv('ana,\"Rua A, 10') toThrow SyntaxError",
+        "investigation": "Confira a expressão de entrada e a comparação toThrow deste caso: expect(() => parsearLinhaCsv('ana,\"Rua A, 10')).toThrow(SyntaxError)",
+        "assertionOffset": 607
+      }
+    ]
   },
   "05.15": {
     "environment": "javascript",
