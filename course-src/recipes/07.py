@@ -612,3 +612,88 @@ CONTENT["07.14"] = E(
     transfer_prompt="Conte palavras por tamanho com obterOuInserir e explique por que a contagem zero guardada não pode ser tratada como ausente.",
     prompt="Implemente obterOuInserir e contarTipos. Antes de executar, diga o que getOrInsert('x', 5) devolve quando 'x' já tem 0 e por que o fallback usa has.",
 )
+
+
+# Feedback por alternativa (revisão 15/10/2026): a alternativa errada nomeia o engano que a produz;
+# o texto correto explica por que a resposta certa é certa, sem repetir a justificativa da incorreta.
+_REVIEW_FEEDBACK = {
+    "07.03": (
+        "A pontuação precisa existir antes da ordenação; o nome só desempata quando os pontos são iguais, e a ordenação trabalha sobre uma cópia para preservar a entrada.",
+        "Se escolheu “Ordenar nomes antes de calcular pontos”, ordenou dados que ainda não têm pontuação. Se escolheu “Ordenar só pelos pontos”, deixou os empates sem regra, então a ordem entre eles fica indefinida. Se escolheu “Ordenar a entrada original antes de filtrar”, misturou no ranking partidas que deveriam ser descartadas.",
+    ),
+    "07.04": (
+        "map cria uma lista com um total por item; some responde com true quando pelo menos um total passa do limite. Cada método responde a uma pergunta diferente: a lista e a existência.",
+        "Se escolheu “filter extrai totais”, confundiu seleção de itens com transformação: filter devolve um subconjunto dos elementos originais, não os totais. Se escolheu “some devolve o primeiro total”, trocou some por find, que devolve o elemento e não um booleano. Se escolheu “every cria uma lista”, trocou every por map e usou reduce para uma pergunta de existência.",
+    ),
+    "07.05": (
+        "A−B mantém os membros de A que não aparecem em B. B é subconjunto de A quando todo membro de B também está em A; basta um membro de B fora de A para refutar essa relação.",
+        "Se escolheu “A−B contém membros de B ausentes de A”, inverteu os papéis: a diferença sempre parte de A. Se escolheu “A−B guarda membros compartilhados”, confundiu diferença com interseção. Se escolheu “A−B remove exclusivos de B de B”, tratou B como base da operação e afirmou que o conjunto vazio nunca é subconjunto, o que é falso.",
+    ),
+    "07.06": (
+        "Um Map guarda uma chave por categoria e atualiza o total de forma explícita; isso preserva zero como total válido e não altera os itens originais.",
+        "Se escolheu o reduce com teste de truthiness, zero é falso e seria tratado como ausência de chave, o que apaga um total válido. Se escolheu objeto comum com soma condicional, o mesmo erro aparece: zero não é ausência. Se escolheu trocar preço zero por um, alterou os dados de entrada para contornar a regra em vez de representá-la.",
+    ),
+    "07.09": (
+        "Com eventos fora de ordem, a duração vem do menor e do maior timestamp, não da posição no array. Map e Set separam a contagem de ocorrências da contagem de ações distintas, e o sucesso é calculado sobre o total certo.",
+        "Se escolheu subtrair o último do primeiro na ordem de chegada, dependeu da posição no array, que é justamente o que muda quando os eventos chegam fora de ordem. Se escolheu contar todas as ocorrências como ações únicas, misturou contagem de eventos com identidade. Se escolheu a ação mais frequente, usou popularidade como se ela medisse duração.",
+    ),
+    "07.10": (
+        "flatMap espera um array de cada callback; um array vazio contribui com zero itens, e o achatamento remove exatamente um nível de aninhamento.",
+        "Se escolheu null, confundiu flatMap com filter: null não é removido automaticamente e entra como valor. Se escolheu array aninhado, supôs achatamento recursivo; flatMap faz apenas um nível. Se escolheu objeto único, esperou que um não-array fosse convertido em array; o callback precisa devolver um array.",
+    ),
+}
+for _eid, (_correct, _incorrect) in _REVIEW_FEEDBACK.items():
+    CONTENT[_eid]["review"]["feedback_correct"] = _correct
+    CONTENT[_eid]["review"]["feedback_incorrect"] = _incorrect
+
+# Fase 6 (6.4): investigação opcional de código alheio (biblioteca com relatório em pipeline). Mudança verificada por testes e mutantes.
+from recipe_api import E as _E07
+
+CONTENT["07.15"] = _E07(
+    "arrays.pipeline",
+    "README.md: investigação de regras de multa com relatório em pipeline; os arquivos estão em starters/07.15.",
+    "2 dias de atraso -> sem linha no relatório e multa zero; 5 dias de atraso -> uma linha com 150 centavos",
+    "empréstimo de 2 dias e outro de 5 dias -> só o de 5 dias aparece; empate de valor ordena por id; a lista de entrada não muda",
+    "Tratar o último dia da carência como atraso que gera multa, porque a comparação inclui o limite.",
+    "Com 2 dias de atraso, o relatório lista a pessoa com valor zero, porque o filtro usa a comparação errada.",
+    "Qual comparação decide se um empréstimo entra no relatório, e o que a linha mostra quando o valor é zero?",
+    (
+        "Relacione o filtro do relatório à função que decide quem tem multa.",
+        "Escreva os valores esperados para 2, 3 e 5 dias antes de executar os testes.",
+        "Confira se a comparação aceita ou rejeita o limite exato da carência.",
+    ),
+    "A causa está em temMulta: a comparação deve ser maior que a carência, não maior ou igual. A correção fica no arquivo que define a regra; relatorio.js e apresentacao.js não mudam.",
+    "biblioteca com carência de 3 dias: atraso de 3 dias -> sem linha; atraso de 4 dias -> multa de 50 centavos",
+    kind="DEBUG",
+    runtime="Node.js 24 LTS (ES modules)",
+    estimated=45,
+    optional=True,
+    compatibility="Arrays com filter, map, reduce e sort, módulos ES e node:test em Node.js 24 LTS",
+    prompt="Investigue a issue: localize a regra que faz a lista incluir devolução dentro da carência, corrija-a no arquivo que a define e prove com testes que o restante do relatório permanece igual.",
+    explanation={
+        "mental_model": "Um relatório é um pipeline: filtrar quem entra, transformar cada item e somar. Se o filtro usa uma regra errada, o resto do pipeline só repete o erro.",
+        "worked_example": "Com carência de 2 dias, um empréstimo de 2 dias não tem multa. Se a regra aceitar 2 dias, o relatório recebe uma linha com multa zero e a lista fica errada mesmo com a soma correta.",
+        "common_trap": "Corrigir o valor da multa no relatório quando o problema é quem entra na lista: a soma continua certa e a linha indevida permanece.",
+        "why_it_matters": "Em código alheio, a causa costuma estar numa função pequena usada por várias etapas. Localizá-la evita espalhar remendos pelo pipeline.",
+    },
+    first_response="Antes de editar, escreva a comparação que decide a entrada no relatório e o valor que ela recebe para 2 dias de atraso.",
+    first_response_timing="Antes de alterar qualquer arquivo ou rodar a suíte.",
+    interaction="Registre a comparação suspeita, a linha do relatório para 2 dias e o resultado depois da correção; a suíte publicada confirma o restante.",
+    resources=(
+        "MDN: Array.prototype.filter — https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/filter",
+        "MDN: Array.prototype.sort — https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/sort",
+    ),
+    rubric=(
+        "Localiza a causa em temMulta e explica por que o relatório herda o erro, sem editar relatorio.js para compensar.",
+        "Mostra o teste que reproduz o problema falhando antes da correção e passando depois.",
+        "Confirma que a ordenação, o teto e a entrada não mutada continuam iguais nos testes de regressão.",
+    ),
+    review={
+        "prompt": "Em que arquivo fica a regra que decide se um atraso gera multa?",
+        "choices": ["src/regras.js", "src/relatorio.js", "src/apresentacao.js"],
+        "answer": "src/regras.js",
+        "feedback_correct": "Sim: temMulta, em regras.js, decide a entrada. O relatório só a usa.",
+        "feedback_incorrect": "relatorio.js apenas filtra com temMulta, e apresentacao.js só formata texto. A regra fica em regras.js.",
+    },
+    transfer_prompt="Com carência de 3 dias e um teto de 500 centavos, explique quais empréstimos entram no relatório e como a regra muda a lista para 3, 4 e 9 dias.",
+)

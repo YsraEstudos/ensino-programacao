@@ -10,6 +10,8 @@
                 return { name: "javascript" };
             if (["catalog", "review"].includes(path[0]))
                 return { name: path[0] };
+            if (path[0] === "katas")
+                return { name: "katas", band: /^\d{2}$/.test(path[1] || "") ? path[1] : null };
             return { name: "home" };
         }
         function setBreadcrumb(...parts) {
@@ -22,6 +24,8 @@
                     return "#/javascript/D.01";
                 if (part === "Revisão")
                     return "#/review";
+                if (part === "Katas")
+                    return "#/katas";
                 if (part === "Etapa 03")
                     return "#/javascript/03.04";
                 const stage = /^Etapa (\d{2})$/.exec(part);
@@ -44,7 +48,7 @@
             ctx.breadcrumb.innerHTML = home + trail;
         }
         function updateNav(route) {
-            const section = route === "javascript" ? "catalog" : route;
+            const section = route === "javascript" ? "catalog" : route === "katas" ? "review" : route;
             document.querySelectorAll("[data-nav]").forEach((item) => item.classList.toggle("active", item.dataset.nav === section));
             const dueCount = ctx.dueExercises().length;
             document.querySelector("#review-count").textContent = dueCount ? String(dueCount) : "↗";

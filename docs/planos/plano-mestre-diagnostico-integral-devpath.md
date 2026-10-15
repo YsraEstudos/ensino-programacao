@@ -43,7 +43,7 @@ npm test
 ```bash
 node docs/auditoria-atividades-2026-10-13/contrato-oculto.mjs
 ```
-Mais os gates da Fase 2.5 da análise curricular (a partir dele). Se algo em `public/` mudou, rodar `npm run assets:version`.
+Mais os gates da Fase 2.5 da análise curricular após sua entrega. **Reprogramação em 15/10/2026, por solicitação do usuário:** o fechamento pendente da Fase 2.5 foi incorporado ao bloco 6.0 da Fase 6 da análise curricular, antes de 6.1–6.4. Reaproveitar os gates já existentes; a exigência integral passa a valer após o fechamento de 6.0. Se algo em `public/` mudou, rodar `npm run assets:version`.
 
 ### Restrições
 - Preservar os IDs existentes e o progresso dos alunos. Atividades novas são permitidas. Mudança de ID ou de posição exige migração testada em `public/progress-migrations.js`. Decisão já tomada: 06.10 e 12.13 ficam onde estão.

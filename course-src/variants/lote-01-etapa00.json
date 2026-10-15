@@ -1,0 +1,606 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.00.01.escolha-ordem-mesas",
+      "conceptId": "execution.order",
+      "sourceActivityId": "00.01",
+      "prerequisites": [],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A pergunta muda o cenário: uma conta aparece dentro de um texto com vírgula, outra é um argumento sozinho e a terceira é uma soma encadeada. O aluno precisa perceber que cada argumento é calculado antes da impressão e que as linhas saem de cima para baixo, o que não se resolve reconhecendo o padrão do exemplo.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida quantas linhas o programa mostra e o que aparece em cada uma. Repare em como cada chamada combina seus argumentos e em qual chamada vem primeiro.",
+      "code": "console.log('Mesas livres:', 8 - 3);\nconsole.log('Reservadas:', 3);\nconsole.log(8 - 3 + 1);\n",
+      "choices": [
+        "Três linhas, mas a primeira mostra '8 - 3' como texto, porque a conta fica ao lado de um texto.",
+        "Duas linhas, porque a terceira chamada repete a conta da primeira e não aparece separada.",
+        "Três linhas, nessa ordem: 'Mesas livres: 5', 'Reservadas: 3' e '6'.",
+        "Três linhas em ordem invertida, porque console.log mostra primeiro a última chamada."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Cada argumento é calculado antes de a chamada mostrar a linha. As chamadas acontecem uma após a outra, de cima para baixo, e 8 - 3 + 1 dá 6.",
+        "byChoice": {
+          "0": "A conta não vira texto: 8 - 3 é um argumento numérico, calculado antes da impressão.",
+          "1": "A terceira chamada tem a própria conta, 8 - 3 + 1, que dá 6, e aparece em linha separada.",
+          "3": "A execução é síncrona: cada chamada termina antes da próxima começar, então a ordem segue o código de cima para baixo."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.01.predicao-ordem-pontos",
+      "conceptId": "execution.order",
+      "sourceActivityId": "00.01",
+      "prerequisites": [],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Aqui a pontuação de um jogo mistura texto, subtração e uma soma de três números dentro da mesma chamada. Prever a linha exige seguir a ordem das chamadas e calcular cada argumento, e não basta reconhecer que o programa tem quatro linhas.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada linha antes de executar. Observe quantas linhas o programa mostra, em que ordem elas saem e como os argumentos de cada chamada se juntam.",
+      "code": "console.log('Ana:', 6 - 1, 'pontos');\nconsole.log('Bruno:', 2 + 2 + 2);\nconsole.log(7);\nconsole.log('fim');\n",
+      "expectedOutput": "Ana: 5 pontos\nBruno: 6\n7\nfim"
+    },
+    {
+      "variantId": "var.00.02.escolha-troca-semaforo",
+      "conceptId": "execution.contradiction",
+      "sourceActivityId": "00.02",
+      "prerequisites": [
+        "00.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O aluno edita uma mensagem de um semáforo e precisa decidir se as outras linhas acompanham a mudança. Ele deve contrariar a expectativa de que uma troca propague, o que exige ler cada chamada como independente, e não apenas reconhecer que o texto mudou.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida a saída. Você editou a versão anterior, que mostrava 'Pedestres: aguardem', e trocou somente essa mensagem por 'Pedestres: atravessem'. Preveja as três linhas e diga o que a troca alterou.",
+      "code": "console.log('Semáforo: verde');\nconsole.log('Pedestres: atravessem');\nconsole.log('Semáforo: amarelo');\n",
+      "choices": [
+        "Semáforo: verde; Pedestres: atravessem; Semáforo: amarelo, e as outras linhas também mudam, porque aparecem juntas no código.",
+        "Semáforo: verde; Pedestres: atravessem; Semáforo: amarelo, sem mudança nos textos das outras chamadas.",
+        "Semáforo: verde; Pedestres: aguardem; Semáforo: amarelo, porque o console guarda a versão anterior.",
+        "Semáforo: verde; Pedestres: atravessem; e a terceira linha some, porque a segunda mudou."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Cada chamada de console.log é independente. A edição muda somente a mensagem da segunda linha; as outras continuam iguais e na mesma ordem.",
+        "byChoice": {
+          "0": "Trocar uma chamada não altera as outras. Nenhuma linha depende do texto da segunda.",
+          "2": "O console não guarda versões antigas: ele imprime o que a execução atual produz, e a segunda linha já diz 'atravessem'.",
+          "3": "A terceira chamada continua no programa e é executada. Trocar um texto não remove nenhuma linha."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.02.predicao-troca-recibo",
+      "conceptId": "execution.contradiction",
+      "sourceActivityId": "00.02",
+      "prerequisites": [
+        "00.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O programa tem dois blocos de recibo que diferem em um único número. O aluno precisa prever quais linhas mudam e quais permanecem, o que contraria a suposição de que um valor alterado mude o texto vizinho.",
+      "contentVersion": 1,
+      "prompt": "Preveja as seis linhas antes de executar. O segundo bloco é uma cópia do primeiro em que só o total mudou; repare em quais linhas mudam e em quais permanecem iguais.",
+      "code": "console.log('Recibo 1');\nconsole.log('Total:', 30);\nconsole.log('Obrigado');\nconsole.log('Recibo 2');\nconsole.log('Total:', 45);\nconsole.log('Obrigado');\n",
+      "expectedOutput": "Recibo 1\nTotal: 30\nObrigado\nRecibo 2\nTotal: 45\nObrigado"
+    },
+    {
+      "variantId": "var.00.03.escolha-ordem-caixa",
+      "conceptId": "execution.sequence",
+      "sourceActivityId": "00.03",
+      "prerequisites": [
+        "00.01",
+        "00.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A montagem agora organiza a rotina de um caixa de loja, com três mensagens e uma linha a mais no conjunto de opções. O aluno precisa ordenar as linhas pela execução, e não apenas escolher as mensagens certas, porque a ordem do arquivo é a ordem de saída.",
+      "contentVersion": 1,
+      "prompt": "A saída precisa mostrar, nessa ordem: 'Abrir caixa', 'Registrar venda' e 'Fechar caixa'. Escolha o conjunto de linhas que produz exatamente essa sequência. Cada linha roda depois da anterior.",
+      "choices": [
+        "console.log('Registrar venda');\nconsole.log('Abrir caixa');\nconsole.log('Fechar caixa');",
+        "console.log('Abrir caixa');\nconsole.log('Registrar venda');",
+        "console.log('Abrir caixa');\nconsole.log('Registrar venda');\nconsole.log('Fechar caixa');",
+        "console.log('Fechar caixa');\nconsole.log('Abrir caixa');\nconsole.log('Registrar venda');"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "A ordem das linhas é a ordem de execução. Com as três chamadas na sequência pedida, a saída é exatamente abrir, registrar e fechar.",
+        "byChoice": {
+          "0": "A venda aparece antes da abertura. Como o programa roda de cima para baixo, a primeira linha precisa ser a abertura.",
+          "1": "Falta a última mensagem. Cada mensagem pedida vira uma chamada, mesmo quando as outras já estão na ordem certa.",
+          "3": "Fechar caixa aparece primeiro. A última linha do arquivo é a última a rodar, então ela não pode vir antes da abertura."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.03.mini-sequencia-pedido",
+      "conceptId": "execution.sequence",
+      "sourceActivityId": "00.03",
+      "prerequisites": [
+        "00.01",
+        "00.02"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O aluno monta uma conta em etapas de um pedido: primeiro o desconto, depois a dobra. Escrever os parênteses que fixam essa ordem exige o mesmo raciocínio sobre a sequência de execução que montar as linhas do exemplo, mas com um valor exportado no lugar da mensagem.",
+      "contentVersion": 1,
+      "prompt": "Em main.js, exporte por padrão o valor final de um pedido. Os passos, na ordem, são: partir de 20 reais, tirar 5 reais de desconto e dobrar o resultado. Use parênteses para que a conta siga essa ordem.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export default 0;\n"
+      },
+      "correctFiles": {
+        "main.js": "export default (20 - 5) * 2;\n"
+      },
+      "tests": "import valor from './main.js';\n\ndescribe('valor final do pedido', () => {\n  test('aplica o desconto antes de dobrar', () => {\n    expect(valor).toBe(30);\n  });\n  test('exporta um número', () => {\n    expect(typeof valor).toBe('number');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "dobra-antes-do-desconto",
+          "files": {
+            "main.js": "export default 20 - 5 * 2;\n"
+          }
+        },
+        {
+          "id": "esquece-a-dobra",
+          "files": {
+            "main.js": "export default 20 - 5;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.00.04.escolha-lacuna-turma",
+      "conceptId": "execution.fill_console",
+      "sourceActivityId": "00.04",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A lacuna agora pede uma linha de turma com um texto, um número e outro texto, em vez de um rótulo e um zero. O aluno precisa reconhecer que a separação por vírgula e as aspas decidem o resultado, e que um texto sem aspas vira nome de variável.",
+      "contentVersion": 1,
+      "prompt": "Antes de escolher, lembre que vírgulas separam os argumentos de console.log e que textos precisam de aspas. A linha deve mostrar exatamente 'Turma B: 14 alunos'. Qual lacuna completa o programa?",
+      "code": "console.log(___);\n",
+      "choices": [
+        "'Turma B:' 14 'alunos'",
+        "'Turma B:', 14, alunos",
+        "'Turma B:', 14, 'alunos'",
+        "'Turma B:', 14"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "As vírgulas separam os três argumentos, e os dois textos ficam entre aspas. O console junta os valores com espaços e mostra 'Turma B: 14 alunos'.",
+        "byChoice": {
+          "0": "Sem vírgulas entre os argumentos, o arquivo tem sintaxe inválida e a linha nem chega a rodar.",
+          "1": "alunos sem aspas é lido como nome de variável. Como esse nome não existe, o erro é ReferenceError.",
+          "3": "Essa lacuna mostra só 'Turma B: 14'. Falta o último argumento, 'alunos'."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.04.mini-texto-vaga",
+      "conceptId": "execution.fill_console",
+      "sourceActivityId": "00.04",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Em vez de completar lacunas numa linha de saída, o aluno exporta o texto exato que uma chamada com três argumentos mostraria. Ele precisa decidir onde entram espaços e onde não entram vírgulas, o mesmo critério de junção que o exemplo exige, mas agora sem o apoio das lacunas.",
+      "contentVersion": 1,
+      "prompt": "Em main.js, exporte por padrão o texto exato que console.log('Vaga', 12, 'livre') mostra em uma linha. Os valores ficam separados por espaço, sem vírgulas no resultado.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export default '';\n"
+      },
+      "correctFiles": {
+        "main.js": "export default 'Vaga 12 livre';\n"
+      },
+      "tests": "import texto from './main.js';\n\ndescribe('texto da linha mostrada', () => {\n  test('junta textos e números com um espaço', () => {\n    expect(texto).toBe('Vaga 12 livre');\n  });\n  test('não coloca vírgulas no texto final', () => {\n    expect(texto.includes(',')).toBe(false);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-espaco",
+          "files": {
+            "main.js": "export default 'Vaga 12livre';\n"
+          }
+        },
+        {
+          "id": "com-virgulas",
+          "files": {
+            "main.js": "export default 'Vaga, 12, livre';\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.00.05.escolha-ambiente-document",
+      "conceptId": "environment.boundaries",
+      "sourceActivityId": "00.05",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O aluno precisa separar o que a linguagem garante do que o ambiente oferece, agora dentro de uma previsão de execução: a mesma linha pode funcionar ou falhar conforme o ambiente. Não é uma troca de nomes, porque o resultado depende de classificar cada recurso pela origem.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, separe o que é padrão da linguagem do que o ambiente oferece. Considere que o arquivo roda no Node.js 24, sem navegador. Decida o que o programa mostra, até onde ele chega e por quê.",
+      "code": "console.log(Math.max(2, 9));\nconsole.log(document.title);\nconsole.log('fim');\n",
+      "choices": [
+        "Erro antes de qualquer saída, porque o Node verifica document no início do arquivo.",
+        "9, depois ReferenceError: document is not defined. A linha 'fim' não é executada.",
+        "9 e undefined, porque document existe no Node com valor indefinido, e depois fim.",
+        "9, fim e um texto vazio, porque o Node simula o título do documento."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Math faz parte do padrão JavaScript e funciona em qualquer ambiente. document vem do navegador: no Node.js ele não existe, e a segunda linha lança ReferenceError depois de mostrar 9.",
+        "byChoice": {
+          "0": "A execução é sequencial e não há verificação prévia. A primeira linha roda e mostra 9; só a segunda falha.",
+          "2": "No Node, document não existe como valor indefinido. O nome simplesmente não está definido, e a leitura lança ReferenceError.",
+          "3": "O Node não simula o navegador. Sem document, a segunda linha lança erro e 'fim' não chega a rodar."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.05.predicao-recursos-padrao",
+      "conceptId": "environment.boundaries",
+      "sourceActivityId": "00.05",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Aqui o código usa só recursos do padrão ECMAScript, como Math, e a previsão precisa mostrar que o resultado não depende do navegador nem do Node. O aluno deve classificar cada chamada pela origem antes de calcular, o que vai além de reconhecer o nome do objeto.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, classifique cada chamada: ela vem do padrão da linguagem ou do ambiente? Depois preveja as três linhas. Note que console.log é oferecido pelo ambiente, mas Math é do padrão.",
+      "code": "console.log(Math.min(4, 10));\nconsole.log(Math.abs(-7) + 1);\nconsole.log(Math.round(2.6));\n",
+      "expectedOutput": "4\n8\n3"
+    },
+    {
+      "variantId": "var.00.06.correcao-aspa-preco",
+      "conceptId": "debug.first_error",
+      "sourceActivityId": "00.06",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04",
+        "00.05"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O programa tem dois defeitos em ordem: primeiro um erro de sintaxe que impede qualquer execução, depois um texto exportado diferente do pedido. O aluno precisa corrigir o primeiro erro antes de ler o segundo, o que muda o método de investigação, e não apenas trocar o texto.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js para que o módulo carregue e exporte a mensagem pedida. Registre o primeiro erro antes de editar: feche a aspa da linha 1 e execute de novo. Só depois compare o texto exportado com o pedido, que é Pedido 7 pronto, e corrija o que faltar.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "console.log(\"Pedido 7 pronto);\nexport default 'Pedido 7 pronta';\n"
+      },
+      "correctFiles": {
+        "main.js": "console.log(\"Pedido 7 pronto\");\nexport default 'Pedido 7 pronto';\n"
+      },
+      "tests": "import texto from './main.js';\n\ndescribe('mensagem do pedido', () => {\n  test('exporta a mensagem pedida', () => {\n    expect(texto).toBe('Pedido 7 pronto');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "so-fecha-a-aspa",
+          "files": {
+            "main.js": "console.log(\"Pedido 7 pronto\");\nexport default 'Pedido 7 pronta';\n"
+          }
+        },
+        {
+          "id": "so-corrige-o-texto",
+          "files": {
+            "main.js": "console.log(\"Pedido 7 pronto);\nexport default 'Pedido 7 pronto';\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.00.06.escolha-primeiro-erro-sintaxe",
+      "conceptId": "debug.first_error",
+      "sourceActivityId": "00.06",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04",
+        "00.05"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Um erro de sintaxe impede o arquivo inteiro de rodar, então nenhuma das linhas válidas aparece na saída. O aluno precisa prever esse efeito global antes de executar, o que não se resolve procurando a linha que parece errada.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o Node.js mostra. Repare em onde a aspa começa, em onde ela deveria terminar e em quando o Node percebe um erro de sintaxe.",
+      "code": "console.log('Oi');\nconsole.log('Tudo bem);\nconsole.log('fim');\n",
+      "choices": [
+        "Oi, depois SyntaxError na linha 2; a linha 'fim' nunca roda.",
+        "Oi e fim, porque a linha 2 é ignorada e o Node continua.",
+        "Nada é impresso: SyntaxError na linha 2, antes da execução. Corrija a aspa primeiro.",
+        "ReferenceError na linha 2, porque 'Tudo bem' não existe como variável."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Uma falha de sintaxe impede o arquivo de rodar: o analisador para antes da primeira chamada, então nenhum texto é impresso. Feche a aspa da linha 2 e execute de novo.",
+        "byChoice": {
+          "0": "O Node não executa parte de um arquivo com erro de sintaxe. O analisador rejeita o arquivo inteiro antes da primeira chamada.",
+          "1": "A linha 2 não é ignorada: a aspa sem fechamento torna o arquivo inválido, e nada chega a rodar.",
+          "3": "Uma string sem fechamento é erro de sintaxe, não de referência. Nomes de variáveis só entram em jogo depois que o arquivo é aceito."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.07.mini-caixas-bolinhas",
+      "conceptId": "execution.make",
+      "sourceActivityId": "00.07",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Escrever o primeiro programa aqui significa montar uma expressão que resolve uma situação de contagem, não repetir a mensagem do exemplo. O aluno escolhe a operação com base no que a situação pede, o que exige a mesma decisão de escrita de uma chamada completa, mas com um número como resultado.",
+      "contentVersion": 1,
+      "prompt": "Em main.js, escreva o primeiro programa: exporte por padrão o total de bolinhas de um estoque com 4 caixas, cada uma com 6 bolinhas. Escreva uma única expressão com números e confira o resultado antes de salvar.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export default 0;\n"
+      },
+      "correctFiles": {
+        "main.js": "export default 4 * 6;\n"
+      },
+      "tests": "import total from './main.js';\n\ndescribe('total de bolinhas', () => {\n  test('4 caixas com 6 bolinhas cada somam 24', () => {\n    expect(total).toBe(24);\n  });\n  test('o total exportado é um número', () => {\n    expect(typeof total).toBe('number');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "soma-em-vez-de-multiplicar",
+          "files": {
+            "main.js": "export default 4 + 6;\n"
+          }
+        },
+        {
+          "id": "conta-so-uma-caixa",
+          "files": {
+            "main.js": "export default 6;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.00.07.predicao-texto-numero",
+      "conceptId": "execution.make",
+      "sourceActivityId": "00.07",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Duas chamadas podem mostrar o mesmo texto de formas diferentes: um argumento numérico e outro textual, ou um único texto já pronto. O aluno precisa prever a saída pela forma de cada argumento, o que não se resolve memorizando que console.log imprime números.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Repare em quais chamadas recebem números sem aspas, em quais recebem textos e em como cada uma junta seus valores.",
+      "code": "console.log('início');\nconsole.log(0, 'livre');\nconsole.log('0 livre');\nconsole.log('fim');\n",
+      "expectedOutput": "início\n0 livre\n0 livre\nfim"
+    },
+    {
+      "variantId": "var.00.08.escolha-label-for-cadastro",
+      "conceptId": "html.tree_reading",
+      "sourceActivityId": "00.08",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04",
+        "00.05",
+        "00.06",
+        "00.07"
+      ],
+      "format": "choice-predict",
+      "environment": "dom",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O formulário tem dois inputs com a mesma classe e um label apontando para o segundo pelo atributo for. O aluno precisa seguir o id, não a posição nem a classe, para dizer a qual campo o label se liga, o que exige a mesma leitura de atributos da origem em outra estrutura.",
+      "contentVersion": 1,
+      "code": "<form id='cadastro'>\n  <label for='email'>E-mail</label>\n  <input id='contato' class='campo'>\n  <input id='email' class='campo'>\n</form>",
+      "prompt": "Leia o trecho sem executá-lo. Diga a qual input o label se conecta, usando o atributo for como evidência, e qual elemento é o pai desse input.",
+      "choices": [
+        "Ao primeiro input, com id='contato', porque é o primeiro filho do form.",
+        "Ao segundo input, com id='email', porque for corresponde ao id; o pai dos dois inputs é o form.",
+        "Ao input de class='campo' mais próximo, porque a classe também identifica o campo.",
+        "A nenhum, porque label só se conecta a um input que está dentro dele."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Na associação explícita, o valor de for é igual ao id do campo. Os dois inputs estão dentro do form, então o pai de ambos é o form.",
+        "byChoice": {
+          "0": "A posição não define a associação. O label aponta para 'email' pelo atributo for, e esse id pertence ao segundo input.",
+          "2": "A classe é compartilhada pelos dois inputs e não associa nada. Só o id, comparado com for, faz a ligação.",
+          "3": "Label não precisa conter o input. A ligação explícita usa for e id, mesmo quando os elementos são irmãos."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.08.escolha-arvore-painel",
+      "conceptId": "html.tree_reading",
+      "sourceActivityId": "00.08",
+      "prerequisites": [
+        "00.01",
+        "00.02",
+        "00.03",
+        "00.04",
+        "00.05",
+        "00.06",
+        "00.07"
+      ],
+      "format": "choice-predict",
+      "environment": "dom",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Agora a pergunta é sobre filhos diretos e um pai distante, num painel com uma seção intermediária. O aluno precisa subir a árvore nível a nível, sem pular a tag que fica no meio, o que é a mesma leitura de pai e filho da origem em uma hierarquia mais funda.",
+      "contentVersion": 1,
+      "code": "<div id='painel'>\n  <section class='bloco'>\n    <h2 id='titulo'>Pedidos</h2>\n    <button id='novo'>Novo</button>\n  </section>\n  <p class='aviso'>Sem pedidos</p>\n</div>",
+      "prompt": "Leia o trecho sem executá-lo. Quais elementos são filhos diretos do div de id 'painel'? E qual é o pai do button?",
+      "choices": [
+        "section e p são filhos diretos; o pai do button é o div.",
+        "Só o section é filho direto; h2 e button são filhos do div.",
+        "section e p são filhos diretos; o pai do button é a section.",
+        "h2, button e p são filhos diretos do div; section não tem filhos."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Filho direto é quem está logo dentro do pai, sem tag intermediária. O button está dentro da section, e section e p estão dentro do div.",
+        "byChoice": {
+          "0": "O button não está ligado diretamente ao div: a section fica entre os dois na árvore.",
+          "1": "h2 e button estão dentro da section, não do div. A section é o pai deles.",
+          "3": "A section tem filhos, h2 e button, e esses dois não são filhos diretos do div."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.09.escolha-total-const",
+      "conceptId": "execution.explain_program",
+      "sourceActivityId": "00.09",
+      "prerequisites": [
+        "00.04",
+        "00.07"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O programa guarda dois valores em const e os usa em contas e em mensagens. O aluno precisa explicar o que cada const guarda e o que cada chamada calcula, e não apenas reconhecer a sintaxe de const, porque a mesma explicação muda quando os valores mudam.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, explique o que cada const guarda e decida o que cada linha mostra. Verifique qual conta acontece dentro de cada chamada.",
+      "code": "const dias = 3;\nconst diaria = 40;\nconsole.log('Total:', dias * diaria);\nconsole.log('Dias:', dias);\n",
+      "choices": [
+        "Total: 43 e depois Dias: 3, porque dias + diaria é calculado antes do produto.",
+        "Total: 120 e Dias: 40, porque as duas linhas usam diaria.",
+        "Erro, porque um const só pode ser lido uma vez por programa.",
+        "Total: 120 e Dias: 3, nessa ordem."
+      ],
+      "answer": 3,
+      "feedback": {
+        "correct": "dias guarda 3 e diaria guarda 40. A primeira chamada calcula 3 * 40 = 120 antes de mostrar; a segunda mostra o valor de dias, 3.",
+        "byChoice": {
+          "0": "A conta da primeira chamada é multiplicação: dias * diaria dá 120, não a soma 43.",
+          "1": "A segunda chamada mostra dias, que vale 3, não diaria.",
+          "2": "Ler um const várias vezes é normal. const só impede trocar o valor do nome, não de lê-lo."
+        }
+      }
+    },
+    {
+      "variantId": "var.00.09.predicao-recibo-const",
+      "conceptId": "execution.explain_program",
+      "sourceActivityId": "00.09",
+      "prerequisites": [
+        "00.04",
+        "00.07"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Os mesmos dois const aparecem em três mensagens com contas diferentes, e uma delas soma os valores em vez de multiplicá-los. O aluno precisa explicar cada linha a partir dos valores guardados, o que é diferente de repetir o padrão de declarar e mostrar.",
+      "contentVersion": 1,
+      "prompt": "Preveja as três linhas antes de executar. Explique para cada chamada qual valor de const ela usa e qual conta é feita, antes de confirmar pela execução.",
+      "code": "const preco = 25;\nconst quantidade = 4;\nconsole.log('Subtotal:', preco * quantidade);\nconsole.log('Itens:', quantidade, 'de', preco);\nconsole.log(preco + quantidade);\n",
+      "expectedOutput": "Subtotal: 100\nItens: 4 de 25\n29"
+    }
+  ]
+}

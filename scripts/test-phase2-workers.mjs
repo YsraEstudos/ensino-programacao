@@ -9,6 +9,7 @@ import {setup} from './course-runner-harness.mjs';
 
 const root = process.cwd();
 const read = file => readFileSync(path.join(root, file), 'utf8');
+const eolNormalized = text => String(text ?? '').replace(/\r\n/g, '\n');
 const assessmentSource = read('course-src/assessments.json');
 const assessments = JSON.parse(assessmentSource);
 const suite = read('course-src/tests/21.04.test.js');
@@ -27,14 +28,14 @@ const workerMutants = workerAssessment.mutantDirs.map(mutant => ({
 
 assert.equal(assessments['21.04'].entryPath, 'memo.js');
 assert.equal(assessments['21.04'].environment, 'javascript');
-assert.equal(assessments['21.04'].tests, suite.trimEnd());
+assert.equal(eolNormalized(assessments['21.04'].tests), eolNormalized(suite).trimEnd());
 assert.equal((suite.match(/\btest\(/g) || []).length, 5);
 assert.match(suite, /memoizeLRU\(value =>.*?, 3\)/);
 assert.match(suite, /expect\(memoized\(third\)\)\.toBe\('third'\)/);
 assert.match(suite, /expect\(calls\)\.toBe\(5\)/);
 assert.equal(assessments['21.05'].entryPath, 'main.js');
 assert.equal(assessments['21.05'].environment, 'dom');
-assert.equal(assessments['21.05'].tests, workerSuite.trimEnd());
+assert.equal(eolNormalized(assessments['21.05'].tests), eolNormalized(workerSuite).trimEnd());
 assert.deepEqual(assessments['21.05'].fixtures.workerEntries, ['worker.js']);
 assert.deepEqual(new Set(workerTargetFiles.map(file => file.path)), new Set(['main.js', 'worker.js', 'primos.js']));
 assert.match(workerSuite, /import\s*\{\s*calcular,\s*encerrar\s*\}\s*from\s*['"]\.\.\/main\.js['"]/);
@@ -57,7 +58,8 @@ function installModuleGraph(window) {
   vm.runInThisContext(`(function(window){${read('public/module-graph.js')}\n})`)(window);
 }
 
-async function runJavascriptSuite(testContent, implementation, records = [], testPath = 'tests/21.04.test.js') {
+// Default placement mirrors public/course-assessment.js: the protected suite runs at behaviorTestPath (project root).
+async function runJavascriptSuite(testContent, implementation, records = [], testPath = assessments['21.04'].behaviorTestPath) {
   const environment = setup();
   try {
     installModuleGraph(environment.w);

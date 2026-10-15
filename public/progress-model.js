@@ -14,12 +14,14 @@
   "exerciseLearning": {},
   "warmupCompleted": {},
   "reviewSchedule": {},
+  "reviewAttempts": {},
   "stage01": {},
   "stage02": {},
   "lastLesson": null,
   "activeDays": [],
   "reviewIndex": 0,
-  "lastReview": null
+  "lastReview": null,
+  "reviewOptIn": false
 };
   const limits = Object.freeze({
   "codeChars": 12000,
@@ -44,11 +46,14 @@
   "secondOrderChars": 80,
   "learningEvents": 12,
   "learningAttemptHistory": 1000,
-  "learningEvidenceHistory": 300,
-  "learningRecords": 300,
+  "learningEvidenceHistory": 383,
+  "learningRecords": 383,
   "learningIdChars": 96,
   "learningFingerprintChars": 128,
-  "learningPayloadChars": 200000
+  "learningPayloadChars": 200000,
+  "reviewAttempts": 383,
+  "reviewHistory": 10,
+  "reviewPayloadChars": 150000
 });
   global.DevPathProgressModel = Object.freeze({ create: () => JSON.parse(JSON.stringify(defaults)), limits });
 })(globalThis);

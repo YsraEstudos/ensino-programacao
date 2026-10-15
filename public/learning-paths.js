@@ -105,8 +105,69 @@
     return `<section class="learning-evidence" data-learning-evidence aria-label="Estado da aprendizagem">
       <strong>Estado histórico: ${esc(state)}</strong><span>${esc(assessmentStatus)}</span><small>${esc(source)}${record.assisted ? ' · percurso com apoio registrado nesta tentativa' : ''}</small>${rubric}</section>`;
   }
+  // Executable transfers: the learner's files run in the browser against the published suite. Drafts live in memory for the page session.
+  const transferFileLimit = 12000;
+  const transferDrafts = new Map();
+  const draftKey = (transfer, path) => `${transfer.id}:${path}`;
+  function executableTransfer(transfer) {
+    return Boolean(transfer && transfer.execution === 'browser' && typeof transfer.tests === 'string' && transfer.tests.trim() && Array.isArray(transfer.files) && transfer.files.length);
+  }
+  function transferAssessment(transfer) {
+    return {environment: 'javascript', version: transfer.version || 1, checks: ['behavior'], tests: transfer.tests};
+  }
+  function principalVerifiedNow(record) {
+    const evidence = record?.verifiedEvidence;
+    return Boolean(evidence && evidence.attemptId === record.attemptId && evidence.fingerprint === record.currentFingerprint && evidence.contentVersion === record.contentVersion && evidence.assessmentVersion === record.assessmentVersion);
+  }
+  function executableTransferMarkup(transfer, record) {
+    const principalVerified = principalVerifiedNow(record);
+    const ready = principalVerified && !record?.assisted;
+    const blocked = !principalVerified ? '<p role="status">Conclua uma avaliação principal atual antes de executar a transferência.</p>' : record?.assisted ? '<p role="status">A ajuda foi registrada nesta tentativa. Comece uma nova tentativa de memória para demonstrar transferência sem ajuda.</p>' : '';
+    const fields = transfer.files.map(file => {
+      const value = transferDrafts.has(draftKey(transfer, file.path)) ? transferDrafts.get(draftKey(transfer, file.path)) : file.content;
+      return `<label class="learning-transfer-file"><span>Arquivo <code>${esc(file.path)}</code></span><textarea data-learning-transfer-file="${esc(file.path)}" rows="12" spellcheck="false" maxlength="${transferFileLimit}">${esc(value)}</textarea></label>`;
+    }).join('');
+    return `<section class="learning-transfer" data-learning-transfer data-learning-transfer-kind="browser" aria-labelledby="learning-transfer-title"><h2 id="learning-transfer-title">Transferência executável no navegador</h2>
+      <p>${esc(transfer.prompt || 'Escreva a solução do novo caso. O navegador executa os testes publicados desta tarefa.')}</p>
+      <p>Uma aprovação significa que o código passou nos testes publicados. Ela conta como demonstrada somente sem ajuda e com a atividade principal verificada.</p>
+      ${fields}${blocked}
+      <button type="button" class="button-secondary" data-learning-transfer-run ${ready ? '' : 'disabled'}>Executar transferência</button><p data-learning-transfer-status role="status" aria-live="polite"></p></section>`;
+  }
+  // Failed runs record nothing, so the verified main attempt stays current and the learner can retry.
+  // A pass becomes a new independent attempt plus a browser-sourced demonstration, and only if nothing changed while it ran.
+  async function runExecutableTransfer({item, transfer, files, assessment, current, event, evaluate, fingerprint, newId, contentVersion, assessmentVersion}) {
+    if (!executableTransfer(transfer) || assessment?.transfer?.id !== transfer.id) return {accepted: false, reason: 'not-executable'};
+    const principal = () => { const record = current(); return principalVerifiedNow(record) && record.attemptIndependent && !record.assisted; };
+    if (!principal()) return {accepted: false, reason: 'principal'};
+    const supplied = Array.isArray(files) ? files : [];
+    const valid = supplied.length === transfer.files.length && transfer.files.every(file => {
+      const match = supplied.filter(entry => entry?.path === file.path);
+      return match.length === 1 && typeof match[0].content === 'string' && match[0].content.length <= transferFileLimit;
+    });
+    if (!valid) return {accepted: false, reason: 'files'};
+    const attemptFiles = transfer.files.map(file => ({path: file.path, content: supplied.find(entry => entry.path === file.path).content}));
+    const attemptFingerprint = await fingerprint({activityId: transfer.id, contentVersion, assessmentVersion: transfer.version || 1, assessment: transferAssessment(transfer), files: attemptFiles});
+    if (typeof attemptFingerprint !== 'string' || !attemptFingerprint || attemptFingerprint.startsWith('unknown')) return {accepted: false, reason: 'fingerprint'};
+    const result = await evaluate({item: {id: transfer.id, contentVersion}, assessment: transferAssessment(transfer), files: attemptFiles, fingerprint: attemptFingerprint});
+    if (!result || result.kind !== 'passed' || result.source !== 'browser') return {accepted: false, reason: 'not-passed', kind: result?.kind || 'error', text: result?.text || ''};
+    if (!principal()) return {accepted: false, reason: 'changed'};
+    const attemptId = newId();
+    const began = await event('attempted', {attemptId, fingerprint: attemptFingerprint, source: 'browser', mode: 'recall', independent: true});
+    if (began?.attemptId !== attemptId || began.assisted) return {accepted: false, reason: 'changed'};
+    const done = await event('demonstrated', {attemptId, fingerprint: attemptFingerprint, source: 'browser', mode: 'recall', independent: true, assessmentPassed: true});
+    const state = done?.state;
+    return {accepted: state === 'demonstrated', reason: state === 'demonstrated' ? 'demonstrated' : 'changed', kind: 'passed', state};
+  }
+  function transferOutcomeText(result) {
+    if (result?.accepted && result.state === 'demonstrated') return 'Transferência aprovada sem ajuda nesta tentativa. Ela conta como demonstrada, com as versões e a impressão digital da tentativa registradas.';
+    if (result?.reason === 'not-passed') return `A transferência não passou nos testes publicados${result.kind && result.kind !== 'failed' ? ` (${result.kind})` : ''}. Nada foi registrado; corrija o código e execute de novo.`;
+    if (result?.reason === 'principal') return 'Conclua uma avaliação principal atual e sem ajuda antes de executar a transferência.';
+    if (result?.reason === 'fingerprint') return 'Não foi possível calcular a impressão digital desta tentativa; nada foi registrado.';
+    return 'Esta execução não conta como demonstrada: a atividade principal ou esta tentativa mudou ou recebeu ajuda.';
+  }
   function transferMarkup(assessment, record) {
     const transfer = assessment?.transfer;
+    if (executableTransfer(transfer)) return executableTransferMarkup(transfer, record);
     if (!transfer || !Array.isArray(transfer.rubric) || !transfer.rubric.length || !Array.isArray(transfer.files) || !transfer.files.length) return '';
     const rows = transfer.files.map(file => `<li><code>${esc(file.path)}</code>: ${esc(file.content)}</li>`).join('');
     const checks = transfer.rubric.map((criterion, index) => `<label class="learning-transfer-criterion"><input type="checkbox" data-learning-transfer-rubric value="${index}"><span>${esc(criterion)}</span></label>`).join('');
@@ -203,7 +264,7 @@
       Promise.resolve(context.learning?.requestHelp?.(item, target)).then(() => context.render?.());
       return false;
     }
-    const target = event.target?.closest?.('button[data-learning-mode],[data-learning-help-target],[data-learning-transfer-submit],[data-learning-new-attempt]');
+    const target = event.target?.closest?.('button[data-learning-mode],[data-learning-help-target],[data-learning-transfer-submit],[data-learning-transfer-run],[data-learning-new-attempt]');
     if (!target || !host?.contains(target)) return false;
     const restorePathFocus = target.matches('[data-learning-mode]') && target === global.document.activeElement;
     event.preventDefault?.();
@@ -233,6 +294,21 @@
       }).catch(() => context.toast?.('Não foi possível registrar a ajuda agora.'));
       return true;
     }
+    if (target.hasAttribute('data-learning-transfer-run')) {
+      const section = target.closest('[data-learning-transfer]');
+      const status = section?.querySelector('[data-learning-transfer-status]');
+      const transfer = context.assessments?.[item.id]?.transfer;
+      const files = [...(section?.querySelectorAll('[data-learning-transfer-file]') || [])].map(field => ({path: field.dataset.learningTransferFile, content: field.value}));
+      if (transfer) for (const file of files) transferDrafts.set(draftKey(transfer, file.path), file.content);
+      if (status) status.textContent = 'Executando a transferência…';
+      Promise.resolve(context.learning?.runTransfer?.(item, transfer, {files})).then(result => {
+        if (status) status.textContent = transferOutcomeText(result);
+        context.render?.();
+      }).catch(() => {
+        if (status) status.textContent = 'Não foi possível executar a transferência agora. Tente novamente.';
+      });
+      return true;
+    }
     const section = target.closest('[data-learning-transfer]');
     const response = section?.querySelector('[data-learning-transfer-response]')?.value.trim() || '';
     const checked = [...(section?.querySelectorAll('[data-learning-transfer-rubric]:checked') || [])].map(input => Number(input.value));
@@ -255,11 +331,17 @@
     return true;
   }
   function handleInput(event, item, context) {
+    const draft = event.target?.closest?.('[data-learning-transfer-file]');
+    if (draft && event.type === 'input') {
+      const transfer = context.assessments?.[item.id]?.transfer;
+      if (transfer) transferDrafts.set(draftKey(transfer, draft.dataset.learningTransferFile), draft.value);
+      return false;
+    }
     if (!event.target?.closest?.('.course-lesson') || event.target.closest('[data-learning-transfer]')) return false;
     if (!['input','change'].includes(event.type)) return false;
     if (/^D\.0[6-9]$/.test(item?.id || '') && event.target.closest('[data-diagnostic-id]')) return false;
     context.learning?.recordAttempt?.(item);
     return false;
   }
-  global.DevPathLearningPaths = Object.freeze({decorate, handleClick, handleInput, stateLabel, evidenceLabel, badgeMarkup});
+  global.DevPathLearningPaths = Object.freeze({decorate, handleClick, handleInput, stateLabel, evidenceLabel, badgeMarkup, executableTransfer, transferAssessment, runExecutableTransfer, transferOutcomeText});
 })(window);

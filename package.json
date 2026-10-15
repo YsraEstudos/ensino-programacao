@@ -36,17 +36,19 @@
     "pretest:stage03": "npm run build:curriculum",
     "build:stage03": "npm run build:curriculum",
     "build:curriculum": "node scripts/build-curriculum-data.mjs",
-    "check:curriculum": "node course-src/build-public-curriculum.mjs --check && node scripts/build-local-checkpoints.mjs --check && node scripts/validate-course-catalog.mjs && node scripts/validate-curriculum-source.mjs",
+    "check:curriculum": "node course-src/build-public-curriculum.mjs --check && node scripts/build-local-checkpoints.mjs --check && node scripts/validate-course-catalog.mjs && node scripts/validate-curriculum-source.mjs && node scripts/build-progress-model.mjs --check && node scripts/validate-concept-links.mjs && node scripts/check-quality-gates.mjs --strict=gate-texto:titulo-sem-acento,gate-texto:feedback-repetido && node scripts/gate-execucao.mjs",
     "precheck:curriculum": "npm run build:curriculum",
     "test:layout": "node --test scripts/test-project-layout.mjs",
     "pretest:layout": "npm run build:curriculum",
     "pretest:stage02": "npm run build:curriculum",
-    "test": "npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1 && npm run test:phase2 && npm run test:phase3 && npm run test:phase4 && npm run test:phase5",
+    "test": "npm run test:catalog && npm run test:learning && npm run test:executors && npm run test:progress && npm run test:app && npm run test:course-test-runtime && npm run test:course-node-runtime && npm run test:layout && npm run test:diagnostic && npm run test:stage00 && npm run test:stage01 && npm run test:stage02 && npm run test:stage03 && npm run test:phase1 && npm run test:phase2 && npm run test:phase3 && npm run test:phase4 && npm run test:phase5 && npm run test:phase6",
     "build:progress": "node scripts/build-progress-model.mjs",
-    "test:progress": "node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs scripts/test-progress-queue.mjs",
+    "test:progress": "node --test scripts/test-progress-api.mjs scripts/test-progress-client.mjs scripts/test-progress-model.mjs scripts/test-progress-queue.mjs scripts/test-progress-p2.mjs",
     "pretest": "npm run build:compiler && npm run build:progress",
     "build:compiler": "node scripts/build-module-compiler.mjs",
-    "test:phase5": "node --test scripts/test-phase5-curriculum.mjs"
+    "test:phase5": "node --test scripts/test-phase5-curriculum.mjs",
+    "test:generators": "node --test scripts/test-generators-sync.mjs",
+    "test:phase6": "node --test scripts/test-quality-gates.mjs scripts/test-gate-execucao.mjs scripts/test-review-formats.mjs scripts/test-transfer-executable.mjs scripts/test-variant-bank.mjs scripts/test-kata-selector.mjs scripts/test-concept-links.mjs scripts/test-kata-ui.mjs scripts/test-phase6-investigacoes.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2",

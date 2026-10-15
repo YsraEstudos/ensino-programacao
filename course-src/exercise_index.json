@@ -177,7 +177,7 @@
   },
   {
     "id": "02.05",
-    "title": "Coercao explicita",
+    "title": "Coerção explícita",
     "stage": "02",
     "kind": "MODIFY",
     "origin": "second_edition",
@@ -201,7 +201,7 @@
   },
   {
     "id": "02.08",
-    "title": "Transferencia - preferencia de usuario",
+    "title": "Transferência - preferência de usuário",
     "stage": "02",
     "kind": "MODIFY",
     "origin": "second_edition",
@@ -273,7 +273,7 @@
   },
   {
     "id": "03.08",
-    "title": "Transferencia - simulador de fila",
+    "title": "Transferência - simulador de fila",
     "stage": "03",
     "kind": "MODIFY",
     "origin": "second_edition",
@@ -353,7 +353,7 @@
   },
   {
     "id": "04.08",
-    "title": "Transferencia - regra por funcoes",
+    "title": "Transferência - regra por funções",
     "stage": "04",
     "kind": "TRANSFER",
     "origin": "second_edition",
@@ -417,7 +417,7 @@
   },
   {
     "id": "05.06",
-    "title": "Bug da mutacao - legado vs moderno",
+    "title": "Bug da mutação - legado vs moderno",
     "stage": "05",
     "kind": "DEBUG",
     "origin": "second_edition",
@@ -457,7 +457,7 @@
   },
   {
     "id": "05.08",
-    "title": "Transferencia - log parser pequeno",
+    "title": "Transferência - log parser pequeno",
     "stage": "05",
     "kind": "MAKE",
     "origin": "second_edition",
@@ -529,7 +529,7 @@
   },
   {
     "id": "06.08",
-    "title": "Transferencia - config versionada",
+    "title": "Transferência - config versionada",
     "stage": "06",
     "kind": "MODIFY",
     "origin": "second_edition",
@@ -617,7 +617,7 @@
   },
   {
     "id": "07.08",
-    "title": "Transferencia - relatorio de vendas",
+    "title": "Transferência - relatório de vendas",
     "stage": "07",
     "kind": "MAKE",
     "origin": "second_edition",
@@ -761,7 +761,7 @@
   },
   {
     "id": "10.01",
-    "title": "Preveja this - metodo comum vs arrow",
+    "title": "Preveja this - método comum vs arrow",
     "stage": "10",
     "kind": "PREDICT",
     "origin": "second_edition",
@@ -785,7 +785,7 @@
   },
   {
     "id": "10.04",
-    "title": "Metodo extraido",
+    "title": "Método extraído",
     "stage": "10",
     "kind": "DEBUG",
     "origin": "second_edition",
@@ -809,7 +809,7 @@
   },
   {
     "id": "10.07",
-    "title": "Transferencia - composicao vs heranca",
+    "title": "Transferência - composição vs herança",
     "stage": "10",
     "kind": "TRANSFER",
     "origin": "second_edition",
@@ -1193,7 +1193,7 @@
   },
   {
     "id": "16.07",
-    "title": "Mudanca de requisito",
+    "title": "Mudança de requisito",
     "stage": "16",
     "kind": "MODIFY",
     "origin": "second_edition",
@@ -1329,7 +1329,7 @@
   },
   {
     "id": "18.07",
-    "title": "Indice seguro",
+    "title": "Índice seguro",
     "stage": "18",
     "kind": "TYPE",
     "origin": "second_edition",
@@ -2035,5 +2035,41 @@
     "origin": "third_edition",
     "audit_ids": [],
     "prompt": "Declare engines, .nvmrc e packageManager, configure a CI com piso e principal, e migre de Node 24 para 26 sem regressão."
+  },
+  {
+    "id": "07.15",
+    "title": "Relatório de multas: rastreie a carência",
+    "stage": "07",
+    "kind": "DEBUG",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Investigue a issue: localize a regra que faz a lista incluir devolução dentro da carência, corrija-a no arquivo que a define e prove com testes que o restante do relatório permanece igual."
+  },
+  {
+    "id": "11.15",
+    "title": "Envio inválido não pode sair da página",
+    "stage": "11",
+    "kind": "DEBUG",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Investigue a issue: reproduza o envio inválido, localize a linha que deixa o envio padrão acontecer, corrija o arquivo que trata o evento e prove que o restante da página continua igual."
+  },
+  {
+    "id": "14.23",
+    "title": "Por que o import do pacote falha",
+    "stage": "14",
+    "kind": "READ",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Investigue a issue sem alterar o projeto: explique com evidência do package.json por que o subcaminho calculo falha, preveja os quatro imports e proponha a mudança mínima."
+  },
+  {
+    "id": "18.11",
+    "title": "Quais identificadores de rota o compilador aceita",
+    "stage": "18",
+    "kind": "READ",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Investigue a issue sem alterar os arquivos: prediga os diagnósticos de tipo e os resultados em execução, separe guarda de cast e explique o efeito de alargar a tabela."
   }
 ]

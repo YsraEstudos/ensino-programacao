@@ -258,7 +258,7 @@ CONTENT = {
         prompt="Investigue a hierarquia do starter e liste dados mutáveis separados de capacidades. Substitua a combinação de subclasses por composição para somente as capacidades configuradas. Antes de executar, preveja quais operações cada entidade expõe; depois teste duas entidades sem compartilhar estado.",
         explanation={
             "mental_model": "Composição monta uma entidade a partir de dados próprios e capacidades escolhidas. Funções de capacidade podem receber a entidade explicitamente; compartilhar a função não significa compartilhar os dados mutáveis de cada instância.",
-            "worked_example": "Um instrumento pode receber `{bateria, capacidades}` e ganhar `emitirSom` e `piscar` apenas quando configurados. As funções de capacidade podem ser reutilizadas enquanto a bateria fica em cada instância. Um instrumento sem capacidade de piscar não precisa herdar uma classe combinatória para escondê-la.",
+            "worked_example": "Um personagem pode receber `{estado, capacidades}` e ganhar `mover` e `curar` apenas quando configurados. As funções de capacidade podem ser reutilizadas enquanto o estado fica em cada instância. Um personagem sem capacidade de curar não precisa herdar uma classe combinatória para escondê-la.",
             "common_trap": "Não crie uma subclasse para cada combinação nem guarde estado da entidade numa variável compartilhada pelo comportamento. Monte somente as capacidades declaradas e teste a ausência também.",
             "why_it_matters": "Composição reduz combinações artificiais e deixa explícito o que cada objeto pode fazer. A separação facilita estender o motor sem criar hierarquias explosivas.",
         },

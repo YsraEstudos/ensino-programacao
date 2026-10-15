@@ -1,7 +1,7 @@
 import { getD1 } from "../../../db";
 import { getChatGPTUser } from "../../chatgpt-auth";
 import { createEmptyProgress } from "../../../lib/progress-model";
-import { sanitizeUserProgress } from "../../../lib/progress-sanitize";
+import { sanitizeUserProgressWithReport } from "../../../lib/progress-sanitize";
 import { readProgressBody, ProgressRequestError } from "../../../lib/progress-request";
 
 export const dynamic = "force-dynamic";
@@ -18,7 +18,9 @@ async function revisionOf(source: string | null): Promise<string> {
 function savedProgress(source: string) {
   const value: unknown = JSON.parse(source);
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid stored progress");
-  return sanitizeUserProgress(value);
+  const { progress, report } = sanitizeUserProgressWithReport(value);
+  if (report.truncated) console.warn("DevPath stored progress exceeds the learning record limit", report.droppedLearningRecords);
+  return progress;
 }
 
 export async function GET() {
@@ -53,7 +55,9 @@ export async function PUT(request: Request) {
     const source = row ? row.progress_json : null;
     if (source !== null) savedProgress(source);
     if (expectedRevision !== await revisionOf(source)) return conflict();
-    const serialized = JSON.stringify(sanitizeUserProgress(payload));
+    const { progress, report } = sanitizeUserProgressWithReport(payload);
+    if (report.truncated) console.warn("DevPath progress save dropped learning records over the limit", report.droppedLearningRecords);
+    const serialized = JSON.stringify(progress);
     const statement = source === null
       ? db.prepare("INSERT OR IGNORE INTO user_progress (user_id, progress_json, updated_at) VALUES (?1, ?2, unixepoch())").bind(user.userId, serialized)
       : db.prepare("UPDATE user_progress SET progress_json = ?2, updated_at = unixepoch() WHERE user_id = ?1 AND progress_json = ?3").bind(user.userId, serialized, source);

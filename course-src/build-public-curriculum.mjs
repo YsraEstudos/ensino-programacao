@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {loadVariantBank} from './variant-sources.mjs';
 import {createHash} from 'node:crypto';
 import {existsSync, readFileSync, readdirSync, writeFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
@@ -6,10 +7,26 @@ import {stage00} from './stage00-preparation.mjs';
 import {stage01Preparation} from './stage01-preparation.mjs';
 import {stage03Contracts} from './stage03-contract.mjs';
 import {diagnosticPreparation} from './diagnostic-preparation.mjs';
-import {guidedPreparation} from './guided-preparation.mjs';
+import {guidedPreparation, distinctFirstAction} from './guided-preparation.mjs';
 import {validateLearningMetadata, validateRuntimeFeatureMatrix} from '../scripts/learning-metadata.mjs';
+import {validateVariantBank} from '../scripts/validate-course-catalog.mjs';
 
 const project = new URL('../', import.meta.url);
+
+// Learner-facing interaction per activity kind. Used where the recorded interaction
+// describes another kind's activity (see INTERACTION_FROM_KIND).
+const KIND_INTERACTION = {
+  MODIFY: 'Edite o código no editor, registre cada alteração e confira os casos públicos depois de executar.',
+  PREDICT: 'Registre sua previsão em campos de texto antes de executar e compare-a com o resultado depois.',
+  PROJECT: 'Construa a solução no editor, guiado pelos checkpoints, e registre a evidência de cada um.',
+  DEBUG: 'Localize o defeito, corrija o código no editor e confira os casos antes e depois da correção.',
+  TYPE: 'Escreva as anotações de tipo no editor e confira os diagnósticos do compilador em texto.',
+  READ: 'Leia o trecho indicado e responda às perguntas com base no texto, citando a linha ou o campo.',
+};
+const INTERACTION_FROM_KIND = new Set(['16.10', '17.01', '17.08', '19.04', '19.05', '19.07']);
+// Investigações opcionais de código alheio (Fase 6, item 6.4), publicadas depois do núcleo existente.
+const INVESTIGATION_IDS_6_4 = new Set(['07.15', '11.15', '14.23', '18.11']);
+const interactionFor = (id, kind, recorded) => (INTERACTION_FROM_KIND.has(id) && KIND_INTERACTION[kind]) || recorded;
 const json = name => JSON.parse(readFileSync(new URL(name, import.meta.url), 'utf8'));
 const bundle = (variable, value, source) => `// Generated from ${source}; edit the editorial source.\nglobalThis.${variable} = ${JSON.stringify(value, null, 2)};\n`;
 const readVirtualFiles = relativeDirectory => {
@@ -22,6 +39,32 @@ const readVirtualFiles = relativeDirectory => {
   return visit(base);
 };
 const isTestPath = path => /(?:^|\/)(?:test|tests)\//i.test(path) || /\.(?:test|spec)\.[cm]?[jt]sx?$/i.test(path);
+
+// Fase 6 (6.1): the variant bank is validated against the compiled activity order and the concept graph, then published
+// deterministically (sorted by variantId, fixed key order, file maps as sorted {path, content} lists).
+const VARIANT_TEST_PATH = '__devpath_variant_tests__.js';
+const fileList = map => Object.keys(map).sort().map(path => ({path, content: map[path]}));
+export function publishVariantBank(bank, records, conceptGraph) {
+  const concepts = new Map(conceptGraph.concepts.map(concept => [concept.id, concept]));
+  validateVariantBank(bank, {activities: records.map(record => ({id: record.id, stage: record.stage})), concepts});
+  const variants = [...bank.variants].sort((a, b) => (a.variantId < b.variantId ? -1 : a.variantId > b.variantId ? 1 : 0)).map(variant => {
+    const base = {
+      variantId: variant.variantId, conceptId: variant.conceptId, sourceActivityId: variant.sourceActivityId,
+      prerequisites: [...variant.prerequisites], format: variant.format, environment: variant.environment, evaluator: variant.evaluator,
+      bands: [...variant.bands], transferDecision: variant.transferDecision, contentVersion: variant.contentVersion, prompt: variant.prompt,
+    };
+    if (variant.format === 'choice-predict') {
+      return {...base, ...(variant.code ? {code: variant.code} : {}), choices: [...variant.choices], answer: variant.answer, feedback: {correct: variant.feedback.correct, byChoice: {...variant.feedback.byChoice}}};
+    }
+    if (variant.format === 'predict-code') return {...base, code: variant.code, expectedOutput: variant.expectedOutput};
+    return {
+      ...base, entryPath: variant.entryPath, testPath: VARIANT_TEST_PATH, tests: variant.tests,
+      starterFiles: fileList(variant.starterFiles), correctFiles: fileList(variant.correctFiles),
+      mutants: variant.mutants.map(mutant => ({id: mutant.id, files: fileList(mutant.files)})),
+    };
+  });
+  return {version: bank.version, variants};
+}
 
 // Reads compiled curriculum data and editorial inputs; regeneration never
 // depends on another checkout or on a previous public catalog.
@@ -109,7 +152,12 @@ const isGenericActivity = record => Number(record.stage) >= 4 || (record.stage =
   const text = readFileSync(new URL('bridges.md', import.meta.url), 'utf8');
   const headings = [...text.matchAll(/^## Ponte (\d{2})(?:–(\d{2}))? — ([^\r\n]+)$/gm)];
   const bridges = headings.map((m, i) => ({start: Number(m[1]), end: Number(m[2] || m[1]), title: m[3].trim(), text: text.slice(m.index + m[0].length, headings[i + 1]?.index ?? text.length).trim()}));
-  const seen = new Set(), answerCounts = new Map();
+  const seen = new Set(), answerCounts = new Map(), investigationCounts = new Map();
+  const existingChoiceCounts = new Map();
+  for (const record of records) {
+    const choices = record.platform?.active_recall?.choices?.length;
+    if (choices && !INVESTIGATION_IDS_6_4.has(record.id)) existingChoiceCounts.set(choices, (existingChoiceCounts.get(choices) || 0) + 1);
+  }
   const catalog = records.map(record => {
     const lesson = record.learner, recall = record.platform?.active_recall;
     const item = {
@@ -118,7 +166,7 @@ const isGenericActivity = record => Number(record.stage) >= 4 || (record.stage =
       duration: `${record.estimated_minutes} min`, runtime: record.runtime, compatibility: record.compatibility,
       objective: lesson.first_response?.action, prompt: lesson.prompt,
       firstResponse: lesson.first_response, explanation: lesson.explanation,
-      interaction: lesson.interaction, resources: [...lesson.resources],
+      interaction: interactionFor(record.id, record.kind, lesson.interaction), resources: [...lesson.resources],
       starterFiles: lesson.starter_files,
       ...(lesson.read_only_files?.length ? {readOnlyFiles: lesson.read_only_files} : {}),
       assets: lesson.assets, examples: lesson.public_examples,
@@ -202,12 +250,25 @@ const isGenericActivity = record => Number(record.stage) >= 4 || (record.stage =
     for (const [title, url, section, question] of officialDocs[item.id] || []) {
       item.resources = [...item.resources, `${title}: ${url}. Seção: ${section}. ${question}`];
     }
+    // firstResponse.action must be a concrete first step, distinct from the objective; derived before the guided scaffold reads it.
+    item.firstResponse = {...item.firstResponse, action: distinctFirstAction(item)};
     if (Number(item.stage) >= 4) Object.assign(item, {preparation: guidedPreparation(item), hints: guidedPreparation(item).hints});
     assert(item.prompt?.trim() && item.firstResponse?.action?.trim() && item.review, `Incomplete public contract: ${item.id}`);
     const review = {...item.review, choices: [...item.review.choices]};
     const correct = review.choices[review.answer]; assert(typeof correct === 'string', `Invalid review answer: ${item.id}`);
-    const count = answerCounts.get(review.choices.length) || 0, position = count % review.choices.length;
-    answerCounts.set(review.choices.length, count + 1);
+    // Investigações da Fase 6 (6.4) continuam a sequência round-robin depois dos cartões existentes: assim a resposta
+    // correta de cartões já publicados não muda, e o progresso (que guarda o índice escolhido) continua válido.
+    const choiceCount = review.choices.length;
+    let position;
+    if (INVESTIGATION_IDS_6_4.has(item.id)) {
+      const extra = investigationCounts.get(choiceCount) || 0;
+      position = ((existingChoiceCounts.get(choiceCount) || 0) + extra) % choiceCount;
+      investigationCounts.set(choiceCount, extra + 1);
+    } else {
+      const count = answerCounts.get(choiceCount) || 0;
+      position = count % choiceCount;
+      answerCounts.set(choiceCount, count + 1);
+    }
     review.choices.splice(review.answer, 1); review.choices.splice(position, 0, correct); review.answer = position;
     item.review = review;
     return item;
@@ -247,8 +308,10 @@ const isGenericActivity = record => Number(record.stage) >= 4 || (record.stage =
       referenceDir: assessment.referenceDir,
     }];
   }));
+  const publishedVariants = publishVariantBank(loadVariantBank(), records, json('.generated/concept_graph.json'));
   return new Map([
     ['public/course-catalog.json', JSON.stringify(catalog) + '\n'],
+    ['public/course-variants.json', JSON.stringify(publishedVariants) + '\n'],
     ['lib/course-exercise-ids.ts', `// Generated from course-src/.generated/resolved_preview.json; learner-facing IDs only.\nexport const courseExerciseIds = [\n${ids}\n] as const;\n`],
     ['public/course-tests.json', JSON.stringify(publishedCourseTests) + '\n'],
     ['public/course-assessments.json', JSON.stringify(publicAssessments) + '\n'],

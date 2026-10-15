@@ -128,7 +128,7 @@ for (const filename of files) {
   const id = filename.replace(/\.test\.js$/, '');
   if (!assessments[id]) throw new Error(`Assessment ausente: ${id}`);
   const fullPath = path.join(testRoot, filename);
-  const source = readFileSync(fullPath, 'utf8');
+  const source = readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n');
   const parsedComments = [];
   const ast = parse(source, {ecmaVersion: 'latest', sourceType: 'module', allowHashBang: true, onComment: parsedComments});
   const assertions = [];

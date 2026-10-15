@@ -21,7 +21,22 @@ const initialIds = initialCatalog.filter(item => Number(item.stage) >= 4 && Numb
 const initiallyMissing = initialIds.filter(id => !initialAssessments[id]);
 const missing = ids.filter(id => !assessments[id]);
 
-assert.equal(ids.length, 84, 'the effective compiled 04–10 catalog includes the three earlier additions, two Fase 3 Git activities, eight Fase 4 additions (04.14, 05.12–05.15, 07.13, 09.09, 10.09) and five Fase 5 additions (05.16, 06.12, 07.14, 09.10, 10.10)');
+// Escala derivada da fonte: o total e a lista de atividades 04–10 vêm do catálogo compilado e do publicado, não de uma contagem fixa.
+const stageOf = item => Number(item.stage);
+const inRange = item => stageOf(item) >= 4 && stageOf(item) <= 10;
+const publishedIds = readJson('public/course-catalog.json').filter(inRange).map(item => item.id);
+const additions = ids.filter(id => !initialIds.includes(id));
+assert(ids.length > 0, 'the compiled catalog must contain 04–10 activities');
+assert.equal(new Set(ids).size, ids.length, '04–10 activity ids must be unique in the compiled catalog');
+assert.deepEqual([...publishedIds].sort(), [...ids].sort(), 'the published 04–10 catalog must list exactly the compiled 04–10 activities');
+const droppedHistorical = initialIds.filter(id => !target.has(id));
+assert.equal(droppedHistorical.length, 0, `historical 04–10 activities missing from the compiled catalog: ${droppedHistorical.join(', ')}`);
+assert(initialIds.length > 0, 'the historical 04–10 inventory must be non-empty');
+assert.equal(additions.length + initialIds.length, ids.length, 'every compiled 04–10 activity is either historical or a new addition');
+for (const id of additions) {
+  assert(assessments[id], `added activity ${id} must have a source assessment`);
+  assert(publishedAssessments[id], `added activity ${id} must be published with an assessment`);
+}
 assert.equal(initiallyMissing.length, 30, `expected initial assessment gap: ${initiallyMissing.join(', ')}`);
 assert.equal(missing.length, 0, `04–10 activities without assessment: ${missing.join(', ')}`);
 

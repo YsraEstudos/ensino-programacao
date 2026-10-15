@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.01.02.escolha-bateria-drone",
+      "conceptId": "bindings.reassignment",
+      "sourceActivityId": "01.02",
+      "prerequisites": [
+        "01.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "A pergunta separa cópia de vínculo: um valor guardado em outro binding continua o mesmo quando o original é reatribuído depois. O aluno precisa acompanhar cada binding linha a linha, e não basta reconhecer quais nomes aparecem no programa.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, acompanhe o valor atual de cada binding depois de cada linha. Pergunte em que momento cada valor foi copiado e quais linhas reatribuem algum nome.",
+      "code": "const bateriaInicial = 80;\nlet carga = bateriaInicial;\ncarga = carga - 25;\ncarga = carga + 10;\nconst registroVoo = carga;\ncarga = 0;\nconsole.log(bateriaInicial, carga, registroVoo);\n",
+      "choices": [
+        "80 65 65",
+        "80 0 65",
+        "80 0 0",
+        "Lança TypeError, porque carga foi declarado com let e não pode mudar."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "carga é o único binding reatribuído. registroVoo copiou 65 antes de carga virar 0, e bateriaInicial continua 80 porque nenhuma linha o reatribui.",
+        "byChoice": {
+          "0": "registroVoo recebeu uma cópia do valor (65) na sua declaração; a reatribuição posterior de carga não altera essa cópia.",
+          "2": "registroVoo não acompanha carga: a cópia de 65 foi feita antes de carga = 0. Só o binding reatribuído muda de valor.",
+          "3": "let existe para permitir reatribuição; carga = 0 é válido e não gera erro."
+        }
+      }
+    },
+    {
+      "variantId": "var.01.02.predicao-troco-caixa",
+      "conceptId": "bindings.reassignment",
+      "sourceActivityId": "01.02",
+      "prerequisites": [
+        "01.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Ler um valor para outro binding e depois reatribuir o original muda o que cada nome guarda a partir daquele ponto. A previsão exige acompanhar o momento de cada cópia, e por isso o aluno não pode apenas identificar os nomes do programa.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada linha antes de executar. Separe o valor copiado para outro binding daquele que recebe nova atribuição depois dessa cópia.",
+      "code": "let troco = 20;\nconst preco = 14;\nconst entregue = troco;\ntroco = troco - preco;\nconsole.log(entregue, troco);\nlet anterior = troco;\ntroco = 1;\nconsole.log(anterior, troco, preco);\n",
+      "expectedOutput": "20 6\n6 1 14"
+    },
+    {
+      "variantId": "var.01.03.correcao-etiqueta-envio",
+      "conceptId": "bindings.declaration_order",
+      "sourceActivityId": "01.03",
+      "prerequisites": [
+        "01.01",
+        "01.02"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Uma etiqueta que lê um nome antes da sua declaração falha mesmo com todos os valores escritos no arquivo. O aluno precisa localizar a dependência entre declarações e reordenar sem trocar textos, uma regra que vale para qualquer valor montado a partir de outros.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. A etiqueta deve sair como 'Envio EN-204 para Porto Alegre', e os textos das declarações não devem mudar. Antes de alterar, execute o arquivo e anote qual nome ainda não tinha valor na primeira leitura.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Etiqueta de envio: cada linha só pode ler nomes que já têm valor.\nexport const etiqueta = 'Envio ' + codigo + ' para ' + destino;\nexport const codigo = 'EN-204';\nexport const destino = 'Porto Alegre';\n"
+      },
+      "correctFiles": {
+        "main.js": "// Etiqueta de envio: cada linha só pode ler nomes que já têm valor.\nexport const codigo = 'EN-204';\nexport const destino = 'Porto Alegre';\nexport const etiqueta = 'Envio ' + codigo + ' para ' + destino;\n"
+      },
+      "tests": "import { etiqueta, codigo, destino } from './main.js';\n\ndescribe('etiqueta de envio', () => {\n  test('monta a etiqueta com os valores já declarados', () => {\n    expect(etiqueta).toBe('Envio EN-204 para Porto Alegre');\n  });\n  test('mantém o código e o destino exportados', () => {\n    expect(codigo).toBe('EN-204');\n    expect(destino).toBe('Porto Alegre');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "var-sem-reordenar",
+          "files": {
+            "main.js": "// Etiqueta de envio: cada linha só pode ler nomes que já têm valor.\nexport var etiqueta = 'Envio ' + codigo + ' para ' + destino;\nexport var codigo = 'EN-204';\nexport var destino = 'Porto Alegre';\n"
+          }
+        },
+        {
+          "id": "destino-e-codigo-trocados",
+          "files": {
+            "main.js": "// Etiqueta de envio: cada linha só pode ler nomes que já têm valor.\nexport const codigo = 'EN-204';\nexport const destino = 'Porto Alegre';\nexport const etiqueta = 'Envio ' + destino + ' para ' + codigo;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.03.escolha-turno-ordem",
+      "conceptId": "bindings.declaration_order",
+      "sourceActivityId": "01.03",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Com const, a posição da declaração decide se um nome já tem valor quando é lido; o texto escrito depois não conta. O aluno precisa prever o que sai antes do erro, o que exige seguir a ordem de execução e não apenas localizar a linha defeituosa.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que aparece no terminal. Leia as linhas na ordem em que o programa as executa e veja quando o nome ordem recebe o seu valor.",
+      "code": "const turno = 'manhã';\nconsole.log('Turno: ' + turno);\nconsole.log('Ordem: ' + ordem);\nconst ordem = 7;\n",
+      "choices": [
+        "Turno: manhã e depois Ordem: undefined, porque ordem existe desde o início sem valor.",
+        "Turno: manhã e depois Ordem: 7, porque a declaração de ordem é içada com o seu valor.",
+        "Turno: manhã e depois ReferenceError, porque ordem é lido antes da sua declaração.",
+        "Ordem: undefined antes de Turno: manhã, porque as linhas executam fora de ordem."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "As duas primeiras linhas executam normalmente. A leitura de ordem acontece antes da linha const ordem, e const não recebe valor antes dela: a execução para com ReferenceError.",
+        "byChoice": {
+          "0": "const não cria o nome com undefined; a leitura antes da declaração lança erro, não devolve um valor vazio.",
+          "1": "const não é içado com valor. Só a linha const ordem = 7 atribui 7, e ela ainda não foi executada.",
+          "3": "As linhas executam de cima para baixo. A primeira saída é Turno: manhã, porque a sua chamada vem antes."
+        }
+      }
+    },
+    {
+      "variantId": "var.01.04.mini-registro-padaria",
+      "conceptId": "bindings.const_let_choice",
+      "sourceActivityId": "01.04",
+      "prerequisites": [
+        "01.02",
+        "01.03"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Escolher const ou let exige prever se o valor muda antes de ser exportado, e não apenas olhar o tipo do dado. Aqui o aluno também decide em que ordem a sobra é calculada, e trocar o nome do registro ou o número de pães não resolve essa decisão.",
+      "contentVersion": 1,
+      "prompt": "Implemente em main.js o registro de uma padaria. Exporte capacidade, que vale 30 e nunca muda; vendidos, que começa em 0 e recebe 4 pães e depois mais 6; e sobra, a diferença entre capacidade e vendidos, calculada depois das vendas. Use const para o que não muda e let para o que muda. Não use funções nem arrays.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Registro da padaria: declare capacidade, vendidos e sobra conforme o enunciado.\n"
+      },
+      "correctFiles": {
+        "main.js": "export const capacidade = 30;\nexport let vendidos = 0;\nvendidos = vendidos + 4;\nvendidos = vendidos + 6;\nexport const sobra = capacidade - vendidos;\n"
+      },
+      "tests": "import { capacidade, vendidos, sobra } from './main.js';\n\ndescribe('registro da padaria', () => {\n  test('capacidade é 30', () => {\n    expect(capacidade).toBe(30);\n  });\n  test('vendidos soma as duas vendas', () => {\n    expect(vendidos).toBe(10);\n  });\n  test('sobra usa o total vendido depois das vendas', () => {\n    expect(sobra).toBe(20);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "const-no-que-muda",
+          "files": {
+            "main.js": "export const capacidade = 30;\nexport const vendidos = 0;\nvendidos = vendidos + 4;\nvendidos = vendidos + 6;\nexport const sobra = capacidade - vendidos;\n"
+          }
+        },
+        {
+          "id": "sobra-antes-das-vendas",
+          "files": {
+            "main.js": "export const capacidade = 30;\nexport let vendidos = 0;\nexport const sobra = capacidade - vendidos;\nvendidos = vendidos + 4;\nvendidos = vendidos + 6;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.04.escolha-senha-const",
+      "conceptId": "bindings.const_let_choice",
+      "sourceActivityId": "01.04",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Um const que recebe nova atribuição não é ignorado nem aceito uma vez: a linha falha e o programa para no ponto do erro. O aluno precisa prever a saída parcial e o tipo de erro, o que depende da regra de const e não apenas do nome da declaração.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra e em que linha o programa para. Repare em qual binding muda de valor e qual deles foi declarado com const.",
+      "code": "const senha = 1234;\nlet tentativas = 0;\ntentativas = tentativas + 1;\nconsole.log(senha, tentativas);\nsenha = 4321;\nconsole.log(senha);\n",
+      "choices": [
+        "1234 1, depois 4321, porque const só impede a primeira atribuição.",
+        "1234 1, depois 1234, porque a atribuição a uma constante é ignorada em silêncio.",
+        "1234 1, depois TypeError por atribuição a uma constante, e a execução para.",
+        "Nenhuma linha, porque let não aceita a operação tentativas + 1."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "tentativas é let e pode receber 1. senha é const: a linha senha = 4321 lança TypeError, e a última chamada não executa.",
+        "byChoice": {
+          "0": "const não permite nova atribuição, nem mesmo uma vez. A linha senha = 4321 é a que falha.",
+          "1": "Em módulos, a atribuição a const não é ignorada: ela lança TypeError e interrompe a execução.",
+          "3": "tentativas é let, então a soma é permitida; a primeira linha já mostra 1 antes de qualquer erro."
+        }
+      }
+    },
+    {
+      "variantId": "var.01.07.correcao-remessa-livros",
+      "conceptId": "bindings.template_literal",
+      "sourceActivityId": "01.07",
+      "prerequisites": [
+        "01.06"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Um texto montado com aspas comuns não recebe o valor dos nomes, e a etiqueta sai com o próprio ${...} escrito. O aluno precisa reconhecer o delimitador que ativa a interpolação e aplicá-lo a outra mensagem, com outros nomes e outra quantidade.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. A remessa deve sair como 'Remessa LV-44: 18 volumes', com o lote e a quantidade lidos das constantes. Antes de alterar, execute o arquivo e confira se a etiqueta mostra os valores ou os nomes escritos entre ${ }.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Remessa de livros: o texto precisa mostrar o lote e a quantidade atuais.\nexport const lote = 'LV-44';\nexport const quantidade = 18;\nexport const remessa = 'Remessa ${lote}: ${quantidade} volumes';\n"
+      },
+      "correctFiles": {
+        "main.js": "// Remessa de livros: o texto precisa mostrar o lote e a quantidade atuais.\nexport const lote = 'LV-44';\nexport const quantidade = 18;\nexport const remessa = `Remessa ${lote}: ${quantidade} volumes`;\n"
+      },
+      "tests": "import { lote, remessa } from './main.js';\n\ndescribe('etiqueta da remessa', () => {\n  test('mostra o lote e a quantidade no texto', () => {\n    expect(remessa).toBe('Remessa LV-44: 18 volumes');\n  });\n  test('o lote continua disponível como valor', () => {\n    expect(lote).toBe('LV-44');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-espaco-depois-do-lote",
+          "files": {
+            "main.js": "// Remessa de livros: o texto precisa mostrar o lote e a quantidade atuais.\nexport const lote = 'LV-44';\nexport const quantidade = 18;\nexport const remessa = `Remessa ${lote}:${quantidade} volumes`;\n"
+          }
+        },
+        {
+          "id": "ponto-final-extra",
+          "files": {
+            "main.js": "// Remessa de livros: o texto precisa mostrar o lote e a quantidade atuais.\nexport const lote = 'LV-44';\nexport const quantidade = 18;\nexport const remessa = `Remessa ${lote}: ${quantidade} volumes.`;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.08.correcao-volume-player",
+      "conceptId": "bindings.configuration",
+      "sourceActivityId": "01.08",
+      "prerequisites": [
+        "01.04",
+        "01.06"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Uma configuração mistura valores fixos e um valor que muda durante a sessão; declarar esse valor com const faz a atualização falhar antes de qualquer resumo. O aluno escolhe a declaração pelo que muda, com o mesmo critério da origem, mas em outro aparelho e com outros valores.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. O player inicia com volume 20, recebe mais 15 e deve mostrar 'Modo cinema, volume 35, legendas true'. Mantenha os valores fixos com const e altere apenas a declaração que precisa mudar.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Configuração do player: o volume muda durante a sessão; os demais valores são fixos.\nconst modo = 'cinema';\nconst legendas = true;\nconst volume = 20;\nvolume = volume + 15;\nexport const resumo = `Modo ${modo}, volume ${volume}, legendas ${legendas}`;\nexport const volumeFinal = volume;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Configuração do player: o volume muda durante a sessão; os demais valores são fixos.\nconst modo = 'cinema';\nconst legendas = true;\nlet volume = 20;\nvolume = volume + 15;\nexport const resumo = `Modo ${modo}, volume ${volume}, legendas ${legendas}`;\nexport const volumeFinal = volume;\n"
+      },
+      "tests": "import { resumo, volumeFinal } from './main.js';\n\ndescribe('configuração do player', () => {\n  test('o resumo mostra o volume depois do ajuste', () => {\n    expect(resumo).toBe('Modo cinema, volume 35, legendas true');\n  });\n  test('o volume final é 35', () => {\n    expect(volumeFinal).toBe(35);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "soma-de-cinco",
+          "files": {
+            "main.js": "// Configuração do player: o volume muda durante a sessão; os demais valores são fixos.\nconst modo = 'cinema';\nconst legendas = true;\nlet volume = 20;\nvolume = volume + 5;\nexport const resumo = `Modo ${modo}, volume ${volume}, legendas ${legendas}`;\nexport const volumeFinal = volume;\n"
+          }
+        },
+        {
+          "id": "resumo-antes-do-ajuste",
+          "files": {
+            "main.js": "// Configuração do player: o volume muda durante a sessão; os demais valores são fixos.\nconst modo = 'cinema';\nconst legendas = true;\nlet volume = 20;\nexport const resumo = `Modo ${modo}, volume ${volume}, legendas ${legendas}`;\nvolume = volume + 15;\nexport const volumeFinal = volume;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.08.mini-cronometro-estudo",
+      "conceptId": "bindings.configuration",
+      "sourceActivityId": "01.08",
+      "prerequisites": [
+        "01.04",
+        "01.06"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A configuração pede um valor fixo, um valor ajustável e um texto calculado a partir deles, e o resumo só pode refletir o ajuste feito antes dele. O aluno precisa decidir quais declarações são const e em que ordem o texto é montado, o que não se resolve trocando nomes de variáveis.",
+      "contentVersion": 1,
+      "prompt": "Implemente em main.js a configuração de um cronômetro de estudo. Exporte tarefa, com o texto fixo 'Revisão'; minutos, que começa em 25 e recebe mais 10 minutos antes de qualquer resumo; e resumo, uma template literal que produz 'Tarefa Revisão: 35 min'. Use const para o que não muda e let para o que muda. Não use funções.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Cronômetro de estudo: declare tarefa, minutos e resumo conforme o enunciado.\n"
+      },
+      "correctFiles": {
+        "main.js": "export const tarefa = 'Revisão';\nexport let minutos = 25;\nminutos = minutos + 10;\nexport const resumo = `Tarefa ${tarefa}: ${minutos} min`;\n"
+      },
+      "tests": "import { tarefa, minutos, resumo } from './main.js';\n\ndescribe('configuração do cronômetro', () => {\n  test('tarefa é o texto fixo Revisão', () => {\n    expect(tarefa).toBe('Revisão');\n  });\n  test('minutos recebe os 10 minutos extras', () => {\n    expect(minutos).toBe(35);\n  });\n  test('resumo usa os minutos já ajustados', () => {\n    expect(resumo).toBe('Tarefa Revisão: 35 min');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "const-em-minutos",
+          "files": {
+            "main.js": "export const tarefa = 'Revisão';\nexport const minutos = 25;\nminutos = minutos + 10;\nexport const resumo = `Tarefa ${tarefa}: ${minutos} min`;\n"
+          }
+        },
+        {
+          "id": "resumo-antes-do-acrescimo",
+          "files": {
+            "main.js": "export const tarefa = 'Revisão';\nexport let minutos = 25;\nexport const resumo = `Tarefa ${tarefa}: ${minutos} min`;\nminutos = minutos + 10;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.09.correcao-saldo-creditos",
+      "conceptId": "bindings.textual_profile",
+      "sourceActivityId": "01.09",
+      "prerequisites": [
+        "01.06",
+        "01.08"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Um texto que captura o saldo no momento da montagem não acompanha as mudanças feitas depois. O aluno precisa posicionar cada instantâneo no ponto certo do programa, e a mesma regra vale para outro perfil textual com outro saldo.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. O extrato deve mostrar 'Teo: 12 créditos' antes do uso e 'Teo: 3 créditos' depois dele. Não altere textos nem valores: mude apenas a posição das linhas que montam cada texto.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Extrato de bicicletas: cada texto precisa capturar o saldo do momento em que é montado.\nconst cliente = 'Teo';\nlet creditos = 12;\nexport const antes = `${cliente}: ${creditos} créditos`;\nexport const depois = `${cliente}: ${creditos} créditos`;\ncreditos = creditos - 9;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Extrato de bicicletas: cada texto precisa capturar o saldo do momento em que é montado.\nconst cliente = 'Teo';\nlet creditos = 12;\nexport const antes = `${cliente}: ${creditos} créditos`;\ncreditos = creditos - 9;\nexport const depois = `${cliente}: ${creditos} créditos`;\n"
+      },
+      "tests": "import { antes, depois } from './main.js';\n\ndescribe('extrato de créditos', () => {\n  test('antes mostra o saldo inicial', () => {\n    expect(antes).toBe('Teo: 12 créditos');\n  });\n  test('depois mostra o saldo depois do uso', () => {\n    expect(depois).toBe('Teo: 3 créditos');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "const-no-saldo",
+          "files": {
+            "main.js": "// Extrato de bicicletas: cada texto precisa capturar o saldo do momento em que é montado.\nconst cliente = 'Teo';\nconst creditos = 12;\nexport const antes = `${cliente}: ${creditos} créditos`;\ncreditos = creditos - 9;\nexport const depois = `${cliente}: ${creditos} créditos`;\n"
+          }
+        },
+        {
+          "id": "antes-depois-do-uso",
+          "files": {
+            "main.js": "// Extrato de bicicletas: cada texto precisa capturar o saldo do momento em que é montado.\nconst cliente = 'Teo';\nlet creditos = 12;\ncreditos = creditos - 9;\nexport const antes = `${cliente}: ${creditos} créditos`;\nexport const depois = `${cliente}: ${creditos} créditos`;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.01.09.predicao-pontos-snapshot",
+      "conceptId": "bindings.textual_profile",
+      "sourceActivityId": "01.09",
+      "prerequisites": [
+        "01.06",
+        "01.08"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Um texto montado guarda o valor do momento em que foi criado, enquanto a variável pode ser reatribuída depois. O aluno precisa prever qual linha reflete a reatribuição e qual mostra o instantâneo, o que depende de entender a ordem da montagem.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Separe o texto que já foi montado do valor que a variável tem no momento de cada chamada.",
+      "code": "let pontos = 40;\nconst jogadora = 'Bia';\nconst inicio = `${jogadora}: ${pontos} pts`;\npontos = pontos + 25;\nconst fim = `${jogadora}: ${pontos} pts`;\nconsole.log(inicio);\nconsole.log(fim);\npontos = pontos - 15;\nconsole.log(`${jogadora} fica com ${pontos}`, inicio);\n",
+      "expectedOutput": "Bia: 40 pts\nBia: 65 pts\nBia fica com 50 Bia: 40 pts"
+    },
+    {
+      "variantId": "var.01.01.escolha-tipos-cadastro",
+      "conceptId": "primitives.typeof",
+      "sourceActivityId": "01.01",
+      "prerequisites": [
+        "00.04"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Um número escrito entre aspas vira texto para typeof, e um valor falso continua sendo number. O aluno precisa separar o efeito das aspas sobre o valor do que typeof classifica, em um cadastro que não aparece na atividade de origem.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida qual rótulo typeof devolve para cada valor do cadastro. Observe onde estão as aspas e se o valor é um número ou um texto que parece número.",
+      "code": "const ano = '2026';\nconst idade = 34;\nconst ativo = 0;\nconsole.log(typeof ano, typeof idade, typeof ativo);\n",
+      "choices": [
+        "number number number",
+        "2026 34 0",
+        "string number number",
+        "string string number"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "'2026' é texto por causa das aspas, idade é number, e ativo = 0 também é number: zero é um número, mesmo sendo falso.",
+        "byChoice": {
+          "0": "Aspas delimitam texto: '2026' é string, não number, mesmo com dígitos.",
+          "1": "typeof devolve o rótulo do tipo, não o valor testado; por isso a saída não repete 2026, 34 ou 0.",
+          "3": "Zero é number. Ser um valor falso não muda o tipo que typeof devolve."
+        }
+      }
+    },
+    {
+      "variantId": "var.01.01.predicao-tipos-aninhados",
+      "conceptId": "primitives.typeof",
+      "sourceActivityId": "01.01",
+      "prerequisites": [
+        "00.04"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "O resultado de typeof é sempre texto, por isso pode ser passado a outro typeof sem virar número. A previsão exige aplicar a regra a expressões aninhadas e a uma concatenação, algo que a atividade de origem não exige.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada linha antes de executar. Separe o valor testado do rótulo que typeof devolve e repare em qual expressão cada chamada recebe.",
+      "code": "const sensor = 'ativo';\nconsole.log(typeof sensor);\nconsole.log(typeof -3);\nconsole.log(typeof (sensor + '!'));\nconsole.log(typeof typeof 5);\n",
+      "expectedOutput": "string\nnumber\nstring\nstring"
+    },
+    {
+      "variantId": "var.01.05.predicao-leitura-sensor",
+      "conceptId": "primitives.special_values",
+      "sourceActivityId": "01.05",
+      "prerequisites": [
+        "01.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Um texto com o nome de um valor especial é classificado como string, e o próprio valor especial continua number. O aluno precisa distinguir grafia e valor nas quatro classificações, o que não se resolve trocando os valores da atividade de origem.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Diferencie o valor especial do texto que tem o mesmo nome e do rótulo que typeof devolve.",
+      "code": "const aviso = 'NaN';\nconsole.log(typeof aviso, typeof NaN);\nconsole.log(typeof -Infinity, typeof 10n);\nconsole.log(typeof undefined, typeof 'undefined');\n",
+      "expectedOutput": "string number\nnumber bigint\nundefined string"
+    },
+    {
+      "variantId": "var.01.05.escolha-nan-texto",
+      "conceptId": "primitives.special_values",
+      "sourceActivityId": "01.05",
+      "prerequisites": [
+        "01.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "Dois valores especiais numéricos e um texto com a mesma grafia pedem rótulos diferentes. O aluno precisa separar o valor da palavra escrita, o que muda a resposta mesmo com a mesma forma de chamada de typeof.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida qual rótulo cada chamada de typeof devolve. Repare em qual valor é especial e qual é apenas um texto com a mesma grafia.",
+      "code": "const leitura = NaN;\nconst teto = Infinity;\nconsole.log(typeof leitura, typeof teto, typeof 'NaN');\n",
+      "choices": [
+        "NaN Infinity string",
+        "number number number",
+        "number number string",
+        "object number string"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "NaN e Infinity são valores do tipo number. Entre aspas, 'NaN' é apenas texto, e typeof devolve o rótulo, não o valor.",
+        "byChoice": {
+          "0": "typeof devolve o rótulo do tipo, não o valor; NaN e Infinity aparecem como number.",
+          "1": "'NaN' entre aspas é texto, então o terceiro rótulo é string, não number.",
+          "3": "NaN não é object. typeof só devolve object para null, peculiaridade já vista na atividade de origem."
+        }
+      }
+    },
+    {
+      "variantId": "var.01.05.escolha-tipos-contagem",
+      "conceptId": "primitives.types",
+      "sourceActivityId": "01.05",
+      "prerequisites": [
+        "01.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07"
+      ],
+      "transferDecision": "O mesmo dígito muda de tipo conforme o sufixo n e as aspas, e 2.5 continua number. O aluno precisa classificar cada literal pelo que a linguagem registra, e não pela aparência do número.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o tipo de cada valor do programa. Observe o sufixo de cada número e se o texto está entre aspas.",
+      "code": "const contagem = 3n;\nconst media = 2.5;\nconst legenda = '3';\nconsole.log(typeof contagem, typeof media, typeof legenda);\n",
+      "choices": [
+        "number number number",
+        "bigint bigint string",
+        "number number string",
+        "bigint number string"
+      ],
+      "answer": 3,
+      "feedback": {
+        "correct": "3n é bigint por causa do sufixo n; 2.5 é number; '3' é string porque as aspas delimitam texto.",
+        "byChoice": {
+          "0": "O sufixo n cria um bigint e as aspas criam um texto; nenhum dos três valores é number.",
+          "1": "2.5 é number, não bigint: bigint é reservado a inteiros com o sufixo n.",
+          "2": "O sufixo muda o tipo do literal: 3n não vira number, e legenda continua sendo texto."
+        }
+      }
+    }
+  ]
+}

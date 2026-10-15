@@ -1,11 +1,11 @@
 import { courseExerciseIds } from "./course-exercise-ids";
 import { limits } from "./progress-contract.json";
 import { createEmptyProgress, type UserProgress } from "./progress-model";
-import { sanitizeEvidence, sanitizeSchedules } from "./progress-evidence";
+import { sanitizeEvidence, sanitizeReviewAttempts, sanitizeSchedules } from "./progress-evidence";
 import { record, text, validDate, validTimestamp, boundedInteger } from "./progress-values";
 import { sanitizeStage01Progress } from "./stage01-progress";
 import { sanitizeStage02Progress } from "./stage02-progress";
-import { sanitizeLearningRecord } from "./learning-progress";
+import { sanitizeLearningRecord, type LearningRecord } from "./learning-progress";
 
 const exerciseIds = new Set<string>(courseExerciseIds);
 const slugs = new Set(["web", "html", "css", ...exerciseIds]);
@@ -36,7 +36,15 @@ function sanitizeCompletion(input: Record<string, unknown>, clean: UserProgress)
     ? [...new Set(input.completed.filter((slug): slug is string => typeof slug === "string" && slugs.has(slug)))] : [];
 }
 
-function sanitizeExerciseData(input: Record<string, unknown>, clean: UserProgress) {
+export type ProgressSanitizeReport = {
+  // Valid learning records dropped because the per-user limit was exceeded (most recently updated are kept).
+  droppedLearningRecords: number;
+  // Review attempts dropped by the count or reviewPayloadChars budget; pending drafts are kept first.
+  droppedReviewAttempts: number;
+  truncated: boolean;
+};
+
+function sanitizeExerciseData(input: Record<string, unknown>, clean: UserProgress): number {
   const fields = [
     ["exerciseDrafts", limits.draftChars],
     ["exercisePredictions", limits.predictionChars],
@@ -58,28 +66,47 @@ function sanitizeExerciseData(input: Record<string, unknown>, clean: UserProgres
   for (const [key, value] of Object.entries(record(input.warmupCompleted))) {
     if (isExerciseDataKey(key) && typeof value === "boolean") clean.warmupCompleted[key] = value;
   }
-  let learningCount = 0;
+  const candidates: [string, LearningRecord][] = [];
   for (const [id, value] of Object.entries(record(input.exerciseLearning))) {
-    if (!exerciseIds.has(id) || learningCount >= limits.learningRecords) continue;
+    if (!exerciseIds.has(id)) continue;
     const learning = sanitizeLearningRecord(value);
-    if (!learning) continue;
-    clean.exerciseLearning[id] = learning;
-    learningCount++;
+    if (learning) candidates.push([id, learning]);
   }
+  const kept = new Set(
+    [...candidates]
+      .sort((a, b) => Date.parse(b[1].currentUpdatedAt) - Date.parse(a[1].currentUpdatedAt) || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+      .slice(0, limits.learningRecords)
+      .map(([id]) => id)
+  );
+  for (const [id, learning] of candidates) {
+    if (kept.has(id)) clean.exerciseLearning[id] = learning;
+  }
+  return candidates.length - kept.size;
 }
 
-export function sanitizeUserProgress(value: unknown): UserProgress {
+export function sanitizeUserProgressWithReport(value: unknown): { progress: UserProgress; report: ProgressSanitizeReport } {
   const input = record(value);
   const clean = createEmptyProgress();
   sanitizeCompletion(input, clean);
-  sanitizeExerciseData(input, clean);
+  const droppedLearningRecords = sanitizeExerciseData(input, clean);
   clean.stage01 = sanitizeStage01Progress(input.stage01);
   clean.stage02 = sanitizeStage02Progress(input.stage02);
   clean.reviewSchedule = sanitizeSchedules(input.reviewSchedule, slugs);
+  const review = sanitizeReviewAttempts(input.reviewAttempts, slugs);
+  clean.reviewAttempts = review.attempts;
   clean.lastLesson = typeof input.lastLesson === "string" && slugs.has(input.lastLesson) ? input.lastLesson : null;
   clean.activeDays = Array.isArray(input.activeDays)
     ? [...new Set(input.activeDays.map(validDate).filter((day): day is string => Boolean(day)))].slice(-limits.activeDays) : [];
   clean.reviewIndex = boundedInteger(input.reviewIndex, 0, courseExerciseIds.length - 1);
   clean.lastReview = validDate(input.lastReview);
-  return clean;
+  clean.reviewOptIn = input.reviewOptIn === true;
+  const droppedReviewAttempts = review.dropped;
+  return {
+    progress: clean,
+    report: { droppedLearningRecords, droppedReviewAttempts, truncated: droppedLearningRecords + droppedReviewAttempts > 0 }
+  };
+}
+
+export function sanitizeUserProgress(value: unknown): UserProgress {
+  return sanitizeUserProgressWithReport(value).progress;
 }

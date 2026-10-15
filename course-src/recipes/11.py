@@ -373,8 +373,7 @@ CONTENT = {
      'serializada.',
      'O DOM, porque sempre se deve recuperar estado lendo os textos dos cartões.',
      'localStorage, consultado em cada render para decidir posições visuais.',
-     'Crie uma lista de reservas de equipamento com estado consistente, persistência local e controles operáveis por teclado, sem '
-     'reaproveitar a estrutura visual do Kanban.')),
+     'Um Kanban com estado consistente, persistência local e controles operáveis por teclado depende de fronteiras claras entre estado, storage e interface.')),
          ),
 "11.09": C(
     'dom.script_loading',
@@ -455,8 +454,7 @@ CONTENT = {
      'O ponto de entrada importa state/view e conecta dados e eventos.',
      'O módulo state importa view para atualizar elementos diretamente.',
      'Todos os arquivos compartilham uma variável global em vez de import/export.',
-     'Extraia model/view/main de um app de lembretes mantendo uma fronteira testável para '
-     'regras e persistência.')),
+     'Extraia state, view e main do Kanban mantendo uma fronteira testável para regras e persistência.')),
          ),
 "11.11": C(
     'dom.event_phases_default',
@@ -561,7 +559,7 @@ CONTENT = {
      'Converta done para status e gere IDs estáveis antes de salvar V2.'), ('Função pura migrate valida cada item, preserva válidos, emite aviso; loader usa '
      'fallback seguro e grava V2 só após migração.'), 'Migrar favoritos V1 string[] para V2 objetos -> válidos preservados', 22, 'browser', ('Planeje o carregamento por etapas: parse, validação por registro, migração e '
      'gravação da versão atual. Decida como itens válidos sobrevivem a um item danificado.',
-     'Uma lista antiga de favoritos pode virar objetos com ids estáveis. Se uma entrada '
+     'Um save antigo do Kanban pode virar tarefas com IDs estáveis. Se uma entrada '
      'estiver incompleta, as demais podem ser convertidas e a interface pode reportar o '
      'descarte.',
      'Monte uma tabela com versão de entrada, função aplicada e formato final; marque onde '
@@ -574,8 +572,7 @@ CONTENT = {
      'Para preservar itens válidos e informar quais entradas precisaram ser descartadas.',
      'Para apagar toda a coleção assim que um registro não tiver um campo.',
      'Para repetir a mesma migração a cada carregamento, sem olhar a versão.',
-     'Migre uma coleção antiga de favoritos para objetos identificáveis sem descartar '
-     'entradas aproveitáveis.')),
+     'Migre o save antigo do Kanban (campo done) para objetos com status e IDs estáveis, sem descartar tarefas aproveitáveis.')),
          ),
 }
 
@@ -713,4 +710,121 @@ CONTENT["11.08"]["rubric"] = (
     "Entrega 2 — app.js mantém uma fonte de verdade, valida antes de mutar e renderiza texto do usuário com textContent; a prévia mostra as três colunas.",
     "Entrega 3 — localStorage salva após cada mudança e reload recupera o quadro; JSON inválido mostra aviso sem sobrescrever os bytes originais.",
     "Entrega 4 — checklist registra evidência de CRUD, status desconhecido, reload, JSON inválido e texto '<img>' literal; reflexão anota a sequência de teclado/foco verificada.",
+)
+
+
+# Feedback por alternativa (revisão 15/10/2026): o texto incorreto nomeia o engano de cada alternativa errada
+# em vez de repetir o exemplo resolvido; o texto correto explica por que a alternativa certa vale.
+_REVIEW_FEEDBACK = {
+    "11.01": (
+        "stopPropagation impede que o evento siga para outros nós do caminho; stopImmediatePropagation também impede os demais listeners do mesmo nó. A diferença é prática, por isso a pergunta a cobra.",
+        "Se escolheu “Ambas sempre impedem a ação padrão”, confundiu propagação com ação padrão: nenhum dos dois métodos cancela a navegação de um link. Se escolheu “Parar a propagação remove permanentemente os listeners ancestrais”, imaginou remoção de callbacks; o método só interrompe o caminho do evento.",
+    ),
+    "11.02": (
+        "Um nó de texto recebe a string como conteúdo; as marcas <em> continuam sendo caracteres visíveis, porque o navegador não cria elementos a partir de texto inserido como nó.",
+        "Se escolheu concatenar em innerHTML, tratou a entrada como marcação, e o navegador transforma <em> em elemento. Se escolheu anexar a string diretamente ao ul sem criar um item, misturou o texto ao contêiner: o dado deixa de pertencer a um <li> e a estrutura da lista se perde.",
+    ),
+    "11.03": (
+        "Number('2.5') e Number('0') produzem números, mas fora da regra de inteiro positivo. A conversão troca o tipo; a verificação de faixa e de inteiro é uma etapa separada.",
+        "Se escolheu que Number converte qualquer entrada em inteiro positivo, supôs que a conversão já valida o domínio; ela só muda o tipo. Se escolheu limpar os campos antes do erro, trocou validação por reinicialização: os valores que a pessoa digitou devem permanecer para correção.",
+    ),
+    "11.04": (
+        "getAll devolve todas as ocorrências do mesmo name, como as caixas marcadas; só depois dessa leitura cada valor é validado e convertido conforme o tipo do campo.",
+        "Se escolheu FormData.get(name), perdeu escolhas: get devolve apenas a primeira ocorrência. Se escolheu Number(formData), tentou converter o formulário inteiro: FormData não é um número, e a conversão não respeita campos repetidos.",
+    ),
+    "11.05": (
+        "A instalação do listener no contêiner e sua remoção pertencem ao ciclo mount/destroy; render só desenha. Assim, chamadas repetidas de render não multiplicam callbacks.",
+        "Se escolheu que render adiciona um listener por cartão, cada redesenho acumula callbacks e um clique passa a disparar várias vezes. Se escolheu que destroy redesenha a interface, misturou limpeza com renderização: desmontar não deve desenhar nada novo.",
+    ),
+    "11.06": (
+        "closest começa no elemento clicado e sobe a árvore até encontrar o botão que representa a ação; assim, um clique num ícone filho ainda identifica o item correto.",
+        "Se escolheu que closest garante que o ancestral pertence à lista atual, atribuiu ao método uma validação de estado que ele não faz. Se escolheu que ele converte event.target em estado sem validação, confundiu localizar o elemento da ação com ler dados do alvo sem critério.",
+    ),
+    "11.07": (
+        "aria-describedby aponta para o id da mensagem, e a label associada ao input dá o nome acessível; assim o leitor de tela anuncia o erro junto ao campo certo.",
+        "Se escolheu a borda vermelha, usou só cor: ela não é anunciada e não identifica o erro para quem não a enxerga. Se escolheu o placeholder, usou um texto que desaparece ao digitar e não substitui label nem descrição.",
+    ),
+    "11.08": (
+        "O estado em memória é a fonte de verdade: render deriva a tela dele, e o storage guarda uma cópia serializada para o reload recuperar o quadro.",
+        "Se escolheu o DOM, tratou o texto visível como dado e recuperou estado lendo cartões, o que mistura apresentação com dados. Se escolheu localStorage consultado em cada render, deixou o armazenamento decidir a tela; a persistência deve guardar o estado, não comandar o layout.",
+    ),
+    "11.09": (
+        "async executa cada script assim que ele fica pronto, sem garantir ordem. Por isso um script lento pode terminar depois de um menor que vem abaixo dele, mesmo que o HTML diga o contrário.",
+        "Se escolheu “Sempre espera o parse completo e conserva a ordem do HTML”, descreveu defer, não async. Se escolheu “Sempre executa depois de DOMContentLoaded”, aplicou a expectativa de defer a async; nenhuma das duas garantias vale para async.",
+    ),
+    "11.10": (
+        "O ponto de entrada compõe os módulos: state calcula o próximo valor, view desenha o número recebido e o ponto de entrada conecta clique e renderização, sem o domínio depender do DOM.",
+        "Se escolheu que state importa view, acoplou o estado ao DOM e perdeu a possibilidade de testar as regras sem navegador. Se escolheu variável global compartilhada, trocou imports explícitos por estado difícil de rastrear.",
+    ),
+    "11.11": (
+        "preventDefault cancela a ação padrão cancelável, como a navegação de um link; ele não remove listeners nem muda a fase, e os ancestrais continuam recebendo o evento.",
+        "Se escolheu “A ordem dos listeners e a fase bubble”, atribuiu a preventDefault um papel de reordenação do caminho, que pertence ao navegador. Se escolheu “A lista de listeners dos ancestrais”, confundiu cancelar uma ação com remover callbacks registrados.",
+    ),
+    "11.12": (
+        "textContent grava a entrada como texto: < e & permanecem caracteres, e nenhum elemento é criado a partir de marcas que estejam na string.",
+        "Se escolheu innerHTML, supôs que ele trata a entrada como texto; ele interpreta a marcação. Se escolheu outerHTML, confundiu escape com remoção: outerHTML também interpreta marcação e ainda substitui o próprio elemento.",
+    ),
+    "11.13": (
+        "Validar item a item preserva os registros corretos e permite informar exatamente quais entradas foram descartadas, sem perda total dos dados.",
+        "Se escolheu apagar toda a coleção, tratou um item inválido como falha da lista inteira e perdeu dados válidos. Se escolheu repetir a migração sem olhar a versão, ignorou o controle de versão que impede reaplicar transformações já feitas.",
+    ),
+    "11.14": (
+        "passive: true promete que o listener não chamará preventDefault, o que deixa o navegador rolar sem esperar o script; a chamada, nesse caso, é ignorada e gera aviso.",
+        "Se escolheu “Que o navegador removerá o listener depois da primeira execução”, confundiu passive com once: a remoção após a primeira execução é o papel de { once: true }. Se escolheu “Que AbortController cancelará a ação padrão”, confundiu remover listeners com cancelar ações do navegador; signal só remove listeners.",
+    ),
+}
+for _eid, (_correct, _incorrect) in _REVIEW_FEEDBACK.items():
+    CONTENT[_eid]["review"]["feedback_correct"] = _correct
+    CONTENT[_eid]["review"]["feedback_incorrect"] = _incorrect
+
+# Fase 6 (6.4): investigação opcional de envio de formulário alheio. Falha reproduzida, correção verificada por teste de DOM e mutantes.
+from recipe_api import E as _E11
+
+CONTENT["11.15"] = _E11(
+    "forms.basic",
+    "README.md: investigação de envio de formulário; os arquivos estão em starters/11.15.",
+    "nome com espaços -> envio cancelado, mensagem Informe o nome. e campo preservado; nome Ana com oficina ceramica -> item com texto Ana · ceramica",
+    "nome <b>Ana</b> -> item mostra o texto literal, sem elemento b; envio inválido não cria item e mantém o foco no nome",
+    "Chamar preventDefault depois da validação, esperando que o envio padrão seja cancelado em todos os casos.",
+    "Com nome vazio, a página recarrega e a mensagem some, porque o envio padrão não foi cancelado.",
+    "Em que ponto do tratador o envio padrão é cancelado, e o que acontece quando a função sai antes dessa linha?",
+    (
+        "Compare a ordem das linhas do tratador com o caminho do envio inválido.",
+        "Confira event.defaultPrevented no caso inválido antes de mexer no código.",
+        "Note que a validação é de regras.js, mas o cancelamento do envio é de app.js.",
+    ),
+    "A causa está em app.js: preventDefault roda só depois do return do caminho inválido. A correção chama event.preventDefault() no início do tratador; regras.js e index.html continuam iguais.",
+    "formulário com campo de e-mail vazio -> envio cancelado e foco no e-mail; e-mail válido -> envio tratado pelo script",
+    kind="DEBUG",
+    estimated=45,
+    optional=True,
+    runtime="browser",
+    compatibility="DOM, eventos submit e foco em navegador evergreen, com módulos ES no iframe sandbox da avaliação",
+    prompt="Investigue a issue: reproduza o envio inválido, localize a linha que deixa o envio padrão acontecer, corrija o arquivo que trata o evento e prove que o restante da página continua igual.",
+    explanation={
+        "mental_model": "No formulário, o navegador envia por padrão. O script só impede esse envio chamando preventDefault no evento; a ordem das linhas decide se essa chamada acontece em todos os caminhos.",
+        "worked_example": "Se o tratador retorna no caminho de erro antes de chamar preventDefault, o navegador recarrega a página e a mensagem some. A validação estava certa; o problema é o momento da chamada.",
+        "common_trap": "Mexer em regras.js porque a mensagem de erro parece errada, quando o erro está na linha que cancela o envio.",
+        "why_it_matters": "Formulários reais misturam validação, DOM e acessibilidade. Saber onde o evento é cancelado evita remendos que só funcionam no caminho feliz.",
+    },
+    first_response="Antes de editar, reproduza o envio com nome vazio e escreva qual linha do tratador roda antes do cancelamento do envio.",
+    first_response_timing="Antes de alterar app.js ou de executar a avaliação.",
+    interaction="Registre o caminho do envio inválido, o valor de defaultPrevented antes e depois da correção, e a linha alterada em app.js.",
+    resources=(
+        "MDN: Event.preventDefault — https://developer.mozilla.org/pt-BR/docs/Web/API/Event/preventDefault",
+        "MDN: aria-live — https://developer.mozilla.org/pt-BR/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-live",
+    ),
+    rubric=(
+        "Reproduz o envio inválido e mostra que defaultPrevented é falso no código inicial.",
+        "Localiza a causa em app.js, na ordem entre validação e preventDefault, sem alterar regras.js.",
+        "Confirma por teste que o texto digitado é preservado, o foco vai ao nome e o nome aparece como texto literal.",
+    ),
+    review={
+        "prompt": "Qual evento o script precisa cancelar para impedir o envio padrão do formulário?",
+        "choices": ["click no botão", "submit do formulário", "change do select"],
+        "answer": "submit do formulário",
+        "feedback_correct": "Isso mesmo: o envio é o evento submit do formulário, e o cancelamento usa preventDefault nele.",
+        "feedback_incorrect": "O clique no botão dispara a submissão, mas o envio padrão é o evento submit do formulário; é nele que preventDefault cancela o envio.",
+    },
+    transfer_prompt="Num formulário de e-mail, explique como um envio inválido deve cancelar o envio padrão, manter o campo e levar o foco ao e-mail, sem criar item.",
 )

@@ -9,6 +9,8 @@
         DevPathAppRouter: ["create"],
         DevPathCatalogView: ["create"],
         DevPathReviewController: ["create"],
+        DevPathKataController: ["create"],
+        DevPathReviewSelection: ["chooseReview", "grade", "reconcileAttempts", "startAttempt", "recordCheck", "behaviorRequest"],
         DevPathCourseController: ["create"],
         DevPathStageRegistry: ["create"],
         DevPathModuleGraph: ["buildModuleGraph"],
@@ -76,6 +78,8 @@
         get renderInlineCode() { return renderInlineCode; },
         get reviewSession() { return reviewSession; }, set reviewSession(value) { reviewSession = value; },
         get reviewQuestionIndex() { return reviewQuestionIndex; }, set reviewQuestionIndex(value) { reviewQuestionIndex = value; },
+        // Learner opt-in for optional activities; stored in progress (reviewOptIn) and sanitized with the rest of it.
+        get reviewOptIn() { return progress.reviewOptIn === true; },
         get nextReviewDate() { return nextReviewDate; },
         get reviewSchedule() { return reviewSchedule; },
         get saveProgress() { return saveProgress; },
@@ -94,6 +98,7 @@
     const appRouterController = window.DevPathAppRouter.create(appContext);
     const catalogViewController = window.DevPathCatalogView.create(appContext);
     const reviewController = window.DevPathReviewController.create(appContext);
+    const kataController = window.DevPathKataController.create(appContext);
     const courseController = window.DevPathCourseController.create(appContext);
     const progressSync = window.DevPathProgressSync.create({
         snapshot: () => JSON.stringify(progress),
@@ -241,6 +246,17 @@
         },
         runTransfer: async (item, transfer, evidence = {}) => {
             const assessment = curriculumAssessments[item.id];
+            // Executable transfers run the learner's files with the assessment runner; only that path can grant "demonstrated".
+            if (transfer?.execution === 'browser') return window.DevPathLearningPaths.runExecutableTransfer({
+                item, transfer, files: evidence.files, assessment,
+                current: () => learningRecord(item),
+                event: (kind, options) => learningEvent(item, kind, options),
+                evaluate: input => window.DevPathAssessment.run(input),
+                fingerprint: input => window.DevPathAssessment.canonicalFingerprint(input),
+                newId: newLearningId,
+                contentVersion: item.contentVersion || 1,
+                assessmentVersion: assessment?.version || 1
+            });
             if (!transfer || assessment?.transfer?.id !== transfer.id || !Array.isArray(transfer.rubric) || !transfer.rubric.length || evidence.response?.trim().length < 40 || evidence.checked?.length !== transfer.rubric.length) return {accepted: false};
             const principal = learningRecord(item), principalEvidence = principal?.verifiedEvidence;
             if (!principalEvidence || principalEvidence.attemptId !== principal.attemptId || principalEvidence.fingerprint !== principal.currentFingerprint || principalEvidence.contentVersion !== (item.contentVersion || 1) || principalEvidence.assessmentVersion !== (assessment?.version || 1) || principal.assisted) return {accepted:false};
@@ -369,9 +385,14 @@
     function requiredActivities() { return curriculumActivities.filter((item) => item.optional !== true); }
     function doneCount() { return requiredActivities().filter((item) => isExerciseDone(item.id)).length; }
     function percentDone() { const required = requiredActivities(); return required.length ? Math.round(doneCount() / required.length * 100) : 0; }
-    function dueExercises() { return requiredActivities().filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
+    // Revisão usa os exercícios obrigatórios e, por adesão do aluno (reviewOptIn), as atividades opcionais concluídas.
+    // Isso não entra em doneCount, percentDone nem requiredActivities.
+    function reviewableActivities() { return curriculumActivities.filter((item) => item.optional !== true || progress.reviewOptIn === true); }
+    function dueExercises() { return reviewableActivities().filter((item) => isExerciseDone(item.id) && Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity) <= Date.now()); }
     function nextReviewDate() {
-        const dates = requiredActivities().filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt || Infinity));
+        // Completed activities without a schedule yet have no date; they must not turn the summary into an invalid date.
+        const dates = reviewableActivities().filter((item) => isExerciseDone(item.id)).map((item) => Number(progress.reviewSchedule?.[item.id]?.dueAt))
+            .filter((date) => Number.isFinite(date));
         return dates.length ? Math.min(...dates) : null;
     }
     function render() {
@@ -385,6 +406,8 @@
             reviewSession = null;
             reviewQuestionIndex = 0;
         }
+        if (route.name !== "katas")
+            kataController.reset();
         updateNav(route.name);
         if (route.name === "home")
             renderHome();
@@ -398,6 +421,8 @@
         }
         if (route.name === "review")
             renderReview();
+        if (route.name === "katas")
+            kataController.render(route.band || null);
         window.DevPathLearningJourney?.sync(view);
         document.querySelector("#main").focus({ preventScroll: true });
     }
@@ -454,6 +479,7 @@
         const adapter = stageRegistry.resolve(item);
         view.innerHTML = window.DevPathLearningPaths.decorate(item, adapter.render(item, stageContext()), stageContext());
         adapter.sync?.(item, stageContext());
+        reviewController.mountOptIn(view, item);
         window.DevPathLocalProjectPanel?.enhance(view, item, {
             assessment: curriculumAssessments[id],
             loadDraft: draftItem => courseController.loadCourseDraft(draftItem),
@@ -475,6 +501,8 @@
     function checkReview(...args) { return reviewController.checkReview(...args); }
     view.addEventListener("click", async (event) => {
         if (dispatchStageEvent(event))
+            return;
+        if (routeInfo().name === "katas" && kataController.handleClick(event))
             return;
         const nextReviewBatch = event.target.closest("[data-review-next-batch]");
         if (nextReviewBatch) {
@@ -541,6 +569,8 @@
             checkReview(reviewCheck.dataset.reviewCheck);
     });
     view.addEventListener("input", (event) => {
+        if (routeInfo().name === "katas" && kataController.handleInput(event))
+            return;
         if (dispatchStageEvent(event))
             return;
         if (event.target.matches("#course-search")) {
@@ -570,6 +600,8 @@
         }
     });
     view.addEventListener("change", (event) => {
+        if (reviewController.handleOptInChange(event))
+            return;
         if (dispatchStageEvent(event))
             return;
         if (event.target.matches("[data-course-rubric]")) {

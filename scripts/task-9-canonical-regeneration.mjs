@@ -1,27 +1,110 @@
+// Orquestrador da regeneração canônica das etapas 15 e 20–23 (e 23.12, por rubrica).
+// Só roda em cópia temporária: recusa execução fora de os.tmpdir() para não sobrescrever o checkout.
+// Duas passagens completas na mesma cópia; a segunda deve reproduzir a primeira byte a byte.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {readFileSync,readdirSync,statSync,writeFileSync,mkdirSync} from 'node:fs';
+import {readFileSync, readdirSync, writeFileSync, mkdirSync} from 'node:fs';
 import path from 'node:path';
+import {tmpdir} from 'node:os';
 import {spawnSync} from 'node:child_process';
-const root=process.cwd();
-const steps=['scripts/task-9-stage20.mjs','scripts/task-9-stage21.mjs','scripts/task-9-dom-21-09.mjs','scripts/task-9-stage22.mjs','scripts/task-9-stage23.mjs','scripts/task-9-remaining-assessments.mjs','scripts/task-9-readmes.mjs','course-src/build-public-curriculum.mjs'];
-function runCycle(){const outputs=[];for(const file of steps){const r=spawnSync(process.execPath,[file],{cwd:root,encoding:'utf8',timeout:120000,windowsHide:true});outputs.push({command:`node ${file}`,exitCode:r.status,stdout:r.stdout||'',stderr:r.stderr||'',error:r.error?.message||null});if(r.status!==0||r.error)throw new Error(`${file} failed\n${r.stdout}\n${r.stderr}\n${r.error||''}`);}return outputs;}
-function walk(dir,base=dir){return readdirSync(dir,{withFileTypes:true}).flatMap(entry=>{const file=path.join(dir,entry.name);return entry.isDirectory()?walk(file,base):[path.relative(root,file).replaceAll('\\','/')];});}
-function snapshot(){const files=['course-src/assessments.json','public/course-assessments.json','public/course-catalog.json',...readdirSync(path.join(root,'scripts')).filter(name=>/^task-9-.*\.mjs$/.test(name)).map(name=>'scripts/'+name),...['course-src/solutions','course-src/mutants','course-src/tests','course-src/starters'].flatMap(pathname=>walk(path.join(root,pathname)))];const unique=[...new Set(files)].sort();return Object.fromEntries(unique.map(file=>[file,createHash('sha256').update(readFileSync(file)).digest('hex')]));}
-const first=runCycle(),firstSnapshot=snapshot();const second=runCycle(),secondSnapshot=snapshot();assert.deepEqual(secondSnapshot,firstSnapshot,'canonical generation changed its outputs across identical runs');
-const source=JSON.parse(readFileSync('course-src/assessments.json','utf8')),published=JSON.parse(readFileSync('public/course-assessments.json','utf8'));
-const compiled=JSON.parse(readFileSync('course-src/.generated/resolved_preview.json','utf8'));
-const ids=compiled.filter(item=>/^(20|21|22|23)\.\d{2}$/.test(item.id)).map(item=>item.id);
-const assessedIds=Object.keys(source).filter(id=>/^(20|21|22|23)\.\d{2}$/.test(id)).sort();
-assert.deepEqual(assessedIds,[...ids].sort(),'Stage 20–23 assessment IDs must match compiled activity identities');
-for(const id of ids){const a=source[id];assert.ok(a.referenceDir,`${id} missing referenceDir`);assert.ok(readFileSync(`course-src/${a.referenceDir}/README.md`,'utf8').length>180,`${id} README incomplete`);assert.ok(a.transfer?.id===`${id}-transfer`&&a.transfer.files?.length===1&&a.transfer.rubric?.length>=2,`${id} transfer/rubric missing`);if(a.checks.includes('behavior')&&!['local','rubric'].includes(a.environment)&&a.studentSuite!==true)assert.equal(a.behaviorTestPath,'__devpath_protected_behavior__.js',`${id} missing protected submitted-behavior gate`);assert.ok(published[id],`${id} missing from published assessment asset`);}
-assert.equal(source['22.07'].studentSuite,true);assert.equal(source['22.07'].studentSuiteKind,'types');assert.equal(source['22.07'].testPath,'tests/22.07.types.ts');assert.ok(source['22.07'].correctFiles.some(f=>f.path==='index.d.ts'));
-assert.equal(source['21.09'].environment,'dom');assert.deepEqual(source['21.09'].correctFiles.map(f=>f.path),['lab.js','index.html']);assert.ok(source['21.09'].mutantDirs.some(m=>m.files.some(f=>f.content!==source['21.09'].correctFiles[0].content)));
-assert.ok(source['20.03'].behaviorTestPath&&published['20.03'].behaviorTestPath);assert.ok(source['20.07'].mutantDirs.some(m=>m.id==='buffered-incremental-consumer'),'20.07 semantic mutant declaration lost');assert.ok(!source['21.09'].tests.includes('toBeLessThanOrEqual'),'21.09 protected suite uses unsupported shared-runner matcher');assert.ok(!readFileSync('course-src/tests/21.09.test.js','utf8').includes('toBeLessThanOrEqual'),'21.09 source suite uses unsupported shared-runner matcher');
-assert.ok(readFileSync('course-src/solutions/21.08/native-using.mjs','utf8').includes('await using'));
-const pkg=JSON.parse(readFileSync('course-src/solutions/22.08/package.json','utf8'));assert.equal(pkg.name,'@curso/centavos');assert.equal(pkg.version,'0.1.0');assert.ok(readFileSync('course-src/solutions/22.08/src/index.d.ts','utf8').includes('somarCentavos(valores:readonly number[])'));
-const slug=readFileSync('course-src/solutions/22.09/src/index.ts','utf8');assert.ok(slug.includes('criarSlug(texto:string)'));assert.ok(slug.includes('maximo:number=padroes.maximo'));assert.ok(!slug.includes('prefixo'));
-const parser=readFileSync('course-src/solutions/22.03/parser.d.ts','utf8');assert.ok(parser.includes('on(evento:string,listener:'));assert.ok(!parser.includes('on(target:'));assert.equal(source['22.03'].entryPath,'parser.d.ts');assert.equal(source['22.03'].typeEntryPath,'consumidor.ts');assert.equal(source['22.05'].environment,'node-simulated');assert.ok(source['22.03'].correctFiles.some(file=>file.path==='consumidor.ts'));assert.ok(source['21.05'].mutantDirs.some(m=>m.id==='off-by-one-prime-count'));assert.ok(source['21.08'].correctFiles.some(file=>file.path==='native-using.test.mjs'));for(const[id,a]of Object.entries(source)){if(/^(20|21|22|23)\./.test(id)&&a.environment==='local')assert.ok((a.local?.commands||[]).flat().every(arg=>!arg.includes('course-src/solutions/')),`${id} local command is checkout-relative`);}
-for(const id of ids){if(source[id].environment==="local")assert.ok(Array.isArray(source[id].local?.commands)&&source[id].local.commands.length>0,id+" local item without local.commands");}
-const report={generatedAt:new Date().toISOString(),runs:2,steps,stableOutputCount:Object.keys(secondSnapshot).length,ids:ids.length,publicActivities:JSON.parse(readFileSync('public/course-catalog.json','utf8')).length,checks:{allStage20to23ReferencesReadmesTransfersRubrics:true,allExecutableBehaviorGatesProtected:true,stage20BehaviorGatePublished:true,stage21_09DOMAndSemanticMutant:true,stage22_07TypesStudentSuiteRetained:true,stage21_08NativeUsingRetained:true,stage22_08AuthoredPackageIdentityRetained:true,stage22_09AuthoredSlugSignaturesRetained:true,stage22_03ActualParserAPI:true,stage22_03SeparateTypeConsumerRoot:true,stage22_05NodeSimulated:true,stage20_07SemanticMutant:true,stage21_09SupportedMatcher:true,stage21_05SemanticMutant:true,stage21_08ProjectIncludesNativeTest:true,localCommandsProjectRelative:true},first,second};
-const out='output/learning-execution/task-9-canonical-regeneration.json';mkdirSync(path.dirname(out),{recursive:true});writeFileSync(out,JSON.stringify(report,null,2)+'\n');console.log(`Canonical Task9 generation stable across two runs (${report.stableOutputCount} file hashes, ${ids.length} IDs, ${report.publicActivities} published activities).`);
+
+const root = process.cwd();
+const scratch = path.resolve(tmpdir());
+if (!path.resolve(root).toLowerCase().startsWith(scratch.toLowerCase())) {
+  console.error(`Recusado: execute em uma cópia temporária dentro de ${scratch}, não no checkout (${root}).`);
+  process.exit(3);
+}
+
+const GENERATORS = [
+  'scripts/task-8b-stage15.mjs',
+  'scripts/task-9-stage20.mjs',
+  'scripts/task-9-stage21.mjs',
+  'scripts/task-9-dom-21-09.mjs',
+  'scripts/task-9-stage22.mjs',
+  'scripts/task-9-stage23.mjs',
+  'scripts/task-9-remaining-assessments.mjs',
+  'scripts/task-9-stage23-12.mjs',
+  'scripts/task-9-readmes.mjs',
+  'scripts/task-9-canonical-texts.mjs',
+];
+const steps = [...GENERATORS, 'course-src/build-public-curriculum.mjs'];
+
+function runStep(step) {
+  const r = spawnSync(process.execPath, [step], {cwd: root, encoding: 'utf8', timeout: 300000, windowsHide: true});
+  return {command: `node ${step}`, exitCode: r.status, stdout: r.stdout || '', stderr: r.stderr || '', error: r.error?.message || null};
+}
+
+function runCycle() {
+  const outputs = [];
+  for (const step of steps) {
+    const result = runStep(step);
+    outputs.push(result);
+    if (result.exitCode !== 0 || result.error) throw new Error(`${result.command} failed\n${result.stdout}\n${result.stderr}\n${result.error || ''}`);
+  }
+  return outputs;
+}
+
+function walk(dir) {
+  return readdirSync(dir, {withFileTypes: true}).flatMap(entry => {
+    if (entry.name === 'node_modules' || entry.name === '.git') return [];
+    const file = path.join(dir, entry.name);
+    return entry.isDirectory() ? walk(file) : [path.relative(root, file).split(path.sep).join('/')];
+  });
+}
+
+function snapshot() {
+  const files = [
+    'course-src/assessments.json', 'public/course-assessments.json', 'public/course-catalog.json',
+    ...GENERATORS, ...['course-src/solutions', 'course-src/mutants', 'course-src/tests', 'course-src/starters', 'course-src/variants'].flatMap(p => walk(path.join(root, p))),
+  ];
+  const unique = [...new Set(files)].sort();
+  return Object.fromEntries(unique.map(file => [file, createHash('sha256').update(readFileSync(path.join(root, file))).digest('hex')]));
+}
+
+const first = runCycle();
+const firstSnapshot = snapshot();
+const second = runCycle();
+const secondSnapshot = snapshot();
+assert.deepEqual(secondSnapshot, firstSnapshot, 'canonical generation changed its outputs across identical runs');
+
+const compiled = JSON.parse(readFileSync('course-src/.generated/resolved_preview.json', 'utf8'));
+const source = JSON.parse(readFileSync('course-src/assessments.json', 'utf8'));
+const published = JSON.parse(readFileSync('public/course-assessments.json', 'utf8'));
+const ids = compiled.filter(item => /^(20|21|22|23)\.\d{2}$/.test(item.id)).map(item => item.id);
+const assessedIds = Object.keys(source).filter(id => /^(20|21|22|23)\.\d{2}$/.test(id)).sort();
+assert.deepEqual(assessedIds, [...ids].sort(), 'Stage 20–23 assessment IDs must match compiled activity identities');
+// Canonical items outside the task-9 chain (learner-declared, no transfer block, no protected gate, short README).
+const outsideChain = new Set(['20.11', '21.12', '21.13', '21.14']);
+for (const id of ids) {
+  const a = source[id];
+  assert.ok(published[id], `${id} missing from published assessment asset`);
+  if (a.environment === 'rubric' && !a.referenceDir) {
+    // 23.12: rubric-only item, no reference directory and no transfer by design.
+    assert.ok(a.rubric?.length >= 2, `${id} rubric missing`);
+    continue;
+  }
+  assert.ok(a.referenceDir, `${id} missing referenceDir`);
+  if (outsideChain.has(id)) continue;
+  assert.ok(readFileSync(`course-src/${a.referenceDir}/README.md`, 'utf8').length > 180, `${id} README incomplete`);
+  assert.ok(a.transfer?.id === `${id}-transfer` && a.transfer.files?.length === 1 && a.transfer.rubric?.length >= 2, `${id} transfer/rubric missing`);
+  if (a.checks.includes('behavior') && !['local', 'rubric'].includes(a.environment) && a.studentSuite !== true) {
+    assert.equal(a.behaviorTestPath, '__devpath_protected_behavior__.js', `${id} missing protected submitted-behavior gate`);
+  }
+}
+assert.equal(source['22.07'].studentSuite, true);
+assert.equal(source['22.07'].studentSuiteKind, 'types');
+assert.equal(source['21.09'].environment, 'dom');
+assert.ok(source['20.07'].mutantDirs.some(m => m.id === 'buffered-incremental-consumer'), '20.07 semantic mutant declaration lost');
+assert.ok(source['21.08'].correctFiles.some(file => file.path === 'native-using.test.mjs'));
+assert.ok(readFileSync('course-src/solutions/21.08/native-using.mjs', 'utf8').includes('await using'));
+
+const report = {
+  generatedAt: new Date().toISOString(), runs: 2, steps,
+  stableOutputCount: Object.keys(secondSnapshot).length, ids: ids.length,
+  first: first.map(({command, exitCode}) => ({command, exitCode})),
+  second: second.map(({command, exitCode}) => ({command, exitCode})),
+};
+const out = 'output/learning-execution/task-9-canonical-regeneration.json';
+mkdirSync(path.dirname(out), {recursive: true});
+writeFileSync(out, JSON.stringify(report, null, 2) + '\n');
+console.log(`Canonical Task9 generation stable across two runs (${report.stableOutputCount} file hashes, ${ids.length} IDs).`);

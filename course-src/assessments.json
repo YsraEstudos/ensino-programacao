@@ -4904,7 +4904,20 @@
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       }
-    ]
+    ],
+    "transfer": {
+      "id": "08.03-transfer-primeira",
+      "execution": "browser",
+      "version": 1,
+      "prompt": "Tarefa independente — Uma lista ordenada pode ter várias cópias do mesmo valor. Escreva primeira(xs, alvo): devolva o menor índice em que alvo aparece, ou -1 se ele não existe. Use a divisão por metades, mas decida o que fazer quando o elemento do meio é igual ao alvo.",
+      "files": [
+        {
+          "path": "transfer.js",
+          "content": "// Transferência · Primeira ocorrência em lista ORDENADA crescente, com duplicatas.\n// Devolva o MENOR índice em que alvo aparece, ou -1 se ele não existe.\n// Use busca por metades. Não use indexOf, includes nem findIndex.\n\nexport function primeira(xs, alvo) {\n  // Escreva a sua implementação aqui.\n  return -1;\n}\n"
+        }
+      ],
+      "tests": "import { primeira } from \"./transfer.js\";\n\ndescribe(\"primeira ocorrência\", () => {\n  test(\"devolve a primeira de várias cópias\", () => {\n    expect(primeira([1, 2, 2, 2, 3], 2)).toBe(1);\n  });\n  test(\"cópias no começo e no meio\", () => {\n    expect(primeira([5, 5, 5, 6, 7], 5)).toBe(0);\n    expect(primeira([1, 4, 4, 4], 4)).toBe(1);\n  });\n  test(\"valor único e extremos\", () => {\n    expect(primeira([1, 3, 5, 7], 1)).toBe(0);\n    expect(primeira([1, 3, 5, 7], 7)).toBe(3);\n  });\n  test(\"ausente devolve -1, dentro ou fora do intervalo\", () => {\n    expect(primeira([1, 3, 5, 7], 4)).toBe(-1);\n    expect(primeira([1, 3, 5, 7], 0)).toBe(-1);\n    expect(primeira([1, 3, 5, 7], 9)).toBe(-1);\n  });\n  test(\"lista vazia\", () => {\n    expect(primeira([], 1)).toBe(-1);\n  });\n});\n\ndescribe(\"continua sendo busca por metades\", () => {\n  test(\"em 1024 elementos com duplicatas lê poucas posições\", () => {\n    const base = Array.from({ length: 1024 }, (_, i) => Math.floor(i / 2));\n    let leituras = 0;\n    const observada = new Proxy(base, {\n      get(alvo, chave, receptor) {\n        if (typeof chave === \"string\" && /^[0-9]+$/.test(chave)) leituras++;\n        return Reflect.get(alvo, chave, receptor);\n      },\n    });\n    expect(primeira(observada, 300)).toBe(600);\n    expect(leituras).toBeLessThan(100);\n  });\n});\n"
+    }
   },
   "08.05": {
     "environment": "javascript",
@@ -6749,12 +6762,14 @@
       "files": [
         {
           "path": "transfer.js",
-          "content": "// Reaplique 11.01 a uma entrada nova e preserve o mesmo contrato observável.\nexport {};"
+          "content": "/*\n * Tarefa independente — Uma lista de cards tem article > a > span. article tem um listener de bubble e a tem um listener que chama stopPropagation. Clique no span, registre a ordem dos listeners e o caminho do evento; depois troque por stopImmediatePropagation num segundo listener de a e registre a diferença.\n */\nexport {};\n"
         }
       ],
       "rubric": [
-        "Aplique o contrato publicado a uma entrada independente e cite a evidência observada."
-      ]
+        "Ordem registrada no clique em span com o caminho article > a > span, incluindo o efeito de stopPropagation e de stopImmediatePropagation",
+        "Casos avaliáveis: clique em span dispara o listener de a antes do de article; stopPropagation em a impede article; stopImmediatePropagation impede o segundo listener de a; clique em article puro não passa por a."
+      ],
+      "prompt": "Tarefa independente — Uma lista de cards tem article > a > span. article tem um listener de bubble e a tem um listener que chama stopPropagation. Clique no span, registre a ordem dos listeners e o caminho do evento; depois troque por stopImmediatePropagation num segundo listener de a e registre a diferença."
     },
     "fixtures": {
       "html": "<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"alvo\">Abrir</span></a></article>"
@@ -6842,12 +6857,14 @@
       "files": [
         {
           "path": "transfer.js",
-          "content": "// Reaplique 11.02 a uma entrada nova e preserve o mesmo contrato observável.\nexport {};"
+          "content": "/*\n * Tarefa independente — Implemente adicionarMensagem(lista, texto) para incluir cada mensagem de chat como um item de texto. A entrada `Olá <b>mundo</b>` deve aparecer com as marcas literais, e `<img src=x>` não pode criar nenhum elemento img. Registre o resultado de cada entrada e o que acontece com texto vazio.\n */\nexport {};\n"
         }
       ],
       "rubric": [
-        "Aplique o contrato publicado a uma entrada independente e cite a evidência observada."
-      ]
+        "Mensagem inserida como nó de texto, com marcas visíveis e nenhum elemento criado a partir da entrada",
+        "Casos avaliáveis: `Olá <b>mundo</b>` mostra as marcas literais; `<img src=x>` não cria img; cada mensagem gera um único item de lista; texto vazio é recusado."
+      ],
+      "prompt": "Tarefa independente — Implemente adicionarMensagem(lista, texto) para incluir cada mensagem de chat como um item de texto. A entrada `Olá <b>mundo</b>` deve aparecer com as marcas literais, e `<img src=x>` não pode criar nenhum elemento img. Registre o resultado de cada entrada e o que acontece com texto vazio."
     },
     "fixtures": {
       "html": "<ul></ul>"
@@ -8067,14 +8084,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 11.09\n\nTarefa independente — Cenário independente: Escolha de carregamento de analytics com fronteira garantida. Critérios já publicados: evidência de runtime e limite da conclusão. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 11.09\n\nTarefa independente — Uma página de notícias tem galeria.js com defer, banner.js com async (300 ms de download) e estatisticas.js com async (50 ms), nesta ordem no HTML. Antes de executar, diga quais relações de ordem são garantidas entre os três scripts. Depois registre a ordem observada em três execuções, variando só os atrasos, e explique a diferença entre defer e async.\n"
         }
       ],
       "rubric": [
-        "evidência de runtime e limite da conclusão",
-        "Casos avaliáveis: Cenário independente: Escolha de carregamento de analytics com fronteira garantida. Critérios já publicados: evidência de runtime e limite da conclusão. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Previsão separa o que defer garante (ordem entre defers, depois do parse e antes de DOMContentLoaded) do que async não garante (ordem entre si e em relação ao parse)",
+        "Casos avaliáveis: com banner em 300 ms e estatisticas em 50 ms, estatisticas executa antes do banner; invertendo os atrasos, a ordem se inverte; galeria executa depois do parse nas três execuções."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Escolha de carregamento de analytics com fronteira garantida. Critérios já publicados: evidência de runtime e limite da conclusão. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Uma página de notícias tem galeria.js com defer, banner.js com async (300 ms de download) e estatisticas.js com async (50 ms), nesta ordem no HTML. Antes de executar, diga quais relações de ordem são garantidas entre os três scripts. Depois registre a ordem observada em três execuções, variando só os atrasos, e explique a diferença entre defer e async."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -8226,12 +8243,14 @@
       "files": [
         {
           "path": "transfer.js",
-          "content": "// Reaplique 11.11 a uma entrada nova e preserve o mesmo contrato observável.\nexport {};"
+          "content": "/*\n * Tarefa independente — Um menu tem a dentro de li, um listener de clique no li que chama preventDefault para links de rascunho, e um listener no ul. Clique no link e depois no li fora do link. Registre se a navegação ocorre, se o evento chega ao ul e o efeito de trocar preventDefault por stopPropagation.\n */\nexport {};\n"
         }
       ],
       "rubric": [
-        "Aplique o contrato publicado a uma entrada independente e cite a evidência observada."
-      ]
+        "Distinção entre cancelar navegação e interromper propagação, com evidência de clique no link e no li",
+        "Casos avaliáveis: clique no link com preventDefault não navega e chega ao ul; stopPropagation no li impede o ul mas mantém a navegação; clique no li fora do link não é afetado."
+      ],
+      "prompt": "Tarefa independente — Um menu tem a dentro de li, um listener de clique no li que chama preventDefault para links de rascunho, e um listener no ul. Clique no link e depois no li fora do link. Registre se a navegação ocorre, se o evento chega ao ul e o efeito de trocar preventDefault por stopPropagation."
     },
     "fixtures": {
       "html": "<div id=\"menu\"><button id=\"item\" data-parar>Escolher</button></div>"
@@ -8605,12 +8624,14 @@
       "files": [
         {
           "path": "transfer.js",
-          "content": "// Reaplique 11.14 a uma entrada nova e preserve o mesmo contrato observável.\nexport {};"
+          "content": "/*\n * Tarefa independente — Um painel de notificações ouve scroll com passive, um botão Fechar com once, e os demais listeners ligados a um AbortController. Ao fechar o painel, todos os listeners do painel devem ser removidos. Registre cada chamada e a remoção.\n */\nexport {};\n"
         }
       ],
       "rubric": [
-        "Aplique o contrato publicado a uma entrada independente e cite a evidência observada."
-      ]
+        "Cada opção (passive, once, signal) demonstrada com efeito observável, e limpeza do painel comprovada pelo abort",
+        "Casos avaliáveis: preventDefault em scroll passive gera aviso e não cancela; Fechar dispara uma vez; após controller.abort() um clique no painel não executa o callback."
+      ],
+      "prompt": "Tarefa independente — Um painel de notificações ouve scroll com passive, um botão Fechar com once, e os demais listeners ligados a um AbortController. Ao fechar o painel, todos os listeners do painel devem ser removidos. Registre cada chamada e a remoção."
     },
     "fixtures": {
       "html": "<button id=\"copiar\">Copiar</button><div id=\"conteudo\"></div><section id=\"painel\"></section>"
@@ -11151,14 +11172,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.01\n\nTarefa independente — Cenário independente: Extraia contrato comum X sem ciclo. Critérios já publicados: ciclo dirigido e intenção. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.01\n\nTarefa independente — Em um sistema de pedidos, carrinho importa preco, preco importa impostos, impostos importa carrinho; relatorio importa carrinho; log não importa nada. Liste o componente cíclico e classifique relatorio e log em relação a ele. Indique qual única aresta, se removida, quebra o ciclo sem mover relatorio, e registre o caminho de volta usado como evidência.\n"
         }
       ],
       "rubric": [
-        "ciclo dirigido e intenção",
-        "Casos avaliáveis: Cenário independente: Extraia contrato comum X sem ciclo. Critérios já publicados: ciclo dirigido e intenção. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Componente cíclico listado com o caminho de volta que o comprova; consumidores e isolados classificados fora dele",
+        "Casos avaliáveis: carrinho, preco e impostos formam o componente; relatorio depende do ciclo sem pertencer a ele; log está isolado; a aresta escolhida elimina o caminho de volta sem alterar relatorio."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Extraia contrato comum X sem ciclo. Critérios já publicados: ciclo dirigido e intenção. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Em um sistema de pedidos, carrinho importa preco, preco importa impostos, impostos importa carrinho; relatorio importa carrinho; log não importa nada. Liste o componente cíclico e classifique relatorio e log em relação a ele. Indique qual única aresta, se removida, quebra o ciclo sem mover relatorio, e registre o caminho de volta usado como evidência."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11184,12 +11205,14 @@
       "files": [
         {
           "path": "transfer.js",
-          "content": "// Reaplique 14.02 a uma entrada nova e preserve o mesmo contrato observável.\nexport {};"
+          "content": "/*\n * Tarefa independente — A ferramenta contar-linhas recebe um caminho, valida que ele não está vazio, verifica que o arquivo existe e imprime o total de linhas. Separe a leitura de process.argv, a validação e a contagem, e teste a validação com caminho vazio e inexistente sem invocar o processo.\n */\nexport {};\n"
         }
       ],
       "rubric": [
-        "Aplique o contrato publicado a uma entrada independente e cite a evidência observada."
-      ]
+        "Leitura de argumentos isolada na borda, com validação e contagem testáveis sem processo",
+        "Casos avaliáveis: caminho vazio retorna erro de validação; caminho inexistente é tratado na borda; arquivo vazio conta zero linhas."
+      ],
+      "prompt": "Tarefa independente — A ferramenta contar-linhas recebe um caminho, valida que ele não está vazio, verifica que o arquivo existe e imprime o total de linhas. Separe a leitura de process.argv, a validação e a contagem, e teste a validação com caminho vazio e inexistente sem invocar o processo."
     },
     "assertionCases": [
       {
@@ -11307,14 +11330,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.03\n\nTarefa independente — Cenário independente: Scripts para pequeno serviço ESM. Critérios já publicados: comandos e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.03\n\nTarefa independente — Um pequeno serviço ESM de tradução de logs tem package.json com \"type\": \"module\" e scripts start (lê logs/exemplo.txt), test (node --test) e lint (node --check em cada arquivo). Antes de executar, escreva os comandos exatos e a versão de Node esperada. Depois rode cada um, registre a saída e explique a diferença entre npm run e node --run.\n"
         }
       ],
       "rubric": [
-        "comandos e reprodutibilidade",
-        "Casos avaliáveis: Cenário independente: Scripts para pequeno serviço ESM. Critérios já publicados: comandos e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Comandos exatos registrados antes da execução, com saída e código de saída de cada script, e a diferença entre npm run e node --run explicada",
+        "Casos avaliáveis: npm start gera uma linha por entrada do exemplo; remover o arquivo de caso faz npm test falhar; os mesmos comandos em outra pasta do projeto produzem a mesma saída."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Scripts para pequeno serviço ESM. Critérios já publicados: comandos e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um pequeno serviço ESM de tradução de logs tem package.json com \"type\": \"module\" e scripts start (lê logs/exemplo.txt), test (node --test) e lint (node --check em cada arquivo). Antes de executar, escreva os comandos exatos e a versão de Node esperada. Depois rode cada um, registre a saída e explique a diferença entre npm run e node --run."
     },
     "evidenceNote": "Evidência declarada · execute este checkpoint em ambiente local isolado e registre o resultado junto aos critérios humanos."
   },
@@ -11332,14 +11355,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.04\n\nTarefa independente — Cenário independente: Migração de uma fronteira CommonJS preservando API. Critérios já publicados: execução e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.04\n\nTarefa independente — Um módulo CommonJS formatoMoeda.cjs exporta formatar(centavos) por module.exports e é usado por relatorio.cjs. Migre o módulo para ESM mantendo formatar(1234) -> \"12,34\", formatar(5) -> \"0,05\" e RangeError para negativos. Mostre um consumidor que ainda é CommonJS e registre a versão de Node em que require() de ESM funcionou ou falhou.\n"
         }
       ],
       "rubric": [
-        "execução e limites",
-        "Casos avaliáveis: Cenário independente: Migração de uma fronteira CommonJS preservando API. Critérios já publicados: execução e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "API preservada com export nomeado e consumidor CommonJS adaptado com import() quando necessário, com a versão de Node registrada",
+        "Casos avaliáveis: formatar(1234) produz \"12,34\"; formatar(5) produz \"0,05\"; formatar(-1) lança RangeError; require() de ESM é registrado como funcionou ou falhou na versão testada."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Migração de uma fronteira CommonJS preservando API. Critérios já publicados: execução e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um módulo CommonJS formatoMoeda.cjs exporta formatar(centavos) por module.exports e é usado por relatorio.cjs. Migre o módulo para ESM mantendo formatar(1234) -> \"12,34\", formatar(5) -> \"0,05\" e RangeError para negativos. Mostre um consumidor que ainda é CommonJS e registre a versão de Node em que require() de ESM funcionou ou falhou."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11373,14 +11396,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.05\n\nTarefa independente — Cenário independente: Config/template relativo ao módulo independente do cwd. Critérios já publicados: URL module-relative e cause. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.05\n\nTarefa independente — Um CLI de traduções em cli/traduzir.mjs lê dicionarios/pt.json, arquivo ao lado do módulo. Resolva o caminho a partir do módulo, não do diretório de execução, e rode o comando a partir de duas pastas diferentes. Registre o caminho absoluto resolvido em cada execução e o erro quando dicionarios/ é renomeado.\n"
         }
       ],
       "rubric": [
-        "URL module-relative e cause",
-        "Casos avaliáveis: Cenário independente: Config/template relativo ao módulo independente do cwd. Critérios já publicados: URL module-relative e cause. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Recurso resolvido a partir do módulo, com caminho absoluto registrado em cada execução e erro de arquivo ausente exibindo o caminho esperado",
+        "Casos avaliáveis: executar em /projeto e em /projeto/cli produz o mesmo caminho; renomear dicionarios gera ENOENT com o caminho esperado; process.cwd() não aparece como base."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Config/template relativo ao módulo independente do cwd. Critérios já publicados: URL module-relative e cause. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um CLI de traduções em cli/traduzir.mjs lê dicionarios/pt.json, arquivo ao lado do módulo. Resolva o caminho a partir do módulo, não do diretório de execução, e rode o comando a partir de duas pastas diferentes. Registre o caminho absoluto resolvido em cada execução e o erro quando dicionarios/ é renomeado."
     },
     "evidenceNote": "Evidência declarada · execute este checkpoint em ambiente local isolado e registre o resultado junto aos critérios humanos."
   },
@@ -11701,14 +11724,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.09\n\nTarefa independente — Cenário independente: Revisão de conflito de configuração antes de commit. Critérios já publicados: status, diff e segredo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.09\n\nTarefa independente — Um conflito em config/app.json opõe a branch ajuste-tema (tema escuro) à main (idioma pt-BR), e um dos lados contém apiToken. Antes de resolver, rode git status e git diff e registre qual chave vem de cada lado. Resolva preservando as duas intenções e explique por que o token não pode ir ao commit.\n"
         }
       ],
       "rubric": [
-        "status, diff e segredo",
-        "Casos avaliáveis: Cenário independente: Revisão de conflito de configuração antes de commit. Critérios já publicados: status, diff e segredo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Conflito inventariado com status e diff antes da escolha, com as duas intenções preservadas e o token tratado como segredo",
+        "Casos avaliáveis: tema escuro e idioma pt-BR convivem no arquivo final; apiToken sai do arquivo e passa a vir de variável de ambiente; o diff final mostra só as chaves do conflito."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Revisão de conflito de configuração antes de commit. Critérios já publicados: status, diff e segredo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um conflito em config/app.json opõe a branch ajuste-tema (tema escuro) à main (idioma pt-BR), e um dos lados contém apiToken. Antes de resolver, rode git status e git diff e registre qual chave vem de cada lado. Resolva preservando as duas intenções e explique por que o token não pode ir ao commit."
     },
     "evidenceNote": "Evidência declarada · execute este checkpoint em ambiente local isolado e registre o resultado junto aos critérios humanos."
   },
@@ -11726,14 +11749,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.10\n\nTarefa independente — Cenário independente: Startup assíncrono de config/data/UI. Critérios já publicados: ordem e distinção de ciclo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.10\n\nTarefa independente — Um painel tem config.mjs (top-level await que lê um arquivo), dados.mjs que importa config e ui.mjs que importa dados e registra um clique. Antes de executar, escreva a ordem de avaliação dos módulos. Depois confirme com logs e troque o import estático de dados por um import() disparado no clique, registrando o que import() devolve de imediato.\n"
         }
       ],
       "rubric": [
-        "ordem e distinção de ciclo",
-        "Casos avaliáveis: Cenário independente: Startup assíncrono de config/data/UI. Critérios já publicados: ordem e distinção de ciclo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Ordem de avaliação prevista pelo grafo e confirmada por logs, com a distinção entre avaliação do módulo e resolução da Promise de import()",
+        "Casos avaliáveis: config avalia antes de dados e dados antes de ui; após o import() dinâmico, dados só avalia no clique; a Promise devolvida resolve com o namespace do módulo."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Startup assíncrono de config/data/UI. Critérios já publicados: ordem e distinção de ciclo. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um painel tem config.mjs (top-level await que lê um arquivo), dados.mjs que importa config e ui.mjs que importa dados e registra um clique. Antes de executar, escreva a ordem de avaliação dos módulos. Depois confirme com logs e troque o import estático de dados por um import() disparado no clique, registrando o que import() devolve de imediato."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11751,14 +11774,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.11\n\nTarefa independente — Cenário independente: Escolha de estratégia CSV com evidência datada. Critérios já publicados: risco residual e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.11\n\nTarefa independente — Escolha entre a dependência csv-parse e uma função própria de 40 linhas para importar planilhas de estoque. Registre a licença, a data da última release, a árvore transitiva (npm ls), a versão fixada no lockfile e um plano de atualização. Recomende uma opção e declare o risco residual.\n"
         }
       ],
       "rubric": [
-        "risco residual e reprodutibilidade",
-        "Casos avaliáveis: Cenário independente: Escolha de estratégia CSV com evidência datada. Critérios já publicados: risco residual e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Critérios além de popularidade com evidência datada, risco residual declarado e reprodutibilidade garantida pelo lockfile",
+        "Casos avaliáveis: licença lida no pacote instalado; árvore transitiva listada com a contagem de dependências; a função própria cobre apenas o formato usado e declara o limite."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Escolha de estratégia CSV com evidência datada. Critérios já publicados: risco residual e reprodutibilidade. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Escolha entre a dependência csv-parse e uma função própria de 40 linhas para importar planilhas de estoque. Registre a licença, a data da última release, a árvore transitiva (npm ls), a versão fixada no lockfile e um plano de atualização. Recomende uma opção e declare o risco residual."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11776,14 +11799,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.12\n\nTarefa independente — Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.12\n\nTarefa independente — Um bundle dist/app.js foi gerado de três módulos e acompanha app.js.map. Localize no artefato a linha que lança TypeError com entrada [] em produção, use o source map para achar a linha original em ranking.js e compare o comportamento do fonte com o do bundle sob a mesma entrada. Declare o limite do mapa.\n"
         }
       ],
       "rubric": [
-        "comparação semântica e limites",
-        "Casos avaliáveis: Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Localização original confirmada no artefato e no fonte, com comparação semântica das duas versões sob a mesma entrada e limite do mapa declarado",
+        "Casos avaliáveis: a entrada [] gera o mesmo TypeError no fonte e no bundle; o mapa aponta para a linha correta de ranking.js; sem nomes preservados, as variáveis do bundle não podem ser lidas."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Trace de source map em artefato de produção. Critérios já publicados: comparação semântica e limites. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um bundle dist/app.js foi gerado de três módulos e acompanha app.js.map. Localize no artefato a linha que lança TypeError com entrada [] em produção, use o source map para achar a linha original em ranking.js e compare o comportamento do fonte com o do bundle sob a mesma entrada. Declare o limite do mapa."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11801,14 +11824,14 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 14.13\n\nTarefa independente — Cenário independente: Ordem de event loop na fronteira browser/Node. Critérios já publicados: evidência específica por contexto. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal.\n"
+          "content": "# Transferência 14.13\n\nTarefa independente — Um script ordem.mjs agenda setTimeout(0), setImmediate, process.nextTick e Promise.resolve().then dentro de um callback de leitura de arquivo. Rode 10 vezes e repita num ordem.cjs equivalente, registrando versão do Node e formato. Diga o que pode ser generalizado a partir dessas observações e o que não pode.\n"
         }
       ],
       "rubric": [
-        "evidência específica por contexto",
-        "Casos avaliáveis: Cenário independente: Ordem de event loop na fronteira browser/Node. Critérios já publicados: evidência específica por contexto. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados."
+        "Observações repetidas com versão, formato e fase registrados, e generalização restrita ao contexto medido",
+        "Casos avaliáveis: dentro de callback de I/O, setImmediate precede setTimeout(0) de forma repetida; nextTick precede Promise no mesmo tick; a diferença entre .mjs e .cjs é registrada e não generalizada."
       ],
-      "prompt": "Tarefa independente — Cenário independente: Ordem de event loop na fronteira browser/Node. Critérios já publicados: evidência específica por contexto. Produza a evidência/solução para outra entrada e explicite entrada, saída, erro e limite observados.\nA entrega deve demonstrar o resultado nos casos concretos e justificar uma borda do contrato; não basta repetir o exemplo principal."
+      "prompt": "Tarefa independente — Um script ordem.mjs agenda setTimeout(0), setImmediate, process.nextTick e Promise.resolve().then dentro de um callback de leitura de arquivo. Rode 10 vezes e repita num ordem.cjs equivalente, registrando versão do Node e formato. Diga o que pode ser generalizado a partir dessas observações e o que não pode."
     },
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
@@ -11866,8 +11889,8 @@
         }
       ],
       "rubric": [
-        "Matriz com exatamente seis linhas ligadas a código e linha: identificar o tipo conhecido, a prova ausente e uma correção mínima sem cast (0–2 por linha).",
-        "Distinguir os seis diagnósticos estáticos da validação de JSON em runtime (0–2); demonstrar com um payload que compila sob assertion e falha ao ser usado."
+        "Três diagnósticos no handler de reserva (lista possivelmente ausente, propriedade numérica vinda do JSON e correção sem cast), cada um com arquivo e linha",
+        "Casos avaliáveis: lista vazia tratada sem erro; quantidade textual rejeitada antes da soma; a correção usa guarda ou validação, não `as`."
       ]
     },
     "prompt": "Em um handler de reserva, diagnostique uma leitura possivelmente ausente de lista e uma propriedade numérica vinda de JSON. Registre arquivo/linha, tipo conhecido, prova ausente e uma correção sem cast; mostre um payload inválido que ainda precisa de validação runtime."
@@ -11933,7 +11956,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Limite padrão e faixa 1..100 com entrada decimal em string, e rejeição de texto inválido em teste independente",
+        "Casos avaliáveis: '  42 ' aceito como 42; 'abc' e '' rejeitados; 0 e 101 falham com erro de faixa."
       ]
     },
     "prompt": "Implemente parsePageLimit(raw: unknown): { limit:number } com entrada string decimal, default 20, e rejeição de texto inválido/valor fora de 1..100. Inclua as entradas, saídas e exceções num teste independente.",
@@ -12104,7 +12128,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Normalização do título e limite mínimo, com asserções negativas de tipo para título e limite",
+        "Casos avaliáveis: título com espaços é aparado; limite 0 gera RangeError; número no lugar do título falha no checker."
       ]
     },
     "prompt": "Projete criarPagina(titulo: string, limite: number) para normalizar o título e rejeitar limite abaixo de 1. Acrescente type assertions negativas para título numérico e retorno incompatível, além de um caso runtime próprio.",
@@ -12257,7 +12282,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Validação de objeto, user e email antes do uso, com payload válido e erro explícito para as formas inválidas",
+        "Casos avaliáveis: payload válido devolve o email; user ausente lança erro; email numérico é rejeitado."
       ]
     },
     "prompt": "Escreva uma função que lê email de um retorno desconhecido. Valide objeto, user e email:string, e inclua um payload válido, user ausente e email numérico em testes próprios.",
@@ -12352,9 +12378,8 @@
         }
       ],
       "rubric": [
-        "Demonstrar por atribuições válidas/inválidas a compatibilidade estrutural de A/B e o efeito de alterar o tipo do campo id (0–3).",
-        "Distinguir propriedade extra de literal fresco e origem nominal de private/protected em classes (0–4).",
-        "Separar private apagado do TypeScript de #private em runtime e criar um caso de DTO independente (0–3)."
+        "Compatibilidade estrutural de dois DTOs e de literal fresco com campo extra, com aceite e rejeição por atribuição",
+        "Casos avaliáveis: literal com campo extra falha; variável previamente tipada passa; classes com private separadas são incompatíveis, e a diferença é classificada como tipo ou runtime."
       ]
     },
     "prompt": "Compare dois DTOs próprios com os mesmos campos públicos, um literal fresco com campo extra e duas classes que declaram private separadamente. Inclua atribuições que o checker aceita/rejeita e diga se a privacidade é estática ou runtime."
@@ -12420,7 +12445,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Decisão explícita entre fallback e erro para lista vazia e tratamento do campo opcional sem undefined implícito",
+        "Casos avaliáveis: lista vazia com fallback devolve o padrão; campo ausente não vira texto 'undefined'; uso sem checagem falha no checker."
       ]
     },
     "prompt": "Modele uma lista de mensagens que pode estar vazia e um campo opcional exato. Defina se vazio retorna fallback ou erro; prove a escolha sem non-null assertion e teste item ausente e alias ausente.",
@@ -12589,7 +12615,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Migração de API de ordenação e filtro preservando assinaturas, erros e exports, com dois casos corretos e um typecheck negativo",
+        "Casos avaliáveis: ordenar não muta a entrada; entrada inválida lança o mesmo erro; tipo errado falha no checker."
       ]
     },
     "prompt": "Migre uma API de ordenação e filtro preservando assinaturas, erros e exports. Inclua dois casos corretos, entrada inválida e um typecheck negativo; explique qualquer limite de compatibilidade do checker.",
@@ -12730,9 +12757,8 @@
         }
       ],
       "rubric": [
-        "Previsão antes de executar: indicar identidade compartilhada e valor observado após push em dados.itens (0–3).",
-        "Explicar por que a propriedade readonly bloqueia reatribuição estática, mas não torna profundo o array referenciado nem impede alias mutável (0–4).",
-        "Registrar uma execução reproduzível e política de cópia/ownership para um novo objeto de inventário (0–3)."
+        "Efeito de push por alias, bloqueio de reatribuição e distinção entre readonly, identidade e congelamento em runtime",
+        "Casos avaliáveis: push pelo editor aparece no painel; reatribuição de readonly falha no checker; Object.freeze bloqueia escrita só em runtime."
       ]
     },
     "prompt": "Uma coleção de membros é compartilhada entre editor e painel. Registre o que acontece após push por cada alias, uma tentativa de reatribuição e uma opção de cópia. Separe readonly superficial, identidade e congelamento runtime.",
@@ -12759,9 +12785,8 @@
         }
       ],
       "rubric": [
-        "Comparar o literal fresco com campo role e variável estruturalmente compatível, incluindo evidência de checker (0–3).",
-        "Mostrar como `satisfies` valida autoria sem alterar o tipo inferido e criar um caso próprio com tipo/valor errado (0–3).",
-        "Definir validação runtime para DTO externo com campo extra, indicando aceitar/rejeitar e observação concreta (0–4)."
+        "Escolha entre literal, variável e satisfies com evidência do checker e política de schema runtime para campo desconhecido",
+        "Casos avaliáveis: campo role em literal fresco é checado; satisfies preserva o tipo inferido; payload com campo extra segue a política declarada."
       ]
     },
     "prompt": "Projete a leitura de um cartão de produto recebido por fetch com campo de extensão desconhecido. Compare literal, variável e satisfies no checker e escolha uma política de schema runtime com exemplo válido e inválido.",
@@ -12817,7 +12842,8 @@
         }
       ],
       "rubric": [
-        "Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível."
+        "Conversão de texto externo de preço com validação de formato e faixa antes do uso",
+        "Casos avaliáveis: '19.90' aceito e convertido; '-1' fora da faixa; formato com vírgula rejeitado conforme a regra declarada."
       ]
     },
     "prompt": "Leia um preço de storage como texto externo. Converta e valide formato/faixa antes de usá-lo; entregue casos para sucesso, texto inválido e valor fora da faixa e diferencie erro de parse de erro de domínio.",
@@ -17310,7 +17336,7 @@
     "entryPath": "memo.js",
     "testPath": "tests/21.04.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "import {memoizeLRU} from '../memo.js';\n\ntest('hit refreshes recency before the least recent key is evicted', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; }, 2);\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  /*@case 21.04.lru-refresh-eviction*/ expect(memoized('B')).toBe('B');\n  /*@case 21.04.lru-refresh-eviction*/ expect(calls).toBe(4);\n});\n\ntest('omitted capacity uses the default of two', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; });\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  memoized('B');\n  /*@case 21.04.default-capacity*/ expect(calls).toBe(4);\n});\n\ntest('falsy values are cached while zero capacity recalculates every time', () => {\n  let calls = 0;\n  const falsy = memoizeLRU(() => { calls += 1; return 0; }, 1);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(1);\n\n  const uncached = memoizeLRU(() => { calls += 1; return false; }, 0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(3);\n});\n\ntest('a thrown calculation propagates and the same key can be retried', () => {\n  let calls = 0;\n  const failure = new Error('falha ao calcular X');\n  const memoized = memoizeLRU(() => {\n    calls += 1;\n    if (calls === 1) throw failure;\n    return false;\n  });\n  let observed;\n  try { memoized('X'); } catch (error) { observed = error; }\n  /*@case 21.04.throw-propagates-and-retries*/ expect(observed).toBe(failure);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(calls).toBe(2);\n});\n\ntest('capacity three preserves adversarial object keys without collisions', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(value => { calls += 1; return value.label; }, 3);\n  const first = {tenant: 'a|b', locale: 'c', label: 'first'};\n  const second = {tenant: 'a', locale: 'b|c', label: 'second'};\n  const third = {tenant: 'other', locale: 'en', label: 'third'};\n  const fourth = {tenant: 'last', locale: 'pt', label: 'fourth'};\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  memoized(fourth);\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(calls).toBe(5);\n});",
+    "tests": "import {memoizeLRU} from './memo.js';\n\ntest('hit refreshes recency before the least recent key is evicted', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; }, 2);\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  /*@case 21.04.lru-refresh-eviction*/ expect(memoized('B')).toBe('B');\n  /*@case 21.04.lru-refresh-eviction*/ expect(calls).toBe(4);\n});\n\ntest('omitted capacity uses the default of two', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; });\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  memoized('B');\n  /*@case 21.04.default-capacity*/ expect(calls).toBe(4);\n});\n\ntest('falsy values are cached while zero capacity recalculates every time', () => {\n  let calls = 0;\n  const falsy = memoizeLRU(() => { calls += 1; return 0; }, 1);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(1);\n\n  const uncached = memoizeLRU(() => { calls += 1; return false; }, 0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(3);\n});\n\ntest('a thrown calculation propagates and the same key can be retried', () => {\n  let calls = 0;\n  const failure = new Error('falha ao calcular X');\n  const memoized = memoizeLRU(() => {\n    calls += 1;\n    if (calls === 1) throw failure;\n    return false;\n  });\n  let observed;\n  try { memoized('X'); } catch (error) { observed = error; }\n  /*@case 21.04.throw-propagates-and-retries*/ expect(observed).toBe(failure);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(calls).toBe(2);\n});\n\ntest('capacity three preserves adversarial object keys without collisions', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(value => { calls += 1; return value.label; }, 3);\n  const first = {tenant: 'a|b', locale: 'c', label: 'first'};\n  const second = {tenant: 'a', locale: 'b|c', label: 'second'};\n  const third = {tenant: 'other', locale: 'en', label: 'third'};\n  const fourth = {tenant: 'last', locale: 'pt', label: 'fourth'};\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  memoized(fourth);\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(calls).toBe(5);\n});",
     "referenceDir": "solutions/21.04",
     "correctFiles": [
       {
@@ -18652,9 +18678,8 @@
         }
       ],
       "rubric": [
-        "O discriminante da declaração, o parâmetro e o retorno do removedor coincidem com o comportamento real do JavaScript.",
-        "O consumidor estreita os dois ramos do resultado e cada um dos dois casos negativos dispara um diagnóstico real.",
-        "A verificação em runtime checa forma válida/inválida e o retorno do removedor; a declaração estática não é apresentada como prova de execução."
+        "Analisador tipado com união discriminada, callback on(evento, listener) e remoção idempotente, sem evento inventado",
+        "Casos avaliáveis: '0' produz ok com value 0; texto malformado produz o ramo error; remover duas vezes não lança erro e não repete a remoção."
       ]
     },
     "rubric": [
@@ -18800,9 +18825,8 @@
         }
       ],
       "rubric": [
-        "A nova função é de escopo de módulo e os chamadores usam a exportação.",
-        "Os testes cobrem as regras escolhidas para acentos e vazio e confirmam que o protótipo global e a enumeração não mudaram.",
-        "A decisão de compatibilidade descreve os consumidores afetados sem depender apenas de aumento de tipos do TypeScript."
+        "Substituição de String.prototype.slug por slug(texto) exportada, com política de acentos e protótipo global intacto",
+        "Casos avaliáveis: entrada vazia; acentos seguem a política escolhida; String.prototype.slug continua indefinido após o import; o chamador usa importação explícita."
       ]
     },
     "rubric": [
@@ -19116,9 +19140,8 @@
         }
       ],
       "rubric": [
-        "A ordem de dependência segue a folha F→E→D e cada checkpoint mantém o resultado observável anterior.",
-        "JSON externo é validado como unknown antes do cálculo; JSON malformado e campos errados são testes separados.",
-        "O plano registra o gate de compilação/execução e a contagem de any por checkpoint, evitando substituições amplas por casts."
+        "Migração D→E→F com resultado 15 registrado antes de cada renomeação e contagem de any que não aumenta",
+        "Casos avaliáveis: após cada etapa o fixture devolve 15; F valida unknown antes do cálculo; o número de any não cresce entre checkpoints."
       ]
     },
     "rubric": [
@@ -19231,9 +19254,8 @@
         }
       ],
       "rubric": [
-        "Nome, versão, licença MIT, mínimo Node 24 e as duas assinaturas autorais permanecem inalterados.",
-        "O consumidor limpo resolve tipos e default a partir dos arquivos dist entregues e executa as duas funções públicas.",
-        "O tarball exclui fonte e scripts de build, contém a declaração gerada, e não há publicação no registro nem redesenho de API."
+        "Consumidor isolado instala @curso/centavos@0.1.0 e usa a raiz do pacote, com tipos e licença verificados no pacote empacotado",
+        "Casos avaliáveis: centavosParaTexto e somarCentavos importam pela raiz; readonly number[] compila; a licença MIT aparece no tarball."
       ]
     },
     "rubric": [
@@ -19311,9 +19333,8 @@
         }
       ],
       "rubric": [
-        "O runtime preserva a API inicial: criarSlug(texto), VERSAO, padroes {separador,maximo:60}, limitar(texto,maximo=60) e Opcoes.",
-        "A emissão nativa de isolatedDeclarations coincide com a implementação; só as anotações necessárias são adicionadas, sem redesenho de API nem mudança de normalização.",
-        "O consumidor nativo cobre acentos, trim, padrões, máximo customizado e formato de opções; caminhos de emissão e diagnósticos do compilador são registrados."
+        "Anotações mínimas para emissão de declarações, com comportamento de acentos, hífen, fatia padrão e máximo customizado preservado",
+        "Casos avaliáveis: acentos dobrados; trim e hífen corretos; fatia padrão de 60 caracteres; máximo customizado aceito; VERSAO e Opcoes presentes no consumidor."
       ]
     },
     "rubric": [
@@ -19445,9 +19466,8 @@
         }
       ],
       "rubric": [
-        "O grafo e os JS, declarações e build-info emitidos mostram que core é compilado antes de cada consumidor.",
-        "O build repetido é incremental e alterar core recompila os dependentes; o diagnóstico do ciclo vem do compilador.",
-        "Documenta o tradeoff e mantém esta extensão opcional; aliases de paths sozinhos não são descritos como ordem de build."
+        "Grafo de referências com build incremental, recompilação de dependentes e ciclo diagnosticado em cópia temporária",
+        "Casos avaliáveis: o segundo build sem mudanças não recompila; alterar core recompila app e report; o ciclo gera diagnóstico do compilador citado."
       ]
     },
     "rubric": [
@@ -19544,9 +19564,8 @@
         }
       ],
       "rubric": [
-        "Cada expect-error documenta uma chamada inválida ou um acesso ilegal a ramo; removê-lo produz TS2578.",
-        "A suíte passa com a declaração correta e cada mutação semântica falha no caminho do teste do aluno; diagnósticos de infraestrutura nunca contam como mutante morto.",
-        "Um teste de runtime separado verifica o comportamento do parser; evidência só de compilação não é chamada de execução."
+        "Suíte de tipos que prova o estreitamento de Result<string> e a restrição de rota a barra inicial, com parse em runtime dos valores",
+        "Casos avaliáveis: o ramo ok acessa value como string; o ramo error acessa error; rota sem barra inicial gera o diagnóstico esperado; sucesso e erro são verificados em runtime."
       ]
     },
     "rubric": [
@@ -19594,9 +19613,8 @@
         }
       ],
       "rubric": [
-        "Contrato nomeia tipos e invariantes com limites observáveis; não inventa estratégia de ID sem documentá-la.",
-        "Teste de prazo distingue forma inválida de data impossível e mostra zero gravações nos erros.",
-        "StorageError mantém cause original, título persistido está normalizado e status inicial é conferido."
+        "Criação de pedido com validação antes da persistência, IDs e datas injetáveis e cause preservada na falha do adapter",
+        "Casos avaliáveis: pedido de duas linhas válido; quantidade zero rejeitada sem chamar persistência; 31 de fevereiro rejeitado; falha do adapter mantém a cause."
       ]
     },
     "rubric": [
@@ -19743,9 +19761,8 @@
         }
       ],
       "rubric": [
-        "Cada checkpoint mantém mensagens, normalização e formato de retorno demonstrados pela suíte; mudanças intencionais têm teste separado.",
-        "Repositório é injetado e entradas inválidas ou cliente ausente produzem zero chamadas de escrita/log.",
-        "Diff conta apenas uma responsabilidade por etapa e registra compatibilidade de coerção de idade/email."
+        "Refatoração por checkpoints: caracterização antes da injeção, normalização de email e registro dos valores aceitos antes da troca",
+        "Casos avaliáveis: linha vazia e duplicada geram 0 gravações na caracterização; email normalizado após a injeção; igualdade frouxa substituída só depois da lista de valores aceitos."
       ]
     },
     "rubric": [
@@ -19965,9 +19982,8 @@
         }
       ],
       "rubric": [
-        "Matriz de arquivos coloca permissão no serviço, regra de estado no domínio e atomicidade na porta/adapter.",
-        "Teste assertivamente que usuário comum não grava, admin registra ator/instante e erro de storage não persiste metade.",
-        "Testes originais de criar/mover/remover continuam passando sobre objetos imutáveis."
+        "Regra de aprovação no domínio de reembolsos, com negação antes da gravação e atomicidade entre estado e evento",
+        "Casos avaliáveis: atendente tenta aprovar e é negado sem escrita; falha entre estado e evento mantém status e histórico antigos; timestamp injetado no teste."
       ]
     },
     "rubric": [
@@ -20237,10 +20253,8 @@
         }
       ],
       "rubric": [
-        "Entrega 1 — README define MVP, contrato CRUD, esquema v1 e duas decisões com necessidade, justificativa e tradeoff.",
-        "Entrega 2 — domínio valida antes de mutar e mantém cópias imutáveis; adapter persiste/recarrega e a suíte de contrato roda com dois adapters.",
-        "Entrega 3 — teste de migração v0→v1 e falha de storage demonstra recuperação sem estado/evento parcial; erro público não expõe causa técnica.",
-        "Entrega 4 — UI/CLI chama serviço e não importa storage; typecheck strict e testes de domínio, integração e fronteiras têm comandos reproduzíveis no README."
+        "Domínio de pedidos com adapter SQLite substituível, suíte de contrato comum e tela restrita ao serviço",
+        "Casos avaliáveis: a mesma suíte passa com adapter em memória e com SQLite; o restart mantém o pedido expedido; a migração v1→v2 preserva os itens; a tela não acessa o adapter."
       ]
     },
     "rubric": [
@@ -20291,9 +20305,8 @@
         }
       ],
       "rubric": [
-        "Cópia profunda trata Authorization/Cookie/Token em arrays e níveis internos sem alterar objeto original.",
-        "A classe de erro determina warn/error; duration é monotônica não negativa e ID é único não secreto.",
-        "Nenhum segredo aparece no JSON de logs nem na resposta pública, mas causa técnica útil permanece redigida."
+        "Instrumentação de upload com redação de segredos nos logs e na resposta, e níveis warn/error definidos pela classe do erro",
+        "Casos avaliáveis: 422 gera warning; erro de rede gera error com cause redigida; API key e cookie ausentes do JSON de log e da resposta simulada."
       ]
     },
     "rubric": [
@@ -20476,7 +20489,7 @@
     "entryPath": "src/domain/raio.js",
     "testPath": "tests/23.11.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "const{dentroDoRaio}=await import('./src/domain/raio.js');const{gerarRelatorio}=await import('./src/service/relatorio.js');const{criarRepositorioEmMemoria}=await import('./src/storage/memoria.js');test('inclusive boundary and custom radius',()=>{expect(dentroDoRaio(4999)).toBe(true);expect(dentroDoRaio(5000)).toBe(true);expect(dentroDoRaio(5001)).toBe(false);expect(dentroDoRaio(250,250)).toBe(true);expect(dentroDoRaio(251,250)).toBe(false);});test('rejects negative/non-finite input and reports the edge delivery',()=>{for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']});const row=repo.listar()[0];row.id='changed';expect(repo.listar()[0].id).toBe('edge');});",
+    "tests": "const{dentroDoRaio}=await import('./src/domain/raio.js');const{gerarRelatorio}=await import('./src/service/relatorio.js');const{criarRepositorioEmMemoria}=await import('./src/storage/memoria.js');test('inclusive boundary and custom radius',()=>{expect(dentroDoRaio(4999)).toBe(true);expect(dentroDoRaio(5000)).toBe(true);expect(dentroDoRaio(5001)).toBe(false);expect(dentroDoRaio(250,250)).toBe(true);expect(dentroDoRaio(251,250)).toBe(false);});test('rejects negative/non-finite input and reports the edge delivery',()=>{for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']});expect(gerarRelatorio(repo,4999)).toEqual({raioMetros:4999,dentro:[],fora:['edge','out']});const row=repo.listar()[0];row.id='changed';expect(repo.listar()[0].id).toBe('edge');});",
     "referenceDir": "solutions/23.11",
     "correctFiles": [
       {
@@ -20493,6 +20506,24 @@
       }
     ],
     "mutantDirs": [
+      {
+        "id": "accept-negative",
+        "files": [
+          {
+            "path": "src/domain/raio.js",
+            "content": "export const RAIO_PADRAO_METROS=5000;export function dentroDoRaio(distanciaMetros,raioMetros=RAIO_PADRAO_METROS){if(!Number.isFinite(distanciaMetros))throw new RangeError('distância inválida');if(!Number.isFinite(raioMetros)||raioMetros<0)throw new RangeError('raio inválido');return distanciaMetros<=raioMetros;}"
+          }
+        ]
+      },
+      {
+        "id": "service-ignores-radius",
+        "files": [
+          {
+            "path": "src/service/relatorio.js",
+            "content": "import{RAIO_PADRAO_METROS,dentroDoRaio}from'../domain/raio.js';export function gerarRelatorio(repositorio,raioMetros=RAIO_PADRAO_METROS){const dentro=[],fora=[];for(const entrega of repositorio.listar())(dentroDoRaio(entrega.distanciaMetros,RAIO_PADRAO_METROS)?dentro:fora).push(entrega.id);return{raioMetros,dentro,fora};}"
+          }
+        ]
+      },
       {
         "id": "exclusive-boundary",
         "files": [
@@ -20512,9 +20543,8 @@
         }
       ],
       "rubric": [
-        "Teste red é exatamente no limite e demonstra que relatório/service consome a função de domínio.",
-        "Correção é inclusiva e localizada; 1 abaixo, no limite e 1 acima passam junto com raio configurável e entradas inválidas.",
-        "Relatório mantém ordenação/forma e storage retorna cópias; UI não recebe regra duplicada."
+        "Correção de limite com teste vermelho primeiro, regra inclusiva localizada no domínio e resumo/ordenação preservados",
+        "Casos avaliáveis: 1.000 pontos com desconto; 1.001 sem desconto; score negativo e NaN rejeitados; configuração de 250 respeitada."
       ]
     },
     "rubric": [
@@ -20525,149 +20555,181 @@
     "prompt": "Demonstre a avaliação 23.11 e complete a transferência independente com casos verificáveis.",
     "assertionCases": [
       {
-        "id": "23.11.inclusive-boundary-and-custo-4ac59cfb",
+        "id": "23.11.inclusive-boundary-and-custo-c6fc4edf",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "inclusive boundary and custom radius",
         "inputExpression": "dentroDoRaio(4999)",
         "matcher": "toBe",
         "expectedExpression": "true",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "sem setup anterior dentro deste teste",
         "assertionExpression": "expect(dentroDoRaio(4999)).toBe(true)",
         "contractRule": "dentroDoRaio(4999) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoRaio(4999)).toBe(true)",
-        "assertionOffset": 298,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 245
       },
       {
-        "id": "23.11.inclusive-boundary-and-custo-90c97704",
+        "id": "23.11.inclusive-boundary-and-custo-57e600e6",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "inclusive boundary and custom radius",
         "inputExpression": "dentroDoRaio(5000)",
         "matcher": "toBe",
         "expectedExpression": "true",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "expect(dentroDoRaio(4999)).toBe(true);",
         "assertionExpression": "expect(dentroDoRaio(5000)).toBe(true)",
         "contractRule": "dentroDoRaio(5000) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoRaio(5000)).toBe(true)",
-        "assertionOffset": 389,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 283
       },
       {
-        "id": "23.11.inclusive-boundary-and-custo-1d911b6b",
+        "id": "23.11.inclusive-boundary-and-custo-c0520cfb",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "inclusive boundary and custom radius",
         "inputExpression": "dentroDoRaio(5001)",
         "matcher": "toBe",
         "expectedExpression": "false",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "expect(dentroDoRaio(4999)).toBe(true);expect(dentroDoRaio(5000)).toBe(true);",
         "assertionExpression": "expect(dentroDoRaio(5001)).toBe(false)",
         "contractRule": "dentroDoRaio(5001) toBe false",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoRaio(5001)).toBe(false)",
-        "assertionOffset": 480,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 321
       },
       {
-        "id": "23.11.inclusive-boundary-and-custo-5f012547",
+        "id": "23.11.inclusive-boundary-and-custo-6f801b5d",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "inclusive boundary and custom radius",
         "inputExpression": "dentroDoRaio(250,250)",
         "matcher": "toBe",
         "expectedExpression": "true",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "expect(dentroDoRaio(4999)).toBe(true);expect(dentroDoRaio(5000)).toBe(true);expect(dentroDoRaio(5001)).toBe(false);",
         "assertionExpression": "expect(dentroDoRaio(250,250)).toBe(true)",
         "contractRule": "dentroDoRaio(250,250) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoRaio(250,250)).toBe(true)",
-        "assertionOffset": 572,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 360
       },
       {
-        "id": "23.11.inclusive-boundary-and-custo-10e663cf",
+        "id": "23.11.inclusive-boundary-and-custo-6232a963",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "inclusive boundary and custom radius",
         "inputExpression": "dentroDoRaio(251,250)",
         "matcher": "toBe",
         "expectedExpression": "false",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "expect(dentroDoRaio(4999)).toBe(true);expect(dentroDoRaio(5000)).toBe(true);expect(dentroDoRaio(5001)).toBe(false);expect(dentroDoRaio(250,250)).toBe(true);",
         "assertionExpression": "expect(dentroDoRaio(251,250)).toBe(false)",
         "contractRule": "dentroDoRaio(251,250) toBe false",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoRaio(251,250)).toBe(false)",
-        "assertionOffset": 666,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 401
       },
       {
-        "id": "23.11.rejects-negative-non-finite--c2cb2d61",
+        "id": "23.11.rejects-negative-non-finite--dc8e3326",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "rejects negative/non-finite input and reports the edge delivery",
         "inputExpression": "()=>dentroDoRaio(x)",
         "matcher": "toThrow",
         "expectedExpression": "RangeError",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "domainExpression": "[-1,NaN,Infinity]",
         "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])",
         "assertionExpression": "expect(()=>dentroDoRaio(x)).toThrow(RangeError)",
         "contractRule": "()=>dentroDoRaio(x) toThrow RangeError",
         "investigation": "Confira a expressão de entrada e a comparação toThrow deste caso: expect(()=>dentroDoRaio(x)).toThrow(RangeError)",
-        "assertionOffset": 873,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 555
       },
       {
-        "id": "23.11.rejects-negative-non-finite--e19378a2",
+        "id": "23.11.rejects-negative-non-finite--1ee1117c",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "rejects negative/non-finite input and reports the edge delivery",
         "inputExpression": "()=>dentroDoRaio(1,NaN)",
         "matcher": "toThrow",
         "expectedExpression": "RangeError",
         "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
         "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);",
         "assertionExpression": "expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError)",
         "contractRule": "()=>dentroDoRaio(1,NaN) toThrow RangeError",
         "investigation": "Confira a expressão de entrada e a comparação toThrow deste caso: expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError)",
-        "assertionOffset": 974,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 603
       },
       {
-        "id": "23.11.rejects-negative-non-finite--1ce108b2",
+        "id": "23.11.rejects-negative-non-finite--2c5ca721",
+        "sourceTestPath": "tests/23.11.test.js",
+        "testName": "rejects negative/non-finite input and reports the edge delivery",
+        "inputExpression": "()=>dentroDoRaio(1,-1)",
+        "matcher": "toThrow",
+        "expectedExpression": "RangeError",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);",
+        "assertionExpression": "expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError)",
+        "contractRule": "()=>dentroDoRaio(1,-1) toThrow RangeError",
+        "investigation": "Confira a expressão de entrada e a comparação toThrow deste caso: expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError)",
+        "assertionOffset": 655
+      },
+      {
+        "id": "23.11.rejects-negative-non-finite--bb539ecc",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "rejects negative/non-finite input and reports the edge delivery",
         "inputExpression": "gerarRelatorio(repo)",
         "matcher": "toEqual",
         "expectedExpression": "{raioMetros:5000,dentro:['edge'],fora:['out']}",
         "negated": false,
-        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);",
         "assertionExpression": "expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']})",
         "contractRule": "gerarRelatorio(repo) toEqual {raioMetros:5000,dentro:['edge'],fora:['out']}",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']})",
-        "assertionOffset": 1184,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 811
       },
       {
-        "id": "23.11.rejects-negative-non-finite--fb69e962",
+        "id": "23.11.rejects-negative-non-finite--4df73c92",
+        "sourceTestPath": "tests/23.11.test.js",
+        "testName": "rejects negative/non-finite input and reports the edge delivery",
+        "inputExpression": "gerarRelatorio(repo,4999)",
+        "matcher": "toEqual",
+        "expectedExpression": "{raioMetros:4999,dentro:[],fora:['edge','out']}",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']});",
+        "assertionExpression": "expect(gerarRelatorio(repo,4999)).toEqual({raioMetros:4999,dentro:[],fora:['edge','out']})",
+        "contractRule": "gerarRelatorio(repo,4999) toEqual {raioMetros:4999,dentro:[],fora:['edge','out']}",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(gerarRelatorio(repo,4999)).toEqual({raioMetros:4999,dentro:[],fora:['edge','out']})",
+        "assertionOffset": 896
+      },
+      {
+        "id": "23.11.rejects-negative-non-finite--28fd9928",
         "sourceTestPath": "tests/23.11.test.js",
         "testName": "rejects negative/non-finite input and reports the edge delivery",
         "inputExpression": "repo.listar()[0].id",
         "matcher": "toBe",
         "expectedExpression": "'edge'",
         "negated": false,
-        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']});const row=repo.listar()[0];row.id='changed';",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "for(const x of [-1,NaN,Infinity])expect(()=>dentroDoRaio(x)).toThrow(RangeError);expect(()=>dentroDoRaio(1,NaN)).toThrow(RangeError);expect(()=>dentroDoRaio(1,-1)).toThrow(RangeError);const repo=criarRepositorioEmMemoria([{id:'edge',distanciaMetros:5000},{id:'out',distanciaMetros:5001}]);expect(gerarRelatorio(repo)).toEqual({raioMetros:5000,dentro:['edge'],fora:['out']});expect(gerarRelatorio(repo,4999)).toEqual({raioMetros:4999,dentro:[],fora:['edge','out']});const row=repo.listar()[0];row.id='changed';",
         "assertionExpression": "expect(repo.listar()[0].id).toBe('edge')",
         "contractRule": "repo.listar()[0].id toBe 'edge'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(repo.listar()[0].id).toBe('edge')",
-        "assertionOffset": 1366,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1031
       }
     ]
   },
@@ -21726,9 +21788,8 @@
         }
       ],
       "rubric": [
-        "Demonstra Promise e valores ana/null em chamada real antes de comparar a declaration.",
-        "Consumidor aguarda e trata null; a declaração passa a refletir Promise<string|null>.",
-        "Transferência audita divergência runtime/types e corrige declaration e uso, sem dizer que declaration altera runtime."
+        "Auditoria: Promise<Registro|undefined> observada sem await, assinatura corrigida e consumidor com guarda de undefined, com runtime inalterado",
+        "Casos avaliáveis: chamada sem await mostra Promise; registro ausente vira undefined tratado; a função segue devolvendo a mesma Promise após a correção."
       ]
     },
     "local": {
@@ -21802,9 +21863,8 @@
         }
       ],
       "rubric": [
-        "Exports types precede default e ambos apontam para artefatos realmente gerados; main inexistente foi removido.",
-        "Build/prepack executa antes do pack; arquivo dist ausente causa falha no consumidor typecheck.",
-        "Transferência inclui consumidor isolado JS/TS e não depende de alias do workspace."
+        "Pacote ESM com exports e declarations verificados por instalação offline em pasta temporária",
+        "Casos avaliáveis: dataIso importa pelo exports; o .d.ts resolve o tipo no consumidor; npm pack --dry-run lista apenas os arquivos publicados."
       ]
     },
     "local": {
@@ -21884,9 +21944,8 @@
         }
       ],
       "rubric": [
-        "Mesma matriz de entradas é aplicada às abordagens; `10` string, NaN e null não passam por coerção.",
-        "Shape e valores válidos são preservados e erros apontam campo concreto.",
-        "Decisão de schema/guard cobre tipo inferido, runtime validation, custo de bundle e dependência sem install não autorizado."
+        "Validação do gateway de frete comparada entre guard manual e schema já existente, com custo da dependência registrado",
+        "Casos avaliáveis: string numérica tratada conforme a regra declarada; Infinity, null e id vazio rejeitados; nenhuma biblioteca instalada sem registro."
       ]
     },
     "prompt": "Avalie 22.06 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -21965,9 +22024,8 @@
         }
       ],
       "rubric": [
-        "Cada responsabilidade do starter é mapeada e dependências apontam para dentro; domínio não importa DOM/fetch/localStorage.",
-        "Fake repository testa preço sem rede e erro HTTP preserva cause técnica distinta da mensagem pública.",
-        "Plano é incremental e cita textContent para dados externos; transferência cobre outro módulo misto com seams concretos."
+        "Mapeamento de cada função do diff para sua camada, com primeira extração testável usando fake repository",
+        "Casos avaliáveis: fetch, validação de CSV, comissão e tabela DOM classificados; fake repo testa a comissão sem rede; parse, cause e textContent localizados no plano."
       ]
     },
     "prompt": "Avalie 23.01 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -22016,9 +22074,8 @@
         }
       ],
       "rubric": [
-        "JSON/parse e validação antecedem domínio/persistência; caso inválido deixa repo intacto.",
-        "Erro público 500 não inclui mensagem técnica, enquanto cause fica preservada para observabilidade.",
-        "Transferência aponta dependências das camadas e rejeita Response/DOM dentro do domínio."
+        "Ordem de execução parse → validação → domínio → repository, com 400 sem escrita e 500 sem mensagem técnica ao cliente",
+        "Casos avaliáveis: linha corrompida retorna 400 com repository intacto; SKU sem autorização retorna 400; falha de banco retorna 500 com cause só no log."
       ]
     },
     "prompt": "Avalie 23.02 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -22192,9 +22249,8 @@
         }
       ],
       "rubric": [
-        "Dois achados prioritários citam arquivo/linha, fluxo, impacto e reprodução; any não é apenas preferência.",
-        "Refuta ou marca um falso positivo com evidência; identifica mutação do sort em entrada supostamente imutável.",
-        "Retry async tem teto e relógio falso; transferência revisa novo diff com dois achados e um falso positivo."
+        "Revisão de diff que aponta um retry sem limite e uma perda de atualização, com reprodução sem editar o diff",
+        "Casos avaliáveis: retry sem limite cita arquivo e linha; perda de atualização reproduzida com fake clock; comentário sobre nome de variável refutado com evidência."
       ]
     },
     "prompt": "Avalie 23.05 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -22223,203 +22279,42 @@
         }
       ],
       "rubric": [
-        "Cinco fontes indicam parse, validação, tipo de domínio e política de falha em arquivo/camada concreta.",
-        "Detecta que cast não valida, que HTML/texto externo deve usar textContent e que storage precisa migrar versão.",
-        "Transferência de uploads inclui multipart bytes/type/size validation, filename distrust e rollback antes de persistir lote."
+        "Auditoria de upload que mapeia parse → validação → domínio → storage e identifica quais erros podem expor cause",
+        "Casos avaliáveis: MIME declarado divergente da assinatura rejeitado; filename com caminho bloqueado; erro de storage não expõe cause ao cliente."
       ]
     },
     "prompt": "Avalie 23.06 segundo a referência e produza a transferência com os casos e evidências descritos.",
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
   "23.10": {
-    "environment": "node-simulated",
+    "environment": "rubric",
     "version": 1,
     "checks": [
-      "behavior",
-      "mutation"
+      "rubric"
     ],
-    "entryPath": "src/domain/limite.js",
-    "testPath": "tests/23.10.test.js",
-    "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "const{dentroDoLimite}=await import('./src/domain/limite.js');const{resumir}=await import('./src/service/relatorio.js');test('issue boundary belongs to domain and service uses it',()=>{expect(dentroDoLimite(10000)).toBe(true);expect(dentroDoLimite(15000)).toBe(false);expect(resumir({listar:()=>[{id:'a',totalCentavos:10000},{id:'b',totalCentavos:15000}]})).toEqual([{id:'a',aprovado:true},{id:'b',aprovado:false}]);});test('negative values and custom limit are decided by the domain rule',()=>{expect(dentroDoLimite(-1)).toBe(false);expect(dentroDoLimite(10001,20000)).toBe(true);expect(resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000)).toEqual([{id:'a',aprovado:true}]);expect(resumir({listar:()=>[{id:'b',totalCentavos:15000}]},12000)).toEqual([{id:'b',aprovado:false}]);});",
     "referenceDir": "solutions/23.10",
-    "correctFiles": [
-      {
-        "path": "src/domain/limite.js",
-        "content": "export const LIMITE_PADRAO_CENTAVOS=10000;export function dentroDoLimite(totalCentavos,limite=LIMITE_PADRAO_CENTAVOS){return Number.isSafeInteger(totalCentavos)&&totalCentavos>=0&&totalCentavos<=limite;}"
-      },
-      {
-        "path": "src/service/relatorio.js",
-        "content": "import{dentroDoLimite}from'../domain/limite.js';export function resumir(repo,limite){return repo.listar().map(x=>({id:x.id,aprovado:dentroDoLimite(x.totalCentavos,limite)}));}"
-      },
-      {
-        "path": "src/ui/formatar-limite.js",
-        "content": "export function formatarLimite(centavos){return new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(centavos/100);}"
-      }
-    ],
-    "mutantDirs": [
-      {
-        "id": "exclusive-limit",
-        "files": [
-          {
-            "path": "src/domain/limite.js",
-            "content": "export const LIMITE_PADRAO_CENTAVOS=10000;export function dentroDoLimite(totalCentavos,limite=LIMITE_PADRAO_CENTAVOS){return Number.isSafeInteger(totalCentavos)&&totalCentavos>=0&&totalCentavos<limite;}"
-          }
-        ]
-      },
-      {
-        "id": "accept-negative",
-        "files": [
-          {
-            "path": "src/domain/limite.js",
-            "content": "export const LIMITE_PADRAO_CENTAVOS=10000;export function dentroDoLimite(totalCentavos,limite=LIMITE_PADRAO_CENTAVOS){return Number.isSafeInteger(totalCentavos)&&totalCentavos<=limite;}"
-          }
-        ]
-      },
-      {
-        "id": "service-ignores-limit",
-        "files": [
-          {
-            "path": "src/service/relatorio.js",
-            "content": "import{dentroDoLimite}from'../domain/limite.js';export function resumir(repo,limite){return repo.listar().map(x=>({id:x.id,aprovado:dentroDoLimite(x.totalCentavos)}));}"
-          }
-        ]
-      }
-    ],
-    "rubric": [
-      "Nomeia src/domain/limite.js como regra e traça UI → service → domain com teste que consome a comparação.",
-      "R$150 é 15.000 centavos e falha segundo o limite padrão 10.000; formatter não altera classificação.",
-      "Transferência cita função/módulo/teste em um repositório diferente e justifica menor diff."
-    ],
+    "correctFiles": [],
+    "mutantDirs": [],
     "transfer": {
       "id": "23.10-transfer",
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transfer 23.10\n\nEm mini-repositório de envio gratuito, localizar regra de CEP/valor mínimo antes de editar; traçar UI → serviço → domínio e citar teste de 9.999/10.000 centavos, evitando alterar só formatter."
+          "content": "# Transfer 23.10\n\nEm mini-repositório de envio gratuito, localizar a regra de valor mínimo antes de qualquer edição; traçar UI → serviço → domínio, prever o resultado para 9.999 e 10.000 centavos e confirmar com execução curta, sem alterar código."
         }
       ],
       "rubric": [
-        "Nomeia src/domain/limite.js como regra e traça UI → service → domain com teste que consome a comparação.",
-        "R$150 é 15.000 centavos e falha segundo o limite padrão 10.000; formatter não altera classificação.",
-        "Transferência cita função/módulo/teste em um repositório diferente e justifica menor diff."
+        "Localização da regra de valor mínimo com rastreamento UI → serviço → domínio, sem edição de código",
+        "Casos avaliáveis: previsão de 9.999 e 10.000 centavos registrada antes da execução; formatter identificado como não dono da regra."
       ]
     },
-    "prompt": "Avalie 23.10 segundo a referência e produza a transferência com os casos e evidências descritos.",
-    "assertionCases": [
-      {
-        "id": "23.10.issue-boundary-belongs-to-do-e9dc377f",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "issue boundary belongs to domain and service uses it",
-        "inputExpression": "dentroDoLimite(10000)",
-        "matcher": "toBe",
-        "expectedExpression": "true",
-        "negated": false,
-        "initialArrangementExpression": "sem setup anterior dentro deste teste",
-        "assertionExpression": "expect(dentroDoLimite(10000)).toBe(true)",
-        "contractRule": "dentroDoLimite(10000) toBe true",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoLimite(10000)).toBe(true)",
-        "assertionOffset": 237,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.issue-boundary-belongs-to-do-7568462a",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "issue boundary belongs to domain and service uses it",
-        "inputExpression": "dentroDoLimite(15000)",
-        "matcher": "toBe",
-        "expectedExpression": "false",
-        "negated": false,
-        "initialArrangementExpression": "expect(dentroDoLimite(10000)).toBe(true);",
-        "assertionExpression": "expect(dentroDoLimite(15000)).toBe(false)",
-        "contractRule": "dentroDoLimite(15000) toBe false",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoLimite(15000)).toBe(false)",
-        "assertionOffset": 331,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.issue-boundary-belongs-to-do-61f77ff1",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "issue boundary belongs to domain and service uses it",
-        "inputExpression": "resumir({listar:()=>[{id:'a',totalCentavos:10000},{id:'b',totalCentavos:15000}]})",
-        "matcher": "toEqual",
-        "expectedExpression": "[{id:'a',aprovado:true},{id:'b',aprovado:false}]",
-        "negated": false,
-        "initialArrangementExpression": "expect(dentroDoLimite(10000)).toBe(true);expect(dentroDoLimite(15000)).toBe(false);",
-        "assertionExpression": "expect(resumir({listar:()=>[{id:'a',totalCentavos:10000},{id:'b',totalCentavos:15000}]})).toEqual([{id:'a',aprovado:true},{id:'b',aprovado:false}])",
-        "contractRule": "resumir({listar:()=>[{id:'a',totalCentavos:10000},{id:'b',totalCentavos:15000}]}) toEqual [{id:'a',aprovado:true},{id:'b',aprovado:false}]",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(resumir({listar:()=>[{id:'a',totalCentavos:10000},{id:'b',totalCentavos:15000}]})).toEqual([{id:'a',aprovado:true},{id:'b',aprovado:false}])",
-        "assertionOffset": 426,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.negative-values-and-custom-l-27b9b7b9",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "negative values and custom limit are decided by the domain rule",
-        "inputExpression": "dentroDoLimite(-1)",
-        "matcher": "toBe",
-        "expectedExpression": "false",
-        "negated": false,
-        "initialArrangementExpression": "sem setup anterior dentro deste teste",
-        "assertionExpression": "expect(dentroDoLimite(-1)).toBe(false)",
-        "contractRule": "dentroDoLimite(-1) toBe false",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoLimite(-1)).toBe(false)",
-        "assertionOffset": 706,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.negative-values-and-custom-l-9222a4fd",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "negative values and custom limit are decided by the domain rule",
-        "inputExpression": "dentroDoLimite(10001,20000)",
-        "matcher": "toBe",
-        "expectedExpression": "true",
-        "negated": false,
-        "initialArrangementExpression": "expect(dentroDoLimite(-1)).toBe(false);",
-        "assertionExpression": "expect(dentroDoLimite(10001,20000)).toBe(true)",
-        "contractRule": "dentroDoLimite(10001,20000) toBe true",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dentroDoLimite(10001,20000)).toBe(true)",
-        "assertionOffset": 798,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.negative-values-and-custom-l-db53a910",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "negative values and custom limit are decided by the domain rule",
-        "inputExpression": "resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000)",
-        "matcher": "toEqual",
-        "expectedExpression": "[{id:'a',aprovado:true}]",
-        "negated": false,
-        "initialArrangementExpression": "expect(dentroDoLimite(-1)).toBe(false);expect(dentroDoLimite(10001,20000)).toBe(true);",
-        "assertionExpression": "expect(resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000)).toEqual([{id:'a',aprovado:true}])",
-        "contractRule": "resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000) toEqual [{id:'a',aprovado:true}]",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000)).toEqual([{id:'a',aprovado:true}])",
-        "assertionOffset": 898,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "23.10.negative-values-and-custom-l-0ffb8d65",
-        "sourceTestPath": "tests/23.10.test.js",
-        "testName": "negative values and custom limit are decided by the domain rule",
-        "inputExpression": "resumir({listar:()=>[{id:'b',totalCentavos:15000}]},12000)",
-        "matcher": "toEqual",
-        "expectedExpression": "[{id:'b',aprovado:false}]",
-        "negated": false,
-        "initialArrangementExpression": "expect(dentroDoLimite(-1)).toBe(false);expect(dentroDoLimite(10001,20000)).toBe(true);expect(resumir({listar:()=>[{id:'a',totalCentavos:12000}]},12000)).toEqual([{id:'a',aprovado:true}]);",
-        "assertionExpression": "expect(resumir({listar:()=>[{id:'b',totalCentavos:15000}]},12000)).toEqual([{id:'b',aprovado:false}])",
-        "contractRule": "resumir({listar:()=>[{id:'b',totalCentavos:15000}]},12000) toEqual [{id:'b',aprovado:false}]",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(resumir({listar:()=>[{id:'b',totalCentavos:15000}]},12000)).toEqual([{id:'b',aprovado:false}])",
-        "assertionOffset": 1052,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      }
-    ]
+    "rubric": [
+      "Nomeia src/domain/limite.js como dono da regra e traça UI → service → domain com função e linha citadas.",
+      "Prevê dentroDoLimite(10000) e dentroDoLimite(10001) antes da execução; registra que dentroDoLimite(-1) retorna true e explica por que nenhum teste existente fixa esse caso.",
+      "Explica por que src/ui/formatar-limite.js não é dono da regra e não altera código neste item."
+    ],
+    "prompt": "Demonstre a avaliação 23.10 e complete a transferência independente com casos verificáveis.",
+    "evidenceNote": "Evidência declarada · a leitura é conferida pela rubrica; test/investigacao.test.js confirma previsões sobre o código atual e não concede aprovação. A decisão exige análise das respostas e conferência humana."
   },
   "03.10": {
     "environment": "javascript",
@@ -23437,7 +23332,7 @@
         "assertionExpression": "expect(ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ])).toEqual(['agata', 'bruno'])",
         "contractRule": "ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ]) toEqual ['agata', 'bruno']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(ranking([\n    {id: 'bruno', jogador: 'Bruno', valida: true, pontos: 8},\n    {id: 'agata', jogador: 'Ágata', valida: true, pontos: 8},\n  ])).toEqual(['agata', 'bruno'])",
-        "assertionOffset": 761
+        "assertionOffset": 814
       }
     ]
   },
@@ -26488,7 +26383,7 @@
         "assertionExpression": "expect(dobro(4)).toBe(8)",
         "contractRule": "dobro(4) toBe 8",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dobro(4)).toBe(8)",
-        "assertionOffset": 271
+        "assertionOffset": 324
       },
       {
         "id": "09.10.calcula-cada-chave-uma-unica-f8d2d1e2",
@@ -26504,7 +26399,7 @@
         "assertionExpression": "expect(dobro(4)).toBe(8)",
         "contractRule": "dobro(4) toBe 8",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dobro(4)).toBe(8)",
-        "assertionOffset": 301
+        "assertionOffset": 407
       },
       {
         "id": "09.10.calcula-cada-chave-uma-unica-9123794b",
@@ -26520,7 +26415,7 @@
         "assertionExpression": "expect(dobro(5)).toBe(10)",
         "contractRule": "dobro(5) toBe 10",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(dobro(5)).toBe(10)",
-        "assertionOffset": 331
+        "assertionOffset": 490
       },
       {
         "id": "09.10.calcula-cada-chave-uma-unica-0f37a0fd",
@@ -26536,7 +26431,7 @@
         "assertionExpression": "expect(chamadas).toBe(2)",
         "contractRule": "chamadas toBe 2",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(chamadas).toBe(2)",
-        "assertionOffset": 362
+        "assertionOffset": 574
       },
       {
         "id": "09.10.guarda-resultados-falsy-sem--fa30e258",
@@ -26552,7 +26447,7 @@
         "assertionExpression": "expect(zero('a')).toBe(0)",
         "contractRule": "zero('a') toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(zero('a')).toBe(0)",
-        "assertionOffset": 557
+        "assertionOffset": 822
       },
       {
         "id": "09.10.guarda-resultados-falsy-sem--fa30e258",
@@ -26568,7 +26463,7 @@
         "assertionExpression": "expect(zero('a')).toBe(0)",
         "contractRule": "zero('a') toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(zero('a')).toBe(0)",
-        "assertionOffset": 588
+        "assertionOffset": 906
       },
       {
         "id": "09.10.guarda-resultados-falsy-sem--236d2b67",
@@ -26584,7 +26479,7 @@
         "assertionExpression": "expect(chamadas).toBe(1)",
         "contractRule": "chamadas toBe 1",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(chamadas).toBe(1)",
-        "assertionOffset": 619
+        "assertionOffset": 990
       },
       {
         "id": "09.10.nao-roda-a-fabrica-quando-a--56195e4b",
@@ -26600,7 +26495,7 @@
         "assertionExpression": "expect(obterOuCalcular(mapa, 'x', () => {\n      rodou = true;\n      return 'novo';\n    })).toBe('guardado')",
         "contractRule": "obterOuCalcular(mapa, 'x', () => {\n      rodou = true;\n      return 'novo';\n    }) toBe 'guardado'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(obterOuCalcular(mapa, 'x', () => {\n      rodou = true;\n      return 'novo';\n    })).toBe('guardado')",
-        "assertionOffset": 787
+        "assertionOffset": 1211
       },
       {
         "id": "09.10.nao-roda-a-fabrica-quando-a--664214d9",
@@ -26616,7 +26511,7 @@
         "assertionExpression": "expect(rodou).toBe(false)",
         "contractRule": "rodou toBe false",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(rodou).toBe(false)",
-        "assertionOffset": 900
+        "assertionOffset": 1377
       },
       {
         "id": "09.10.o-caminho-sem-getorinsertcom-0097f3cf",
@@ -26632,7 +26527,7 @@
         "assertionExpression": "expect(obterOuCalcular(mapa, 'k', fabrica)).toBe('pronto')",
         "contractRule": "obterOuCalcular(mapa, 'k', fabrica) toBe 'pronto'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(obterOuCalcular(mapa, 'k', fabrica)).toBe('pronto')",
-        "assertionOffset": 1190
+        "assertionOffset": 1720
       },
       {
         "id": "09.10.o-caminho-sem-getorinsertcom-0097f3cf",
@@ -26648,7 +26543,7 @@
         "assertionExpression": "expect(obterOuCalcular(mapa, 'k', fabrica)).toBe('pronto')",
         "contractRule": "obterOuCalcular(mapa, 'k', fabrica) toBe 'pronto'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(obterOuCalcular(mapa, 'k', fabrica)).toBe('pronto')",
-        "assertionOffset": 1254
+        "assertionOffset": 1837
       },
       {
         "id": "09.10.o-caminho-sem-getorinsertcom-2abd45e7",
@@ -26664,7 +26559,7 @@
         "assertionExpression": "expect(chamadas).toBe(1)",
         "contractRule": "chamadas toBe 1",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(chamadas).toBe(1)",
-        "assertionOffset": 1318
+        "assertionOffset": 1954
       }
     ]
   },
@@ -27178,5 +27073,583 @@
     ],
     "evidenceLabel": "rubric-declared",
     "evidenceNote": "A plataforma não executa a CI nem o projeto do aluno. A rubrica revisa a evidência declarada; a troca de principal depende do calendário de M.1."
+  },
+  "07.15": {
+    "environment": "node-simulated",
+    "version": 1,
+    "checks": [
+      "behavior"
+    ],
+    "entryPath": "src/relatorio.js",
+    "testPath": "tests/07.15.test.js",
+    "behaviorTestPath": "__devpath_protected_behavior__.js",
+    "referenceDir": "solutions/07.15",
+    "correctFiles": [
+      {
+        "path": "src/apresentacao.js",
+        "content": "// Texto para o balcão. Recebe uma linha já calculada e só formata.\nexport function textoMulta(linha) {\n  const reais = (linha.multaCentavos / 100).toFixed(2).replace('.', ',');\n  return `${linha.id}: ${linha.diasAtraso} dias, R$ ${reais}`;\n}\n"
+      },
+      {
+        "path": "src/regras.js",
+        "content": "export const CARENCIA_DIAS = 2;\nexport const TAXA_CENTAVOS_POR_DIA = 50;\nexport const TETO_CENTAVOS = 2000;\n\n// Atraso que gera multa: só depois da carência.\nexport function temMulta(diasAtraso) {\n  return diasAtraso > CARENCIA_DIAS;\n}\n\nexport function multaCentavos(diasAtraso) {\n  if (!temMulta(diasAtraso)) return 0;\n  return Math.min((diasAtraso - CARENCIA_DIAS) * TAXA_CENTAVOS_POR_DIA, TETO_CENTAVOS);\n}\n"
+      },
+      {
+        "path": "src/relatorio.js",
+        "content": "import { multaCentavos, temMulta } from './regras.js';\n\n// Entrada: [{ id, diasAtraso }]. Saída: linhas com multa, da maior para a menor; empates por id.\nexport function relatorioMultas(emprestimos) {\n  const linhas = emprestimos\n    .filter(emprestimo => temMulta(emprestimo.diasAtraso))\n    .map(emprestimo => ({ id: emprestimo.id, diasAtraso: emprestimo.diasAtraso, multaCentavos: multaCentavos(emprestimo.diasAtraso) }))\n    .sort((a, b) => b.multaCentavos - a.multaCentavos || a.id.localeCompare(b.id));\n  const totalCentavos = linhas.reduce((soma, linha) => soma + linha.multaCentavos, 0);\n  return { linhas, totalCentavos };\n}\n"
+      }
+    ],
+    "mutantDirs": [
+      {
+        "id": "desempate-invertido",
+        "files": [
+          {
+            "path": "src/relatorio.js",
+            "content": "import { multaCentavos, temMulta } from './regras.js';\n\n// Entrada: [{ id, diasAtraso }]. Saída: linhas com multa, da maior para a menor; empates por id.\nexport function relatorioMultas(emprestimos) {\n  const linhas = emprestimos\n    .filter(emprestimo => temMulta(emprestimo.diasAtraso))\n    .map(emprestimo => ({ id: emprestimo.id, diasAtraso: emprestimo.diasAtraso, multaCentavos: multaCentavos(emprestimo.diasAtraso) }))\n    .sort((a, b) => b.multaCentavos - a.multaCentavos || b.id.localeCompare(a.id));\n  const totalCentavos = linhas.reduce((soma, linha) => soma + linha.multaCentavos, 0);\n  return { linhas, totalCentavos };\n}\n"
+          }
+        ]
+      },
+      {
+        "id": "relatorio-muta-entrada",
+        "files": [
+          {
+            "path": "src/relatorio.js",
+            "content": "import { multaCentavos, temMulta } from './regras.js';\n\n// Entrada: [{ id, diasAtraso }]. Saída: linhas com multa, da maior para a menor; empates por id.\nexport function relatorioMultas(emprestimos) {\n  emprestimos.sort((a, b) => a.id.localeCompare(b.id));\n  const linhas = emprestimos\n    .filter(emprestimo => temMulta(emprestimo.diasAtraso))\n    .map(emprestimo => ({ id: emprestimo.id, diasAtraso: emprestimo.diasAtraso, multaCentavos: multaCentavos(emprestimo.diasAtraso) }))\n    .sort((a, b) => b.multaCentavos - a.multaCentavos || a.id.localeCompare(b.id));\n  const totalCentavos = linhas.reduce((soma, linha) => soma + linha.multaCentavos, 0);\n  return { linhas, totalCentavos };\n}\n"
+          }
+        ]
+      },
+      {
+        "id": "sem-teto",
+        "files": [
+          {
+            "path": "src/regras.js",
+            "content": "export const CARENCIA_DIAS = 2;\nexport const TAXA_CENTAVOS_POR_DIA = 50;\nexport const TETO_CENTAVOS = 2000;\n\n// Atraso que gera multa: só depois da carência.\nexport function temMulta(diasAtraso) {\n  return diasAtraso > CARENCIA_DIAS;\n}\n\nexport function multaCentavos(diasAtraso) {\n  if (!temMulta(diasAtraso)) return 0;\n  return (diasAtraso - CARENCIA_DIAS) * TAXA_CENTAVOS_POR_DIA;\n}\n"
+          }
+        ]
+      },
+      {
+        "id": "um-dia-cedo",
+        "files": [
+          {
+            "path": "src/regras.js",
+            "content": "export const CARENCIA_DIAS = 2;\nexport const TAXA_CENTAVOS_POR_DIA = 50;\nexport const TETO_CENTAVOS = 2000;\n\n// Atraso que gera multa: só depois da carência.\nexport function temMulta(diasAtraso) {\n  return diasAtraso > CARENCIA_DIAS;\n}\n\nexport function multaCentavos(diasAtraso) {\n  if (!temMulta(diasAtraso)) return 0;\n  return Math.min((diasAtraso - CARENCIA_DIAS + 1) * TAXA_CENTAVOS_POR_DIA, TETO_CENTAVOS);\n}\n"
+          }
+        ]
+      }
+    ],
+    "assertionCases": [
+      {
+        "id": "07.15.dias-ate-a-carencia-inclusiv-6df8e92e",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "dias até a carência, inclusive o último, não têm multa",
+        "inputExpression": "temMulta(0)",
+        "matcher": "toBe",
+        "expectedExpression": "false",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(temMulta(0)).toBe(false)",
+        "contractRule": "temMulta(0) toBe false",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(temMulta(0)).toBe(false)",
+        "assertionOffset": 365
+      },
+      {
+        "id": "07.15.dias-ate-a-carencia-inclusiv-06e3a6c2",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "dias até a carência, inclusive o último, não têm multa",
+        "inputExpression": "temMulta(1)",
+        "matcher": "toBe",
+        "expectedExpression": "false",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(temMulta(0)).toBe(false);",
+        "assertionExpression": "expect(temMulta(1)).toBe(false)",
+        "contractRule": "temMulta(1) toBe false",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(temMulta(1)).toBe(false)",
+        "assertionOffset": 455
+      },
+      {
+        "id": "07.15.dias-ate-a-carencia-inclusiv-d3168809",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "dias até a carência, inclusive o último, não têm multa",
+        "inputExpression": "temMulta(CARENCIA_DIAS)",
+        "matcher": "toBe",
+        "expectedExpression": "false",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(temMulta(0)).toBe(false);\n    expect(temMulta(1)).toBe(false);",
+        "assertionExpression": "expect(temMulta(CARENCIA_DIAS)).toBe(false)",
+        "contractRule": "temMulta(CARENCIA_DIAS) toBe false",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(temMulta(CARENCIA_DIAS)).toBe(false)",
+        "assertionOffset": 545
+      },
+      {
+        "id": "07.15.dias-ate-a-carencia-inclusiv-916322ef",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "dias até a carência, inclusive o último, não têm multa",
+        "inputExpression": "temMulta(CARENCIA_DIAS + 1)",
+        "matcher": "toBe",
+        "expectedExpression": "true",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(temMulta(0)).toBe(false);\n    expect(temMulta(1)).toBe(false);\n    expect(temMulta(CARENCIA_DIAS)).toBe(false);",
+        "assertionExpression": "expect(temMulta(CARENCIA_DIAS + 1)).toBe(true)",
+        "contractRule": "temMulta(CARENCIA_DIAS + 1) toBe true",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(temMulta(CARENCIA_DIAS + 1)).toBe(true)",
+        "assertionOffset": 647
+      },
+      {
+        "id": "07.15.devolucao-no-ultimo-dia-da-c-973f1372",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "devolução no último dia da carência não entra no relatório",
+        "inputExpression": "relatorioMultas([emprestimo(\"a\", CARENCIA_DIAS)]).linhas",
+        "matcher": "toEqual",
+        "expectedExpression": "[]",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(relatorioMultas([emprestimo(\"a\", CARENCIA_DIAS)]).linhas).toEqual([])",
+        "contractRule": "relatorioMultas([emprestimo(\"a\", CARENCIA_DIAS)]).linhas toEqual []",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(relatorioMultas([emprestimo(\"a\", CARENCIA_DIAS)]).linhas).toEqual([])",
+        "assertionOffset": 835
+      },
+      {
+        "id": "07.15.cobra-50-centavos-por-dia-ex-98bfc069",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "cobra 50 centavos por dia excedente à carência",
+        "inputExpression": "multaCentavos(3)",
+        "matcher": "toBe",
+        "expectedExpression": "50",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(multaCentavos(3)).toBe(50)",
+        "contractRule": "multaCentavos(3) toBe 50",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(multaCentavos(3)).toBe(50)",
+        "assertionOffset": 1081
+      },
+      {
+        "id": "07.15.cobra-50-centavos-por-dia-ex-0a699582",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "cobra 50 centavos por dia excedente à carência",
+        "inputExpression": "multaCentavos(5)",
+        "matcher": "toBe",
+        "expectedExpression": "150",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(multaCentavos(3)).toBe(50);",
+        "assertionExpression": "expect(multaCentavos(5)).toBe(150)",
+        "contractRule": "multaCentavos(5) toBe 150",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(multaCentavos(5)).toBe(150)",
+        "assertionOffset": 1173
+      },
+      {
+        "id": "07.15.aplica-o-teto-de-2000-centav-2cf6e38a",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "aplica o teto de 2000 centavos",
+        "inputExpression": "multaCentavos(CARENCIA_DIAS + 40)",
+        "matcher": "toBe",
+        "expectedExpression": "TETO_CENTAVOS",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(multaCentavos(CARENCIA_DIAS + 40)).toBe(TETO_CENTAVOS)",
+        "contractRule": "multaCentavos(CARENCIA_DIAS + 40) toBe TETO_CENTAVOS",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(multaCentavos(CARENCIA_DIAS + 40)).toBe(TETO_CENTAVOS)",
+        "assertionOffset": 1321
+      },
+      {
+        "id": "07.15.aplica-o-teto-de-2000-centav-898c8bd3",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "aplica o teto de 2000 centavos",
+        "inputExpression": "multaCentavos(100)",
+        "matcher": "toBe",
+        "expectedExpression": "TETO_CENTAVOS",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(multaCentavos(CARENCIA_DIAS + 40)).toBe(TETO_CENTAVOS);",
+        "assertionExpression": "expect(multaCentavos(100)).toBe(TETO_CENTAVOS)",
+        "contractRule": "multaCentavos(100) toBe TETO_CENTAVOS",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(multaCentavos(100)).toBe(TETO_CENTAVOS)",
+        "assertionOffset": 1441
+      },
+      {
+        "id": "07.15.ordena-por-multa-decrescente-61f3cf84",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "ordena por multa decrescente e desempata por id crescente",
+        "inputExpression": "linhas.map(linha => linha.id)",
+        "matcher": "toEqual",
+        "expectedExpression": "[\"a\", \"b\", \"c\"]",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const linhas = relatorioMultas([emprestimo(\"b\", 5), emprestimo(\"c\", 3), emprestimo(\"a\", 5)]).linhas;",
+        "assertionExpression": "expect(linhas.map(linha => linha.id)).toEqual([\"a\", \"b\", \"c\"])",
+        "contractRule": "linhas.map(linha => linha.id) toEqual [\"a\", \"b\", \"c\"]",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(linhas.map(linha => linha.id)).toEqual([\"a\", \"b\", \"c\"])",
+        "assertionOffset": 1768
+      },
+      {
+        "id": "07.15.soma-o-total-das-linhas-77fdf933",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "soma o total das linhas",
+        "inputExpression": "relatorioMultas([emprestimo(\"b\", 5), emprestimo(\"c\", 3), emprestimo(\"a\", 5)]).totalCentavos",
+        "matcher": "toBe",
+        "expectedExpression": "350",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(relatorioMultas([emprestimo(\"b\", 5), emprestimo(\"c\", 3), emprestimo(\"a\", 5)]).totalCentavos).toBe(350)",
+        "contractRule": "relatorioMultas([emprestimo(\"b\", 5), emprestimo(\"c\", 3), emprestimo(\"a\", 5)]).totalCentavos toBe 350",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(relatorioMultas([emprestimo(\"b\", 5), emprestimo(\"c\", 3), emprestimo(\"a\", 5)]).totalCentavos).toBe(350)",
+        "assertionOffset": 1932
+      },
+      {
+        "id": "07.15.nao-altera-a-lista-de-entrad-faf4a097",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "não altera a lista de entrada",
+        "inputExpression": "entrada.map(item => item.id)",
+        "matcher": "toEqual",
+        "expectedExpression": "[\"c\", \"a\"]",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const entrada = [emprestimo(\"c\", 3), emprestimo(\"a\", 5)];\n    relatorioMultas(entrada);",
+        "assertionExpression": "expect(entrada.map(item => item.id)).toEqual([\"c\", \"a\"])",
+        "contractRule": "entrada.map(item => item.id) toEqual [\"c\", \"a\"]",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(entrada.map(item => item.id)).toEqual([\"c\", \"a\"])",
+        "assertionOffset": 2246
+      },
+      {
+        "id": "07.15.lista-vazia-produz-relatorio-5bb7aa42",
+        "sourceTestPath": "tests/07.15.test.js",
+        "testName": "lista vazia produz relatório vazio",
+        "inputExpression": "relatorioMultas([])",
+        "matcher": "toEqual",
+        "expectedExpression": "{ linhas: [], totalCentavos: 0 }",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(relatorioMultas([])).toEqual({ linhas: [], totalCentavos: 0 })",
+        "contractRule": "relatorioMultas([]) toEqual { linhas: [], totalCentavos: 0 }",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(relatorioMultas([])).toEqual({ linhas: [], totalCentavos: 0 })",
+        "assertionOffset": 2420
+      }
+    ]
+  },
+  "11.15": {
+    "environment": "dom",
+    "version": 1,
+    "checks": [
+      "behavior",
+      "mutation"
+    ],
+    "entryPath": "index.html",
+    "fixtures": {
+      "entryPath": "app.js"
+    },
+    "testPath": "tests/11.15.test.js",
+    "behaviorTestPath": "__devpath_protected_behavior__.js",
+    "referenceDir": "solutions/11.15",
+    "correctFiles": [
+      {
+        "path": "app.js",
+        "content": "import { validarInscricao } from './regras.js';\n\nconst form = document.querySelector('#inscricao');\nconst nome = document.querySelector('#nome');\nconst oficina = document.querySelector('#oficina');\nconst status = document.querySelector('#status');\nconst lista = document.querySelector('#lista');\n\nform.addEventListener('submit', event => {\n  event.preventDefault();\n  const resultado = validarInscricao({ nome: nome.value, oficina: oficina.value });\n  if (!resultado.ok) {\n    status.textContent = resultado.erros[0];\n    nome.focus();\n    return;\n  }\n  const item = document.createElement('li');\n  item.textContent = `${resultado.nome} · ${resultado.oficina}`;\n  lista.append(item);\n  status.textContent = `Inscrição de ${resultado.nome} registrada.`;\n  nome.value = '';\n  nome.focus();\n});\n"
+      },
+      {
+        "path": "index.html",
+        "content": "<main>\n  <h1>Inscrição na oficina</h1>\n  <form id=\"inscricao\" novalidate>\n    <label for=\"nome\">Nome</label>\n    <input id=\"nome\" name=\"nome\" type=\"text\">\n    <label for=\"oficina\">Oficina</label>\n    <select id=\"oficina\" name=\"oficina\">\n      <option value=\"ceramica\">Cerâmica</option>\n      <option value=\"xadrez\">Xadrez</option>\n    </select>\n    <button type=\"submit\">Inscrever</button>\n  </form>\n  <p id=\"status\" aria-live=\"polite\"></p>\n  <ul id=\"lista\"></ul>\n</main>\n"
+      },
+      {
+        "path": "regras.js",
+        "content": "export const OFICINAS = ['ceramica', 'xadrez'];\n\n// Valida a inscrição. Não lê nem escreve no DOM.\nexport function validarInscricao({ nome, oficina }) {\n  const erros = [];\n  const limpo = String(nome ?? '').trim();\n  if (limpo === '') erros.push('Informe o nome.');\n  if (limpo.length > 40) erros.push('O nome pode ter até 40 caracteres.');\n  if (!OFICINAS.includes(oficina)) erros.push('Escolha uma oficina da lista.');\n  return erros.length ? { ok: false, erros } : { ok: true, nome: limpo, oficina };\n}\n"
+      }
+    ],
+    "mutantDirs": [
+      {
+        "id": "aria-live-removido",
+        "files": [
+          {
+            "path": "index.html",
+            "content": "<main>\n  <h1>Inscrição na oficina</h1>\n  <form id=\"inscricao\" novalidate>\n    <label for=\"nome\">Nome</label>\n    <input id=\"nome\" name=\"nome\" type=\"text\">\n    <label for=\"oficina\">Oficina</label>\n    <select id=\"oficina\" name=\"oficina\">\n      <option value=\"ceramica\">Cerâmica</option>\n      <option value=\"xadrez\">Xadrez</option>\n    </select>\n    <button type=\"submit\">Inscrever</button>\n  </form>\n  <p id=\"status\"></p>\n  <ul id=\"lista\"></ul>\n</main>\n"
+          }
+        ]
+      },
+      {
+        "id": "innerhtml-no-nome",
+        "files": [
+          {
+            "path": "app.js",
+            "content": "import { validarInscricao } from './regras.js';\n\nconst form = document.querySelector('#inscricao');\nconst nome = document.querySelector('#nome');\nconst oficina = document.querySelector('#oficina');\nconst status = document.querySelector('#status');\nconst lista = document.querySelector('#lista');\n\nform.addEventListener('submit', event => {\n  event.preventDefault();\n  const resultado = validarInscricao({ nome: nome.value, oficina: oficina.value });\n  if (!resultado.ok) {\n    status.textContent = resultado.erros[0];\n    nome.focus();\n    return;\n  }\n  const item = document.createElement('li');\n  item.innerHTML = `${resultado.nome} · ${resultado.oficina}`;\n  lista.append(item);\n  status.textContent = `Inscrição de ${resultado.nome} registrada.`;\n  nome.value = '';\n  nome.focus();\n});\n"
+          }
+        ]
+      },
+      {
+        "id": "limpa-antes-de-validar",
+        "files": [
+          {
+            "path": "app.js",
+            "content": "import { validarInscricao } from './regras.js';\n\nconst form = document.querySelector('#inscricao');\nconst nome = document.querySelector('#nome');\nconst oficina = document.querySelector('#oficina');\nconst status = document.querySelector('#status');\nconst lista = document.querySelector('#lista');\n\nform.addEventListener('submit', event => {\n  event.preventDefault();\n  const digitado = nome.value;\n  nome.value = '';\n  const resultado = validarInscricao({ nome: digitado, oficina: oficina.value });\n  if (!resultado.ok) {\n    status.textContent = resultado.erros[0];\n    nome.focus();\n    return;\n  }\n  const item = document.createElement('li');\n  item.textContent = `${resultado.nome} · ${resultado.oficina}`;\n  lista.append(item);\n  status.textContent = `Inscrição de ${resultado.nome} registrada.`;\n  nome.value = '';\n  nome.focus();\n});\n"
+          }
+        ]
+      },
+      {
+        "id": "sem-foco-no-erro",
+        "files": [
+          {
+            "path": "app.js",
+            "content": "import { validarInscricao } from './regras.js';\n\nconst form = document.querySelector('#inscricao');\nconst nome = document.querySelector('#nome');\nconst oficina = document.querySelector('#oficina');\nconst status = document.querySelector('#status');\nconst lista = document.querySelector('#lista');\n\nform.addEventListener('submit', event => {\n  event.preventDefault();\n  const resultado = validarInscricao({ nome: nome.value, oficina: oficina.value });\n  if (!resultado.ok) {\n    status.textContent = resultado.erros[0];\n    return;\n  }\n  const item = document.createElement('li');\n  item.textContent = `${resultado.nome} · ${resultado.oficina}`;\n  lista.append(item);\n  status.textContent = `Inscrição de ${resultado.nome} registrada.`;\n  nome.value = '';\n  nome.focus();\n});\n"
+          }
+        ]
+      }
+    ],
+    "assertionCases": [
+      {
+        "id": "11.15.impede-o-envio-padrao-quando-8eeeef57",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "impede o envio padrão quando o nome está vazio",
+        "inputExpression": "evento.defaultPrevented",
+        "matcher": "toBe",
+        "expectedExpression": "true",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const evento = enviar('   ');",
+        "assertionExpression": "expect(evento.defaultPrevented).toBe(true)",
+        "contractRule": "evento.defaultPrevented toBe true",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(evento.defaultPrevented).toBe(true)",
+        "assertionOffset": 626
+      },
+      {
+        "id": "11.15.chama-foco-no-nome-e-anuncia-56ccc0be",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "chama foco no nome e anuncia o erro",
+        "inputExpression": "focos",
+        "matcher": "toBeGreaterThan",
+        "expectedExpression": "0",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const nomeEl = campo();\n    let focos = 0;\n    const focoOriginal = nomeEl.focus.bind(nomeEl);\n    nomeEl.focus = () => { focos += 1; focoOriginal(); };\n    enviar('');\n    delete nomeEl.focus;",
+        "assertionExpression": "expect(focos).toBeGreaterThan(0)",
+        "contractRule": "focos toBeGreaterThan 0",
+        "investigation": "Confira a expressão de entrada e a comparação toBeGreaterThan deste caso: expect(focos).toBeGreaterThan(0)",
+        "assertionOffset": 932
+      },
+      {
+        "id": "11.15.chama-foco-no-nome-e-anuncia-e04423c1",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "chama foco no nome e anuncia o erro",
+        "inputExpression": "status().textContent",
+        "matcher": "toBe",
+        "expectedExpression": "'Informe o nome.'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const nomeEl = campo();\n    let focos = 0;\n    const focoOriginal = nomeEl.focus.bind(nomeEl);\n    nomeEl.focus = () => { focos += 1; focoOriginal(); };\n    enviar('');\n    delete nomeEl.focus;\n    expect(focos).toBeGreaterThan(0);",
+        "assertionExpression": "expect(status().textContent).toBe('Informe o nome.')",
+        "contractRule": "status().textContent toBe 'Informe o nome.'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(status().textContent).toBe('Informe o nome.')",
+        "assertionOffset": 970
+      },
+      {
+        "id": "11.15.preserva-o-que-foi-digitado--1cf41778",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "preserva o que foi digitado e não cria item",
+        "inputExpression": "campo().value",
+        "matcher": "toBe",
+        "expectedExpression": "'   '",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const antes = itens();\n    enviar('   ');",
+        "assertionExpression": "expect(campo().value).toBe('   ')",
+        "contractRule": "campo().value toBe '   '",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(campo().value).toBe('   ')",
+        "assertionOffset": 1142
+      },
+      {
+        "id": "11.15.preserva-o-que-foi-digitado--f83ac7c1",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "preserva o que foi digitado e não cria item",
+        "inputExpression": "itens()",
+        "matcher": "toBe",
+        "expectedExpression": "antes",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const antes = itens();\n    enviar('   ');\n    expect(campo().value).toBe('   ');",
+        "assertionExpression": "expect(itens()).toBe(antes)",
+        "contractRule": "itens() toBe antes",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(itens()).toBe(antes)",
+        "assertionOffset": 1181
+      },
+      {
+        "id": "11.15.registra-o-nome-como-texto-l-d6c2ae5a",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "registra o nome como texto literal",
+        "inputExpression": "li.textContent",
+        "matcher": "toBe",
+        "expectedExpression": "'<b>Ana</b> · ceramica'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const antes = itens();\n    enviar('<b>Ana</b>');\n    const li = document.querySelectorAll('#lista li')[antes];",
+        "assertionExpression": "expect(li.textContent).toBe('<b>Ana</b> · ceramica')",
+        "contractRule": "li.textContent toBe '<b>Ana</b> · ceramica'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(li.textContent).toBe('<b>Ana</b> · ceramica')",
+        "assertionOffset": 1426
+      },
+      {
+        "id": "11.15.registra-o-nome-como-texto-l-08e26208",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "registra o nome como texto literal",
+        "inputExpression": "li.querySelector('b')",
+        "matcher": "toBe",
+        "expectedExpression": "null",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const antes = itens();\n    enviar('<b>Ana</b>');\n    const li = document.querySelectorAll('#lista li')[antes];\n    expect(li.textContent).toBe('<b>Ana</b> · ceramica');",
+        "assertionExpression": "expect(li.querySelector('b')).toBe(null)",
+        "contractRule": "li.querySelector('b') toBe null",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(li.querySelector('b')).toBe(null)",
+        "assertionOffset": 1484
+      },
+      {
+        "id": "11.15.limpa-o-campo-chama-foco-no--ec3a698a",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "limpa o campo, chama foco no nome e confirma",
+        "inputExpression": "campo().value",
+        "matcher": "toBe",
+        "expectedExpression": "''",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const nomeEl = campo();\n    let focos = 0;\n    const focoOriginal = nomeEl.focus.bind(nomeEl);\n    nomeEl.focus = () => { focos += 1; focoOriginal(); };\n    enviar('Bruno');\n    delete nomeEl.focus;",
+        "assertionExpression": "expect(campo().value).toBe('')",
+        "contractRule": "campo().value toBe ''",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(campo().value).toBe('')",
+        "assertionOffset": 1802
+      },
+      {
+        "id": "11.15.limpa-o-campo-chama-foco-no--284e10a1",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "limpa o campo, chama foco no nome e confirma",
+        "inputExpression": "focos",
+        "matcher": "toBeGreaterThan",
+        "expectedExpression": "0",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const nomeEl = campo();\n    let focos = 0;\n    const focoOriginal = nomeEl.focus.bind(nomeEl);\n    nomeEl.focus = () => { focos += 1; focoOriginal(); };\n    enviar('Bruno');\n    delete nomeEl.focus;\n    expect(campo().value).toBe('');",
+        "assertionExpression": "expect(focos).toBeGreaterThan(0)",
+        "contractRule": "focos toBeGreaterThan 0",
+        "investigation": "Confira a expressão de entrada e a comparação toBeGreaterThan deste caso: expect(focos).toBeGreaterThan(0)",
+        "assertionOffset": 1838
+      },
+      {
+        "id": "11.15.limpa-o-campo-chama-foco-no--4a9c1d86",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "limpa o campo, chama foco no nome e confirma",
+        "inputExpression": "status().textContent",
+        "matcher": "toBe",
+        "expectedExpression": "'Inscrição de Bruno registrada.'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const nomeEl = campo();\n    let focos = 0;\n    const focoOriginal = nomeEl.focus.bind(nomeEl);\n    nomeEl.focus = () => { focos += 1; focoOriginal(); };\n    enviar('Bruno');\n    delete nomeEl.focus;\n    expect(campo().value).toBe('');\n    expect(focos).toBeGreaterThan(0);",
+        "assertionExpression": "expect(status().textContent).toBe('Inscrição de Bruno registrada.')",
+        "contractRule": "status().textContent toBe 'Inscrição de Bruno registrada.'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(status().textContent).toBe('Inscrição de Bruno registrada.')",
+        "assertionOffset": 1876
+      },
+      {
+        "id": "11.15.a-area-de-status-anuncia-mud-57e9dbd4",
+        "sourceTestPath": "tests/11.15.test.js",
+        "testName": "a área de status anuncia mudanças de forma não intrusiva",
+        "inputExpression": "status().getAttribute('aria-live')",
+        "matcher": "toBe",
+        "expectedExpression": "'polite'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(status().getAttribute('aria-live')).toBe('polite')",
+        "contractRule": "status().getAttribute('aria-live') toBe 'polite'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(status().getAttribute('aria-live')).toBe('polite')",
+        "assertionOffset": 2070
+      }
+    ]
+  },
+  "14.23": {
+    "environment": "rubric",
+    "version": 1,
+    "checks": [
+      "rubric"
+    ],
+    "referenceDir": "solutions/14.23",
+    "correctFiles": [],
+    "mutantDirs": [],
+    "transfer": {
+      "id": "14.23-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transfer 14.23\n\nNum pacote com exports apenas em '.', explique o que um projeto externo recebe ao importar um arquivo interno e qual entrada adicionar para expor um utilitário."
+        }
+      ],
+      "rubric": [
+        "Explicação do mapa exports com um subcaminho que falha e a entrada que o libera."
+      ],
+      "prompt": "Num pacote com exports apenas em '.', explique o que um projeto externo recebe ao importar um arquivo interno e qual entrada adicionar para expor um utilitário."
+    },
+    "rubric": [
+      "Cita o campo exports como o que decide os subcaminhos e distingue-o de main, com trecho do package.json.",
+      "Registra as quatro previsões antes de conferir e explica cada divergência, se houver.",
+      "Explica por que os testes internos passam com imports relativos e propõe a mudança mínima, com o efeito na API pública."
+    ],
+    "prompt": "Investigue a issue sem alterar o projeto: explique com evidência do package.json por que o subcaminho calculo falha, preveja os quatro imports e proponha a mudança mínima.",
+    "evidenceNote": "Evidência declarada · a leitura é conferida pela rubrica; a plataforma não executa o projeto do aluno. A decisão exige análise das respostas e conferência humana."
+  },
+  "18.11": {
+    "environment": "rubric",
+    "version": 1,
+    "checks": [
+      "rubric"
+    ],
+    "referenceDir": "solutions/18.11",
+    "correctFiles": [],
+    "mutantDirs": [],
+    "transfer": {
+      "id": "18.11-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transfer 18.11\n\nNuma tabela de cores declarada com satisfies: explique quais chaves o compilador aceita para uma função que recebe o nome da cor e o que mudaria se a tabela fosse anotada."
+        }
+      ],
+      "rubric": [
+        "Explicação do conjunto de chaves aceitas e do efeito de anotar a tabela."
+      ],
+      "prompt": "Numa tabela de cores declarada com satisfies, explique quais chaves o compilador aceita para uma função que recebe o nome da cor e o que mudaria se a tabela fosse anotada."
+    },
+    "rubric": [
+      "Explica RotaId como união literal das chaves e o papel de satisfies em não alargar essas chaves.",
+      "Prevê o diagnóstico de caminhoDe('admin') em código externo e distingue erro de compilação de comportamento em execução.",
+      "Identifica o as RotaId como afirmação não verificada e Object.hasOwn como guarda em execução; descreve o efeito de Record<string, Rota>."
+    ],
+    "prompt": "Investigue a issue sem alterar os arquivos: prediga os diagnósticos de tipo e os resultados em execução, separe guarda de cast e explique o efeito de alargar a tabela.",
+    "evidenceNote": "Evidência declarada · a leitura é conferida pela rubrica; a plataforma não executa o projeto do aluno. A decisão exige análise das respostas e conferência humana."
   }
 }

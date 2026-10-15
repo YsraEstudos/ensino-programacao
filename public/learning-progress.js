@@ -23,8 +23,10 @@ var DevPathLearningProgress = (() => {
   var learning_progress_exports = {};
   __export(learning_progress_exports, {
     mergeExerciseLearning: () => mergeExerciseLearning,
+    mergeExerciseLearningWithReport: () => mergeExerciseLearningWithReport,
     mergeLearningRecords: () => mergeLearningRecords,
     mergeProgressSnapshots: () => mergeProgressSnapshots,
+    mergeProgressSnapshotsWithReport: () => mergeProgressSnapshotsWithReport,
     migrateLegacyLearning: () => migrateLegacyLearning,
     sanitizeLearningRecord: () => sanitizeLearningRecord,
     transitionLearning: () => transitionLearning
@@ -54,12 +56,36 @@ var DevPathLearningProgress = (() => {
     secondOrderChars: 80,
     learningEvents: 12,
     learningAttemptHistory: 1e3,
-    learningEvidenceHistory: 300,
-    learningRecords: 300,
+    learningEvidenceHistory: 383,
+    learningRecords: 383,
     learningIdChars: 96,
     learningFingerprintChars: 128,
-    learningPayloadChars: 2e5
+    learningPayloadChars: 2e5,
+    reviewAttempts: 383,
+    reviewHistory: 10,
+    reviewPayloadChars: 15e4
   };
+
+  // lib/progress-evidence.ts
+  var attemptSize = ([key, attempt]) => JSON.stringify([key, attempt]).length;
+  function boundReviewAttempts(candidates) {
+    const priority = [...candidates].sort((a, b) => {
+      const pendingA = a[1].status === "pending" ? 0 : 1, pendingB = b[1].status === "pending" ? 0 : 1;
+      if (pendingA !== pendingB) return pendingA - pendingB;
+      return Math.max(b[1].finishedAt, b[1].startedAt) - Math.max(a[1].finishedAt, a[1].startedAt) || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0);
+    });
+    const kept = /* @__PURE__ */ new Set();
+    let chars = 0;
+    for (const entry of priority) {
+      const size = attemptSize(entry);
+      if (kept.size >= limits.reviewAttempts || chars + size > limits.reviewPayloadChars) continue;
+      kept.add(entry[0]);
+      chars += size;
+    }
+    const attempts = {};
+    for (const [key, attempt] of candidates) if (kept.has(key)) attempts[key] = attempt;
+    return { attempts, dropped: candidates.length - kept.size };
+  }
 
   // lib/learning-progress.ts
   var maxEvents = limits.learningEvents;
@@ -74,7 +100,7 @@ var DevPathLearningProgress = (() => {
   function object(value) {
     return value !== null && typeof value === "object" && !Array.isArray(value) ? value : {};
   }
-  function validTimestamp(value) {
+  function validTimestamp2(value) {
     return typeof value === "string" && value.length <= 40 && Number.isFinite(Date.parse(value));
   }
   function validId(value) {
@@ -93,7 +119,7 @@ var DevPathLearningProgress = (() => {
     const item = object(value);
     const contentVersion = version(item.contentVersion);
     const assessmentVersion = version(item.assessmentVersion);
-    if (!validId(item.attemptId) || contentVersion === null || assessmentVersion === null || !validFingerprint(item.fingerprint) || item.fingerprint.startsWith("unknown") || !sourceValues.has(item.source) || !validTimestamp(item.at)) return void 0;
+    if (!validId(item.attemptId) || contentVersion === null || assessmentVersion === null || !validFingerprint(item.fingerprint) || item.fingerprint.startsWith("unknown") || !sourceValues.has(item.source) || !validTimestamp2(item.at)) return void 0;
     return {
       attemptId: item.attemptId,
       contentVersion,
@@ -106,7 +132,7 @@ var DevPathLearningProgress = (() => {
   }
   function sanitizeEvent(value) {
     const item = object(value);
-    if (!validId(item.id) || !kinds.has(item.kind) || !validId(item.attemptId) || !validTimestamp(item.at) || !validFingerprint(item.fingerprint) || !sourceValues.has(item.source)) return void 0;
+    if (!validId(item.id) || !kinds.has(item.kind) || !validId(item.attemptId) || !validTimestamp2(item.at) || !validFingerprint(item.fingerprint) || !sourceValues.has(item.source)) return void 0;
     return {
       id: item.id,
       kind: item.kind,
@@ -142,12 +168,12 @@ var DevPathLearningProgress = (() => {
     const byId = /* @__PURE__ */ new Map();
     for (const raw of values) {
       const item = object(raw);
-      if (!validId(item.attemptId) || !validTimestamp(item.startedAt)) continue;
+      if (!validId(item.attemptId) || !validTimestamp2(item.startedAt)) continue;
       const entry = { attemptId: item.attemptId, startedAt: item.startedAt };
       const previous = byId.get(entry.attemptId);
       if (!previous || Date.parse(entry.startedAt) < Date.parse(previous.startedAt)) byId.set(entry.attemptId, entry);
     }
-    if (validId(currentAttemptId) && validTimestamp(currentStartedAt) && !byId.has(currentAttemptId)) {
+    if (validId(currentAttemptId) && validTimestamp2(currentStartedAt) && !byId.has(currentAttemptId)) {
       byId.set(currentAttemptId, { attemptId: currentAttemptId, startedAt: currentStartedAt });
     }
     let entries = [...byId.values()].sort((a, b) => Date.parse(a.startedAt) - Date.parse(b.startedAt));
@@ -160,13 +186,13 @@ var DevPathLearningProgress = (() => {
     }
     return entries;
   }
-  function evidenceHistory(record) {
-    if (!record) return [];
+  function evidenceHistory(record2) {
+    if (!record2) return [];
     return compactEvidence([
-      ...Array.isArray(record.evidenceHistory) ? record.evidenceHistory : [],
-      record.verifiedEvidence,
-      record.demonstratedEvidence,
-      record.transferEvidence
+      ...Array.isArray(record2.evidenceHistory) ? record2.evidenceHistory : [],
+      record2.verifiedEvidence,
+      record2.demonstratedEvidence,
+      record2.transferEvidence
     ]);
   }
   function sanitizeLearningRecord(value) {
@@ -175,7 +201,7 @@ var DevPathLearningProgress = (() => {
     const assessmentVersion = version(item.assessmentVersion);
     const mode = item.mode;
     const state = item.state;
-    if (item.schemaVersion !== 1 || contentVersion === null || assessmentVersion === null || mode !== "learn" && mode !== "recall" || !states.has(state) || typeof item.assisted !== "boolean" || !validId(item.attemptId) || typeof item.attemptIndependent !== "boolean" || !validFingerprint(item.currentFingerprint) || !validTimestamp(item.currentUpdatedAt)) return null;
+    if (item.schemaVersion !== 1 || contentVersion === null || assessmentVersion === null || mode !== "learn" && mode !== "recall" || !states.has(state) || typeof item.assisted !== "boolean" || !validId(item.attemptId) || typeof item.attemptIndependent !== "boolean" || !validFingerprint(item.currentFingerprint) || !validTimestamp2(item.currentUpdatedAt)) return null;
     let serializedLength;
     try {
       serializedLength = JSON.stringify(value).length;
@@ -239,8 +265,8 @@ var DevPathLearningProgress = (() => {
   function validContext(context, event) {
     return version(context.contentVersion) !== null && version(context.assessmentVersion) !== null && validFingerprint(context.fingerprint) && context.fingerprint === event.fingerprint && typeof context.independent === "boolean" && typeof context.assessmentPassed === "boolean";
   }
-  function appendEvent(record, event) {
-    return { ...record, events: compactEvents([...record.events, event]) };
+  function appendEvent(record2, event) {
+    return { ...record2, events: compactEvents([...record2.events, event]) };
   }
   function newRecord(event, context, previous) {
     const mode = context.mode === "recall" ? "recall" : "learn";
@@ -271,36 +297,36 @@ var DevPathLearningProgress = (() => {
       if (safeCurrent) return safeCurrent;
       throw new TypeError("A learning event requires a valid attempt identity, timestamp, source, and fingerprint.");
     }
-    const record = sanitizeLearningRecord(current);
-    const sameAttempt = record?.attemptId === event.attemptId;
-    const duplicate = record?.events.some((item) => item.id === event.id);
-    if (duplicate && sameAttempt) return record;
-    if (!record) {
+    const record2 = sanitizeLearningRecord(current);
+    const sameAttempt = record2?.attemptId === event.attemptId;
+    const duplicate = record2?.events.some((item) => item.id === event.id);
+    if (duplicate && sameAttempt) return record2;
+    if (!record2) {
       if (event.kind !== "attempted" && event.kind !== "studied") {
         throw new TypeError("A learning record must begin with an explicit attempt or study event.");
       }
-      const fresh = newRecord(event, context, record);
+      const fresh = newRecord(event, context, record2);
       if (event.kind === "studied") fresh.state = "studied";
       return fresh;
     }
-    if (Date.parse(event.at) < Date.parse(record.currentUpdatedAt)) return record;
+    if (Date.parse(event.at) < Date.parse(record2.currentUpdatedAt)) return record2;
     if (!sameAttempt) {
-      const previouslyUsed = record.attemptHistory.some((item) => item.attemptId === event.attemptId);
-      if (event.kind !== "attempted" || !context.independent || previouslyUsed) return record;
-      return newRecord(event, context, record);
+      const previouslyUsed = record2.attemptHistory.some((item) => item.attemptId === event.attemptId);
+      if (event.kind !== "attempted" || !context.independent || previouslyUsed) return record2;
+      return newRecord(event, context, record2);
     }
-    const mode = context.mode === "recall" ? "recall" : context.mode === "learn" ? "learn" : record.mode;
-    const changedFingerprint = event.fingerprint !== record.currentFingerprint;
-    const changedVersion = context.contentVersion !== record.contentVersion || context.assessmentVersion !== record.assessmentVersion;
+    const mode = context.mode === "recall" ? "recall" : context.mode === "learn" ? "learn" : record2.mode;
+    const changedFingerprint = event.fingerprint !== record2.currentFingerprint;
+    const changedVersion = context.contentVersion !== record2.contentVersion || context.assessmentVersion !== record2.assessmentVersion;
     let next = {
-      ...record,
-      contentVersion: version(context.contentVersion) ?? record.contentVersion,
-      assessmentVersion: version(context.assessmentVersion) ?? record.assessmentVersion,
+      ...record2,
+      contentVersion: version(context.contentVersion) ?? record2.contentVersion,
+      assessmentVersion: version(context.assessmentVersion) ?? record2.assessmentVersion,
       mode,
       currentFingerprint: event.fingerprint,
-      currentUpdatedAt: latest(record.currentUpdatedAt, event.at),
-      assisted: record.assisted || event.assisted === true || event.kind === "help" || mode === "learn",
-      state: changedFingerprint || changedVersion ? "attempted" : record.state
+      currentUpdatedAt: latest(record2.currentUpdatedAt, event.at),
+      assisted: record2.assisted || event.assisted === true || event.kind === "help" || mode === "learn",
+      state: changedFingerprint || changedVersion ? "attempted" : record2.state
     };
     next = appendEvent(next, event);
     if ((next.assisted || !next.attemptIndependent) && next.state === "demonstrated") {
@@ -314,7 +340,7 @@ var DevPathLearningProgress = (() => {
     if ((next.assisted || !next.attemptIndependent) && next.state === "transfer-declared") next.state = "attempted";
     if (event.kind === "attempted") {
       next.state = "attempted";
-      next.attemptIndependent = record.attemptIndependent && context.independent;
+      next.attemptIndependent = record2.attemptIndependent && context.independent;
       return next;
     }
     if (event.kind === "help") return next;
@@ -322,8 +348,8 @@ var DevPathLearningProgress = (() => {
       if (next.state === "attempted") next.state = "studied";
       return next;
     }
-    const versionsMatch = context.contentVersion > 0 && context.assessmentVersion > 0 && context.contentVersion === record.contentVersion && context.assessmentVersion === record.assessmentVersion;
-    const fingerprintMatches = event.fingerprint === record.currentFingerprint && !event.fingerprint.startsWith("unknown");
+    const versionsMatch = context.contentVersion > 0 && context.assessmentVersion > 0 && context.contentVersion === record2.contentVersion && context.assessmentVersion === record2.assessmentVersion;
+    const fingerprintMatches = event.fingerprint === record2.currentFingerprint && !event.fingerprint.startsWith("unknown");
     const evidence = {
       attemptId: event.attemptId,
       contentVersion: context.contentVersion,
@@ -334,20 +360,20 @@ var DevPathLearningProgress = (() => {
       eventId: event.id
     };
     if (event.kind === "transfer-declared") {
-      if (context.independent && record.attemptIndependent && !next.assisted && versionsMatch && fingerprintMatches && event.attemptId === record.attemptId && event.source !== "browser") {
+      if (context.independent && record2.attemptIndependent && !next.assisted && versionsMatch && fingerprintMatches && event.attemptId === record2.attemptId && event.source !== "browser") {
         next.state = "transfer-declared";
         next.transferEvidence = evidence;
         next.evidenceHistory = compactEvidence([...next.evidenceHistory, evidence]);
       }
       return next;
     }
-    const promotable = context.assessmentPassed && versionsMatch && fingerprintMatches && event.attemptId === record.attemptId && sourceValues.has(event.source);
+    const promotable = context.assessmentPassed && versionsMatch && fingerprintMatches && event.attemptId === record2.attemptId && sourceValues.has(event.source);
     if (!promotable) return next;
     if (event.kind === "verified") {
       next.state = "verified";
       next.verifiedEvidence = evidence;
       next.evidenceHistory = compactEvidence([...next.evidenceHistory, evidence]);
-    } else if (event.kind === "demonstrated" && event.source === "browser" && context.independent && record.attemptIndependent && !next.assisted) {
+    } else if (event.kind === "demonstrated" && event.source === "browser" && context.independent && record2.attemptIndependent && !next.assisted) {
       next.state = "demonstrated";
       next.verifiedEvidence = evidence;
       next.demonstratedEvidence = evidence;
@@ -392,17 +418,27 @@ var DevPathLearningProgress = (() => {
       events
     };
   }
-  function mergeExerciseLearning(leftValue, rightValue) {
+  function mergeExerciseLearningWithReport(leftValue, rightValue) {
     const left = object(leftValue);
     const right = object(rightValue);
-    const output = {};
+    const candidates = [];
     for (const id of /* @__PURE__ */ new Set([...Object.keys(left), ...Object.keys(right)])) {
       if (id === "__proto__" || id === "constructor" || id === "prototype") continue;
-      const record = mergeLearningRecords(left[id], right[id]);
-      if (record) output[id] = record;
+      const record2 = mergeLearningRecords(left[id], right[id]);
+      if (record2) candidates.push([id, record2]);
     }
-    for (const id of Object.keys(output).slice(maxRecords)) delete output[id];
-    return output;
+    const kept = new Set(
+      [...candidates].sort((a, b) => Date.parse(b[1].currentUpdatedAt) - Date.parse(a[1].currentUpdatedAt) || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0)).slice(0, maxRecords).map(([id]) => id)
+    );
+    const records = {};
+    for (const [id, record2] of candidates) {
+      if (kept.has(id)) records[id] = record2;
+    }
+    const droppedLearningRecords = candidates.length - kept.size;
+    return { records, droppedLearningRecords, truncated: droppedLearningRecords > 0 };
+  }
+  function mergeExerciseLearning(leftValue, rightValue) {
+    return mergeExerciseLearningWithReport(leftValue, rightValue).records;
   }
   var mapFields = [
     "answers",
@@ -419,6 +455,35 @@ var DevPathLearningProgress = (() => {
     "stage02"
   ];
   function mergeProgressSnapshots(localValue, remoteValue) {
+    return mergeProgressSnapshotsWithReport(localValue, remoteValue).progress;
+  }
+  function mergeReviewSchedules(localValue, remoteValue) {
+    const local = object(localValue), remote = object(remoteValue);
+    const merged = { ...remote };
+    for (const [id, value] of Object.entries(local)) {
+      const other = object(remote[id]);
+      const localAt = typeof object(value).lastReviewedAt === "string" ? object(value).lastReviewedAt : "";
+      const remoteAt = typeof other.lastReviewedAt === "string" ? other.lastReviewedAt : "";
+      if (!(remoteAt > localAt && remote[id] !== void 0)) merged[id] = value;
+    }
+    return merged;
+  }
+  function mergeReviewAttempts(localValue, remoteValue) {
+    const local = object(localValue), remote = object(remoteValue);
+    const activity = (value) => {
+      const item = object(value);
+      return Math.max(Number(item.finishedAt) || 0, Number(item.startedAt) || 0);
+    };
+    const candidates = [];
+    for (const id of /* @__PURE__ */ new Set([...Object.keys(remote), ...Object.keys(local)])) {
+      if (id === "__proto__" || id === "constructor" || id === "prototype") continue;
+      const localHas = Object.hasOwn(local, id), remoteHas = Object.hasOwn(remote, id);
+      const chosen = localHas && remoteHas ? activity(remote[id]) > activity(local[id]) ? remote[id] : local[id] : localHas ? local[id] : remote[id];
+      candidates.push([id, chosen]);
+    }
+    return boundReviewAttempts(candidates);
+  }
+  function mergeProgressSnapshotsWithReport(localValue, remoteValue) {
     const local = object(localValue);
     const remote = object(remoteValue);
     const output = { ...remote, ...local };
@@ -431,8 +496,17 @@ var DevPathLearningProgress = (() => {
       ...Array.isArray(remote.activeDays) ? remote.activeDays : [],
       ...Array.isArray(local.activeDays) ? local.activeDays : []
     ])];
-    output.exerciseLearning = mergeExerciseLearning(local.exerciseLearning, remote.exerciseLearning);
-    return output;
+    const learning = mergeExerciseLearningWithReport(local.exerciseLearning, remote.exerciseLearning);
+    output.exerciseLearning = learning.records;
+    output.reviewSchedule = mergeReviewSchedules(local.reviewSchedule, remote.reviewSchedule);
+    const review = mergeReviewAttempts(local.reviewAttempts, remote.reviewAttempts);
+    output.reviewAttempts = review.attempts;
+    return {
+      progress: output,
+      droppedLearningRecords: learning.droppedLearningRecords,
+      droppedReviewAttempts: review.dropped,
+      truncated: learning.truncated || review.dropped > 0
+    };
   }
   function assessmentMap(value) {
     const data = object(value);
@@ -454,8 +528,8 @@ var DevPathLearningProgress = (() => {
     const existing = object(progress.exerciseLearning);
     const learning = {};
     for (const [id, value] of Object.entries(existing)) {
-      const record = sanitizeLearningRecord(value);
-      if (record) learning[id] = record;
+      const record2 = sanitizeLearningRecord(value);
+      if (record2) learning[id] = record2;
     }
     const catalog = Array.isArray(catalogValue) ? catalogValue : [];
     const assessments = assessmentMap(assessmentsValue);
@@ -483,7 +557,7 @@ var DevPathLearningProgress = (() => {
       const linked = Boolean(oldEvidence && oldEvidence.testsPassed === true && oldEvidence.runResult === "result" && validFingerprint(oldEvidence.fingerprint) && !oldEvidence.fingerprint.startsWith("unknown") && oldEvidence.contentVersion === catalogVersion && oldEvidence.assessmentVersion === assessmentVersion && sourceValues.has(oldEvidence.source) && catalogVersion > 0 && assessmentVersion > 0);
       const fingerprint = linked ? oldEvidence?.fingerprint : "unknown";
       const recordedAt = oldEvidence?.recordedAt;
-      const at = validTimestamp(recordedAt) ? recordedAt : "1970-01-01T00:00:00.000Z";
+      const at = validTimestamp2(recordedAt) ? recordedAt : "1970-01-01T00:00:00.000Z";
       const linkedEvidence = linked && oldEvidence ? {
         attemptId: `legacy:${id}`.slice(0, idLimit),
         contentVersion: catalogVersion,
@@ -502,7 +576,7 @@ var DevPathLearningProgress = (() => {
         source: "browser"
       };
       const state = linked ? "verified" : event.kind === "studied" ? "studied" : "attempted";
-      const record = {
+      const record2 = {
         schemaVersion: 1,
         contentVersion: catalogVersion,
         assessmentVersion,
@@ -518,7 +592,7 @@ var DevPathLearningProgress = (() => {
         evidenceHistory: linkedEvidence ? [linkedEvidence] : [],
         events: [event]
       };
-      learning[id] = record;
+      learning[id] = record2;
     }
     clone.exerciseLearning = learning;
     return clone;

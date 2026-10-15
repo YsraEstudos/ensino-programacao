@@ -1,4 +1,4 @@
-import {memoizeLRU} from '../memo.js';
+import {memoizeLRU} from './memo.js';
 
 test('hit refreshes recency before the least recent key is evicted', () => {
   let calls = 0;

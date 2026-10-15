@@ -597,7 +597,8 @@ test('campos editoriais e chaves desconhecidas não alteram o fingerprint', asyn
 
 test('a allowlist cobre todas as chaves dos manifestos de origem e publicado', () => {
   const known = new Set([...fingerprintApi.fingerprintFields, ...fingerprintApi.editorialFields]);
-  const transferKnown = new Set(['id', 'files', 'testPath', 'rubric', 'prompt']);
+  // execution escolhe o caminho executável; version e tests entram no fingerprint via transferAssessment (learning-paths.js).
+  const transferKnown = new Set(['id', 'files', 'testPath', 'rubric', 'prompt', 'execution', 'version', 'tests']);
   const missing = [];
   for (const file of ['course-src/assessments.json', 'public/course-assessments.json']) {
     const manifest = JSON.parse(readFileSync(file, 'utf8'));

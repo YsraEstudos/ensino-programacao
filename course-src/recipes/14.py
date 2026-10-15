@@ -944,3 +944,77 @@ CONTENT["14.22"] = _E14(
     prompt="Crie util.mjs, usar.cjs, comTopLevelAwait.mjs e falha.cjs, e rode cada comando. Antes do Run, diga o código de erro esperado de falha.cjs.",
     rubric=("Registra a saída e o código de saída de cada comando.", "Explica a diferença entre require() síncrono e import() assíncrono.", "Identifica a causa do ERR_REQUIRE_ASYNC_MODULE no grafo do módulo."),
 )
+
+
+# Feedback por alternativa (revisão 15/10/2026): o texto incorreto nomeia o engano de cada alternativa errada.
+# O texto correto continua explicando por que a alternativa certa vale.
+_REVIEW_INCORRECT = {
+    "14.01": "Se escolheu “Sim; qualquer aresta de entrada o coloca dentro do ciclo”, confundiu depender de um ciclo com pertencer a ele: pertencer exige participar do caminho que volta ao início. Se escolheu “Não há diferença”, apagou a distinção entre quem está no ciclo e quem apenas consome a saída dele.",
+    "14.02": "Se escolheu ler process.argv dentro de cada regra, espalhou a dependência do processo pelo domínio, que deixa de ser testável sem a CLI. Se escolheu ler depois de imprimir sucesso, inverteu a ordem: a entrada precisa ser validada antes de qualquer resultado.",
+    "14.03": "Se escolheu que dev, test e start são aliases do mesmo comando, supôs que scripts com nomes diferentes são equivalentes; cada um aponta para um comando concreto. Se escolheu lockfile não versionado, confundiu flexibilidade com reprodutibilidade: o lockfile fixa as versões instaladas.",
+    "14.04": "Se escolheu que só o campo type converte require, supôs que uma configuração converte código automaticamente; require e import continuam sintaxes diferentes. Se escolheu que só os consumidores mudam, ignorou que exports e caminhos do próprio pacote definem sua forma pública.",
+    "14.05": "Se escolheu o diretório de onde o usuário executou o CLI, confundiu cwd com a localização do módulo: esse valor muda conforme a pasta em que o comando roda. Se escolheu o argumento de process.argv, tratou a entrada do usuário como localização do código, que o próprio módulo define.",
+    "14.06": "Se escolheu registrar todas as variáveis no console, ignorou a política de exposição: segredos não devem aparecer em logs. Se escolheu deixar strings sem validação porque o ambiente seria tipado, supôs que o ambiente entrega tipos; variáveis chegam como texto e precisam de conversão e validação.",
+    "14.07": "Se escolheu o ano em que a proposta chegou ao padrão, confundiu aprovação de uma especificação com disponibilidade no runtime usado. Se escolheu um transpiler de sintaxe, tratou sintaxe e API como iguais: transpilar sintaxe não cria APIs ausentes no runtime.",
+    "14.08": "Se escolheu que cada função de domínio abre o próprio arquivo, espalhou I/O pelo domínio e perdeu a capacidade de testar regras sem disco. Se escolheu armazenar argumentos globais para ler depois, criou estado oculto do qual o serviço não deveria depender.",
+    "14.09": "Se escolheu aceitar sempre o lado atual, descartou a intenção da outra versão sem evidência. Se escolheu commit sem olhar status e diff, confiou que o merge sinaliza tudo; ele não confirma que as duas intenções foram preservadas.",
+    "14.10": "Se escolheu o namespace síncrono, confundiu import() com import estático: a forma dinâmica sempre devolve uma Promise. Se escolheu uma Promise que cancela a avaliação quando o importador fecha, supôs que o importador controla a avaliação do módulo, o que não acontece.",
+    "14.11": "Se escolheu downloads e estrelas, usou popularidade como critério único; ela não mostra licença nem risco de manutenção. Se escolheu tamanho minificado isolado, otimizou uma métrica sem avaliar licença, manutenção e dependências transitivas.",
+    "14.12": "Se escolheu que todo ESM precisa de bundler, confundiu ferramenta de distribuição com requisito de execução. Se escolheu que o source map substitui a inspeção, supôs que o mapa prova o artefato; é preciso conferir os arquivos gerados.",
+    "14.13": "Se escolheu que nextTick sempre precede as Promises, generalizou uma observação sem contexto; a ordem depende de fase e de módulo. Se escolheu aplicar a ordem do navegador ao Node, transferiu um event loop para outro ambiente sem declarar a diferença.",
+}
+for _eid, _incorrect in _REVIEW_INCORRECT.items():
+    CONTENT[_eid]["review"]["feedback_incorrect"] = _incorrect
+
+# Fase 6 (6.4): investigação opcional de leitura de pacote Node (exports). Evidência declarada: rubrica e respostas de referência.
+from recipe_api import E as _E14
+
+CONTENT["14.23"] = _E14(
+    "modules.project_structure",
+    "README.md: pacote oficina-notas com exports e testes; os arquivos estão em starters/14.23.",
+    "importar oficina-notas/formatar -> resolve para ./src/formatar.js; importar oficina-notas/calculo -> ERR_PACKAGE_PATH_NOT_EXPORTED",
+    "oficina-notas -> resolve para ./src/index.js; oficina-notas/src/calculo.js -> também falha, porque exports não expõe a pasta inteira",
+    "Achar que main, ou a simples existência do arquivo, basta para um projeto externo importar um subcaminho do pacote.",
+    "Um projeto externo recebe ERR_PACKAGE_PATH_NOT_EXPORTED ao importar um arquivo que existe dentro do pacote.",
+    "Qual campo do package.json controla quais subcaminhos podem ser importados pelo nome do pacote?",
+    (
+        "Compare o campo main com o campo exports antes de responder.",
+        "Escreva a previsão dos quatro imports antes de conferir a documentação.",
+        "Lembre que imports relativos dentro do pacote não passam pelo mapa exports.",
+    ),
+    "O campo exports decide os subcaminhos. main só define a entrada do nome puro. Para liberar calculo, acrescente a entrada ./calculo apontando para ./src/calculo.js; a pasta src/ continua fechada.",
+    "pacote com exports sem ./utils -> import de pacote/utils falha; com a entrada ./utils -> resolve para ./src/utils.js",
+    kind="READ",
+    runtime="Node.js 24 LTS (ES modules)",
+    estimated=25,
+    optional=True,
+    compatibility="Node.js 24 LTS com ESM (campo type module) e o mapa exports do package.json",
+    prompt="Investigue a issue sem alterar o projeto: explique com evidência do package.json por que o subcaminho calculo falha, preveja os quatro imports e proponha a mudança mínima.",
+    explanation={
+        "mental_model": "Um pacote declara sua superfície pública no campo exports. Um subcaminho só existe para quem importa o pacote se estiver nesse mapa; o arquivo sozinho não basta.",
+        "worked_example": "Com exports com as entradas '.' e './formatar', o import de oficina-notas/formatar resolve, e o de oficina-notas/calculo falha mesmo com o arquivo presente em src/.",
+        "common_trap": "Concluir que o arquivo está quebrado porque os testes internos passam: os testes usam caminho relativo e não passam pelo mapa exports.",
+        "why_it_matters": "A API pública de um pacote é um contrato. Quem expõe a pasta inteira perde o controle do que é público; quem expõe pouco força outros projetos a copiar código.",
+    },
+    first_response="Antes de abrir src/, copie o trecho do package.json que controla os subcaminhos e escreva a previsão dos quatro imports.",
+    first_response_timing="Antes de ler qualquer arquivo de src/ e antes de conferir a previsão.",
+    interaction="Tabela com os quatro imports, a previsão, o campo do package.json que decide cada um e o resultado esperado.",
+    resources=(
+        "Node.js: exports em pacotes — https://nodejs.org/api/packages.html#exports",
+        "npm: campo exports no package.json — https://docs.npmjs.com/cli/v10/configuring-npm/package-json#exports",
+    ),
+    rubric=(
+        "Cita o campo exports como o que decide os subcaminhos e distingue-o de main, com trecho do package.json.",
+        "Registra as quatro previsões antes de conferir e explica cada divergência, se houver.",
+        "Explica por que os testes internos passam com imports relativos e propõe a mudança mínima, com o efeito na API pública.",
+    ),
+    review={
+        "prompt": "Qual campo do package.json decide os subcaminhos importáveis pelo nome do pacote?",
+        "choices": ["main", "exports", "scripts"],
+        "answer": "exports",
+        "feedback_correct": "Sim: exports lista os subcaminhos públicos. main só define a entrada do nome puro.",
+        "feedback_incorrect": "main define só a entrada do nome puro, e scripts guarda comandos. Quem decide os subcaminhos é exports.",
+    },
+    transfer_prompt="Num pacote com exports apenas em '.', explique o que um projeto externo recebe ao importar um arquivo interno e qual entrada adicionar para expor um utilitário.",
+)
+

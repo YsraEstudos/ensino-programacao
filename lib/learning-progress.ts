@@ -1,4 +1,6 @@
 import { limits } from "./progress-contract.json";
+import { boundReviewAttempts } from "./progress-evidence";
+import type { ReviewAttempt } from "./progress-model";
 
 // "transfer-declared" is a transfer answered against a declared rubric; only "demonstrated" needs browser-run evidence.
 export type LearningState = "attempted" | "studied" | "verified" | "demonstrated" | "transfer-declared";
@@ -429,23 +431,73 @@ export function mergeLearningRecords(leftValue: unknown, rightValue: unknown): L
   };
 }
 
-export function mergeExerciseLearning(leftValue: unknown, rightValue: unknown): Record<string, LearningRecord> {
+export type LearningMergeReport = { droppedLearningRecords: number; droppedReviewAttempts: number; truncated: boolean };
+
+// Keeps the most recently updated records when the union exceeds the limit; the count of dropped records is reported.
+export function mergeExerciseLearningWithReport(leftValue: unknown, rightValue: unknown):
+  { records: Record<string, LearningRecord> } & LearningMergeReport {
   const left = object(leftValue);
   const right = object(rightValue);
-  const output: Record<string, LearningRecord> = {};
+  const candidates: [string, LearningRecord][] = [];
   for (const id of new Set([...Object.keys(left), ...Object.keys(right)])) {
     if (id === "__proto__" || id === "constructor" || id === "prototype") continue;
     const record = mergeLearningRecords(left[id], right[id]);
-    if (record) output[id] = record;
+    if (record) candidates.push([id, record]);
   }
-  for (const id of Object.keys(output).slice(maxRecords)) delete output[id];
-  return output;
+  const kept = new Set(
+    [...candidates]
+      .sort((a, b) => Date.parse(b[1].currentUpdatedAt) - Date.parse(a[1].currentUpdatedAt) || (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+      .slice(0, maxRecords)
+      .map(([id]) => id)
+  );
+  const records: Record<string, LearningRecord> = {};
+  for (const [id, record] of candidates) {
+    if (kept.has(id)) records[id] = record;
+  }
+  const droppedLearningRecords = candidates.length - kept.size;
+  return { records, droppedLearningRecords, truncated: droppedLearningRecords > 0 };
+}
+
+export function mergeExerciseLearning(leftValue: unknown, rightValue: unknown): Record<string, LearningRecord> {
+  return mergeExerciseLearningWithReport(leftValue, rightValue).records;
 }
 
 const mapFields = ["answers", "attempts", "challenges", "exerciseVersions", "exerciseDrafts", "exercisePredictions",
   "exerciseReflections", "exerciseEvidence", "warmupCompleted", "reviewSchedule", "stage01", "stage02"] as const;
 
 export function mergeProgressSnapshots(localValue: unknown, remoteValue: unknown): Record<string, unknown> {
+  return mergeProgressSnapshotsWithReport(localValue, remoteValue).progress;
+}
+
+// A schedule is kept whole: the copy whose last graded review is later wins, so its history travels with it.
+function mergeReviewSchedules(localValue: unknown, remoteValue: unknown): Record<string, unknown> {
+  const local = object(localValue), remote = object(remoteValue);
+  const merged: Record<string, unknown> = { ...remote };
+  for (const [id, value] of Object.entries(local)) {
+    const other = object(remote[id]);
+    const localAt = typeof object(value).lastReviewedAt === "string" ? object(value).lastReviewedAt as string : "";
+    const remoteAt = typeof other.lastReviewedAt === "string" ? other.lastReviewedAt : "";
+    if (!(remoteAt > localAt && remote[id] !== undefined)) merged[id] = value;
+  }
+  return merged;
+}
+
+// An attempt is kept whole: the copy with the later activity time wins, and the local copy wins ties.
+function mergeReviewAttempts(localValue: unknown, remoteValue: unknown): { attempts: Record<string, unknown>; dropped: number } {
+  const local = object(localValue), remote = object(remoteValue);
+  const activity = (value: unknown) => { const item = object(value); return Math.max(Number(item.finishedAt) || 0, Number(item.startedAt) || 0); };
+  const candidates: [string, ReviewAttempt][] = [];
+  for (const id of new Set([...Object.keys(remote), ...Object.keys(local)])) {
+    if (id === "__proto__" || id === "constructor" || id === "prototype") continue;
+    const localHas = Object.hasOwn(local, id), remoteHas = Object.hasOwn(remote, id);
+    const chosen = localHas && remoteHas ? (activity(remote[id]) > activity(local[id]) ? remote[id] : local[id]) : localHas ? local[id] : remote[id];
+    candidates.push([id, chosen as ReviewAttempt]);
+  }
+  return boundReviewAttempts(candidates);
+}
+
+export function mergeProgressSnapshotsWithReport(localValue: unknown, remoteValue: unknown):
+  { progress: Record<string, unknown> } & LearningMergeReport {
   const local = object(localValue);
   const remote = object(remoteValue);
   const output: Record<string, unknown> = { ...remote, ...local };
@@ -454,8 +506,17 @@ export function mergeProgressSnapshots(localValue: unknown, remoteValue: unknown
     ...(Array.isArray(local.completed) ? local.completed : [])])];
   output.activeDays = [...new Set([...(Array.isArray(remote.activeDays) ? remote.activeDays : []),
     ...(Array.isArray(local.activeDays) ? local.activeDays : [])])];
-  output.exerciseLearning = mergeExerciseLearning(local.exerciseLearning, remote.exerciseLearning);
-  return output;
+  const learning = mergeExerciseLearningWithReport(local.exerciseLearning, remote.exerciseLearning);
+  output.exerciseLearning = learning.records;
+  output.reviewSchedule = mergeReviewSchedules(local.reviewSchedule, remote.reviewSchedule);
+  const review = mergeReviewAttempts(local.reviewAttempts, remote.reviewAttempts);
+  output.reviewAttempts = review.attempts;
+  return {
+    progress: output,
+    droppedLearningRecords: learning.droppedLearningRecords,
+    droppedReviewAttempts: review.dropped,
+    truncated: learning.truncated || review.dropped > 0
+  };
 }
 
 function assessmentMap(value: unknown): Record<string, unknown> {

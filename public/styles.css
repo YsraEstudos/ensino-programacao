@@ -321,6 +321,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 /* Review */
 .review-banner { display: flex; align-items: center; gap: 20px; margin: 21px 0 28px; padding: 22px; border-radius: 8px; background: #e8edda; }.review-icon { width: 45px; height: 45px; flex: 0 0 45px; display: grid; place-items: center; border-radius: 50%; color: #516538; background: #dce7c1; font-size: 21px; }.review-banner h2 { margin: 0 0 5px; font-size: 15px; }.review-banner p { margin: 0; color: #73786a; font-size: 10px; line-height: 1.6; }
 .review-progress { margin-left: auto; min-width: 60px; color: #647346; font: 10px var(--mono); text-align: right; }
+.review-code { max-width: 570px; margin: 14px 0; padding: 14px 16px; overflow: auto; border: 1px solid #cfd5bf; border-radius: 7px; color: #2c3322; background: #f3f6ea; font: 11px/1.7 var(--mono); white-space: pre; }.review-field { display: grid; gap: 7px; max-width: 570px; margin: 14px 0; color: #5e6456; font: 10px var(--mono); }.review-field textarea { width: 100%; min-height: 110px; padding: 11px 12px; resize: vertical; border: 1px solid #cfd5bf; border-radius: 7px; color: #252b1c; background: #fbfcf7; font: 12px/1.6 var(--mono); }.review-field textarea:focus { outline: 2px solid #94a951; outline-offset: 1px; }.review-limit { max-width: 570px; margin: 14px 0 0; padding: 10px 12px; border-left: 3px solid #a6b56a; border-radius: 0 6px 6px 0; color: #5d6450; background: #eef2e1; font-size: 10px; line-height: 1.6; }
 .review-question { max-width: 670px; padding: 10px 0 35px; }.review-question h2 { margin: 11px 0 17px; font-size: clamp(21px, 3vw, 29px); font-weight: 600; letter-spacing: -1.1px; line-height: 1.38; }.review-question .answer-group { max-width: 570px; }.review-actions { display: flex; align-items: center; justify-content: space-between; max-width: 570px; margin-top: 17px; }
 .review-done { max-width: 580px; padding: 34px 0; }.review-done .done-icon { font-size: 30px; color: #819747; }.review-done h2 { font-size: 25px; letter-spacing: -1px; }.review-done p { color: #72756b; font-size: 11px; line-height: 1.8; }
 .toast { position: fixed; z-index: 30; left: 50%; bottom: 22px; max-width: calc(100vw - 30px); padding: 11px 16px; border: 1px solid #475643; border-radius: 7px; color: #f2f5e9; background: #2f3b30; font-size: 10px; opacity: 0; transform: translate(-50%, 14px); pointer-events: none; transition: opacity .2s, transform .2s; }.toast.show { opacity: 1; transform: translate(-50%, 0); }
@@ -432,6 +433,11 @@ body { background: var(--paper); color: var(--ink); }
 .review-banner { background: #252a20; }
 .review-icon { color: #d7e7ae; background: #353e2b; }
 .review-progress { color: #c9dd98; }
+.review-code { color: #d7e3bb; border-color: #3a4030; background: #131410; }
+.review-field { color: #a5a89b; }
+.review-field textarea { color: var(--ink); border-color: #3b3d35; background: #20211c; }
+.review-field textarea:focus { outline-color: #95b24f; }
+.review-limit { color: #c5cdb0; border-left-color: #6f8240; background: #22271d; }
 .toast { color: #f2f5e9; border-color: #475643; background: #2f3b30; }
 .button-primary:disabled { color: #9a9d91; background: #34362f; }
 
@@ -519,3 +525,20 @@ body { background: var(--paper); color: var(--ink); }
 .local-git-commands { overflow-x:auto; margin:0 0 10px; padding:12px; border:1px solid var(--line); border-radius:8px; font-family:var(--mono); font-size:12px; line-height:1.6; white-space:pre; }
 .local-project-panel button:focus-visible, .local-project-panel pre:focus-visible { outline:2px solid var(--lime); outline-offset:2px; }
 .local-project-panel button:disabled { opacity:.6; cursor:progress; }
+
+/* Katas por faixa and the review opt-in (Fase 6). Colors inherit or use translucent borders so both themes work. */
+.kata-question [hidden], .review-question [hidden] { display: none !important; }
+.kata-band-list { display: grid; gap: 12px; max-width: 670px; margin: 18px 0 0; padding: 0; list-style: none; }
+.kata-band { padding: 16px 18px; border: 1px solid rgba(128, 138, 90, .35); border-radius: 8px; }
+.kata-band.is-blocked { opacity: .78; }
+.kata-band h2 { margin: 0 0 6px; font-size: 15px; }
+.kata-status { margin: 0 0 12px; color: #73786a; font-size: 10px; line-height: 1.6; }
+.kata-band .button-primary { margin-top: 2px; }
+.kata-loading { color: #73786a; font-size: 11px; }
+.review-katas-link { margin: 10px 0 0; }
+.review-optin { max-width: 570px; margin: 30px 0 0; padding: 16px 18px; border: 1px solid rgba(128, 138, 90, .35); border-radius: 8px; }
+.review-optin h2 { margin: 0 0 10px; font-size: 13px; }
+.review-optin-control { display: flex; align-items: center; gap: 10px; font-size: 11px; cursor: pointer; }
+.review-optin-control input { width: 16px; height: 16px; margin: 0; accent-color: #94a951; }
+.review-optin-help { margin: 10px 0 0; color: #73786a; font-size: 10px; line-height: 1.6; }
+.review-optin-status { min-height: 16px; margin: 6px 0 0; color: #647346; font-size: 10px; }

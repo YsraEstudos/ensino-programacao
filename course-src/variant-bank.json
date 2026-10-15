@@ -1,0 +1,424 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.04.03.escolha-chamada-antes-const",
+      "conceptId": "functions.decomposition",
+      "sourceActivityId": "04.03",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Ao extrair helpers, o aluno precisa prever a ordem de avaliação, não só nomear funções: mover a chamada para cima de uma declaração const muda o resultado. Não é troca de nomes, porque a mesma decomposição funciona numa ordem e falha em outra.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida qual resultado o programa produz. Compare a linha da chamada com as linhas que criam somar e formatar, e lembre que um const só recebe valor quando a sua linha é executada.",
+      "code": "function resumoCarrinho(itens) {\n  return 'Total: ' + formatar(somar(itens));\n}\n\nconsole.log(resumoCarrinho([{ centavos: 1500 }, { centavos: 250 }]));\n\nconst somar = itens => itens.reduce((total, item) => total + item.centavos, 0);\nconst formatar = centavos => 'R$ ' + (centavos / 100).toFixed(2);\n",
+      "choices": [
+        "Imprime 'Total: R$ 17.50', porque funções declaradas com const são içadas com o seu valor.",
+        "Lança TypeError: somar is not a function, porque resumoCarrinho recebe um array.",
+        "Lança ReferenceError, porque as funções const só recebem valor depois que a sua linha é executada.",
+        "Imprime 'Total: NaN', porque as arrow functions ainda não existem e valem undefined."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "A chamada acontece antes da linha const somar. O binding existe, mas ainda está em zona morta temporal, e a leitura lança ReferenceError. Extrair helpers não muda a ordem de avaliação.",
+        "byChoice": {
+          "0": "Arrow functions atribuídas a const não são içadas com valor; a atribuição acontece na linha em que o const é executado.",
+          "1": "O erro não é de tipo: somar já existe como binding, mas ainda não foi inicializado. Por isso o erro é ReferenceError.",
+          "3": "Não há NaN: ler um const antes da inicialização interrompe a execução com erro."
+        }
+      }
+    },
+    {
+      "variantId": "var.04.03.predicao-texto-helpers",
+      "conceptId": "functions.decomposition",
+      "sourceActivityId": "04.03",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O aluno precisa seguir o contrato de cada helper: normalizar não decide o que é palavra, e contarPalavras define a separação por espaço. Prever entradas com espaços repetidos, vazias ou com tabulação exige ler essa responsabilidade, não só o nome da função.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada linha antes de executar. Siga o valor produzido por cada helper: normalizar, contarPalavras e resumir têm responsabilidades separadas.",
+      "code": "function normalizar(texto) {\n  return texto.trim().toLowerCase();\n}\n\nfunction contarPalavras(texto) {\n  return normalizar(texto).split(' ').filter(Boolean).length;\n}\n\nfunction resumir(texto) {\n  const n = contarPalavras(texto);\n  return n + (n === 1 ? ' palavra' : ' palavras');\n}\n\nconsole.log(resumir('  Olá   mundo  '));\nconsole.log(resumir('único'));\nconsole.log(resumir(''));\nconsole.log(resumir('a\\tb'));\n",
+      "expectedOutput": "2 palavras\n1 palavra\n0 palavras\n1 palavra"
+    },
+    {
+      "variantId": "var.04.03.mini-cotacao-entrega",
+      "conceptId": "functions.decomposition",
+      "sourceActivityId": "04.03",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Separar o cálculo em centavos da formatação em texto exige decidir o contrato de cada função. Não é renomeação: a função de cálculo não pode depender de vírgulas nem de textos, e a de formatação não pode decidir taxas.",
+      "contentVersion": 1,
+      "prompt": "Implemente em main.js duas funções com responsabilidades separadas. cotarEntrega(pedido) recebe { pesoGramas, distanciaKm } e devolve um inteiro em centavos, sem texto: taxa fixa de 800; mais 150 para cada quilo ou fração que passar do primeiro quilo (até 1000 g inclusive cabe no primeiro quilo); mais 40 para cada quilômetro ou fração que passar de 5 km. Valide antes de calcular: campo que não é número lança TypeError; número não finito ou negativo lança RangeError. descreverCotacao(centavos) apenas formata o texto, como em \"Entrega: R$ 12,50\". Não altere o pedido recebido.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function cotarEntrega(pedido) {\n  // Implemente a cotação conforme o enunciado.\n}\n\nexport function descreverCotacao(centavos) {\n  // Implemente somente a formatação do texto.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "function validarNumero(valor, nome) {\n  if (typeof valor !== 'number') throw new TypeError(nome + ' deve ser número');\n  if (!Number.isFinite(valor) || valor < 0) throw new RangeError(nome + ' deve ser finito e não negativo');\n}\n\nexport function cotarEntrega(pedido) {\n  const pesoGramas = pedido.pesoGramas;\n  const distanciaKm = pedido.distanciaKm;\n  validarNumero(pesoGramas, 'pesoGramas');\n  validarNumero(distanciaKm, 'distanciaKm');\n  const kgExtras = Math.max(0, Math.ceil(pesoGramas / 1000) - 1);\n  const kmExtras = Math.max(0, Math.ceil(distanciaKm - 5));\n  return 800 + kgExtras * 150 + kmExtras * 40;\n}\n\nexport function descreverCotacao(centavos) {\n  return 'Entrega: R$ ' + (centavos / 100).toFixed(2).replace('.', ',');\n}\n"
+      },
+      "tests": "import { cotarEntrega, descreverCotacao } from './main.js';\n\ndescribe('cotarEntrega', () => {\n  test('dentro do primeiro quilo e até 5 km cobra só a taxa fixa', () => {\n    expect(cotarEntrega({ pesoGramas: 500, distanciaKm: 3 })).toBe(800);\n    expect(cotarEntrega({ pesoGramas: 1000, distanciaKm: 5 })).toBe(800);\n  });\n  test('1001 g já cobra um quilo extra', () => {\n    expect(cotarEntrega({ pesoGramas: 1001, distanciaKm: 5 })).toBe(950);\n  });\n  test('3000 g cobram dois quilos extras, sem contar o primeiro', () => {\n    expect(cotarEntrega({ pesoGramas: 3000, distanciaKm: 5 })).toBe(1100);\n  });\n  test('quilômetros acima de 5 são cobrados por fração', () => {\n    expect(cotarEntrega({ pesoGramas: 500, distanciaKm: 7 })).toBe(880);\n    expect(cotarEntrega({ pesoGramas: 500, distanciaKm: 5.5 })).toBe(840);\n  });\n  test('combina peso e distância', () => {\n    expect(cotarEntrega({ pesoGramas: 2500, distanciaKm: 12 })).toBe(800 + 2 * 150 + 280);\n  });\n  test('campo que não é número lança TypeError', () => {\n    expect(() => cotarEntrega({ pesoGramas: '500', distanciaKm: 3 })).toThrow(TypeError);\n  });\n  test('valor negativo ou não finito lança RangeError', () => {\n    expect(() => cotarEntrega({ pesoGramas: -1, distanciaKm: 3 })).toThrow(RangeError);\n    expect(() => cotarEntrega({ pesoGramas: 500, distanciaKm: NaN })).toThrow(RangeError);\n  });\n  test('não altera o pedido recebido', () => {\n    const pedido = Object.freeze({ pesoGramas: 1500, distanciaKm: 6 });\n    expect(cotarEntrega(pedido)).toBe(800 + 150 + 40);\n    expect(pedido).toEqual({ pesoGramas: 1500, distanciaKm: 6 });\n  });\n});\n\ndescribe('descreverCotacao', () => {\n  test('formata centavos com vírgula decimal', () => {\n    expect(descreverCotacao(1250)).toBe('Entrega: R$ 12,50');\n    expect(descreverCotacao(800)).toBe('Entrega: R$ 8,00');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-cobranca-por-km",
+          "files": {
+            "main.js": "function validarNumero(valor, nome) {\n  if (typeof valor !== 'number') throw new TypeError(nome + ' deve ser número');\n  if (!Number.isFinite(valor) || valor < 0) throw new RangeError(nome + ' deve ser finito e não negativo');\n}\n\nexport function cotarEntrega(pedido) {\n  const pesoGramas = pedido.pesoGramas;\n  const distanciaKm = pedido.distanciaKm;\n  validarNumero(pesoGramas, 'pesoGramas');\n  validarNumero(distanciaKm, 'distanciaKm');\n  const kgExtras = Math.max(0, Math.ceil(pesoGramas / 1000) - 1);\n  const kmExtras = 0;\n  return 800 + kgExtras * 150 + kmExtras * 40;\n}\n\nexport function descreverCotacao(centavos) {\n  return 'Entrega: R$ ' + (centavos / 100).toFixed(2).replace('.', ',');\n}\n"
+          }
+        },
+        {
+          "id": "peso-arredondado-para-baixo",
+          "files": {
+            "main.js": "function validarNumero(valor, nome) {\n  if (typeof valor !== 'number') throw new TypeError(nome + ' deve ser número');\n  if (!Number.isFinite(valor) || valor < 0) throw new RangeError(nome + ' deve ser finito e não negativo');\n}\n\nexport function cotarEntrega(pedido) {\n  const pesoGramas = pedido.pesoGramas;\n  const distanciaKm = pedido.distanciaKm;\n  validarNumero(pesoGramas, 'pesoGramas');\n  validarNumero(distanciaKm, 'distanciaKm');\n  const kgExtras = Math.max(0, Math.floor(pesoGramas / 1000) - 1);\n  const kmExtras = Math.max(0, Math.ceil(distanciaKm - 5));\n  return 800 + kgExtras * 150 + kmExtras * 40;\n}\n\nexport function descreverCotacao(centavos) {\n  return 'Entrega: R$ ' + (centavos / 100).toFixed(2).replace('.', ',');\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "function validarNumero(valor, nome) {\n  if (false) throw new TypeError(nome + ' deve ser número');\n  if (false) throw new RangeError(nome + ' deve ser finito e não negativo');\n}\n\nexport function cotarEntrega(pedido) {\n  const pesoGramas = pedido.pesoGramas;\n  const distanciaKm = pedido.distanciaKm;\n  validarNumero(pesoGramas, 'pesoGramas');\n  validarNumero(distanciaKm, 'distanciaKm');\n  const kgExtras = Math.max(0, Math.ceil(pesoGramas / 1000) - 1);\n  const kmExtras = Math.max(0, Math.ceil(distanciaKm - 5));\n  return 800 + kgExtras * 150 + kmExtras * 40;\n}\n\nexport function descreverCotacao(centavos) {\n  return 'Entrega: R$ ' + (centavos / 100).toFixed(2).replace('.', ',');\n}\n"
+          }
+        },
+        {
+          "id": "formata-com-ponto",
+          "files": {
+            "main.js": "function validarNumero(valor, nome) {\n  if (typeof valor !== 'number') throw new TypeError(nome + ' deve ser número');\n  if (!Number.isFinite(valor) || valor < 0) throw new RangeError(nome + ' deve ser finito e não negativo');\n}\n\nexport function cotarEntrega(pedido) {\n  const pesoGramas = pedido.pesoGramas;\n  const distanciaKm = pedido.distanciaKm;\n  validarNumero(pesoGramas, 'pesoGramas');\n  validarNumero(distanciaKm, 'distanciaKm');\n  const kgExtras = Math.max(0, Math.ceil(pesoGramas / 1000) - 1);\n  const kmExtras = Math.max(0, Math.ceil(distanciaKm - 5));\n  return 800 + kgExtras * 150 + kmExtras * 40;\n}\n\nexport function descreverCotacao(centavos) {\n  return 'Entrega: R$ ' + (centavos / 100).toFixed(2);\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.04.11.escolha-erro-coercao",
+      "conceptId": "errors.throw",
+      "sourceActivityId": "04.11",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever qual entrada falha exige conhecer a coerção de Number, não só a sintaxe de throw. Escolher o erro certo para uma validação depende desse caminho real, e a variante usa idade em texto em vez de repetir a faixa de percentual.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida quais valores o programa imprime. Repare em que momento o erro é lançado e em que momento Number(texto) devolve um valor sem falhar.",
+      "code": "function lerIdade(texto) {\n  try {\n    const idade = Number(texto);\n    if (!Number.isInteger(idade)) throw new RangeError('idade inválida');\n    return idade;\n  } catch (erro) {\n    return erro.name;\n  }\n}\n\nconsole.log(lerIdade('42'), lerIdade('abc'), lerIdade(''));\n",
+      "choices": [
+        "42 abc RangeError",
+        "42 RangeError RangeError",
+        "42 RangeError 0",
+        "42 TypeError 0"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Number('abc') vira NaN, que não é inteiro; o RangeError é lançado e capturado. Number('') vira 0, um inteiro válido, sem exceção.",
+        "byChoice": {
+          "0": "O catch devolve erro.name, não o texto original da entrada; 'abc' nunca aparece no retorno.",
+          "1": "Number('') devolve 0, um inteiro válido, por isso nenhum erro é lançado nesse caminho.",
+          "3": "Nenhum TypeError é lançado: Number aceita texto e devolve NaN quando não converte. O erro criado no if é um RangeError."
+        }
+      }
+    },
+    {
+      "variantId": "var.04.11.predicao-validacao-porta",
+      "conceptId": "errors.throw",
+      "sourceActivityId": "04.11",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Um erro de domínio carrega identidade (name), campo e mensagem, e quem chama decide o tratamento pelo tipo. O aluno precisa prever os dois caminhos, tipo errado e faixa errada, a partir do que o construtor grava, o que não se resolve trocando nomes.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada iteração antes de executar. Repare no nome da classe de erro, no campo que ela carrega e na mensagem montada pelo construtor.",
+      "code": "class ErroDeValidacao extends Error {\n  constructor(campo, mensagem) {\n    super(campo + ': ' + mensagem);\n    this.name = 'ErroDeValidacao';\n    this.campo = campo;\n  }\n}\n\nfunction validarPorta(valor) {\n  if (typeof valor !== 'number') throw new ErroDeValidacao('porta', 'deve ser número');\n  if (valor < 1 || valor > 65535) throw new ErroDeValidacao('porta', 'fora da faixa: ' + valor);\n  return valor;\n}\n\nfor (const valor of [8080, '443', 0, 70000]) {\n  try {\n    console.log('ok', validarPorta(valor));\n  } catch (erro) {\n    console.log(erro.name, erro.campo, erro.message);\n  }\n}\n",
+      "expectedOutput": "ok 8080\nErroDeValidacao porta porta: deve ser número\nErroDeValidacao porta porta: fora da faixa: 0\nErroDeValidacao porta porta: fora da faixa: 70000"
+    },
+    {
+      "variantId": "var.04.11.correcao-reserva-estoque",
+      "conceptId": "errors.throw",
+      "sourceActivityId": "04.11",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Retornar um objeto de erro parece funcionar até que um chamador trate o retorno como saldo. O aluno precisa localizar a falha no ponto em que o erro é criado, não na regra de estoque, e aplicar a mesma correção a outra validação de entrada.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. Quantidades inválidas e estoque insuficiente devem interromper a execução com RangeError, sem devolver o erro como valor. Quando a reserva cabe no estoque, devolva o saldo restante. Antes de alterar, rode os casos e anote qual linha devolve em vez de lançar.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Reserva unidades: quantidade inteira positiva e estoque suficiente.\nexport function reservarUnidades(estoque, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade <= 0) {\n    return new RangeError('quantidade deve ser inteiro positivo');\n  }\n  if (quantidade > estoque) {\n    throw new RangeError('estoque insuficiente');\n  }\n  return estoque - quantidade;\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "// Reserva unidades: quantidade inteira positiva e estoque suficiente.\nexport function reservarUnidades(estoque, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade <= 0) {\n    throw new RangeError('quantidade deve ser inteiro positivo');\n  }\n  if (quantidade > estoque) {\n    throw new RangeError('estoque insuficiente');\n  }\n  return estoque - quantidade;\n}\n"
+      },
+      "tests": "import { reservarUnidades } from './main.js';\n\ndescribe('reservarUnidades', () => {\n  test('devolve o saldo restante quando a reserva cabe no estoque', () => {\n    expect(reservarUnidades(10, 3)).toBe(7);\n    expect(reservarUnidades(3, 3)).toBe(0);\n  });\n  test('quantidade zero, negativa ou fracionada lança RangeError', () => {\n    expect(() => reservarUnidades(10, 0)).toThrow(RangeError);\n    expect(() => reservarUnidades(10, -1)).toThrow(RangeError);\n    expect(() => reservarUnidades(10, 1.5)).toThrow(RangeError);\n  });\n  test('quantidade que não é número lança RangeError', () => {\n    expect(() => reservarUnidades(10, '2')).toThrow(RangeError);\n  });\n  test('estoque insuficiente lança RangeError com a mensagem do contrato', () => {\n    expect(() => reservarUnidades(2, 3)).toThrow('estoque insuficiente');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "retorna-o-erro",
+          "files": {
+            "main.js": "// Reserva unidades: quantidade inteira positiva e estoque suficiente.\nexport function reservarUnidades(estoque, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade <= 0) {\n    return new RangeError('quantidade deve ser inteiro positivo');\n  }\n  if (quantidade > estoque) {\n    throw new RangeError('estoque insuficiente');\n  }\n  return estoque - quantidade;\n}\n"
+          }
+        },
+        {
+          "id": "aceita-zero",
+          "files": {
+            "main.js": "// Reserva unidades: quantidade inteira positiva e estoque suficiente.\nexport function reservarUnidades(estoque, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade < 0) {\n    throw new RangeError('quantidade deve ser inteiro positivo');\n  }\n  if (quantidade > estoque) {\n    throw new RangeError('estoque insuficiente');\n  }\n  return estoque - quantidade;\n}\n"
+          }
+        },
+        {
+          "id": "sem-checagem-de-estoque",
+          "files": {
+            "main.js": "// Reserva unidades: quantidade inteira positiva e estoque suficiente.\nexport function reservarUnidades(estoque, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade <= 0) {\n    throw new RangeError('quantidade deve ser inteiro positivo');\n  }\n  if (false) {\n    throw new RangeError('estoque insuficiente');\n  }\n  return estoque - quantidade;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.05.07.escolha-mediana-mutacao",
+      "conceptId": "arrays.basic",
+      "sourceActivityId": "05.07",
+      "prerequisites": [
+        "05.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11",
+        "14"
+      ],
+      "transferDecision": "Calcular uma estatística exige decidir se a função pode alterar a entrada. O aluno prevê o efeito de sort sobre o array original e o índice do meio depois da ordenação, o que não se resolve trocando o nome de medianaDosPedidos.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o programa imprime. Pergunte primeiro se a função altera o array recebido e só depois calcule a posição do meio.",
+      "code": "function medianaDosPedidos(valores) {\n  const ordenados = valores.sort((a, b) => a - b);\n  return ordenados[Math.floor(ordenados.length / 2)];\n}\n\nconst entrada = [9, 2, 7];\nconsole.log(medianaDosPedidos(entrada), entrada[0]);\n",
+      "choices": [
+        "7 9",
+        "2 7",
+        "7 2",
+        "9 2"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "sort reordena o próprio array: valores e entrada são o mesmo objeto. A mediana é o índice 1 de [2, 7, 9], que é 7, e entrada[0] passa a valer 2.",
+        "byChoice": {
+          "0": "sort altera o array recebido; por isso entrada[0] já não vale 9 quando a linha de console é executada.",
+          "1": "A ordem das saídas segue a chamada: primeiro a mediana (7), depois entrada[0] (2).",
+          "3": "Nove é o primeiro valor original, mas a mediana é o elemento do meio do array ordenado, que é 7."
+        }
+      }
+    },
+    {
+      "variantId": "var.05.07.predicao-notas-splice",
+      "conceptId": "arrays.basic",
+      "sourceActivityId": "05.07",
+      "prerequisites": [
+        "05.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11",
+        "14"
+      ],
+      "transferDecision": "Filtrar, mapear e reduzir preservam a entrada, enquanto splice a altera. Prever length, último elemento e máximo depois da remoção exige seguir a mutação, não apenas o nome de cada operação.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Acompanhe quais operações apenas leem o array, quais o transformam em outro array e o que muda quando splice remove um elemento.",
+      "code": "const notas = [6.5, 8, 4.5, 9];\nconst aprovados = notas.filter(n => n >= 6);\nconst pesos = notas.map((n, i) => n * (i + 1));\nconst acumulado = notas.reduce((total, n) => total + n, 0);\nconsole.log(aprovados.length, pesos.join(','), acumulado / notas.length);\n\nconst posicao = notas.indexOf(8);\nnotas.splice(posicao, 1);\nconsole.log(notas.length, notas.at(-1), Math.max(...notas));\n",
+      "expectedOutput": "3 6.5,16,13.5,36 7\n3 9 9"
+    },
+    {
+      "variantId": "var.05.07.mini-medias-janela",
+      "conceptId": "arrays.basic",
+      "sourceActivityId": "05.07",
+      "prerequisites": [
+        "05.01"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11",
+        "14"
+      ],
+      "transferDecision": "Uma janela deslizante exige decidir onde cada intervalo de índices começa e termina e o que fazer quando a janela não cabe, sem alterar a entrada. Trocar nomes de variáveis ou calcular uma soma no lugar da média não resolve nenhuma dessas decisões.",
+      "contentVersion": 1,
+      "prompt": "Implemente medias(valores, janela) em main.js. Devolva um array com a média de cada janela contígua de tamanho janela, na ordem da lista: [2, 4, 6, 8] com janela 2 gera [3, 5, 7]. Se a janela não couber na lista, o resultado é vazio. Janela precisa ser inteiro maior que zero; caso contrário lance RangeError. Não altere a lista recebida, nem use sort sobre ela.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function medias(valores, janela) {\n  // Calcule as médias das janelas contíguas.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function medias(valores, janela) {\n  if (!Number.isInteger(janela) || janela < 1) {\n    throw new RangeError('janela deve ser inteiro maior que zero');\n  }\n  const resultado = [];\n  for (let inicio = 0; inicio + janela <= valores.length; inicio++) {\n    let soma = 0;\n    for (let i = inicio; i < inicio + janela; i++) soma += valores[i];\n    resultado.push(soma / janela);\n  }\n  return resultado;\n}\n"
+      },
+      "tests": "import { medias } from './main.js';\n\ndescribe('medias de janelas contíguas', () => {\n  test('exemplo do enunciado', () => {\n    expect(medias([2, 4, 6, 8], 2)).toEqual([3, 5, 7]);\n  });\n  test('janela do tamanho da lista devolve uma média', () => {\n    expect(medias([1, 2, 4], 3)).toEqual([7 / 3]);\n  });\n  test('janela maior que a lista devolve lista vazia', () => {\n    expect(medias([1, 2, 4], 4)).toEqual([]);\n    expect(medias([], 2)).toEqual([]);\n  });\n  test('janela de tamanho um devolve os próprios valores', () => {\n    expect(medias([5, -2, 0], 1)).toEqual([5, -2, 0]);\n  });\n});\n\ndescribe('validação e entrada', () => {\n  test('janela inválida lança RangeError', () => {\n    expect(() => medias([1, 2], 0)).toThrow(RangeError);\n    expect(() => medias([1, 2], 1.5)).toThrow(RangeError);\n    expect(() => medias([1, 2], '2')).toThrow(RangeError);\n  });\n  test('não altera a lista recebida', () => {\n    const entrada = Object.freeze([3, 1, 2]);\n    expect(medias(entrada, 2)).toEqual([2, 1.5]);\n    expect(entrada).toEqual([3, 1, 2]);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "inclui-janelas-parciais",
+          "files": {
+            "main.js": "export function medias(valores, janela) {\n  if (!Number.isInteger(janela) || janela < 1) {\n    throw new RangeError('janela deve ser inteiro maior que zero');\n  }\n  const resultado = [];\n  for (let inicio = 0; inicio < valores.length; inicio++) {\n    let soma = 0;\n    for (let i = inicio; i < inicio + janela; i++) soma += valores[i];\n    resultado.push(soma / janela);\n  }\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "divide-pelo-tamanho-da-lista",
+          "files": {
+            "main.js": "export function medias(valores, janela) {\n  if (!Number.isInteger(janela) || janela < 1) {\n    throw new RangeError('janela deve ser inteiro maior que zero');\n  }\n  const resultado = [];\n  for (let inicio = 0; inicio + janela <= valores.length; inicio++) {\n    let soma = 0;\n    for (let i = inicio; i < inicio + janela; i++) soma += valores[i];\n    resultado.push(soma / valores.length);\n  }\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export function medias(valores, janela) {\n  if (false) {\n    throw new RangeError('janela deve ser inteiro maior que zero');\n  }\n  const resultado = [];\n  for (let inicio = 0; inicio + janela <= valores.length; inicio++) {\n    let soma = 0;\n    for (let i = inicio; i < inicio + janela; i++) soma += valores[i];\n    resultado.push(soma / janela);\n  }\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "altera-a-entrada",
+          "files": {
+            "main.js": "export function medias(valores, janela) {\n  if (!Number.isInteger(janela) || janela < 1) {\n    throw new RangeError('janela deve ser inteiro maior que zero');\n  }\n  valores.reverse(); const resultado = [];\n  for (let inicio = 0; inicio + janela <= valores.length; inicio++) {\n    let soma = 0;\n    for (let i = inicio; i < inicio + janela; i++) soma += valores[i];\n    resultado.push(soma / janela);\n  }\n  return resultado;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.09.03.escolha-limitador-tentativas",
+      "conceptId": "closures.basic",
+      "sourceActivityId": "09.03",
+      "prerequisites": [
+        "09.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "11",
+        "14",
+        "18"
+      ],
+      "transferDecision": "O estado privado de uma fábrica pertence a cada instância da closure. O aluno precisa prever dois limitadores com contadores independentes, o que não se resolve trocando o nome da fábrica nem o da função devolvida.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra. Pergunte quantas variáveis usos existem e qual função as enxerga em cada chamada.",
+      "code": "function criarLimitador(maximo) {\n  let usos = 0;\n  return () => {\n    if (usos >= maximo) return 'bloqueado';\n    usos += 1;\n    return 'permitido';\n  };\n}\n\nconst entrar = criarLimitador(2);\nconst exportar = criarLimitador(1);\nconsole.log(entrar(), entrar(), entrar(), exportar(), exportar());\n",
+      "choices": [
+        "permitido permitido permitido permitido permitido",
+        "permitido permitido bloqueado permitido bloqueado",
+        "permitido permitido bloqueado bloqueado bloqueado",
+        "Erro: usos is not defined"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Cada chamada de criarLimitador cria um usos próprio, capturado pela função devolvida. entrar bloqueia na terceira chamada; exportar, com limite 1, bloqueia na segunda.",
+        "byChoice": {
+          "0": "usos é criado uma vez por fábrica. Se fosse recriado a cada chamada da função devolvida, o bloqueio nunca aconteceria.",
+          "2": "exportar tem contador próprio: a primeira chamada dele ainda é permitida, mesmo depois de entrar ter bloqueado.",
+          "3": "usos é declarado no escopo de criarLimitador e a função devolvida o captura; não há ReferenceError."
+        }
+      }
+    },
+    {
+      "variantId": "var.09.03.predicao-idioma-captura",
+      "conceptId": "closures.basic",
+      "sourceActivityId": "09.03",
+      "prerequisites": [
+        "09.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "11",
+        "14",
+        "18"
+      ],
+      "transferDecision": "Separar se a função lê um binding vivo ou um valor copiado para o parâmetro é o que distingue closure de cópia. O aluno precisa prever a saída a partir de onde o valor foi capturado, e a mesma forma sintática muda de resultado conforme esse ponto.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada saída antes de executar. Separe o que a função lê no momento da chamada do que já foi copiado para um parâmetro quando a fábrica foi criada.",
+      "code": "const mensagens = { pt: 'Bem-vindo', en: 'Welcome' };\nlet idioma = 'pt';\n\nconst traduzir = () => mensagens[idioma];\nidioma = 'en';\nconsole.log(traduzir());\n\nfunction criarTraducao(lingua) {\n  return () => mensagens[lingua];\n}\n\nconst traduzirPt = criarTraducao(idioma);\nidioma = 'pt';\nconsole.log(traduzirPt(), traduzir());\n",
+      "expectedOutput": "Welcome\nWelcome Bem-vindo"
+    },
+    {
+      "variantId": "var.09.03.correcao-gerador-ids",
+      "conceptId": "closures.basic",
+      "sourceActivityId": "09.03",
+      "prerequisites": [
+        "09.01",
+        "09.02"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "11",
+        "14",
+        "18"
+      ],
+      "transferDecision": "Estado criado por fábrica pertence à instância. Movê-lo para o módulo parece simplificar, mas compartilha o número entre todos os geradores. O defeito só aparece com mais de uma instância, então o aluno precisa raciocinar sobre o escopo, não sobre a sintaxe.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que cada fábrica de IDs tenha o seu próprio contador. Ajuste apenas o lugar em que o estado é declarado; o formato prefixo-número deve permanecer. Antes de alterar, rode a suíte e anote quais geradores compartilham o mesmo número.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Cada gerador deveria contar sozinho; o contador atual está compartilhado entre todos.\nlet proximo = 1;\n\nexport function criarGeradorDeIds(prefixo) {\n  return () => {\n    const id = prefixo + '-' + proximo;\n    proximo += 1;\n    return id;\n  };\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function criarGeradorDeIds(prefixo) {\n  let proximo = 1;\n  return () => {\n    const id = prefixo + '-' + proximo;\n    proximo += 1;\n    return id;\n  };\n}\n"
+      },
+      "tests": "import { criarGeradorDeIds } from './main.js';\n\ndescribe('criarGeradorDeIds', () => {\n  test('gera identificadores sequenciais com o prefixo', () => {\n    const gerar = criarGeradorDeIds('loja');\n    expect(gerar()).toBe('loja-1');\n    expect(gerar()).toBe('loja-2');\n  });\n  test('geradores diferentes não compartilham o contador', () => {\n    const lojas = criarGeradorDeIds('loja');\n    lojas();\n    lojas();\n    const web = criarGeradorDeIds('web');\n    expect(web()).toBe('web-1');\n    expect(lojas()).toBe('loja-3');\n  });\n  test('o prefixo de cada gerador é preservado', () => {\n    const pedidos = criarGeradorDeIds('PED');\n    const notas = criarGeradorDeIds('NF');\n    expect(pedidos()).toBe('PED-1');\n    expect(notas()).toBe('NF-1');\n    expect(pedidos()).toBe('PED-2');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "contador-compartilhado",
+          "files": {
+            "main.js": "let proximo = 1;\nexport function criarGeradorDeIds(prefixo) {\n  return () => {\n    const id = prefixo + '-' + proximo;\n    proximo += 1;\n    return id;\n  };\n}\n"
+          }
+        },
+        {
+          "id": "comeca-em-zero",
+          "files": {
+            "main.js": "export function criarGeradorDeIds(prefixo) {\n  let proximo = 0;\n  return () => {\n    const id = prefixo + '-' + proximo;\n    proximo += 1;\n    return id;\n  };\n}\n"
+          }
+        },
+        {
+          "id": "ignora-prefixo",
+          "files": {
+            "main.js": "export function criarGeradorDeIds(prefixo) {\n  let proximo = 1;\n  return () => {\n    const id = String(proximo);\n    proximo += 1;\n    return id;\n  };\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,652 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.14.18.escolha-postinstall-npm-ci",
+      "conceptId": "npm.safety",
+      "sourceActivityId": "14.18",
+      "prerequisites": ["14.03", "14.11"],
+      "format": "choice-predict",
+      "environment": "node-local",
+      "evaluator": "choice",
+      "bands": ["18"],
+      "transferDecision": "Avaliar uma instalação exige separar o que o lockfile garante, a reprodução exata de versões, do que ele não garante: a execução de scripts de ciclo. Trocar o nome de uma dependência ou de um script não altera essa fronteira de risco.",
+      "contentVersion": 1,
+      "prompt": "Antes de rodar qualquer comando, decida o que acontece quando este projeto é instalado com npm ci. O package-lock.json registra utilitario-datas 2.4.3 e grafico-simples 1.8.2. Compare essas versões com os intervalos do package.json e lembre quais scripts de ciclo rodam na instalação.",
+      "code": "{\n  \"name\": \"painel-notas\",\n  \"scripts\": {\n    \"test\": \"vitest run\",\n    \"postinstall\": \"node scripts/preparar.js\"\n  },\n  \"dependencies\": {\n    \"utilitario-datas\": \"^2.4.0\",\n    \"grafico-simples\": \"~1.8.2\"\n  }\n}\n",
+      "choices": [
+        "npm ci resolve ^2.4.0 e ~1.8.2 de novo e grava versões mais novas no lockfile antes de instalar.",
+        "npm ci instala utilitario-datas 2.4.3 e grafico-simples 1.8.2 exatamente como o lockfile, e executa postinstall, que pode rodar código durante a instalação.",
+        "npm ci ignora o lockfile e não executa scripts de ciclo, porque só npm install roda postinstall.",
+        "npm ci só executa postinstall quando npm audit aponta vulnerabilidade, porque o audit dispara os scripts."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "npm ci usa as versões do lockfile e não as reescreve. O postinstall declarado no package.json continua sendo código executado durante a instalação: o lockfile reduz a variação de versões, mas não torna scripts seguros.",
+        "byChoice": {
+          "0": "npm ci não resolve intervalos de novo nem grava o lockfile. Ele instala exatamente o que está registrado e falha se package.json e lockfile divergirem.",
+          "2": "Os scripts de ciclo do pacote raiz também rodam na instalação, e npm ci não os desativa. Lockfile e scripts são questões separadas.",
+          "3": "npm audit apenas gera um relatório de advisories. Ele não dispara nem controla scripts de instalação."
+        }
+      }
+    },
+    {
+      "variantId": "var.18.03.escolha-tipo-acesso-chave",
+      "conceptId": "ts.keyof_indexed_access",
+      "sourceActivityId": "18.03",
+      "prerequisites": ["17.01", "18.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Usar keyof com acesso indexado exige prever o tipo exato de cada chave, não apenas o nome da função genérica. Renomear T ou K não muda a relação entre chave e tipo que decide quais chaves são aceitas.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida se o checker TypeScript reporta algum erro, em qual linha, e qual é o tipo de x. Repare no tipo que K aceita e no tipo que T[K] devolve.",
+      "code": "type Registro = { n: number; s: string };\n\nfunction get<T, K extends keyof T>(obj: T, chave: K): T[K] {\n  return obj[chave];\n}\n\nconst r: Registro = { n: 2, s: 'a' };\nconst x = get(r, 'n');\nconst y = get(r, 'x');\n",
+      "choices": [
+        "Compila sem erros; x é string | number, porque get aceita qualquer propriedade de Registro.",
+        "Compila sem erros; x é number e y é any, porque chaves desconhecidas passam a any.",
+        "Erro apenas na chamada get(r, 'x'), porque 'x' não é chave de Registro; x é number.",
+        "Erro na declaração de get, porque T[K] não pode ser tipo de retorno; x e y ficam unknown."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "K é restrito a keyof T, então 'x' é recusado na chamada. Com 'n', T[K] resolve para number, e a função genérica não precisa de cast.",
+        "byChoice": {
+          "0": "Cada chave tem um tipo próprio: keyof limita K aos nomes existentes, e o retorno T[K] não é a união de todas as propriedades.",
+          "1": "any não aparece aqui: chaves fora de keyof T são erro de compilação, não any.",
+          "3": "T[K] é um tipo de acesso indexado válido. O problema é só a chave 'x', que não existe em Registro."
+        }
+      }
+    },
+    {
+      "variantId": "var.18.03.escolha-chave-alargada",
+      "conceptId": "ts.keyof_indexed_access",
+      "sourceActivityId": "18.03",
+      "prerequisites": ["17.01", "18.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Prever o tipo de config[chave] depende de saber que a chave é restrita e que o valor é alargado quando o objeto não é const. Mudar o nome da variável ou da função não revela esse comportamento de tipo.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida qual tipo o compilador atribui a m e a t, e se a última chamada compila. Lembre que as propriedades de um objeto sem as const são mutáveis e que keyof vem de typeof config.",
+      "code": "const config = { modo: 'escuro', tamanho: 12 };\ntype ChaveConfig = keyof typeof config;\n\nfunction ler<K extends ChaveConfig>(chave: K) {\n  return config[chave];\n}\n\nconst m = ler('modo');\nconst t = ler('tamanho');\nler('cor');\n",
+      "choices": [
+        "m é string, t é number, e ler('cor') é erro de compilação, porque 'cor' não pertence a keyof typeof config.",
+        "m e t são string | number, porque config é um objeto sem tipo fixo, e ler('cor') compila.",
+        "m é 'escuro' e t é 12, porque keyof preserva os valores literais do objeto, e ler('cor') é erro.",
+        "m e t são any, e ler('cor') compila, porque chaves inexistentes viram undefined em tempo de execução."
+      ],
+      "answer": 0,
+      "feedback": {
+        "correct": "config[chave] devolve o tipo da propriedade indicada por K. Como as propriedades não são readonly, 'escuro' é alargado para string e 12 para number, e 'cor' é recusada antes de qualquer execução.",
+        "byChoice": {
+          "1": "Cada chamada usa só a propriedade pedida por K: m vem de modo e t de tamanho, então os tipos não se misturam.",
+          "2": "Sem as const, o valor literal 'escuro' não é preservado: a propriedade é alargada para string, e 12 para number.",
+          "3": "keyof restringe as chaves na compilação. 'cor' é recusada pelo checker, não vira undefined em tempo de execução."
+        }
+      }
+    },
+    {
+      "variantId": "var.18.06.escolha-satisfies-excesso",
+      "conceptId": "ts.satisfies",
+      "sourceActivityId": "18.06",
+      "prerequisites": ["17.09", "18.05"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Escolher entre anotação e satisfies exige prever se o tipo inferido sobrevive e se o excesso de propriedades é checado. Renomear rotas ou Rota não altera essa diferença de contrato.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida o que o compilador aceita em cada declaração. Verifique qual é o tipo de caminho e se o objeto de erroDeChave tem alguma chave fora de Rota.",
+      "code": "type Rota = 'home' | 'sobre';\n\nconst rotas = {\n  home: '/',\n  sobre: '/sobre',\n} satisfies Record<Rota, string>;\n\nconst caminho = rotas.home;\n\nconst erroDeChave = {\n  home: '/',\n  sobre: '/sobre',\n  contato: '/contato',\n} satisfies Record<Rota, string>;\n",
+      "choices": [
+        "rotas compila e caminho é string; erroDeChave falha, porque o objeto tem a chave 'contato', que não existe em Rota.",
+        "rotas compila e caminho é '/', porque satisfies preserva literais; erroDeChave também compila, pois a chave extra é ignorada.",
+        "rotas falha, porque satisfies não aceita objetos literais; erroDeChave compila.",
+        "Ambos compilam; caminho é '/' e erroDeChave passa a ter tipo Record<Rota, string>, o que apaga a chave contato."
+      ],
+      "answer": 0,
+      "feedback": {
+        "correct": "satisfies confere o valor contra o tipo sem substituí-lo: o tipo continua o da expressão, e o excesso de propriedades em literal de objeto é recusado. Por isso caminho é string, não '/'.",
+        "byChoice": {
+          "1": "satisfies não transforma strings em literais por si só: caminho é alargado para string. Além disso, chave extra em literal de objeto é recusada.",
+          "2": "satisfies aceita objetos literais. O que ele recusa é valor que não casa com o tipo, como uma chave a mais.",
+          "3": "Uma anotação substituiria o tipo, mas satisfies não o substitui. O tipo de erroDeChave continua sendo o da expressão, e a chave extra é recusada."
+        }
+      }
+    },
+    {
+      "variantId": "var.18.09.escolha-import-tipo-apagado",
+      "conceptId": "ts.import_type",
+      "sourceActivityId": "18.09",
+      "prerequisites": ["14.10", "15.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Entender import type exige separar o que existe só para o typecheck do que Node de fato carrega. Trocar o nome de Usuario ou de gerarId não altera essa fronteira entre tipo e módulo emitido.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida qual linha de importação sobra no JavaScript emitido. Considere o modo verbatimModuleSyntax e o fato de que Usuario é usado apenas como tipo.",
+      "code": "// modelo.ts\nimport type { Usuario } from './usuario.js';\nimport { gerarId } from './ids.js';\n\nexport function criarUsuario(nome: string): Usuario {\n  return { id: gerarId(), nome };\n}\n",
+      "choices": [
+        "Uma importação de Usuario como valor, e Node carrega usuario.js para conferir o tipo em tempo de execução.",
+        "Nada: a linha some do JavaScript emitido, então usuario.js não é carregado, e o tipo existe só para o typecheck.",
+        "Uma linha import './usuario.js' sem nomes, que mantém o efeito colateral do módulo, mas não o símbolo Usuario.",
+        "Erro de compilação, porque import type não pode apontar para um caminho relativo em módulos ESM."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "import type é apagado na emissão. Como nenhum valor de usuario.js é usado, o módulo não entra no grafo de execução, e o checker continua verificando Usuario.",
+        "byChoice": {
+          "0": "Um import type nunca vira valor. Em tempo de execução, Node não tem Usuario para conferir.",
+          "2": "Só uma importação escrita como import './usuario.js' manteria o módulo. A forma import type é apagada por inteiro.",
+          "3": "Caminhos relativos são válidos em ESM quando têm extensão. O problema aqui não é o caminho."
+        }
+      }
+    },
+    {
+      "variantId": "var.18.09.escolha-import-misto-valor",
+      "conceptId": "ts.import_type",
+      "sourceActivityId": "18.09",
+      "prerequisites": ["14.10", "15.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Prever o que sobra de um import misto exige distinguir o nome usado como valor do nome usado só como tipo. Trocar o nome de Usuario ou de Papel não muda essa distinção no JavaScript emitido.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida o que o JavaScript emitido de main.ts imprime. Repare em quais nomes da importação são valores e quais são apenas tipos.",
+      "code": "// usuario.ts\nexport class Usuario {\n  constructor(public nome: string) {}\n}\nexport type Papel = 'admin' | 'leitor';\n\n// main.ts\nimport { Usuario, type Papel } from './usuario.js';\nconst p: Papel = 'admin';\nconsole.log(new Usuario('Ana').nome, p);\n",
+      "choices": [
+        "Lança erro em tempo de execução ao ler Papel, porque o nome é importado como valor e não existe no módulo emitido.",
+        "Imprime 'Ana admin': Usuario é importado como valor, a cláusula type Papel é apagada, e p é a string 'admin'.",
+        "Lança erro em tempo de execução, Usuario is not defined, porque a importação inteira foi apagada junto com o type.",
+        "Erro de compilação, porque uma importação não pode misturar classe e type na mesma cláusula."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "A cláusula type Papel é apagada, e Usuario continua como importação de valor. Em tempo de execução, a classe cria o nome 'Ana' e p é a string 'admin'.",
+        "byChoice": {
+          "0": "Papel não é lido em tempo de execução: como a cláusula inline type foi apagada, o nome nunca vira valor.",
+          "2": "Só a cláusula marcada com type é apagada. Usuario, sem type, continua sendo importado como valor.",
+          "3": "Importações mistas são válidas no TypeScript: cada nome pode ser marcado individualmente como type."
+        }
+      }
+    },
+    {
+      "variantId": "var.19.09.escolha-marca-erro-tipo",
+      "conceptId": "ts.branding",
+      "sourceActivityId": "19.09",
+      "prerequisites": ["18.07", "19.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Marcar tipos com uma propriedade de tipo impede trocar identificadores de domínios diferentes, e o aluno precisa prever onde o checker recusa, não onde o código quebraria. Mudar os nomes de UserId ou de buscarUsuario não altera essa regra.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida quais chamadas o checker recusa. Compare o tipo de cada argumento com o que o tipo marcado exige.",
+      "code": "type Brand<T, M extends string> = T & { readonly __marca: M };\ntype UserId = Brand<string, 'UserId'>;\ntype OrderId = Brand<string, 'OrderId'>;\n\nfunction buscarUsuario(id: UserId): string {\n  return 'usuario ' + id;\n}\n\nconst pedido = 'o1' as OrderId;\nbuscarUsuario('u1');\nbuscarUsuario(pedido);\n",
+      "choices": [
+        "Nenhuma: UserId e OrderId são string por baixo, então o checker não diferencia os dois identificadores.",
+        "Duas: buscarUsuario('u1') falta a marca __marca de UserId, e buscarUsuario(pedido) recebe um OrderId, que não é UserId.",
+        "Só buscarUsuario('u1'), porque literais não são aceitos; pedido compila, porque o cast as OrderId aceita qualquer string.",
+        "Nenhuma em compilação: a marca só existe em tempo de execução, então o erro aparece quando buscarUsuario recebe o prefixo errado."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "A marca é uma propriedade só de tipo: um literal 'u1' não a tem, e um OrderId traz a marca 'OrderId', incompatível com UserId. Ambas as recusas acontecem no checker, antes da execução.",
+        "byChoice": {
+          "0": "Se fosse só string, a marca não existiria. A propriedade __marca é o que separa os dois tipos.",
+          "2": "O cast as OrderId vale só no ponto em que é escrito. Ele não torna o valor um UserId quando ele é passado para buscarUsuario.",
+          "3": "A marca não existe em tempo de execução, mas o checker a usa antes da execução. Por isso o erro é de compilação."
+        }
+      }
+    },
+    {
+      "variantId": "var.19.09.escolha-construtor-garante-marca",
+      "conceptId": "ts.branding",
+      "sourceActivityId": "19.09",
+      "prerequisites": ["18.07", "19.01"],
+      "format": "choice-predict",
+      "environment": "typescript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Um tipo marcado só é confiável quando a validação acontece no construtor, o que exige distinguir garantia de tipo e garantia de execução. Renomear criarUserId ou UserId não altera essa diferença.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida o que o programa faz em cada linha e se a marca de UserId é garantida em b. Compare o caminho pelo construtor com o cast direto.",
+      "code": "type UserId = string & { readonly __marca: 'UserId' };\n\nfunction criarUserId(valor: string): UserId {\n  if (!/^u\\d+$/.test(valor)) throw new RangeError('UserId inválido: ' + valor);\n  return valor as UserId;\n}\n\nconst a = criarUserId('u42');\nconst b = 'x9' as UserId;\n",
+      "choices": [
+        "criarUserId('x') lança RangeError; 'x9' as UserId compila sem passar pela validação, então a garantia depende de usar sempre o construtor.",
+        "Ambas as chamadas passam pela validação, porque o TypeScript insere a regex automaticamente em todo cast com as.",
+        "Como UserId é só tipo, a marca existe em tempo de execução e impede criar um UserId sem o construtor, mesmo com cast.",
+        "b lança RangeError na linha de declaração, porque 'x9' não passa na regex de UserId."
+      ],
+      "answer": 0,
+      "feedback": {
+        "correct": "criarUserId é o único caminho que valida o formato. O cast as UserId não executa código, então 'x9' vira UserId sem validação e a garantia depende de sempre usar o construtor.",
+        "byChoice": {
+          "1": "O cast com as não executa código: é só uma instrução ao checker, então nenhuma regex roda no ponto do cast.",
+          "2": "A marca é só de tipo. Em tempo de execução, o valor é a string pura, e quem protege é o construtor, não a declaração de tipo.",
+          "3": "A linha de b não chama criarUserId, então nenhuma regex é executada nela."
+        }
+      }
+    },
+    {
+      "variantId": "var.20.01.escolha-for-await-return",
+      "conceptId": "iterators.async",
+      "sourceActivityId": "20.01",
+      "prerequisites": ["12.13"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Um gerador assíncrono entrega valores um a um, e prever o que o console mostra exige separar yield do valor final de return. Renomear contar ou valores não altera essa regra de entrega.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra. Repare em quantos valores o for await recebe do gerador e no que acontece com o valor devolvido por return.",
+      "code": "async function* contar() {\n  yield 1;\n  yield 2;\n  return 3;\n}\n\nasync function principal() {\n  const valores = [];\n  for await (const n of contar()) valores.push(n);\n  console.log(valores.join(','));\n}\n\nprincipal();\n",
+      "choices": [
+        "1,2,3",
+        "1,2",
+        "3",
+        "Nada é impresso, porque for await não aceita async generators."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "for await entrega cada yield ao corpo e para quando done é verdadeiro. O valor de return acompanha o resultado final, mas não é uma iteração e não entra em valores.",
+        "byChoice": {
+          "0": "O valor de return vem no resultado com done verdadeiro, e for await não o entrega ao corpo como uma iteração.",
+          "2": "valores é preenchido pelos yields; o return não substitui a lista, então o console não mostra apenas 3.",
+          "3": "for await aceita async generators. Consumir valores um a um é exatamente o protocolo assíncrono que ele usa."
+        }
+      }
+    },
+    {
+      "variantId": "var.20.03.correcao-intervalo-cursor",
+      "conceptId": "iterators.async",
+      "sourceActivityId": "20.03",
+      "prerequisites": ["12.13", "20.02"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Um iterador assíncrono precisa de estado próprio por chamada de Symbol.asyncIterator. Mover o cursor para fora do iterador parece simplificar, mas faz iterações diferentes compartilharem a posição. O defeito só aparece com dois iteradores ou com uma segunda leitura, então o aluno precisa raciocinar sobre o escopo do estado.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que criarIntervaloAsync(inicio, fim) produza de inicio até fim, inclusive, com for await. Cada iterador deve ter o próprio cursor e um intervalo pode ser percorrido de novo. Antes de alterar, rode a suíte e anote qual linha impede a inclusão do fim e qual linha compartilha a posição entre iteradores.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Intervalo assíncrono: produz inicio..fim, com cursor próprio para cada iterador.\nlet cursor = 0;\n\nexport function criarIntervaloAsync(inicio, fim) {\n  cursor = inicio;\n  return {\n    [Symbol.asyncIterator]() {\n      return {\n        async next() {\n          if (cursor >= fim) return { value: undefined, done: true };\n          const valor = cursor;\n          cursor += 1;\n          return { value: valor, done: false };\n        },\n      };\n    },\n  };\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "// Intervalo assíncrono: produz inicio..fim, com cursor próprio para cada iterador.\nexport function criarIntervaloAsync(inicio, fim) {\n  return {\n    [Symbol.asyncIterator]() {\n      let cursor = inicio;\n      return {\n        async next() {\n          if (cursor > fim) return { value: undefined, done: true };\n          const valor = cursor;\n          cursor += 1;\n          return { value: valor, done: false };\n        },\n      };\n    },\n  };\n}\n"
+      },
+      "tests": "import { criarIntervaloAsync } from './main.js';\n\nasync function coletar(iteravel) {\n  const valores = [];\n  for await (const valor of iteravel) valores.push(valor);\n  return valores;\n}\n\ndescribe('criarIntervaloAsync', () => {\n  test('produz de inicio até fim, inclusive', async () => {\n    expect(await coletar(criarIntervaloAsync(2, 4))).toEqual([2, 3, 4]);\n  });\n  test('intervalo vazio quando inicio é maior que fim', async () => {\n    expect(await coletar(criarIntervaloAsync(5, 4))).toEqual([]);\n  });\n  test('cada iterador mantém o próprio cursor', async () => {\n    const intervalo = criarIntervaloAsync(1, 3);\n    const primeiro = intervalo[Symbol.asyncIterator]();\n    const segundo = intervalo[Symbol.asyncIterator]();\n    expect((await primeiro.next()).value).toBe(1);\n    expect((await primeiro.next()).value).toBe(2);\n    expect((await segundo.next()).value).toBe(1);\n  });\n  test('percorrer o mesmo intervalo de novo recomeça do inicio', async () => {\n    const intervalo = criarIntervaloAsync(1, 2);\n    expect(await coletar(intervalo)).toEqual([1, 2]);\n    expect(await coletar(intervalo)).toEqual([1, 2]);\n  });\n  test('o resultado final tem done verdadeiro e sem valor', async () => {\n    const iterador = criarIntervaloAsync(1, 1)[Symbol.asyncIterator]();\n    expect((await iterador.next()).value).toBe(1);\n    const fim = await iterador.next();\n    expect(fim.done).toBe(true);\n    expect(fim.value).toBeUndefined();\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "cursor-fora-do-iterador",
+          "files": {
+            "main.js": "// Intervalo assíncrono: produz inicio..fim, com cursor próprio para cada iterador.\nexport function criarIntervaloAsync(inicio, fim) {\n  let cursor = inicio;\n  return {\n    [Symbol.asyncIterator]() {\n      return {\n        async next() {\n          if (cursor > fim) return { value: undefined, done: true };\n          const valor = cursor;\n          cursor += 1;\n          return { value: valor, done: false };\n        },\n      };\n    },\n  };\n}\n"
+          }
+        },
+        {
+          "id": "fim-exclusivo",
+          "files": {
+            "main.js": "// Intervalo assíncrono: produz inicio..fim, com cursor próprio para cada iterador.\nexport function criarIntervaloAsync(inicio, fim) {\n  return {\n    [Symbol.asyncIterator]() {\n      let cursor = inicio;\n      return {\n        async next() {\n          if (cursor >= fim) return { value: undefined, done: true };\n          const valor = cursor;\n          cursor += 1;\n          return { value: valor, done: false };\n        },\n      };\n    },\n  };\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.20.08.microimpl-paginar-preguicoso",
+      "conceptId": "iterators.async",
+      "sourceActivityId": "20.08",
+      "prerequisites": ["12.13", "20.07"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Paginação preguiçosa exige decidir quando cada página é pedida e o que acontece quando o consumidor para cedo. Juntar todas as páginas antes de entregar o primeiro item muda o número de pedidos, e isso não se resolve trocando o nome de paginar.",
+      "contentVersion": 1,
+      "prompt": "Implemente paginar(buscarPagina) em main.js como async generator. buscarPagina(numero) devolve uma promessa de { itens, temMais }, e a primeira página é a 1. Cada página deve ser pedida só depois que o consumidor recebeu todos os itens da anterior; se o consumidor parar antes, nenhuma página nova é pedida. Quando temMais for falso, encerre. Se buscarPagina não for função, lance TypeError ao primeiro next. Erros da busca devem chegar ao consumidor sem serem engolidos.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export async function* paginar(buscarPagina) {\n  // Implemente a paginação preguiçosa conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function* paginar(buscarPagina) {\n  if (typeof buscarPagina !== 'function') throw new TypeError('buscarPagina deve ser função');\n  let numero = 1;\n  while (true) {\n    const pagina = await buscarPagina(numero);\n    for (const item of pagina.itens) yield item;\n    if (!pagina.temMais) return;\n    numero += 1;\n  }\n}\n"
+      },
+      "tests": "import { paginar } from './main.js';\n\nconst paginas = {\n  1: { itens: ['a', 'b'], temMais: true },\n  2: { itens: ['c'], temMais: false },\n};\n\nasync function coletar(gerador) {\n  const valores = [];\n  for await (const item of gerador) valores.push(item);\n  return valores;\n}\n\ndescribe('paginar', () => {\n  test('junta os itens de todas as páginas na ordem', async () => {\n    expect(await coletar(paginar(async n => paginas[n]))).toEqual(['a', 'b', 'c']);\n  });\n  test('página vazia com temMais verdadeiro não encerra a paginação', async () => {\n    const comVazia = { 1: { itens: [], temMais: true }, 2: { itens: ['x'], temMais: false } };\n    expect(await coletar(paginar(async n => comVazia[n]))).toEqual(['x']);\n  });\n  test('não pede a página seguinte antes de consumir a atual', async () => {\n    let pedidos = 0;\n    const buscar = async n => {\n      pedidos += 1;\n      return paginas[n];\n    };\n    const gerador = paginar(buscar)[Symbol.asyncIterator]();\n    expect((await gerador.next()).value).toBe('a');\n    expect((await gerador.next()).value).toBe('b');\n    expect(pedidos).toBe(1);\n    expect((await gerador.next()).value).toBe('c');\n    expect(pedidos).toBe(2);\n  });\n  test('parar o consumo cedo não pede páginas extras', async () => {\n    let pedidos = 0;\n    const buscar = async n => {\n      pedidos += 1;\n      return paginas[n];\n    };\n    for await (const item of paginar(buscar)) {\n      if (item === 'a') break;\n    }\n    expect(pedidos).toBe(1);\n  });\n  test('erro da busca chega ao consumidor', async () => {\n    const buscar = async n => {\n      if (n === 2) throw new Error('falha na página 2');\n      return paginas[n];\n    };\n    let erro = null;\n    try {\n      await coletar(paginar(buscar));\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.message).toBe('falha na página 2');\n  });\n  test('buscarPagina que não é função lança TypeError', async () => {\n    let erro = null;\n    try {\n      await paginar(null).next();\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro instanceof TypeError).toBe(true);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "pede-todas-antes",
+          "files": {
+            "main.js": "export async function* paginar(buscarPagina) {\n  if (typeof buscarPagina !== 'function') throw new TypeError('buscarPagina deve ser função');\n  const todos = [];\n  let numero = 1;\n  while (true) {\n    const pagina = await buscarPagina(numero);\n    todos.push(...pagina.itens);\n    if (!pagina.temMais) break;\n    numero += 1;\n  }\n  yield* todos;\n}\n"
+          }
+        },
+        {
+          "id": "para-em-pagina-vazia",
+          "files": {
+            "main.js": "export async function* paginar(buscarPagina) {\n  if (typeof buscarPagina !== 'function') throw new TypeError('buscarPagina deve ser função');\n  let numero = 1;\n  while (true) {\n    const pagina = await buscarPagina(numero);\n    for (const item of pagina.itens) yield item;\n    if (pagina.itens.length === 0) return;\n    numero += 1;\n  }\n}\n"
+          }
+        },
+        {
+          "id": "engole-erro",
+          "files": {
+            "main.js": "export async function* paginar(buscarPagina) {\n  if (typeof buscarPagina !== 'function') throw new TypeError('buscarPagina deve ser função');\n  let numero = 1;\n  while (true) {\n    let pagina;\n    try {\n      pagina = await buscarPagina(numero);\n    } catch {\n      return;\n    }\n    for (const item of pagina.itens) yield item;\n    if (!pagina.temMais) return;\n    numero += 1;\n  }\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.20.09.predicao-pull-gerador",
+      "conceptId": "streams.basic",
+      "sourceActivityId": "20.09",
+      "prerequisites": ["20.01", "20.08"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [],
+      "transferDecision": "Em um fluxo puxado, o consumidor decide quando o produtor avança, e a ordem das mensagens depende dessa demanda. Prever a saída exige seguir cada next(), não apenas a ordem em que as funções aparecem no arquivo.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Um gerador só roda o próprio corpo quando alguém pede o próximo valor: acompanhe quem pede, quem produz e quando cada linha é impressa.",
+      "code": "function* produzir() {\n  for (let i = 1; i <= 3; i++) {\n    console.log('produz', i);\n    yield i;\n  }\n}\n\nfunction* dobrar(fonte) {\n  for (const n of fonte) {\n    console.log('dobra', n);\n    yield n * 2;\n  }\n}\n\nconst fluxo = dobrar(produzir());\nconsole.log('pronto');\nconsole.log('primeiro', fluxo.next().value);\nconsole.log('segundo', fluxo.next().value);\n",
+      "expectedOutput": "pronto\nproduz 1\ndobra 1\nprimeiro 2\nproduz 2\ndobra 2\nsegundo 4"
+    },
+    {
+      "variantId": "var.20.09.correcao-lotes-fluxo",
+      "conceptId": "streams.basic",
+      "sourceActivityId": "20.09",
+      "prerequisites": ["12.13", "20.08"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Um agrupador de fluxo precisa entregar cada lote como um valor independente e fechar o lote final incompleto. Reutilizar o mesmo array entre lotes parece economizar memória, mas altera o que o consumidor já recebeu. O defeito só aparece quando o consumidor guarda os lotes, então o aluno precisa seguir o ciclo de cada lote.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que lotes(fonte, tamanho) agrupe os itens de uma fonte assíncrona em arrays de tamanho fixo, sem perder o lote final incompleto. Cada lote entregue deve continuar intacto depois que o consumidor pede o próximo. Tamanho que não é inteiro maior que zero lança RangeError. Antes de alterar, rode a suíte e anote qual linha faz os lotes crescerem e qual faz o último lote sumir.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export async function* lotes(fonte, tamanho) {\n  if (!Number.isInteger(tamanho) || tamanho < 1) throw new RangeError('tamanho deve ser inteiro positivo');\n  let atual = [];\n  for await (const item of fonte) {\n    atual.push(item);\n    if (atual.length === tamanho) {\n      yield atual;\n    }\n  }\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function* lotes(fonte, tamanho) {\n  if (!Number.isInteger(tamanho) || tamanho < 1) throw new RangeError('tamanho deve ser inteiro positivo');\n  let atual = [];\n  for await (const item of fonte) {\n    atual.push(item);\n    if (atual.length === tamanho) {\n      yield atual;\n      atual = [];\n    }\n  }\n  if (atual.length > 0) yield atual;\n}\n"
+      },
+      "tests": "import { lotes } from './main.js';\n\nasync function* de(valores) {\n  for (const valor of valores) yield valor;\n}\n\nasync function coletar(gerador) {\n  const recebidos = [];\n  for await (const lote of gerador) recebidos.push(lote);\n  return recebidos;\n}\n\ndescribe('lotes', () => {\n  test('agrupa em lotes de tamanho fixo', async () => {\n    expect(await coletar(lotes(de([1, 2, 3, 4]), 2))).toEqual([[1, 2], [3, 4]]);\n  });\n  test('entrega o lote final incompleto', async () => {\n    expect(await coletar(lotes(de([1, 2, 3]), 2))).toEqual([[1, 2], [3]]);\n  });\n  test('fonte vazia não produz lotes', async () => {\n    expect(await coletar(lotes(de([]), 3))).toEqual([]);\n  });\n  test('lotes já entregues não mudam quando o consumidor pede mais', async () => {\n    const recebidos = [];\n    for await (const lote of lotes(de([1, 2, 3, 4, 5]), 2)) recebidos.push(lote);\n    expect(recebidos).toEqual([[1, 2], [3, 4], [5]]);\n  });\n  test('tamanho inválido lança RangeError', async () => {\n    let erro = null;\n    try {\n      await coletar(lotes(de([1]), 0));\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro instanceof RangeError).toBe(true);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "descarta-lote-final",
+          "files": {
+            "main.js": "export async function* lotes(fonte, tamanho) {\n  if (!Number.isInteger(tamanho) || tamanho < 1) throw new RangeError('tamanho deve ser inteiro positivo');\n  let atual = [];\n  for await (const item of fonte) {\n    atual.push(item);\n    if (atual.length === tamanho) {\n      yield atual;\n      atual = [];\n    }\n  }\n}\n"
+          }
+        },
+        {
+          "id": "reaproveita-array",
+          "files": {
+            "main.js": "export async function* lotes(fonte, tamanho) {\n  if (!Number.isInteger(tamanho) || tamanho < 1) throw new RangeError('tamanho deve ser inteiro positivo');\n  let atual = [];\n  for await (const item of fonte) {\n    atual.push(item);\n    if (atual.length === tamanho) {\n      yield atual;\n      atual.length = 0;\n    }\n  }\n  if (atual.length > 0) yield atual;\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export async function* lotes(fonte, tamanho) {\n  let atual = [];\n  for await (const item of fonte) {\n    atual.push(item);\n    if (atual.length === tamanho) {\n      yield atual;\n      atual = [];\n    }\n  }\n  if (atual.length > 0) yield atual;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.20.09.escolha-fila-limitada",
+      "conceptId": "streams.basic",
+      "sourceActivityId": "20.09",
+      "prerequisites": ["20.06", "20.08"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Um produtor limitado por capacidade só avança quando há espaço, e o aluno precisa prever essa recusa a partir do estado da fila. Trocar os nomes de Fila ou de empurrar não altera a regra de demanda.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra nas duas linhas. Acompanhe o tamanho da fila em cada chamada de empurrar e o efeito do shift entre as duas linhas.",
+      "code": "class Fila {\n  constructor(limite) {\n    this.limite = limite;\n    this.itens = [];\n  }\n\n  empurrar(item) {\n    if (this.itens.length >= this.limite) return false;\n    this.itens.push(item);\n    return true;\n  }\n}\n\nconst fila = new Fila(2);\nconsole.log(fila.empurrar('a'), fila.empurrar('b'), fila.empurrar('c'));\nfila.itens.shift();\nconsole.log(fila.empurrar('c'), fila.itens.join(','));\n",
+      "choices": [
+        "Imprime 'true true true' e depois 'true b,c', porque o limite só vale para a primeira chamada.",
+        "Imprime 'true true false' e depois 'true b,c', porque a fila recusa o terceiro item enquanto estiver cheia.",
+        "Imprime 'true true false' e depois 'false a,b', porque a fila não aceita novos itens depois de recusar um.",
+        "Lança TypeError, porque itens é um array e não tem o método empurrar."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Com limite 2, o terceiro empurrar devolve false sem alterar a fila. Depois do shift há espaço, 'c' entra, e a fila fica com 'b,c'.",
+        "byChoice": {
+          "0": "O limite vale em todas as chamadas: empurrar confere this.itens.length antes de cada inserção.",
+          "2": "Recusar um item não bloqueia a fila para sempre. Ela volta a aceitar quando há espaço, como depois do shift.",
+          "3": "itens é um array comum, e empurrar é método da classe Fila, não de itens."
+        }
+      }
+    },
+    {
+      "variantId": "var.21.02.microimpl-usar-recurso",
+      "conceptId": "resources.cleanup",
+      "sourceActivityId": "21.02",
+      "prerequisites": ["12.06", "21.01"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Garantir o fechamento de um recurso exige cobrir todos os caminhos de saída, inclusive erro síncrono e promessa rejeitada. Fechar só no caminho feliz parece correto até o uso falhar, e a correção depende de onde o fechamento fica, não do nome da função.",
+      "contentVersion": 1,
+      "prompt": "Implemente usarRecurso(abrir, usar) em main.js. abrir() pode ser síncrona ou assíncrona e devolve { valor, fechar }. usarRecurso chama usar(valor), espera o resultado se for promessa e o devolve. fechar() deve ser chamado exatamente uma vez, quer usar tenha dado certo, lançado erro ou rejeitado. Se abrir falhar, não chame fechar e deixe o erro chegar ao chamador. Se abrir ou usar não forem funções, lance TypeError.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export async function usarRecurso(abrir, usar) {\n  // Abra o recurso, use-o e garanta o fechamento conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function usarRecurso(abrir, usar) {\n  if (typeof abrir !== 'function' || typeof usar !== 'function') throw new TypeError('abrir e usar devem ser funções');\n  const recurso = await abrir();\n  try {\n    return await usar(recurso.valor);\n  } finally {\n    recurso.fechar();\n  }\n}\n"
+      },
+      "tests": "import { usarRecurso } from './main.js';\n\nfunction criarEstado() {\n  const estado = { aberto: false, fechamentos: 0 };\n  estado.abrir = async () => {\n    estado.aberto = true;\n    return {\n      valor: 'conexao',\n      fechar() {\n        estado.aberto = false;\n        estado.fechamentos += 1;\n      },\n    };\n  };\n  return estado;\n}\n\ndescribe('usarRecurso', () => {\n  test('devolve o resultado de usar e fecha ao final', async () => {\n    const estado = criarEstado();\n    expect(await usarRecurso(estado.abrir, async valor => valor + '!')).toBe('conexao!');\n    expect(estado.aberto).toBe(false);\n    expect(estado.fechamentos).toBe(1);\n  });\n  test('o recurso continua aberto durante o uso', async () => {\n    const estado = criarEstado();\n    let abertoDurante = null;\n    await usarRecurso(estado.abrir, () => {\n      abertoDurante = estado.aberto;\n      return 1;\n    });\n    expect(abertoDurante).toBe(true);\n  });\n  test('fecha mesmo quando usar lança erro', async () => {\n    const estado = criarEstado();\n    let erro = null;\n    try {\n      await usarRecurso(estado.abrir, () => {\n        throw new Error('falha de uso');\n      });\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.message).toBe('falha de uso');\n    expect(estado.aberto).toBe(false);\n    expect(estado.fechamentos).toBe(1);\n  });\n  test('fecha mesmo quando a promessa de usar rejeita', async () => {\n    const estado = criarEstado();\n    let erro = null;\n    try {\n      await usarRecurso(estado.abrir, async () => {\n        throw new Error('rejeitou');\n      });\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.message).toBe('rejeitou');\n    expect(estado.fechamentos).toBe(1);\n  });\n  test('falha ao abrir não chama usar', async () => {\n    let usou = false;\n    let erro = null;\n    try {\n      await usarRecurso(async () => {\n        throw new Error('sem acesso');\n      }, () => {\n        usou = true;\n      });\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.message).toBe('sem acesso');\n    expect(usou).toBe(false);\n  });\n  test('abrir e usar precisam ser funções', async () => {\n    let erro = null;\n    try {\n      await usarRecurso(null, () => 1);\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro instanceof TypeError).toBe(true);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-finally",
+          "files": {
+            "main.js": "export async function usarRecurso(abrir, usar) {\n  if (typeof abrir !== 'function' || typeof usar !== 'function') throw new TypeError('abrir e usar devem ser funções');\n  const recurso = await abrir();\n  const resultado = await usar(recurso.valor);\n  recurso.fechar();\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "fecha-antes-de-usar",
+          "files": {
+            "main.js": "export async function usarRecurso(abrir, usar) {\n  if (typeof abrir !== 'function' || typeof usar !== 'function') throw new TypeError('abrir e usar devem ser funções');\n  const recurso = await abrir();\n  recurso.fechar();\n  return await usar(recurso.valor);\n}\n"
+          }
+        },
+        {
+          "id": "fecha-duas-vezes",
+          "files": {
+            "main.js": "export async function usarRecurso(abrir, usar) {\n  if (typeof abrir !== 'function' || typeof usar !== 'function') throw new TypeError('abrir e usar devem ser funções');\n  const recurso = await abrir();\n  try {\n    return await usar(recurso.valor);\n  } finally {\n    recurso.fechar();\n    recurso.fechar();\n  }\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.21.02.escolha-ordem-finally",
+      "conceptId": "resources.cleanup",
+      "sourceActivityId": "21.02",
+      "prerequisites": ["12.06", "21.01"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Limpeza feita em finally acompanha qualquer caminho de saída, e o aluno precisa prever a ordem entre retorno, captura e limpeza. Mudar o nome de operacao ou de registro não altera essa ordem de execução.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra. Acompanhe a ordem em que cada bloco registra a sua etapa e lembre o que acontece com o valor devolvido pelo return do catch.",
+      "code": "function operacao(registro) {\n  try {\n    registro.push('usa');\n    throw new Error('falha');\n  } catch (erro) {\n    registro.push('captura');\n    return 'erro tratado';\n  } finally {\n    registro.push('fecha');\n  }\n}\n\nconst registro = [];\nconsole.log(operacao(registro), registro.join(' > '));\n",
+      "choices": [
+        "erro tratado usa > fecha > captura, porque o finally roda antes do catch.",
+        "erro tratado usa > captura > fecha, porque o catch roda antes do finally e o retorno do catch é mantido.",
+        "Error: falha usa > captura > fecha, porque o catch não impede o erro de chegar ao chamador.",
+        "erro tratado usa > captura, porque o finally só roda quando não há exceção."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "O catch captura o erro e registra 'captura'. O return dele fica pendente, o finally roda e registra 'fecha', e só então 'erro tratado' chega ao console.",
+        "byChoice": {
+          "0": "O finally roda depois do catch: o catch vem antes na ordem de execução.",
+          "2": "O catch trata a exceção, então o erro não sai da função. O retorno é a string 'erro tratado'.",
+          "3": "O finally roda sempre, com ou sem exceção. Por isso 'fecha' aparece no registro."
+        }
+      }
+    },
+    {
+      "variantId": "var.21.05.escolha-ordem-worker",
+      "conceptId": "workers.basic",
+      "sourceActivityId": "21.05",
+      "prerequisites": ["21.01", "21.04"],
+      "format": "choice-predict",
+      "environment": "dom",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Trabalhar com worker exige separar o que é síncrono no thread principal do que chega depois como mensagem. Renomear worker ou fatorial não muda essa ordem de eventos.",
+      "contentVersion": 1,
+      "prompt": "Antes de responder, decida a ordem das linhas impressas pelo thread principal. Lembre que postMessage não devolve o resultado do worker e que a resposta chega como evento.",
+      "code": "// main.js (thread principal)\nconst worker = new Worker('calcula.js');\nworker.onmessage = evento => console.log('recebido', evento.data);\nconst retorno = worker.postMessage({ n: 5 });\nconsole.log('retorno', retorno);\nconsole.log('fim do script');\n\n// calcula.js (worker)\nfunction fatorial(n) {\n  return n <= 1 ? 1 : n * fatorial(n - 1);\n}\nself.onmessage = evento => self.postMessage(fatorial(evento.data.n));\n",
+      "choices": [
+        "recebido 120, retorno 120, fim do script, porque postMessage espera o worker terminar e devolve o resultado.",
+        "retorno undefined, fim do script, recebido 120, porque a resposta do worker chega depois que o script principal termina.",
+        "retorno undefined, recebido 120, fim do script, porque a mensagem do worker interrompe o script principal.",
+        "Erro: fatorial is not defined, porque o worker não enxerga funções declaradas no thread principal."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "postMessage devolve undefined e não espera resposta. O worker responde por evento, em uma tarefa posterior, então as duas linhas síncronas rodam primeiro.",
+        "byChoice": {
+          "0": "postMessage não devolve resposta. O resultado só chega pelo evento message, de forma assíncrona.",
+          "2": "Eventos do worker não interrompem o script em execução. Eles entram na fila e são tratados depois.",
+          "3": "O worker tem o próprio escopo, mas calcula.js declara fatorial no próprio arquivo, então a função existe lá."
+        }
+      }
+    },
+    {
+      "variantId": "var.23.09.microimpl-operacao-com-log",
+      "conceptId": "operations.observability",
+      "sourceActivityId": "23.09",
+      "prerequisites": ["13.15", "23.06"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Observar uma operação exige decidir o que vai para o log técnico, o que vai para a mensagem pública e como medir a duração com um relógio injetado. Esses três destinos são decisões de contrato, e trocar nomes de variáveis não as resolve.",
+      "contentVersion": 1,
+      "prompt": "Implemente executarOperacao(nome, operacao, { id, relogio, logger }) em main.js. relogio() devolve milissegundos e deve ser chamado exatamente duas vezes: antes e depois da operação. operacao() pode ser síncrona ou devolver promessa. Em sucesso, registre logger.info({ evento: 'operacao', id, nome, status: 'ok', duracaoMs }) e devolva o resultado. Em falha, registre logger.error({ evento: 'operacao', id, nome, status: 'falha', duracaoMs, causa: mensagemDoErroOriginal }) e lance um Error cuja mensagem seja 'Operação ', seguida do nome e de ' falhou', com cause igual ao erro original. A mensagem pública não repete o texto do erro original.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export async function executarOperacao(nome, operacao, { id, relogio, logger }) {\n  // Meça a duração, registre o resultado e trate a falha conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function executarOperacao(nome, operacao, { id, relogio, logger }) {\n  const inicio = relogio();\n  try {\n    const resultado = await operacao();\n    logger.info({ evento: 'operacao', id, nome, status: 'ok', duracaoMs: relogio() - inicio });\n    return resultado;\n  } catch (erro) {\n    logger.error({ evento: 'operacao', id, nome, status: 'falha', duracaoMs: relogio() - inicio, causa: erro.message });\n    throw new Error('Operação ' + nome + ' falhou', { cause: erro });\n  }\n}\n"
+      },
+      "tests": "import { executarOperacao } from './main.js';\n\nfunction criarLogger() {\n  const registros = [];\n  return {\n    registros,\n    info: registro => registros.push(registro),\n    error: registro => registros.push(registro),\n  };\n}\n\ndescribe('executarOperacao', () => {\n  test('sucesso devolve o resultado e registra id, nome, status e duração', async () => {\n    const logger = criarLogger();\n    const tempos = [100, 135];\n    const resultado = await executarOperacao('gerar', () => 42, { id: 'op-1', relogio: () => tempos.shift(), logger });\n    expect(resultado).toBe(42);\n    expect(logger.registros).toEqual([{ evento: 'operacao', id: 'op-1', nome: 'gerar', status: 'ok', duracaoMs: 35 }]);\n  });\n  test('operação assíncrona bem-sucedida é aguardada', async () => {\n    const logger = criarLogger();\n    const tempos = [0, 4];\n    const resultado = await executarOperacao('buscar', async () => 'dados', { id: 'op-2', relogio: () => tempos.shift(), logger });\n    expect(resultado).toBe('dados');\n    expect(logger.registros[0].duracaoMs).toBe(4);\n  });\n  test('falha registra a causa e a duração e lança erro com cause', async () => {\n    const logger = criarLogger();\n    const tempos = [0, 7];\n    const original = new Error('timeout no provedor externo');\n    let erro = null;\n    try {\n      await executarOperacao('login', async () => {\n        throw original;\n      }, { id: 'op-3', relogio: () => tempos.shift(), logger });\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.cause).toBe(original);\n    expect(logger.registros).toEqual([{ evento: 'operacao', id: 'op-3', nome: 'login', status: 'falha', duracaoMs: 7, causa: 'timeout no provedor externo' }]);\n  });\n  test('a mensagem pública não repete o erro original', async () => {\n    const logger = criarLogger();\n    const tempos = [0, 1];\n    let erro = null;\n    try {\n      await executarOperacao('login', () => {\n        throw new Error('timeout no provedor externo');\n      }, { id: 'op-4', relogio: () => tempos.shift(), logger });\n    } catch (falha) {\n      erro = falha;\n    }\n    expect(erro && erro.message).toBe('Operação login falhou');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "mensagem-com-erro-original",
+          "files": {
+            "main.js": "export async function executarOperacao(nome, operacao, { id, relogio, logger }) {\n  const inicio = relogio();\n  try {\n    const resultado = await operacao();\n    logger.info({ evento: 'operacao', id, nome, status: 'ok', duracaoMs: relogio() - inicio });\n    return resultado;\n  } catch (erro) {\n    logger.error({ evento: 'operacao', id, nome, status: 'falha', duracaoMs: relogio() - inicio, causa: erro.message });\n    throw new Error('Operação ' + nome + ' falhou: ' + erro.message, { cause: erro });\n  }\n}\n"
+          }
+        },
+        {
+          "id": "sem-cause",
+          "files": {
+            "main.js": "export async function executarOperacao(nome, operacao, { id, relogio, logger }) {\n  const inicio = relogio();\n  try {\n    const resultado = await operacao();\n    logger.info({ evento: 'operacao', id, nome, status: 'ok', duracaoMs: relogio() - inicio });\n    return resultado;\n  } catch (erro) {\n    logger.error({ evento: 'operacao', id, nome, status: 'falha', duracaoMs: relogio() - inicio, causa: erro.message });\n    throw new Error('Operação ' + nome + ' falhou');\n  }\n}\n"
+          }
+        },
+        {
+          "id": "sem-duracao",
+          "files": {
+            "main.js": "export async function executarOperacao(nome, operacao, { id, relogio, logger }) {\n  const inicio = relogio();\n  try {\n    const resultado = await operacao();\n    logger.info({ evento: 'operacao', id, nome, status: 'ok', duracaoMs: 0 });\n    return resultado;\n  } catch (erro) {\n    logger.error({ evento: 'operacao', id, nome, status: 'falha', duracaoMs: relogio() - inicio, causa: erro.message });\n    throw new Error('Operação ' + nome + ' falhou', { cause: erro });\n  }\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.23.09.escolha-erro-publico-causa",
+      "conceptId": "operations.observability",
+      "sourceActivityId": "23.09",
+      "prerequisites": ["13.15", "23.06"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [],
+      "transferDecision": "Ao expor um erro, o aluno precisa prever o que vai para a mensagem pública e o que fica na causa, porque o log técnico e o texto para o usuário saem de campos diferentes. Trocar os nomes da classe ou do argumento não muda essa separação.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que cada linha imprime. Repare em qual argumento do construtor vai para message, qual vai para cause e como String(erro) monta o texto.",
+      "code": "class ErroPublico extends Error {\n  constructor(mensagemPublica, causa) {\n    super(mensagemPublica, { cause: causa });\n    this.name = 'ErroPublico';\n  }\n}\n\nconst original = new Error('timeout no provedor externo');\nconst erro = new ErroPublico('Não foi possível autenticar.', original);\nconsole.log(erro.message);\nconsole.log(erro.cause.message);\nconsole.log(String(erro));\n",
+      "choices": [
+        "Imprime 'Não foi possível autenticar.', 'timeout no provedor externo' e 'Error: timeout no provedor externo', porque String(erro) usa a causa.",
+        "Imprime 'Não foi possível autenticar.', 'timeout no provedor externo' e 'ErroPublico: Não foi possível autenticar.'.",
+        "Imprime 'undefined', 'timeout no provedor externo' e 'ErroPublico: Não foi possível autenticar.', porque super não grava a mensagem.",
+        "Imprime 'Não foi possível autenticar.', 'undefined' e 'ErroPublico: timeout no provedor externo.', porque a causa vira mensagem."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "super grava a mensagem pública, e a causa fica acessível em cause. String(erro) combina name e message, e a causa nunca entra nessa frase.",
+        "byChoice": {
+          "0": "String(erro) usa name e message do próprio erro. A causa não entra no texto.",
+          "2": "super recebe a mensagem e a grava em message. O problema não é de inicialização.",
+          "3": "A causa fica em erro.cause, e a mensagem continua sendo a pública passada ao construtor."
+        }
+      }
+    },
+    {
+      "variantId": "var.22.06.correcao-validacao-caminhos",
+      "conceptId": "validation.schema",
+      "sourceActivityId": "22.06",
+      "prerequisites": ["13.02", "22.05"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [],
+      "transferDecision": "Um validador declarativo só informa bem quando cada erro carrega o caminho exato e quando listas são percorridas item a item. O defeito some em casos com um único campo, então o aluno precisa testar a estrutura aninhada, não só a regra do campo.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que validar(regra, valor) percorra objetos aninhados e listas e reporte cada erro com o caminho completo, como 'endereco.cidade' ou 'itens[1]'. Ele deve reportar todos os erros, não só o primeiro, e campo opcional ausente é aceito. Antes de alterar, rode a suíte e anote qual linha perde o prefixo do caminho e qual deixa de olhar os itens da lista.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Validação declarativa: cada regra descreve o tipo esperado; os erros carregam o caminho do campo.\nexport function validar(regra, valor) {\n  const erros = [];\n  coletar(regra, valor, '', erros);\n  return erros.length === 0 ? { ok: true, valor } : { ok: false, erros };\n}\n\nfunction coletar(regra, valor, caminho, erros) {\n  if (valor === undefined && regra.opcional) return;\n  if (regra.tipo === 'objeto') {\n    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser objeto' });\n      return;\n    }\n    for (const [campo, subRegra] of Object.entries(regra.campos)) {\n      coletar(subRegra, valor[campo], campo, erros);\n    }\n    return;\n  }\n  if (regra.tipo === 'lista') {\n    if (!Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser lista' });\n    }\n    return;\n  }\n  if (typeof valor !== regra.tipo) erros.push({ caminho, mensagem: 'deve ser ' + regra.tipo });\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "// Validação declarativa: cada regra descreve o tipo esperado; os erros carregam o caminho do campo.\nexport function validar(regra, valor) {\n  const erros = [];\n  coletar(regra, valor, '', erros);\n  return erros.length === 0 ? { ok: true, valor } : { ok: false, erros };\n}\n\nfunction coletar(regra, valor, caminho, erros) {\n  if (valor === undefined && regra.opcional) return;\n  if (regra.tipo === 'objeto') {\n    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser objeto' });\n      return;\n    }\n    for (const [campo, subRegra] of Object.entries(regra.campos)) {\n      coletar(subRegra, valor[campo], caminho ? caminho + '.' + campo : campo, erros);\n    }\n    return;\n  }\n  if (regra.tipo === 'lista') {\n    if (!Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser lista' });\n      return;\n    }\n    valor.forEach((item, indice) => coletar(regra.itens, item, caminho + '[' + indice + ']', erros));\n    return;\n  }\n  if (typeof valor !== regra.tipo) erros.push({ caminho, mensagem: 'deve ser ' + regra.tipo });\n}\n"
+      },
+      "tests": "import { validar } from './main.js';\n\nconst pedido = {\n  tipo: 'objeto',\n  campos: {\n    nome: { tipo: 'string' },\n    quantidade: { tipo: 'number' },\n    endereco: { tipo: 'objeto', campos: { cidade: { tipo: 'string' } } },\n    itens: { tipo: 'lista', itens: { tipo: 'string' } },\n    cupom: { tipo: 'string', opcional: true },\n  },\n};\n\ndescribe('validar', () => {\n  test('aceita um valor que segue o esquema e devolve o próprio valor', () => {\n    const valor = { nome: 'Ana', quantidade: 2, endereco: { cidade: 'Recife' }, itens: ['caneta'] };\n    const resultado = validar(pedido, valor);\n    expect(resultado.ok).toBe(true);\n    expect(resultado.valor).toBe(valor);\n  });\n  test('campo opcional ausente é aceito', () => {\n    const resultado = validar(pedido, { nome: 'Ana', quantidade: 1, endereco: { cidade: 'X' }, itens: [] });\n    expect(resultado.ok).toBe(true);\n  });\n  test('erro de campo aninhado carrega o caminho completo', () => {\n    const resultado = validar(pedido, { nome: 'Ana', quantidade: 1, endereco: { cidade: 7 }, itens: [] });\n    expect(resultado.ok).toBe(false);\n    expect(resultado.erros).toEqual([{ caminho: 'endereco.cidade', mensagem: 'deve ser string' }]);\n  });\n  test('cada item inválido de uma lista é reportado com o índice', () => {\n    const resultado = validar(pedido, { nome: 'Ana', quantidade: 1, endereco: { cidade: 'X' }, itens: ['ok', 3, 'ok', null] });\n    expect(resultado.erros).toEqual([\n      { caminho: 'itens[1]', mensagem: 'deve ser string' },\n      { caminho: 'itens[3]', mensagem: 'deve ser string' },\n    ]);\n  });\n  test('reporta todos os erros, não só o primeiro', () => {\n    const resultado = validar(pedido, { nome: 1, quantidade: 'x', endereco: null, itens: 'a' });\n    expect(resultado.erros.map(erro => erro.caminho)).toEqual(['nome', 'quantidade', 'endereco', 'itens']);\n  });\n  test('objeto raiz que não é objeto gera erro na raiz', () => {\n    expect(validar(pedido, [1]).erros).toEqual([{ caminho: '', mensagem: 'deve ser objeto' }]);\n  });\n  test('não altera o valor validado', () => {\n    const valor = Object.freeze({ nome: 'Ana', quantidade: 1, endereco: { cidade: 'X' }, itens: ['a'] });\n    expect(validar(pedido, valor).ok).toBe(true);\n    expect(valor.itens).toEqual(['a']);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "ignora-opcional",
+          "files": {
+            "main.js": "// Validação declarativa: cada regra descreve o tipo esperado; os erros carregam o caminho do campo.\nexport function validar(regra, valor) {\n  const erros = [];\n  coletar(regra, valor, '', erros);\n  return erros.length === 0 ? { ok: true, valor } : { ok: false, erros };\n}\n\nfunction coletar(regra, valor, caminho, erros) {\n  if (regra.tipo === 'objeto') {\n    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser objeto' });\n      return;\n    }\n    for (const [campo, subRegra] of Object.entries(regra.campos)) {\n      coletar(subRegra, valor[campo], caminho ? caminho + '.' + campo : campo, erros);\n    }\n    return;\n  }\n  if (regra.tipo === 'lista') {\n    if (!Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser lista' });\n      return;\n    }\n    valor.forEach((item, indice) => coletar(regra.itens, item, caminho + '[' + indice + ']', erros));\n    return;\n  }\n  if (typeof valor !== regra.tipo) erros.push({ caminho, mensagem: 'deve ser ' + regra.tipo });\n}\n"
+          }
+        },
+        {
+          "id": "primeiro-erro-apenas",
+          "files": {
+            "main.js": "// Validação declarativa: cada regra descreve o tipo esperado; os erros carregam o caminho do campo.\nexport function validar(regra, valor) {\n  const erros = [];\n  coletar(regra, valor, '', erros);\n  return erros.length === 0 ? { ok: true, valor } : { ok: false, erros: erros.slice(0, 1) };\n}\n\nfunction coletar(regra, valor, caminho, erros) {\n  if (valor === undefined && regra.opcional) return;\n  if (regra.tipo === 'objeto') {\n    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser objeto' });\n      return;\n    }\n    for (const [campo, subRegra] of Object.entries(regra.campos)) {\n      coletar(subRegra, valor[campo], caminho ? caminho + '.' + campo : campo, erros);\n    }\n    return;\n  }\n  if (regra.tipo === 'lista') {\n    if (!Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser lista' });\n      return;\n    }\n    valor.forEach((item, indice) => coletar(regra.itens, item, caminho + '[' + indice + ']', erros));\n    return;\n  }\n  if (typeof valor !== regra.tipo) erros.push({ caminho, mensagem: 'deve ser ' + regra.tipo });\n}\n"
+          }
+        },
+        {
+          "id": "lista-sem-indice",
+          "files": {
+            "main.js": "// Validação declarativa: cada regra descreve o tipo esperado; os erros carregam o caminho do campo.\nexport function validar(regra, valor) {\n  const erros = [];\n  coletar(regra, valor, '', erros);\n  return erros.length === 0 ? { ok: true, valor } : { ok: false, erros };\n}\n\nfunction coletar(regra, valor, caminho, erros) {\n  if (valor === undefined && regra.opcional) return;\n  if (regra.tipo === 'objeto') {\n    if (typeof valor !== 'object' || valor === null || Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser objeto' });\n      return;\n    }\n    for (const [campo, subRegra] of Object.entries(regra.campos)) {\n      coletar(subRegra, valor[campo], caminho ? caminho + '.' + campo : campo, erros);\n    }\n    return;\n  }\n  if (regra.tipo === 'lista') {\n    if (!Array.isArray(valor)) {\n      erros.push({ caminho, mensagem: 'deve ser lista' });\n      return;\n    }\n    valor.forEach((item, indice) => coletar(regra.itens, item, caminho, erros));\n    return;\n  }\n  if (typeof valor !== regra.tipo) erros.push({ caminho, mensagem: 'deve ser ' + regra.tipo });\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.22.06.predicao-esquema-typeof",
+      "conceptId": "validation.schema",
+      "sourceActivityId": "22.06",
+      "prerequisites": ["13.02", "22.05"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [],
+      "transferDecision": "Um esquema só protege quando a checagem segue o tipo real que typeof informa, e isso inclui valores que parecem válidos, como NaN. O aluno precisa prever os erros a partir dessa regra, não supor que o nome do campo basta para validar.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Atenção ao que typeof devolve para null, NaN e para um campo ausente, e à ordem em que os campos do esquema são percorridos.",
+      "code": "const esquema = { nome: 'string', idade: 'number' };\n\nfunction checar(obj) {\n  const erros = [];\n  for (const campo of Object.keys(esquema)) {\n    if (typeof obj[campo] !== esquema[campo]) erros.push(campo);\n  }\n  return erros;\n}\n\nconsole.log(checar({ nome: 'Ana', idade: 30 }));\nconsole.log(checar({ nome: 'Ana', idade: '30' }));\nconsole.log(checar({ idade: NaN, nome: 'Bia', extra: true }));\nconsole.log(checar({ nome: null }));\nconsole.log(Object.keys(esquema).join('|'));\n",
+      "expectedOutput": "[]\n[ 'idade' ]\n[]\n[ 'nome', 'idade' ]\nnome|idade"
+    }
+  ]
+}

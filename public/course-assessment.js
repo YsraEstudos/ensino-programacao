@@ -278,7 +278,8 @@
         const implementationByPath = new Map(implementation.filter(file => runtimeVirtualFile(file) && /\.(?:m?js|jsx|ts|tsx|json)$/i.test(file.path)).map(file => [file.path, file]));
         for (const file of suppliedFiles) if (!implementationByPath.has(file.path) || declaredPaths.includes(file.path)) implementationByPath.set(file.path, file);
         for (const file of testSource) if (declaredPaths.includes(file.path) || !implementationByPath.has(file.path)) implementationByPath.set(file.path, file);
-        const nodeFiles = [...implementationByPath.values()];
+        // The module graph only accepts code and JSON; Markdown such as ISSUE.md stays in the editor but never reaches the runner.
+        const nodeFiles = [...implementationByPath.values()].filter(file => /\.(?:m?js|jsx|ts|tsx|json)$/i.test(file.path));
         const paths = declaredPaths.filter(path => nodeFiles.some(file => file.path === path));
         const nodeEntry = paths.length > 1 ? '__devpath_node_tests__.js' : paths[0] || testSource[0]?.path;
         if (!nodeEntry) return {kind: 'error', text: 'Entrada da suíte ausente.'};
@@ -442,6 +443,9 @@
           const kind = ['cancelled', 'timeout', 'unsupported', 'error', 'type-error'].includes(behavior.kind) ? behavior.kind : 'failed';
           return normalized(base, kind, `A implementação enviada não passa seus testes comportamentais.${behavior.text ? `\n${behavior.text}` : ''}`, {...behavior, firstFailure: kind === 'failed' && !behavior.node?.exitCode ? behavior.tests?.firstFailure : undefined});
         }
+        // Behavior-only activities end here: the generic runner below would receive every starter file, including the
+        // Markdown files that the module graph refuses (node-simulated and javascript runners only accept code).
+        if (!assessment.checks.includes('mutation') && assessment.studentSuite !== true) return normalized(base, 'passed', textFor('passed', behavior), behavior);
       } catch (error) {
         return normalized(base, error?.code === 'UNSUPPORTED' ? 'unsupported' : 'error', error instanceof Error ? error.message : String(error));
       }

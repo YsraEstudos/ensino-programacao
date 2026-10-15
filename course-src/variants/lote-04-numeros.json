@@ -1,0 +1,567 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.02.04.mini-limite-credito-texto",
+      "conceptId": "coercion.number_validation",
+      "sourceActivityId": "02.04",
+      "prerequisites": ["01.01", "02.01", "02.03"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11"],
+      "transferDecision": "Um limite de crédito digitado como texto precisa virar número ou ser recusado sem falsa aceitação. A decisão depende de saber que Number('') vale 0 e que Infinity é do tipo number; por isso a validação precisa tratar cada entrada de forma explícita, e não apenas converter o texto.",
+      "contentVersion": 1,
+      "prompt": "Implemente lerLimite(texto) em main.js. A função recebe um texto digitado e devolve o limite como número, ou null quando a entrada não serve. Aceite decimais com espaços nas bordas: ' 12.5 ' vale 12.5 e '0' vale 0. Devolva null para texto vazio ou só com espaços, para textos que não viram número, para Infinity e para valores negativos. Não lance erro.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function lerLimite(texto) {\n  // Converta e valide o texto conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function lerLimite(texto) {\n  const limpo = texto.trim();\n  if (limpo === '') return null;\n  const numero = Number(limpo);\n  if (!Number.isFinite(numero) || numero < 0) return null;\n  return numero;\n}\n"
+      },
+      "tests": "import { lerLimite } from './main.js';\n\ndescribe('lerLimite', () => {\n  test('aceita decimais e ignora espaços nas bordas', () => {\n    expect(lerLimite(' 12.5 ')).toBe(12.5);\n    expect(lerLimite('0')).toBe(0);\n  });\n  test('texto vazio ou só com espaços devolve null', () => {\n    expect(lerLimite('')).toBeNull();\n    expect(lerLimite('   ')).toBeNull();\n  });\n  test('texto que não vira número devolve null', () => {\n    expect(lerLimite('abc')).toBeNull();\n    expect(lerLimite('12a')).toBeNull();\n  });\n  test('Infinity e valores negativos devolvem null', () => {\n    expect(lerLimite('Infinity')).toBeNull();\n    expect(lerLimite('-3')).toBeNull();\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-checagem-de-vazio",
+          "files": {
+            "main.js": "export function lerLimite(texto) {\n  const limpo = texto.trim();\n  const numero = Number(limpo);\n  if (!Number.isFinite(numero) || numero < 0) return null;\n  return numero;\n}\n"
+          }
+        },
+        {
+          "id": "aceita-infinito",
+          "files": {
+            "main.js": "export function lerLimite(texto) {\n  const limpo = texto.trim();\n  if (limpo === '') return null;\n  const numero = Number(limpo);\n  if (Number.isNaN(numero) || numero < 0) return null;\n  return numero;\n}\n"
+          }
+        },
+        {
+          "id": "aceita-negativo",
+          "files": {
+            "main.js": "export function lerLimite(texto) {\n  const limpo = texto.trim();\n  if (limpo === '') return null;\n  const numero = Number(limpo);\n  if (!Number.isFinite(numero)) return null;\n  return numero;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.04.escolha-validar-quantidade",
+      "conceptId": "coercion.number_validation",
+      "sourceActivityId": "02.04",
+      "prerequisites": ["01.01", "02.01", "02.03"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Validar uma quantidade digitada exige decidir o que Number devolve para texto vazio, espaços e decimais. O aluno precisa prever que a regra aceita zero, que espaços nas bordas não impedem a conversão e que a fração é recusada, a partir do valor convertido e não do texto original.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida a saída das quatro chamadas. Observe o que Number devolve para cada texto e qual regra a função aplica ao resultado, não ao texto original.",
+      "code": "function validarQuantidade(texto) {\n  const numero = Number(texto);\n  return Number.isInteger(numero) && numero >= 0 ? 'válida' : 'inválida';\n}\n\nconsole.log(validarQuantidade('3'), validarQuantidade(' 7 '), validarQuantidade(''), validarQuantidade('2.5'));\n",
+      "choices": [
+        "válida válida inválida inválida",
+        "válida válida válida inválida",
+        "válida inválida válida inválida",
+        "Lança TypeError, porque Number não aceita texto."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Number(' 7 ') vale 7, porque espaços nas bordas são ignorados. Number('') vale 0: é inteiro e não é negativo, então passa na regra. Em '2.5', o número não é inteiro e a saída é inválida.",
+        "byChoice": {
+          "0": "A função não olha o texto vazio: Number('') vale 0, que é inteiro e não negativo, então a terceira saída é válida.",
+          "2": "Espaços nas bordas não impedem a conversão: Number(' 7 ') vale 7, e a segunda saída é válida.",
+          "3": "Number não lança erro para texto; quando não converte, ele devolve NaN. Aqui cada chamada devolve um texto de status."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.05.correcao-frete-texto",
+      "conceptId": "coercion.explicit",
+      "sourceActivityId": "02.05",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11"],
+      "transferDecision": "Um pedido montado a partir de formulário traz o frete como texto, e somar texto a número produz concatenação silenciosa. O aluno precisa localizar a fronteira em que o texto entra na conta e converter ali, sem alterar o cálculo dos itens, o que exige raciocinar sobre tipos e não sobre a ordem das linhas.",
+      "contentVersion": 1,
+      "prompt": "Corrija totalEmCentavos em main.js. Os valores chegam de um formulário como texto: quantidade, precoCentavos e frete. O cálculo dos itens já converte com Number, mas o frete é somado sem conversão e a soma vira texto. Corrija somente a conversão do frete, devolvendo um inteiro em centavos. Antes de alterar, rode os casos e anote em qual linha o resultado vira texto.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function totalEmCentavos(pedido) {\n  let total = 0;\n  for (const item of pedido.itens) {\n    total += Number(item.quantidade) * Number(item.precoCentavos);\n  }\n  return total + pedido.frete;\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function totalEmCentavos(pedido) {\n  let total = 0;\n  for (const item of pedido.itens) {\n    total += Number(item.quantidade) * Number(item.precoCentavos);\n  }\n  return total + Number(pedido.frete);\n}\n"
+      },
+      "tests": "import { totalEmCentavos } from './main.js';\n\ndescribe('totalEmCentavos', () => {\n  test('soma os itens convertidos e acrescenta o frete como número', () => {\n    const pedido = { itens: [{ quantidade: '2', precoCentavos: '1250' }], frete: '800' };\n    expect(totalEmCentavos(pedido)).toBe(3300);\n  });\n  test('aceita espaços nas bordas do frete', () => {\n    const pedido = { itens: [{ quantidade: '1', precoCentavos: '990' }, { quantidade: '3', precoCentavos: '100' }], frete: ' 650 ' };\n    expect(totalEmCentavos(pedido)).toBe(1940);\n  });\n  test('frete zero e pedido sem itens devolvem zero', () => {\n    expect(totalEmCentavos({ itens: [], frete: '0' })).toBe(0);\n  });\n  test('o resultado é sempre número, não texto', () => {\n    const total = totalEmCentavos({ itens: [{ quantidade: '1', precoCentavos: '500' }], frete: '250' });\n    expect(typeof total).toBe('number');\n    expect(total).toBe(750);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "ignora-frete",
+          "files": {
+            "main.js": "export function totalEmCentavos(pedido) {\n  let total = 0;\n  for (const item of pedido.itens) {\n    total += Number(item.quantidade) * Number(item.precoCentavos);\n  }\n  return total;\n}\n"
+          }
+        },
+        {
+          "id": "frete-em-reais",
+          "files": {
+            "main.js": "export function totalEmCentavos(pedido) {\n  let total = 0;\n  for (const item of pedido.itens) {\n    total += Number(item.quantidade) * Number(item.precoCentavos);\n  }\n  return total + Number(pedido.frete) / 100;\n}\n"
+          }
+        },
+        {
+          "id": "soma-como-texto",
+          "files": {
+            "main.js": "export function totalEmCentavos(pedido) {\n  let total = 0;\n  for (const item of pedido.itens) {\n    total += Number(item.quantidade) * Number(item.precoCentavos);\n  }\n  return String(total + Number(pedido.frete));\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.05.predicao-conversoes-formulario",
+      "conceptId": "coercion.explicit",
+      "sourceActivityId": "02.05",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": ["07", "11"],
+      "transferDecision": "Campos de formulário chegam como texto, e o operador usado decide se o resultado soma, multiplica ou concatena. O aluno precisa prever cada linha seguindo o tipo produzido por Number, por + e por -, o que não se resolve trocando nomes de variáveis.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Em cada expressão, identifique se o operador recebe texto e se a conversão acontece antes da soma, da multiplicação ou da concatenação.",
+      "code": "const campos = { quantidade: '4', valor: '2.5', desconto: '' };\nconst bruto = campos.quantidade * campos.valor;\nconsole.log(bruto, typeof bruto);\nconsole.log(campos.quantidade + campos.valor);\nconst descontoNumero = Number(campos.desconto);\nconsole.log(descontoNumero, String(descontoNumero + bruto));\nconsole.log(Number('4') + Number('2.5'), '4' - '1' + 1, '4' + 1 - 1);\n",
+      "expectedOutput": "10 number\n42.5\n0 10\n6.5 4 40"
+    },
+    {
+      "variantId": "var.02.04.correcao-leituras-sensor",
+      "conceptId": "number.model",
+      "sourceActivityId": "02.04",
+      "prerequisites": ["01.01", "02.01"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11", "14"],
+      "transferDecision": "Em JavaScript, typeof responde só ao tipo, e NaN ou Infinity também têm tipo number. Uma contagem de leituras que confie apenas em typeof conta valores que não são medidas, e o aluno precisa identificar essa diferença no modelo de number, não apenas trocar o nome da condição.",
+      "contentVersion": 1,
+      "prompt": "Corrija contarLeiturasValidas em main.js. Uma leitura é válida quando é um número finito; zero e negativos são válidos. A condição atual confia só em typeof, que também aceita NaN e Infinity. Ajuste somente a condição do if. Antes de alterar, rode os casos e anote quais valores entram na contagem sem serem medidas.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function contarLeiturasValidas(leituras) {\n  let total = 0;\n  for (const leitura of leituras) {\n    if (typeof leitura === 'number') total += 1;\n  }\n  return total;\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function contarLeiturasValidas(leituras) {\n  let total = 0;\n  for (const leitura of leituras) {\n    if (typeof leitura === 'number' && Number.isFinite(leitura)) total += 1;\n  }\n  return total;\n}\n"
+      },
+      "tests": "import { contarLeiturasValidas } from './main.js';\n\ndescribe('contarLeiturasValidas', () => {\n  test('conta números finitos, inclusive zero e negativos', () => {\n    expect(contarLeiturasValidas([1, -5, 0, 2.5])).toBe(4);\n  });\n  test('NaN e Infinity têm tipo number, mas não são leituras válidas', () => {\n    expect(contarLeiturasValidas([NaN, Infinity, -Infinity, 3])).toBe(1);\n  });\n  test('texto, null e undefined não contam', () => {\n    expect(contarLeiturasValidas(['12', null, undefined, 7])).toBe(1);\n  });\n  test('lista vazia devolve zero', () => {\n    expect(contarLeiturasValidas([])).toBe(0);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "aceita-nan-e-infinito",
+          "files": {
+            "main.js": "export function contarLeiturasValidas(leituras) {\n  let total = 0;\n  for (const leitura of leituras) {\n    if (typeof leitura === 'number' && !Number.isNaN(leitura)) total += 1;\n  }\n  return total;\n}\n"
+          }
+        },
+        {
+          "id": "so-positivos",
+          "files": {
+            "main.js": "export function contarLeiturasValidas(leituras) {\n  let total = 0;\n  for (const leitura of leituras) {\n    if (typeof leitura === 'number' && Number.isFinite(leitura) && leitura > 0) total += 1;\n  }\n  return total;\n}\n"
+          }
+        },
+        {
+          "id": "aceita-texto-numerico",
+          "files": {
+            "main.js": "export function contarLeiturasValidas(leituras) {\n  let total = 0;\n  for (const leitura of leituras) {\n    if ((typeof leitura === 'number' || typeof leitura === 'string') && Number.isFinite(Number(leitura))) total += 1;\n  }\n  return total;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.04.escolha-tipo-nan",
+      "conceptId": "number.model",
+      "sourceActivityId": "02.04",
+      "prerequisites": ["01.01", "02.01"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Um valor do tipo number pode ser NaN, Infinity ou -0, e cada um responde de forma diferente a includes, indexOf e Object.is. O aluno precisa prever a comparação a partir do modelo de number, sem supor que a igualdade é sempre a mesma.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida a saída da linha. Lembre que typeof descreve o tipo e que includes, indexOf e Object.is comparam valores de formas diferentes.",
+      "code": "console.log(typeof NaN, [0, -0, NaN].includes(NaN), [NaN].indexOf(NaN), Object.is(0, -0), 1 / -0);\n",
+      "choices": [
+        "number false -1 false -Infinity",
+        "number true -1 false -Infinity",
+        "number true -1 true Infinity",
+        "number true 0 false -Infinity"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "typeof NaN é 'number'. includes usa SameValueZero, por isso encontra NaN; indexOf usa ===, que nunca iguala NaN, e devolve -1. Object.is distingue 0 de -0, e 1 / -0 vale -Infinity.",
+        "byChoice": {
+          "0": "includes não compara com ===: ele usa SameValueZero, que trata NaN como igual a NaN, então o resultado é true.",
+          "2": "Object.is(0, -0) é false, e 1 / -0 vale -Infinity, não Infinity: -0 é um zero com sinal.",
+          "3": "indexOf usa ===, e NaN nunca é igual a si mesmo; o resultado é -1, não uma posição."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.10.mini-trajeto-grade",
+      "conceptId": "math.basic",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11"],
+      "transferDecision": "Medir distâncias em um mapa de armazém exige escolher a fórmula certa para cada medida: a reta, a grade e o maior lado mudam com o sinal das diferenças. O aluno precisa decidir quando usar Math.sqrt, Math.abs e Math.max, e não apenas copiar uma fórmula de outro exemplo.",
+      "contentVersion": 1,
+      "prompt": "Implemente medirTrajeto(origem, destino) em main.js. Os dois argumentos são pontos { x, y }. Devolva { reta, grade, lado }: reta é a distância euclidiana, calculada com Math.sqrt; grade é a soma das diferenças absolutas nos eixos, com Math.abs; lado é a maior diferença absoluta entre os eixos, com Math.max. A ordem dos pontos não muda os valores.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function medirTrajeto(origem, destino) {\n  // Calcule reta, grade e lado conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function medirTrajeto(origem, destino) {\n  const dx = destino.x - origem.x;\n  const dy = destino.y - origem.y;\n  return {\n    reta: Math.sqrt(dx * dx + dy * dy),\n    grade: Math.abs(dx) + Math.abs(dy),\n    lado: Math.max(Math.abs(dx), Math.abs(dy)),\n  };\n}\n"
+      },
+      "tests": "import { medirTrajeto } from './main.js';\n\ndescribe('medirTrajeto', () => {\n  test('triângulo 3-4-5: reta 5, grade 7 e lado 4', () => {\n    expect(medirTrajeto({ x: 0, y: 0 }, { x: 3, y: 4 })).toEqual({ reta: 5, grade: 7, lado: 4 });\n  });\n  test('sinais negativos não mudam os comprimentos', () => {\n    expect(medirTrajeto({ x: -2, y: 5 }, { x: 1, y: 1 })).toEqual({ reta: 5, grade: 7, lado: 4 });\n  });\n  test('a ordem dos pontos não muda a medida', () => {\n    expect(medirTrajeto({ x: 1, y: 1 }, { x: -2, y: 5 })).toEqual({ reta: 5, grade: 7, lado: 4 });\n  });\n  test('o mesmo ponto devolve zeros', () => {\n    expect(medirTrajeto({ x: 2, y: 2 }, { x: 2, y: 2 })).toEqual({ reta: 0, grade: 0, lado: 0 });\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-raiz-na-reta",
+          "files": {
+            "main.js": "export function medirTrajeto(origem, destino) {\n  const dx = destino.x - origem.x;\n  const dy = destino.y - origem.y;\n  return {\n    reta: dx * dx + dy * dy,\n    grade: Math.abs(dx) + Math.abs(dy),\n    lado: Math.max(Math.abs(dx), Math.abs(dy)),\n  };\n}\n"
+          }
+        },
+        {
+          "id": "grade-com-max",
+          "files": {
+            "main.js": "export function medirTrajeto(origem, destino) {\n  const dx = destino.x - origem.x;\n  const dy = destino.y - origem.y;\n  return {\n    reta: Math.sqrt(dx * dx + dy * dy),\n    grade: Math.max(Math.abs(dx), Math.abs(dy)),\n    lado: Math.max(Math.abs(dx), Math.abs(dy)),\n  };\n}\n"
+          }
+        },
+        {
+          "id": "grade-sem-modulo",
+          "files": {
+            "main.js": "export function medirTrajeto(origem, destino) {\n  const dx = destino.x - origem.x;\n  const dy = destino.y - origem.y;\n  return {\n    reta: Math.sqrt(dx * dx + dy * dy),\n    grade: dx + dy,\n    lado: Math.max(Math.abs(dx), Math.abs(dy)),\n  };\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.10.predicao-extremos-math",
+      "conceptId": "math.basic",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": ["07", "11"],
+      "transferDecision": "Relatórios que usam Math.max e Math.min sobre listas podem receber listas vazias, e Math.trunc e Math.floor divergem para negativos com fração. O aluno precisa prever o resultado sem entradas e com sinal, lendo o contrato de cada função e não a aparência da chamada.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Repare no que Math.max e Math.min devolvem sem argumentos, no sinal de -0 e na diferença entre trunc e floor para números negativos.",
+      "code": "console.log(Math.max(), Math.min(), Math.max(...[]), Math.min(3, '2', -0));\nconsole.log(Math.abs(-0), Math.sign(-7), Math.trunc(-2.7), Math.floor(-2.7));\nconsole.log(Math.hypot(3, 4), Math.cbrt(27), Math.pow(2, 10), 2 ** -1);\n",
+      "expectedOutput": "-Infinity Infinity -Infinity -0\n0 -1 -2 -3\n5 3 1024 0.5"
+    },
+    {
+      "variantId": "var.02.10.correcao-centavos-arredondamento",
+      "conceptId": "math.rounding",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11", "14"],
+      "transferDecision": "Converter reais com fração em centavos inteiros parece simples, mas Math.trunc corta a parte decimal e a diferença aparece só em alguns valores. O aluno precisa escolher a função de arredondamento pelo contrato do valor, não pela ideia de pegar a parte inteira.",
+      "contentVersion": 1,
+      "prompt": "Corrija paraCentavos em main.js. A função converte um valor em reais, com fração, para centavos inteiros, arredondando ao centavo mais próximo e com meio centavo para cima. O código atual usa Math.trunc, que corta a fração: 19.99 vira 1998 em vez de 1999. Ajuste somente a expressão de arredondamento. Antes de alterar, rode os casos e anote quais valores perdem centavos.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Converte reais em centavos inteiros.\nexport function paraCentavos(valorReais) {\n  return Math.trunc(valorReais * 100);\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "// Converte reais em centavos inteiros.\nexport function paraCentavos(valorReais) {\n  return Math.round(valorReais * 100);\n}\n"
+      },
+      "tests": "import { paraCentavos } from './main.js';\n\ndescribe('paraCentavos', () => {\n  test('arredonda a fração para o centavo mais próximo', () => {\n    expect(paraCentavos(3.456)).toBe(346);\n    expect(paraCentavos(19.99)).toBe(1999);\n  });\n  test('meio centavo sobe', () => {\n    expect(paraCentavos(0.125)).toBe(13);\n  });\n  test('valores exatos e zero não mudam', () => {\n    expect(paraCentavos(10.5)).toBe(1050);\n    expect(paraCentavos(0)).toBe(0);\n  });\n  test('o resultado é inteiro', () => {\n    expect(Number.isInteger(paraCentavos(2.499))).toBe(true);\n    expect(paraCentavos(2.499)).toBe(250);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "piso",
+          "files": {
+            "main.js": "// Converte reais em centavos inteiros.\nexport function paraCentavos(valorReais) {\n  return Math.floor(valorReais * 100);\n}\n"
+          }
+        },
+        {
+          "id": "arredonda-para-dezenas",
+          "files": {
+            "main.js": "// Converte reais em centavos inteiros.\nexport function paraCentavos(valorReais) {\n  return Math.round(valorReais * 10) * 10;\n}\n"
+          }
+        },
+        {
+          "id": "sem-passar-a-inteiro",
+          "files": {
+            "main.js": "// Converte reais em centavos inteiros.\nexport function paraCentavos(valorReais) {\n  return Number((valorReais * 100).toFixed(2));\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.10.escolha-arredondamento-meio",
+      "conceptId": "math.rounding",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Um rateio com valores negativos mostra como Math.round desempata o meio e como -0 aparece no console. Prever essa linha exige conhecer o contrato de Math.round e de Math.floor, e não supor arredondamento para o par nem para longe do zero.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida os quatro valores da linha. Lembre para onde Math.round leva o meio e para onde Math.floor leva um negativo com fração.",
+      "code": "console.log(Math.round(2.5), Math.round(-2.5), Math.round(-0.4), Math.floor(-0.4));\n",
+      "choices": [
+        "3 -3 0 -1",
+        "3 -2 0 -1",
+        "3 -2 -0 -1",
+        "2 -2 -0 -1"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Math.round leva o meio para o inteiro maior: 2.5 vira 3 e -2.5 vira -2. Math.round(-0.4) produz -0, e console.log mostra -0. Math.floor(-0.4) vale -1, porque vai para o inteiro menor.",
+        "byChoice": {
+          "0": "Math.round não afasta o meio do zero: -2.5 vira -2, porque o meio vai para +∞.",
+          "1": "Math.round(-0.4) produz -0, um zero negativo; console.log o exibe como -0, não como 0.",
+          "3": "2.5 não vira 2: Math.round leva o meio para o inteiro maior, então o resultado é 3, sem arredondamento para o par."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.10.mini-sorteio-face",
+      "conceptId": "math.random",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11"],
+      "transferDecision": "Sortear um dado a partir de uma função injetada exige mapear o intervalo [0, 1) para faces de 1 a 6 e recusar valores fora desse intervalo. O defeito mais comum é arredondar em vez de truncar, e o teste só o revela com valores perto de 1; por isso a escolha depende do contrato do intervalo, não da sensação de aleatoriedade.",
+      "contentVersion": 1,
+      "prompt": "Implemente sortearFace(aleatorio = Math.random) em main.js. aleatorio é uma função que devolve um número em [0, 1). Devolva um inteiro de 1 a 6, com a mesma chance para cada face. Se aleatorio() devolver algo fora de [0, 1), lance RangeError. Use o parâmetro dentro da lógica: os testes passam uma função fixa, e o resultado precisa ser previsível para cada valor.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function sortearFace(aleatorio = Math.random) {\n  // Transforme o número de aleatorio() em uma face de 1 a 6.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function sortearFace(aleatorio = Math.random) {\n  const valor = aleatorio();\n  if (!(valor >= 0 && valor < 1)) throw new RangeError('aleatorio deve devolver número em [0, 1)');\n  return Math.floor(valor * 6) + 1;\n}\n"
+      },
+      "tests": "import { sortearFace } from './main.js';\n\ndescribe('sortearFace', () => {\n  test('o início do intervalo cai na primeira face', () => {\n    expect(sortearFace(() => 0)).toBe(1);\n  });\n  test('valores de [0, 1) são divididos em seis faixas', () => {\n    expect(sortearFace(() => 0.2)).toBe(2);\n    expect(sortearFace(() => 0.5)).toBe(4);\n  });\n  test('quase 1 continua na sexta face', () => {\n    expect(sortearFace(() => 0.9999999999999999)).toBe(6);\n  });\n  test('valores fora de [0, 1) lançam RangeError', () => {\n    expect(() => sortearFace(() => 1)).toThrow(RangeError);\n    expect(() => sortearFace(() => -0.1)).toThrow(RangeError);\n  });\n  test('sem função injetada, o resultado é sempre uma face válida', () => {\n    for (let i = 0; i < 100; i++) {\n      const face = sortearFace();\n      expect(Number.isInteger(face) && face >= 1 && face <= 6).toBe(true);\n    }\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "arredonda-em-vez-de-truncar",
+          "files": {
+            "main.js": "export function sortearFace(aleatorio = Math.random) {\n  const valor = aleatorio();\n  if (!(valor >= 0 && valor < 1)) throw new RangeError('aleatorio deve devolver número em [0, 1)');\n  return Math.round(valor * 6) + 1;\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export function sortearFace(aleatorio = Math.random) {\n  const valor = aleatorio();\n  return Math.floor(valor * 6) + 1;\n}\n"
+          }
+        },
+        {
+          "id": "sem-mais-um",
+          "files": {
+            "main.js": "export function sortearFace(aleatorio = Math.random) {\n  const valor = aleatorio();\n  if (!(valor >= 0 && valor < 1)) throw new RangeError('aleatorio deve devolver número em [0, 1)');\n  return Math.floor(valor * 6);\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.10.correcao-indice-sorteio",
+      "conceptId": "math.random",
+      "sourceActivityId": "02.10",
+      "prerequisites": ["01.01", "02.01", "02.04"],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11", "14"],
+      "transferDecision": "Escolher um item de uma lista com sorteio depende de o índice cair em [0, tamanho). Somar 1 ao índice parece inofensivo, mas pula o primeiro item e pode sair da lista; o aluno precisa relacionar o intervalo de Math.random com o tamanho da lista, e não corrigir apenas o caso que falhou.",
+      "contentVersion": 1,
+      "prompt": "Corrija escolherItem em main.js. A função deve devolver um item sorteado de uma lista não vazia, com a mesma chance para cada posição, a partir de aleatorio() em [0, 1). O código atual soma 1 ao índice: com 0 pula o primeiro item e perto de 1 devolve undefined. Corrija somente a expressão do índice e mantenha o parâmetro de sorteio. Antes de alterar, rode os casos e anote qual valor de aleatorio() produz undefined.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// aleatorio() devolve um número em [0, 1).\nexport function escolherItem(itens, aleatorio = Math.random) {\n  const indice = Math.floor(aleatorio() * itens.length + 1);\n  return itens[indice];\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "// aleatorio() devolve um número em [0, 1).\nexport function escolherItem(itens, aleatorio = Math.random) {\n  const indice = Math.floor(aleatorio() * itens.length);\n  return itens[indice];\n}\n"
+      },
+      "tests": "import { escolherItem } from './main.js';\n\ndescribe('escolherItem', () => {\n  test('r = 0 devolve o primeiro item', () => {\n    expect(escolherItem(['a', 'b', 'c'], () => 0)).toBe('a');\n  });\n  test('r quase 1 devolve o último item', () => {\n    expect(escolherItem(['a', 'b', 'c'], () => 0.9999999999999999)).toBe('c');\n  });\n  test('cada terço de [0, 1) cai no item correspondente', () => {\n    expect(escolherItem(['a', 'b', 'c'], () => 0.33)).toBe('a');\n    expect(escolherItem(['a', 'b', 'c'], () => 0.34)).toBe('b');\n    expect(escolherItem(['a', 'b', 'c'], () => 0.67)).toBe('c');\n  });\n  test('lista com um item sempre devolve esse item', () => {\n    expect(escolherItem(['único'], () => 0.99)).toBe('único');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "teto-do-produto",
+          "files": {
+            "main.js": "// aleatorio() devolve um número em [0, 1).\nexport function escolherItem(itens, aleatorio = Math.random) {\n  const indice = Math.ceil(aleatorio() * itens.length);\n  return itens[indice];\n}\n"
+          }
+        },
+        {
+          "id": "primeiro-nunca-sai",
+          "files": {
+            "main.js": "// aleatorio() devolve um número em [0, 1).\nexport function escolherItem(itens, aleatorio = Math.random) {\n  const indice = Math.floor(aleatorio() * (itens.length - 1)) + 1;\n  return itens[indice];\n}\n"
+          }
+        },
+        {
+          "id": "arredonda-indice",
+          "files": {
+            "main.js": "// aleatorio() devolve um número em [0, 1).\nexport function escolherItem(itens, aleatorio = Math.random) {\n  const indice = Math.round(aleatorio() * itens.length);\n  return itens[indice];\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.12.mini-mesma-medida",
+      "conceptId": "number.tolerance",
+      "sourceActivityId": "02.12",
+      "prerequisites": ["01.01", "02.10", "02.11"],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": ["07", "11"],
+      "transferDecision": "Um medidor de nível com passo de 0.2 litro aceita diferenças até metade do passo, com limite inclusivo. O aluno precisa derivar a tolerância da política do instrumento e tratar a diferença em ponto flutuante, em vez de usar um limite fixo que parece seguro.",
+      "contentVersion": 1,
+      "prompt": "Implemente mesmaMedida(a, b, passo) em main.js. Duas leituras de um medidor de nível são iguais quando a diferença absoluta entre elas é menor ou igual a metade do passo, com limite inclusivo. Se a ou b não forem números finitos, ou se passo não for maior que zero, lance RangeError. Calcule a diferença com Math.abs e compare com a tolerância; não use Number.EPSILON como limite.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export function mesmaMedida(a, b, passo) {\n  // Compare as leituras conforme a política do medidor.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function mesmaMedida(a, b, passo) {\n  if (!Number.isFinite(a) || !Number.isFinite(b) || !(passo > 0)) {\n    throw new RangeError('leituras devem ser finitas e o passo positivo');\n  }\n  const tolerancia = passo / 2;\n  return Math.abs(a - b) <= tolerancia;\n}\n"
+      },
+      "tests": "import { mesmaMedida } from './main.js';\n\ndescribe('mesmaMedida', () => {\n  test('diferença dentro da metade do passo é igual', () => {\n    expect(mesmaMedida(9.6, 10, 1)).toBe(true);\n    expect(mesmaMedida(5, 5, 0.1)).toBe(true);\n  });\n  test('diferença acima da metade do passo é diferente', () => {\n    expect(mesmaMedida(1, 1.6, 1)).toBe(false);\n    expect(mesmaMedida(9.4, 10, 1)).toBe(false);\n  });\n  test('o limite é inclusivo', () => {\n    expect(mesmaMedida(10, 10.5, 1)).toBe(true);\n  });\n  test('o ponto flutuante não decide sozinho o limite', () => {\n    expect(mesmaMedida(0.3, 0.2, 0.2)).toBe(true);\n  });\n  test('leitura não finita ou passo não positivo lançam RangeError', () => {\n    expect(() => mesmaMedida(NaN, 1, 0.2)).toThrow(RangeError);\n    expect(() => mesmaMedida(2, 1, 0)).toThrow(RangeError);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "passo-inteiro-como-tolerancia",
+          "files": {
+            "main.js": "export function mesmaMedida(a, b, passo) {\n  if (!Number.isFinite(a) || !Number.isFinite(b) || !(passo > 0)) {\n    throw new RangeError('leituras devem ser finitas e o passo positivo');\n  }\n  return Math.abs(a - b) <= passo;\n}\n"
+          }
+        },
+        {
+          "id": "limite-estrito",
+          "files": {
+            "main.js": "export function mesmaMedida(a, b, passo) {\n  if (!Number.isFinite(a) || !Number.isFinite(b) || !(passo > 0)) {\n    throw new RangeError('leituras devem ser finitas e o passo positivo');\n  }\n  const tolerancia = passo / 2;\n  return Math.abs(a - b) < tolerancia;\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export function mesmaMedida(a, b, passo) {\n  const tolerancia = passo / 2;\n  return Math.abs(a - b) <= tolerancia;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.12.escolha-tolerancia-diferenca",
+      "conceptId": "number.tolerance",
+      "sourceActivityId": "02.12",
+      "prerequisites": ["01.01", "02.10", "02.11"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Comparar medidas de ponto flutuante exige separar três decisões: o limite derivado da política, a diferença real calculada e a igualdade exata. Os valores 0.3 - 0.2 e 0.1 mostram que uma diferença pode caber no limite sem ser exatamente igual a ele.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida os quatro valores da linha. Separe o limite (metade do passo), a diferença real calculada em ponto flutuante e a igualdade exata com 0.1.",
+      "code": "const passo = 0.2;\nconst tolerancia = passo / 2;\nconsole.log(tolerancia, Math.abs(0.3 - 0.2) <= tolerancia, Math.abs(0.3 - 0.2) === 0.1, 0.1 + 0.2 === 0.3);\n",
+      "choices": [
+        "0.1 true true true",
+        "0.1 true false false",
+        "0.1 false false false",
+        "0.2 true false false"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "tolerancia é passo / 2, ou seja 0.1. A diferença real é 0.09999999999999998, que cabe no limite inclusivo; mas Math.abs(0.3 - 0.2) não é exatamente 0.1, e 0.1 + 0.2 também não vale 0.3.",
+        "byChoice": {
+          "0": "A diferença real é 0.09999999999999998, não 0.1: a subtração em ponto flutuante não é exata. A igualdade com 0.1 é false, e 0.1 + 0.2 também não é 0.3.",
+          "2": "A diferença fica dentro do limite inclusivo, porque 0.09999999999999998 é menor ou igual a 0.1; a comparação de tolerância é true.",
+          "3": "O limite é metade do passo, 0.1, e não o passo inteiro; a política usa passo / 2."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.11.escolha-acumulo-decimal",
+      "conceptId": "number.ieee754",
+      "sourceActivityId": "02.11",
+      "prerequisites": ["01.01", "02.01", "02.10"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Um acumulador de tempo ou de centavos soma frações que não são exatas em binário. Prever se o laço termina em 1 ou apenas perto dele exige raciocinar sobre a representação de cada parcela e sobre o erro acumulado, e não sobre a aparência do código.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida os três valores. Lembre que 0.1 não é exato em binário, que o laço pode não chegar a 1 e que Number.EPSILON é a distância entre 1 e o próximo número representável.",
+      "code": "let saldo = 0;\nfor (let i = 0; i < 10; i++) saldo += 0.1;\nconsole.log(saldo, saldo === 1, Math.abs(saldo - 1) < Number.EPSILON);\n",
+      "choices": [
+        "1 true true",
+        "0.9999999999999999 false false",
+        "0.9999999999999999 false true",
+        "0.9999999999999999 true true"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "O laço termina em 0.9999999999999999, então saldo === 1 é false. A diferença para 1 é cerca de 1.1e-16, menor que Number.EPSILON, por isso a comparação passa neste caso. EPSILON mede a folga perto de 1 e não serve como limite universal.",
+        "byChoice": {
+          "0": "Somar 0.1 dez vezes não dá exatamente 1: cada parcela é aproximada em binário e o erro se acumula, por isso a saída é 0.9999999999999999.",
+          "1": "Math.abs(saldo - 1) vale cerca de 1.1e-16, menor que Number.EPSILON (cerca de 2.2e-16); por isso a comparação com EPSILON é true aqui.",
+          "3": "saldo === 1 é false, porque o resultado do laço é 0.9999999999999999 e não 1."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.11.predicao-soma-decimal",
+      "conceptId": "number.ieee754",
+      "sourceActivityId": "02.11",
+      "prerequisites": ["01.01", "02.01", "02.10"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": ["07", "11"],
+      "transferDecision": "Valores decimais de preço, troco e média voltam com ruído de representação. O aluno precisa prever cada linha pelo valor exato que o ponto flutuante guarda e saber quando toFixed ou Math.round apenas exibem um valor sem mudar o que === consulta.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Separe o valor guardado pelo ponto flutuante do valor exibido por toFixed e do que a comparação === consulta.",
+      "code": "const soma = 0.7 + 0.1;\nconsole.log(soma, soma === 0.8, Number(soma.toFixed(2)) === 0.8);\nconst troco = 0.3 - 0.1;\nconsole.log(troco, troco === 0.2, Math.abs(troco - 0.2) < 1e-9);\nconsole.log(0.5 + 0.25 === 0.75, 1 / 3 + 1 / 3 + 1 / 3 === 1, 3 * 0.1);\nconsole.log(Math.round(1.005 * 100) / 100, 4.35 * 100, 1.1 * 3);\n",
+      "expectedOutput": "0.7999999999999999 false true\n0.19999999999999998 false true\ntrue true 0.30000000000000004\n1 434.99999999999994 3.3000000000000003"
+    },
+    {
+      "variantId": "var.02.11.predicao-ids-seguros",
+      "conceptId": "number.safe_integers",
+      "sourceActivityId": "02.11",
+      "prerequisites": ["01.01", "02.01", "02.10"],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": ["07", "11", "14"],
+      "transferDecision": "IDs numéricos vindos de sistemas externos podem ultrapassar 2^53 - 1 sem nenhum erro visível. O aluno precisa prever onde a aritmética deixa de ser exata e quais valores Number.isSafeInteger aceita, lendo o limite do tipo e não a aparência do número.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Verifique quais literais são inteiros seguros, o que acontece ao somar 2 a um valor seguro próximo do limite e como BigInt se comporta com 10n.",
+      "code": "const idSeguro = 9007199254740991;\nconst idGrande = 9007199254740993;\nconsole.log(Number.isSafeInteger(idSeguro), Number.isSafeInteger(idGrande), idGrande);\nconsole.log(idSeguro + 2, Number.MAX_SAFE_INTEGER - Number.MAX_SAFE_INTEGER + 1);\nconst ids = [1, 2, 9007199254740992];\nconsole.log(ids.map(id => Number.isSafeInteger(id)).join(' '), 2 ** 53 + 1 === 2 ** 53);\nconsole.log(typeof 10n, String(10n * 2n), Number.isInteger(2.0), Number.isSafeInteger(2.0));\n",
+      "expectedOutput": "true false 9007199254740992\n9007199254740992 1\ntrue true false true\nbigint 20 true true"
+    },
+    {
+      "variantId": "var.02.11.escolha-contador-ids",
+      "conceptId": "number.safe_integers",
+      "sourceActivityId": "02.11",
+      "prerequisites": ["01.01", "02.01", "02.10"],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": ["07", "11"],
+      "transferDecision": "Um contador de identificadores que cresce até o limite do tipo deixa de avançar sem lançar erro. O aluno precisa prever o valor guardado em cada passo e a resposta de Number.isSafeInteger no fim, sem supor que o incremento sempre produz o próximo inteiro.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida a saída. Acompanhe o valor do contador a cada iteração e pergunte se o incremento ainda muda o número guardado.",
+      "code": "let proximo = Number.MAX_SAFE_INTEGER - 1;\nconst ids = [];\nfor (let i = 0; i < 3; i++) {\n  ids.push(proximo);\n  proximo += 1;\n}\nconsole.log(ids.join(' '), Number.isSafeInteger(proximo));\n",
+      "choices": [
+        "9007199254740990 9007199254740991 9007199254740992 false",
+        "9007199254740990 9007199254740991 9007199254740993 false",
+        "9007199254740990 9007199254740991 9007199254740992 true",
+        "9007199254740990 9007199254740991 9007199254740991 false"
+      ],
+      "answer": 0,
+      "feedback": {
+        "correct": "Até 9007199254740991 o incremento é exato. Em 9007199254740992, somar 1 arredonda de volta para 9007199254740992: o contador trava sem erro, e Number.isSafeInteger devolve false.",
+        "byChoice": {
+          "1": "Number não faz aritmética exata acima de 2^53: 9007199254740992 + 1 não vira 9007199254740993, porque esse valor não é representável.",
+          "2": "9007199254740992 não é inteiro seguro: Number.isSafeInteger aceita até 9007199254740991, então o resultado final é false.",
+          "3": "O terceiro id não repete 991: depois de 991, o contador vai a 992, e é esse valor que a terceira iteração guarda."
+        }
+      }
+    }
+  ]
+}

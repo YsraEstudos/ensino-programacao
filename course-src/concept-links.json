@@ -1,0 +1,1246 @@
+{
+  "version": 1,
+  "concepts": [
+    {
+      "conceptId": "algorithms.complexity",
+      "decision": "linked",
+      "activities": [
+        "08.01",
+        "08.06"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "08.01 exige classificar a complexidade de trechos pelo crescimento; 08.06 exige escolher entre includes e Set com base no custo de cada busca. 08.03 (busca binária) foi excluída porque a atividade não exige análise de crescimento."
+    },
+    {
+      "conceptId": "algorithms.recursion",
+      "decision": "linked",
+      "activities": [
+        "08.02",
+        "20.02",
+        "20.04"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "08.02 soma uma árvore por recursão com caso base; 20.02 exige situar a recursão de um gerador; 20.04 pede identificar a linha que reentra numa recursão de Proxy. Todas exigem raciocinar sobre a chamada que se repete."
+    },
+    {
+      "conceptId": "architecture.boundaries",
+      "decision": "linked",
+      "activities": [
+        "23.01",
+        "23.02",
+        "23.06",
+        "23.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "23.01 e 23.06 exigem mapear responsabilidades e fronteiras entre UI, serviço, domínio e adaptadores; 23.02 ordena camadas de entrada, validação e persistência; 23.08 exige um capstone com domínio e persistência separados."
+    },
+    {
+      "conceptId": "arrays.basic",
+      "decision": "linked",
+      "activities": [
+        "05.01",
+        "05.04",
+        "05.06",
+        "05.07",
+        "05.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "05.01 exige prever o estado de arrays e de suas identidades; 05.04 busca por índice; 05.06 corrige mutação de sort/reverse; 05.07 calcula estatísticas sem mutar a entrada; 05.09 aplica adicionar e remover sobre um array."
+    },
+    {
+      "conceptId": "arrays.pipeline",
+      "decision": "linked",
+      "activities": [
+        "07.01",
+        "07.02",
+        "07.06",
+        "07.08",
+        "07.09",
+        "07.10"
+      ],
+      "optionalActivities": [
+        "07.15"
+      ],
+      "kind": "implementation",
+      "rationale": "07.01, 07.06 e 07.10 encadeiam ou escolhem entre map, filter, reduce e flatMap sobre arrays; 07.02, 07.08 e 07.09 reduzem coleções de registros com agrupamento e métricas. 07.03 (ranking por sort) foi excluída por ser ordenação, não pipeline. 07.15 é opcional: investigação de relatório em pipeline (regra de carência e teste de regressão), revisão por adesão."
+    },
+    {
+      "conceptId": "async.iterables",
+      "decision": "needs-new-activity",
+      "activities": [],
+      "optionalActivities": [
+        "12.13"
+      ],
+      "kind": "implementation",
+      "rationale": "Nenhuma atividade obrigatória exige for await ou async iterator; 12.13 é opcional e apenas compara iteração assíncrona incremental com materialização. Nova atividade necessária: consumir uma fonte assíncrona com for await e encerrar a iteração cedo."
+    },
+    {
+      "conceptId": "async.promise",
+      "decision": "linked",
+      "activities": [
+        "12.01",
+        "12.02",
+        "12.03",
+        "12.04",
+        "12.05",
+        "12.07",
+        "12.14",
+        "12.17",
+        "12.18"
+      ],
+      "optionalActivities": [
+        "12.09",
+        "12.21"
+      ],
+      "kind": "implementation",
+      "rationale": "12.01 e 12.04 exigem prever a ordem de microtasks e tasks; 12.02, 12.03, 12.07 e 12.14 compõem Promises; 12.05 corrige await e captura de rejeição; 12.17 e 12.18 criam Promises e retries. 12.09 e 12.21 são opcionais."
+    },
+    {
+      "conceptId": "bindings.configuration",
+      "decision": "linked",
+      "activities": [
+        "01.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 01.08 (TRANSFER) exige decidir const ou let para cada valor de configuração."
+    },
+    {
+      "conceptId": "bindings.const_let_choice",
+      "decision": "linked",
+      "activities": [
+        "01.04"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 01.04 (FADED) exige escolher const ou let conforme haja reatribuição."
+    },
+    {
+      "conceptId": "bindings.declaration_order",
+      "decision": "linked",
+      "activities": [
+        "01.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 01.03 (PARSONS) exige ordenar declarações pela dependência entre nomes."
+    },
+    {
+      "conceptId": "bindings.reassignment",
+      "decision": "linked",
+      "activities": [
+        "01.02"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 01.02 (TRACE) exige rastrear o valor atual de cada binding após reatribuições."
+    },
+    {
+      "conceptId": "bindings.template_literal",
+      "decision": "linked",
+      "activities": [
+        "01.06",
+        "01.07"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 01.06 (FADED) completa uma template literal e 01.07 (MAKE) cria um resumo com interpolação."
+    },
+    {
+      "conceptId": "bindings.textual_profile",
+      "decision": "linked",
+      "activities": [
+        "01.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 01.09 (PROJECT) produz três linhas textuais a partir de bindings."
+    },
+    {
+      "conceptId": "bindings.values",
+      "decision": "linked",
+      "activities": [
+        "01.02",
+        "01.07",
+        "01.08",
+        "01.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "01.02 rastreia o valor de cada nome após cada instrução; 01.07 declara e imprime um valor; 01.08 e 01.09 usam os valores dos bindings em resumos e em uma ficha. 01.06 foi excluída por apenas interpolar uma expressão."
+    },
+    {
+      "conceptId": "callbacks.basic",
+      "decision": "linked",
+      "activities": [
+        "07.04",
+        "09.05",
+        "12.17",
+        "17.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "07.04 completa callbacks de map e filter; 09.05 corrige callbacks guardados num laço; 12.17 converte uma API de callback em Promise; 17.03 tipa callbacks de map e filter. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "classes.basic",
+      "decision": "linked",
+      "activities": [
+        "10.02",
+        "10.05"
+      ],
+      "optionalActivities": [
+        "10.10"
+      ],
+      "kind": "implementation",
+      "rationale": "10.02 completa uma classe com campo privado e invariante de saldo; 10.05 corrige a ordem de constructor e super numa herança. 10.10 (campo privado com #) é opcional."
+    },
+    {
+      "conceptId": "closures.basic",
+      "decision": "linked",
+      "activities": [
+        "09.02",
+        "09.03",
+        "09.04",
+        "09.05",
+        "09.06",
+        "09.08"
+      ],
+      "optionalActivities": [
+        "09.10"
+      ],
+      "kind": "implementation",
+      "rationale": "09.02 e 09.08 mantêm estado privado em factories; 09.03 completa um multiplicador que captura um fator; 09.04 rastreia o binding capturado; 09.05 corrige callbacks de loop; 09.06 implementa memoização com estado capturado. 09.10 é opcional."
+    },
+    {
+      "conceptId": "coercion.explicit",
+      "decision": "linked",
+      "activities": [
+        "02.05"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.05 (MODIFY) exige conversão explícita de entradas textuais."
+    },
+    {
+      "conceptId": "coercion.number_validation",
+      "decision": "linked",
+      "activities": [
+        "02.04"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.04 (FADED) normaliza entrada e converte para number com validação."
+    },
+    {
+      "conceptId": "control.branch",
+      "decision": "linked",
+      "activities": [
+        "03.03",
+        "03.04",
+        "03.05",
+        "03.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "03.03 ordena regras condicionais de FizzBuzz; 03.04 classifica faixas com cortes exclusivos; 03.05 testa o limite de cada condição; 03.10 escolhe entre ternário e if/else com dois e três desfechos."
+    },
+    {
+      "conceptId": "control.loop",
+      "decision": "linked",
+      "activities": [
+        "03.01",
+        "03.02",
+        "03.06",
+        "03.07",
+        "03.08",
+        "03.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "03.01 e 03.02 rastreiam passagens de um laço; 03.06 investiga um laço que não progride; 03.07 percorre inteiros de 1 a n; 03.08 e 03.09 simulam laços por ticks e turnos."
+    },
+    {
+      "conceptId": "date.time",
+      "decision": "linked",
+      "activities": [
+        "12.12",
+        "12.20"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "12.12 calcula expiração com comparação estrita e fuso; 12.20 usa Intl para plural e tempo relativo. 12.20 entrou pela revisão do catálogo."
+    },
+    {
+      "conceptId": "debug.first_error",
+      "decision": "linked",
+      "activities": [
+        "00.06"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 00.06 (DEBUG) exige localizar o primeiro erro e corrigi-lo."
+    },
+    {
+      "conceptId": "debugging.tools",
+      "decision": "linked",
+      "activities": [
+        "13.04",
+        "13.05",
+        "13.12"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "13.04 exige prever, executar e inspecionar com debugger; 13.05 reduz um bug até um caso mínimo; 13.12 escolhe a ferramenta que produz a evidência de cada falha."
+    },
+    {
+      "conceptId": "dom.basic",
+      "decision": "linked",
+      "activities": [
+        "11.02",
+        "11.04",
+        "11.05",
+        "11.06",
+        "11.07",
+        "11.08",
+        "11.12"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "11.02 e 11.12 criam nós com texto seguro; 11.04 lê controles de formulário no DOM; 11.05 e 11.06 tratam listeners e delegação sobre nós; 11.07 trabalha rótulos e foco; 11.08 renderiza o Kanban. 11.09 foi excluída por tratar do momento de execução do script, coberto em modules.browser."
+    },
+    {
+      "conceptId": "environment.boundaries",
+      "decision": "linked",
+      "activities": [
+        "00.05"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Isenção proposta revisada: 00.05 (READ) exige classificar cada recurso como padrão da linguagem ou oferecido pelo ambiente, exercitando o conceito diretamente; por isso o vínculo é mantido e a isenção não se aplica."
+    },
+    {
+      "conceptId": "errors.cause",
+      "decision": "linked",
+      "activities": [
+        "13.10",
+        "13.15"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 13.10 (MODIFY) preserva cause ao traduzir erro externo. 13.15 (MAKE), encontrado na revisão do catálogo e não sugerido pelo mapa, cria erro de domínio com cause."
+    },
+    {
+      "conceptId": "errors.throw",
+      "decision": "linked",
+      "activities": [
+        "04.11",
+        "04.12",
+        "04.13"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "04.11 e 04.13 lançam TypeError e RangeError para argumentos inválidos; 04.12 relança erros com contexto preservado."
+    },
+    {
+      "conceptId": "errors.try_catch",
+      "decision": "linked",
+      "activities": [
+        "06.06",
+        "06.09",
+        "12.05",
+        "13.10",
+        "16.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "06.06 e 06.09 capturam JSON inválido e restauram defaults; 12.05 corrige captura local de rejeição; 13.10 captura falha externa; 16.10 trata a captura como unknown. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "errors.types",
+      "decision": "linked",
+      "activities": [
+        "04.11",
+        "04.12",
+        "04.13"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "04.11 separa TypeError de RangeError; 04.12 identifica SyntaxError pelo tipo; 04.13 separa TypeError de retorno esperado."
+    },
+    {
+      "conceptId": "events.propagation",
+      "decision": "linked",
+      "activities": [
+        "11.01",
+        "11.06",
+        "11.11"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "11.01 rastreia o alvo e os ancestrais na fase de bubble; 11.06 implementa delegação de eventos no ul com closest; 11.11 separa propagação de ação padrão com stopPropagation e preventDefault. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "execution.contradiction",
+      "decision": "linked",
+      "activities": [
+        "00.02"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 00.02 (TRACE) exige comparar o efeito de uma alteração no programa."
+    },
+    {
+      "conceptId": "execution.explain_program",
+      "decision": "linked",
+      "activities": [
+        "00.09"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 00.09 (TRACE) exige rastrear e explicar um programa curto."
+    },
+    {
+      "conceptId": "execution.fill_console",
+      "decision": "linked",
+      "activities": [
+        "00.04"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 00.04 (FADED) exige completar valores para produzir a saída esperada."
+    },
+    {
+      "conceptId": "execution.make",
+      "decision": "linked",
+      "activities": [
+        "00.07"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 00.07 (MAKE) exige escrever o primeiro programa."
+    },
+    {
+      "conceptId": "execution.order",
+      "decision": "linked",
+      "activities": [
+        "00.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 00.01 (PREDICT) exige prever a saída na ordem de execução."
+    },
+    {
+      "conceptId": "execution.sequence",
+      "decision": "linked",
+      "activities": [
+        "00.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 00.03 (PARSONS) exige montar o programa na ordem de execução."
+    },
+    {
+      "conceptId": "fetch.basic",
+      "decision": "linked",
+      "activities": [
+        "12.06",
+        "12.08",
+        "12.11",
+        "12.16"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "12.06 implementa busca cancelável; 12.08 monta dashboard com tratamento de status; 12.11 inspeciona o corpo consumível de Response; 12.16 investiga requisições na aba Network. 12.16 entrou pela revisão do catálogo, não por sugestão do mapa."
+    },
+    {
+      "conceptId": "forms.basic",
+      "decision": "linked",
+      "activities": [
+        "11.03",
+        "11.04",
+        "11.07"
+      ],
+      "optionalActivities": [
+        "11.15"
+      ],
+      "kind": "implementation",
+      "rationale": "11.03 completa validação associando erros ao campo; 11.04 lê FormData e converte valores; 11.07 torna o formulário operável por teclado. Conceito pendente, procurado no catálogo inteiro. 11.15 é opcional: investigação de envio inválido em DOM, revisão por adesão."
+    },
+    {
+      "conceptId": "functions.decomposition",
+      "decision": "linked",
+      "activities": [
+        "04.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 04.03 (PARSONS) exige decompor um programa em funções."
+    },
+    {
+      "conceptId": "functions.return",
+      "decision": "linked",
+      "activities": [
+        "04.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 04.01 (PREDICT) exige prever o retorno de funções."
+    },
+    {
+      "conceptId": "git.basics",
+      "decision": "linked",
+      "activities": [
+        "07.11",
+        "07.12",
+        "14.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "07.11 cria o primeiro histórico Git com commits; 07.12 revisa um PR; 14.09 usa Git antes de abrir um PR. 14.09 entrou pela revisão do catálogo, não por sugestão do mapa."
+    },
+    {
+      "conceptId": "html.tree_reading",
+      "decision": "linked",
+      "activities": [
+        "00.08"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Isenção proposta revisada: 00.08 (READ) exige desenhar a árvore pai/filhos de um formulário e ligar label a input pelo atributo for, exercitando a leitura de árvore diretamente; por isso o vínculo é mantido e a isenção não se aplica."
+    },
+    {
+      "conceptId": "http.basic",
+      "decision": "linked",
+      "activities": [
+        "12.10"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "12.10 (READ) exige identificar status, headers e corpo de cada troca HTTP antes de escolher o parser. Atividade previsão-leitura única; ver nota sobre variantes."
+    },
+    {
+      "conceptId": "iterators.async",
+      "decision": "needs-new-activity",
+      "activities": [],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Nenhuma atividade de 20 exige for await, async generator ou async iterator; 20.01 e 20.03 tratam apenas iteradores síncronos. Nova atividade necessária."
+    },
+    {
+      "conceptId": "iterators.sync",
+      "decision": "linked",
+      "activities": [
+        "20.01",
+        "20.02",
+        "20.03",
+        "20.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "20.01 rastreia as chamadas de next() e done; 20.02 monta um generator; 20.03 completa Symbol.iterator; 20.08 implementa uma pipeline lazy com generators."
+    },
+    {
+      "conceptId": "mapset.basic",
+      "decision": "linked",
+      "activities": [
+        "07.02",
+        "07.05",
+        "07.07",
+        "07.08"
+      ],
+      "optionalActivities": [
+        "07.14"
+      ],
+      "kind": "implementation",
+      "rationale": "07.02 retorna Map em agrupamento; 07.05 implementa operações com Set; 07.07 conta e agrupa com Map; 07.08 calcula totais em Map e doadores únicos em Set. 07.14 (getOrInsert) é opcional. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "math.basic",
+      "decision": "linked",
+      "activities": [
+        "02.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.10 (MODIFY) exige usar funções de Math no código."
+    },
+    {
+      "conceptId": "math.random",
+      "decision": "linked",
+      "activities": [
+        "02.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.10 (MODIFY) inclui sorteios com Math.random."
+    },
+    {
+      "conceptId": "math.rounding",
+      "decision": "linked",
+      "activities": [
+        "02.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.10 (MODIFY) inclui arredondamento com Math."
+    },
+    {
+      "conceptId": "modules.browser",
+      "decision": "linked",
+      "activities": [
+        "11.09",
+        "11.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "11.09 (PREDICT) compara scripts classic, defer e module quanto à ordem de execução; 11.10 (MODIFY) separa o Kanban em módulos ES no navegador. Conceito pendente na tabela, com vínculo por sugestão de 11.10 e revisão de 11.09."
+    },
+    {
+      "conceptId": "modules.esm",
+      "decision": "linked",
+      "activities": [
+        "14.01",
+        "14.04",
+        "14.05",
+        "14.10"
+      ],
+      "optionalActivities": [
+        "14.22"
+      ],
+      "kind": "implementation",
+      "rationale": "14.01 mapeia imports e ciclos; 14.04 converte CJS para ESM; 14.05 corrige caminho de módulo ESM (DEBUG); 14.10 traça a avaliação de um grafo ESM. 14.22 (require de ESM e top-level await) é opcional. O conceito é introduzido em 00 e exercitado a partir de 14."
+    },
+    {
+      "conceptId": "modules.project_structure",
+      "decision": "linked",
+      "activities": [
+        "14.01",
+        "14.04",
+        "14.10"
+      ],
+      "optionalActivities": [
+        "14.19",
+        "14.23"
+      ],
+      "kind": "predict-read",
+      "rationale": "14.01 mapeia dependências e ciclos de um projeto; 14.04 define formato, exports e imports relativos; 14.10 traça o grafo de módulos. 14.19 (import.meta para caminhos) é opcional. 14.23 é opcional: leitura do mapa exports de um pacote, revisão por adesão."
+    },
+    {
+      "conceptId": "node.basics",
+      "decision": "linked",
+      "activities": [
+        "14.02",
+        "14.05",
+        "14.06",
+        "14.08"
+      ],
+      "optionalActivities": [
+        "14.20",
+        "14.21"
+      ],
+      "kind": "implementation",
+      "rationale": "14.02 separa leitura de argumentos da lógica de domínio; 14.05 corrige caminho relativo ao diretório de execução; 14.06 lê configuração por ambiente; 14.08 entrega uma CLI completa. 14.20 e 14.21 são opcionais."
+    },
+    {
+      "conceptId": "npm.safety",
+      "decision": "linked",
+      "activities": [
+        "14.11",
+        "14.18"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "14.11 avalia se uma dependência deve ser instalada, com critérios de manutenção e transitividade; 14.18 compara versões fixas e faixas, npm ci e npm audit. 14.03 (scripts) foi excluída por não tratar de segurança."
+    },
+    {
+      "conceptId": "number.ieee754",
+      "decision": "linked",
+      "activities": [
+        "02.11"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.11 (PREDICT) exige prever resultados de ponto flutuante."
+    },
+    {
+      "conceptId": "number.model",
+      "decision": "linked",
+      "activities": [
+        "02.04"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.04 (FADED) normaliza entrada numérica e explicita o modelo de number."
+    },
+    {
+      "conceptId": "number.safe_integers",
+      "decision": "linked",
+      "activities": [
+        "02.11"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.11 (PREDICT) inclui o limite de inteiros seguros."
+    },
+    {
+      "conceptId": "number.tolerance",
+      "decision": "linked",
+      "activities": [
+        "02.12"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.12 (TRANSFER) exige escolher tolerância para comparar números decimais."
+    },
+    {
+      "conceptId": "objects.identity",
+      "decision": "linked",
+      "activities": [
+        "06.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 06.01 (PREDICT) exige prever identidades de referências e o alcance do spread raso."
+    },
+    {
+      "conceptId": "objects.own",
+      "decision": "linked",
+      "activities": [
+        "06.03",
+        "06.04",
+        "06.07",
+        "06.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "06.03 copia apenas campos permitidos; 06.04 faz merge raso e indica a origem de cada propriedade; 06.07 indexa por id tratando __proto__ como chave própria; 06.10 compara propriedade própria e herdada."
+    },
+    {
+      "conceptId": "operations.observability",
+      "decision": "linked",
+      "activities": [
+        "23.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "23.09 (PROJECT) registra ID, duração e Error.cause e redige dados sensíveis. Uma atividade obrigatória."
+    },
+    {
+      "conceptId": "operators.arithmetic",
+      "decision": "linked",
+      "activities": [
+        "02.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.01 (PREDICT) exige prever expressões aritméticas."
+    },
+    {
+      "conceptId": "operators.basic",
+      "decision": "linked",
+      "activities": [
+        "02.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.01 (PREDICT) exige prever expressões com operadores básicos."
+    },
+    {
+      "conceptId": "operators.boolean_validation",
+      "decision": "linked",
+      "activities": [
+        "02.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.03 (PARSONS) monta validação booleana com operadores lógicos."
+    },
+    {
+      "conceptId": "operators.comparison",
+      "decision": "linked",
+      "activities": [
+        "02.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.01 (PREDICT) exige prever comparações."
+    },
+    {
+      "conceptId": "operators.discount_expression",
+      "decision": "linked",
+      "activities": [
+        "02.07"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.07 (MAKE) implementa uma regra de desconto com operadores."
+    },
+    {
+      "conceptId": "operators.falsy_nullish",
+      "decision": "linked",
+      "activities": [
+        "02.02"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.02 (PREDICT) exige prever valores falsy e nullish."
+    },
+    {
+      "conceptId": "operators.logical",
+      "decision": "linked",
+      "activities": [
+        "02.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.01 (PREDICT) exige prever operadores lógicos."
+    },
+    {
+      "conceptId": "operators.nullish_fallback",
+      "decision": "linked",
+      "activities": [
+        "02.06"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.06 (DEBUG) corrige um fallback que usa || no lugar de ??."
+    },
+    {
+      "conceptId": "operators.predict",
+      "decision": "linked",
+      "activities": [
+        "02.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 02.01 (PREDICT) exige prever resultados de operadores."
+    },
+    {
+      "conceptId": "operators.preferences",
+      "decision": "linked",
+      "activities": [
+        "02.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.08 (TRANSFER) aplica operadores a preferências do usuário."
+    },
+    {
+      "conceptId": "operators.scoreboard",
+      "decision": "linked",
+      "activities": [
+        "02.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 02.09 (TRANSFER) aplica operadores a placar com entradas opcionais."
+    },
+    {
+      "conceptId": "performance.measure",
+      "decision": "linked",
+      "activities": [
+        "21.01",
+        "21.03",
+        "21.09",
+        "21.12"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "21.01 identifica gargalo com evidência mensurável; 21.03 monta benchmark com warmup e mediana; 21.09 compara implementações com amostras; 21.12 investiga uma gravação do Performance. 21.12 entrou pela revisão do catálogo, não por sugestão do mapa."
+    },
+    {
+      "conceptId": "primitives.special_values",
+      "decision": "linked",
+      "activities": [
+        "01.05"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 01.05 (PREDICT) exige classificar valores especiais."
+    },
+    {
+      "conceptId": "primitives.typeof",
+      "decision": "linked",
+      "activities": [
+        "01.01"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo exato: 01.01 (PREDICT) exige classificar valores pelo tipo."
+    },
+    {
+      "conceptId": "primitives.types",
+      "decision": "linked",
+      "activities": [
+        "01.01",
+        "01.05"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "01.01 classifica valores por typeof; 01.05 classifica null, undefined e NaN como tipos ou valores especiais."
+    },
+    {
+      "conceptId": "prototype.chain",
+      "decision": "linked",
+      "activities": [
+        "10.03",
+        "10.05"
+      ],
+      "optionalActivities": [
+        "10.10"
+      ],
+      "kind": "implementation",
+      "rationale": "10.03 liga objetos a um protótipo compartilhado e pergunta se um método é próprio ou herdado; 10.05 sobrescreve método de base preservando a cadeia. 10.10 (Object.create(Conta.prototype)) é opcional. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "regex.basic",
+      "decision": "linked",
+      "activities": [
+        "05.02",
+        "05.12",
+        "05.13",
+        "05.14"
+      ],
+      "optionalActivities": [
+        "05.05"
+      ],
+      "kind": "implementation",
+      "rationale": "05.02 valida com regex ancorada; 05.12 troca datas com grupos nomeados; 05.13 extrai pares com matchAll e flags; 05.14 decide entre regex e parser. 05.05 (RegExp.escape) é opcional."
+    },
+    {
+      "conceptId": "resources.cleanup",
+      "decision": "linked",
+      "activities": [
+        "21.02"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 21.02 (PARSONS) exige ordenar setup e cleanup de recursos, incluindo listeners."
+    },
+    {
+      "conceptId": "scope.lexical",
+      "decision": "linked",
+      "activities": [
+        "09.01",
+        "09.04"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "09.01 desenha o mapa de escopos e a cadeia léxica; 09.04 rastreia o binding que a função captura. Ambas são previsão-leitura, o que mantém a classificação do mapa."
+    },
+    {
+      "conceptId": "serialization.json",
+      "decision": "linked",
+      "activities": [
+        "06.06",
+        "06.09"
+      ],
+      "optionalActivities": [
+        "06.12"
+      ],
+      "kind": "implementation",
+      "rationale": "06.06 separa JSON inválido de tipos distorcidos no round-trip; 06.09 implementa salvar e restaurar com defaults. 06.12 (número grande preservado) é opcional."
+    },
+    {
+      "conceptId": "storage.versioned",
+      "decision": "linked",
+      "activities": [
+        "11.08",
+        "11.13",
+        "13.14"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "11.08 persiste o estado do Kanban; 11.13 migra saves versionados registro a registro; 13.14 migra V2 para V3 com regressões."
+    },
+    {
+      "conceptId": "streams.basic",
+      "decision": "needs-new-activity",
+      "activities": [],
+      "optionalActivities": [
+        "20.09"
+      ],
+      "kind": "implementation",
+      "rationale": "Só 20.09 (opcional) investiga produtor e consumidor sob uma fila de stream; nenhuma atividade obrigatória cria ou consome um stream. Nova atividade necessária. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "strings.basic",
+      "decision": "linked",
+      "activities": [
+        "05.03",
+        "05.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "05.03 gera slug com split, filter e join; 05.08 separa linhas pelos delimitadores e preserva o restante da mensagem."
+    },
+    {
+      "conceptId": "testing.behavior",
+      "decision": "linked",
+      "activities": [
+        "13.01",
+        "13.03",
+        "13.06",
+        "13.07",
+        "13.08",
+        "13.09",
+        "13.13"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "13.01 lê uma falha de teste; 13.03 amplia a suíte de paginação; 13.06 aplica TDD a um parser; 13.07 escreve teste de regressão; 13.08 testa contratos; 13.09 usa dublês e relógio falso; 13.13 testa teclado e foco."
+    },
+    {
+      "conceptId": "this.binding",
+      "decision": "linked",
+      "activities": [
+        "10.01",
+        "10.04",
+        "10.05"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "10.01 prevê quem fornece this em cada forma de chamada; 10.04 corrige o receptor de um método extraído com bind; 10.05 trata o this antes de super. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "ts.advanced",
+      "decision": "linked",
+      "activities": [
+        "19.01",
+        "19.02",
+        "19.03",
+        "19.04",
+        "19.05",
+        "19.06",
+        "19.07",
+        "19.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "19.01 e 19.06 expandem mapped types à mão; 19.02 e 19.03 usam condicionais e infer; 19.04 investiga distributividade; 19.05 usa template literal types; 19.07 mede complexidade recursiva; 19.08 projeta uma DSL tipada."
+    },
+    {
+      "conceptId": "ts.basic",
+      "decision": "linked",
+      "activities": [
+        "14.14",
+        "15.01",
+        "15.03"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "14.14 monta um projeto TypeScript local com strict; 15.01 lê erros do compilador; 15.03 escreve anotações mínimas. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "ts.branding",
+      "decision": "linked",
+      "activities": [
+        "19.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "19.09 implementa IDs nominais com marcas distintas e type tests que impedem troca."
+    },
+    {
+      "conceptId": "ts.functions",
+      "decision": "linked",
+      "activities": [
+        "17.01",
+        "17.03",
+        "17.04",
+        "17.06"
+      ],
+      "optionalActivities": [
+        "17.07"
+      ],
+      "kind": "implementation",
+      "rationale": "17.01 classifica assinaturas genéricas, union ou concretas; 17.03 tipa callbacks de map e filter; 17.04 ajusta constraint de função genérica; 17.06 compara overload, union e generic. 17.07 é opcional."
+    },
+    {
+      "conceptId": "ts.generics",
+      "decision": "linked",
+      "activities": [
+        "17.01",
+        "17.02",
+        "17.03",
+        "17.04",
+        "17.06",
+        "17.08"
+      ],
+      "optionalActivities": [
+        "17.07"
+      ],
+      "kind": "implementation",
+      "rationale": "17.01 e 17.06 escolhem entre generic e union; 17.02 define Repository<T>; 17.03 tipa callbacks genéricos; 17.04 ajusta constraint; 17.08 implementa Cache<K,V>. 17.07 é opcional."
+    },
+    {
+      "conceptId": "ts.import_type",
+      "decision": "linked",
+      "activities": [
+        "18.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "18.09 (TRACE) mostra que um import de tipo não existe no JavaScript emitido."
+    },
+    {
+      "conceptId": "ts.keyof_indexed_access",
+      "decision": "linked",
+      "activities": [
+        "18.03"
+      ],
+      "optionalActivities": [
+        "18.11"
+      ],
+      "kind": "implementation",
+      "rationale": "Vínculo exato: 18.03 (FADED) completa chave e valor com keyof e acesso indexado. 18.11 é opcional: leitura de keyof, satisfies e cast em tabela de rotas, revisão por adesão."
+    },
+    {
+      "conceptId": "ts.narrowing",
+      "decision": "linked",
+      "activities": [
+        "16.02",
+        "16.03",
+        "16.04",
+        "16.05",
+        "16.09",
+        "16.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "16.02 faz narrowing de string, number e null sem truthiness; 16.03 usa união discriminada; 16.04 substitui cast por guarda; 16.05 usa type predicate; 16.09 verifica exaustividade; 16.10 guarda antes de ler unknown."
+    },
+    {
+      "conceptId": "ts.packages",
+      "decision": "linked",
+      "activities": [
+        "22.01",
+        "22.02",
+        "22.03",
+        "22.07",
+        "22.08",
+        "22.09"
+      ],
+      "optionalActivities": [
+        "22.10"
+      ],
+      "kind": "implementation",
+      "rationale": "22.01 compara runtime e declaração; 22.02 ordena exports e types; 22.03 escreve .d.ts; 22.07 escreve type tests de pacote; 22.08 e 22.09 entregam pacote publicável. 22.10 é opcional."
+    },
+    {
+      "conceptId": "ts.readonly",
+      "decision": "linked",
+      "activities": [
+        "15.09",
+        "17.05",
+        "17.11"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "15.09 prevê o efeito de mutação em dado readonly; 17.05 aceita entradas somente de leitura; 17.11 declara propriedades readonly em classe. 17.05 e 17.11 entraram pela revisão do catálogo; o mapa só sugeria atividades da etapa 15."
+    },
+    {
+      "conceptId": "ts.satisfies",
+      "decision": "linked",
+      "activities": [
+        "18.06",
+        "18.08"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "18.06 compara satisfies com anotação ampla; 18.08 constrói formulário tipado com satisfies. Apenas duas atividades obrigatórias."
+    },
+    {
+      "conceptId": "ts.unions",
+      "decision": "linked",
+      "activities": [
+        "16.01",
+        "16.02",
+        "16.03",
+        "16.06",
+        "16.07",
+        "16.08",
+        "16.09"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "16.01 modela estados impossíveis com union; 16.02 e 16.03 usam union com narrowing e discriminante; 16.06 deriva union de as const; 16.07 adiciona variante; 16.08 implementa máquina de estados; 16.09 verifica exaustividade."
+    },
+    {
+      "conceptId": "ts.unknown",
+      "decision": "linked",
+      "activities": [
+        "15.02",
+        "15.04",
+        "15.11"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "15.02 valida configuração externa como unknown; 15.04 lê payload desconhecido com guardas; 15.11 remove cast e valida a fronteira de resposta externa."
+    },
+    {
+      "conceptId": "ts.utility",
+      "decision": "linked",
+      "activities": [
+        "18.01",
+        "18.02",
+        "18.04",
+        "18.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "18.01 deriva aliases a partir de declarações canônicas; 18.02 faz patch parcial; 18.04 troca alias excessivo por resumo nomeado; 18.10 usa utility types com propósito."
+    },
+    {
+      "conceptId": "unicode.basic",
+      "decision": "linked",
+      "activities": [
+        "05.11",
+        "05.15"
+      ],
+      "optionalActivities": [
+        "05.16"
+      ],
+      "kind": "implementation",
+      "rationale": "05.11 compara UTF-16, code points e NFC; 05.15 (MAKE) conta grafemas com Intl.Segmenter. A classificação passa de previsão-leitura para implementação porque 05.15 é obrigatória e do tipo MAKE; 05.16 é opcional."
+    },
+    {
+      "conceptId": "validation.manual",
+      "decision": "linked",
+      "activities": [
+        "16.04",
+        "16.05",
+        "22.06"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "16.04 troca cast por guarda de resposta; 16.05 usa type predicate para filtrar registros externos; 22.06 compara guarda manual com schema. Conceito pendente, procurado no catálogo inteiro."
+    },
+    {
+      "conceptId": "validation.schema",
+      "decision": "linked",
+      "activities": [
+        "22.06"
+      ],
+      "optionalActivities": [],
+      "kind": "predict-read",
+      "rationale": "Vínculo único: 22.06 (COMPARE) compara guarda manual com biblioteca de schema. Previsão-leitura com uma atividade obrigatória."
+    },
+    {
+      "conceptId": "workers.basic",
+      "decision": "linked",
+      "activities": [
+        "21.05",
+        "21.10"
+      ],
+      "optionalActivities": [],
+      "kind": "implementation",
+      "rationale": "21.05 move cálculo puro para um worker; 21.10 (INVESTIGATE) mostra que a transferência de ArrayBuffer torna o buffer do emissor inutilizável."
+    }
+  ]
+}

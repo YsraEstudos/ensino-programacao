@@ -1,0 +1,701 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.02.01.escolha-diarias-precedencia",
+      "conceptId": "operators.basic",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Uma expressão que mistura multiplicação, subtração e parênteses muda de valor quando o agrupamento muda, mesmo com os mesmos números. Prever o total de um aluguel exige a mesma leitura de precedência e de tipos de operadores básicos, em outro domínio.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, calcule cada valor separadamente. Atenção aos parênteses e ao que && devolve quando os dois lados são booleanos.",
+      "code": "const diarias = 3;\nconst valorDiaria = 40;\nconst desconto = 10;\nconsole.log(diarias * valorDiaria - desconto, diarias * (valorDiaria - desconto), valorDiaria % 3 === 1 && diarias > 2);\n",
+      "choices": [
+        "110 120 true",
+        "110 90 false",
+        "110 90 true",
+        "120 90 true"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "Multiplicação vem antes de subtração: 3 * 40 - 10 = 110. Dentro dos parênteses, 40 - 10 = 30 e 3 * 30 = 90. Como 40 % 3 vale 1 e diarias > 2 é true, && devolve true.",
+        "byChoice": {
+          "0": "Os parênteses mudam só a segunda expressão: 3 * (40 - 10) vale 90. Ignorá-los dá 3 * 40 = 120.",
+          "1": "40 % 3 vale 1, e 1 === 1 é true. Como diarias > 2 também é true, o && devolve true, não false.",
+          "3": "A primeira expressão tem multiplicação antes da subtração: 3 * 40 - 10 vale 110, não 120."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.01.predicao-turnos-pausa",
+      "conceptId": "operators.basic",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever a linha exige avaliar ** e % na ordem certa, a subtração e a comparação antes de juntar o texto final. O aluno precisa decidir a ordem de cada operação num contexto de treino, e não apenas reconhecer os símbolos.",
+      "contentVersion": 1,
+      "prompt": "Preveja a linha completa antes de executar. Confira a ordem de cada operação e o tipo de cada parte antes de juntar os valores.",
+      "code": "const turnos = 4;\nconst pausa = 2;\nconst restante = turnos - pausa * 2;\nconsole.log(restante, turnos ** 2 % 5, (turnos + pausa) * 3 >= 18, 'turnos: ' + turnos);\n",
+      "expectedOutput": "0 1 true turnos: 4"
+    },
+    {
+      "variantId": "var.02.01.escolha-medalhas-concatenacao",
+      "conceptId": "operators.predict",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Quando um texto aparece antes do primeiro +, a concatenação continua até o fim da expressão, e um mesmo par de números pode virar texto ou soma. Prever as três linhas exige acompanhar o tipo acumulado em cada operador, o que muda o resultado mesmo com os mesmos números.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que cada linha imprime. Repare em quando o + encontra um texto do lado esquerdo.",
+      "code": "const ouro = 2;\nconst prata = 3;\nconsole.log('Medalhas: ' + ouro + prata);\nconsole.log('Medalhas: ' + (ouro + prata));\nconsole.log(ouro + prata + ' no total');\n",
+      "choices": [
+        "Medalhas: 5 | Medalhas: 5 | 5 no total",
+        "Medalhas: 23 | Medalhas: 5 | 5 no total",
+        "Medalhas: 5 | Medalhas: 23 | 23 no total",
+        "Medalhas: 23 | Medalhas: 5 | 23 no total"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "'Medalhas: ' + ouro + prata começa com texto, então cada + concatena e vira 'Medalhas: 23'. Com parênteses, 2 + 3 vale 5 antes de juntar o texto. Em ouro + prata + ' no total', a soma vem primeiro.",
+        "byChoice": {
+          "0": "Na primeira linha, 'Medalhas: ' + ouro + prata começa com texto: + concatena e o resultado é 'Medalhas: 23', não 5.",
+          "2": "As duas primeiras linhas estão trocadas: sem parênteses o texto vem antes e concatena; com parênteses, 2 + 3 vale 5 antes de juntar o texto.",
+          "3": "A terceira linha começa com ouro + prata, que são números: 2 + 3 vale 5 antes de encontrar o texto ' no total'."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.01.predicao-concatenacao-texto",
+      "conceptId": "operators.predict",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A mesma sequência de + produz número ou texto conforme a posição de cada operando, e o aluno precisa acompanhar a ordem de avaliação e o tipo acumulado. Reconhecer o padrão de soma não basta, porque a linha com texto no meio muda a saída.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Acompanhe quando um operando já é texto, porque a partir daí o + concatena.",
+      "code": "console.log(1 + 2 + '3');\nconsole.log('1' + 2 + 3);\nconsole.log('ola' + !0, 'x' + true);\n",
+      "expectedOutput": "33\n123\nolatrue xtrue"
+    },
+    {
+      "variantId": "var.02.01.escolha-ciclos-resto",
+      "conceptId": "operators.arithmetic",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O resto de % e a divisão decimal exigem saber o sinal do resultado e o tipo produzido, não só o símbolo do operador. Uma estimativa de carga com outros números testa a mesma leitura aritmética.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida os três valores. Lembre que % devolve o resto com o sinal do primeiro operando e que / não trunca.",
+      "code": "const ciclos = 2;\nconst passo = 3;\nconsole.log(ciclos ** passo, -7 % passo, 7 / ciclos);\n",
+      "choices": [
+        "6 -1 3.5",
+        "8 -1 3.5",
+        "8 2 3.5",
+        "8 -1 3"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "2 ** 3 vale 8. O resto de % segue o sinal do dividendo, então -7 % 3 vale -1. A divisão 7 / 2 devolve 3.5, porque / não trunca.",
+        "byChoice": {
+          "0": "ciclos ** passo eleva 2 à potência 3 e vale 8. Multiplicar os dois números dá 6, outra operação.",
+          "2": "O sinal do resto acompanha o primeiro operando: -7 % 3 vale -1, não 2.",
+          "3": "/ não arredonda nem trunca: 7 / 2 vale 3.5, e a divisão inteira não é o operador usado aqui."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.01.predicao-rega-divisao",
+      "conceptId": "operators.arithmetic",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever cada linha de uma rega pede separar divisão decimal, resto e a ordem entre multiplicação e soma. O erro típico aparece quando o resto é lido como porcentagem ou quando a multiplicação é feita depois da soma; outro cálculo mantém esse ponto.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Separe a divisão decimal do resto e calcule a multiplicação antes da soma.",
+      "code": "const litros = 25;\nconst regas = 4;\nconsole.log(litros / regas);\nconsole.log(litros % regas);\nconsole.log(regas * 2 + litros % regas);\nconsole.log(-litros % regas);\n",
+      "expectedOutput": "6.25\n1\n9\n-1"
+    },
+    {
+      "variantId": "var.02.01.escolha-ingresso-igualdade",
+      "conceptId": "operators.comparison",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Comparações devolvem booleanos, e >=, > e !== dão resultados diferentes exatamente no caso de igualdade, enquanto == converte tipos. Um controle de ingresso com limite igual ao valor exige essa distinção, que a origem só cobre com números diferentes.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida cada booleano. Compare o que cada operador aceita ou recusa quando os dois lados são iguais.",
+      "code": "const ingresso = 18;\nconst limite = 18;\nconsole.log(ingresso >= limite, ingresso > limite, ingresso !== limite, ingresso == '18');\n",
+      "choices": [
+        "true true false true",
+        "true false true true",
+        "true false false true",
+        "true false false false"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "18 >= 18 é true; 18 > 18 é false; 18 !== 18 é false; 18 == '18' é true, porque == converte o texto antes de comparar.",
+        "byChoice": {
+          "0": "> é estrito: 18 > 18 é false. Só >= inclui a igualdade.",
+          "1": "!== compara valor e tipo: como 18 e 18 são iguais, !== vale false.",
+          "3": "== converte tipos antes de comparar: 18 == '18' vale true. O === daria false, mas o código usa ==."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.01.predicao-nan-comparacao",
+      "conceptId": "operators.comparison",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "NaN não é igual a nenhum valor, nem a si mesmo, e isso exige ler === e !== com cuidado. A segunda linha separa >= de > sob igualdade e compara tipos diferentes; a leitura de sensores muda o caso, não a regra de comparação.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Lembre que NaN não é igual a si mesmo e que === compara valor e tipo.",
+      "code": "const leitura = NaN;\nconsole.log(leitura === leitura, leitura !== leitura);\nconsole.log(7 > 7 || 7 >= 7, 0 === '0');\n",
+      "expectedOutput": "false true\ntrue false"
+    },
+    {
+      "variantId": "var.02.01.escolha-cadastro-operandos",
+      "conceptId": "operators.logical",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "&& e || podem devolver um dos operandos, não um booleano, e a leitura exige saber qual operando sobra. Um cadastro com apelido vazio usa a mesma regra de fallback lógico, mas com outros nomes e valores.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida qual operando cada operador devolve. Lembre que && e || não convertem o resultado em booleano.",
+      "code": "const nome = 'Luana';\nconst apelido = '';\nconsole.log(apelido || nome, nome && 0, !apelido && 'sem apelido');\n",
+      "choices": [
+        "Luana false sem apelido",
+        "true 0 sem apelido",
+        "Luana 0 sem apelido",
+        "vazio 0 sem apelido"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "apelido é '' (falsy), então || passa para nome, 'Luana'. nome é truthy, então && devolve o segundo operando, 0. !'' é true, e && devolve 'sem apelido'.",
+        "byChoice": {
+          "0": "&& devolve o segundo operando quando o primeiro é truthy: nome && 0 vale 0, não false.",
+          "1": "|| devolve o primeiro truthy, 'Luana', e não um booleano. O && final também devolve o texto, não true.",
+          "3": "|| não devolve o operando falsy: apelido é '', então o resultado é 'Luana', não uma string vazia."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.01.predicao-ativo-operandos",
+      "conceptId": "operators.logical",
+      "sourceActivityId": "02.01",
+      "prerequisites": [
+        "01.02"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever uma linha com ! e com operandos de texto exige aplicar truthiness e devolver o operando certo, não um booleano. A troca de cadastro e ativo por outros nomes muda o contexto, não o conceito de operadores lógicos.",
+      "contentVersion": 1,
+      "prompt": "Preveja a linha antes de executar. Lembre que ! inverte a condição e que && e || podem devolver um dos operandos.",
+      "code": "const ativo = 0;\nconst cadastro = 'ok';\nconsole.log(!ativo, !cadastro, ativo || cadastro, cadastro && 'ok2');\n",
+      "expectedOutput": "true false ok ok2"
+    },
+    {
+      "variantId": "var.02.02.escolha-estoque-cupom",
+      "conceptId": "operators.falsy_nullish",
+      "sourceActivityId": "02.02",
+      "prerequisites": [
+        "02.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Zero e null ativam o padrão de || de um jeito que ?? não faz, e prever a linha exige diferenciar falsy de nullish no mesmo código. Trocar o estoque de pilhas por um cupom de desconto muda o caso, não o critério.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que cada expressão imprime. Compare o que || e ?? consideram ausência.",
+      "code": "const quantidade = 0;\nconst cupom = null;\nconsole.log(quantidade || 10, quantidade ?? 10, cupom ?? 'sem cupom', cupom || 'sem cupom');\n",
+      "choices": [
+        "10 10 sem cupom sem cupom",
+        "10 0 sem cupom sem cupom",
+        "0 0 sem cupom sem cupom",
+        "10 0 null sem cupom"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "quantidade || 10 dá 10, porque 0 é falsy. quantidade ?? 10 preserva 0. cupom é null, nullish e falsy: os dois operadores devolvem 'sem cupom'.",
+        "byChoice": {
+          "0": "?? só age sobre null e undefined. Zero é preservado, então quantidade ?? 10 vale 0, e não 10.",
+          "2": "|| troca qualquer falsy, incluindo zero: quantidade || 10 vale 10, e a primeira saída não pode ser 0.",
+          "3": "cupom ?? 'sem cupom' substitui null pelo texto padrão. A saída nunca mostra 'null'."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.02.predicao-aceito-avaliacao",
+      "conceptId": "operators.falsy_nullish",
+      "sourceActivityId": "02.02",
+      "prerequisites": [
+        "02.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever duas linhas com false, NaN e undefined pede classificar cada valor como falsy, nullish ou ambos antes de escolher o padrão. Outro conjunto de valores exige a mesma classificação, e não a memorização de uma tabela.",
+      "contentVersion": 1,
+      "prompt": "Preveja as duas linhas antes de executar. Classifique cada valor como falsy, nullish ou ambos antes de escolher o operador.",
+      "code": "const aceito = false;\nconst avaliacao = NaN;\nconst legenda = undefined;\nconsole.log(aceito ?? 'padrão', avaliacao ?? 'padrão', legenda ?? 'padrão');\nconsole.log(aceito || 'padrão', avaliacao || 'padrão', legenda || 'padrão');\n",
+      "expectedOutput": "false NaN padrão\npadrão padrão padrão"
+    },
+    {
+      "variantId": "var.02.03.correcao-reserva-sala",
+      "conceptId": "operators.boolean_validation",
+      "sourceActivityId": "02.03",
+      "prerequisites": [
+        "02.01",
+        "02.02"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "A validação de reserva combina duas exigências, e o erro típico é aceitar com apenas uma condição verdadeira. Corrigir exige o mesmo raciocínio do Parsons de validação: a regra só passa quando as duas condições valem, inclusive no caso de borda.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. Uma reserva só deve ser aceita quando o grupo cabe na capacidade e a sala está limpa. Antes de alterar, rode os quatro casos e anote qual linha aceita uma reserva que deveria ser recusada.",
+      "entryPath": "main.js",
+      "tests": "import {reservaCabe, reservaLotada, reservaSalaSuja, reservaLimite} from './main.js';\n\ndescribe('reserva de sala de estudo', () => {\n  test('grupo que cabe e sala limpa é aceito', () => {\n    expect(reservaCabe).toBe(true);\n  });\n  test('grupo acima da capacidade é recusado mesmo com sala limpa', () => {\n    expect(reservaLotada).toBe(false);\n  });\n  test('sala suja recusa a reserva mesmo quando o grupo cabe', () => {\n    expect(reservaSalaSuja).toBe(false);\n  });\n  test('grupo que preenche exatamente a capacidade é aceito', () => {\n    expect(reservaLimite).toBe(true);\n  });\n});\n",
+      "starterFiles": {
+        "main.js": "// Reserva de sala: o grupo precisa caber na capacidade E a sala precisa estar limpa.\nconst capacidade = 8;\nconst salaLimpaA = true;\nconst salaLimpaB = false;\n\nexport const reservaCabe = 6 <= capacidade || salaLimpaA;\nexport const reservaLotada = 9 <= capacidade || salaLimpaA;\nexport const reservaSalaSuja = 5 <= capacidade || salaLimpaB;\nexport const reservaLimite = 8 <= capacidade || salaLimpaA;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Reserva de sala: o grupo precisa caber na capacidade E a sala precisa estar limpa.\nconst capacidade = 8;\nconst salaLimpaA = true;\nconst salaLimpaB = false;\n\nexport const reservaCabe = 6 <= capacidade && salaLimpaA;\nexport const reservaLotada = 9 <= capacidade && salaLimpaA;\nexport const reservaSalaSuja = 5 <= capacidade && salaLimpaB;\nexport const reservaLimite = 8 <= capacidade && salaLimpaA;\n"
+      },
+      "mutants": [
+        {
+          "id": "ignora-sala",
+          "files": {
+            "main.js": "// Reserva de sala: o grupo precisa caber na capacidade E a sala precisa estar limpa.\nconst capacidade = 8;\nconst salaLimpaA = true;\nconst salaLimpaB = false;\n\nexport const reservaCabe = 6 <= capacidade && salaLimpaA;\nexport const reservaLotada = 9 <= capacidade && salaLimpaA;\nexport const reservaSalaSuja = 5 <= capacidade;\nexport const reservaLimite = 8 <= capacidade && salaLimpaA;\n"
+          }
+        },
+        {
+          "id": "limite-exclusivo",
+          "files": {
+            "main.js": "// Reserva de sala: o grupo precisa caber na capacidade E a sala precisa estar limpa.\nconst capacidade = 8;\nconst salaLimpaA = true;\nconst salaLimpaB = false;\n\nexport const reservaCabe = 6 <= capacidade && salaLimpaA;\nexport const reservaLotada = 9 <= capacidade && salaLimpaA;\nexport const reservaSalaSuja = 5 <= capacidade && salaLimpaB;\nexport const reservaLimite = 8 < capacidade && salaLimpaA;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.03.escolha-emprestimo-validacao",
+      "conceptId": "operators.boolean_validation",
+      "sourceActivityId": "02.03",
+      "prerequisites": [
+        "02.01",
+        "02.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Negar uma validação inteira exige tratar o && como um bloco único, e não cada condição separadamente. Mudar o caso para empréstimo de livros mantém a estrutura de validação, mas altera o que a leitura precisa decidir sobre || e !.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida cada um dos três valores. Lembre que ! inverte o resultado do parêntese inteiro.",
+      "code": "const livrosEmprestados = 2;\nconst limite = 3;\nconst multasPendentes = 0;\nconst dentroDoLimite = livrosEmprestados < limite;\nconst semMultas = multasPendentes === 0;\nconsole.log(dentroDoLimite && semMultas, dentroDoLimite || semMultas, !(dentroDoLimite && semMultas));\n",
+      "choices": [
+        "true false true",
+        "true true false",
+        "false true false",
+        "true true true"
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "Os dois requisitos valem true. && e || dão true; o parêntese faz ! inverter o resultado do && inteiro, então a última expressão vale false.",
+        "byChoice": {
+          "0": "|| não exige as duas condições, mas aqui ambas são true e o resultado é true. Além disso, ! inverte o && inteiro, então a última saída é false.",
+          "2": "2 < 3 é true e multasPendentes === 0 também é true. Por isso && vale true, não false.",
+          "3": "O ! aplica-se ao resultado entre parênteses. Como && vale true, !(...) vale false."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.06.correcao-limite-bateria",
+      "conceptId": "operators.nullish_fallback",
+      "sourceActivityId": "02.06",
+      "prerequisites": [
+        "02.02"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "O defeito aparece quando um valor falsy legítimo, como zero ou false, vira o padrão. Corrigir exige distinguir ausência de escolha campo a campo, e não trocar o padrão por outro valor, porque a regra precisa valer para qualquer configuração.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que apenas a ausência use o padrão; zero e false devem continuar sendo escolhas. Antes de alterar, rode os casos e anote qual valor desaparece no fallback.",
+      "entryPath": "main.js",
+      "tests": "import {limiteAplicado, mensagemAplicada, modoAplicado, alertaAplicado} from './main.js';\n\ndescribe('alerta de bateria', () => {\n  test('limite zero continua sendo uma escolha válida', () => {\n    expect(limiteAplicado).toBe(0);\n  });\n  test('mensagem ausente (null) recebe o texto padrão', () => {\n    expect(mensagemAplicada).toBe('Carregue o aparelho');\n  });\n  test('modo ausente (undefined) recebe normal', () => {\n    expect(modoAplicado).toBe('normal');\n  });\n  test('alerta desligado (false) continua desligado', () => {\n    expect(alertaAplicado).toBe(false);\n  });\n});\n",
+      "starterFiles": {
+        "main.js": "// Alerta de bateria. Zero e false são escolhas válidas; só ausência (null ou undefined) deve receber o padrão.\nconst limiteEscolhido = 0;\nconst mensagemEscolhida = null;\nconst modoEscolhido = undefined;\nconst alertaEscolhido = false;\n\nexport const limiteAplicado = limiteEscolhido || 20;\nexport const mensagemAplicada = mensagemEscolhida || 'Carregue o aparelho';\nexport const modoAplicado = modoEscolhido || 'normal';\nexport const alertaAplicado = alertaEscolhido || true;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Alerta de bateria. Zero e false são escolhas válidas; só ausência (null ou undefined) deve receber o padrão.\nconst limiteEscolhido = 0;\nconst mensagemEscolhida = null;\nconst modoEscolhido = undefined;\nconst alertaEscolhido = false;\n\nexport const limiteAplicado = limiteEscolhido ?? 20;\nexport const mensagemAplicada = mensagemEscolhida ?? 'Carregue o aparelho';\nexport const modoAplicado = modoEscolhido ?? 'normal';\nexport const alertaAplicado = alertaEscolhido ?? true;\n"
+      },
+      "mutants": [
+        {
+          "id": "limite-com-or",
+          "files": {
+            "main.js": "// Alerta de bateria. Zero e false são escolhas válidas; só ausência (null ou undefined) deve receber o padrão.\nconst limiteEscolhido = 0;\nconst mensagemEscolhida = null;\nconst modoEscolhido = undefined;\nconst alertaEscolhido = false;\n\nexport const limiteAplicado = limiteEscolhido || 20;\nexport const mensagemAplicada = mensagemEscolhida ?? 'Carregue o aparelho';\nexport const modoAplicado = modoEscolhido ?? 'normal';\nexport const alertaAplicado = alertaEscolhido ?? true;\n"
+          }
+        },
+        {
+          "id": "modo-padrao-escuro",
+          "files": {
+            "main.js": "// Alerta de bateria. Zero e false são escolhas válidas; só ausência (null ou undefined) deve receber o padrão.\nconst limiteEscolhido = 0;\nconst mensagemEscolhida = null;\nconst modoEscolhido = undefined;\nconst alertaEscolhido = false;\n\nexport const limiteAplicado = limiteEscolhido ?? 20;\nexport const mensagemAplicada = mensagemEscolhida ?? 'Carregue o aparelho';\nexport const modoAplicado = modoEscolhido ?? 'escuro';\nexport const alertaAplicado = alertaEscolhido ?? true;\n"
+          }
+        },
+        {
+          "id": "mensagem-sem-padrao",
+          "files": {
+            "main.js": "// Alerta de bateria. Zero e false são escolhas válidas; só ausência (null ou undefined) deve receber o padrão.\nconst limiteEscolhido = 0;\nconst mensagemEscolhida = null;\nconst modoEscolhido = undefined;\nconst alertaEscolhido = false;\n\nexport const limiteAplicado = limiteEscolhido ?? 20;\nexport const mensagemAplicada = mensagemEscolhida;\nexport const modoAplicado = modoEscolhido ?? 'normal';\nexport const alertaAplicado = alertaEscolhido ?? true;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.06.escolha-pilhas-etiqueta",
+      "conceptId": "operators.nullish_fallback",
+      "sourceActivityId": "02.06",
+      "prerequisites": [
+        "02.02"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever a saída exige separar, na mesma linha, um zero que deve ser preservado de uma string vazia que o || substitui. A mesma distinção entre ausência e falsy muda a escolha do operador, não o nome das variáveis.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida cada valor. Diferencie o zero, que está presente, da string vazia e do padrão numérico.",
+      "code": "const pilhas = 0;\nconst etiqueta = '';\nconsole.log(pilhas ?? 5, etiqueta || 'sem etiqueta', pilhas || 5);\n",
+      "choices": [
+        "5 sem etiqueta 5",
+        "0 etiqueta vazia 5",
+        "0 sem etiqueta 0",
+        "0 sem etiqueta 5"
+      ],
+      "answer": 3,
+      "feedback": {
+        "correct": "pilhas ?? 5 preserva 0. etiqueta || 'sem etiqueta' troca a string vazia. pilhas || 5 troca o zero, que é falsy, e devolve 5.",
+        "byChoice": {
+          "0": "?? só age sobre null e undefined. pilhas é 0, presente, então pilhas ?? 5 devolve 0.",
+          "1": "Texto vazio é falsy: etiqueta || 'sem etiqueta' devolve o padrão, e a string vazia não aparece na saída.",
+          "2": "pilhas || 5 troca o zero, que é falsy, e devolve 5. A terceira saída nunca é 0."
+        }
+      }
+    },
+    {
+      "variantId": "var.02.07.mini-mensalidade-desconto",
+      "conceptId": "operators.discount_expression",
+      "sourceActivityId": "02.07",
+      "prerequisites": [
+        "02.01"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Calcular o total depois do desconto exige escolher a fração que permanece, e não o valor removido. Trocar o domínio para mensalidade muda os números e os casos de borda, mas a relação entre fração e preço continua a mesma.",
+      "contentVersion": 1,
+      "prompt": "Implemente em main.js o total de cada caso. Cada total é o valor base vezes a fração que permanece após o desconto. Escreva a expressão no lugar de cada 0, sem alterar os valores base nem as frações.",
+      "entryPath": "main.js",
+      "tests": "import {totalAnual, totalSemDesconto, totalPromocao, totalMeia} from './main.js';\n\ndescribe('mensalidade com desconto', () => {\n  test('desconto de 25% deixa 75% do valor anual', () => {\n    expect(totalAnual).toBe(360);\n  });\n  test('sem desconto, a fração que sobra é 1 e o total é o valor base', () => {\n    expect(totalSemDesconto).toBe(90);\n  });\n  test('desconto integral zera a mensalidade', () => {\n    expect(totalPromocao).toBe(0);\n  });\n  test('desconto de metade cobra metade do valor', () => {\n    expect(totalMeia).toBe(35);\n  });\n});\n",
+      "starterFiles": {
+        "main.js": "// Mensalidade de academia. Cada caso tem valor base e a fração removida pelo desconto (de 0 a 1).\nconst baseAnual = 480;\nconst descontoAnual = 0.25;\nconst baseSemDesconto = 90;\nconst descontoNenhum = 0;\nconst basePromocao = 60;\nconst descontoIntegral = 1;\nconst baseMeia = 70;\nconst descontoMeia = 0.5;\n\n// Escreva a expressão do total no lugar de cada 0, usando a fração que permanece após o desconto.\nexport const totalAnual = 0;\nexport const totalSemDesconto = 0;\nexport const totalPromocao = 0;\nexport const totalMeia = 0;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Mensalidade de academia. Cada caso tem valor base e a fração removida pelo desconto (de 0 a 1).\nconst baseAnual = 480;\nconst descontoAnual = 0.25;\nconst baseSemDesconto = 90;\nconst descontoNenhum = 0;\nconst basePromocao = 60;\nconst descontoIntegral = 1;\nconst baseMeia = 70;\nconst descontoMeia = 0.5;\n\n// Escreva a expressão do total no lugar de cada 0, usando a fração que permanece após o desconto.\nexport const totalAnual = baseAnual * (1 - descontoAnual);\nexport const totalSemDesconto = baseSemDesconto * (1 - descontoNenhum);\nexport const totalPromocao = basePromocao * (1 - descontoIntegral);\nexport const totalMeia = baseMeia * (1 - descontoMeia);\n"
+      },
+      "mutants": [
+        {
+          "id": "aplica-a-fracao-como-total",
+          "files": {
+            "main.js": "// Mensalidade de academia. Cada caso tem valor base e a fração removida pelo desconto (de 0 a 1).\nconst baseAnual = 480;\nconst descontoAnual = 0.25;\nconst baseSemDesconto = 90;\nconst descontoNenhum = 0;\nconst basePromocao = 60;\nconst descontoIntegral = 1;\nconst baseMeia = 70;\nconst descontoMeia = 0.5;\n\n// Escreva a expressão do total no lugar de cada 0, usando a fração que permanece após o desconto.\nexport const totalAnual = baseAnual * descontoAnual;\nexport const totalSemDesconto = baseSemDesconto * descontoNenhum;\nexport const totalPromocao = basePromocao * descontoIntegral;\nexport const totalMeia = baseMeia * descontoMeia;\n"
+          }
+        },
+        {
+          "id": "soma-o-desconto",
+          "files": {
+            "main.js": "// Mensalidade de academia. Cada caso tem valor base e a fração removida pelo desconto (de 0 a 1).\nconst baseAnual = 480;\nconst descontoAnual = 0.25;\nconst baseSemDesconto = 90;\nconst descontoNenhum = 0;\nconst basePromocao = 60;\nconst descontoIntegral = 1;\nconst baseMeia = 70;\nconst descontoMeia = 0.5;\n\n// Escreva a expressão do total no lugar de cada 0, usando a fração que permanece após o desconto.\nexport const totalAnual = baseAnual * (1 + descontoAnual);\nexport const totalSemDesconto = baseSemDesconto * (1 + descontoNenhum);\nexport const totalPromocao = basePromocao * (1 + descontoIntegral);\nexport const totalMeia = baseMeia * (1 + descontoMeia);\n"
+          }
+        },
+        {
+          "id": "subtrai-a-fracao",
+          "files": {
+            "main.js": "// Mensalidade de academia. Cada caso tem valor base e a fração removida pelo desconto (de 0 a 1).\nconst baseAnual = 480;\nconst descontoAnual = 0.25;\nconst baseSemDesconto = 90;\nconst descontoNenhum = 0;\nconst basePromocao = 60;\nconst descontoIntegral = 1;\nconst baseMeia = 70;\nconst descontoMeia = 0.5;\n\n// Escreva a expressão do total no lugar de cada 0, usando a fração que permanece após o desconto.\nexport const totalAnual = baseAnual - descontoAnual;\nexport const totalSemDesconto = baseSemDesconto - descontoNenhum;\nexport const totalPromocao = basePromocao - descontoIntegral;\nexport const totalMeia = baseMeia - descontoMeia;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.07.predicao-loja-desconto",
+      "conceptId": "operators.discount_expression",
+      "sourceActivityId": "02.07",
+      "prerequisites": [
+        "02.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever cada linha exige separar o valor removido pelo desconto do total restante, mesmo quando as expressões parecem parecidas. A mesma relação entre fração e preço aparece com outros números e uma linha de desconto explícito.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Diferencie a parte removida pelo desconto do total que sobra.",
+      "code": "const valorLoja = 250;\nconst descontoFracao = 0.25;\nconst restante = 1 - descontoFracao;\nconsole.log(valorLoja * descontoFracao);\nconsole.log(valorLoja * restante);\nconsole.log(valorLoja - valorLoja * descontoFracao);\nconsole.log(valorLoja * (1 - 0.5));\n",
+      "expectedOutput": "62.5\n187.5\n187.5\n125"
+    },
+    {
+      "variantId": "var.02.08.correcao-agenda-preferencias",
+      "conceptId": "operators.preferences",
+      "sourceActivityId": "02.08",
+      "prerequisites": [
+        "02.02",
+        "02.06"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Preferências de agenda têm valores falsy válidos, como zero minutos e texto vazio, e o padrão não pode substituí-los. Corrigir exige decidir campo a campo quando a ausência recebe o padrão, o mesmo critério da transferência de preferências em outro formulário.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. Preferências com zero, texto vazio ou false são escolhas do usuário e devem ser preservadas; só ausência recebe o padrão. Antes de alterar, rode os casos e registre qual preferência é substituída indevidamente.",
+      "entryPath": "main.js",
+      "tests": "import {antecedencia, observacao, lembrete, agenda} from './main.js';\n\ndescribe('preferências da agenda', () => {\n  test('zero minutos de antecedência é escolha válida', () => {\n    expect(antecedencia).toBe(0);\n  });\n  test('texto vazio é observação válida e não vira o padrão', () => {\n    expect(observacao).toBe('');\n  });\n  test('lembrete desligado continua desligado', () => {\n    expect(lembrete).toBe(false);\n  });\n  test('agenda ausente (null) recebe o padrão pessoal', () => {\n    expect(agenda).toBe('pessoal');\n  });\n});\n",
+      "starterFiles": {
+        "main.js": "// Preferências da agenda. Zero, texto vazio e false são escolhas do usuário; só ausência (null) recebe padrão.\nconst antecedenciaEscolhida = 0;\nconst observacaoEscolhida = '';\nconst lembreteEscolhido = false;\nconst agendaEscolhida = null;\n\nexport const antecedencia = antecedenciaEscolhida || 15;\nexport const observacao = observacaoEscolhida || 'sem observação';\nexport const lembrete = lembreteEscolhido || true;\nexport const agenda = agendaEscolhida || 'pessoal';\n"
+      },
+      "correctFiles": {
+        "main.js": "// Preferências da agenda. Zero, texto vazio e false são escolhas do usuário; só ausência (null) recebe padrão.\nconst antecedenciaEscolhida = 0;\nconst observacaoEscolhida = '';\nconst lembreteEscolhido = false;\nconst agendaEscolhida = null;\n\nexport const antecedencia = antecedenciaEscolhida ?? 15;\nexport const observacao = observacaoEscolhida ?? 'sem observação';\nexport const lembrete = lembreteEscolhido ?? true;\nexport const agenda = agendaEscolhida ?? 'pessoal';\n"
+      },
+      "mutants": [
+        {
+          "id": "antecedencia-com-or",
+          "files": {
+            "main.js": "// Preferências da agenda. Zero, texto vazio e false são escolhas do usuário; só ausência (null) recebe padrão.\nconst antecedenciaEscolhida = 0;\nconst observacaoEscolhida = '';\nconst lembreteEscolhido = false;\nconst agendaEscolhida = null;\n\nexport const antecedencia = antecedenciaEscolhida || 15;\nexport const observacao = observacaoEscolhida ?? 'sem observação';\nexport const lembrete = lembreteEscolhido ?? true;\nexport const agenda = agendaEscolhida ?? 'pessoal';\n"
+          }
+        },
+        {
+          "id": "lembrete-fixo",
+          "files": {
+            "main.js": "// Preferências da agenda. Zero, texto vazio e false são escolhas do usuário; só ausência (null) recebe padrão.\nconst antecedenciaEscolhida = 0;\nconst observacaoEscolhida = '';\nconst lembreteEscolhido = false;\nconst agendaEscolhida = null;\n\nexport const antecedencia = antecedenciaEscolhida ?? 15;\nexport const observacao = observacaoEscolhida ?? 'sem observação';\nexport const lembrete = true;\nexport const agenda = agendaEscolhida ?? 'pessoal';\n"
+          }
+        },
+        {
+          "id": "agenda-padrao-trabalho",
+          "files": {
+            "main.js": "// Preferências da agenda. Zero, texto vazio e false são escolhas do usuário; só ausência (null) recebe padrão.\nconst antecedenciaEscolhida = 0;\nconst observacaoEscolhida = '';\nconst lembreteEscolhido = false;\nconst agendaEscolhida = null;\n\nexport const antecedencia = antecedenciaEscolhida ?? 15;\nexport const observacao = observacaoEscolhida ?? 'sem observação';\nexport const lembrete = lembreteEscolhido ?? true;\nexport const agenda = agendaEscolhida ?? 'trabalho';\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.08.predicao-pausa-tema",
+      "conceptId": "operators.preferences",
+      "sourceActivityId": "02.08",
+      "prerequisites": [
+        "02.02",
+        "02.06"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Ler duas preferências por linha exige distinguir escolha válida (zero, false) de ausência (null) e prever qual operador preserva cada uma. Reconhecer o padrão de fallback não basta: é preciso aplicar a política de cada campo.",
+      "contentVersion": 1,
+      "prompt": "Preveja as duas linhas antes de executar. Separe escolha válida (zero, false) de ausência (null).",
+      "code": "const pausa = 0;\nconst tema = null;\nconst sons = false;\nconsole.log(pausa ?? 10, pausa || 10);\nconsole.log(tema ?? 'claro', sons ?? true, sons || true);\n",
+      "expectedOutput": "0 10\nclaro false true"
+    },
+    {
+      "variantId": "var.02.09.mini-placar-torneio",
+      "conceptId": "operators.scoreboard",
+      "sourceActivityId": "02.09",
+      "prerequisites": [
+        "02.07",
+        "02.08"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Um placar com provas não registradas exige normalizar cada entrada antes de somar, porque undefined produz NaN. Trocar a modalidade por um torneio de xadrez muda nomes e dados, mas a política de soma com entradas opcionais continua a mesma.",
+      "contentVersion": 1,
+      "prompt": "Implemente em main.js os três totais. Uma prova sem registro chega como undefined ou null e vale zero; normalize cada prova antes de somar. Escreva as expressões no lugar dos zeros, sem alterar as entradas.",
+      "entryPath": "main.js",
+      "tests": "import {totalA, totalB, totalC} from './main.js';\n\ndescribe('placar de torneio', () => {\n  test('segunda prova sem registro conta como zero', () => {\n    expect(totalA).toBe(7);\n  });\n  test('duas provas registradas somam normalmente', () => {\n    expect(totalB).toBe(5);\n  });\n  test('primeira prova com null conta como zero', () => {\n    expect(totalC).toBe(3);\n  });\n});\n",
+      "starterFiles": {
+        "main.js": "// Torneio de xadrez. Uma prova sem registro chega como undefined ou null e vale zero na soma.\nconst primeiraA = 7;\nconst segundaA = undefined;\nconst primeiraB = 0;\nconst segundaB = 5;\nconst primeiraC = null;\nconst segundaC = 3;\n\n// Escreva o total de cada caso no lugar de cada 0, normalizando cada prova antes de somar.\nexport const totalA = 0;\nexport const totalB = 0;\nexport const totalC = 0;\n"
+      },
+      "correctFiles": {
+        "main.js": "// Torneio de xadrez. Uma prova sem registro chega como undefined ou null e vale zero na soma.\nconst primeiraA = 7;\nconst segundaA = undefined;\nconst primeiraB = 0;\nconst segundaB = 5;\nconst primeiraC = null;\nconst segundaC = 3;\n\n// Escreva o total de cada caso no lugar de cada 0, normalizando cada prova antes de somar.\nexport const totalA = (primeiraA ?? 0) + (segundaA ?? 0);\nexport const totalB = (primeiraB ?? 0) + (segundaB ?? 0);\nexport const totalC = (primeiraC ?? 0) + (segundaC ?? 0);\n"
+      },
+      "mutants": [
+        {
+          "id": "sem-normalizar",
+          "files": {
+            "main.js": "// Torneio de xadrez. Uma prova sem registro chega como undefined ou null e vale zero na soma.\nconst primeiraA = 7;\nconst segundaA = undefined;\nconst primeiraB = 0;\nconst segundaB = 5;\nconst primeiraC = null;\nconst segundaC = 3;\n\n// Escreva o total de cada caso no lugar de cada 0, normalizando cada prova antes de somar.\nexport const totalA = primeiraA + segundaA;\nexport const totalB = primeiraB + segundaB;\nexport const totalC = primeiraC + segundaC;\n"
+          }
+        },
+        {
+          "id": "padrao-depois-da-soma",
+          "files": {
+            "main.js": "// Torneio de xadrez. Uma prova sem registro chega como undefined ou null e vale zero na soma.\nconst primeiraA = 7;\nconst segundaA = undefined;\nconst primeiraB = 0;\nconst segundaB = 5;\nconst primeiraC = null;\nconst segundaC = 3;\n\n// Escreva o total de cada caso no lugar de cada 0, normalizando cada prova antes de somar.\nexport const totalA = primeiraA + segundaA ?? 0;\nexport const totalB = primeiraB + segundaB ?? 0;\nexport const totalC = primeiraC + segundaC ?? 0;\n"
+          }
+        },
+        {
+          "id": "ignora-segunda",
+          "files": {
+            "main.js": "// Torneio de xadrez. Uma prova sem registro chega como undefined ou null e vale zero na soma.\nconst primeiraA = 7;\nconst segundaA = undefined;\nconst primeiraB = 0;\nconst segundaB = 5;\nconst primeiraC = null;\nconst segundaC = 3;\n\n// Escreva o total de cada caso no lugar de cada 0, normalizando cada prova antes de somar.\nexport const totalA = primeiraA ?? 0;\nexport const totalB = primeiraB ?? 0;\nexport const totalC = primeiraC ?? 0;\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.02.09.escolha-pontos-indefinidos",
+      "conceptId": "operators.scoreboard",
+      "sourceActivityId": "02.09",
+      "prerequisites": [
+        "02.07",
+        "02.08"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Prever o total exige perceber que a soma sem tratamento produz NaN e que o ?? precisa agir antes da soma. Outra pontuação com a mesma dependência testa a ordem de normalização, e não apenas os números.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que cada linha imprime. Repare em qual valor entra na soma sem tratamento.",
+      "code": "const pontosA = undefined;\nconst pontosB = 4;\nconsole.log(pontosA + pontosB, (pontosA ?? 0) + pontosB);\n",
+      "choices": [
+        "4 4",
+        "NaN NaN",
+        "NaN 4",
+        "4 NaN"
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "undefined não é número: pontosA + pontosB vale NaN. Com ?? 0, pontosA vira 0 antes da soma e o total é 4.",
+        "byChoice": {
+          "0": "undefined não vale zero numa soma: pontosA + pontosB vira NaN, porque a conta não consegue usar undefined.",
+          "1": "A segunda expressão normaliza pontosA com ?? 0 antes de somar, então ela vale 4, não NaN.",
+          "3": "A ordem das saídas segue o console.log: a soma sem normalização vem primeiro e vale NaN."
+        }
+      }
+    }
+  ]
+}

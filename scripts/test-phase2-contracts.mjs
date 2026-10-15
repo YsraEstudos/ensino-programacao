@@ -179,7 +179,7 @@ function validate() {
   const sourceResults = new Map();
   for (const file of files) {
     const fullPath = path.join(sourceTests, file);
-    const parsed = parseSuite(readFileSync(fullPath, 'utf8'), file);
+    const parsed = parseSuite(readFileSync(fullPath, 'utf8').replace(/\r\n/g, '\n'), file);
     errors.push(...parsed.errors);
     for (const record of parsed.records) {
       seenAnnotationIds.add(record.id);
@@ -212,7 +212,7 @@ function validate() {
       for (const record of assessment.assertionCases || []) {
         assert.ok(publicAssessment.assertionCases?.some(candidate => candidate.id === record.id), `caso não publicado: ${record.id}`);
       }
-      const source = typeof assessment.tests === 'string' ? assessment.tests : publishedTests[activityId];
+      const source = (typeof assessment.tests === 'string' ? assessment.tests : publishedTests[activityId])?.replace(/\r\n/g, '\n');
       if (typeof source === 'string' && /\/\*@case\s+/.test(source)) {
         const publicFile = `${activityId}.test.js`;
         const publicParsed = parseSuite(source, publicFile);

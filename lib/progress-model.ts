@@ -33,7 +33,31 @@ export type ExerciseEvidence = {
     }>;
   };
 };
-export type ReviewSchedule = { intervalIndex: number; dueAt: number; lastReviewedAt?: string };
+export type ReviewFormat = "choice-predict" | "predict-code" | "short-fix" | "mini-impl";
+export type ReviewResult = "passed" | "failed";
+export type ReviewHistoryEntry = { variantId: string; format: ReviewFormat; result: ReviewResult; at: string };
+export type ReviewSchedule = {
+  intervalIndex: number;
+  dueAt: number;
+  lastReviewedAt?: string;
+  /** Variant and format of the last graded review, used to alternate between sessions. */
+  lastVariantId?: string;
+  lastFormat?: ReviewFormat;
+  /** Most recent graded reviews, at most reviewHistory entries. */
+  history?: ReviewHistoryEntry[];
+};
+/** A review attempt is persisted before it is evaluated. A review never grants "demonstrated". */
+export type ReviewAttempt = {
+  activityId: string;
+  contentVersion: number;
+  format: ReviewFormat;
+  /** Learner response: choice index as text, or the code/answer text. Capped by draftChars. */
+  draft: string;
+  status: "pending" | "passed" | "failed";
+  usedHelp: boolean;
+  startedAt: number;
+  finishedAt: number;
+};
 export type UserProgress = {
   stage01: Record<string, Stage01State>;
   stage02: Record<string, Stage02State>;
@@ -49,10 +73,13 @@ export type UserProgress = {
   exerciseLearning: Record<string, LearningRecord>;
   warmupCompleted: Record<string, boolean>;
   reviewSchedule: Record<string, ReviewSchedule>;
+  reviewAttempts: Record<string, ReviewAttempt>;
   lastLesson: string | null;
   activeDays: string[];
   reviewIndex: number;
   lastReview: string | null;
+  // Learner opted in to reviews of optional activities (they are never counted as core).
+  reviewOptIn: boolean;
 };
 
 export function createEmptyProgress(): UserProgress {

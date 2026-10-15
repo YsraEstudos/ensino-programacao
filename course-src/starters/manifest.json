@@ -791,7 +791,8 @@
       "src/domain/limite.js",
       "src/storage/memoria.js",
       "test/limite.test.js",
-      "test/relatorio.test.js"
+      "test/relatorio.test.js",
+      "test/investigacao.test.js"
     ]
   },
   "23.11": {
@@ -1422,6 +1423,51 @@
     "version": 1,
     "files": [
       "main.js"
+    ]
+  },
+  "07.15": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "src/regras.js",
+      "src/relatorio.js",
+      "src/apresentacao.js",
+      "test/relatorio.test.js"
+    ]
+  },
+  "11.15": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "index.html",
+      "app.js",
+      "regras.js"
+    ]
+  },
+  "14.23": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "package.json",
+      "src/index.js",
+      "src/calculo.js",
+      "src/formatar.js",
+      "src/cli.js",
+      "test/calculo.test.js"
+    ]
+  },
+  "18.11": {
+    "version": 1,
+    "files": [
+      "README.md",
+      "ISSUE.md",
+      "tsconfig.json",
+      "src/rotas.ts",
+      "src/navegacao.ts",
+      "src/acesso.ts"
     ]
   }
 }

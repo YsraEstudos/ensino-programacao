@@ -520,8 +520,8 @@
         "Um efeito colateral, pois o valor retornado pelo callback é ignorado."
       ],
       "answer": 1,
-      "correctFeedback": "Cada retorno atualiza o acumulador; a etapa seguinte recebe esse valor.",
-      "incorrectFeedback": "O retorno do callback não é descartado: ele define o estado acumulado para o próximo passo."
+      "correctFeedback": "No reduce, o retorno do callback vira o acumulador da chamada seguinte; é esse valor que carrega o estado de uma etapa para a outra.",
+      "incorrectFeedback": "Se escolheu o array completo de entrada, confundiu acumulador com a coleção percorrida: reduce não reinicia o percurso. Se escolheu efeito colateral, ignorou que o retorno é exatamente o que reduce usa na próxima etapa."
     }
   },
   "07.10": {
@@ -533,8 +533,8 @@
         "`map`, que aplica uma transformação a cada item."
       ],
       "answer": 2,
-      "correctFeedback": "`map` mantém a relação item a item; `filter` seleciona e `reduce` agrega.",
-      "incorrectFeedback": "Escolha conforme a forma desejada da saída: transformação individual, seleção ou agregação."
+      "correctFeedback": "map devolve exatamente um valor para cada item, na mesma ordem; quando cada entrada deve gerar uma saída, essa é a forma adequada.",
+      "incorrectFeedback": "Se escolheu filter, ele pode descartar itens, e a correspondência um a um deixa de valer. Se escolheu reduce, ele combina tudo num único valor e perde a correspondência item a item."
     }
   },
   "07.09": {
@@ -546,8 +546,8 @@
         "Manter resultados anteriores em uma variável compartilhada entre execuções."
       ],
       "answer": 1,
-      "correctFeedback": "Entradas explícitas e ausência de dependências ocultas tornam a execução reproduzível.",
-      "incorrectFeedback": "Relógio e estado compartilhado introduzem variação externa; um analisador determinístico depende dos dados recebidos."
+      "correctFeedback": "Uma função que recebe os eventos e devolve o resultado, sem relógio ou estado externo, produz a mesma saída para a mesma entrada, e por isso o teste se repete.",
+      "incorrectFeedback": "Se escolheu consultar a hora durante o cálculo, o resultado passa a depender do momento da execução e o teste deixa de ser repetível. Se escolheu uma variável compartilhada entre execuções, o resultado de um teste vaza para o seguinte."
     }
   },
   "08.01": {
@@ -833,8 +833,8 @@
         "Ele só pode executar depois do evento load e sempre bloqueia o parse enquanto baixa."
       ],
       "answer": 1,
-      "correctFeedback": "Correto. Um script de métricas lento com async pode terminar depois de um script menor abaixo dele; a posição no HTML não garante ordem de execução.",
-      "incorrectFeedback": "Revise esta regra: Considerar async ordenado como defer. Um script de métricas lento com async pode terminar depois de um script menor abaixo dele; a posição no HTML não garante ordem de execução."
+      "correctFeedback": "defer baixa em paralelo ao parse e executa depois dele, respeitando a ordem entre os scripts defer; por isso é a escolha quando a ordem importa.",
+      "incorrectFeedback": "Se escolheu executar assim que o download termina, descreveu async: defer não executa na chegada e preserva a ordem. Se escolheu executar só depois de load e bloquear o parse, misturou defer com scripts síncronos e com o evento load, que não fazem parte do contrato de defer."
     }
   },
   "11.01": {
@@ -846,8 +846,8 @@
         "target identifica a origem do evento; currentTarget identifica o nó cujo listener está sendo executado."
       ],
       "answer": 2,
-      "correctFeedback": "Correto. Em article > a > span, clicar em span começa nele; o listener bubble de a roda antes do listener de article porque o caminho sobe a partir do alvo.",
-      "incorrectFeedback": "Revise esta regra: Supor que eventos sempre começam no elemento mais externo. Em article > a > span, clicar em span começa nele; o listener bubble de a roda antes do listener de article porque o caminho sobe a partir do alvo."
+      "correctFeedback": "target é o nó onde o evento foi originado; currentTarget é o nó cujo listener está rodando no momento. Durante a propagação os dois podem ser nós diferentes, e é essa diferença que a pergunta cobra.",
+      "incorrectFeedback": "Se escolheu “target sempre identifica document; currentTarget sempre identifica o elemento clicado”, inverteu os papéis: target é a origem, e currentTarget muda a cada nó do caminho. Se escolheu “target e currentTarget são aliases”, ignorou que o listener de um ancestral vê currentTarget diferente de target."
     }
   },
   "11.11": {
@@ -859,8 +859,8 @@
         "Somente entre elementos irmãos no mesmo nível."
       ],
       "answer": 0,
-      "correctFeedback": "Correto. Num link dentro de item de lista, impedir navegação não impede o evento de alcançar ancestrais; parar propagação não cancela sozinho a navegação.",
-      "incorrectFeedback": "Revise esta regra: Confundir ação padrão com propagação. Num link dentro de item de lista, impedir navegação não impede o evento de alcançar ancestrais; parar propagação não cancela sozinho a navegação."
+      "correctFeedback": "Na fase de captura o evento desce do ancestral mais externo até o alvo; na fase de bolha o caminho é inverso, do alvo de volta para fora.",
+      "incorrectFeedback": "Se escolheu “Do alvo para os ancestrais”, descreveu a fase de bolha, que sobe. Se escolheu “Somente entre elementos irmãos”, ignorou que a propagação segue a árvore de ancestrais, não o nível dos irmãos."
     }
   },
   "11.14": {
@@ -872,8 +872,8 @@
         "A opção transforma o callback em execução assíncrona."
       ],
       "answer": 1,
-      "correctFeedback": "Correto. Um botão “Copiar” pode responder uma vez; um listener de rolagem que não cancela a ação padrão pode ser passivo; fechar um painel pode abortar os listeners ligados ao controller dele.",
-      "incorrectFeedback": "Revise esta regra: Confundir once com cleanup geral ou usar preventDefault em listener passive. Um botão “Copiar” pode responder uma vez; um listener de rolagem que não cancela a ação padrão pode ser passivo; fechar um painel pode abortar os listeners ligados ao controller dele."
+      "correctFeedback": "once: true faz o navegador remover o listener após a primeira invocação; a opção controla quantas vezes o callback roda, não o momento da execução.",
+      "incorrectFeedback": "Se escolheu “uma vez por descendente”, confundiu a opção com delegação: once conta invocações do mesmo listener, não elementos filhos. Se escolheu execução assíncrona, confundiu once com passive ou com Promises: a chamada continua síncrona no despacho."
     }
   },
   "11.02": {
@@ -885,8 +885,8 @@
         "document.createElement(tagName)"
       ],
       "answer": 2,
-      "correctFeedback": "Correto. Para exibir “Novo <em>rascunho</em>”, um nó de texto mantém as marcas literalmente; o navegador não cria um elemento <em> a partir delas.",
-      "incorrectFeedback": "Revise esta regra: Usar innerHTML com dado não confiável ou remover a lista inteira. Para exibir “Novo <em>rascunho</em>”, um nó de texto mantém as marcas literalmente; o navegador não cria um elemento <em> a partir delas."
+      "correctFeedback": "createElement cria um elemento novo a partir do nome da tag; é esse método que monta a estrutura da interface, e o texto entra depois, em nós próprios.",
+      "incorrectFeedback": "Se escolheu document.createTextNode(tagName), confundiu nó de texto com elemento: createTextNode cria apenas texto, e tagName não vira tag. Se escolheu element.setAttribute(tagName, valor), tratou atributo como criação: setAttribute altera um elemento que já existe e não cria nenhum."
     }
   },
   "11.03": {
@@ -898,8 +898,8 @@
         "A função separada garante que nenhum dado vindo do usuário precise de verificação."
       ],
       "answer": 0,
-      "correctFeedback": "Correto. Em um formulário de entrega, “  Lia ” vira “Lia” e “4” vira o número quatro; apresentar um erro não deve substituir os valores ainda editados.",
-      "incorrectFeedback": "Revise esta regra: Validar apenas presença da string, aceitando quantidade inválida. Em um formulário de entrega, “  Lia ” vira “Lia” e “4” vira o número quatro; apresentar um erro não deve substituir os valores ainda editados."
+      "correctFeedback": "Separar a validação da manipulação do DOM permite testar a regra sem montar a interface e mudar a apresentação dos erros sem alterar a regra.",
+      "incorrectFeedback": "Se escolheu que o navegador passa a validar regras do produto, atribuiu à plataforma uma responsabilidade que é do código da aplicação. Se escolheu que a função separada dispensa a verificação de dados do usuário, confundiu organização do código com validação: a entrada continua exigindo checagem."
     }
   },
   "11.04": {
@@ -911,8 +911,8 @@
         "O evento `keydown` de cada campo de texto."
       ],
       "answer": 1,
-      "correctFeedback": "Correto. Em um formulário de preferências, getAll(\"cor\") pode retornar [azul, verde] e preservar as duas caixas marcadas; get(\"cor\") retorna apenas uma ocorrência.",
-      "incorrectFeedback": "Revise esta regra: Usar get no campo repetido ou tratar string numérica como number. Em um formulário de preferências, getAll(\"cor\") pode retornar [azul, verde] e preservar as duas caixas marcadas; get(\"cor\") retorna apenas uma ocorrência."
+      "correctFeedback": "submit é disparado pelo próprio formulário, quer o envio venha de um botão, da tecla Enter ou de outro gatilho; por isso um único ponto trata os dois casos.",
+      "incorrectFeedback": "Se escolheu click em cada botão de envio, o tratamento depende de um botão específico e deixa de fora o envio pelo Enter. Se escolheu keydown em cada campo, observou a digitação, não o envio: a intenção de enviar não é a tecla pressionada."
     }
   },
   "11.05": {
@@ -924,8 +924,8 @@
         "A função fica associada para ser chamada quando aquele evento for despachado no alvo apropriado."
       ],
       "answer": 2,
-      "correctFeedback": "Correto. Um painel de favoritos pode redesenhar sua lista a cada busca, enquanto um listener único no contêiner continua atendendo novos cartões.",
-      "incorrectFeedback": "Revise esta regra: Confundir render de elementos com instalação de listeners. Um painel de favoritos pode redesenhar sua lista a cada busca, enquanto um listener único no contêiner continua atendendo novos cartões."
+      "correctFeedback": "addEventListener apenas registra a função; ela é chamada depois, quando o evento daquele tipo é despachado no alvo que a recebeu.",
+      "incorrectFeedback": "Se escolheu que a função é executada imediatamente e removida, confundiu registro com chamada: o callback espera o evento. Se escolheu que a função roda em cada redesenho, confundiu listener com efeito de renderização: o registro não depende da atualização do DOM."
     }
   },
   "11.06": {
@@ -937,8 +937,8 @@
         "O primeiro ancestral que contém um atributo de dados."
       ],
       "answer": 0,
-      "correctFeedback": "Correto. Numa lista de arquivos, clicar no ícone dentro de Arquivar deve localizar o botão ancestral antes de ler seu data-id.",
-      "incorrectFeedback": "Revise esta regra: Ler dataset apenas de event.target e perder clique em filho. Numa lista de arquivos, clicar no ícone dentro de Arquivar deve localizar o botão ancestral antes de ler seu data-id."
+      "correctFeedback": "currentTarget é o nó onde o listener foi registrado; por isso o código consegue ler o atributo do controle mesmo quando o clique partiu de um filho.",
+      "incorrectFeedback": "Se escolheu o elemento mais interno clicado, confundiu currentTarget com target: a origem do clique é target, não o nó do listener. Se escolheu o primeiro ancestral com atributo de dados, atribuiu a currentTarget uma busca que só closest ou um percurso manual faria."
     }
   },
   "11.12": {
@@ -950,8 +950,8 @@
         "Insere o nó como filho do contêiner."
       ],
       "answer": 2,
-      "correctFeedback": "Correto. Uma nota “2 < 5 & 7 > 3” pode aparecer como caracteres dentro de um parágrafo; a árvore continua tendo apenas o parágrafo esperado.",
-      "incorrectFeedback": "Revise esta regra: Tratar texto externo como HTML confiável. Uma nota “2 < 5 & 7 > 3” pode aparecer como caracteres dentro de um parágrafo; a árvore continua tendo apenas o parágrafo esperado."
+      "correctFeedback": "append insere o nó recebido como último filho do contêiner; não o converte em texto nem o copia.",
+      "incorrectFeedback": "Se escolheu a conversão em string HTML, confundiu append com serialização: o nó continua sendo nó. Se escolheu clonar o nó para todos os elementos com o seletor, atribuiu ao método uma busca e uma cópia que ele não faz."
     }
   },
   "11.13": {
@@ -963,8 +963,8 @@
         "Para que uma tarefa continue reconhecível mesmo quando seu texto ou outros campos mudam."
       ],
       "answer": 2,
-      "correctFeedback": "Correto. Uma lista antiga de favoritos pode virar objetos com ids estáveis. Se uma entrada estiver incompleta, as demais podem ser convertidas e a interface pode reportar o descarte.",
-      "incorrectFeedback": "Revise esta regra: Descartar todas as tarefas porque um único item antigo está inválido. Uma lista antiga de favoritos pode virar objetos com ids estáveis. Se uma entrada estiver incompleta, as demais podem ser convertidas e a interface pode reportar o descarte."
+      "correctFeedback": "Um id estável identifica a tarefa independentemente do texto ou da posição; assim, edições e reordenações não criam uma tarefa nova.",
+      "incorrectFeedback": "Se escolheu tratar tarefas diferentes como a mesma, o id precisa ser único, não compartilhado: uma colisão apaga ou mistura registros. Se escolheu codificar a posição, a identidade passa a mudar a cada reordenação, justamente o que o id deve evitar."
     }
   },
   "12.10": {
@@ -1279,7 +1279,7 @@
       ],
       "answer": 0,
       "correctFeedback": "Pertencer ao ciclo exige que o próprio nó esteja em um caminho dirigido de retorno.",
-      "incorrectFeedback": "Uma ligação com um ciclo não basta; verifique se o caminho retorna ao próprio nó."
+      "incorrectFeedback": "Se escolheu “ter aresta para um nó do ciclo”, confundiu depender de um ciclo com pertencer a ele: é preciso um caminho de volta ao próprio nó. Se escolheu “conectado a outro componente”, descreveu uma conexão, que não implica ciclo."
     }
   },
   "14.02": {
@@ -1292,7 +1292,7 @@
       ],
       "answer": 1,
       "correctFeedback": "`process.argv` começa com informações de execução; o recorte após elas contém os argumentos do comando.",
-      "incorrectFeedback": "`argv` descreve argumentos do processo; variáveis de ambiente e saída do terminal são interfaces diferentes."
+      "incorrectFeedback": "Se escolheu as variáveis de ambiente, confundiu argv com env: argv traz os argumentos da linha de comando. Se escolheu a saída já escrita, confundiu entrada com saída: argv é lido antes de qualquer impressão."
     }
   },
   "14.04": {
@@ -1305,7 +1305,7 @@
       ],
       "answer": 0,
       "correctFeedback": "ES modules encapsulam declarações por arquivo e expõem explicitamente os nomes exportados.",
-      "incorrectFeedback": "A fronteira do módulo impede visibilidade implícita; comunicação entre arquivos usa a interface de importação/exportação."
+      "incorrectFeedback": "Se escolheu um escopo global compartilhado, tratou o módulo como script comum: no ESM, declarações locais não vazam para outros arquivos. Se escolheu a visibilidade sem importação, ignorou que compartilhar um nome exige export e import."
     }
   },
   "14.05": {
@@ -1318,7 +1318,7 @@
       ],
       "answer": 1,
       "correctFeedback": "`node:path` lida com composição e separadores do sistema; leitura de arquivo é outra operação.",
-      "incorrectFeedback": "Helpers de caminho não carregam arquivos nem resolvem automaticamente o contexto do módulo; eles normalizam segmentos de caminho."
+      "incorrectFeedback": "Se escolheu que a concatenação vira URL de módulo, confundiu caminho de arquivo com URL: concatenar não muda o tipo do valor. Se escolheu que os helpers verificam existência e carregam conteúdo, atribuiu a path uma responsabilidade de leitura, que é de fs: path apenas monta e normaliza."
     }
   },
   "14.07": {
@@ -1364,7 +1364,7 @@
       ],
       "answer": 0,
       "correctFeedback": "A compatibilidade depende do runtime declarado e do contrato real da API.",
-      "incorrectFeedback": "Uma proposta ou ausência de erro no editor não confirma suporte no runtime escolhido."
+      "incorrectFeedback": "Se escolheu a data da proposta, confundiu discussão com disponibilidade: uma proposta discutida pode não estar implementada no runtime. Se escolheu a ausência de erro no editor, tomou um verificador de sintaxe por prova de API: o editor não executa a chamada."
     }
   },
   "14.11": {
@@ -1377,7 +1377,7 @@
       ],
       "answer": 1,
       "correctFeedback": "A decisão deve considerar a necessidade real e as responsabilidades que cada opção traz.",
-      "incorrectFeedback": "Popularidade ou quantidade de recursos, isoladamente, não demonstram que a opção seja adequada."
+      "incorrectFeedback": "Se escolheu a opção mais popular, usou popularidade como critério único, sem verificar se atende ao caso de uso. Se escolheu a opção com mais recursos, aceitou um custo de manutenção por recursos que o projeto não usa."
     }
   },
   "14.12": {
@@ -1390,7 +1390,7 @@
       ],
       "answer": 2,
       "correctFeedback": "O bundler transforma e organiza entradas para produzir artefatos de build.",
-      "incorrectFeedback": "A saída do build ainda será usada por um runtime; a ferramenta não escolhe a lógica de negócio."
+      "incorrectFeedback": "Se escolheu decidir a lógica de negócio, atribuiu ao bundler um papel da aplicação: ele empacota e transforma, não define regras. Se escolheu substituir o runtime-alvo, ignorou que o artefato ainda precisa rodar no ambiente declarado."
     }
   },
   "14.13": {
@@ -1403,7 +1403,7 @@
       ],
       "answer": 0,
       "correctFeedback": "Resultados interpretáveis precisam estar associados às condições em que foram observados.",
-      "incorrectFeedback": "Uma observação isolada ou sem contexto não justifica generalização entre ambientes."
+      "incorrectFeedback": "Se escolheu anotar a ordem uma vez e tratá-la como universal, transformou uma observação isolada em regra geral. Se escolheu combinar runtimes sem identificar a origem, perdeu a condição que torna a comparação interpretável."
     }
   },
   "15.02": {

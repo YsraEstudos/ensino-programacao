@@ -1,0 +1,720 @@
+{
+  "version": 1,
+  "variants": [
+    {
+      "variantId": "var.04.01.escolha-retorno-quebra-linha",
+      "conceptId": "functions.return",
+      "sourceActivityId": "04.01",
+      "prerequisites": [],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Quebrar a linha logo depois de return faz a função devolver undefined sem nenhum aviso, e o defeito só aparece no valor recebido por quem chama. O aluno precisa conhecer a inserção automática de ponto e vírgula, não apenas o significado de return.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra. Repare no que acontece com a expressão que fica na linha seguinte à palavra return.",
+      "code": "function precoComDesconto(preco) {\n  return\n    preco * 0.9;\n}\n\nconsole.log(precoComDesconto(100));\n",
+      "choices": [
+        "Imprime 90, porque a expressão na linha seguinte vira o valor retornado.",
+        "Imprime undefined, porque a quebra de linha depois de return insere um ponto e vírgula, e a expressão seguinte nunca é devolvida.",
+        "Lança SyntaxError, porque return não pode ficar sozinho numa linha.",
+        "Imprime NaN, porque preco * 0.9 é calculado antes do return."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "O JavaScript insere ponto e vírgula logo após return quando a quebra de linha vem antes do valor. A função devolve undefined, e console.log imprime undefined.",
+        "byChoice": {
+          "0": "A expressão da linha seguinte nunca vira retorno: a quebra de linha já encerrou a instrução return.",
+          "2": "return sozinho é sintaxe válida. O erro não acontece; o problema é o valor devolvido, que é undefined.",
+          "3": "A expressão depois da quebra não é executada, então não há NaN. O que a função devolve é undefined."
+        }
+      }
+    },
+    {
+      "variantId": "var.04.01.predicao-retorno-callback",
+      "conceptId": "functions.return",
+      "sourceActivityId": "04.01",
+      "prerequisites": [],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Um return dentro de uma função interna devolve somente à própria função interna, e a externa continua até o fim. O aluno precisa identificar, em cada return, qual função o recebe, o que não se resolve trocando nomes de variáveis.",
+      "contentVersion": 1,
+      "prompt": "Preveja a saída de cada linha antes de executar. Para cada return, diga qual função recebe o valor: a interna ou a que chamou temNegativo e primeiroNegativo.",
+      "code": "function temNegativo(valores) {\n  const verificar = valor => {\n    if (valor < 0) return true;\n  };\n  for (const valor of valores) verificar(valor);\n  return false;\n}\n\nfunction primeiroNegativo(valores) {\n  for (const valor of valores) {\n    if (valor < 0) return valor;\n  }\n}\n\nconsole.log(temNegativo([3, -1, 4]), temNegativo([1, 2]));\nconsole.log(primeiroNegativo([5, -7, -2]), primeiroNegativo([1]));\n",
+      "expectedOutput": "false false\n-7 undefined"
+    },
+    {
+      "variantId": "var.05.08.iniciais-nome-completo",
+      "conceptId": "strings.basic",
+      "sourceActivityId": "05.08",
+      "prerequisites": [
+        "05.03"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Extrair iniciais exige decidir o que conta como palavra, como tratar espaços sobrando e o que devolver para texto vazio. Essas regras são contrato da função, e não se resolvem chamando charAt sem pensar nos casos de borda.",
+      "contentVersion": 1,
+      "prompt": "Implemente iniciais(nomeCompleto) em main.js. Devolva as iniciais, em maiúsculas, da primeira e da última palavra, nesta ordem. Espaços antes, depois ou repetidos entre as palavras não contam. Um nome com uma palavra só devolve apenas a inicial dela. Texto vazio ou só com espaços devolve texto vazio. Entrada que não é texto lança TypeError. Use métodos de string e de array já estudados: trim, split, filter, charAt e toUpperCase.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Devolve as iniciais da primeira e da última palavra, em maiúsculas.\nexport function iniciais(nomeCompleto) {\n  // Implemente conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function iniciais(nomeCompleto) {\n  if (typeof nomeCompleto !== 'string') throw new TypeError('nome deve ser texto');\n  const partes = nomeCompleto.trim().split(' ').filter(Boolean);\n  if (partes.length === 0) return '';\n  const primeira = partes[0].charAt(0).toUpperCase();\n  const ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0).toUpperCase() : '';\n  return primeira + ultima;\n}\n"
+      },
+      "tests": "import { iniciais } from './main.js';\n\ndescribe('iniciais', () => {\n  test('primeira e última palavra em maiúsculas', () => {\n    expect(iniciais('ana souza')).toBe('AS');\n    expect(iniciais('bruno de almeida costa')).toBe('BC');\n  });\n  test('espaços antes, depois e repetidos não contam', () => {\n    expect(iniciais('  ana   maria   souza ')).toBe('AS');\n  });\n  test('uma palavra só devolve a sua inicial', () => {\n    expect(iniciais('maria')).toBe('M');\n  });\n  test('texto vazio ou só com espaços devolve texto vazio', () => {\n    expect(iniciais('')).toBe('');\n    expect(iniciais('   ')).toBe('');\n  });\n  test('acentos são preservados na maiúscula', () => {\n    expect(iniciais('élio santos')).toBe('ÉS');\n  });\n  test('entrada que não é texto lança TypeError', () => {\n    expect(() => iniciais(42)).toThrow(TypeError);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "usa-segunda-palavra",
+          "files": {
+            "main.js": "export function iniciais(nomeCompleto) {\n  if (typeof nomeCompleto !== 'string') throw new TypeError('nome deve ser texto');\n  const partes = nomeCompleto.trim().split(' ').filter(Boolean);\n  if (partes.length === 0) return '';\n  const primeira = partes[0].charAt(0).toUpperCase();\n  const ultima = partes.length > 1 ? partes[1].charAt(0).toUpperCase() : '';\n  return primeira + ultima;\n}\n"
+          }
+        },
+        {
+          "id": "sem-maiusculas",
+          "files": {
+            "main.js": "export function iniciais(nomeCompleto) {\n  if (typeof nomeCompleto !== 'string') throw new TypeError('nome deve ser texto');\n  const partes = nomeCompleto.trim().split(' ').filter(Boolean);\n  if (partes.length === 0) return '';\n  const primeira = partes[0].charAt(0);\n  const ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0) : '';\n  return primeira + ultima;\n}\n"
+          }
+        },
+        {
+          "id": "vazio-vira-espaco",
+          "files": {
+            "main.js": "export function iniciais(nomeCompleto) {\n  if (typeof nomeCompleto !== 'string') throw new TypeError('nome deve ser texto');\n  const partes = nomeCompleto.trim().split(' ').filter(Boolean);\n  if (partes.length === 0) return ' ';\n  const primeira = partes[0].charAt(0).toUpperCase();\n  const ultima = partes.length > 1 ? partes[partes.length - 1].charAt(0).toUpperCase() : '';\n  return primeira + ultima;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.05.11.primeiros-codepoints",
+      "conceptId": "unicode.basic",
+      "sourceActivityId": "05.11",
+      "prerequisites": [
+        "05.03"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Limitar um texto por quantidade exige escolher a unidade de contagem: length e slice contam unidades UTF-16 e podem partir um emoji ao meio. O aluno precisa decidir que a regra conta code points, e isso não se resolve trocando o nome da função.",
+      "contentVersion": 1,
+      "prompt": "Corrija o defeito em main.js. primeirosCaracteres(texto, quantidade) devolve os primeiros caracteres contados como code points, para que um emoji ocupe uma posição e não seja partido. Quantidade precisa ser inteiro não negativo; caso contrário lance RangeError. Antes de alterar, rode o caso com o emoji e anote por que slice quebra o caractere.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Devolve os primeiros caracteres do texto, contando cada emoji como um caractere.\nexport function primeirosCaracteres(texto, quantidade) {\n  return texto.slice(0, quantidade);\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function primeirosCaracteres(texto, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade < 0) {\n    throw new RangeError('quantidade deve ser inteiro não negativo');\n  }\n  return Array.from(texto).slice(0, quantidade).join('');\n}\n"
+      },
+      "tests": "import { primeirosCaracteres } from './main.js';\n\ndescribe('primeirosCaracteres', () => {\n  test('devolve os primeiros caracteres de um texto simples', () => {\n    expect(primeirosCaracteres('abcdef', 3)).toBe('abc');\n    expect(primeirosCaracteres('Olá', 2)).toBe('Ol');\n  });\n  test('um emoji ocupa uma posição e não é partido ao meio', () => {\n    expect(primeirosCaracteres('a😀b', 2)).toBe('a😀');\n  });\n  test('conta code points: a letra e o acento combinante são duas posições', () => {\n    expect(primeirosCaracteres('e\\u0301x', 2)).toBe('e\\u0301');\n  });\n  test('quantidade maior que o texto devolve o texto inteiro', () => {\n    expect(primeirosCaracteres('ab', 10)).toBe('ab');\n  });\n  test('quantidade zero devolve texto vazio', () => {\n    expect(primeirosCaracteres('ab', 0)).toBe('');\n  });\n  test('quantidade negativa ou fracionada lança RangeError', () => {\n    expect(() => primeirosCaracteres('ab', -1)).toThrow(RangeError);\n    expect(() => primeirosCaracteres('ab', 1.5)).toThrow(RangeError);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "conta-unidades-utf16",
+          "files": {
+            "main.js": "export function primeirosCaracteres(texto, quantidade) {\n  if (!Number.isInteger(quantidade) || quantidade < 0) {\n    throw new RangeError('quantidade deve ser inteiro não negativo');\n  }\n  return texto.slice(0, quantidade);\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export function primeirosCaracteres(texto, quantidade) {\n  return Array.from(texto).slice(0, quantidade).join('');\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.06.01.escolha-identidade-spread",
+      "conceptId": "objects.identity",
+      "sourceActivityId": "06.01",
+      "prerequisites": [
+        "05.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Copiar com spread cria um objeto novo no primeiro nível, mas os objetos aninhados continuam compartilhados. O aluno precisa perguntar quais nomes apontam para o mesmo objeto, e não apenas se a cópia foi feita.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida a saída. Separe a identidade do objeto de fora da identidade dos objetos aninhados, que o spread copia por referência.",
+      "code": "const perfil = { nome: 'Ana', contato: { cidade: 'Recife' } };\nconst copia = { ...perfil };\nconst outra = perfil;\n\ncopia.nome = 'Bia';\ncopia.contato.cidade = 'Natal';\nconsole.log(perfil.nome, perfil.contato.cidade, outra === perfil, copia === perfil);\n",
+      "choices": [
+        "Imprime \"Ana Recife true false\", porque o spread copia também o objeto contato.",
+        "Imprime \"Bia Natal true false\", porque copia e perfil são o mesmo objeto.",
+        "Imprime \"Ana Natal true false\", porque o spread copia só o primeiro nível e contato continua compartilhado.",
+        "Imprime \"Ana Natal false false\", porque outra recebe uma cópia de perfil."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "copia é um objeto novo, então perfil.nome continua \"Ana\". Mas contato é o mesmo objeto nas duas variáveis, e a cidade mudada por copia aparece em perfil. outra === perfil é true; copia === perfil é false.",
+        "byChoice": {
+          "0": "O spread copia só o primeiro nível: contato continua sendo o mesmo objeto, por isso a mudança feita por copia aparece em perfil.",
+          "1": "copia é outro objeto; a atribuição a nome altera apenas a cópia, então perfil.nome continua \"Ana\".",
+          "3": "outra recebe a mesma referência de perfil, então outra === perfil é true, e não false."
+        }
+      }
+    },
+    {
+      "variantId": "var.06.01.predicao-referencias-listas",
+      "conceptId": "objects.identity",
+      "sourceActivityId": "06.01",
+      "prerequisites": [
+        "05.01"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "Quando o objeto externo é copiado, um array interno pode continuar compartilhado, e push altera o dado visto por todas as referências. O aluno precisa seguir identidades de objeto e de array, não o valor que aparece num nome.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Depois de cada atribuição, diga quais nomes apontam para o mesmo objeto e quais apontam para um array diferente.",
+      "code": "const turma = { alunos: ['Ana', 'Caio'] };\nconst ref = turma;\nconst snapshot = { ...turma };\nturma.alunos.push('Dara');\nsnapshot.alunos = ['Eva'];\n\nconsole.log(ref === turma, snapshot === turma, turma.alunos.length);\nconsole.log(ref.alunos.join(','), snapshot.alunos.join(','));\nconst outro = { ...turma, alunos: [...turma.alunos] };\noutro.alunos.pop();\nconsole.log(turma.alunos.length, outro.alunos.length, outro === turma);\n",
+      "expectedOutput": "true false 3\nAna,Caio,Dara Eva\n3 2 false"
+    },
+    {
+      "variantId": "var.06.06.ranking-map-json",
+      "conceptId": "serialization.json",
+      "sourceActivityId": "06.06",
+      "prerequisites": [
+        "06.01"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "07",
+        "11"
+      ],
+      "transferDecision": "JSON não tem Map, então a função precisa escolher um formato de pares, definir a ordem da saída e decidir o que fazer com dados inválidos ao restaurar. Essas escolhas são contrato de fronteira, e trocar nomes de variáveis não as resolve.",
+      "contentVersion": 1,
+      "prompt": "Implemente serializarRanking(ranking) e restaurarRanking(texto) em main.js. serializarRanking recebe um Map de nome para pontos e devolve texto JSON com pares [nome, pontos], ordenados pelo nome com < e >; não use localeCompare. Entrada que não é Map lança TypeError. restaurarRanking recebe texto e devolve um Map: texto que não é JSON válido, JSON que não é array ou pares mal formados não lançam erro; pares cujos pontos não são inteiros não negativos são descartados.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Serializa e restaura um ranking de nome para pontos.\nexport function serializarRanking(ranking) {\n  // Implemente conforme o enunciado.\n}\n\nexport function restaurarRanking(texto) {\n  // Implemente conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function serializarRanking(ranking) {\n  if (!(ranking instanceof Map)) throw new TypeError('ranking deve ser Map');\n  const pares = [...ranking.entries()].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));\n  return JSON.stringify(pares);\n}\n\nexport function restaurarRanking(texto) {\n  const mapa = new Map();\n  let dados;\n  try {\n    dados = JSON.parse(texto);\n  } catch {\n    return mapa;\n  }\n  if (!Array.isArray(dados)) return mapa;\n  for (const par of dados) {\n    if (!Array.isArray(par) || par.length !== 2) continue;\n    const [nome, pontos] = par;\n    if (typeof nome !== 'string' || !Number.isInteger(pontos) || pontos < 0) continue;\n    mapa.set(nome, pontos);\n  }\n  return mapa;\n}\n"
+      },
+      "tests": "import { serializarRanking, restaurarRanking } from './main.js';\n\ndescribe('serializarRanking', () => {\n  test('gera pares ordenados pelo nome', () => {\n    expect(serializarRanking(new Map([['Bia', 7], ['Ana', 9]]))).toBe('[[\"Ana\",9],[\"Bia\",7]]');\n  });\n  test('ranking vazio vira array vazio', () => {\n    expect(serializarRanking(new Map())).toBe('[]');\n  });\n  test('entrada que não é Map lança TypeError', () => {\n    expect(() => serializarRanking({ Ana: 9 })).toThrow(TypeError);\n  });\n});\n\ndescribe('restaurarRanking', () => {\n  test('ida e volta preserva os pares', () => {\n    const original = new Map([['Ana', 9], ['Bia', 7]]);\n    const restaurado = restaurarRanking(serializarRanking(original));\n    expect([...restaurado.entries()]).toEqual([['Ana', 9], ['Bia', 7]]);\n  });\n  test('texto que não é JSON válido devolve Map vazio, sem lançar', () => {\n    expect(restaurarRanking('{ruim').size).toBe(0);\n  });\n  test('JSON que não é array devolve Map vazio', () => {\n    expect(restaurarRanking('{\"Ana\":3}').size).toBe(0);\n  });\n  test('descarta pares com pontos inválidos ou mal formados', () => {\n    const restaurado = restaurarRanking('[[\"Ana\",-1],[\"Caio\",2.5],[\"Dara\",3],[\"Eva\"]]');\n    expect([...restaurado.entries()]).toEqual([['Dara', 3]]);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "sem-ordenacao",
+          "files": {
+            "main.js": "export function serializarRanking(ranking) {\n  if (!(ranking instanceof Map)) throw new TypeError('ranking deve ser Map');\n  return JSON.stringify([...ranking.entries()]);\n}\n\nexport function restaurarRanking(texto) {\n  const mapa = new Map();\n  let dados;\n  try {\n    dados = JSON.parse(texto);\n  } catch {\n    return mapa;\n  }\n  if (!Array.isArray(dados)) return mapa;\n  for (const par of dados) {\n    if (!Array.isArray(par) || par.length !== 2) continue;\n    const [nome, pontos] = par;\n    if (typeof nome !== 'string' || !Number.isInteger(pontos) || pontos < 0) continue;\n    mapa.set(nome, pontos);\n  }\n  return mapa;\n}\n"
+          }
+        },
+        {
+          "id": "aceita-pontos-invalidos",
+          "files": {
+            "main.js": "export function serializarRanking(ranking) {\n  if (!(ranking instanceof Map)) throw new TypeError('ranking deve ser Map');\n  const pares = [...ranking.entries()].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));\n  return JSON.stringify(pares);\n}\n\nexport function restaurarRanking(texto) {\n  const mapa = new Map();\n  let dados;\n  try {\n    dados = JSON.parse(texto);\n  } catch {\n    return mapa;\n  }\n  if (!Array.isArray(dados)) return mapa;\n  for (const par of dados) {\n    if (!Array.isArray(par) || par.length !== 2) continue;\n    const [nome, pontos] = par;\n    if (typeof nome !== 'string') continue;\n    mapa.set(nome, pontos);\n  }\n  return mapa;\n}\n"
+          }
+        },
+        {
+          "id": "lanca-em-json-invalido",
+          "files": {
+            "main.js": "export function serializarRanking(ranking) {\n  if (!(ranking instanceof Map)) throw new TypeError('ranking deve ser Map');\n  const pares = [...ranking.entries()].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));\n  return JSON.stringify(pares);\n}\n\nexport function restaurarRanking(texto) {\n  const mapa = new Map();\n  const dados = JSON.parse(texto);\n  if (!Array.isArray(dados)) return mapa;\n  for (const par of dados) {\n    if (!Array.isArray(par) || par.length !== 2) continue;\n    const [nome, pontos] = par;\n    if (typeof nome !== 'string' || !Number.isInteger(pontos) || pontos < 0) continue;\n    mapa.set(nome, pontos);\n  }\n  return mapa;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.08.06.existe-par-set",
+      "conceptId": "algorithms.complexity",
+      "sourceActivityId": "08.06",
+      "prerequisites": [
+        "08.01"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "11",
+        "14"
+      ],
+      "transferDecision": "Escolher entre comparar todos os pares e consultar um Set depende de como o custo cresce com a lista, não só de a resposta estar certa. O aluno precisa prever quando a versão aninhada deixa de caber no tempo e justificar a estrutura que troca a busca por consulta direta.",
+      "contentVersion": 1,
+      "prompt": "Implemente existePar(numeros, alvo) em main.js. Devolva true se existirem duas posições diferentes cujos valores somam alvo, e false caso contrário. O mesmo elemento não pode ser usado duas vezes, mas valores repetidos em posições diferentes contam. Entrada que não é array lança TypeError. A solução precisa crescer de forma linear com a lista: use uma varredura com Set, não a comparação de todos os pares.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Devolve true se duas posições diferentes somam alvo.\nexport function existePar(numeros, alvo) {\n  // Implemente conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export function existePar(numeros, alvo) {\n  if (!Array.isArray(numeros)) throw new TypeError('numeros deve ser array');\n  const vistos = new Set();\n  for (const numero of numeros) {\n    if (vistos.has(alvo - numero)) return true;\n    vistos.add(numero);\n  }\n  return false;\n}\n"
+      },
+      "tests": "import { existePar } from './main.js';\n\ndescribe('existePar', () => {\n  test('encontra dois valores que somam o alvo', () => {\n    expect(existePar([2, 7, 11, 15], 9)).toBe(true);\n    expect(existePar([3, 2, 4], 6)).toBe(true);\n  });\n  test('valores repetidos em posições diferentes contam', () => {\n    expect(existePar([3, 3], 6)).toBe(true);\n  });\n  test('o mesmo elemento não pode ser usado duas vezes', () => {\n    expect(existePar([3], 6)).toBe(false);\n  });\n  test('sem par devolve false, e lista vazia também', () => {\n    expect(existePar([1, 2, 3], 10)).toBe(false);\n    expect(existePar([], 0)).toBe(false);\n  });\n  test('entrada que não é array lança TypeError', () => {\n    expect(() => existePar('123', 3)).toThrow(TypeError);\n  });\n  test('lista grande é resolvida com uma única varredura', () => {\n    const grande = Array.from({ length: 200000 }, (_, i) => i * 2);\n    expect(existePar(grande, 399996)).toBe(true);\n    expect(existePar(grande, 399997)).toBe(false);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "pares-aninhados",
+          "files": {
+            "main.js": "export function existePar(numeros, alvo) {\n  if (!Array.isArray(numeros)) throw new TypeError('numeros deve ser array');\n  for (let i = 0; i < numeros.length; i++) {\n    for (let j = 0; j < numeros.length; j++) {\n      if (i !== j && numeros[i] + numeros[j] === alvo) return true;\n    }\n  }\n  return false;\n}\n"
+          }
+        },
+        {
+          "id": "sem-posicao-distinta",
+          "files": {
+            "main.js": "export function existePar(numeros, alvo) {\n  if (!Array.isArray(numeros)) throw new TypeError('numeros deve ser array');\n  const vistos = new Set();\n  for (const numero of numeros) {\n    if (vistos.has(alvo - numero) || numero * 2 === alvo) return true;\n    vistos.add(numero);\n  }\n  return false;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.09.01.escolha-escopo-lexico-bloco",
+      "conceptId": "scope.lexical",
+      "sourceActivityId": "09.01",
+      "prerequisites": [
+        "04.01"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "11",
+        "14",
+        "18"
+      ],
+      "transferDecision": "Uma função lê os bindings do escopo onde foi escrita, não os do lugar em que é chamada nem os de um bloco que está em execução. Prever o valor de um nome repetido exige seguir a cadeia léxica, e trocar o nome da variável não altera essa regra.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o programa imprime. Para cada leitura de nivel, pergunte qual é o binding mais próximo no escopo onde a função foi escrita, e não onde ela é chamada.",
+      "code": "let nivel = 'global';\n\nfunction externa() {\n  let nivel = 'externa';\n  function interna() {\n    return nivel;\n  }\n  {\n    let nivel = 'bloco';\n    console.log(interna(), nivel);\n  }\n  return interna;\n}\n\nconsole.log(externa()(), nivel);\n",
+      "choices": [
+        "Imprime 'bloco bloco' e depois 'bloco global', porque interna enxerga o let do bloco quando é chamada dentro dele.",
+        "Imprime 'global bloco' e depois 'global global', porque o let de externa esconde o global e interna cai no topo do arquivo.",
+        "Imprime 'externa bloco' e depois 'externa global', porque interna lê o nivel do escopo onde foi escrita, dentro de externa.",
+        "Imprime 'externa bloco' e depois 'bloco global', porque a segunda chamada lê o nivel do bloco que acabou de ser executado."
+      ],
+      "answer": 2,
+      "feedback": {
+        "correct": "interna foi escrita dentro de externa, então lê o nivel de externa. A primeira linha sai dentro do bloco, com nivel 'bloco'. A segunda linha lê o nivel do topo, 'global'.",
+        "byChoice": {
+          "0": "O let do bloco fica restrito às chaves; interna não o enxerga, porque foi escrita fora desse bloco.",
+          "1": "O let de externa vale dentro de externa e interna o enxerga; ela não cai no global do topo.",
+          "3": "A segunda linha usa o nivel do topo do arquivo, que é 'global'. O bloco já terminou e não vaza para fora das chaves."
+        }
+      }
+    },
+    {
+      "variantId": "var.10.05.plano-anual-super",
+      "conceptId": "classes.basic",
+      "sourceActivityId": "10.05",
+      "prerequisites": [
+        "10.02"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "11",
+        "14"
+      ],
+      "transferDecision": "Em classes derivadas, a ordem entre super e this e a reutilização do método da base são decisões de contrato. O defeito só aparece ao instanciar ou ao descrever, então o aluno precisa seguir o construtor e o método herdado, e não corrigir só o nome do campo.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. PlanoAnual deve chamar super antes de usar this, guardar o preço anual (mensal vezes 12) e manter o texto da classe base em descricao(). Antes de alterar, rode o caso e anote qual linha lança ReferenceError e qual linha omite o preço.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "export class Plano {\n  #preco;\n\n  constructor(nome, preco) {\n    if (!Number.isInteger(preco) || preco < 0) throw new RangeError('preco deve ser inteiro não negativo');\n    this.nome = nome;\n    this.#preco = preco;\n  }\n\n  get preco() {\n    return this.#preco;\n  }\n\n  descricao() {\n    return this.nome + ' por ' + this.#preco + ' centavos';\n  }\n}\n\nexport class PlanoAnual extends Plano {\n  constructor(nome, precoMensal) {\n    this.meses = 12;\n    super(nome, precoMensal);\n  }\n\n  descricao() {\n    return 'Anual: ' + this.nome;\n  }\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export class Plano {\n  #preco;\n\n  constructor(nome, preco) {\n    if (!Number.isInteger(preco) || preco < 0) throw new RangeError('preco deve ser inteiro não negativo');\n    this.nome = nome;\n    this.#preco = preco;\n  }\n\n  get preco() {\n    return this.#preco;\n  }\n\n  descricao() {\n    return this.nome + ' por ' + this.#preco + ' centavos';\n  }\n}\n\nexport class PlanoAnual extends Plano {\n  constructor(nome, precoMensal) {\n    super(nome, precoMensal * 12);\n    this.meses = 12;\n  }\n\n  descricao() {\n    return 'Anual: ' + super.descricao();\n  }\n}\n"
+      },
+      "tests": "import { Plano, PlanoAnual } from './main.js';\n\ndescribe('PlanoAnual', () => {\n  test('preço anual é o mensal vezes doze', () => {\n    expect(new PlanoAnual('Pro', 10).preco).toBe(120);\n  });\n  test('guarda a quantidade de meses', () => {\n    expect(new PlanoAnual('Pro', 10).meses).toBe(12);\n  });\n  test('a descrição mantém o texto da classe base', () => {\n    expect(new PlanoAnual('Pro', 10).descricao()).toBe('Anual: Pro por 120 centavos');\n  });\n  test('é um Plano', () => {\n    expect(new PlanoAnual('Pro', 10) instanceof Plano).toBe(true);\n  });\n  test('valor inválido é validado pela classe base', () => {\n    expect(() => new PlanoAnual('X', -1)).toThrow(RangeError);\n  });\n  test('a classe base continua funcionando sozinha', () => {\n    expect(new Plano('Básico', 50).descricao()).toBe('Básico por 50 centavos');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "descricao-sem-base",
+          "files": {
+            "main.js": "export class Plano {\n  #preco;\n\n  constructor(nome, preco) {\n    if (!Number.isInteger(preco) || preco < 0) throw new RangeError('preco deve ser inteiro não negativo');\n    this.nome = nome;\n    this.#preco = preco;\n  }\n\n  get preco() {\n    return this.#preco;\n  }\n\n  descricao() {\n    return this.nome + ' por ' + this.#preco + ' centavos';\n  }\n}\n\nexport class PlanoAnual extends Plano {\n  constructor(nome, precoMensal) {\n    super(nome, precoMensal * 12);\n    this.meses = 12;\n  }\n\n  descricao() {\n    return 'Anual: ' + this.nome;\n  }\n}\n"
+          }
+        },
+        {
+          "id": "preco-sem-multiplicar",
+          "files": {
+            "main.js": "export class Plano {\n  #preco;\n\n  constructor(nome, preco) {\n    if (!Number.isInteger(preco) || preco < 0) throw new RangeError('preco deve ser inteiro não negativo');\n    this.nome = nome;\n    this.#preco = preco;\n  }\n\n  get preco() {\n    return this.#preco;\n  }\n\n  descricao() {\n    return this.nome + ' por ' + this.#preco + ' centavos';\n  }\n}\n\nexport class PlanoAnual extends Plano {\n  constructor(nome, precoMensal) {\n    super(nome, precoMensal);\n    this.meses = 12;\n  }\n\n  descricao() {\n    return 'Anual: ' + super.descricao();\n  }\n}\n"
+          }
+        },
+        {
+          "id": "meses-antes-do-super",
+          "files": {
+            "main.js": "export class Plano {\n  #preco;\n\n  constructor(nome, preco) {\n    if (!Number.isInteger(preco) || preco < 0) throw new RangeError('preco deve ser inteiro não negativo');\n    this.nome = nome;\n    this.#preco = preco;\n  }\n\n  get preco() {\n    return this.#preco;\n  }\n\n  descricao() {\n    return this.nome + ' por ' + this.#preco + ' centavos';\n  }\n}\n\nexport class PlanoAnual extends Plano {\n  constructor(nome, precoMensal) {\n    this.meses = 12;\n    super(nome, precoMensal * 12);\n  }\n\n  descricao() {\n    return 'Anual: ' + super.descricao();\n  }\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.10.03.veiculo-prototipo",
+      "conceptId": "prototype.chain",
+      "sourceActivityId": "10.03",
+      "prerequisites": [
+        "10.01"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "11",
+        "14"
+      ],
+      "transferDecision": "Um método guardado em cada objeto cria uma cópia por instância, enquanto no protótipo ele é compartilhado e os dados ficam em cada instância. O aluno precisa distinguir propriedade própria de propriedade herdada, o que não se resolve renomeando a função de fábrica.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js para que criarVeiculo devolva objetos que herdam descrever de veiculoPrototipo, sem uma cópia do método em cada objeto. Marca e ano continuam próprios de cada veículo. Antes de alterar, rode os casos e anote quais propriedades são próprias e quais são herdadas.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Cada veículo deveria herdar descrever do protótipo; este código cria uma cópia do método em cada objeto.\nexport function criarVeiculo(marca, ano) {\n  return {\n    marca,\n    ano,\n    descrever() {\n      return this.marca + ' (' + this.ano + ')';\n    },\n  };\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "const veiculoPrototipo = {\n  descrever() {\n    return this.marca + ' (' + this.ano + ')';\n  },\n};\n\nexport function criarVeiculo(marca, ano) {\n  const veiculo = Object.create(veiculoPrototipo);\n  veiculo.marca = marca;\n  veiculo.ano = ano;\n  return veiculo;\n}\n"
+      },
+      "tests": "import { criarVeiculo } from './main.js';\n\ndescribe('criarVeiculo', () => {\n  test('descrever usa marca e ano do próprio veículo', () => {\n    expect(criarVeiculo('Volks', 1980).descrever()).toBe('Volks (1980)');\n  });\n  test('descrever não é propriedade própria de cada veículo', () => {\n    expect(Object.hasOwn(criarVeiculo('Volks', 1980), 'descrever')).toBe(false);\n  });\n  test('marca e ano são as únicas propriedades próprias', () => {\n    expect(Object.keys(criarVeiculo('Volks', 1980))).toEqual(['marca', 'ano']);\n  });\n  test('veículos diferentes compartilham o mesmo método', () => {\n    const a = criarVeiculo('A', 1);\n    const b = criarVeiculo('B', 2);\n    expect(a.descrever === b.descrever).toBe(true);\n  });\n  test('alterar o ano de um veículo não muda o outro', () => {\n    const a = criarVeiculo('A', 1);\n    const b = criarVeiculo('B', 2);\n    a.ano = 3;\n    expect(a.descrever()).toBe('A (3)');\n    expect(b.descrever()).toBe('B (2)');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "metodo-por-instancia",
+          "files": {
+            "main.js": "export function criarVeiculo(marca, ano) {\n  return {\n    marca,\n    ano,\n    descrever() {\n      return this.marca + ' (' + this.ano + ')';\n    },\n  };\n}\n"
+          }
+        },
+        {
+          "id": "ano-nao-atribuido",
+          "files": {
+            "main.js": "const veiculoPrototipo = {\n  descrever() {\n    return this.marca + ' (' + this.ano + ')';\n  },\n};\n\nexport function criarVeiculo(marca, ano) {\n  const veiculo = Object.create(veiculoPrototipo);\n  veiculo.marca = marca;\n  return veiculo;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.11.10.frete-modulos",
+      "conceptId": "modules.browser",
+      "sourceActivityId": "11.10",
+      "prerequisites": [
+        "11.09"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Módulos ES tornam as dependências explícitas por import e export, e cada arquivo passa a ter um contrato próprio. Separar a tabela de frete do texto exige decidir o que cada módulo exporta e quais dados atravessam a fronteira, e não apenas mover linhas de arquivo.",
+      "contentVersion": 1,
+      "prompt": "Separe o cálculo do frete em precos.js e use-o em main.js por import. precos.js exporta TAXA_BASE e calcularFrete(pesoGramas): até 999 g cobra a taxa base; de 1000 g a 4999 g cobra 900; a partir de 5000 g cobra 1500. Peso que não é número lança TypeError; número negativo ou não finito lança RangeError. main.js exporta resumoFrete(pesoGramas), que devolve o texto \"Frete: <valor> (base <taxa>)\". Não coloque efeitos colaterais no topo de precos.js.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "precos.js": "// Módulo sem efeitos ao ser importado: exporta a taxa e a função de cálculo.\nexport const TAXA_BASE = 500;\n\nexport function calcularFrete(pesoGramas) {\n  // Implemente a tabela do enunciado.\n}\n",
+        "main.js": "import { calcularFrete, TAXA_BASE } from './precos.js';\n\nexport function resumoFrete(pesoGramas) {\n  return 'Frete: ' + calcularFrete(pesoGramas) + ' (base ' + TAXA_BASE + ')';\n}\n"
+      },
+      "correctFiles": {
+        "precos.js": "export const TAXA_BASE = 500;\n\nexport function calcularFrete(pesoGramas) {\n  if (typeof pesoGramas !== 'number') throw new TypeError('peso deve ser número');\n  if (!Number.isFinite(pesoGramas) || pesoGramas < 0) throw new RangeError('peso deve ser finito e não negativo');\n  if (pesoGramas >= 5000) return 1500;\n  if (pesoGramas >= 1000) return 900;\n  return TAXA_BASE;\n}\n",
+        "main.js": "import { calcularFrete, TAXA_BASE } from './precos.js';\n\nexport function resumoFrete(pesoGramas) {\n  return 'Frete: ' + calcularFrete(pesoGramas) + ' (base ' + TAXA_BASE + ')';\n}\n"
+      },
+      "tests": "import { resumoFrete } from './main.js';\nimport { calcularFrete, TAXA_BASE } from './precos.js';\n\ndescribe('calcularFrete', () => {\n  test('até 999 g cobra a taxa base', () => {\n    expect(calcularFrete(0)).toBe(TAXA_BASE);\n    expect(calcularFrete(999)).toBe(500);\n  });\n  test('de 1000 g a 4999 g cobra 900', () => {\n    expect(calcularFrete(1000)).toBe(900);\n    expect(calcularFrete(4999)).toBe(900);\n  });\n  test('a partir de 5000 g cobra 1500', () => {\n    expect(calcularFrete(5000)).toBe(1500);\n  });\n  test('entrada que não é número lança TypeError', () => {\n    expect(() => calcularFrete('1000')).toThrow(TypeError);\n  });\n  test('número negativo ou não finito lança RangeError', () => {\n    expect(() => calcularFrete(-1)).toThrow(RangeError);\n    expect(() => calcularFrete(NaN)).toThrow(RangeError);\n  });\n});\n\ndescribe('resumoFrete', () => {\n  test('texto com valor e taxa base', () => {\n    expect(resumoFrete(500)).toBe('Frete: 500 (base 500)');\n    expect(resumoFrete(1000)).toBe('Frete: 900 (base 500)');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "limite-5000-exclusivo",
+          "files": {
+            "precos.js": "export const TAXA_BASE = 500;\n\nexport function calcularFrete(pesoGramas) {\n  if (typeof pesoGramas !== 'number') throw new TypeError('peso deve ser número');\n  if (!Number.isFinite(pesoGramas) || pesoGramas < 0) throw new RangeError('peso deve ser finito e não negativo');\n  if (pesoGramas > 5000) return 1500;\n  if (pesoGramas >= 1000) return 900;\n  return TAXA_BASE;\n}\n"
+          }
+        },
+        {
+          "id": "sem-taxa-base",
+          "files": {
+            "main.js": "import { calcularFrete } from './precos.js';\n\nexport function resumoFrete(pesoGramas) {\n  return 'Frete: ' + calcularFrete(pesoGramas);\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.12.10.predicao-cabecalhos-corpo",
+      "conceptId": "http.basic",
+      "sourceActivityId": "12.10",
+      "prerequisites": [
+        "11.04"
+      ],
+      "format": "predict-code",
+      "environment": "javascript",
+      "evaluator": "output-match",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Uma resposta HTTP tem três partes com papéis diferentes: a linha de status, os headers e o corpo, que pode faltar em respostas como 204. Antes de escolher um parser, o aluno precisa identificar a parte que cada linha lê, e isso não muda ao trocar nomes de variáveis.",
+      "contentVersion": 1,
+      "prompt": "Preveja cada linha antes de executar. Separe a linha de status, os headers (cujos nomes não diferenciam maiúsculas) e o corpo depois da linha em branco. Diga o que cada parte representa na resposta.",
+      "code": "const bruto = 'HTTP/1.1 201 Created\\r\\nContent-Type: application/json; charset=utf-8\\r\\nLocation: /pedidos/7\\r\\n\\r\\n{\"id\":7}';\nconst [cabecalho, corpo = ''] = bruto.split('\\r\\n\\r\\n');\nconst [linhaStatus, ...linhasHeaders] = cabecalho.split('\\r\\n');\nconst codigo = linhaStatus.split(' ')[1];\nconst headers = {};\nfor (const linha of linhasHeaders) {\n  const indice = linha.indexOf(':');\n  headers[linha.slice(0, indice).toLowerCase()] = linha.slice(indice + 1).trim();\n}\n\nconsole.log(Number(codigo), headers['content-type'], headers.location);\nconsole.log(corpo.length, JSON.parse(corpo).id);\n\nconst semCorpo = 'HTTP/1.1 204 No Content\\r\\nCache-Control: no-store\\r\\n\\r\\n';\nconst [, resto = 'vazio'] = semCorpo.split('\\r\\n\\r\\n');\nconsole.log(resto === '' ? 'sem corpo' : resto);\n",
+      "expectedOutput": "201 application/json; charset=utf-8 /pedidos/7\n8 7\nsem corpo"
+    },
+    {
+      "variantId": "var.12.10.escolha-status-204",
+      "conceptId": "http.basic",
+      "sourceActivityId": "12.10",
+      "prerequisites": [
+        "11.04"
+      ],
+      "format": "choice-predict",
+      "environment": "javascript",
+      "evaluator": "choice",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Uma resposta 204 indica que não há corpo, então o cliente não deve tentar ler JSON nela. O aluno precisa ligar o status ao corpo antes de chamar um parser, e essa decisão não se resolve trocando o nome da função de leitura.",
+      "contentVersion": 1,
+      "prompt": "Antes de executar, decida o que o console mostra. Pergunte o que a função devolve quando o status é 204 e se JSON.parse é alcançado nesse caminho.",
+      "code": "function interpretarCorpo(status, texto) {\n  if (status === 204) return 'sem corpo';\n  return JSON.parse(texto);\n}\n\nconsole.log(interpretarCorpo(204, ''));\nconsole.log(interpretarCorpo(200, '{\"ok\":true}').ok);\n",
+      "choices": [
+        "Imprime 'null' e depois 'true', porque a resposta 204 vira null quando o corpo está vazio.",
+        "Imprime 'sem corpo' e depois 'true', porque o ramo 204 retorna antes de JSON.parse.",
+        "Lança SyntaxError na primeira linha, porque JSON.parse('') falha com texto vazio.",
+        "Imprime 'sem corpo' e depois 'undefined', porque JSON.parse devolve um texto sem propriedade ok."
+      ],
+      "answer": 1,
+      "feedback": {
+        "correct": "O ramo 204 devolve 'sem corpo' antes de chamar JSON.parse. A segunda chamada faz o parse de {\"ok\":true} e lê ok, que vale true.",
+        "byChoice": {
+          "0": "Nenhum null aparece nesse caminho: a função devolve o texto 'sem corpo' para o status 204.",
+          "2": "O ramo 204 retorna antes de JSON.parse, então a primeira chamada não lança erro.",
+          "3": "JSON.parse devolve o objeto {ok: true}, e a propriedade ok vale true."
+        }
+      }
+    },
+    {
+      "variantId": "var.12.12.vigencia-meio-aberta",
+      "conceptId": "date.time",
+      "sourceActivityId": "12.12",
+      "prerequisites": [
+        "12.10"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Um período de vigência é meio aberto, e textos de data podem trazer deslocamentos de fuso diferentes. Decidir qual instante é comparado, e em que fuso um dia é mostrado, muda o resultado mesmo quando o texto de entrada é o mesmo.",
+      "contentVersion": 1,
+      "prompt": "Implemente estaVigente(inicioIso, fimIso, agoraIso) e diaDoPeriodo(iso) em main.js, usando Date.parse e toISOString, sem depender do fuso do computador. O período inclui o início e exclui o fim. Texto de data inválido lança RangeError, assim como um fim que não é posterior ao início. diaDoPeriodo devolve o dia em UTC no formato AAAA-MM-DD.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Vigência: início incluído, fim excluído. Textos de data são lidos com Date.parse.\nexport function estaVigente(inicioIso, fimIso, agoraIso) {\n  // Implemente conforme o enunciado.\n}\n\nexport function diaDoPeriodo(iso) {\n  // Implemente conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "function instante(texto) {\n  const ms = Date.parse(texto);\n  if (Number.isNaN(ms)) throw new RangeError('data inválida: ' + texto);\n  return ms;\n}\n\nexport function estaVigente(inicioIso, fimIso, agoraIso) {\n  const inicio = instante(inicioIso);\n  const fim = instante(fimIso);\n  const agora = instante(agoraIso);\n  if (fim <= inicio) throw new RangeError('fim deve ser posterior ao início');\n  return inicio <= agora && agora < fim;\n}\n\nexport function diaDoPeriodo(iso) {\n  return new Date(instante(iso)).toISOString().slice(0, 10);\n}\n"
+      },
+      "tests": "import { estaVigente, diaDoPeriodo } from './main.js';\n\ndescribe('estaVigente', () => {\n  test('inclui o instante de início', () => {\n    expect(estaVigente('2026-03-01T00:00:00Z', '2026-03-10T00:00:00Z', '2026-03-01T00:00:00Z')).toBe(true);\n  });\n  test('exclui o instante de fim', () => {\n    expect(estaVigente('2026-03-01T00:00:00Z', '2026-03-10T00:00:00Z', '2026-03-10T00:00:00Z')).toBe(false);\n  });\n  test('compara instantes, não textos: -03:00 às 00:00 é 03:00 UTC', () => {\n    const inicio = '2026-03-01T00:00:00-03:00';\n    const fim = '2026-03-10T00:00:00Z';\n    expect(estaVigente(inicio, fim, '2026-03-01T02:59:59Z')).toBe(false);\n    expect(estaVigente(inicio, fim, '2026-03-01T03:00:00Z')).toBe(true);\n  });\n  test('texto de data inválido lança RangeError', () => {\n    expect(() => estaVigente('nao é data', '2026-03-10T00:00:00Z', '2026-03-05T00:00:00Z')).toThrow(RangeError);\n  });\n  test('fim que não é posterior ao início lança RangeError', () => {\n    expect(() => estaVigente('2026-03-10T00:00:00Z', '2026-03-01T00:00:00Z', '2026-03-05T00:00:00Z')).toThrow(RangeError);\n  });\n});\n\ndescribe('diaDoPeriodo', () => {\n  test('devolve o dia em UTC', () => {\n    expect(diaDoPeriodo('2026-03-01T23:30:00-03:00')).toBe('2026-03-02');\n  });\n  test('usa o formato AAAA-MM-DD', () => {\n    expect(diaDoPeriodo('2026-12-31T12:00:00Z')).toBe('2026-12-31');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "fim-inclusivo",
+          "files": {
+            "main.js": "function instante(texto) {\n  const ms = Date.parse(texto);\n  if (Number.isNaN(ms)) throw new RangeError('data inválida: ' + texto);\n  return ms;\n}\n\nexport function estaVigente(inicioIso, fimIso, agoraIso) {\n  const inicio = instante(inicioIso);\n  const fim = instante(fimIso);\n  const agora = instante(agoraIso);\n  if (fim <= inicio) throw new RangeError('fim deve ser posterior ao início');\n  return inicio <= agora && agora <= fim;\n}\n\nexport function diaDoPeriodo(iso) {\n  return new Date(instante(iso)).toISOString().slice(0, 10);\n}\n"
+          }
+        },
+        {
+          "id": "dia-pelo-texto",
+          "files": {
+            "main.js": "function instante(texto) {\n  const ms = Date.parse(texto);\n  if (Number.isNaN(ms)) throw new RangeError('data inválida: ' + texto);\n  return ms;\n}\n\nexport function estaVigente(inicioIso, fimIso, agoraIso) {\n  const inicio = instante(inicioIso);\n  const fim = instante(fimIso);\n  const agora = instante(agoraIso);\n  if (fim <= inicio) throw new RangeError('fim deve ser posterior ao início');\n  return inicio <= agora && agora < fim;\n}\n\nexport function diaDoPeriodo(iso) {\n  return iso.slice(0, 10);\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao-de-intervalo",
+          "files": {
+            "main.js": "function instante(texto) {\n  const ms = Date.parse(texto);\n  if (Number.isNaN(ms)) throw new RangeError('data inválida: ' + texto);\n  return ms;\n}\n\nexport function estaVigente(inicioIso, fimIso, agoraIso) {\n  const inicio = instante(inicioIso);\n  const fim = instante(fimIso);\n  const agora = instante(agoraIso);\n  return inicio <= agora && agora < fim;\n}\n\nexport function diaDoPeriodo(iso) {\n  return new Date(instante(iso)).toISOString().slice(0, 10);\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.12.13.primeiros-itens-break",
+      "conceptId": "async.iterables",
+      "sourceActivityId": "12.13",
+      "prerequisites": [
+        "12.01",
+        "12.07"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Consumir uma fonte assíncrona não termina quando o último valor necessário chega. Encerrar cedo com break libera a fonte, e o aluno precisa provar isso pela contagem do que foi produzido, e não só por inspeção visual do laço.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. primeirosItens(fonte, n) consome uma fonte assíncrona com for await e devolve os n primeiros itens. Ao atingir n, a iteração deve ser encerrada para que a fonte pare de produzir e seja finalizada. n precisa ser inteiro não negativo; caso contrário a promise rejeita com RangeError. Antes de alterar, rode o caso e conte quantos itens a fonte produziu.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Devolve os n primeiros itens da fonte. Ao atingir n, a iteração deve ser encerrada.\nexport async function primeirosItens(fonte, n) {\n  const resultado = [];\n  for await (const item of fonte) {\n    if (resultado.length < n) resultado.push(item);\n  }\n  return resultado;\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function primeirosItens(fonte, n) {\n  if (!Number.isInteger(n) || n < 0) throw new RangeError('n deve ser inteiro não negativo');\n  const resultado = [];\n  if (n === 0) return resultado;\n  for await (const item of fonte) {\n    resultado.push(item);\n    if (resultado.length === n) break;\n  }\n  return resultado;\n}\n"
+      },
+      "tests": "import { primeirosItens } from './main.js';\n\ndescribe('primeirosItens', () => {\n  test('devolve os n primeiros itens de uma fonte síncrona', async () => {\n    expect(await primeirosItens([1, 2, 3], 2)).toEqual([1, 2]);\n  });\n  test('fonte menor que n devolve todos os itens', async () => {\n    expect(await primeirosItens(['a'], 5)).toEqual(['a']);\n  });\n  test('ao atingir n a fonte para de produzir e é finalizada', async () => {\n    const estado = { produzidos: 0, finalizada: false };\n    async function* fonte() {\n      try {\n        for (let i = 1; i <= 100; i++) {\n          estado.produzidos++;\n          yield i;\n        }\n      } finally {\n        estado.finalizada = true;\n      }\n    }\n    expect(await primeirosItens(fonte(), 3)).toEqual([1, 2, 3]);\n    expect(estado.produzidos).toBe(3);\n    expect(estado.finalizada).toBe(true);\n  });\n  test('n inválido rejeita com RangeError', async () => {\n    await expect(primeirosItens([1], -1)).rejects.toThrow(RangeError);\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "continua-consumindo",
+          "files": {
+            "main.js": "export async function primeirosItens(fonte, n) {\n  if (!Number.isInteger(n) || n < 0) throw new RangeError('n deve ser inteiro não negativo');\n  const resultado = [];\n  if (n === 0) return resultado;\n  for await (const item of fonte) {\n    if (resultado.length < n) resultado.push(item);\n  }\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "uma-a-mais",
+          "files": {
+            "main.js": "export async function primeirosItens(fonte, n) {\n  if (!Number.isInteger(n) || n < 0) throw new RangeError('n deve ser inteiro não negativo');\n  const resultado = [];\n  if (n === 0) return resultado;\n  for await (const item of fonte) {\n    resultado.push(item);\n    if (resultado.length > n) break;\n  }\n  return resultado;\n}\n"
+          }
+        },
+        {
+          "id": "sem-validacao",
+          "files": {
+            "main.js": "export async function primeirosItens(fonte, n) {\n  const resultado = [];\n  if (n === 0) return resultado;\n  for await (const item of fonte) {\n    resultado.push(item);\n    if (resultado.length === n) break;\n  }\n  return resultado;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.12.13.itens-de-paginas",
+      "conceptId": "async.iterables",
+      "sourceActivityId": "12.13",
+      "prerequisites": [
+        "12.01",
+        "12.07"
+      ],
+      "format": "mini-impl",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Um async generator faz trabalho sob demanda: cada página é pedida quando o consumidor avança, e erros viajam pela própria iteração. O aluno precisa decidir quando a busca acontece e como detectar o fim da sequência, o que não se resolve por mudança de nomes.",
+      "contentVersion": 1,
+      "prompt": "Implemente itensDePaginas(buscarPagina) em main.js como async generator. buscarPagina(pagina) devolve uma promise de array para as páginas 1, 2, 3 e assim por diante. Cada item é produzido em ordem assim que a sua página chega. Uma página vazia encerra a sequência. Erros de buscarPagina devem chegar a quem consome, sem serem engolidos. A página 1 só é pedida quando o primeiro item é consumido.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Produz os itens de cada página, até a primeira página vazia.\nexport async function* itensDePaginas(buscarPagina) {\n  // Implemente conforme o enunciado.\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function* itensDePaginas(buscarPagina) {\n  for (let pagina = 1; ; pagina++) {\n    const itens = await buscarPagina(pagina);\n    if (itens.length === 0) return;\n    for (const item of itens) yield item;\n  }\n}\n"
+      },
+      "tests": "import { itensDePaginas } from './main.js';\n\nasync function coletar(iteravel) {\n  const itens = [];\n  for await (const item of iteravel) itens.push(item);\n  return itens;\n}\n\nfunction paginasFalsas(paginas, chamadas) {\n  return async pagina => {\n    chamadas.push(pagina);\n    return paginas[pagina - 1] || [];\n  };\n}\n\ndescribe('itensDePaginas', () => {\n  test('produz os itens de todas as páginas em ordem', async () => {\n    const busca = paginasFalsas([[1, 2], [3]], []);\n    expect(await coletar(itensDePaginas(busca))).toEqual([1, 2, 3]);\n  });\n  test('uma página vazia encerra a sequência', async () => {\n    const chamadas = [];\n    const busca = paginasFalsas([['a'], []], chamadas);\n    expect(await coletar(itensDePaginas(busca))).toEqual(['a']);\n    expect(chamadas).toEqual([1, 2]);\n  });\n  test('só busca a página seguinte quando o consumidor avança', async () => {\n    const chamadas = [];\n    const busca = paginasFalsas([[1, 2], [3]], chamadas);\n    for await (const item of itensDePaginas(busca)) {\n      if (item === 1) break;\n    }\n    expect(chamadas).toEqual([1]);\n  });\n  test('erro da busca chega ao consumidor', async () => {\n    const busca = async pagina => {\n      if (pagina === 2) throw new Error('página 2 indisponível');\n      return [pagina];\n    };\n    await expect(coletar(itensDePaginas(busca))).rejects.toThrow('página 2 indisponível');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "carrega-tudo-antes",
+          "files": {
+            "main.js": "export async function* itensDePaginas(buscarPagina) {\n  const todos = [];\n  for (let pagina = 1; ; pagina++) {\n    const itens = await buscarPagina(pagina);\n    if (itens.length === 0) break;\n    todos.push(...itens);\n  }\n  for (const item of todos) yield item;\n}\n"
+          }
+        },
+        {
+          "id": "erro-engolido",
+          "files": {
+            "main.js": "export async function* itensDePaginas(buscarPagina) {\n  for (let pagina = 1; ; pagina++) {\n    let itens;\n    try {\n      itens = await buscarPagina(pagina);\n    } catch {\n      return;\n    }\n    if (itens.length === 0) return;\n    for (const item of itens) yield item;\n  }\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.12.13.total-await",
+      "conceptId": "async.iterables",
+      "sourceActivityId": "12.13",
+      "prerequisites": [
+        "12.01",
+        "12.07"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Esquecer await não gera erro de sintaxe: a soma recebe uma promise e o resultado vira texto. O aluno precisa acompanhar quando cada valor está disponível, e não apenas o tipo que aparece no código.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. totalDePrecos soma os preços pedidos em sequência: precoDe(item) devolve uma promise, e o total precisa do valor já resolvido antes de somar. Antes de alterar, rode o caso com dois itens e anote o tipo do total. Uma rejeição de precoDe deve rejeitar totalDePrecos.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Soma o preço de cada item; precoDe(item) devolve uma promise com o preço em centavos.\nexport async function totalDePrecos(itens, precoDe) {\n  let total = 0;\n  for (const item of itens) {\n    total += precoDe(item);\n  }\n  return total;\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function totalDePrecos(itens, precoDe) {\n  let total = 0;\n  for (const item of itens) {\n    total += await precoDe(item);\n  }\n  return total;\n}\n"
+      },
+      "tests": "import { totalDePrecos } from './main.js';\n\nconst precos = { cafe: 500, pao: 250, leite: 400 };\nconst buscarPreco = async item => precos[item];\n\ndescribe('totalDePrecos', () => {\n  test('soma os preços já resolvidos', async () => {\n    expect(await totalDePrecos(['cafe', 'pao'], buscarPreco)).toBe(750);\n  });\n  test('lista vazia soma zero', async () => {\n    expect(await totalDePrecos([], buscarPreco)).toBe(0);\n  });\n  test('pede o preço de cada item em sequência, esperando cada resposta', async () => {\n    const ordem = [];\n    const lento = async item => {\n      ordem.push('inicio ' + item);\n      await null;\n      await null;\n      ordem.push('fim ' + item);\n      return precos[item];\n    };\n    expect(await totalDePrecos(['cafe', 'leite'], lento)).toBe(900);\n    expect(ordem).toEqual(['inicio cafe', 'fim cafe', 'inicio leite', 'fim leite']);\n  });\n  test('rejeição de precoDe rejeita o total', async () => {\n    const semPreco = async item => {\n      if (item === 'pao') throw new Error('sem preço');\n      return precos[item];\n    };\n    await expect(totalDePrecos(['cafe', 'pao'], semPreco)).rejects.toThrow('sem preço');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "pedidos-em-paralelo",
+          "files": {
+            "main.js": "export async function totalDePrecos(itens, precoDe) {\n  const precosResolvidos = await Promise.all(itens.map(item => precoDe(item)));\n  return precosResolvidos.reduce((total, preco) => total + preco, 0);\n}\n"
+          }
+        },
+        {
+          "id": "ignora-rejeicao",
+          "files": {
+            "main.js": "export async function totalDePrecos(itens, precoDe) {\n  let total = 0;\n  for (const item of itens) {\n    total += await precoDe(item).catch(() => 0);\n  }\n  return total;\n}\n"
+          }
+        }
+      ]
+    },
+    {
+      "variantId": "var.13.10.perfil-causa-erro",
+      "conceptId": "errors.cause",
+      "sourceActivityId": "13.10",
+      "prerequisites": [
+        "04.11",
+        "13.01"
+      ],
+      "format": "short-fix",
+      "environment": "javascript",
+      "evaluator": "behavior",
+      "bands": [
+        "14",
+        "18"
+      ],
+      "transferDecision": "Traduzir uma falha externa para uma mensagem pública perde o detalhe técnico quando a causa não é preservada. O aluno precisa separar o que a pessoa lê do que o registro técnico precisa, e manter a referência original sem depender do texto da mensagem.",
+      "contentVersion": 1,
+      "prompt": "Corrija main.js. Quando buscar() falha, carregarPerfil deve lançar um Error com a mensagem pública \"Perfil indisponível\" e guardar o erro original em cause, sem alterá-lo. Um valor que não é Error, como um texto, também vai para cause do jeito que foi recebido. Em caso de sucesso, devolve o valor de buscar(). Antes de alterar, rode o caso de falha e anote o que chega ao chamador.",
+      "entryPath": "main.js",
+      "starterFiles": {
+        "main.js": "// Traduz falha de busca para um erro de domínio. A causa original deve ser preservada.\nexport async function carregarPerfil(buscar) {\n  try {\n    return await buscar();\n  } catch (erro) {\n    throw new Error('Perfil indisponível');\n  }\n}\n"
+      },
+      "correctFiles": {
+        "main.js": "export async function carregarPerfil(buscar) {\n  try {\n    return await buscar();\n  } catch (erro) {\n    throw new Error('Perfil indisponível', { cause: erro });\n  }\n}\n"
+      },
+      "tests": "import { carregarPerfil } from './main.js';\n\nasync function capturarErro(promessa) {\n  try {\n    await promessa;\n  } catch (erro) {\n    return erro;\n  }\n  return undefined;\n}\n\ndescribe('carregarPerfil', () => {\n  test('sucesso devolve o valor de buscar', async () => {\n    expect(await carregarPerfil(async () => ({ nome: 'Ana' }))).toEqual({ nome: 'Ana' });\n  });\n  test('falha vira Error com a mensagem pública', async () => {\n    const original = new Error('timeout no banco');\n    const erro = await capturarErro(carregarPerfil(async () => { throw original; }));\n    expect(erro instanceof Error).toBe(true);\n    expect(erro.message).toBe('Perfil indisponível');\n  });\n  test('o erro original é preservado em cause, sem alteração', async () => {\n    const original = new Error('timeout no banco');\n    const erro = await capturarErro(carregarPerfil(async () => { throw original; }));\n    expect(erro.cause).toBe(original);\n  });\n  test('causa que não é Error chega como foi recebida', async () => {\n    const erro = await capturarErro(carregarPerfil(async () => { throw 'falha de rede'; }));\n    expect(erro.cause).toBe('falha de rede');\n  });\n});\n",
+      "mutants": [
+        {
+          "id": "causa-como-texto",
+          "files": {
+            "main.js": "export async function carregarPerfil(buscar) {\n  try {\n    return await buscar();\n  } catch (erro) {\n    throw new Error('Perfil indisponível', { cause: String(erro) });\n  }\n}\n"
+          }
+        },
+        {
+          "id": "repassa-sem-traduzir",
+          "files": {
+            "main.js": "export async function carregarPerfil(buscar) {\n  try {\n    return await buscar();\n  } catch (erro) {\n    throw erro;\n  }\n}\n"
+          }
+        },
+        {
+          "id": "detalhe-na-mensagem",
+          "files": {
+            "main.js": "export async function carregarPerfil(buscar) {\n  try {\n    return await buscar();\n  } catch (erro) {\n    throw new Error('Perfil indisponível: ' + erro.message, { cause: erro });\n  }\n}\n"
+          }
+        }
+      ]
+    }
+  ]
+}

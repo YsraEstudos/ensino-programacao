@@ -53,3 +53,54 @@ for _item in CONTENT.values():
 
 for _id, _recipe in CONTENT.items():
     _recipe['rubric'] = _rubrics[_id]
+
+
+# Feedback por alternativa (revisão 15/10/2026): cada alternativa errada nomeia o engano que a produz.
+# Em 01.04 a pergunta foi corrigida: pontos e tentativas também são reatribuídos, então a pergunta
+# passa a pedir o único binding que, entre as opções, não pode ser const.
+CONTENT["01.04"]["review"].update(
+    prompt="Qual destes bindings não pode ser declarado com const neste código?",
+    choices=("volume, que recebe 7 depois de 0", "ativo, que é false e nunca muda", "idioma, que é texto fixo"),
+    answer="volume, que recebe 7 depois de 0",
+)
+_REVIEW_FEEDBACK = {
+    "01.01": (
+        "typeof null devolve \"object\" por uma peculiaridade histórica da linguagem, não porque null seja um objeto. typeof sempre devolve um rótulo textual, e null é o caso que contraria a expectativa.",
+        "Se escolheu \"null\", confundiu o rótulo com o valor: typeof devolve o nome do tipo, não o valor testado. Se escolheu \"undefined\", tratou null como ausência de valor atribuído a um binding, que é o papel de undefined.",
+    ),
+    "01.02": (
+        "Só total muda: a instrução total = total + 3 reatribui o binding total. base foi declarado com const e continua 2, porque nenhuma instrução atribui a ele.",
+        "Se escolheu “base e total”, supôs que toda leitura no lado direito altera os bindings envolvidos; só o lado esquerdo da atribuição recebe o novo valor. Se escolheu “Nenhum binding”, ignorou que total recebe 5 na última reatribuição.",
+    ),
+    "01.03": (
+        "D lê nome, idade e ativo; essas três declarações precisam ser inicializadas antes da leitura. A, B e C podem trocar de posição entre si, e E não entra nessa restrição, porque nenhum consumidor o lê.",
+        "Se escolheu “A ordem alfabética”, criou uma regra que o código não tem: a ordem exigida vem das leituras, não dos nomes. Se escolheu “A obrigação de usar E”, confundiu uma saída de diagnóstico com dependência real de D.",
+    ),
+    "01.04": (
+        "volume começa em 0 e recebe 7 em seguida; const impediria essa segunda atribuição, então volume precisa de let. ativo e idioma nunca são reatribuídos, e const é válido para eles mesmo com valores falsos ou textuais.",
+        "Se escolheu “ativo, que é false”, associou valor falso a permissão de reatribuição: const aceita false, só proíbe nova atribuição. Se escolheu “idioma, que é texto fixo”, decidiu pelo tipo do valor, quando a regra é a reatribuição prevista.",
+    ),
+    "01.05": (
+        "NaN e Infinity pertencem ao tipo number, e o sufixo n de 1n marca bigint. A pergunta trata de classificação por typeof, não de operações que produzem esses valores.",
+        "Se escolheu “NaN”, tomou o nome de um valor especial como rótulo de tipo; typeof devolve o tipo, não a grafia. Se escolheu “undefined”, confundiu um valor numérico especial com a ausência de valor.",
+    ),
+    "01.06": (
+        "Dentro de crases, ${nome} é substituído pelo valor atual do binding, então a expressão produz “Nara: nível 3” com os dados que existem agora, sem texto fixo.",
+        "Se escolheu “${nome}” entre aspas comuns, a interpolação não acontece: a saída traz o texto ${nome} literalmente. Se escolheu copiar Nara, a string fica presa ao valor de hoje e deixa de acompanhar o binding.",
+    ),
+    "01.07": (
+        "A tarefa pede uma declaração nova derivada de horas e minutos e a impressão dela. Sem essas duas instruções o programa não produz o resumo, mesmo com os dados já declarados.",
+        "Se escolheu “Somente mudar horas”, tratou a tarefa como alteração de dado, mas nenhum valor precisa mudar. Se escolheu “Somente escrever uma string fixa”, perdeu a exigência de derivar o resumo de horas e minutos, que deve preservar zero.",
+    ),
+    "01.08": (
+        "volume é o único binding reatribuído (0 para 7), então é o único que precisa de let. jogo, dificuldade, legendas e idioma permanecem fixos e podem ser const.",
+        "Se escolheu “legendas, porque é false”, associou o valor a mudança, quando o que importa é reatribuição. Se escolheu “idioma, porque é texto”, decidiu pelo tipo do valor, não pela atribuição que ocorre depois.",
+    ),
+    "01.09": (
+        "vida muda duas vezes (de 10 para 6 e depois para 0), então precisa de let. nome, nivel e status não mudam e ficam em const; zero é um valor válido e não impede const.",
+        "Se escolheu “Porque todo número usa let”, aplicou uma regra por tipo; nivel é número e continua em const porque não muda. Se escolheu “Porque zero não pode estar em const”, confundiu valor com permissão: const aceita zero e só impede nova atribuição.",
+    ),
+}
+for _eid, (_correct, _incorrect) in _REVIEW_FEEDBACK.items():
+    CONTENT[_eid]["review"]["feedback_correct"] = _correct
+    CONTENT[_eid]["review"]["feedback_incorrect"] = _incorrect

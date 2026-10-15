@@ -3,6 +3,7 @@ import {existsSync, readFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 
 const root = new URL('../', import.meta.url);
+const eolNormalized = text => String(text ?? '').replace(/\r\n/g, '\n');
 const readJson = path => JSON.parse(readFileSync(new URL(path, root), 'utf8'));
 const sourceCatalog = readJson('course-src/.generated/resolved_preview.json');
 const initialCatalog = readJson('output/fase2/catalog-before.json');
@@ -48,7 +49,7 @@ for (const id of tsConvertedIds) {
     assert(!assessment.checks.includes('mutation') && assessment.checks.includes('behavior') && assessment.testPath==='tests/18.02.test.js' && assessment.behaviorTestPath==='__devpath_protected_behavior__.js', '18.02 keeps the protected suite at the runner synthetic root');
     const canonicalTest=readFileSync(new URL('course-src/tests/18.02.test.js',root),'utf8');
     assert.match(canonicalTest, /from '\.\/patch\.js'/, 'the test source uses the synthetic-root-relative import expected by the publisher');
-    assert.equal(publishedAssessments[id]?.tests,canonicalTest, 'the published protected suite exactly matches canonical source');
+    assert.equal(eolNormalized(publishedAssessments[id]?.tests),eolNormalized(canonicalTest), 'the published protected suite exactly matches canonical source');
   }
   const contract=assessment.contractTypeFiles[0];
   assert(existsSync(new URL('course-src/' + contract.path,root)) && contract.content.trim(), id + ' protected contract source');
