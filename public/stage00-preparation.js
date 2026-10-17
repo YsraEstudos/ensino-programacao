@@ -570,6 +570,11 @@
         status('[data-s00-output]', p.exerciseEvidence[k].output);
         sync(item, context);
     }
+    function sourceRule(preparation, source) {
+        const text = String(source ?? '');
+        const broken = (preparation.sourceRules || []).find(rule => rule.kind === 'forbid' ? new RegExp(rule.pattern).test(text) : !new RegExp(rule.pattern).test(text));
+        return broken?.message || null;
+    }
     function run(item, context) {
         const p = context.progress, k = key(item), saved = p.warmupCompleted?.[k] === true;
         if (!saved && item.preparation.mode !== 'debug')
@@ -588,6 +593,12 @@
             }
             const values = result.lines.map(line => line.values), variant = p.exerciseLabState?.[k]?.zeroRequirement ? 'zero' : null, expected = item.preparation.expectedByRequirement?.[variant] || item.preparation.expectedByFile?.[file.path] || item.preparation.expected;
             texts.push(values.map(row => row.map(String).join(' ')).join('\n') || '(sem saída)');
+            const sourceProblem = sourceRule(item.preparation, files[file.path]);
+            if (sourceProblem) {
+                passed = false;
+                texts.push(sourceProblem);
+                continue;
+            }
             const index = expected?.findIndex((row, i) => JSON.stringify(row) !== JSON.stringify(values[i])) ?? -1;
             if (index !== -1 || values.length !== expected?.length) {
                 passed = false;

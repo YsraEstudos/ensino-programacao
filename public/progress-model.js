@@ -46,12 +46,12 @@
   "secondOrderChars": 80,
   "learningEvents": 12,
   "learningAttemptHistory": 1000,
-  "learningEvidenceHistory": 383,
-  "learningRecords": 383,
+  "learningEvidenceHistory": 388,
+  "learningRecords": 388,
   "learningIdChars": 96,
   "learningFingerprintChars": 128,
   "learningPayloadChars": 200000,
-  "reviewAttempts": 383,
+  "reviewAttempts": 388,
   "reviewHistory": 10,
   "reviewPayloadChars": 150000
 });

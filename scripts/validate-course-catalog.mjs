@@ -7,7 +7,7 @@ const catalog = JSON.parse(readFileSync(new URL("../public/course-catalog.json",
 const canonical = JSON.parse(readFileSync(new URL("../course-src/.generated/resolved_preview.json", import.meta.url), "utf8"));
 const canonicalIds = canonical.map((item) => item.id);
 const idsSource = readFileSync(new URL("../lib/course-exercise-ids.ts", import.meta.url), "utf8");
-const ids = [...idsSource.matchAll(/"((?:D|(?:0[0-9]|1[0-9]|2[0-3]))\.\d{2})"/g)].map((match) => match[1]);
+const ids = [...idsSource.matchAll(/"((?:D|(?:0[0-9]|1[0-9]|2[0-4]))\.\d{2})"/g)].map((match) => match[1]);
 const allowed = new Set([
   "id", "title", "stage", "kind", "optional", "duration", "runtime", "objective", "prompt", "firstResponse", "assessmentEnvironment",
   "explanation", "interaction", "resources", "starterFiles", "readOnlyFiles", "assets", "examples", "checks", "constraints", "rubric", "rubricFingerprint", "review", "contentVersion", "stageBridge", "stageBridgeTitle", "compatibility", "learningMetadata",
@@ -42,7 +42,7 @@ const VARIANT_ENVIRONMENTS = new Set(["javascript", "dom", "typescript", "node-l
 const VARIANT_EVALUATORS = new Set(["choice", "output-match", "behavior"]);
 const BROWSER_VARIANT_ENVIRONMENTS = new Set(["javascript", "dom"]);
 const KATA_BANDS = ["07", "11", "14", "18"];
-const STAGE_SEQUENCE = ["D", ...Array.from({length: 24}, (_, index) => String(index).padStart(2, "0"))];
+const STAGE_SEQUENCE = ["D", ...Array.from({length: 25}, (_, index) => String(index).padStart(2, "0"))];
 const SAFE_VARIANT_PATH = /^(?!\/)(?!.*(?:^|\/)\.\.(?:\/|$))(?!.*\\)[\w.-]+(?:\/[\w.-]+)*\.[cm]?[jt]sx?$/;
 
 const stageRank = stage => {
@@ -164,7 +164,7 @@ export function validateVariantBank(bank, {activities, concepts}) {
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
 const stageCounts = new Map();
 const answerPositions = new Map();
-const expectedStageOrder = ["D", ...Array.from({ length: 24 }, (_, index) => String(index).padStart(2, "0"))];
+const expectedStageOrder = ["D", ...Array.from({ length: 25 }, (_, index) => String(index).padStart(2, "0"))];
 
 if (new Set(catalog.map((item) => item.id)).size !== catalog.length) throw new Error("Duplicate exercise ID in the public catalog.");
 if (JSON.stringify(catalog.map((item) => item.id)) !== JSON.stringify(canonicalIds)) throw new Error("Public catalog IDs or order differ from compiled source.");
@@ -174,7 +174,7 @@ let previousStageIndex = -1;
 for (const item of catalog) {
   validateAssessmentEnvironment(item);
   if (!item.compatibility || item.compatibility.startsWith("Recursos básicos")) throw new Error(`Missing specific compatibility in ${item.id}.`);
-  if (!/^(?:D\.\d{2}|(?:0[0-9]|1[0-9]|2[0-3])\.\d{2})$/.test(item.id)) throw new Error(`Unexpected exercise ID: ${item.id}`);
+  if (!/^(?:D\.\d{2}|(?:0[0-9]|1[0-9]|2[0-4])\.\d{2})$/.test(item.id)) throw new Error(`Unexpected exercise ID: ${item.id}`);
   if (Object.keys(item).some((key) => !isAllowedPublicField(item, key))) throw new Error(`Non-public field in ${item.id}.`);
   const stage = item.stage;
   if (Number(stage) >= 4 && !(Array.isArray(item.edgeCases) && item.edgeCases.length && item.edgeCases.every((rule) => typeof rule === "string" && rule.trim()))) throw new Error(`Missing public edge cases: ${item.id}.`);

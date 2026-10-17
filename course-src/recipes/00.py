@@ -139,19 +139,19 @@ CONTENT = {
     ),
     "00.03": E(
         "execution.sequence",
-        'blocos embaralhados: C=console.log("Fim"); A=console.log("Início"); D=console.log("Olá"); B=console.log("Olá, Ana");',
-        "ordem pedida Início/Olá, Ana/Fim -> A,B,C; D não usado",
+        'main.js: console.log("Fim"); // C\nconsole.log("Início"); // A\nconsole.log("Olá"); // D\nconsole.log("Olá, Ana"); // B',
+        'saídas pedidas: "Início", "Olá, Ana" e "Fim", nessa ordem, uma por linha -> blocos A, B, C; D fica de fora',
         "se a saudação literal vira Olá, Rui -> A,bloco alterado,C; distrator segue fora",
         "Tratar bloco distrator como parte obrigatória do programa.",
         "A saída contém a saudação curta do distrator ou aparece fora da ordem pedida.",
         "Quais três mensagens o enunciado pede, em que ordem?",
         ("Compare cada bloco com as três mensagens pedidas.", "O distrator também parece uma saudação, mas não corresponde ao texto solicitado.", 'A saída pedida "Olá, Ana" não é a mesma mensagem que "Olá".'),
-        "Use A, B, C. O bloco D é distrator e não entra na montagem.",
+        'Use A, depois B, depois C: as três linhas imprimem "Início", "Olá, Ana" e "Fim". O bloco D imprime só "Olá" e fica de fora.',
         "Ordenar três logs de um recibo com quarto bloco de debug -> abertura, valor, fecho; debug fora",
-        prompt=('Reordene os blocos que compõem uma saudação de três partes. Antes de '
-         'confirmar, registre a ordem escolhida e marque qual bloco de diagnóstico não '
-         'faz parte da saída pedida. Use teclado ou a lista ordenada equivalente.'),
-        kind="PARSONS", estimated=7, requires=("execution.order",), rubric=("Escolha os blocos que produzem exatamente as três mensagens e organize-os na ordem pedida; deixe o distrator plausível de fora."), load={"novelty": 1, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 1, "reading": 2, "independence": 2, "tools": 1},
+        prompt=('Seu programa deve mostrar exatamente três linhas, nesta ordem: "Início", '
+         'depois "Olá, Ana" e, por último, "Fim". Reordene as linhas do main.js, apague o '
+         'bloco que não entra e execute. Registre a ordem escolhida antes de confirmar.'),
+        kind="PARSONS", estimated=7, requires=("execution.order",), rubric=("Mantenha somente as três linhas que imprimem \"Início\", \"Olá, Ana\" e \"Fim\", na ordem pedida; apague o bloco D."), load={"novelty": 1, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 1, "reading": 2, "independence": 2, "tools": 1},
         runtime='Node.js 24 LTS',
         compatibility='Recursos básicos; confirmar cada API recente no runtime declarado',
         explanation={'mental_model': 'Em Parsons, a saída desejada define quais blocos entram; '
@@ -194,9 +194,10 @@ CONTENT = {
          'feedback_correct': 'Correto. O requisito define três saídas e sua ordem; a '
                              'disponibilidade do quarto bloco não torna esse log parte '
                              'do programa pedido.',
-         'feedback_incorrect': 'Volte do objetivo para os blocos: associe uma mensagem '
-                               'necessária a cada trecho e deixe de fora qualquer trecho '
-                               'que não contribui para a saída especificada.'},
+         'feedback_incorrect': 'Se marcou "Usar as quatro porque todas foram oferecidas": o pedido define três mensagens, e o bloco D '
+                               'imprime só Olá, que não é uma das saídas pedidas. Oferecer um bloco não obriga a usá-lo. Se marcou '
+                               '"Manter a ordem em que os blocos aparecem no arquivo": a ordem das linhas muda a saída, porque o '
+                               'JavaScript executa as chamadas de cima para baixo. A sequência certa é a que o pedido define.'},
          transfer_prompt=(('Ordene os três logs necessários para um recibo — abertura, valor e fecho — e marque o '
          'quarto bloco de depuração que não deve aparecer na saída.')),
     ),
@@ -208,7 +209,7 @@ CONTENT = {
         "Confundir o valor mostrado com o rótulo ou apagar uma chamada ao preencher uma lacuna.",
         "A saída fica sem uma das três linhas ou mostra o rótulo no lugar do valor.",
         "Quantas chamadas há no arquivo e qual valor cada uma recebe?",
-        ("Preencha as três lacunas, uma em cada chamada.", "O rótulo e o valor são argumentos separados por vírgula.", 'Exemplo: console.log("pontos:", 0) mostra pontos: 0.'),
+        ("Texto fica entre aspas, como \"Ana\" ou \"fim\"; o número 0 fica sem aspas.", "Analise cada chamada isoladamente: a primeira e a segunda têm rótulo e valor separados por vírgula; a terceira tem um único argumento.", 'Exemplo de outro contexto: console.log("setor:", "B") mostra setor: B; console.log("falhas:", 0) mostra falhas: 0; e console.log("pronto") mostra pronto.'),
         'Substitua as lacunas pelos literais "Ana", 0 e "fim", sem alterar o restante do arquivo.',
         'Completar três logs de temperatura com 0 e "" -> todas as linhas permanecem',
         kind="FADED", estimated=6, load={"novelty": 1, "syntax": 1, "composition": 1, "state": 1, "debugging": 1, "files": 1, "reading": 2, "independence": 2, "tools": 1},
@@ -249,11 +250,11 @@ CONTENT = {
         ("Marque primeiro os built-ins do ECMAScript.", "Depois preencha Browser e Node.js 24 separadamente; não force APIs compartilhadas em uma única categoria.", "fetch e console podem receber marca nas duas colunas de host."),
         "Array é padrão ECMAScript; document é Browser; process e node:fs são Node; console e fetch estão nos dois hosts; npm e TypeScript pertencem ao ecossistema/ferramenta externa.",
         "Em navegador e Node.js 24, crypto -> API global do host (Web Crypto no navegador e crypto global no Node), não sintaxe ECMAScript",
-        kind="READ", estimated=8, requires=("environment.boundaries",), load={"novelty": 2, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
+        kind="READ", estimated=8, requires=("execution.order", "execution.fill_console"), load={"novelty": 2, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
          prompt=(('Preencha uma matriz para os oito nomes do starter: marque se cada um é padrão ECMAScript, API do navegador, API do Node.js 24 ou ferramenta/linguagem externa. Uma linha pode ter mais de uma marca quando o nome existe nos dois hosts.')),
         runtime='Node.js 24 LTS',
         compatibility='Recursos básicos; confirmar cada API recente no runtime declarado',
-        explanation={'mental_model': 'ECMAScript define objetos padrão como Array. O navegador e Node.js fornecem APIs de host; algumas existem nos dois. Ferramentas e linguagens externas pertencem a outra camada.',
+        explanation={'mental_model': 'ECMAScript define objetos padrão como Array. O navegador e Node.js fornecem APIs de host; algumas existem nos dois; console, por exemplo, é padronizado pelo WHATWG Console Standard e não faz parte do ECMAScript. Ferramentas e linguagens externas pertencem a outra camada.',
          'worked_example': 'Na matriz, Array recebe marca em ECMAScript; document recebe marca em Browser; process e node:fs em Node 24; console e fetch nas duas colunas de host; npm e TypeScript em ferramenta/linguagem externa.',
          'common_trap': 'Não force cada nome em uma categoria exclusiva. Também não trate fs como global: a API de arquivos é importada do módulo node:fs.',
          'why_it_matters': 'Separar padrão da linguagem, APIs de host e ferramentas evita usar um recurso no ambiente errado ou atribuí-lo à camada errada.'},
@@ -287,7 +288,7 @@ CONTENT = {
         kind="DEBUG", estimated=9, requires=("execution.order", "execution.fill_console"), load={"novelty": 2, "syntax": 2, "composition": 2, "state": 1, "debugging": 3, "files": 1, "reading": 3, "independence": 2, "tools": 1},
         runtime='Node.js 24 LTS',
         compatibility='Recursos básicos; confirmar cada API recente no runtime declarado',
-         prompt=(('Execute o arquivo intacto e registre a primeira falha. Feche a string e execute novamente; corrija `consle` e execute outra vez; por fim, observe e corrija a palavra impressa errada, mesmo sem exceção.')),
+         prompt=(('Execute o arquivo intacto e observe a mensagem de erro: categoria, linha indicada e o que ela sugere. Formule uma hipótese antes de editar e investigue uma falha por vez, executando de novo a cada alteração. Ao final, compare a saída com o alvo do enunciado, mesmo quando nenhuma exceção aparecer.')),
          explanation={'mental_model': 'Uma string malformada causa SyntaxError antes de qualquer linha rodar. Depois do parse, um nome inexistente causa ReferenceError quando a execução chega a ele. Um programa também pode terminar sem exceção e ainda produzir texto diferente do pedido.',
           'worked_example': 'Primeiro, feche a aspa de Olá para o arquivo poder ser analisado. Depois, consle gera ReferenceError. Corrigir o nome permite que o programa rode; se a última mensagem ainda diz erro em vez de ok, a saída está semanticamente incorreta, embora nenhuma exceção aconteça.',
          'common_trap': 'Não comece por uma chamada posterior: enquanto o parse falha, '
@@ -345,7 +346,7 @@ CONTENT = {
           'choices': ('`console.log(0);`', '`console.log("0");`', '`console.log("zero");`'),
           'answer': '`console.log(0);`',
           'feedback_correct': 'Correto. Sem aspas, 0 é um valor numérico passado à chamada.',
-          'feedback_incorrect': 'Aspas delimitam texto. Para imprimir o número, passe 0 sem aspas.'},
+          'feedback_incorrect': 'Não: com aspas, 0 vira o texto "0". A saída parece igual, mas o código representa outro tipo de valor. Para o número, escreva console.log(0), sem aspas.'},
          transfer_prompt=('Escreva três chamadas completas para mostrar `abriu`, o número 5 e `fechou`, nessa ordem; explique por que a chamada do meio não usa aspas.'),
     ),
     "00.08": E(
@@ -359,7 +360,7 @@ CONTENT = {
         ("Marque tags de abertura e fechamento.", "for e id devem ter o mesmo valor.", "Dois elementos podem ter class campo, mas o id nome deve ser único."),
         "form contém label, input e button. for=nome aponta ao input id=nome; class=campo é metadado de seleção.",
         "Formulário de reserva com input de quantidade id=quantidade -> form é pai; label for=quantidade associa esse input",
-         kind="READ", estimated=8, requires=("html.tree_reading",), load={"novelty": 2, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 2, "reading": 3, "independence": 2, "tools": 2}, runtime="browser-readonly",
+         kind="READ", estimated=8, requires=("environment.boundaries",), load={"novelty": 2, "syntax": 1, "composition": 2, "state": 1, "debugging": 1, "files": 2, "reading": 3, "independence": 2, "tools": 2}, runtime="browser-readonly",
         prompt=(('Leia o HTML. Registre quem é pai de cada elemento, qual id corresponde ao for '
          'do label e qual valor é classe; não escreva CSS. Justifique com os atributos '
          'visíveis.')),
@@ -411,66 +412,54 @@ CONTENT = {
     ),
     "00.09": E(
         "execution.explain_program",
-        'main.js: console.log("abrir");\nconsole.log(1 + 2);\nconsole.log("fechar");',
-          "arquivo completo -> abrir, 3, fechar; removida segunda linha -> abrir, fechar sem erro; apenas o log da linha removida desaparece",
-          "removida primeira linha -> 3, fechar; removida terceira -> abrir, 3; em ambos os casos as chamadas restantes executam sem erro",
-        "Descrever intenção geral sem ligar cada saída à linha que a produz.",
-        "Explicação não prevê corretamente o efeito de remover uma chamada.",
-        "Que saída pertence exclusivamente à linha removida?",
-        ("Anote uma saída ao lado de cada linha.", "Remover uma chamada remove sua saída, não reordena as demais.", 'No programa A/B/C, remover B deixa A/C.'),
-        "Explique cada chamada; as saídas são abrir, 3, fechar. Remover qualquer linha elimina apenas sua própria saída.",
-        "Documentar arquivo de três logs de processo e prever remoção do log central -> duas saídas restantes",
-          kind="TRACE", estimated=8, requires=("execution.order", "execution.sequence"), title="Trace de chamadas e remoções", load={"novelty": 1, "syntax": 1, "composition": 2, "state": 2, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
-          prompt=(('Sem editar o arquivo, anote ao lado de cada linha a saída que ela produz. '
-           'Depois escreva o que desapareceria se cada chamada fosse removida. Remover uma '
-           'chamada de console.log não causa erro: só elimina a saída daquela linha; as demais '
-           'continuam na ordem original.')),
+        'main.js: ',
+          "exigência zero aplicada -> Atendimento, Pessoa: Ana, Itens: 0 e Fim, nessa ordem; a chamada Itens: continua no arquivo com o número 0",
+          "chamada Itens: apagada ou ainda com 3 depois da exigência zero -> reprovado: a saída precisa ter quatro mensagens e Itens: 0 na terceira",
+        "Achar que apagar a chamada Itens: é o mesmo que registrar zero itens.",
+        "Programa sem a linha Itens: não cumpre a exigência, mesmo sem erro de execução.",
+        "Qual linha muda quando 3 vira 0, e qual linha precisa continuar existindo?",
+        ("Anote a saída de cada chamada antes de editar.", "Trocar o número muda só a mensagem daquela chamada; a chamada continua no arquivo.", 'Se a linha Itens: some, a quantidade deixa de aparecer na saída.'),
+        "Troque somente o 3 por 0 na chamada Itens:; a saída final é Atendimento, Pessoa: Ana, Itens: 0 e Fim.",
+        "Registro de backup com a chamada Copias: 2 -> Backup, Copias: 0 e Fim; a chamada Copias: continua no arquivo e só o número muda",
+          kind="TRACE", estimated=15, requires=("execution.order", "execution.sequence"), title="Trace de chamadas e remoções", load={"novelty": 1, "syntax": 1, "composition": 2, "state": 2, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
+          prompt=(('No main.js vazio, escreva chamadas que mostrem uma abertura, a pessoa Ana, a quantidade 3 e um encerramento. '
+           'Preveja, execute e compare. Depois aceite a nova exigência de quantidade 0, altere o programa e execute outra vez. '
+           'Por fim responda aos dois desafios de transferência.')),
         runtime='Node.js 24 LTS',
         compatibility='Recursos básicos; confirmar cada API recente no runtime declarado',
-        explanation={'mental_model': 'Uma chamada síncrona de console.log produz uma saída associada '
-                         'àquela chamada. Remover uma linha elimina essa chamada; as '
-                         'outras ainda executam na ordem textual.',
-         'worked_example': 'Exemplo paralelo: o programa imprime "carregar", calcula 9 - '
-                           '2 e imprime "pronto". A chamada central produz o número '
-                           'calculado; ao removê-la, as mensagens de abertura e '
-                           'conclusão continuam, sem que o JavaScript refaça outro '
-                           'cálculo.',
-         'common_trap': 'Uma explicação geral como "o arquivo mostra o estado" não '
-                        'basta: conecte cada linha à sua própria saída e não atribua à '
-                        'remoção um efeito em comandos sem dependência.',
+        explanation={'mental_model': 'Cada console.log produz uma saída na ordem do arquivo. Para '
+                         'mudar uma quantidade, troque o número dentro da chamada: a linha '
+                         'continua existindo e só a sua mensagem muda.',
+         'worked_example': 'Exemplo paralelo: o programa imprime "Empréstimo", "Livro: Dom Casmurro", '
+                           '"Multas: 3" e "Fim". Para exigir zero multas, troque só o 3 por 0 '
+                           'na chamada Multas:; as outras três mensagens continuam iguais.',
+         'common_trap': 'Apagar a linha Itens: para "registrar zero" faz a quantidade sumir da '
+                        'saída. O correto é trocar o número por 0 e manter a chamada.',
          'why_it_matters': 'Documentar a relação entre linha e efeito é a base de '
                            'revisão de código e investigação. Explicações verificáveis '
                            'ajudam outra pessoa a avaliar uma alteração pequena sem '
                            'adivinhar a intenção.'},
-        first_response=(('Um mapa linha → efeito/saída e uma previsão da remoção da chamada central, '
-         'antes de redigir a explicação final.')),
-        first_response_timing=(('Depois de ler o arquivo e antes de escrever a explicação ou revelar a solução; '
-         'esta atividade não pede edição de código.')),
-        interaction=(('Editor somente leitura com linhas numeradas e área de anotação vinculada a '
-         'cada linha; teclado e leitor de tela percorrem trecho e notas em ordem. A '
-         'hipótese de remoção é respondida em texto, sem arrastar.')),
-        resources=('Starter existente: main.js curto com três chamadas síncronas.',
-         'Material visível: linhas numeradas, campos de anotação e uma pergunta de '
-         'remoção; sem asset externo.',
+        first_response=(('Uma lista das quatro mensagens previstas e a chamada que informa a quantidade, '
+         'antes de escrever o código.')),
+        first_response_timing=(('Depois de ler a explicação e o exemplo resolvido, antes de escrever chamadas no main.js vazio.')),
+        interaction=(('Editor main.js vazio com botão de execução; anote a previsão antes de rodar, '
+         'use o botão da exigência zero e responda aos desafios em texto.')),
+        resources=('Starter: main.js vazio.',
+         'Material visível: pedido com quatro mensagens, exigência de zero itens e dois desafios de transferência; '
+         'sem asset externo.',
          'Referência: explicação textual liga cada chamada ao efeito observável.'),
-        review={'prompt': 'Ao explicar um programa de três chamadas síncronas, o que se pode '
-                   'concluir ao remover apenas a chamada central?',
-         'choices': ('Some a saída produzida por essa chamada; as outras continuam '
-                     'executando na ordem original.',
-                     'As chamadas vizinhas recalculam seus argumentos usando o valor que '
-                     'a chamada removida teria produzido.',
-                     'A remoção da linha central faz o runtime inverter a ordem das duas '
-                     'chamadas restantes.'),
-         'answer': 'Some a saída produzida por essa chamada; as outras continuam '
-                   'executando na ordem original.',
-         'feedback_correct': 'Correto. Não há dependência de dados entre essas chamadas: '
-                             'cada uma produz sua própria linha, e as restantes mantêm a '
-                             'ordem textual.',
-         'feedback_incorrect': 'Volte ao mapa linha → saída. Como as chamadas não usam '
-                               'valores umas das outras, retirar uma chamada remove seu '
-                               'efeito sem alterar a ordem das demais.'},
-        transfer_prompt=(('Documente um arquivo com logs de etapas de backup e explique o que muda na saída '
-         'se a chamada que confirma a cópia for removida.')),
+        review={'prompt': 'Um programa mostra Empréstimo, Livro: Dom Casmurro, Multas: 3 e Fim. '
+                   'Se o 3 virar 0 e a chamada continuar no arquivo, o que muda?',
+         'choices': ('Só a linha Multas: passa a mostrar 0; as outras três continuam iguais.',
+                     'A linha Multas: some e a saída fica com três mensagens.',
+                     'Todas as linhas passam a mostrar 0.'),
+         'answer': 'Só a linha Multas: passa a mostrar 0; as outras três continuam iguais.',
+         'feedback_correct': 'Correto. Trocar o número muda somente a mensagem da chamada '
+                             'alterada; as demais continuam na mesma ordem.',
+         'feedback_incorrect': 'Se marcou "A linha Multas: some": apagar a chamada é outra mudança, diferente de trocar o número; a exigência '
+                               'pede que a linha continue e mostre 0. Se marcou "Todas as linhas passam a mostrar 0": o número é argumento de uma única '
+                               'chamada. Trocá-lo altera só a linha dessa chamada, e as outras três não recebem esse valor.'},
+        transfer_prompt=(('Num registro de backup com a chamada Copias: 2, troque somente o número para 0 e escreva a saída esperada, sem apagar a linha.')),
     ),
 }
 
@@ -479,7 +468,7 @@ _OFFICIAL_DOCS = {
     "00.02": "MDN console.log: https://developer.mozilla.org/en-US/docs/Web/API/console/log_static; Node.js Console: https://nodejs.org/api/console.html#consolelogdata-args",
     "00.03": "MDN console.log: https://developer.mozilla.org/en-US/docs/Web/API/console/log_static",
     "00.04": "MDN console.log: https://developer.mozilla.org/en-US/docs/Web/API/console/log_static",
-    "00.05": "MDN standard built-in objects: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects; Node.js globals: https://nodejs.org/api/globals.html",
+    "00.05": "MDN standard built-in objects: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects; Node.js globals: https://nodejs.org/api/globals.html; WHATWG Console Standard (console, fora da ECMAScript): https://console.spec.whatwg.org/",
     "00.06": "MDN JavaScript errors: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors",
     "00.07": "MDN console.log: https://developer.mozilla.org/en-US/docs/Web/API/console/log_static; Node.js Console: https://nodejs.org/api/console.html#consolelogdata-args",
     "00.08": "MDN label element: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/label; input element: https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/input",

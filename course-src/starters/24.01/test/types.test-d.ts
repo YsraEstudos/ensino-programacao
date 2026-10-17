@@ -1,0 +1,10 @@
+import {expectTypeOf} from 'expect-type';
+import {createSecurity} from '../src/security.mjs';
+const security=createSecurity();
+expectTypeOf(security.login('ana','demo-ana')).toEqualTypeOf<string|null>();
+expectTypeOf(security.csrfFor('session')).toEqualTypeOf<string|null>();
+expectTypeOf(security.userFor('session')).toEqualTypeOf<'ana'|'bia'|null>();
+expectTypeOf(security.canRead('session','ana')).toEqualTypeOf<boolean>();
+expectTypeOf(security.canWrite('session','ana','csrf')).toEqualTypeOf<boolean>();
+expectTypeOf(security.canLogout('session','csrf')).toEqualTypeOf<boolean>();
+expectTypeOf(security.logout('session','csrf')).toEqualTypeOf<boolean>();

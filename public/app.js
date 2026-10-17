@@ -427,6 +427,31 @@
         document.querySelector("#main").focus({ preventScroll: true });
     }
     function stageContext() { return { progress, activities: curriculumActivities, assessments: curriculumAssessments, learning: learningContext, saveProgress, scheduleSave: scheduleCourseSave, render, toast }; }
+    function installNextExerciseButton(item) {
+        const currentIndex = curriculumActivities.findIndex(activity => activity.id === item.id);
+        const article = view.querySelector("article");
+        if (currentIndex < 0 || !article)
+            return;
+        article.querySelectorAll(".exercise-next-nav").forEach(nav => nav.remove());
+        const positions = new Map(curriculumActivities.map((activity, index) => [activity.id, index]));
+        for (const link of article.querySelectorAll('nav a[href^="#/javascript/"], footer a[href^="#/javascript/"]')) {
+            const targetId = link.getAttribute("href").slice("#/javascript/".length);
+            if ((positions.get(targetId) ?? -1) > currentIndex)
+                link.remove();
+        }
+        const next = curriculumActivities[currentIndex + 1];
+        if (!next)
+            return;
+        const navigation = document.createElement("nav");
+        navigation.className = "exercise-next-nav";
+        navigation.setAttribute("aria-label", "Avançar para o próximo exercício");
+        const link = document.createElement("a");
+        link.className = "button-primary";
+        link.setAttribute("href", `#/javascript/${encodeURIComponent(next.id)}`);
+        link.textContent = "Próximo exercício →";
+        navigation.append(link);
+        article.append(navigation);
+    }
     const genericCourseAdapter = {
         render: item => renderCurriculumLesson(item),
         handleClick: (event, item) => courseController.handleClick(event, item),
@@ -478,6 +503,7 @@
         setBreadcrumb("JavaScript", item.stage === "D" ? "Diagnóstico" : `Etapa ${item.stage || item.id.slice(0, 2)}`, item.title);
         const adapter = stageRegistry.resolve(item);
         view.innerHTML = window.DevPathLearningPaths.decorate(item, adapter.render(item, stageContext()), stageContext());
+        installNextExerciseButton(item);
         adapter.sync?.(item, stageContext());
         reviewController.mountOptIn(view, item);
         window.DevPathLocalProjectPanel?.enhance(view, item, {

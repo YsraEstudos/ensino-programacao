@@ -1,0 +1,5 @@
+# I-24 — projeto fantasma após conflito
+
+Reprodução operacional: `npm run test:incident` executa o caso de rollback contra HTTP e banco temporário reais em ambos transportes. No starter ele precisa primeiro de autenticação/rotas implementadas para alcançar a falha transacional. Depois da implementação, introduza localmente somente a regressão de transação sem ROLLBACK (ou compare o mutante da equipe quando disponível): duplicar a segunda tarefa retorna 409 mas deixa o projeto/primeira tarefa. A suíte deve falhar por asserção sobre a lista vazia. Registre a diferença entre erro HTTP tratado e atomicidade de dados.
+
+Investigue SQL persistido por conexão separada, versão de migração e transação aberta; não escreva credenciais/token no relatório. Recupere usando a transação com rollback, reexecute incidente e regressão inteira. No banco do teste, o filho fecha/valida listener, conexões e DB; o wrapper pai aguarda child exit e verifica separadamente a remoção real de DB/WAL/SHM/diretórios. Não remova banco real para esconder o sintoma. Preencha postmortem com causa, efeito, recuperação e prevenção.

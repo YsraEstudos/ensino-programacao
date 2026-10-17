@@ -480,6 +480,78 @@
       "availableInLocalNode26": true,
       "sourceType": "ecmascript",
       "fonte": "versão a conferir na BCD antes de publicar"
+    },
+    {
+      "label": "node:sqlite / DatabaseSync",
+      "edition": "Node platform API",
+      "match": [
+        "node:sqlite",
+        "DatabaseSync"
+      ],
+      "nodeVersionAdded": "22.5.0",
+      "chromeVersionAdded": "não suportado",
+      "compatibility": "node:sqlite / DatabaseSync existe desde22.5.0; 24.02 exige >=24.15.0 para Stability1.2 RC, não Stability2.",
+      "availableInLocalNode26": true,
+      "sourceType": "web-node-api",
+      "fonte": "https://nodejs.org/download/release/v24.15.0/docs/api/sqlite.html"
+    },
+    {
+      "label": "Web Components / Custom Elements",
+      "edition": "Web platform API",
+      "match": [
+        "Web Components",
+        "customElements"
+      ],
+      "nodeVersionAdded": "não suportado",
+      "chromeVersionAdded": "Chromium153 exercised; historical floor not claimed",
+      "availableInLocalNode26": false,
+      "sourceType": "web-node-api",
+      "compatibility": "24.03 runs in installed Chromium; capability detection/explicit metric limits, no cross-browser Baseline claim.",
+      "fonte": "https://developer.mozilla.org/en-US/docs/Web/API/Web_components"
+    },
+    {
+      "label": "IndexedDB / versioned upgrade",
+      "edition": "Web platform API",
+      "match": [
+        "IndexedDB",
+        "onupgradeneeded"
+      ],
+      "nodeVersionAdded": "não suportado",
+      "chromeVersionAdded": "Chromium153 exercised; historical floor not claimed",
+      "availableInLocalNode26": false,
+      "sourceType": "web-node-api",
+      "compatibility": "24.03 runs in installed Chromium; capability detection/explicit metric limits, no cross-browser Baseline claim.",
+      "fonte": "https://developer.mozilla.org/en-US/docs/Web/API/IDBOpenDBRequest/upgradeneeded_event"
+    },
+    {
+      "label": "Service Worker / offline shell",
+      "edition": "Web platform API",
+      "match": [
+        "serviceWorker",
+        "Service Worker"
+      ],
+      "nodeVersionAdded": "não suportado",
+      "chromeVersionAdded": "Chromium153 exercised; historical floor not claimed",
+      "availableInLocalNode26": false,
+      "sourceType": "web-node-api",
+      "compatibility": "24.03 runs in installed Chromium; capability detection/explicit metric limits, no cross-browser Baseline claim.",
+      "fonte": "https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API"
+    },
+    {
+      "label": "Web Vitals / Event Timing",
+      "edition": "Web platform API",
+      "match": [
+        "Web Vitals",
+        "onINP",
+        "onLCP",
+        "onCLS"
+      ],
+      "nodeVersionAdded": "não suportado",
+      "chromeVersionAdded": "Chromium153 exercised; historical floor not claimed",
+      "availableInLocalNode26": false,
+      "sourceType": "web-node-api",
+      "compatibility": "24.03 runs in installed Chromium; capability detection/explicit metric limits, no cross-browser Baseline claim.",
+      "fonte": "https://github.com/GoogleChrome/web-vitals"
     }
   ],
   "markers": [

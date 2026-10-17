@@ -304,7 +304,7 @@ def make_records() -> list[dict]:
     assert not unknown, f"Recipes without exercise: {sorted(unknown)}"
     by_id = {item["id"]: item for item in drafts}
     ordered = []
-    for stage in ["D"] + [f"{i:02d}" for i in range(24)]:
+    for stage in ["D"] + [f"{i:02d}" for i in range(25)]:
         stage_ids = [item["id"] for item in drafts if item["stage"] == stage]
         override = SEQUENCE_OVERRIDES.get(stage, [])
         if override:
@@ -337,6 +337,8 @@ def make_records() -> list[dict]:
             scoring = "Confira os casos publicados antes e depois da mudança; explique o que alterou e por que as saídas cumprem o contrato."
         elif stage == "02" and kind == "MAKE":
             scoring = "Aceite qualquer cálculo que cumpra as entradas e saídas publicadas; não exigir tratamento de erro fora do domínio declarado."
+        elif eid == "00.03":
+            scoring = 'Exija exatamente três saídas, nesta ordem: "Início", "Olá, Ana" e "Fim". A ordem importa, pois cada chamada imprime na sequência do arquivo; o bloco D ("Olá") deve ficar de fora.'
         elif kind in ("MAKE", "PROJECT"):
             if recipe["rubric"]:
                 scoring = "Critérios desta atividade: " + " ".join(recipe["rubric"])

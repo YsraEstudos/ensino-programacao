@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.browsers/
+test-results/
+playwright-report/

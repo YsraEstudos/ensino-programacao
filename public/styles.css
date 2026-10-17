@@ -42,7 +42,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .primary-nav { display: grid; gap: 4px; }
 .primary-nav a { min-height: 43px; padding: 0 11px; display: flex; align-items: center; gap: 11px; border-radius: 8px; color: #676a62; font-size: 13px; transition: background .18s ease, color .18s ease; }
 .primary-nav a:hover { color: var(--ink); background: #e8e6dd; }
-.primary-nav a.active { color: var(--ink); font-weight: 700; background: #e7e5dc; }
+.primary-nav a.active { color: #11120f; font-weight: 700; background: #d9fc68; }
 .nav-icon { width: 17px; text-align: center; font-size: 17px; line-height: 1; }
 .nav-count { margin-left: auto; min-width: 20px; text-align: center; padding: 3px 5px; border-radius: 10px; color: #56652f; background: #e2eabf; font: 10px var(--mono); }
 .path-label { margin-top: 40px; display: flex; justify-content: space-between; font-size: 9px; }
@@ -181,6 +181,9 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .course-complete-note, .course-gate-note { padding: 12px 14px; border-radius: 6px; color: #d9e5b2; background: #263326; font-size: 10px; line-height: 1.6; }
 .course-lesson-footer { display: flex; justify-content: space-between; gap: 10px; margin: 20px 0; }
 .course-lesson-footer .button-secondary { max-width: 48%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exercise-next-nav { display: flex; justify-content: flex-end; margin: 16px 0 28px; }
+.exercise-next-nav .button-primary { min-height: 44px; text-decoration: none; }
+.exercise-next-nav .button-primary:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; }
 
 @media (max-width: 1000px) {
   .catalog-tools { grid-template-columns: 1fr 180px; }
@@ -195,6 +198,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
   .course-lesson-hero, .course-prompt-panel, .course-explanation-panel, .course-practice-panel { padding: 18px; }
   .course-lesson-footer { align-items: stretch; flex-direction: column; }
   .course-lesson-footer .button-secondary { max-width: none; }
+  .exercise-next-nav .button-primary { width: 100%; }
   .course-complete-row { align-items: flex-start; flex-direction: column; }
 }
 .icon-button { width: 31px; height: 31px; border: 0; border-radius: 50%; background: transparent; color: #77796f; cursor: pointer; transition: background .2s, color .2s; }
@@ -338,7 +342,7 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 }
 @media (max-width: 850px) {
   .sidebar { inset: auto 0 0; width: auto; height: 62px; padding: 0 14px; flex-direction: row; align-items: center; justify-content: space-around; border-top: 1px solid var(--line); border-right: 0; background: #f0eee7f5; backdrop-filter: blur(12px); }
-  .brand, .sidebar-label, .side-path, .sidebar-bottom { display: none; }.primary-nav { width: 100%; display: flex; justify-content: space-around; gap: 5px; }.primary-nav a { min-height: 42px; padding: 0 12px; gap: 7px; font-size: 10px; }.primary-nav a.active { background: #e7e5dc; }.nav-count { min-width: 17px; padding: 2px 4px; }
+  .brand, .sidebar-label, .side-path, .sidebar-bottom { display: none; }.primary-nav { width: 100%; display: flex; justify-content: space-around; gap: 5px; }.primary-nav a { min-height: 42px; padding: 0 12px; gap: 7px; font-size: 10px; }.primary-nav a.active { color: #11120f; background: #d9fc68; }.nav-count { min-width: 17px; padding: 2px 4px; }
   .main-content { margin-left: 0; padding: 0 21px 72px; }.topbar { height: 60px; }.view { min-height: calc(100vh - 124px); padding-top: 26px; }.site-footer { font-size: 8px; gap: 18px; }.site-footer span:last-child { text-align: right; }
   .welcome { align-items: start; margin-top: 5px; }.welcome h1 { font-size: 35px; letter-spacing: -2px; }.welcome p { max-width: 410px; font-size: 11px; }.date-chip { display: none; }
   .continue-panel { min-height: 190px; grid-template-columns: 1fr 125px; gap: 8px; padding: 24px 21px; }.code-art { width: 118px; height: 120px; padding: 13px 11px; }.code-line.w-2 { margin-left: 9px; }.code-line.w-3 { margin-left: 9px; }.code-line.w-4 { margin-left: 18px; }.continue-copy h2 { font-size: 23px; }.continue-copy p { max-width: 250px; font-size: 10px; line-height: 1.5; }.continue-bottom { gap: 10px; flex-wrap: wrap; margin-top: 17px; }.continue-bottom .button-primary { min-height: 36px; padding: 0 12px; font-size: 10px; }.subtle-meta { font-size: 8px; }

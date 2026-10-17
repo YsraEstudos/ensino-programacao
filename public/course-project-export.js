@@ -83,6 +83,7 @@
   }
 
   function satisfiesRange(version, range) {
+    if (range === '*' || range === 'x' || range === 'X') return Boolean(versionParts(version));
     if (range === version) return true;
     const versionValue = versionParts(version);
     if (!versionValue || typeof range !== 'string') return false;

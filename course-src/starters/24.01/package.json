@@ -1,0 +1,26 @@
+{
+  "name": "devpath-phase7-common-fixture",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "start": "node src/server.mjs",
+    "test": "vitest run test/security.test.mjs test/regression.test.mjs",
+    "test:properties": "vitest run test/properties.test.mjs",
+    "test:types": "tsc --ignoreConfig --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext test/types.test-d.ts",
+    "test:http-contract": "node --test test/http.contract.node.test.mjs",
+    "test:e2e": "node scripts/run-e2e.mjs",
+    "test:transfer": "node --test transfer/contract.test.mjs",
+    "test:maintenance": "node --test test/maintenance.contract.node.test.mjs",
+    "test:incident": "node --test incident/r17/repro.test.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "expect-type": "1.4.0",
+    "fast-check": "4.10.0",
+    "typescript": "6.0.3",
+    "vitest": "5.0.0"
+  }
+}

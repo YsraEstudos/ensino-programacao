@@ -137,11 +137,12 @@ test('o identificador de variante nunca coincide com um identificador do catálo
   for (const variant of published.variants) assert.equal(catalogIds.has(variant.variantId), false, variant.variantId);
 });
 
-// Catálogo antes da Fase 6 (item 6.4) somava 302; as quatro investigações opcionais são acrescentadas, todas opcionais.
+// Catálogo antes da Fase 6 (item 6.4) somava 302; as quatro investigações e as quatro atividades da Fase 7 são acrescentadas.
 const CATALOG_BEFORE_6_4 = 302;
 const INVESTIGATIONS_6_4 = ['07.15', '11.15', '14.23', '18.11'];
+const PHASE7_EXERCISES = ['24.01', '24.02', '24.03', '24.04'];
 test('variantes não entram na contagem de atividades do catálogo', () => {
-  assert.equal(catalog.length, CATALOG_BEFORE_6_4 + INVESTIGATIONS_6_4.length);
+  assert.equal(catalog.length, CATALOG_BEFORE_6_4 + INVESTIGATIONS_6_4.length + PHASE7_EXERCISES.length);
   assert.equal(catalog.filter(item => item.id.startsWith('var.')).length, 0);
   for (const id of INVESTIGATIONS_6_4) assert.equal(catalog.find(item => item.id === id)?.optional, true, `${id} é opcional`);
 });

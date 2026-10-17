@@ -1,0 +1,1 @@
+{"compilerOptions":{"target":"ES2022","module":"NodeNext","moduleResolution":"NodeNext","strict":true,"declaration":true,"isolatedDeclarations":true,"verbatimModuleSyntax":true,"noEmitOnError":true,"rootDir":"src","outDir":"build"},"include":["src/**/*.ts"]}
