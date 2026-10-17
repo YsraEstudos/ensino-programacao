@@ -12,7 +12,7 @@ test('one self-contained project retains the complete curriculum and latest revi
   assert.equal(catalog.length, sourceIds.length);
   assert.deepEqual(catalog.map(item => item.id), sourceIds);
   assert.equal(new Set(catalog.map(item => item.id)).size, sourceIds.length);
-  assert.deepEqual([...new Set(catalog.map(item => item.stage))], ['D', ...Array.from({length: 24}, (_, i) => String(i).padStart(2, '0'))]);
+  assert.deepEqual([...new Set(catalog.map(item => item.stage))], ['D', ...Array.from({length: 25}, (_, i) => String(i).padStart(2, '0'))]);
   assert(catalog.filter(item => item.stage === '01').every(item => item.preparation.conceptSteps.length >= 3));
   assert.equal(catalog.find(item => item.id === '03.09').contentVersion, 2);
   assert.match(fs.readFileSync(new URL('course-src/stages/02.txt', project), 'utf8'), /não comprova sozinha domínio/);

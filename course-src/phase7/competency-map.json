@@ -1,0 +1,2358 @@
+{
+  "version": 1,
+  "stage": "24",
+  "phase": "Fase 7",
+  "status": "complete-local-curriculum",
+  "evidencePolicy": "local-declared",
+  "prerequisites": [
+    "07.11",
+    "07.12",
+    "14.14",
+    "14.18",
+    "23.09",
+    "23.10",
+    "23.11"
+  ],
+  "prerequisiteClosure": [
+    {
+      "id": "00.01",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11",
+          "04.01",
+          "03.04",
+          "02.01",
+          "01.01",
+          "00.01"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "01.01",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11",
+          "04.01",
+          "03.04",
+          "02.01",
+          "01.01"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "02.01",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11",
+          "04.01",
+          "03.04",
+          "02.01"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "03.04",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11",
+          "04.01",
+          "03.04"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "04.01",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11",
+          "04.01"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "07.11",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.11"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "07.12",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "07.12"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "13.03",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "23.09",
+          "13.03"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "14.01",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "14.14",
+          "14.04",
+          "14.01"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "14.03",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "14.18",
+          "14.03"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "14.04",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "14.14",
+          "14.04"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "14.14",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "14.14"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "14.18",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "14.18"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "23.06",
+      "origin": "transitive",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "23.09",
+          "23.06"
+        ],
+        "source": "course-src/learning-metadata.json requires edges"
+      }
+    },
+    {
+      "id": "23.09",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "23.09"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "23.10",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "23.10"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    },
+    {
+      "id": "23.11",
+      "origin": "direct",
+      "evidence": {
+        "chain": [
+          "24.01",
+          "23.11"
+        ],
+        "source": "Fase 7 prerequisite declaration"
+      }
+    }
+  ],
+  "references": [
+    {
+      "id": "OWASP-ASVS",
+      "version": "5.0.0",
+      "url": "https://owasp.org/www-project-application-security-verification-standard/"
+    },
+    {
+      "id": "Playwright",
+      "version": "1.63.0",
+      "url": "https://playwright.dev/docs/test-webserver"
+    },
+    {
+      "id": "fast-check",
+      "version": "4.10.0",
+      "url": "https://fast-check.dev/docs/tutorials/quick-start/"
+    },
+    {
+      "id": "Vitest",
+      "version": "5.0.0",
+      "url": "https://vitest.dev/"
+    },
+    {
+      "id": "expect-type",
+      "version": "1.4.0",
+      "url": "https://github.com/mmkal/expect-type"
+    }
+  ],
+  "competencies": [
+    {
+      "id": "7.2",
+      "title": "Segurança web",
+      "introduced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "threat-model-and-reference"
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "local-security-fixture"
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "negative-and-regression-tests"
+        }
+      ],
+      "controls": [
+        "authentication",
+        "authorization",
+        "session-expiry",
+        "session-termination",
+        "csrf",
+        "cors",
+        "csp",
+        "untrusted-dom-text",
+        "secret-redaction"
+      ]
+    },
+    {
+      "id": "7.4",
+      "title": "Testes além do unitário",
+      "introduced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "test-strategy-and-cost-review"
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "playwright-fast-check-mutation-type-tests"
+        },
+        {
+          "activityId": "24.03",
+          "evidenceKind": "integration-contract-regression-chromium-and-mutation",
+          "paths": [
+            "test/model.test.mjs",
+            "test/api.test.mjs",
+            "test/maintenance.test.mjs",
+            "e2e/kanban.spec.mjs"
+          ]
+        },
+        {
+          "activityId": "24.04",
+          "evidenceKind": "integration-contract-regression-and-mutation",
+          "paths": [
+            "test/release.test.mjs"
+          ]
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "starter-reference-mutant-gate"
+        },
+        {
+          "activityId": "24.03",
+          "evidenceKind": "local-declared",
+          "teamGate": "scripts/test-phase7-frontend.mjs",
+          "note": "Internal reference/starter/mutants run in extracted/temporary copies; no independent learner assessment."
+        },
+        {
+          "activityId": "24.04",
+          "evidenceKind": "local-declared",
+          "teamGate": "scripts/test-phase7-libraries.mjs",
+          "note": "Common24.01 rubrics remain required; no independent learner assessment."
+        }
+      ],
+      "techniques": [
+        "Playwright E2E",
+        "fast-check properties",
+        "mutation testing",
+        "expectTypeOf type tests"
+      ]
+    },
+    {
+      "id": "7.6",
+      "title": "Trabalho profissional",
+      "introduced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "ticket-and-acceptance-criteria"
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "foreign-change-request-and-reproducible-incident"
+        },
+        {
+          "activityId": "24.04",
+          "evidenceKind": "ticket-maintenance-incident-migration-review",
+          "paths": [
+            "ticket.md",
+            "change-request.md",
+            "incident.md",
+            "postmortem.md",
+            "ADR-001.md",
+            "MIGRATION.md"
+          ]
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "four-observable-rubrics"
+        },
+        {
+          "activityId": "24.04",
+          "evidenceKind": "local-declared",
+          "teamGate": "scripts/test-phase7-libraries.mjs",
+          "note": "Common24.01 rubrics remain required; no independent learner assessment."
+        }
+      ]
+    },
+    {
+      "id": "7.7",
+      "title": "Desenvolvimento com IA",
+      "introduced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "bounded-provided-patch"
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "official-documentation-review"
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.01",
+          "evidenceKind": "tests-reveal-patch-defects"
+        }
+      ],
+      "externalModelRequired": false
+    },
+    {
+      "id": "7.1",
+      "title": "Back-end persistente",
+      "reused": [
+        {
+          "activityId": "22.06",
+          "competency": "guard manual e schema na fronteira; execução Zod é acrescentada em24.02"
+        },
+        {
+          "activityId": "12.16",
+          "competency": "leitura HTTP/CORS não equivale a autoria de API"
+        },
+        {
+          "activityId": "13.03",
+          "competency": "erros assíncronos"
+        },
+        {
+          "activityId": "14.03",
+          "competency": "Node e módulos"
+        }
+      ],
+      "introduced": [
+        {
+          "activityId": "24.02",
+          "evidenceKind": "lesson-and-contract",
+          "path": "course-src/phase7/backend/contract.md",
+          "objectives": [
+            "HTTP routing",
+            "SQLite migrations and atomicity",
+            "password/session authorization",
+            "RFC9457",
+            "Hono Node adapter"
+          ]
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.02",
+          "evidenceKind": "student-local-implementation",
+          "paths": [
+            "src/service.mjs",
+            "src/schema.mjs",
+            "src/store.mjs",
+            "src/hono.mjs",
+            "maintenance/report.mjs"
+          ]
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.02",
+          "evidenceKind": "local-declared",
+          "paths": [
+            "test/contract.test.mjs",
+            "test/maintenance.test.mjs",
+            "manual-test-plan.md"
+          ],
+          "teamGate": "scripts/test-phase7-backend.mjs",
+          "note": "Team reference/mutation runs are not assessment of learner submission."
+        }
+      ]
+    },
+    {
+      "id": "7.3",
+      "title": "Front-end de produção",
+      "reused": [
+        {
+          "activityId": "11.08",
+          "competency": "Kanban e modelo estado→render"
+        },
+        {
+          "activityId": "13.14",
+          "competency": "regressão do Kanban"
+        },
+        {
+          "activityId": "12.16",
+          "competency": "async/rede e inspeção de requisições"
+        },
+        {
+          "activityId": "14.16",
+          "competency": "ferramentas/build local; tsc é usado sem exigir Vite no checkpoint"
+        },
+        {
+          "activityId": "14.18",
+          "competency": "TypeScript/DOM e ferramentas, dependências transitivas no grafo"
+        }
+      ],
+      "introduced": [
+        {
+          "activityId": "24.03",
+          "evidenceKind": "lesson-and-contract",
+          "path": "course-src/phase7/frontend/contract.md",
+          "objectives": [
+            "native Web Components state/render/routing",
+            "cache/revalidation/out-of-order responses",
+            "IndexedDB versioned migration",
+            "responsive accessible flow",
+            "real Web Vitals measurement"
+          ]
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.03",
+          "evidenceKind": "student-local-implementation",
+          "paths": [
+            "src/model.mjs",
+            "src/storage.mjs",
+            "maintenance/visible.mjs",
+            "ADR-001.md",
+            "incident.md"
+          ]
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.03",
+          "evidenceKind": "local-declared",
+          "paths": [
+            "test/model.test.mjs",
+            "test/api.test.mjs",
+            "test/maintenance.test.mjs",
+            "e2e/kanban.spec.mjs",
+            "manual-test-plan.md"
+          ],
+          "teamGate": "scripts/test-phase7-frontend.mjs",
+          "note": "Team reference/mutant execution is not independent learner assessment."
+        }
+      ]
+    },
+    {
+      "id": "7.5",
+      "title": "Bibliotecas e ferramentas",
+      "reused": [
+        {
+          "activityId": "22.06",
+          "competency": "validation.schema_boundary: guard manual versus Zod/Valibot; validação runtime na fronteira, aplicada à rejeição de chamada JS legada em2.0 sem exigir dependência nova"
+        },
+        {
+          "activityId": "22.08",
+          "competency": "pacote real e consumidor externo"
+        },
+        {
+          "activityId": "22.09",
+          "competency": "API pública slug/limitar e declarações explícitas"
+        }
+      ],
+      "introduced": [
+        {
+          "activityId": "24.04",
+          "evidenceKind": "lesson-and-contract",
+          "path": "course-src/phase7/libraries/contract.md",
+          "objectives": [
+            "compatible overload and planned breaking SemVer",
+            "packed strict declarations and package-root consumers",
+            "migration preserving output/order/identity"
+          ]
+        }
+      ],
+      "practiced": [
+        {
+          "activityId": "24.04",
+          "evidenceKind": "student-local-implementation",
+          "paths": [
+            "src/index.ts",
+            "src/v2.ts",
+            "consumers/report/main.ts",
+            "CHANGELOG.md",
+            "MIGRATION.md"
+          ]
+        }
+      ],
+      "assessed": [
+        {
+          "activityId": "24.04",
+          "evidenceKind": "local-declared",
+          "paths": [
+            "test/release.test.mjs",
+            "manual-test-plan.md"
+          ],
+          "teamGate": "scripts/test-phase7-libraries.mjs",
+          "note": "Team reference/mutant runs are not independent learner assessment."
+        }
+      ]
+    }
+  ],
+  "rubrics": [
+    {
+      "id": "7.6",
+      "outcomes": [
+        {
+          "id": "autonomy",
+          "task": "Resolver ticket ambíguo antes de implementar.",
+          "deliverables": [
+            "perguntas e respostas",
+            "contrato acordado",
+            "decomposição",
+            "estimativa com incertezas"
+          ],
+          "criteria": [
+            "identifica decisões que alteram comportamento, dados, limites ou aceitação",
+            "resolve com solicitante ou declara hipóteses aceitas",
+            "implementação e testes seguem o contrato"
+          ],
+          "evidenceLabel": "local-declared"
+        },
+        {
+          "id": "maintenance",
+          "task": "Alterar requisito numa base fornecida que o aluno não escreveu.",
+          "deliverables": [
+            "regra rastreada",
+            "reprodução antes do patch",
+            "patch localizado",
+            "suíte de regressão"
+          ],
+          "criteria": [
+            "teste demonstra a lacuna antes e passa depois",
+            "atende ao contrato novo",
+            "preserva comportamentos relevantes",
+            "explica causa e alcance"
+          ],
+          "evidenceLabel": "local-declared"
+        },
+        {
+          "id": "transfer",
+          "task": "Resolver problema com domínio e dados diferentes dos exemplos.",
+          "deliverables": [
+            "contrato próprio",
+            "implementação independente",
+            "registro de ajuda e tentativas"
+          ],
+          "criteria": [
+            "atende casos normais, de borda e falha",
+            "não copia resposta trabalhada",
+            "distingue recuperação com ajuda de recuperação independente"
+          ],
+          "evidenceLabel": "local-declared"
+        },
+        {
+          "id": "communication",
+          "task": "Entregar README, ADR, resposta a revisão e postmortem.",
+          "deliverables": [
+            "README reproduzível",
+            "ADR com contexto/alternativas/decisão/consequências",
+            "comentários de revisão",
+            "postmortem do incidente"
+          ],
+          "criteria": [
+            "outra pessoa executa os comandos",
+            "decisão cita evidência e tradeoffs",
+            "aceitação ou rejeição da revisão tem justificativa técnica",
+            "postmortem liga sintoma, investigação, causa, recuperação e prevenção e declara limites"
+          ],
+          "evidenceLabel": "local-declared"
+        }
+      ]
+    }
+  ],
+  "activities": {
+    "24.01": {
+      "status": "implemented",
+      "scope": [
+        "7.2",
+        "7.4",
+        "7.6",
+        "7.7"
+      ],
+      "evidence": "local-declared"
+    },
+    "24.02": {
+      "status": "implemented",
+      "scope": [
+        "7.1",
+        "7.4"
+      ],
+      "evidence": "local-declared",
+      "prerequisites": [
+        "12.16",
+        "13.03",
+        "14.03",
+        "14.18",
+        "22.06",
+        "24.01"
+      ],
+      "prerequisiteClosure": [
+        {
+          "id": "00.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01",
+              "00.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "01.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "02.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "04.01",
+              "03.04",
+              "02.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "03.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "04.01",
+              "03.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "04.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.07",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.11",
+              "04.07"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "05.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06",
+              "15.01",
+              "06.01",
+              "05.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "06.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06",
+              "15.01",
+              "06.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "07.12",
+              "07.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "07.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.02",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.02"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.06",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08",
+              "12.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.08",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16",
+              "12.08"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.16",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "12.16"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "13.03",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "13.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "14.03",
+              "14.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.03",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "14.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06",
+              "14.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.14",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "14.14"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.18",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "14.18"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "15.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06",
+              "15.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06",
+              "22.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.06",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "22.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.06",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "23.09",
+              "23.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.09",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "23.09"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.10",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "23.11",
+              "23.10"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01",
+              "23.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "24.01",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.02",
+              "24.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        }
+      ],
+      "practiceMinutes": {
+        "minimum": 1800,
+        "maximum": 2700,
+        "estimate": 2250,
+        "calibrated": false
+      },
+      "authoringEstimateHours": {
+        "implementation": [
+          12,
+          20
+        ],
+        "review": [
+          4,
+          8
+        ],
+        "note": "Planning hypotheses, record actuals separately"
+      },
+      "toolchain": {
+        "node": ">=24.15.0",
+        "sqliteStability": "1.2 Release candidate",
+        "source": "https://nodejs.org/download/release/v24.15.0/docs/api/sqlite.html",
+        "packageLockStatus": "available"
+      },
+      "tests": [
+        "test/contract.test.mjs",
+        "test/maintenance.test.mjs",
+        "scripts/verify-fixtures.mjs"
+      ],
+      "limits": [
+        "Local-declared only",
+        "No production HTTPS/browser/cross-platform signal proof",
+        "Manual plan and account synchronization require separate homologation"
+      ],
+      "security": {
+        "asvsVersion": "5.0.0",
+        "source": "https://raw.githubusercontent.com/OWASP/ASVS/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json",
+        "note": "Teaching subset; no complete ASVS certification. Common fixture controls remain scoped to24.01.",
+        "controls": [
+          {
+            "id": "v5.0.0-V1.2.4",
+            "control": "Bound SQL parameters and a hostile project name preserved as text",
+            "test": "test/contract.test.mjs"
+          },
+          {
+            "id": "v5.0.0-V11.4.2",
+            "control": "crypto.scrypt salted hashes and timing-safe verification; no production parameter sizing claim",
+            "test": "test/contract.test.mjs"
+          },
+          {
+            "id": "v5.0.0-V11.5.1",
+            "control": "CSPRNG 256-bit session token, expiry and revocation; digest persisted",
+            "test": "test/contract.test.mjs"
+          },
+          {
+            "id": "v5.0.0-V16.2.5",
+            "control": "Selected log metadata omits sentinels in password/token/body/query",
+            "test": "test/contract.test.mjs"
+          },
+          {
+            "id": "local-resource-authorization",
+            "control": "Anonymous, other owner, expired and ended sessions on projects and related tasks",
+            "test": "test/contract.test.mjs"
+          },
+          {
+            "id": "local-input-bounds",
+            "control": "Zod strict schema, JSON syntax, byte limit, media type, fixed loopback, no browser Origin",
+            "test": "test/contract.test.mjs"
+          }
+        ],
+        "notApplicable": [
+          {
+            "control": "cookie attributes and CSRF",
+            "reason": "API accepts explicit Bearer Authorization, no cookie authentication and refuses Origin; browser-cookie practice remains mandatory24.01"
+          },
+          {
+            "control": "DOM/CSP, upload, external command, outbound URL/SSRF",
+            "reason": "No browser UI, upload, shell input, URL fetching or eval route; these common controls remain in24.01"
+          }
+        ]
+      }
+    },
+    "24.03": {
+      "status": "implemented-verified-locally",
+      "scope": [
+        "7.3",
+        "7.4"
+      ],
+      "evidence": "local-declared",
+      "prerequisites": [
+        "11.08",
+        "13.14",
+        "12.16",
+        "14.16",
+        "14.18",
+        "24.01"
+      ],
+      "prerequisiteClosure": [
+        {
+          "id": "00.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01",
+              "00.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "00.03",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "00.08",
+              "00.05",
+              "00.04",
+              "00.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "00.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "00.08",
+              "00.05",
+              "00.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "00.05",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "00.08",
+              "00.05"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "00.08",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "00.08"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "01.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "02.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01",
+              "04.01",
+              "03.04",
+              "02.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "03.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01",
+              "04.01",
+              "03.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01",
+              "04.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.07",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.11",
+              "04.07"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.02",
+              "04.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "05.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01",
+              "05.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "06.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08",
+              "06.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "07.12",
+              "07.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "07.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "11.08",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "11.08"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "11.13",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "13.14",
+              "11.13"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.02",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.02"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.06",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08",
+              "12.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.08",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16",
+              "12.08"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "12.16",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "12.16"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "13.03",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "23.09",
+              "13.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "13.07",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "13.14",
+              "13.07"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "13.14",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "13.14"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "14.16",
+              "14.03",
+              "14.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.03",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "14.16",
+              "14.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "14.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "14.16",
+              "14.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.14",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "14.14"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.16",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "14.16"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.18",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "14.18"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.06",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "23.09",
+              "23.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.09",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "23.09"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.10",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "23.11",
+              "23.10"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01",
+              "23.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "24.01",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.03",
+              "24.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        }
+      ],
+      "practiceMinutes": {
+        "minimum": 1500,
+        "maximum": 2400,
+        "estimate": 1950,
+        "calibrated": false
+      },
+      "authoringEstimateHours": {
+        "implementation": [
+          14,
+          22
+        ],
+        "review": [
+          4,
+          8
+        ],
+        "note": "Planning hypothesis; actual effort not calibrated"
+      },
+      "toolchain": {
+        "node": ">=24.0.0",
+        "typescript": "6.0.3",
+        "playwright": "1.63.0",
+        "webVitals": "6.2.3",
+        "packageLockStatus": "available",
+        "browser": "fixture-local Chromium1243 (Chrome153)"
+      },
+      "tests": [
+        "test/model.test.mjs",
+        "test/api.test.mjs",
+        "test/maintenance.test.mjs",
+        "e2e/kanban.spec.mjs",
+        "scripts/verify-fixtures.mjs"
+      ],
+      "additionalTechnique": {
+        "name": "mutation",
+        "risk": "cache/race/validation/migration/maintenance regressions",
+        "cost": "five controlled implementations; Chromium and temporary copies",
+        "limit": "representative defects only"
+      },
+      "security": {
+        "asvsVersion": "5.0.0",
+        "source": "https://raw.githubusercontent.com/OWASP/ASVS/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json",
+        "controls": [
+          {
+            "id": "local-dom-boundary",
+            "control": "textContent with hostile title, same-origin CSP and bounded fixture JSON",
+            "test": "e2e/kanban.spec.mjs; test/api.test.mjs"
+          }
+        ],
+        "notApplicable": [
+          {
+            "control": "identity/session/CSRF",
+            "reason": "Fixture provides public synthetic tasks, no cookie/token identity; common24.01 remains mandatory"
+          },
+          {
+            "control": "SQL/upload/command/outbound URL",
+            "reason": "No SQL, file uploads, shell input or arbitrary URL fetching in this UI/API"
+          }
+        ]
+      },
+      "limits": [
+        "local-declared only; no learner submission independently executed",
+        "Screen reader/zoom/contrast/multibrowser manual, no full WCAG certification",
+        "Web Vitals laboratory sample and controlled slow input, no p75/RUM/performance certification",
+        "No offline write queue/conflict resolution; API seed resets per process",
+        "Real Site navigation/export and account resume/sync homologation pending"
+      ],
+      "professionalTasks": {
+        "autonomy": {
+          "ticket": "ticket.md",
+          "id": "F-31"
+        },
+        "maintenance": {
+          "id": "F-33",
+          "base": "maintenance/visible.mjs",
+          "test": "test/maintenance.test.mjs",
+          "contract": "change-request.md"
+        },
+        "communication": {
+          "adr": "ADR-001.md",
+          "incident": "I-F32",
+          "reproduction": "e2e/kanban.spec.mjs IndexedDB",
+          "postmortem": "postmortem.md"
+        },
+        "transferAndAI": {
+          "activityId": "24.01",
+          "note": "Independent different-domain task and supplied AI patch; four common rubrics remain required."
+        }
+      }
+    },
+    "24.04": {
+      "status": "implemented-verified-locally",
+      "scope": [
+        "7.5",
+        "7.4",
+        "7.6"
+      ],
+      "evidence": "local-declared",
+      "prerequisites": [
+        "22.06",
+        "22.08",
+        "22.09",
+        "24.01"
+      ],
+      "prerequisiteClosure": [
+        {
+          "id": "00.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01",
+              "00.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "01.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "04.01",
+              "03.04",
+              "02.01",
+              "01.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "02.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "04.01",
+              "03.04",
+              "02.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "03.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "04.01",
+              "03.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "04.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "04.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "05.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "06.01",
+              "05.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "06.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01",
+              "06.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "07.12",
+              "07.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "07.12",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "07.12"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "13.03",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "23.09",
+              "13.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "14.04",
+              "14.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.03",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "14.18",
+              "14.03"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.04",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "14.04"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.14",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "14.14"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "14.18",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "14.18"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "15.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "15.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.01",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06",
+              "22.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.02",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.08",
+              "22.02"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.06",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.07",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.08",
+              "22.07"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.08",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.08"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "22.09",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "22.09"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.06",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "23.09",
+              "23.06"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.09",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "23.09"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.10",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "23.11",
+              "23.10"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "23.11",
+          "origin": "transitive",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01",
+              "23.11"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        },
+        {
+          "id": "24.01",
+          "origin": "direct",
+          "evidence": {
+            "chain": [
+              "24.04",
+              "24.01"
+            ],
+            "source": "course-src/learning-metadata.json requires edges"
+          }
+        }
+      ],
+      "practiceMinutes": {
+        "minimum": 1200,
+        "maximum": 1800,
+        "estimate": 1500,
+        "calibrated": false
+      },
+      "authoringEstimateHours": {
+        "implementation": [
+          10,
+          16
+        ],
+        "review": [
+          4,
+          6
+        ],
+        "note": "Planning hypothesis; actual effort not calibrated"
+      },
+      "toolchain": {
+        "node": ">=24.0.0",
+        "typescript": "6.0.3",
+        "packageLockStatus": "available; actual offline npm ci validated"
+      },
+      "tests": [
+        "test/release.test.mjs",
+        "scripts/verify-fixtures.mjs"
+      ],
+      "additionalTechnique": {
+        "name": "mutation",
+        "risk": "accidental API, default, legacy, v2 or consumer ordering regression",
+        "cost": "five rebuilds and packed external consumer installations",
+        "limit": "representative semantic defects; no ecosystem-wide compatibility proof"
+      },
+      "security": {
+        "controls": [
+          {
+            "id": "package-boundary",
+            "control": "pack file allowlist and delimited temporary installation directories",
+            "test": "test/release.test.mjs"
+          }
+        ],
+        "commonBlock": "24.01 security7.2 remains mandatory",
+        "notApplicable": [
+          {
+            "control": "HTTP/auth/SQL/upload",
+            "reason": "Package fixture has no service, identity, database or uploads"
+          }
+        ]
+      },
+      "professionalTasks": {
+        "autonomy": {
+          "ticket": "ticket.md",
+          "id": "L-41"
+        },
+        "maintenance": {
+          "id": "L-43",
+          "base": "consumers/report/main.ts",
+          "test": "test/release.test.mjs",
+          "contract": "change-request.md"
+        },
+        "communication": {
+          "adr": "ADR-001.md",
+          "incident": "I-L42",
+          "postmortem": "postmortem.md",
+          "migration": "MIGRATION.md",
+          "releaseNotes": "CHANGELOG.md"
+        },
+        "transferAndAI": {
+          "activityId": "24.01",
+          "note": "Independent other-domain task and AI patch remain required"
+        }
+      },
+      "limits": [
+        "local-declared only; learner submission not independently executed",
+        "Synthetic ESM Node consumers; no CJS/browser/bundler/public registry/production compatibility proof",
+        "No publish, CI service or credentials exercised",
+        "24.01 common security, AI, transfer and four rubrics remain required"
+      ]
+    }
+  },
+  "asvs": {
+    "version": "5.0.0",
+    "source": "https://raw.githubusercontent.com/OWASP/ASVS/v5.0.0/5.0/docs_en/OWASP_Application_Security_Verification_Standard_5.0.0_en.flat.json",
+    "statusNote": "Local fixture mapping only; not an ASVS certification.",
+    "controls": [
+      {
+        "id": "v5.0.0-V3.2.2",
+        "control": "DOM comment content is assigned with textContent; hostile markup remains text.",
+        "test": "test/e2e/security.spec.mjs",
+        "status": "reference-chromium-xss-passed"
+      },
+      {
+        "id": "v5.0.0-V1.2.2",
+        "control": "No user-controlled outbound/dynamic URL exists in this fixture.",
+        "test": null,
+        "status": "not-applicable-no-outbound-url-flow"
+      },
+      {
+        "id": "v5.0.0-V1.2.4",
+        "control": "No database or query layer exists in this fixture.",
+        "test": null,
+        "status": "not-applicable-no-database"
+      },
+      {
+        "id": "v5.0.0-V1.2.5",
+        "control": "The HTTP app accepts no command input; test harness invokes fixed executables and argv.",
+        "test": "scripts/run-mutation.mjs",
+        "status": "not-security-tested-adversarial-input"
+      },
+      {
+        "id": "v5.0.0-V1.3.2",
+        "control": "Production server/client source contains no dynamic eval or Function construction.",
+        "test": "scripts/verify-fixtures.mjs",
+        "status": "tested-by-local-source-scan"
+      },
+      {
+        "id": "v5.0.0-V1.3.6",
+        "control": "No server-side request or URL fetch feature exists.",
+        "test": null,
+        "status": "not-applicable-no-outbound-request"
+      },
+      {
+        "id": "v5.0.0-V5.2.1",
+        "control": "No upload endpoint exists.",
+        "test": null,
+        "status": "not-applicable-no-upload"
+      },
+      {
+        "id": "v5.0.0-V5.3.2",
+        "control": "ZIP export path validation is covered by the repository export tests, outside the runnable fixture.",
+        "test": "scripts/test-project-export.mjs",
+        "status": "repository-suite-passed"
+      },
+      {
+        "id": "v5.0.0-V3.3.1",
+        "control": "Local HTTP cookie omits Secure; production HTTPS behavior is outside this fixture.",
+        "test": null,
+        "status": "not-satisfied-local-http"
+      },
+      {
+        "id": "v5.0.0-V11.4.2",
+        "control": "Demo password verifier stores scrypt-derived values and compares with timingSafeEqual; demo samples do not define production parameters.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "demo-only-no-production-parameter-review"
+      },
+      {
+        "id": "v5.0.0-V16.2.5",
+        "control": "Cookie and CSRF token sentinels are redacted in success and denied request logs.",
+        "test": "test/regression.test.mjs",
+        "status": "reference-http-contract-passed"
+      },
+      {
+        "id": "v5.0.0-V11.5.1",
+        "control": "Session ID uses 256 CSPRNG bits; server remains loopback only.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      },
+      {
+        "id": "v5.0.0-V13.1.1",
+        "control": "No third-party or user-selected external services are used; local communication is loopback-only.",
+        "test": "test/security.test.mjs",
+        "status": "documentation-and-loopback-test"
+      },
+      {
+        "id": "v5.0.0-V3.3.2",
+        "control": "Session cookie uses SameSite=Strict; regression asserts attribute.",
+        "test": "test/http.contract.node.test.mjs",
+        "status": "reference-http-contract-passed"
+      },
+      {
+        "id": "v5.0.0-V3.3.4",
+        "control": "Session token is set only through HttpOnly Set-Cookie; regression asserts attribute.",
+        "test": "test/http.contract.node.test.mjs",
+        "status": "reference-http-contract-passed"
+      },
+      {
+        "id": "v5.0.0-V3.4.3",
+        "control": "CSP denies object content, uses base-uri none and self-only script source.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      },
+      {
+        "id": "v5.0.0-V2.2.1",
+        "control": "PORT from environment is parsed as an integer in 0..65535 and host is fixed to loopback.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      },
+      {
+        "id": "v5.0.0-V3.4.2",
+        "control": "Origin is compared to a fixed local allowlist; wildcard CORS is not used.",
+        "test": "test/e2e/security.spec.mjs",
+        "status": "reference-chromium-cors-allow-deny-passed"
+      },
+      {
+        "id": "v5.0.0-V3.4.4",
+        "control": "Responses include X-Content-Type-Options: nosniff.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      },
+      {
+        "id": "v5.0.0-V3.4.5",
+        "control": "Responses set Referrer-Policy: no-referrer.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      },
+      {
+        "id": "local-json-bounds",
+        "control": "Login and comment bodies are capped at 16 KiB; malformed JSON is answered with generic 400 and oversize bodies with generic 413.",
+        "test": "test/http.contract.node.test.mjs",
+        "status": "reference-http-contract-passed"
+      },
+      {
+        "id": "local-no-content-logs",
+        "control": "Only request method/path and event metadata are logged; body, comment, cookie, and CSRF values are omitted.",
+        "test": "test/http.contract.node.test.mjs",
+        "status": "reference-http-contract-passed"
+      },
+      {
+        "id": "local-csrf-session",
+        "control": "CSRF is independently random per session and required for writes and logout; inherited username properties are rejected.",
+        "test": "test/security.contract.node.test.mjs",
+        "status": "tested-locally"
+      }
+    ]
+  },
+  "toolchain": {
+    "node": ">=24.0.0",
+    "packageManager": "npm",
+    "packageLockStatus": "available"
+  }
+}

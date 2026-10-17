@@ -1,0 +1,6 @@
+[
+  {"id":"public-access-bypass","file":"public-access-bypass.mjs","defect":"recurso privado liberado a qualquer usuário"},
+  {"id":"expiry-boundary","file":"expiry-boundary.mjs","defect":"sessão segue válida exatamente no instante de expiração"},
+  {"id":"csrf-ignored","file":"csrf-ignored.mjs","defect":"mutação ignora token CSRF"},
+  {"id":"secret-log","file":"secret-log.mjs","defect":"redação deixa escapar cookie/token"}
+]

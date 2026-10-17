@@ -11,6 +11,7 @@ import {createContext, evaluateActivity} from './gate-execucao.mjs';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const read = file => JSON.parse(readFileSync(path.join(ROOT, file), 'utf8'));
+const normalizeEol = value => value.replace(/\r\n/g, '\n');
 const IDS = ['07.15', '11.15', '14.23', '18.11'];
 const catalog = new Map(read('public/course-catalog.json').map(item => [item.id, item]));
 const assessments = read('public/course-assessments.json');
@@ -69,7 +70,7 @@ describe('investigações 6.4: arquivos publicados e de origem coincidem', () =>
       for (const mutant of sourceAssessments[id].mutantDirs) {
         for (const file of mutant.files) {
           const disk = readFileSync(path.join(dir, mutant.id, file.path), 'utf8');
-          assert.equal(disk, file.content, `${id}/${mutant.id}/${file.path}`);
+          assert.equal(normalizeEol(disk), normalizeEol(file.content), `${id}/${mutant.id}/${file.path}`);
         }
       }
     }
@@ -79,7 +80,7 @@ describe('investigações 6.4: arquivos publicados e de origem coincidem', () =>
     for (const id of ['07.15', '11.15']) {
       const dir = path.join(ROOT, 'course-src', 'solutions', id);
       for (const file of sourceAssessments[id].correctFiles) {
-        assert.equal(readFileSync(path.join(dir, file.path), 'utf8'), file.content, `${id}/${file.path}`);
+        assert.equal(normalizeEol(readFileSync(path.join(dir, file.path), 'utf8')), normalizeEol(file.content), `${id}/${file.path}`);
       }
     }
   });

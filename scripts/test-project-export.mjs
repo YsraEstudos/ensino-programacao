@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import test from 'node:test';
+import vm from 'node:vm';
 import {checkLocalProject} from './check-local-course.mjs';
 
 const projectRoot = new URL('../', import.meta.url);
@@ -123,6 +124,9 @@ test('export refuses missing declared entry, test, dependency, or incoherent loc
   noPackageCheckpointNpm.assessment.local.commands = [];
   noPackageCheckpointNpm.checkpoint.commands = [['npm', 'test']];
   assert.throws(() => api().createProjectFiles(noPackageCheckpointNpm), /npm command requires exported package/i);
+  const packageWithoutLock = fixtureOptions();
+  delete packageWithoutLock.checkpoint.packageLock;
+  assert.throws(() => api().createProjectFiles(packageWithoutLock), /package-lock\.json is required/i);
   const unresolvedTransitive = fixtureOptions();
   unresolvedTransitive.checkpoint.package = {...unresolvedTransitive.checkpoint.package, devDependencies: {'@types/node': '24.19.1'}};
   unresolvedTransitive.checkpoint.packageLock = {
@@ -241,6 +245,39 @@ const definitions = JSON.parse(await readFile(new URL('../course-src/local-check
     assert.equal(manifest.verificationStatus, 'not-run-by-export');
     assert.match(files.find(file => file.path === 'README.md').content, /TypeScript 7\.0.*proxy local/);
     if (id === '23.08') assert.doesNotMatch(files.find(file => file.path === 'README.md').content, /acessibilidade.*verificad/i);
+  }
+});
+
+test('24.01 export includes the full catalog fixture and its genuine package lock', async () => {
+  const catalog = JSON.parse(await readFile(new URL('../public/course-catalog.json', import.meta.url), 'utf8'));
+  const assessments = JSON.parse(await readFile(new URL('../public/course-assessments.json', import.meta.url), 'utf8'));
+  const checkpointContext = {};
+  vm.runInNewContext(await readFile(new URL('../public/local-checkpoints.js', import.meta.url), 'utf8'), checkpointContext);
+  const item = catalog.find(activity => activity.id === '24.01');
+  const assessment = assessments['24.01'];
+  const checkpoint = checkpointContext.DevPathLocalCheckpoints.byId('24.01');
+  assert.ok(item && assessment && checkpoint, 'real 24.01 catalog/assessment/checkpoint records exist');
+  const paths = new Set(item.starterFiles.map(file => file.path));
+  for (const path of ['package.json', 'package-lock.json', 'src/server.mjs', 'src/security.mjs', 'test/regression.test.mjs', 'transfer/submission.mjs']) {
+    assert.ok(paths.has(path), `real exported starter must contain ${path}`);
+  }
+  const fixturePackage = JSON.parse(await readFile(new URL('../course-src/phase7/common/package.json', import.meta.url), 'utf8'));
+  const fixtureLock = JSON.parse(await readFile(new URL('../course-src/phase7/common/package-lock.json', import.meta.url), 'utf8'));
+  assert.equal(JSON.stringify(checkpoint.package), JSON.stringify(fixturePackage), 'real checkpoint package matches fixture package');
+  assert.equal(JSON.stringify(checkpoint.packageLock), JSON.stringify(fixtureLock), 'real checkpoint lock matches fixture lock');
+  const exportAssessment = {...assessment};
+  for (const graderOnly of ['testPath', 'testPaths', 'fixturesPath', 'referenceDir', 'correctFiles', 'transfer', 'assertionCases']) delete exportAssessment[graderOnly];
+  const input = {item, assessment: exportAssessment, checkpoint, files: item.starterFiles};
+  if (!checkpoint.packageLock) {
+    assert.fail('24.01 must carry its genuine lockfile in the checkpoint');
+  } else {
+    const files = api().createProjectFiles(input);
+    const names = new Set(files.map(file => file.path));
+    for (const starterFile of item.starterFiles) assert.ok(names.has(starterFile.path), `export includes ${starterFile.path}`);
+    assert.equal(names.size, item.starterFiles.length + 1, 'export includes all learner files plus devpath-project.json');
+    assert.deepEqual(JSON.parse(files.find(file => file.path === 'package.json').content), fixturePackage);
+    assert.deepEqual(JSON.parse(files.find(file => file.path === 'package-lock.json').content), fixtureLock);
+    for (const answer of ['reference/security.mjs','incident/r17/reference.mjs','transfer/solution.mjs','foreign-base/reference/reports.mjs','scripts/run-mutation.mjs','scripts/verify-fixtures.mjs']) assert.ok(!names.has(answer), `internal answer excluded: ${answer}`);
   }
 });
 

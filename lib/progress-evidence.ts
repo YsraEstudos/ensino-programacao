@@ -20,7 +20,7 @@ function diagnosticProgress(value: unknown): NonNullable<ExerciseEvidence["diagn
     try { parsed = record(JSON.parse(snapshot)); } catch { return []; }
     if (parsed.v !== 1 || !Number.isInteger(item.revision) || !Number.isInteger(item.contentVersion)
       || !validTimestamp(item.recordedAt) || !["learn", "recall", "none"].includes(String(item.mode))) return [];
-    const idPattern = /^(?:D|(?:0[0-9]|1[0-9]|2[0-3]))\.\d{2}$/;
+    const idPattern = /^(?:D|(?:0[0-9]|1[0-9]|2[0-4]))\.\d{2}$/;
     const coverage: Record<string, boolean> = {};
     for (const [id, covered] of Object.entries(record(item.coverage)).slice(0, 12)) {
       if (idPattern.test(id) && typeof covered === "boolean") coverage[id] = covered;

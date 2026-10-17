@@ -27651,5 +27651,234 @@
     ],
     "prompt": "Investigue a issue sem alterar os arquivos: prediga os diagnósticos de tipo e os resultados em execução, separe guarda de cast e explique o efeito de alargar a tabela.",
     "evidenceNote": "Evidência declarada · a leitura é conferida pela rubrica; a plataforma não executa o projeto do aluno. A decisão exige análise das respostas e conferência humana."
+  },
+  "24.01": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "ci"
+        ],
+        [
+          "npm",
+          "run",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "test:properties"
+        ],
+        [
+          "npm",
+          "run",
+          "test:types"
+        ],
+        [
+          "npm",
+          "run",
+          "test:http-contract"
+        ],
+        [
+          "npm",
+          "run",
+          "test:e2e"
+        ],
+        [
+          "npm",
+          "run",
+          "test:maintenance"
+        ],
+        [
+          "npm",
+          "run",
+          "test:incident"
+        ],
+        [
+          "npm",
+          "run",
+          "test:transfer"
+        ]
+      ],
+      "evidence": [
+        "respostas e hipóteses do ticket",
+        "resultados declarados das suítes após a implementação",
+        "checklist de limites de execução e origem da evidência",
+        "change request, postmortem e transferência do aluno"
+      ],
+      "evidenceLabel": "local-declared"
+    },
+    "rubric": [
+      "Segurança: controles HTTP e de navegador são verificados em casos permitidos, anônimos, alheios, expirados, encerrados e maliciosos.",
+      "Testes: contratos HTTP, Playwright, fast-check e expectTypeOf executam localmente quando a instalação e o navegador estiverem disponíveis; reporte falhas ambientais como pendentes.",
+      "Trabalho profissional: autonomia, manutenção, transferência e comunicação atendem às quatro tarefas e a todos os critérios do mapa.",
+      "IA: documentação oficial e testes reproduzíveis fundamentam a decisão sobre cada defeito do patch fornecido; nenhum serviço ou credencial externa é exigido."
+    ],
+    "prompt": "Execute a fixture comum, registre as quatro rubricas e declare limites e origem da evidência.",
+    "evidenceNote": "Evidência declarada · a plataforma não executa os testes nem confere os documentos locais. Gates internos de referência e mutação são evidência da equipe, não validação independente do aluno."
+  },
+  "24.02": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "ci"
+        ],
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "run",
+          "test:schema"
+        ],
+        [
+          "npm",
+          "run",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "test:maintenance"
+        ],
+        [
+          "npm",
+          "run",
+          "test:incident"
+        ]
+      ],
+      "evidence": [
+        "comandos/saídas e Node/SO",
+        "testes e diff",
+        "ticket, README e ADR",
+        "B-25 antes/depois",
+        "I-24 e postmortem",
+        "plano manual e limites"
+      ],
+      "evidenceLabel": "local-declared"
+    },
+    "rubric": [
+      "API node:http e Hono: contratos HTTP/DB reais, duas entidades relacionadas e isolamento por usuário.",
+      "Schema baseado em22.06 executado; SQLite migrações/transação e rollback; autenticação scrypt, sessão aleatória/expirada/encerrada, autorização e problemas RFC9457.",
+      "Entrada limitada, SQL parametrizado, logs/erros sem segredos e shutdown; testes negativos, regressão e técnica adicional justificada.",
+      "Mudança B-25 e incidente I-24 com reprodução antes/depois, README/ADR/postmortem e quatro blocos/rubricas de24.01."
+    ],
+    "prompt": "Implemente/exporte a API e declare a evidência e seus limites.",
+    "evidenceNote": "local-declared: testes internos de referência/mutantes não executam o projeto submetido pelo aluno nem conferem rubricas."
+  },
+  "24.03": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "ci"
+        ],
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "run",
+          "test:types"
+        ],
+        [
+          "npm",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "browser:install"
+        ],
+        [
+          "npm",
+          "run",
+          "test:e2e"
+        ]
+      ],
+      "evidence": [
+        "Node/SO/comandos/saídas e ajuda",
+        "diff e testes positivos/negativos",
+        "captura dos três Web Vitals com contexto de laboratório",
+        "ticket/ADR/revisão",
+        "F-33 antes/depois e I-F32/postmortem",
+        "cenários manuais e rubricas24.01"
+      ],
+      "evidenceLabel": "local-declared"
+    },
+    "rubric": [
+      "Web Components nativos: estado/render/roteamento explicados, duas rotas navegáveis e tiposDOM em TSstrict.",
+      "API fornecida: loading/erro/vazio, cache/revalidação e latest-request-wins inclusive mesma chave; texto não confiável inerte.",
+      "IndexedDBv2 com upgrade/reabertura, regressão de migração; layout responsivo e fluxo acessível verificável; LCP/CLS/INP medidos e limites descritos.",
+      "Integração/contrato/regressão e E2EChromium real; técnica adicional mutação; manutenção F-33 e incidente I-F32, README/ADR e quatro blocos/rubricas24.01."
+    ],
+    "prompt": "Implemente/exporte o Kanban e registre evidência local-declared e limites.",
+    "evidenceNote": "Execução da referência/mutantes pela equipe não avalia submissão independente do aluno nem confere rubricas."
+  },
+  "24.04": {
+    "environment": "local",
+    "version": 1,
+    "checks": [
+      "local"
+    ],
+    "local": {
+      "commands": [
+        [
+          "npm",
+          "ci"
+        ],
+        [
+          "npm",
+          "run",
+          "build"
+        ],
+        [
+          "npm",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "pack:releases"
+        ]
+      ],
+      "evidence": [
+        "SO/Node/npm/TS/comandos/saídas/ajuda",
+        "npm pack --json e declarações/exports dos dois tarballs",
+        "dois consumidores instalados via .tgz, strict NodeNext e runtime",
+        "L-43 antes/depois e I-L42/postmortem",
+        "ticket/ADR/revisão/release notes/migração",
+        "integração/contrato/regressão/técnica adicional e quatro rubricas24.01"
+      ],
+      "evidenceLabel": "local-declared"
+    },
+    "rubric": [
+      "API histórica22.09 preservada em1.1; overload objeto novo e remoção numérica planejada em2.0 com SemVer explicado.",
+      "Tarballs reais allowlisted, declarações strict NodeNext e dois consumidores externos sem aliases/src imports.",
+      "Integração/contrato/regressão e técnica adicional, L-43 preservando saída/ordem/identidade; I-L42/postmortem.",
+      "Ticket/ADR/revisão, release notes/migração e quatro blocos/rubricas24.01; limites honestos."
+    ],
+    "prompt": "Entregue slug-kit1.1/2.0 com consumidores, migração e evidência local-declared.",
+    "evidenceNote": "Execução da referência/mutantes pela equipe não é avaliação independente da submissão do aluno."
   }
 }

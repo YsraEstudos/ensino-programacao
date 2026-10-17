@@ -1,0 +1,4 @@
+CREATE TABLE users(id TEXT PRIMARY KEY, password_hash TEXT NOT NULL) STRICT;
+CREATE TABLE projects(id INTEGER PRIMARY KEY, owner_id TEXT NOT NULL REFERENCES users(id), name TEXT NOT NULL) STRICT;
+CREATE TABLE tasks(id INTEGER PRIMARY KEY, project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE, title TEXT NOT NULL, UNIQUE(project_id,title)) STRICT;
+CREATE INDEX projects_owner ON projects(owner_id);

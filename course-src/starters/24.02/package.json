@@ -1,0 +1,17 @@
+{
+  "name": "devpath-phase7-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=24.15.0"},
+  "scripts": {
+    "start": "node src/cli.mjs",
+    "start:hono": "node src/cli.mjs --hono",
+    "build": "node scripts/check.mjs",
+    "test": "node scripts/test.mjs",
+    "test:schema": "node scripts/test.mjs --test-name-pattern=22.06 test/contract.test.mjs",
+    "test:maintenance": "node scripts/test.mjs test/maintenance.test.mjs",
+    "test:incident": "node scripts/test.mjs --test-name-pattern=rollback test/contract.test.mjs"
+  },
+  "dependencies": {"@hono/node-server": "2.1.5", "hono": "4.13.13", "zod": "4.6.7"}
+}

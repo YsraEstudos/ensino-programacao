@@ -306,4 +306,8 @@ export const courseExerciseIds = [
   "23.09",
   "23.07",
   "23.12",
+  "24.01",
+  "24.02",
+  "24.03",
+  "24.04",
 ] as const;

@@ -36,7 +36,8 @@
     "diagnostic": "Navegador ou Node.js {node} LTS",
     "typescript": "TypeScript {typescript} strict · Node.js {node} LTS",
     "typescript-package": "TypeScript {typescript} strict · Node.js {node} LTS · pacote ESM",
-    "git": "Git (versão estável atual)"
+    "git": "Git (versão estável atual)",
+    "node-sqlite-rc": "Node.js >=24.15.0 · SQLite Stability 1.2 Release candidate · módulos ES"
   },
   "aliases": {
     "Node.js 24 LTS": "node",

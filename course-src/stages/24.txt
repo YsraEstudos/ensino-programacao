@@ -1,0 +1,20 @@
+ETAPA 24 - Especializações para o nível sênior
+Faixa
+Avançado profissional
+Carga
+12-18 h para blocos comuns (24.01: 720-1080 min; 180-270 min por prática: segurança, testes, trabalho profissional e transferência/revisão de IA). Back-end24.02:30–45 h adicionais (estimativa2250 min); Front-end24.03:25–40 h adicionais (estimativa1950 min); Bibliotecas24.04 — slug-kit, SemVer e consumidores:20–30 h adicionais (1200–1800 min; estimativa1500 min, ainda não calibrada)
+Nivel curricular
+4.5/5
+PRE-REQUISITOS
+Base aplicável das etapas 07, 14 e 23; Bibliotecas24.04 requer diretamente22.06/22.08/22.09/24.01. Consulte os fechamentos em course-src/phase7/competency-map.json.
+Resultados de aprendizagem
+• Aplicar segurança, testes, manutenção profissional e revisão de código com IA em um projeto local.
+• Registrar introdução, prática, avaliação e origem da evidência de cada competência.
+• Distinguir evidência declarada de execução independente pelo site.
+• Em Bibliotecas24.04, preservar API compatível1.1.0, planejar quebra2.0.0 e migrar consumidores externos usando o pacote realmente distribuído.
+Conceitos nucleares
+autorização · sessão · fronteiras web · testes negativos · Playwright · fast-check · mutação · testes de tipos · SemVer · tarball · declarações NodeNext · migração de consumidores
+Modelo mental aprofundado
+A fixture transversal 24.01 compartilha controles/testes e rubricas. A especialização 24.02 acrescenta API node:http e Hono, SQLite real, schema executável, sessão e autorização; exige Node >=24.15.0 porque node:sqlite é Release candidate nesse piso. Front-end24.03 acrescenta Kanban com Web Components, rotas/cache/concorrência, IndexedDB/migração, tiposDOM, acessibilidade, Web Vitals e E2EChromium (25–40h adicionais). Bibliotecas24.04 acrescenta slug-kit independente de22.09:1.1.0 mantém limitar(texto,maximo?) e adiciona limitar(texto,{maximo});2.0.0 remove somente overload numérico, preservando criarSlug, defaults e exports antigos. Dois consumidores externos instalam tarballs reais, usam imports da raiz e declarações strict NodeNext; catálogo funciona nas duas versões, relatório legado quebra em2.0 e a migração preserva saída, ordem e identidade. A fase permanece parcial aguardando integração e homologação.
+GATE DE DOMINIO
+Conclua os blocos 7.2, 7.4, 7.6 e 7.7 com24.01 e ao menos uma especialização (24.02:30–45 h;24.03:25–40 h;24.04:20–30 h além das12–18 h comuns). Em24.04, entregue contrato1.1/2.0, npm pack --json/allowlist/declarations, dois consumidores externos, migração/regressão, mudança L-43 e incidente I-L42, revisão/documentos e limites. Os checkpoints e suas evidências permanecem local-declared; a plataforma não executa HTTP/SQLite/Playwright/npm locais da submissão do aluno nem concede demonstrated por executar a referência. Fase parcial aguardando integração e homologação. Não conclua a fase com somente um bloco transversal; conclusão curricular não é credencial de senioridade.

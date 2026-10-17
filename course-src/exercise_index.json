@@ -2071,5 +2071,41 @@
     "origin": "third_edition",
     "audit_ids": [],
     "prompt": "Investigue a issue sem alterar os arquivos: prediga os diagnósticos de tipo e os resultados em execução, separe guarda de cast e explique o efeito de alargar a tabela."
+  },
+  {
+    "id": "24.01",
+    "title": "Fixture comum: segurança, testes, manutenção e IA",
+    "stage": "24",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Complete os blocos comuns 7.2, 7.4, 7.6 e 7.7 usando o checkpoint local e registre a evidência declarada."
+  },
+  {
+    "id": "24.02",
+    "title": "Back-end: API privada persistente e port Hono",
+    "stage": "24",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Implemente API node:http/SQLite e fatia Hono; execute o checkpoint e registre evidência local-declared."
+  },
+  {
+    "id": "24.03",
+    "title": "Front-end: Kanban com Web Components",
+    "stage": "24",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Evolua o Kanban: rotas, cache, concorrência, IndexedDB/migração, DOMTS, acessibilidade, Web Vitals e E2E real; evidência local-declared."
+  },
+  {
+    "id": "24.04",
+    "title": "Bibliotecas: slug-kit, SemVer e consumidores",
+    "stage": "24",
+    "kind": "PROJECT",
+    "origin": "third_edition",
+    "audit_ids": [],
+    "prompt": "Evolua slug-kit com releases compatível/breaking, declarações, consumidores externos, migração e local-declared."
   }
 ]

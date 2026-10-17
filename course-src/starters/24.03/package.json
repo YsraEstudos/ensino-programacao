@@ -1,0 +1,16 @@
+{
+  "name": "devpath-phase7-frontend-fixture",
+  "private": true,
+  "type": "module",
+  "engines": {"node": ">=24.0.0"},
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test:types": "tsc -p tsconfig.json --noEmit",
+    "start": "node server.mjs",
+    "test": "node --test test/model.test.mjs test/api.test.mjs test/maintenance.test.mjs",
+    "test:e2e": "playwright test",
+    "browser:install": "playwright install chromium"
+  },
+  "dependencies": {"web-vitals": "6.2.3"},
+  "devDependencies": {"@playwright/test": "1.63.0", "typescript": "6.0.3"}
+}
