@@ -1,1 +1,1 @@
-import{subtotal}from'./b.js';export function executar(json){return subtotal(json);}if(import.meta.url===new URL(process.argv[1], 'file://').href)console.log(executar('{"quantidade":3,"preco":5}'));
+import{resolve}from'node:path';import{pathToFileURL}from'node:url';import{subtotal}from'./b.js';export function executar(json){return subtotal(json);}if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href)console.log(executar('{"quantidade":3,"preco":5}'));

@@ -447,8 +447,8 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 ## Fase 17: Lote 8A — arquitetura e JavaScript avançado (19.08–20.10)
 
 **Situação:** reduzida e adiada até o estudo chegar a estes assuntos.
-- [ ] Escolher os exercícios que serão feitos e conferir entradas, saídas, assinaturas e arquivos de entrega.
-- [ ] Verificar a referência e o comportamento que a tarefa pede; corrigir somente falhas ainda atuais.
+- [x] Escolher os exercícios que serão feitos e conferir entradas, saídas, assinaturas e arquivos de entrega.
+- [x] Verificar a referência e o comportamento que a tarefa pede; corrigir somente falhas ainda atuais.
 
 **Pontos úteis do inventário:** contratos de 20.01, 20.04–20.07, 20.09 e 20.10; pipeline 20.08. Esses casos já tiveram trabalho nas fases 5–6: reaproveitar a evidência e verificar apenas o necessário para o exercício selecionado.
 
@@ -456,11 +456,14 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 **Redução:** sem uma revisão antecipada de todo o lote, benchmark profissional ou infraestrutura adicional para tarefas que cabem no ambiente atual.
 **Saída:** a atividade avançada escolhida pode ser entendida, executada e conferida.
 
+**Registro:** escolhidos 19.08 (emitter com payload associado à chave) e 20.08 (pipeline lazy). Em 19.08, starter, referência, transferência e saída publicada mantêm `Events[K]`; o typecheck strict da referência passou e `node --experimental-strip-types --test course-src/solutions/19.08/emitter.test.ts` passou 3/3. Em 20.08, starter, prompt/contrato, transferência, testes protegidos, referência e saída publicada estão alinhados: a verificação focal confirmou `[4,6]` com três pulls, `take(0)` sem consumo, fechamento da fonte no limite e no `break`, e ramificações imutáveis. Não foi confirmado defeito atual nesses dois IDs; nenhuma fonte funcional ou avaliação foi alterada. Limite: os demais IDs de 19.08–20.10 ficaram fora desta seleção; não houve percurso manual no navegador.
+
 ## Fase 18: Lote 8B — desempenho, Workers e integração JS/TS (21.01–22.07)
 
-**Situação:** reduzida e adiada até estes recursos entrarem na prática.
-- [ ] Conferir os contratos dos exercícios escolhidos e executar no ambiente real que o recurso exige.
-- [ ] Se estudar Workers, exercitar um Worker real e os cenários pedidos de resposta, erro e encerramento; se estudar CLI, conferir os comandos no Windows utilizado.
+**Situação:** execução focal concluída para 21.01, 21.05 e 22.05; a verificação em Worker nativo do navegador permanece pendente.
+- [x] Conferir os contratos e executar a comparação de carga, a lógica de Worker e o caso CLI escolhido.
+- [ ] Confirmar 21.05 em Worker nativo de navegador servido; a alternativa com Worker Thread real passou, mas não confirma o navegador.
+- [x] Conferir os comandos CLI de 22.05 no Windows utilizado.
 
 **Pontos úteis do inventário:** montagem/desmontagem de 21.02; ciclo de vida e pendências de 21.05; compatibilidade de process.argv em 22.04/22.05; material de transferência de 22.07. Em 21.04, o contrato é LRU, sem acrescentar TTL por engano. Em tarefas de desempenho, comparar a mesma carga em condições declaradas, sem construir uma suíte de benchmark além do objetivo.
 
@@ -469,11 +472,13 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 **Redução:** sem homologação em vários navegadores, matriz extensa de desempenho ou distribuição pública de bibliotecas.
 **Saída:** o recurso estudado funciona no ambiente declarado, e sua avaliação consegue conferir o comportamento exigido.
 
+**Registro:** em 21.01/21.05, a mesma função e carga de 50.000 números foi comparada no Node.js v26.7.0/Windows, após um aquecimento e em cinco amostras; medianas: 4,19 ms na thread principal e 4,64 ms no Worker Thread (inclui ida e volta). Em 21.05, o módulo real worker.js executou num Worker Thread real, com respostas entregues em ordem inversa ([25,4]) e associadas corretamente às chamadas ([4,25]); erro de tarefa rejeitou só a própria chamada, a seguinte retornou 1, e encerrar rejeitou o trabalho pendente e chamou terminate uma vez. O browser nativo foi tentado via Playwright/CUA e Edge/Chrome headless, mas o loopback do servidor local expirou e os binários headless falharam ao iniciar no sandbox; o cenário de navegador não está homologado. Em 22.05, o comando Windows 'node .\a.js' não imprimia o resultado porque a URL de entrada tratava incorretamente o caminho relativo; a fonte scripts/task-9-stage22.mjs agora normaliza o caminho com resolve/pathToFileURL. A geração em cópia temporária foi aplicada somente à entrada 22.05 dos artefatos, à referência e ao teste correspondentes. Após a correção, 'node .\a.js' imprime 15; importar a.js não executa o CLI; a API retorna 15, JSON inválido lança SyntaxError e formato inválido lança TypeError. 'npm run test:course-node-runtime' passou 12/12, incluindo o fixture de Worker/browser do runtime Node simulado. Os demais IDs de 21.01–22.07 não foram revisados nesta seleção.
+
 ## Fase 19: Lote 9 — pacotes, arquitetura e projeto final (22.08–23.11)
 
-**Situação:** reduzida e adiada. Fazer o projeto final somente quando ele for útil ao objetivo pessoal de aprendizagem.
-- [ ] Nos exercícios escolhidos, alinhar o que o enunciado pede com implementação, testes e arquivos de entrega.
-- [ ] Para um projeto final escolhido, escrever um briefing curto: problema a resolver, funcionalidades necessárias, como executar e como conferir que funciona.
+**Situação:** execução focal concluída em 22.08; brief pessoal preparado para 23.08.
+- [x] Alinhar enunciado, starter, solução, testes e entrega empacotada em 22.08.
+- [x] Escrever um brief curto de projeto pessoal com problema, funcionalidades, execução e conferência.
 
 **Pontos úteis do inventário:** consumo de pacote/declarações em 22.08–22.10; contrato versus implementação em 23.01/23.03; passos de refatoração de 23.04; APIs de 23.02/23.09. Em 23.08, delimitar um projeto pessoal realizável, com persistência somente se necessária. Não exigir um projeto de 30–50 horas, arquitetura em camadas, diagrama ou documentação profissional por padrão.
 
@@ -483,6 +488,10 @@ Se o objetivo escolhido for aprender empacotamento, manter a prova pertinente (p
 **Fonte:** geradores task-9 das etapas 22–23 e regra de cópia temporária.
 **Saída:** o exercício ou projeto escolhido cumpre seus requisitos pessoais e pode ser executado e conferido, sem requisitos de lançamento público.
 
+**Registro:** 22.08 foi escolhido para praticar empacotamento. O prompt aponta para o cenário autoral e a transferência; esta pede instalar o tarball `@curso/centavos@0.1.0` em consumidor isolado, importar a API pela raiz, compilar `readonly number[]` e conferir exports/licença. O starter e a referência descrevem o mesmo pacote ESM, com `centavosParaTexto` (BRL/USD), `somarCentavos` e validação de centavos inteiros seguros. `node --test scripts/test-task-9-package-22-08.mjs` passou 1/1 em Node 26.7.0: a referência foi regenerada em diretório temporário; os testes do starter e da referência passaram 2/2 cada; TypeScript emitiu declarações da fonte JSDoc, e o consumidor compilou; o tarball instalado offline executou as duas funções e continha `dist/index.js`, `dist/index.d.ts`, `LICENSE`, `README.md` e `package.json`, sem `src/` ou scripts. Não houve correção funcional necessária nem publicação em registry. Limite: aviso de depreciação do teste sobre `spawnSync` com shell; não afetou o resultado.
+
+**Brief pessoal 23.08 — quadro local de estudo:** problema: acompanhar tarefas de estudo sem conta ou serviço externo. Entrega: CLI que cria, lista, move entre “a fazer”, “fazendo” e “feito”, e remove tarefas; rejeita títulos vazios e IDs duplicados; salva/restaura o quadro em arquivo local após reiniciar; chama o serviço, com domínio e armazenamento separados. Execução: `npm install` e `node --experimental-strip-types src/cli.ts`; validação: `npm test` e `npm run typecheck`. Conferir criando e movendo uma tarefa, reiniciando a CLI e confirmando a restauração, depois removendo-a; também confirmar rejeição de entrada inválida e que a CLI não importa diretamente o adapter. Escopo pessoal: um usuário, armazenamento local e sem sincronização ou publicação.
+
 ## Fase 20: Fechamento leve do trabalho realizado
 
 **Quando:** após concluir os lotes escolhidos para a rodada de estudo. Etapas avançadas adiadas permanecem adiadas; este fechamento não declara que foram executadas.
@@ -490,7 +499,15 @@ Se o objetivo escolhido for aprender empacotamento, manter a prova pertinente (p
 - [ ] Executar os testes existentes afetados e npm run check:curriculum. Rodar npm test no fechamento da rodada ampla, com limite de tempo e registro de eventuais falhas/travamentos; não repeti-lo a cada edição de texto. Uma falha confirmada no caminho usado precisa ser corrigida; outras falhas conhecidas ficam identificadas e adiadas, sem alegar suíte global verde.
 - [ ] Abrir o site no navegador habitual: estudar uma atividade alterada, fazer uma tentativa incorreta e uma válida quando houver avaliação, executar e conferir o retorno; salvar um rascunho/progresso e recarregar para confirmar a restauração. Exercitar ajuda ou modos de estudo que tenham sido alterados ou sejam usados nesse percurso.
 - [ ] Se a rodada mudou DOM, Worker, runner ou persistência, conferir o comportamento afetado no navegador real; testes sintéticos não substituem essa observação. Não exigir repetir todos os fluxos e navegadores.
-- [ ] Registrar em poucas linhas: atividades corrigidas, comandos/resultados, percurso manual conferido e pendências realmente adiadas.
+- [x] Registrar em poucas linhas: atividades corrigidas, comandos/resultados, percurso manual conferido e pendências realmente adiadas.
+
+**Registro Fase 20 — 19/10/2026:** revisão limitada aos trabalhos focais de 19.08, 20.08, 22.05 e 22.08 das fases 17–19; nesta fase, nenhuma fonte funcional foi alterada.
+
+- `node --experimental-strip-types --test course-src/solutions/19.08/emitter.test.ts` — 3/3. `node --test scripts/test-master456-advanced.mjs` — 11/11, incluindo o contrato 20.08. `node --test scripts/test-task-9-package-22-08.mjs` — 1/1 em Node 26.7.0; consumidor temporário importou runtime e tipos do tarball. Permaneceu o aviso Node `[DEP0190]` de `spawnSync` com `shell: true`, sem falha no teste.
+- `node --test scripts/test-course-node-runtime.mjs` — 12/12. `node .\a.js`, executado em `course-src/solutions/22.05`, imprimiu `15`; o contrato 22.05 também passou na execução publicada da bateria. `git diff --check` não apontou erro de whitespace.
+- `npm.cmd run check:curriculum` executou a geração e validou 310 atividades, 0 avisos/erros da fonte, 21/21 checkpoints locais e modelo de progresso atual. Os gates strict registraram zero falhas strict; os gates reportaram 204 avisos editoriais conhecidos. `gate-execucao` terminou em modo warning/exit 0 e listou 15 IDs `starter-not-failing` (04.01, 05.01, 06.01, 06.02, 08.01, 08.07, 09.01, 09.04, 10.01, 12.14, 13.03, 13.07, 13.09, 20.01 e 23.04). Após esse relatório, o processo de `check:curriculum` ficou sem saída por mais de 70 s e foi interrompido; saída do comando completo: exit 1. Portanto, este check fica inconclusivo, sem atribuir os avisos gerais a defeito novo dos IDs focalizados.
+- `npm.cmd test` foi executado uma vez com teto aproximado de 10 min e interrompido ainda em `test:stage02`; saída final do comando: exit 1 por interrupção, não por falha observada nessa parte. Blocos concluídos observados: catálogo 4/4, learning 62/62, executors 224 aprovados/0 falhas/1 skip (225 total), test-course-test-runtime 10/10, test-course-node-runtime 12/12, layout 4/4 e Stage 01 61/61. O resumo do executor marcou 21.05 como skip por exigir Worker nativo. Fases seguintes e o restante de Stage 02 não foram concluídos; não há resultado de suíte global.
+- Tentativa no navegador: o inventário confirmou uma janela Edge “Estudar programacao”; a automação Windows dessa janela expirou antes do controle. O servidor local `vinext dev` iniciou a varredura de dependências, mas o acesso a `http://127.0.0.1:5173/` falhou no próprio host com `EACCES` de socket e no Edge com `ERR_CONNECTION_REFUSED`. Não foi possível fazer tentativa errada/correta nem salvar/recarregar rascunho/progresso. A aba local de erro foi fechada e não há processo `node`/`npm` remanescente. A caixa de percurso em navegador, incluindo a observação do Worker nativo, permanece pendente por bloqueio de acesso ao servidor loopback no sandbox; nenhum defeito funcional foi confirmado que justificasse editar código nesta fase.
 
 **Dispensado:** exigir fases 21–23 concluídas, recontar todos os indicadores editoriais, atingir zero avisos, cobertura total, revisão de todo o catálogo ou homologação de lançamento. Nenhum gate será desligado para obter aprovação.
 **Saída:** o percurso pessoal trabalhado permite estudar, praticar e retomar o progresso; testes pertinentes passam e os limites são explícitos. O plano pode ser retomado na próxima etapa sem reabrir o que continua correto.
