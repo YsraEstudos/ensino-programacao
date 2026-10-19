@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/___",
-      "default": "./dist/___"
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     }
   },
   "files": [
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test src/index.test.ts",
+    "test": "node --test src/index.test.mjs",
     "prepack": "npm run build"
   },
   "devDependencies": {

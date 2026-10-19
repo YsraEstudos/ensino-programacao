@@ -18,7 +18,7 @@ globalThis.DevPathStage03Preparation = {
       "pitfall": "Trocar a ordem das faixas ou usar <= sem reavaliar o corte desloca exatamente os valores de fronteira.",
       "next": "Depois de prever cada corte, complete o classificador e confira 0, 20, 40, 60, 80, 100 e um valor inválido."
     },
-    "starter": "const nota = 20;\nlet faixa = \"\";\nif (nota < 0 || nota > 100) {\n  faixa = \"inválida\";\n} else if (nota < 20) {\n  faixa = \"E\";\n} else if (/* complete a próxima faixa */) {\n  faixa = \"D\";\n} else {\n  faixa = \"A\";\n}\nconsole.log(faixa);",
+    "starter": "const nota = 20;\nlet faixa = \"\";\nif (nota < 0 || nota > 100) {\n  faixa = \"inválida\";\n} else if (nota < 20) {\n  faixa = \"E\";\n} else if (/* complete faixa D: nota < 40 */) {\n  faixa = \"D\";\n} else if (/* complete faixa C: nota < 60 */) {\n  faixa = \"C\";\n} else if (/* complete faixa B: nota < 80 */) {\n  faixa = \"B\";\n} else {\n  faixa = \"A\";\n}\nconsole.log(faixa);",
     "hints": [
       "Escreva em palavras os intervalos que ainda faltam entre 20 e 100.",
       "Use limites crescentes: cada teste recebe valores que falharam nos anteriores.",

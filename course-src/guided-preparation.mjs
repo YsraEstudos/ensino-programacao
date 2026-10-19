@@ -2,6 +2,7 @@
 // example, hints, docs) for stages 04-23 from the fields each activity already
 // publishes. Nothing here invents new facts: every sentence comes from the
 // activity's own explanation, prompt, examples, rubric or resources.
+import {firstResponseQuestions} from './first-response-questions.mjs';
 
 export const guidedStageTitles = {
   '04': 'FUNÇÕES, RETORNO E ERROS',
@@ -72,8 +73,6 @@ function docsFrom(resources) {
   return {docs, materials};
 }
 
-// Whole sentences up to `max` characters; never cut inside a word or sentence.
-// A first sentence longer than `max` is kept whole.
 function excerpt(text, max = 240) {
   const parts = sentences(text);
   let out = parts[0] || '';
@@ -86,26 +85,49 @@ function excerpt(text, max = 240) {
 
 function hintsFor(item) {
   const e = item.explanation, example = item.examples?.[0];
-  const out = [`Releia o enunciado e separe entrada, saída e restrições: ${excerpt(item.prompt)}`];
+  if (Number(item.stage) < 4) {
+    return [
+      `Releia o enunciado e separe entrada, saída e restrições: ${excerpt(item.prompt)}`,
+      example?.given ? `Compare com o exemplo público — dado: ${clean(example.given)}. Esperado: ${clean(example.expected)}.` : `Volte ao modelo mental: ${first(e.mental_model)}`,
+      `Cuidado com a armadilha desta atividade: ${first(e.common_trap)}`,
+    ].filter(hint => hint.length > 12);
+  }
+  const risk = first(e.common_trap).replace(/^Armadilha:\s*/i, '');
+  const out = [`Cuidado: ${risk}`];
   out.push(example?.given
     ? `Compare com o exemplo público — dado: ${clean(example.given)}. Esperado: ${clean(example.expected)}.`
     : `Volte ao modelo mental: ${first(e.mental_model)}`);
-  out.push(`Cuidado com a armadilha desta atividade: ${first(e.common_trap)}`);
+  out.push(`Aprofunde a regra: ${first(e.mental_model)}`);
   return out.filter(hint => hint.length > 12);
 }
 
-const sameText = (a, b) => clean(a).toLowerCase() === clean(b).toLowerCase();
-
-// The first response must be a concrete action, not a restatement of the objective.
-// Uses the activity's own first imperative step, then its first concept step; never empty.
+// Ask for an initial, verifiable decision. A public example's `given` may be
+// only a label ("build", "ciclo", "esperado"), so it is not a question source.
 export function distinctFirstAction(item) {
-  const current = clean(item.firstResponse?.action);
-  if (current && !sameText(current, item.objective)) return current;
-  const candidates = [
-    ...sentences(item.prompt).slice(0, 3),
-    ...sentences(item.explanation?.mental_model).slice(0, 3),
-  ].map(clean).filter(text => text.length > 12 && !sameText(text, item.objective));
-  return candidates[0] || current || 'Leia a tarefa e registre sua primeira hipótese antes de executar.';
+  if (item.stage === 'D' || Number(item.stage) < 4) {
+    const current = clean(item.firstResponse?.action);
+    const sameText = (a, b) => clean(a).toLowerCase() === clean(b).toLowerCase();
+    if (current && !sameText(current, item.objective)) return current;
+    const candidates = [
+      ...sentences(item.prompt).slice(0, 3),
+      ...sentences(item.explanation?.mental_model).slice(0, 3),
+    ].map(clean).filter(text => text.length > 12 && !sameText(text, item.objective));
+    return candidates[0] || current || 'Leia a tarefa e registre sua primeira hipótese antes de executar.';
+  }
+  if (firstResponseQuestions[item.id]) return firstResponseQuestions[item.id];
+  const title = clean(item.title);
+  const risk = first(item.explanation?.common_trap).split(';')[0]
+    .replace(/^Armadilha:\s*/i, '').replace(/[.!?]$/, '');
+  if (['PREDICT', 'TRACE', 'TYPE'].includes(item.kind)) {
+    return `Em ${title}, que saída, estado ou tipo você prevê primeiro e que observação detectaria o risco “${risk}”?`;
+  }
+  if (['PARSONS', 'FADED'].includes(item.kind)) {
+    if (item.kind === 'PARSONS') {
+      return `Em ${title}, qual relação entre os blocos você precisa fixar antes de ordená-los, considerando “${risk}”?`;
+    }
+    return `Em ${title}, que contrato da parte incompleta você definiria primeiro para evitar “${risk}”?`;
+  }
+  return `Em ${title}, que caso inicial você usaria para detectar o risco “${risk}” antes de editar?`;
 }
 
 export function guidedPreparation(item) {

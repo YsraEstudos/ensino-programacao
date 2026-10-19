@@ -1,5 +1,11 @@
-export function somaComReduce(xs){return xs.reduce((a,b)=>a+b,0)}export function somaComFor(xs){let s=0;for(const x of xs)s+=x;return s}export function medir(fn,input,{runs=5,warmups=1,now=()=>performance.now()}={}){if(!Array.isArray(input)||input.some(x=>!Number.isFinite(x)))throw new TypeError('finite numbers required');for(let i=0;i<warmups;i++)fn(input);const samples=[];for(let i=0;i<runs;i++){const t=now();fn(input);samples.push(now()-t)}const s=[...samples].sort((a,b)=>a-b);return{samples,median:s[Math.floor(s.length/2)],min:Math.min(...s),max:Math.max(...s),memory:performance.memory?.usedJSHeapSize??null}}
+export function somaComReduce(xs){return xs.reduce((a,b)=>a+b,0)}export function somaComFor(xs){let s=0;for(const x of xs)s+=x;return s}export function medir(fn,input,{runs=5,warmups=1,now=()=>performance.now()}={}){if(!Array.isArray(input)||input.some(x=>!Number.isFinite(x)))throw new TypeError('finite numbers required');for(let i=0;i<warmups;i++)fn(input);const samples=[];for(let i=0;i<runs;i++){const t=now();fn(input);samples.push(now()-t)}const s=[...samples].sort((a,b)=>a-b);return{samples,median:s.length%2?s[Math.floor(s.length/2)]:(s[s.length/2-1]+s[s.length/2])/2,min:Math.min(...s),max:Math.max(...s),memory:performance.memory?.usedJSHeapSize??null}}
 
+export function comparar(input) {
+  if (!Array.isArray(input) || input.length === 0 || input.some(x => !Number.isFinite(x))) return {erro:'Entrada inválida: use números finitos.'};
+  const a = somaComReduce(input), b = somaComFor(input);
+  if (a !== b) return {erro:'Resultados diferentes.'};
+  return {resultado:a, reduce:medir(somaComReduce,input), for:medir(somaComFor,input), memory:globalThis.performance?.memory?.usedJSHeapSize??null};
+}
 export function montarLaboratorio(documentRef=globalThis.document){
   if(!documentRef)return;
   const input=documentRef.querySelector('#tamanho'),button=documentRef.querySelector('#medir'),status=documentRef.querySelector('#mensagem'),body=documentRef.querySelector('#resultados'),memory=documentRef.querySelector('#memoria'),environment=documentRef.querySelector('#ambiente');

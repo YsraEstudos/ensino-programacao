@@ -44,7 +44,7 @@ def _lesson(skill, starter, misconception, _hints, _solution, transfer, estimate
     else:
         runtime_note = f"Compatibilidade: {runtime}; use recursos nativos e fixtures locais descritos."
     return {
-        "prompt": task + chr(10) + chr(10) + "Starter de trabalho:" + chr(10) + starter + chr(10) + chr(10) + "Registre sua primeira decisão antes de executar; depois compare previsão, evidência e justificativa.",
+        "prompt": task,
         "explanation": {
             "mental_model": mental_model,
             "worked_example": example,
@@ -149,8 +149,8 @@ CONTENT = {
      'assert.',
      'Painel de testes com ações de teclado, árvore DOM, activeElement e região de '
      'anúncio; execução/resultado anunciados em texto.',
-     'Starter com DOM de formulário, runner Vitest/DOM, utilitário de teclado e inspetor '
-     'de foco; leitor de tela opcional para revisão manual.',
+     'Starter com DOM de formulário, utilitário de teclado e inspetor de foco; avaliação '
+     'automática do contrato no site e leitor de tela opcional para revisão manual.',
      'O que um teste DOM automatizado consegue verificar diretamente?',
      'Relações do DOM, estado de foco e resposta a eventos de teclado simulados.',
      'Toda a qualidade do anúncio para qualquer leitor de tela e dispositivo.',
@@ -278,7 +278,7 @@ CONTENT = {
      'Inspecione acc e índice a cada parada.'),
     ('Entregue tabela previsão/resultado/traço e explique qual ferramenta forneceu '
      'evidência em cada fase.'),
-    'Mesmo protocolo para buscar máximo -> registrar primeira divergência',
+    'Mesmo protocolo para buscar máximo -> registrar se houve divergência; se sim, localizar a primeira; se não, explicar a evidência que confirmou a previsão',
     kind='INVESTIGATE',
     estimated=20,
     runtime='Node.js 24 with a provisioned Vitest runner',
@@ -286,8 +286,8 @@ CONTENT = {
      'cada iteração'), 'Rodar antes de prever e perder diagnóstico do modelo mental.', ('Escreva previsão com confiança.',
      'Execute com entrada fixa.',
      'Inspecione acc e índice a cada parada.'), ('Entregue tabela previsão/resultado/traço e explique qual ferramenta forneceu '
-     'evidência em cada fase.'), 'Mesmo protocolo para buscar máximo -> registrar primeira divergência', 20, 'Node.js 24 with a provisioned Vitest runner', ('Siga o protocolo prever→executar→inspecionar em cada iteração. Registre a primeira '
-     'divergência e qual evidência do debugger resolveu sua dúvida.',
+     'evidência em cada fase.'), 'Mesmo protocolo para buscar máximo -> registrar se houve divergência; se sim, localizar a primeira; se não, explicar a evidência que confirmou a previsão', 20, 'Node.js 24 with a provisioned Vitest runner', ('Siga o protocolo prever→executar→inspecionar em cada iteração. Registre se houve divergência; '
+     'se sim, localize a primeira e explique qual evidência do debugger resolveu a dúvida; se não, explique qual observação confirmou sua previsão.',
      'Ao procurar a primeira letra “r” em “arara”, marque índice e posição encontrada a '
      'cada iteração; o traço mostra quando a condição encerra o laço.',
      'Escreva resultado previsto e confiança, depois escolha a variável e o ponto de '
@@ -518,8 +518,9 @@ CONTENT = {
      'pessoa antes de escrever o catch.',
      'Editor de tratamento de erro, painel separado para UI/log privado e inspeção de '
      'cause/identidade; foco e retorno textual.',
-     'Adaptador simulado que falha, UI local e console; erros determinísticos sem token, '
-     'URL ou serviço real.',
+     'Adaptador simulado e console para reprodução local; avaliação automática do contrato '
+     'no site DevPath. Vitest só é necessário se instalado no projeto local; erros determinísticos '
+     'sem token, URL ou serviço real.',
      'Por que conservar a causa ao criar um erro de domínio?',
      'Ela mantém a evidência técnica para diagnóstico sem expor detalhes na mensagem '
      'pública.',
@@ -616,11 +617,12 @@ _LITERAL_STARTERS = {
     ],
     '13.13': [
         {"path": "app.js", "content": "export function montarWidget(document) { /* TODO: associe submit, foco, texto literal e delegação */ }"},
+        {"path": "index.html", "content": "<form id=\"f\"><label for=\"text\">Texto</label><input id=\"text\"><button id=\"add\" type=\"submit\">Adicionar</button><ul id=\"list\"></ul><p id=\"error\" aria-live=\"polite\"></p></form>"},
         {"path": "tests/13.13.test.js", "content": "import {montarWidget} from '../app.js';\ndescribe('suíte DOM do widget', () => {\n  test('mantém associação de rótulo e botão de submit', () => { montarWidget(document); expect(document.querySelector('label[for=text]')).toBeTruthy(); expect(document.querySelector('#add[type=submit]')).toBeTruthy(); });\n});"},
     ],
     '13.01': "material.md: Teste: expect(paginar([1, 2, 3], 2, 2)).toEqual([3]);\nResultado recebido: [2, 3]\n\nA falha localiza uma divergência entre a saída esperada e recebida; ainda não identifica a causa.",
     '13.02': "material.md: Bloco A: if (typeof dividendo !== 'number' || !Number.isFinite(dividendo)) throw new TypeError('dividendo inválido');\nBloco B: if (typeof divisor !== 'number' || !Number.isFinite(divisor)) throw new TypeError('divisor inválido');\nBloco C: if (divisor === 0) throw new RangeError('divisor não pode ser zero');\nBloco D: return dividendo / divisor;\n\nContexto: function dividir(dividendo, divisor) { /* ordenar blocos; toda validação precede a divisão */ }",
-    '13.03': "pagination.test.js: import { paginar } from './pagination.js';\n\ndescribe('paginar', () => {\n  it('retorna a primeira página', () => {\n    expect(paginar([1, 2, 3], 1, 2)).toEqual([1, 2]);\n  });\n});\n\n// Complete a suíte para contratos de borda; page e size são inteiros 1-based.",
+    '13.03': [{'path': 'pagination.js', 'content': "export function paginar(items, page, size) { if (!Number.isInteger(page) || page < 1 || !Number.isInteger(size) || size < 1) throw new RangeError('page/size inválidos'); return items.slice((page - 1) * size, page * size); }\n"}, {'path': 'pagination.test.js', 'content': "import { paginar } from './pagination.js';\ndescribe('paginar', () => {\n  it('retorna a primeira página', () => {\n    expect(paginar([1, 2, 3], 1, 2)).toEqual([1, 2]);\n  });\n});\n// Complete a suíte para contratos de borda; page e size são inteiros 1-based.\n"}],
     '13.04': "debug.js: export function somaPositivos(valores) {\n  let total = 0;\n  for (const valor of valores) {\n    if (valor > 0) total += valor;\n  }\n  return total;\n}\n\n// Preveja os estados de total para [1, -2, 3] antes de avançar o debugger.",
     '13.05': "filtro.js: export function manterDefinidos(valores) {\n  const resultado = [];\n  for (const valor of valores) {\n    if (valor) resultado.push(valor); // BUG: remove valores válidos falsy, como 0 e false.\n  }\n  return resultado;\n}\n\n// Contrato: remover somente undefined; preservar 0, false, null, strings e sua ordem.",
     '13.06': "parser.js: export function parseLinha(texto) {\n  // Formato: chave=valor;chave=valor. \\; representa ; literal e \\\\ representa \\ literal.\n  // Chave repetida: último valor vence. Segmento sem '=' ou escape incompleto: SyntaxError.\n  // Entrada vazia retorna {}.\n}\n",
@@ -629,7 +631,7 @@ _LITERAL_STARTERS = {
         {"path": "tests/clamp.test.js", "content": "import {clamp} from '../clamp.js';\ndescribe('clamp regression', () => { test('lower-bound regression', () => { expect(clamp(-5, 0, 10)).toBe(0); }); });"},
     ],
     '13.08': "library.js: export function clamp(valor, minimo, maximo) {}\nexport function unique(valores) {}\nexport function paginar(valores, pagina, tamanho) {}\n\n// API ESM pública; registre entrada, saída, erros, mutação e ordem para cada função.",
-    '13.09': "retry.test.js: import { retry } from './retry.js';\nimport { vi, expect, it } from 'vitest';\n\nit('retorna o resultado de uma operação bem-sucedida', async () => {\n  const operation = vi.fn(async () => 'ok');\n  const timer = (fn, ms) => { fn(); return 1; };\n  expect(await retry(operation, 2, 10, timer)).toBe('ok');\n});\n\n// Amplie para falha transitória, limite de tentativas, atraso e limpeza entre testes.",
+    '13.09': [{'path': 'retry.js', 'content': 'export async function retry(operation, max = 3, delay = 0, timer = (fn, ms) => setTimeout(fn, ms)) {\n  let last;\n  for (let attempt = 0; attempt < max; attempt++) {\n    try { return await operation(); } catch (error) { last = error; if (attempt === max - 1) break; await new Promise(resolve => timer(resolve, delay)); }\n  }\n  throw last;\n}\n'}, {'path': 'retry.test.js', 'content': "import { retry } from './retry.js';\nimport { vi, expect, it } from 'vitest';\nit('retorna o resultado de uma operação bem-sucedida', async () => {\n  const operation = vi.fn(async () => 'ok');\n  const timer = (fn, ms) => { fn(); return 1; };\n  expect(await retry(operation, 2, 10, timer)).toBe('ok');\n});\n// Amplie para falha transitória, limite de tentativas, atraso e limpeza entre testes.\n"}],
     '13.10': "service.js: export async function carregarConfiguracao(readFile) {\n  try {\n    return await readFile();\n  } catch (erro) {\n    throw new Error(String(erro));\n  }\n}\n\n// BUG: a causa original foi descartada e o texto externo pode expor detalhes indevidos.",
     '13.11': "indices.js: const itens = ['a', 'b', 'c'];\nconsole.log(itens.at(0));\nconsole.log(itens.at(-1));\nconsole.log(itens.at(3));\n\n// Compare índice fora dos limites, índice negativo e o uso equivalente com bracket access.",
     '13.12': "material.md: Falha: teste de retry expira após 5 s.\nEvidências disponíveis: log de chamadas, relógio do teste e stack trace.\nHipótese inicial: timer real foi usado junto com relógio falso.\n\nEscolha a ferramenta que pode confirmar a hipótese e anote o que ela não prova.",
@@ -709,6 +711,31 @@ for _card_id, _official_url in _OFFICIAL_DOCS.items():
 
 # Revisão editorial de 05/10/2026: enunciado, starter e contrato realinhados.
 CONTENT["13.14"]["content_version"] = 2
+
+# Compatibilidade do avaliador: autoTested descreve a avaliação do site, não a CLI do Vitest.
+_SITE_TESTED_13 = ("13.02", "13.03", "13.05", "13.06", "13.07", "13.08", "13.09", "13.10")
+for _card_id in _SITE_TESTED_13:
+    CONTENT[_card_id]["runtime"] = "Node.js 24 LTS"
+    CONTENT[_card_id]["compatibility"] = (
+        "A avaliação automática roda no site pelo runtime de testes do DevPath. `autoTested` "
+        "indica essa avaliação; não significa que o site execute o comando Vitest nem que o "
+        "starter instale essa dependência. Se rodar Vitest no computador, configure-o no "
+        "projeto exportado; confira o comando e as APIs indicados no próprio cartão."
+    )
+CONTENT["13.13"]["compatibility"] = (
+    "A avaliação automática do contrato DOM roda no site. A checagem automatizada não substitui "
+    "a revisão manual com teclado e tecnologia assistiva em navegador local."
+)
+for _card_id, _where in {
+    "13.01": "A rubrica é avaliada no site. Para executar uma reprodução local, siga a configuração Vitest descrita no cartão; essa instalação é opcional e fica no projeto exportado.",
+    "13.04": "A rubrica é avaliada no site. Previsão, execução e breakpoints são feitos no computador local com Node.js e o debugger escolhido; Vitest não é necessário.",
+    "13.11": "A rubrica é avaliada no site. A consulta da documentação e a execução da função ocorrem no navegador/editor local indicado no cartão.",
+    "13.12": "A rubrica é avaliada no site. Execute o snippet localmente apenas quando a evidência escolhida exigir; Vitest é uma opção de projeto, não requisito do cartão.",
+}.items():
+    CONTENT[_card_id]["compatibility"] = _where
+CONTENT["13.01"]["runtime"] = "Node.js 24 LTS"
+CONTENT["13.04"]["runtime"] = "Node.js 24 LTS"
+CONTENT["13.12"]["runtime"] = "Node.js 24 LTS"
 
 
 # Fase 4 (análise curricular, item 4.6): subclasses de Error com cause e Error.isError com fallback (item 5.3).

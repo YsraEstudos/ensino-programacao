@@ -4,7 +4,7 @@ CONTENT = {
     "08.01": E(
         "algorithms.big_o_read",
         "snippets: acesso a[0]; varredura n; dois loops aninhados n; divisão por 2 repetida; sort; busca binária; Set.has médio; cópia de n itens",
-        "ordens na sequência -> O(1),O(n),O(n²),O(log n),O(n log n),O(log n),O(1) médio,O(n)",
+        "duas varreduras consecutivas de n itens -> O(n)",
         "loop n com corpo constante extra -> O(n); dois loops consecutivos n+n -> O(n), não O(n²)",
         "Multiplicar custos de loops consecutivos ou ignorar custo de sort/cópia.",
         "A resposta diz O(n²) para dois loops sequenciais.",
@@ -19,7 +19,7 @@ CONTENT = {
         kind="PREDICT",
         requires=("mapset.basic",),
         estimated=17,
-        prompt="Use o starter descrito no contrato (snippets: acesso a[0]; varredura n; dois loops aninhados n; divisão por 2 repetida; sort; busca binária; Set.has médio; cópia de n itens). Antes de executar, escreva a saída/ordem e um traço por passo que justifique a transição decisiva; então compare com a execução.",
+        prompt="Use o material inicial exibido no editor (snippets: acesso a[0]; varredura n; dois loops aninhados n; divisão por 2 repetida; sort; busca binária; Set.has médio; cópia de n itens). Antes de executar, escreva a saída/ordem e um traço por passo que justifique a transição decisiva; então compare com a execução.",
         explanation={
             "mental_model": "Trabalhos em sequência somam; só aninhamento repete o custo interno para cada item externo.",
             "worked_example": "Um importador percorre o lote para contar linhas e depois percorre-o outra vez para validar extensões. São duas passagens; comparar cada arquivo com todos os demais criaria pares.",
@@ -68,7 +68,7 @@ CONTENT = {
         "Somar pesos de pastas em árvore binária -> caso base e composição corretos",
         kind="PARSONS",
         estimated=20,
-        prompt="Use o starter descrito no contrato (blocos: A=if(no===null)return 0; B=const esquerda=somar(no.esq); C=const direita=somar(no.dir); D=return no.valor+esquerda+direita). Ordene ou selecione os blocos, entregue a sequência final e explique uma dependência entre etapas.",
+        prompt="Use o material inicial exibido no editor (blocos: A=if(no===null)return 0; B=const esquerda=somar(no.esq); C=const direita=somar(no.dir); D=return no.valor+esquerda+direita). Ordene ou selecione os blocos, entregue a sequência final e explique uma dependência entre etapas.",
         explanation={
             "mental_model": "Recursão em árvore combina caso base, chamadas menores e composição de resultados.",
             "worked_example": "Para contar documentos, pasta ausente contribui zero; pasta existente soma seu documento e as contagens das subpastas. Cada chamada desce até ausência.",
@@ -117,7 +117,7 @@ CONTENT = {
         "Buscar código 8 em lista [2,4,6,8,10] -> índice 3",
         kind="FADED",
         estimated=20,
-        prompt="Use o starter descrito no contrato (main.js: export function busca(xs,alvo){let lo=0,hi=xs.length-1;while(lo<=hi){const mid=Math.floor((lo+hi)/2); if(xs[mid]===alvo)return mid;…). Complete os espaços do starter, entregue a função e explique qual caso de borda verifica cada papel preenchido.",
+        prompt="Use o material inicial exibido no editor (main.js: export function busca(xs,alvo){let lo=0,hi=xs.length-1;while(lo<=hi){const mid=Math.floor((lo+hi)/2); if(xs[mid]===alvo)return mid;…). Complete os espaços do starter, entregue a função e explique qual caso de borda verifica cada papel preenchido.",
         explanation={
             "mental_model": "Busca binária mantém um intervalo ordenado candidato; o meio comparado sai do intervalo.",
             "worked_example": "Na lista [2,6,11,18,25], procure 18. Compare o centro; como o alvo é maior, mova lo para depois do meio. Repita até achar o alvo ou cruzar os limites.",
@@ -166,7 +166,7 @@ CONTENT = {
         "Explicar invariante de varredura que encontra máximo -> max é maior valor do prefixo processado",
         kind="READ",
         estimated=21,
-        prompt="Use o starter descrito no contrato (trechos: busca binária em array ordenado; soma prefixo xs[0..i); dois ponteiros para par alvo). Registre uma hipótese e a evidência que precisa coletar antes de inspecionar o material; entregue observação, conclusão e fonte/ferramenta quando aplicável.",
+        prompt="Use o material inicial exibido no editor (trechos: busca binária em array ordenado; soma prefixo xs[0..i); dois ponteiros para par alvo). Registre uma hipótese e a evidência que precisa coletar antes de inspecionar o material; entregue observação, conclusão e fonte/ferramenta quando aplicável.",
         explanation={
             "mental_model": "Invariante descreve o prefixo já processado e continua válida após cada iteração.",
             "worked_example": "Ao achar mínimo em [8,3,9], o mínimo do primeiro prefixo é 8; depois do segundo é 3; no fim continua 3. A variável resume exatamente o prefixo visitado.",
@@ -265,7 +265,7 @@ CONTENT = {
         kind="MAKE",
         requires=("mapset.basic",),
         estimated=26,
-        prompt="Use o starter descrito no contrato (main.js: export function unicosLento(xs){} export function unicosSet(xs){}). Implemente a mudança e entregue código e evidência dos casos público e de borda; explique a regra que preserva o contrato.",
+        prompt="Use o material inicial exibido no editor (main.js: export function unicosLento(xs){} export function unicosSet(xs){}). Implemente a mudança e entregue código e evidência dos casos público e de borda; explique a regra que preserva o contrato.",
         explanation={
             "mental_model": "Deduplicar preservando primeira aparição exige manter a ordem enquanto se reconhece se um valor já apareceu. Defina também o que significa igualdade para as chaves do domínio.",
             "worked_example": "Ao importar um catálogo de livros, duas linhas podem compartilhar o mesmo ISBN mesmo que tenham títulos abreviados de modo diferente. Antes de remover repetições, decida qual identificador define uma ocorrência e registre como a ordem original será mantida.",
@@ -365,7 +365,7 @@ CONTENT = {
         kind="PROJECT",
         requires=("mapset.basic",),
         estimated=75,
-        prompt="Use o starter descrito no contrato (main.js: export function caminho(grafo,inicio,fim){ /* Map de adjacência, BFS */ }). Implemente o comportamento e entregue código executável, uma verificação de sucesso e de borda, e uma decisão de comportamento visível ao usuário.",
+        prompt="Use o material inicial exibido no editor (main.js: export function caminho(grafo,inicio,fim){ /* Map de adjacência, BFS */ }). Implemente o comportamento e entregue código executável, uma verificação de sucesso e de borda, e uma decisão de comportamento visível ao usuário.",
         explanation={
             "mental_model": "BFS usa fila FIFO; visitar ao enfileirar evita duplicatas e predecessor reconstrói rota.",
             "worked_example": "Num mapa de estações, parta de Central e enfileire vizinhas na ordem anunciada. Ao descobrir Mercado, registre de onde veio; ao achar destino, siga predecessoras e inverta.",

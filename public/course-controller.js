@@ -270,7 +270,9 @@
             const predictionKey = ctx.exerciseProgressKey(item);
             const structuredProvider = predictionTable && window.DevPathStructuredPredictions;
             const predictionState = structuredProvider ? structuredProvider.parse(prediction, predictionTable) : null;
-            const answerReady = answered && (!predictionTable || predictionState?.compatible === true);
+            const awaitingPredictionMetadata = item.kind === "PREDICT" && !courseAssessmentsCache;
+            const answerReady = !awaitingPredictionMetadata && answered && (!predictionTable || predictionState?.compatible === true);
+            const hideStarterSource = awaitingPredictionMetadata || (!answerReady && predictionTable?.revealSourceAfterPrediction === true);
             const practiceLocked = `
         <p class="course-gate-note" role="status">${answered && predictionTable && !predictionState?.compatible ? "A resposta antiga continua preservada. Registre uma nova previsão estruturada acima para liberar a execução." : "Registre sua primeira resposta no passo 03 para liberar a prática e a explicação final."}</p>`;
             const editingPrediction = predictionEditorOpen.has(predictionKey);
@@ -356,7 +358,7 @@
             <ol class="s01-task-steps">${arr(prep.practiceSteps).map((step) => `<li>${ctx.esc(step)}</li>`).join("")}</ol>
             <div class="course-interaction-note"><strong>Como responder</strong><p>${ctx.esc(item.interaction)}</p></div>
             ${constraints}${edgeCases}${materials}
-            <div class="course-starter-read"><div class="course-section-kicker">LEIA O ARQUIVO ANTES DE RESPONDER</div>${starterPreview}${readOnlyPreview ? `<h3>Artefatos somente leitura para comparar</h3><p>Abra os arquivos de saída e a proveniência do build. Eles foram preparados a partir deste exemplo antes da atividade.</p>${readOnlyPreview}` : ""}</div>
+            <div class="course-starter-read">${hideStarterSource ? "" : `<div class="course-section-kicker">LEIA O ARQUIVO ANTES DE RESPONDER</div>${starterPreview}`}${readOnlyPreview ? `<h3>Artefatos somente leitura para comparar</h3><p>Abra os arquivos de saída e a proveniência do build. Eles foram preparados a partir deste exemplo antes da atividade.</p>${readOnlyPreview}` : ""}</div>
           </section>
           <section id="g-predict" data-s00-step="03" tabindex="-1">
             ${sectionTitle("03", "Prever antes de executar")}

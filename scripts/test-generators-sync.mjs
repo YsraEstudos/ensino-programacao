@@ -19,10 +19,10 @@ const generators = [
   'scripts/task-9-stage23-12.mjs',
   'scripts/task-9-readmes.mjs',
   'scripts/task-9-canonical-texts.mjs',
+  'scripts/task-9-advanced-repairs.mjs',
 ];
 
-const excluded = relative => relative === 'node_modules' || relative.startsWith(`node_modules${path.sep}`)
-  || relative === '.git' || relative.startsWith(`.git${path.sep}`);
+const excluded = relative => relative.split(path.sep).some(part => part === 'node_modules' || part === '.git' || part === '.superpowers');
 
 function walk(base, dir = base, out = []) {
   for (const entry of readdirSync(dir, {withFileTypes: true})) {

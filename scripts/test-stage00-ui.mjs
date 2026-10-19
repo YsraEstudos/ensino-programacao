@@ -149,10 +149,24 @@ for(const item of lessons){
   app.window.location.hash=`#/javascript/${item.id}`;await settle();
   aq('[data-learning-mode="learn"]').click();await settle();
   assert(aq('[data-s00-teaching]'),`${item.id}: application uses new renderer`);
+  if(item.id==='00.05'||item.id==='00.08'){
+    assert.equal(item.rubric.length,3,`${item.id}: published rubric has three criteria`);
+    assert.equal(view.querySelectorAll('[data-s00-rubric]').length,3,`${item.id}: all rubric criteria are visible`);
+  }
   const first=aq('[data-s00-target]');first.click();assert.equal(app.window.document.activeElement.id,first.dataset.s00Target);
   if(item.id==='00.06'){aq('[data-s00-action="run"]').click();assert.match(aq('[data-s00-output]').textContent,/SyntaxError/);}
   afill('[data-s00-prediction]','Registrei uma previsão ou plano depois de estudar o exemplo.');aq('[data-s00-action="predict"]').click();
   if(item.id==='00.09')aq('[data-s00-lab-action="zero-requirement"]').click();
+  if(item.id==='00.03'){
+    afill('[data-s00-editor]','console.log("Início");\nconsole.log("Olá, Ana");\nconsole.log("Fim");\nconsole.log("extra");');
+    aq('[data-s00-action="run"]').click();
+    assert.match(aq('[data-s00-output]').textContent,/Primeira divergência/,'00.03 rejects a fourth output line');
+  }
+  if(item.id==='00.09'){
+    afill('[data-s00-editor]','console.log("Atendimento");\nconsole.log("Pessoa:", "Ana");\nconsole.log("Fim");');
+    aq('[data-s00-action="run"]').click();
+    assert.match(aq('[data-s00-output]').textContent,/Primeira divergência/,'00.09 rejects deleting the Itens line instead of printing zero');
+  }
   if(solutions[item.id])afill('[data-s00-editor]',solutions[item.id]);
   if(aq('[data-s00-action="run"]'))aq('[data-s00-action="run"]').click();
   if(aq('[data-s00-action="write"]')){

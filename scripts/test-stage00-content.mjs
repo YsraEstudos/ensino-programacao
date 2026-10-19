@@ -13,5 +13,9 @@ assert.equal(stage00['00.09'].lab?.kind, 'capstone', '00.09 integrates the stage
 assert.equal(stage00['00.09'].mode, 'edit-run', 'the capstone starts as an executable blank-file exercise');
 assert.equal(stage00['00.09'].starterFiles?.find(file => file.path === 'main.js')?.content, '', 'the capstone asks the learner to write from a blank file');
 assert.deepEqual(stage00['00.09'].expectedByRequirement?.zero, [['Atendimento'],['Pessoa:','Ana'],['Itens:',0],['Fim']], 'the capstone validates its changed zero-item requirement');
+for (const id of ['00.05','00.08']) {
+  assert.equal(stage00[id].rubric.length, 3, `${id} READ activity has three specific criteria`);
+  assert.equal(new Set(stage00[id].rubric).size, 3, `${id} criteria are distinct`);
+}
 
 console.log('Stage 00 source: canonical sync and requested lesson experiences are present.');

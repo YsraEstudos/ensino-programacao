@@ -6,6 +6,14 @@ const root = process.cwd();
 const catalog = JSON.parse(fs.readFileSync('public/course-catalog.json', 'utf8'));
 const manifest = JSON.parse(fs.readFileSync('course-src/starters/manifest.json', 'utf8'));
 const assessments = JSON.parse(fs.readFileSync('course-src/assessments.json', 'utf8'));
+const MUTANT_IDS={
+ '15.02':'accepts-non-object-as-default',
+ '15.03':'uses-fixed-creation-time',
+ '15.04':'trusts-unvalidated-json-shape',
+ '15.07':'keeps-alias-and-whitespace',
+ '15.08':'skips-pagination-validation',
+ '15.11':'trusts-json-cast-without-validation',
+};
 const entries = catalog.filter(item => item.id.startsWith('15.'));
 const files = new Map();
 const definitions = {
@@ -165,10 +173,11 @@ for (const item of entries) {
     const editableTest = path.join(root, 'course-src/starters', id, 'tests', `${id}.test.js`);
     if (fs.existsSync(editableTest)) fs.unlinkSync(editableTest);
   }
-  if(d.mutant) for(const [name,content] of Object.entries(d.mutant)) write(`course-src/mutants/${id}/plausible/${name}`,content);
+  const mutantId=MUTANT_IDS[id] || 'plausible';
+  if(d.mutant) for(const [name,content] of Object.entries(d.mutant)) write(`course-src/mutants/${id}/${mutantId}/${name}`,content);
   solution(id,d.solution);
   const runnable=Boolean(d.testPath);
-  const assessment={environment:d.environment,version:1,checks:d.checks,entryPath:d.entryPath,referenceDir:`solutions/${id}`,...(d.tsconfigPath?{tsconfigPath:d.tsconfigPath}:{}),...(d.contractTypes?{contractTypeFiles:[{path:`contracts/${id}.types.ts`,content:d.contractTypes}]}:{}),...(d.typeMutant?{typeContractMutants:[{id:'any-signature',files:Object.entries(d.typeMutant).map(([name,content])=>({path:name,content}))}]}:{}),...(d.testPath?{testPath:`tests/${id}.test.js`,behaviorTestPath:'__devpath_tests__.js',typecheckMutants:true,mutantDirs:[{id:'plausible',files:Object.entries(d.mutant).map(([name,content])=>({path:name,content}))}],correctFiles:Object.entries(d.ref).map(([name,content])=>({path:name,content}))}:{}),...(d.expectedDiagnostics?{expectedDiagnostics:d.expectedDiagnostics.map(([code,line])=>({code,file:entry,line}))}:{}),...(d.rubric?{rubric:d.rubric}:{}),transfer:{id:`${id}-transfer`,files:[{path:'transfer.md',content:`# Transferência ${id}\n\n${d.transfer || 'Produza um caso independente com entrada, saída, erro e limite observados.'}`}],rubric:d.rubric||['Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível.']},prompt:`${d.transfer || `Resolva o contrato publicado de ${id} e registre evidência com entrada, resultado e limite.`}`};
+  const assessment={environment:d.environment,version:1,checks:d.checks,entryPath:d.entryPath,referenceDir:`solutions/${id}`,...(d.tsconfigPath?{tsconfigPath:d.tsconfigPath}:{}),...(d.contractTypes?{contractTypeFiles:[{path:`contracts/${id}.types.ts`,content:d.contractTypes}]}:{}),...(d.typeMutant?{typeContractMutants:[{id:'any-signature',files:Object.entries(d.typeMutant).map(([name,content])=>({path:name,content}))}]}:{}),...(d.testPath?{testPath:`tests/${id}.test.js`,behaviorTestPath:'__devpath_tests__.js',typecheckMutants:true,mutantDirs:[{id:mutantId,files:Object.entries(d.mutant).map(([name,content])=>({path:name,content}))}],correctFiles:Object.entries(d.ref).map(([name,content])=>({path:name,content}))}:{}),...(d.expectedDiagnostics?{expectedDiagnostics:d.expectedDiagnostics.map(([code,line])=>({code,file:entry,line}))}:{}),...(d.rubric?{rubric:d.rubric}:{}),transfer:{id:`${id}-transfer`,files:[{path:'transfer.md',content:`# Transferência ${id}\n\n${d.transfer || 'Produza um caso independente com entrada, saída, erro e limite observados.'}`}],rubric:d.rubric||['Preserve o contrato e diferencie resultado normal, borda e falha com evidência reproduzível.']},prompt:`${d.transfer || `Resolva o contrato publicado de ${id} e registre evidência com entrada, resultado e limite.`}`};
   assessments[id]=assessment;
 }
 write('course-src/starters/manifest.json',JSON.stringify(manifest,null,2));

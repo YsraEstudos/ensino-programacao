@@ -1,3 +1,7 @@
+// Contrato visível 23.09:
+// Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.
+// Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada.
+
 // 23.09 · Falha observável sem segredo.
 // Complete o redator e a instrumentação. O token NUNCA pode aparecer em nenhuma linha de log.
 
@@ -47,3 +51,7 @@ console.log(await salvar({ id: "p2", lento: true }, contexto, { id: () => "demo-
 const saida = JSON.stringify(logs);
 console.log(saida);
 console.log("vazou segredo?", /segredo-123|s=abc|t-999/.test(saida)); // esperado: false
+
+// Avaliação visível: implementação pendente
+export function lerLogs() { return logs; }
+export function limparLogs() { logs.length=0; }

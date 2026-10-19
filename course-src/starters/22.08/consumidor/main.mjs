@@ -1,7 +1,5 @@
-// Consumidor fora do workspace. Passos, sem publicar nada na rede:
-// 1. Na pasta do pacote: npm run build && npm pack   (gera curso-centavos-0.1.0.tgz)
-// 2. Nesta pasta: npm init -y && npm install ../curso-centavos-0.1.0.tgz
-// 3. node main.mjs   e, num main.ts equivalente, npx tsc --noEmit
+// Depois de empacotar, instale o tarball neste consumidor e execute `node main.mjs`.
+// Compile `main.ts` com `tsc --noEmit --strict --module NodeNext --moduleResolution NodeNext main.ts`.
 import { centavosParaTexto, somarCentavos } from "@curso/centavos";
 
 console.log(centavosParaTexto(somarCentavos([100, 250])));

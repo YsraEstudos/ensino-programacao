@@ -26,7 +26,7 @@ function activity(id, overrides = {}) {
     kind: "MAKE",
     objective: "Objetivo distinto da primeira resposta.",
     prompt: "Implemente `resultado` em main.js.",
-    firstResponse: { action: "Ação inicial distinta do objetivo." },
+    firstResponse: { action: "Qual caso deve ser verificado primeiro?" },
     explanation: { mental_model: "Modelo simples.", worked_example: "", common_trap: "", why_it_matters: "" },
     starterFiles: [{ path: "main.js", content: "export function resultado() {\n  return 1;\n}\n" }],
     hints: ["Uma dica completa."],
@@ -43,7 +43,7 @@ function goodFixture() {
     assessments: {
       "01.01": {
         correctFiles: [{ path: "main.js", content: "" }],
-        mutantDirs: [{ id: "off-by-one", files: [] }],
+        mutantDirs: [{ id: "off-by-one", files: [{path: "main.js", content: "export function resultado() { return 2; }"}] }],
       },
     },
     tests: { "01.01": SUITE },
@@ -98,7 +98,7 @@ test("gate-mutantes-presenca: aceita mutante real; rejeita só 'plausible' e aus
   assert.equal(mutantesPresenca.run(goodFixture()).warnings.length, 0);
 
   const placeholder = goodFixture();
-  placeholder.assessments["01.01"].mutantDirs = [{ id: "plausible", files: [] }];
+  placeholder.assessments["01.01"].mutantDirs = [{ id: "plausible", files: [{path: "main.js", content: "export function resultado() { return 2; }"}] }];
   const onlyPlausible = mutantesPresenca.run(placeholder);
   assert.equal(onlyPlausible.warnings.length, 1);
   assert.match(onlyPlausible.warnings[0].message, /plausible/);
@@ -109,7 +109,7 @@ test("gate-mutantes-presenca: aceita mutante real; rejeita só 'plausible' e aus
 
   const typeMutant = goodFixture();
   typeMutant.assessments["01.01"].mutantDirs = [];
-  typeMutant.assessments["01.01"].typeContractMutants = [{ id: "any-signature", files: [] }];
+  typeMutant.assessments["01.01"].typeContractMutants = [{ id: "any-signature", files: [{path: "contract.ts", content: "const checked: number = 1;"}] }];
   assert.equal(mutantesPresenca.run(typeMutant).warnings.length, 0);
 });
 
@@ -118,6 +118,37 @@ test("gate-mutantes-presenca: atividade sem teste não é avisada", () => {
   data.tests = {};
   delete data.assessments["01.01"].mutantDirs;
   assert.equal(mutantesPresenca.run(data).warnings.length, 0);
+});
+
+test("gate-mutantes-presenca: mutante com arquivos ausentes, vazios ou formato legado é inválido", () => {
+  const malformed = [
+    {mutantDirs: [{id: "real", files: []}]},
+    {typeContractMutants: [{id: "real", files: [{path: "", content: ""}]}]},
+    {mutants: "plausible"},
+  ];
+  for (const overrides of malformed) {
+    const data = goodFixture();
+    data.assessments["01.01"] = {...data.assessments["01.01"], ...overrides};
+    const result = mutantesPresenca.run(data);
+    assert.ok(result.warnings.some(warning => warning.check === "mutante-invalido" && warning.activityId === "01.01"), JSON.stringify(result));
+  }
+});
+
+test("gate-mutantes-presenca: rejeita caminhos absolutos Windows e placeholder com espaços ou caixa diferente", () => {
+  for (const path of ["C:\\tmp\\x.js", "C:/x.js", "\\\\server\\x.js"]) {
+    const data = goodFixture();
+    data.assessments["01.01"].mutantDirs[0].files[0].path = path;
+    const result = mutantesPresenca.run(data);
+    assert.ok(result.warnings.some(warning => warning.check === "mutante-invalido"), path);
+  }
+
+  for (const id of ["plausible ", "Plausible", 7]) {
+    const data = goodFixture();
+    data.assessments["01.01"].mutantDirs[0].id = id;
+    const result = mutantesPresenca.run(data);
+    assert.ok(result.warnings.some(warning => warning.check === "mutantes-ausentes"), id);
+    if (typeof id !== "string") assert.ok(result.warnings.some(warning => warning.check === "mutante-invalido"), String(id));
+  }
 });
 
 test("gate-texto: detecta hint cortado, título sem acento, resposta fora do intervalo, feedback repetido e primeira resposta igual ao objetivo", () => {
@@ -145,6 +176,42 @@ test("gate-texto: detecta hint cortado, título sem acento, resposta fora do int
     objective: "Objetivo igual.",
   });
   assert.deepEqual(texto.run(sameResponse).warnings.map((w) => w.check), ["primeira-resposta"]);
+});
+
+test('gate-texto: avisa quando a dica copia o prompt ou a primeira resposta não é pergunta', () => {
+  const data = withActivity(goodFixture(), '01.01', {
+    stage: '04',
+    hints: ['Implemente `resultado` em main.js.'],
+    firstResponse: {action: 'Implemente `resultado` em main.js.'},
+  });
+  assert.deepEqual(texto.run(data).warnings.map(warning => warning.check),
+    ['dica-copia-prompt', 'primeira-pergunta']);
+});
+
+test('gate-texto: rejeita prefixo de dica copiada e pergunta genérica sobre objetivo', () => {
+  const data = withActivity(goodFixture(), '01.01', {
+    stage: '04',
+    title: 'Dobro',
+    hints: ['Pista: Implemente `resultado` em main.js.'],
+    firstResponse: {action: 'Em Dobro, qual é o objetivo?'},
+  });
+  assert.deepEqual(texto.run(data).warnings.map(warning => warning.check),
+    ['dica-copia-prompt', 'primeira-pergunta']);
+});
+
+test('checks da Fase 2 só bloqueiam IDs verificados, mantendo avisos dos demais', () => {
+  const data = goodFixture();
+  data.catalog = [
+    activity('04.01', {stage: '04', firstResponse: {action: 'Execute o código.'}}),
+    activity('05.01', {stage: '05', firstResponse: {action: 'Execute o código.'}}),
+  ];
+  const options = {scopedStrict: ['gate-texto:primeira-pergunta'], verifiedIds: new Set(['04.01'])};
+  const report = runChecks(data, options);
+  const gate = report.results.find(result => result.gate === 'gate-texto');
+  assert.equal(gate.blocking, 1);
+  assert.equal(gate.warnings.filter(warning => warning.check === 'primeira-pergunta').length, 2);
+  assert.equal(report.exitCode, 1);
+  assert.equal(runChecks(data, {...options, verifiedIds: new Set(['06.01'])}).exitCode, 0);
 });
 
 test("gate-texto: correctFeedback repetido na mesma etapa avisa; etapas diferentes não", () => {

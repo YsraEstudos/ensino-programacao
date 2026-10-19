@@ -69,7 +69,7 @@
   "12.09": "Baseline Node.js 24 LTS; `Promise.try` (ES2025, Node.js 23+) com o fallback descrito pelo contrato da atividade.",
   "12.13": "Baseline Node.js 24 LTS; `Array.fromAsync` (ES2026, Node.js 22+); o comportamento de cada API está delimitado pelo contrato desta atividade.",
   "12.14": "Baseline Node.js 24 LTS; `AggregateError` (ES2021, Node.js 15+); o comportamento de cada API está delimitado pelo contrato desta atividade.",
-  "13.10": "Node.js 24 e runner Vitest provisionado para o exercício; `Error.cause` (ES2022, Node.js 16.9+) para encadear causas nos testes.",
+  "13.10": "A avaliação automática de 13.10 roda no site pelo runtime de testes do DevPath, não pela CLI Vitest. Para reproduzir testes localmente, use Node.js 24 e adicione Vitest ao projeto exportado; `Error.cause` (ES2022, Node.js 16.9+) preserva a causa técnica.",
   "14.07": "Node.js 24 LTS com módulos ES; `Promise.try` (ES2025, Node.js 23+) está disponível no runtime do curso, e o cartão exige registrar a fonte oficial antes de adotá-lo.",
   "20.06": "Iterator helpers (`Iterator.from`, `.map`, `.filter`, `.take`, `.toArray`; Node.js 22+) funcionam no Node.js 24. `Iterator.concat` (ES2026) não está no Node.js 24 segundo a matriz de recursos: omita ou use feature detection e fallback."
 }

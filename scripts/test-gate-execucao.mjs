@@ -1,7 +1,7 @@
 // Prova do gate de execucao (scripts/gate-execucao.mjs): caso bom passa, caso forjado e pego, mutante travado morre por timeout.
 import assert from 'node:assert/strict';
 import {after, before, describe, test} from 'node:test';
-import {createContext, evaluateActivity, referenceFor} from './gate-execucao.mjs';
+import {allowsBehaviorPreservingStarter, createContext, evaluateActivity, referenceFor} from './gate-execucao.mjs';
 
 let ctx;
 before(async () => { ctx = await createContext(); });
@@ -21,6 +21,22 @@ describe('gate de execucao', () => {
     assert.equal(result.starter.kind, 'passed');
     assert.equal(result.status, 'fail');
     assert.ok(result.problems.includes('starter-not-failing'), JSON.stringify(result.problems));
+  });
+
+  test('04.10 permite starter de refatoracao de nomes apenas com contrato de preservacao e rubrica', {timeout: 120000}, async () => {
+    const item = ctx.catalog.get('04.10');
+    const assessment = ctx.assessments['04.10'];
+    assert.equal(allowsBehaviorPreservingStarter('04.10', assessment, item), true);
+    assert.equal(allowsBehaviorPreservingStarter('04.10', assessment, {...item, kind: 'FIX'}), false);
+    assert.equal(allowsBehaviorPreservingStarter('04.10', assessment, {...item, objective: 'Implemente novo comportamento'}), false);
+    assert.equal(allowsBehaviorPreservingStarter('04.10', {...assessment, rubric: ['Altera os resultados e a API']}, item), false);
+    assert.equal(allowsBehaviorPreservingStarter('04.10', {...assessment, rubric: []}, item), false);
+    assert.equal(allowsBehaviorPreservingStarter('04.09', assessment, item), false);
+    const result = await evaluateActivity(ctx, '04.10', {timeoutMs: 3000});
+    assert.equal(result.status, 'ok', JSON.stringify(result.problems));
+    assert.equal(result.reference.kind, 'passed');
+    assert.equal(result.mutantCount, 1);
+    assert.equal(result.mutants[0].killed, true);
   });
 
   test('mutante que trava (08.03, laco infinito) morre por timeout e o gate nao trava', {timeout: 120000}, async () => {

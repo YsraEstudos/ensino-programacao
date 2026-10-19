@@ -9,6 +9,16 @@ test('trace needs correct table and supplied code; edits invalidate completion',
     predict();assert(q('[data-s03-code]').readOnly);click('run');assert.equal(ctx.progress.exerciseEvidence['03.01@v2'].status,undefined);table();click('run');assert.equal(ctx.progress.exerciseEvidence['03.01@v2'].status,'executed');fill('[data-s03-reflection]','O contador avança após o corpo e o acumulador conserva a soma.');dom.window.document.querySelectorAll('[data-s03-rubric]').forEach(el=>{el.checked=true;w.DevPathStage03UI.handleInput({target:el},item,ctx);});click('complete');assert(w.DevPathStage03UI.complete(item,ctx.progress));fill('[data-s03-cell="0"]','9');assert.equal(w.DevPathStage03UI.complete(item,ctx.progress),false);
   }finally{dom.window.close();}
 });
+test('range classifier starter exposes the three missing bands and the verifier accepts every cut',()=>{
+  const {dom,w,item,ctx,q,click,fill,table,predict}=setup('03.04');try{
+    const starter=w.DevPathStage03Preparation['03.04'].starter;
+    assert.match(starter,/complete faixa D: nota < 40/);
+    assert.match(starter,/complete faixa C: nota < 60/);
+    assert.match(starter,/complete faixa B: nota < 80/);
+    predict();table();fill('[data-s03-code]',solutions['03.04']);click('run');
+    assert.equal(ctx.progress.exerciseEvidence['03.04@v2'].runResult,'result',q('[data-s03-output]').textContent);
+  }finally{dom.window.close();}
+});
 test('typing code preserves focus and empty drafts survive reload within API limits',()=>{
   const {dom,w,ctx,q,fill,predict}=setup('03.07');try{predict();q('[data-s03-code]').focus();fill('[data-s03-code]',solutions['03.07']);assert.equal(w.document.activeElement,q('[data-s03-code]'));assert(ctx.progress.exerciseDrafts['03.07@v2'].length<=2500);ctx.render();assert.equal(q('[data-s03-code]').value,solutions['03.07']);fill('[data-s03-code]','');ctx.render();assert.equal(q('[data-s03-code]').value,'');}finally{dom.window.close();}
 });

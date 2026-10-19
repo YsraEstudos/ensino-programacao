@@ -17,6 +17,17 @@ function fixture(id) {
   const input = (selector,value) => {const target=view.querySelector(selector); if(target.type==='checkbox')target.checked=value;else target.value=value;ui.handleInput({target},item,ctx);};
   ctx.render(); return {dom,item,ui,progress,view,ctx,click,input};
 }
+test('READ and INVESTIGATE diagnostics publish and display three specific, verifiable criteria',()=>{
+  for(const id of ['D.04','D.05','D.07','D.08','D.09']) {
+    const f=fixture(id);try {
+      assert.equal(f.item.rubric.length,3,`${id} catalog rubric`);
+      const section=f.view.querySelector('.diagnostic-reading-criteria');
+      assert(section,`${id} visible reading criteria`);
+      assert.equal(section.querySelectorAll('li').length,3,`${id} renders all criteria`);
+      for(const criterion of f.item.rubric) assert(section.textContent.includes(criterion),`${id} renders ${criterion}`);
+    } finally {f.dom.window.close();}
+  }
+});
 for (const id of Object.keys(diagnosticPreparation)) test(`${id}: unknown answers get explained feedback and allow completion`,()=>{
   const f=fixture(id); try {
     assert(!f.view.querySelector('[data-course-editor], [data-course-run]'),'diagnosis does not ask learners to edit or execute code');

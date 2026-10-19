@@ -1,4 +1,28 @@
 export function pipeline(source) {
-  const operators=[];
-  const api={map(fn){operators.push({kind:"map",fn});return api;},filter(fn){operators.push({kind:"filter",fn});return api;},take(count){operators.push({kind:"take",count});return api;},[Symbol.iterator](){let iterator=source[Symbol.iterator]();let taken=0;const limit=operators.find(op=>op.kind==="take");return {next(){if(limit&&taken>=limit.count){iterator.return?.();return {done:true,value:undefined};}while(true){const item=iterator.next();if(item.done)return item;let value=item.value,skip=false;for(const op of operators){if(op.kind==="map")value=op.fn(value);else if(op.kind==="filter"&&!op.fn(value)){skip=true;break;}}if(skip)continue;taken++;return {done:false,value};}}};}};return api;
+  return {
+    map(fn) {
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() { for (const value of input) yield fn(value); } });
+    },
+    filter(predicate) {
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() { for (const value of input) if (predicate(value)) yield value; } });
+    },
+    take(count) {
+      if (!Number.isInteger(count) || count < 0) throw new RangeError('take requer inteiro não negativo');
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() {
+        if (count === 0) return;
+        const iterator = input[Symbol.iterator]();
+        try {
+          for (let accepted = 0; accepted < count; accepted++) {
+            const step = iterator.next();
+            if (step.done) return;
+            yield step.value;
+          }
+        } finally { iterator.return?.(); }
+      } });
+    },
+    [Symbol.iterator]() { return source[Symbol.iterator](); },
+  };
 }

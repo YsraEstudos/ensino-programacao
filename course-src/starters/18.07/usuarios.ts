@@ -13,7 +13,7 @@ export function nomeDe(id: string): string {
   return usuario.nome;
 }
 
-// Escolha a política para id ausente (fallback ou erro explícito) e registre:
+// Para id ausente, inclusive constructor, toString e __proto__, lance RangeError com o id.
 // nomeDe("u1") -> "Ana"
-// nomeDe("u9") -> ___
+// nomeDe("u9") -> RangeError com "u9" na mensagem
 // Compile com e sem a flag. O JavaScript emitido muda? ___

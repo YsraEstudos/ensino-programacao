@@ -7,10 +7,11 @@ import {readFileSync, readdirSync, writeFileSync, mkdirSync} from 'node:fs';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
 import {spawnSync} from 'node:child_process';
+import {isStrictDescendant} from './temporary-path-guard.mjs';
 
 const root = process.cwd();
 const scratch = path.resolve(tmpdir());
-if (!path.resolve(root).toLowerCase().startsWith(scratch.toLowerCase())) {
+if (!isStrictDescendant(root, scratch)) {
   console.error(`Recusado: execute em uma cópia temporária dentro de ${scratch}, não no checkout (${root}).`);
   process.exit(3);
 }
@@ -26,6 +27,7 @@ const GENERATORS = [
   'scripts/task-9-stage23-12.mjs',
   'scripts/task-9-readmes.mjs',
   'scripts/task-9-canonical-texts.mjs',
+  'scripts/task-9-advanced-repairs.mjs',
 ];
 const steps = [...GENERATORS, 'course-src/build-public-curriculum.mjs'];
 

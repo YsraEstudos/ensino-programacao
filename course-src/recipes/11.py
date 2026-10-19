@@ -280,7 +280,8 @@ CONTENT = {
      'Use closest e cheque que botão pertence ao contêiner.',
      'Converta ou compare ID conforme contrato de dados.'), ("Listener único usa target.closest('button[data-id]'), verifica ul.contains(botao), "
      'resolve ID e atualiza estado antes de render.'), 'Lista de notificações adicionadas depois do mount -> um listener atende todas', 25, 'browser', ('Implemente delegação no ul: normalize o alvo com closest, confirme que o botão '
-     'pertence à lista e só então leia o identificador.',
+     'pertence à lista e só então leia o data-id não vazio. Ignore cliques sem botão válido '
+     'ou em botões fora da lista.',
      'Numa lista de arquivos, clicar no ícone dentro de Arquivar deve localizar o botão '
      'ancestral antes de ler seu data-id.',
      'Anote os alvos possíveis (botão ou filho) e o passo que os reduz ao controle válido.',
@@ -442,8 +443,8 @@ CONTENT = {
      'main importa ambos e é entrada única do HTML.'), ('Separe domínio/persistência em state, DOM em view e composição em main; use imports '
      'ESM explícitos e servidor local.'), 'Separar app de notas em model/view/main -> mesmas fronteiras', 22, 'browser', ('Separe o Kanban em estado, visualização e ponto de entrada. Defina dependências e '
      'dados entre fronteiras e valide o carregamento no navegador.',
-     'Num contador, state.js calcula o próximo valor, view.js desenha o número recebido e '
-     'main.js conecta clique, atualização e renderização.',
+     'Num Kanban, state.js carrega e salva as tarefas, view.js renderiza um snapshot e '
+     'main.js importa os dois módulos e inicia a lista HTML fornecida por boot.',
      'Desenhe setas entre state, view e main e anote qual dado/callback cruza cada uma '
      'antes de mover funções.',
      'Três painéis de arquivos com mapa de imports, ação executar via servidor local e '
@@ -497,32 +498,29 @@ CONTENT = {
          ),
 "11.12": C(
     'dom.untrusted_text',
-    ('renderComentario(container,texto) recebe string externa; usar createElement e '
-     'textContent'),
+    ('mostrarTitulo(alvo,titulo) recebe texto externo; renderize em nó de texto e '
+     'use comentário vazio para título vazio'),
     "'<b>olá</b>' -> texto literal com sinais < >; querySelector('b') -> null",
     ("'<img src=x onerror=alert(1)>' -> nenhum img criado; string vazia -> nó de "
      'comentário vazio; quebra de linha preservada como texto'),
     'Tratar texto externo como HTML confiável.',
-    ('Crie um elemento contêiner.',
-     'Atribua textContent, não innerHTML.',
-     'Verifique DOM resultante além da aparência visual.'),
-    ("const p=document.createElement('p');p.textContent=texto;container.append(p); não use "
-     'HTML parser para comentários.'),
+    ('Use o alvo fornecido; não crie um parágrafo para envolver o título.',
+     'Converta o valor para string e substitua os filhos por um nó de texto.',
+     'Para string vazia, crie um comentário vazio; inspecione childNodes, pois children exclui comentários.'),
+    ("const texto=String(titulo);alvo.replaceChildren(texto.length===0?alvo.ownerDocument.createComment(''):alvo.ownerDocument.createTextNode(texto));"),
     'Renderizar título de tarefa vindo de storage -> conteúdo literal',
     load={"novelty": 2, "syntax": 3, "composition": 3, "state": 2, "debugging": 2, "files": 2, "reading": 3, "independence": 3, "tools": 3},
         kind='UI',
     runtime='browser',
     estimated=12,
-    **_lesson('dom.untrusted_text', ('renderComentario(container,texto) recebe string externa; usar createElement e '
-     'textContent'), 'Tratar texto externo como HTML confiável.', ('Crie um elemento contêiner.',
-     'Atribua textContent, não innerHTML.',
-     'Verifique DOM resultante além da aparência visual.'), ("const p=document.createElement('p');p.textContent=texto;container.append(p); não use "
-     'HTML parser para comentários.'), 'Renderizar título de tarefa vindo de storage -> conteúdo literal', 12, 'browser', ('Implemente renderComentario e inspecione o texto visível e os nós realmente criados '
+    **_lesson('dom.untrusted_text', ('mostrarTitulo(alvo,titulo) recebe texto externo; renderize em nó de texto e '
+     'use comentário vazio para título vazio'), 'Tratar texto externo como HTML confiável.', ('Use o alvo fornecido; não crie um parágrafo para envolver o título.',
+     'Converta o valor para string e substitua os filhos por um nó de texto.',
+     'Para string vazia, crie um comentário vazio; inspecione childNodes, pois children exclui comentários.'), ("const texto=String(titulo);alvo.replaceChildren(texto.length===0?alvo.ownerDocument.createComment(''):alvo.ownerDocument.createTextNode(texto));"), 'Renderizar título de tarefa vindo de storage -> conteúdo literal', 12, 'browser', ('Implemente mostrarTitulo e inspecione o texto visível e os nós realmente criados '
      'no DOM.',
-     'Uma nota “2 < 5 & 7 > 3” pode aparecer como caracteres dentro de um parágrafo; a '
-     'árvore continua tendo apenas o parágrafo esperado.',
-     'Antes de codificar, preveja o elemento estrutural e se o texto cria algum '
-     'descendente.',
+     'A nota “2 < 5 & 7 > 3” aparece como texto literal em um único nó de texto, sem '
+     'elementos descendentes; título vazio produz um comentário vazio.',
+     'Antes de codificar, preveja os nós em childNodes: children não inclui nós de comentário.',
      'Editor da função, prévia do texto e inspetor de árvore com nomes/contagem de nós; '
      'execução por teclado e saída legível.',
      'Função inicial, container vazio e inspetor textual da árvore; execução local, sem '
@@ -580,28 +578,28 @@ CONTENT = {
 _LITERAL_STARTERS = {
     '11.01': "material.md: <!doctype html>\n<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"botao\">Abrir</span></a></article>\n\nCada um dos três nós tem um listener click em bubble que registra currentTarget.id. Clique em span.",
     '11.02': "material.md: Bloco A: const item = document.createElement('li');\nBloco B: const texto = document.createTextNode(mensagem);\nBloco C: const botao = document.createElement('button');\nBloco D: botao.textContent = 'Remover';\nBloco E: botao.addEventListener('click', () => item.remove());\nBloco F: item.append(texto, botao);\nBloco G: lista.append(item);\n\nContexto fixo: const lista = document.querySelector('ul'); const mensagem = '<b>rascunho</b>'; Os blocos estão fora de ordem; cada declaração ocorre uma vez.",
-    '11.03': "validate.js: export function validar({ nome, quantidade }) {\n  const erros = {};\n  // TODO: normalize o nome com trim e registre erro se ficar vazio.\n  // TODO: converta quantidade e aceite somente inteiro positivo.\n  // TODO: retorne { ok: true, nome, quantidade } ou { ok: false, erros }.\n}\n",
-    '11.04': "form.js: export function lerInscricao(form) {\n  const dados = new FormData(form);\n  const nome = dados.get('nome');\n  const quantidadeTexto = dados.get('quantidade');\n  const interesses = dados.getAll('interesse');\n  // TODO: normalize e valide sem descartar os valores do formulário.\n}\n\nconst area = document.createElement('div');\narea.innerHTML = '<form><input name=\"nome\"><input name=\"quantidade\"><input type=\"checkbox\" name=\"interesse\" value=\"JS\"><input type=\"checkbox\" name=\"interesse\" value=\"TS\"></form>';\nconst form = area.querySelector('form');\nform.elements.nome.value = 'Ana';\nform.elements.quantidade.value = '2';\nform.querySelectorAll('[name=interesse]')[0].checked = true;\nform.querySelectorAll('[name=interesse]')[1].checked = true;\nconsole.log(lerInscricao(form));",
-    '11.05': "app.js: const lista = document.querySelector('#lista');\nlet acoes = 0;\nconst limpezas = [];\n\nfunction render(itens) {\n  lista.replaceChildren();\n  for (const item of itens) {\n    const botao = document.createElement('button');\n    botao.textContent = item;\n    lista.append(botao);\n  }\n  const aoClicar = (event) => {\n    if (event.target.closest('button')) acoes += 1;\n  };\n  lista.addEventListener('click', aoClicar);\n  limpezas.push(() => lista.removeEventListener('click', aoClicar));\n}\n\nfunction destroy() {\n  lista.replaceChildren();\n  // BUG: limpezas nunca são executadas; renders também acumulam listeners.\n}\n\nexport { render, destroy };\nexport const getAcoes = () => acoes;",
+    '11.03': "validate.js: export function validar({ nome, quantidade }) {\n  const erros = {};\n  // TODO: normalize o nome com trim e registre erro se ficar vazio.\n  // TODO: converta quantidade e aceite somente inteiro positivo.\n  // TODO: retorne { ok: true, nome: nome.trim(), quantidade: numero } no sucesso.\n  // TODO: na falha retorne { ok: false, erros, valores: { nome, quantidade } }; valores preserva a entrada original.\n}\n",
+    '11.04': [{'path': 'form.js', 'content': "export function lerInscricao(form) {\n  const dados = new FormData(form);\n  const nome = dados.get('nome');\n  const quantidadeTexto = dados.get('quantidade');\n  const interesses = dados.getAll('interesse');\n  // TODO: normalize e valide sem descartar os valores do formulário.\n}\n"}, {'path': 'index.html', 'content': '<form id="inscricao"><label>Nome <input name="nome"></label><label>Quantidade <input name="quantidade" type="text"></label><fieldset><label><input type="checkbox" name="interesse" value="JS">JS</label><label><input type="checkbox" name="interesse" value="TS">TS</label></fieldset></form>\n'}],
+    '11.05': [{'path': 'app.js', 'content': "const lista = document.querySelector('#lista');\nlet acoes = 0;\nconst limpezas = [];\nfunction render(itens) {\n  lista.replaceChildren();\n  for (const item of itens) {\n    const botao = document.createElement('button');\n    botao.textContent = item;\n    lista.append(botao);\n  }\n  const aoClicar = (event) => {\n    if (event.target.closest('button')) acoes += 1;\n  };\n  lista.addEventListener('click', aoClicar);\n  limpezas.push(() => lista.removeEventListener('click', aoClicar));\n}\nfunction mount() { /* TODO: instale uma única delegação no contêiner */ }\nfunction destroy() {\n  lista.replaceChildren();\n  // BUG: limpezas nunca são executadas; renders também acumulam listeners.\n}\nexport { mount, render, destroy };\nexport const getAcoes = () => acoes;\n"}, {'path': 'index.html', 'content': '<ul id="lista"></ul>\n'}],
     '11.06': "app.js: export function montarDelegacao(lista, removerPorId) {\n  lista.addEventListener('click', (event) => {\n    // TODO: normalize o alvo clicado, inclusive quando for um span dentro do botão.\n    // TODO: ignore botão ausente, externo à lista ou com id desconhecido.\n    // TODO: chame removerPorId somente com o data-id do botão válido.\n  });\n}\n\n// A lista pode receber botões novos depois desta função ser chamada.\n// <ul id=\"tarefas\"><li><button data-id=\"7\"><span>Remover</span></button></li></ul>",
     '11.07': [
         {"path": "index.html", "content": "<form id=\"reserva\"><input id=\"email\" placeholder=\"E-mail\"><div id=\"enviar\" onclick=\"enviarFormulario()\">Enviar</div><p id=\"erro\">Campo inválido</p><p id=\"resultado\" aria-live=\"polite\"></p></form>"},
         {"path": "main.js", "content": "const form = document.querySelector('#reserva');\nconst email = document.querySelector('#email');\nform?.addEventListener('submit', event => { event.preventDefault(); if (!email.value.includes('@')) document.querySelector('#erro').textContent = 'Campo inválido'; });"},
     ],
     '11.08': [
-        {"path": "index.html", "content": "<!doctype html><form id=\"nova-tarefa\"><label for=\"texto\">Nova tarefa</label><input id=\"texto\" name=\"texto\" required><button type=\"submit\">Adicionar</button></form><p id=\"aviso\" aria-live=\"polite\"></p><main class=\"quadro\"><section aria-labelledby=\"todo-title\"><h2 id=\"todo-title\">A fazer</h2><ul id=\"todo\" data-status=\"todo\"></ul></section><section aria-labelledby=\"doing-title\"><h2 id=\"doing-title\">Em curso</h2><ul id=\"doing\" data-status=\"doing\"></ul></section><section aria-labelledby=\"done-title\"><h2 id=\"done-title\">Feito</h2><ul id=\"done\" data-status=\"done\"></ul></section></main>"},
+        {"path": "index.html", "content": "<!doctype html><link rel=\"stylesheet\" href=\"./style.css\"><form id=\"nova-tarefa\"><label for=\"texto\">Nova tarefa</label><input id=\"texto\" name=\"texto\" required><button type=\"submit\">Adicionar</button></form><p id=\"aviso\" aria-live=\"polite\"></p><main class=\"quadro\"><section aria-labelledby=\"todo-title\"><h2 id=\"todo-title\">A fazer</h2><ul id=\"todo\" data-status=\"todo\"></ul></section><section aria-labelledby=\"doing-title\"><h2 id=\"doing-title\">Em curso</h2><ul id=\"doing\" data-status=\"doing\"></ul></section><section aria-labelledby=\"done-title\"><h2 id=\"done-title\">Feito</h2><ul id=\"done\" data-status=\"done\"></ul></section></main><script type=\"module\" src=\"./app.js\"></script>"},
         {"path": "style.css", "content": ".quadro { display: grid; grid-template-columns: repeat(3, minmax(12rem, 1fr)); gap: 1rem; } section { border: 1px solid #999; padding: 1rem; }"},
-        {"path": "app.js", "content": "const STORAGE_KEY = 'kanban:v1';\nconst STATUSES = new Set(['todo', 'doing', 'done']);\nconst vazio = () => ({version: 1, tasks: []});\nexport function carregar(storage, warn = () => {}) { try { return JSON.parse(storage.getItem(STORAGE_KEY)) || vazio(); } catch { warn('JSON inválido'); return vazio(); } }\nexport function mover(estado, id, status) { return estado; }\nexport function renderizar(document, estado) { /* TODO: renderize cada status com textContent */ }\nexport function salvar(storage, estado) { storage.setItem(STORAGE_KEY, JSON.stringify(estado)); }\nexport function montarKanban(document, storage) { /* TODO: valide submit, mova por botões e anuncie */ }"},
+        {"path": "app.js", "content": "const STORAGE_KEY = 'kanban:v1';\nconst STATUSES = new Set(['todo', 'doing', 'done']);\nconst vazio = () => ({version: 1, tasks: []});\nexport function carregar(storage, warn = () => {}) { try { return JSON.parse(storage.getItem(STORAGE_KEY)) || vazio(); } catch { warn('JSON inválido'); return vazio(); } }\nexport function mover(estado, id, status) { /* TODO: status desconhecido lança RangeError; não mutar estado */ return estado; }\nexport function renderizar(document, estado) { /* TODO: renderize cada status com textContent */ }\nexport function salvar(storage, estado) { storage.setItem(STORAGE_KEY, JSON.stringify(estado)); }\nexport function montarKanban(document, storage) { /* TODO: valide submit, mova por botões, anuncie e retorne {getState: () => estadoAtual} */ }"},
     ],
     '11.09': "material.md: <!doctype html>\n<head>\n  <script>console.log('head clássico')</script>\n  <script defer src=\"defer.js\"></script>\n  <script async src=\"async.js\"></script>\n  <script type=\"module\" src=\"module.js\"></script>\n</head>\n<body><button id=\"salvar\">Salvar</button></body>\n<script>document.addEventListener('DOMContentLoaded', () => console.log('DOMContentLoaded'))</script>",
     '11.10': [
-        {"path": "state.js", "content": "const key = 'kanban:v1';\nexport function carregar(storage) { try { return JSON.parse(storage.getItem(key)); } catch { return {version: 1, tasks: []}; } }\nexport function mover(state, id, status) { return state; }\nexport function salvar(storage, state) { storage.setItem(key, JSON.stringify(state)); }"},
-        {"path": "view.js", "content": "export function render(document, state, list) { list.replaceChildren(...state.tasks.map(task => { const item = document.createElement('li'); item.innerHTML = task.text; return item; })); }"},
-        {"path": "main.js", "content": "import {carregar} from './state.js';\nimport {render} from './view.js';\nexport function boot(storage, document, list) { render(document, carregar(storage), list); }"},
+        {"path": "state.js", "content": "const key = 'kanban:v1';\nexport function carregar(storage) { try { return JSON.parse(storage.getItem(key)) || {version: 1, tasks: []}; } catch { return {version: 1, tasks: []}; } }\nexport function mover(state, id, status) { return state; }\nexport function salvar(storage, state) { storage.setItem(key, JSON.stringify(state)); }"},
+        {"path": "view.js", "content": "export function render(document, state, list) { list.replaceChildren(...state.tasks.map(task => { const item = document.createElement('li'); item.textContent = task.text; return item; })); }"},
+        {"path": "main.js", "content": "import {carregar} from './state.js';\nimport {render} from './view.js';\nexport function boot(storage, document, list) { render(document, carregar(storage), list); }\nif (typeof document !== 'undefined' && typeof localStorage !== 'undefined') { const list = document.querySelector('#todo'); if (list) boot(localStorage, document, list); }"},
     ],
     '11.11': "material.md: const pai = document.querySelector('#menu');\nconst item = document.querySelector('#item');\n\nitem.addEventListener('click', () => registrar('item'));\npai.addEventListener('click', () => registrar('pai'));\nitem.addEventListener('click', (event) => {\n  if (event.target.matches('[data-parar]')) event.stopPropagation();\n});\n\n// O terceiro listener é instalado depois do primeiro listener de item.",
     '11.12': "render.js: export function mostrarTitulo(alvo, titulo) {\n  alvo.innerHTML = titulo;\n}\n\nconst titulo = '<img src=x onerror=alert(1)> Revisão';\n// Alvo inicial: <h2 id=\"titulo\"></h2>",
-    '11.13': "migration.js: export function migrarV1ParaV2(entrada) {\n  // V1 usado pelo Kanban de 11.08: { version: 1, tasks: [{ id, text, status }] }\n  // V2 esperado: { version: 2, tasks: [{ id, text, status, priority }] }\n  // TODO: preserve ids/text/status, use priority='normal' quando ausente e valide por tarefa.\n}\n\nexport function carregar(entrada) {\n  // TODO: V1 passa pela migração uma vez; V2 não é migrado novamente.\n}\n",
+    '11.13': "migration.js: export function migrarV1ParaV2(entrada) {\n  // V1: { version: 1, tasks: [{ id, text, status }] }; V2 acrescenta priority.\n  // TODO: preserve ids/text/status, use priority='normal' quando ausente e valide por tarefa.\n}\n\nexport function carregar(entrada, avisos = []) {\n  // entrada pode ser objeto ou storage com getItem('kanban:v1').\n  // TODO: V1 passa pela migração uma vez; V2 não é migrado novamente.\n  // TODO: descarte apenas tarefa parcial, avise em avisos; JSON inválido não chama setItem.\n}\n",
     '11.14': "material.md: const botao = document.querySelector('#copiar');\nconst rolagem = document.querySelector('#conteudo');\nconst painel = document.querySelector('#painel');\nconst painelController = new AbortController();\n\nbotao.addEventListener('click', copiarTexto, { once: true });\nrolagem.addEventListener('wheel', observarRolagem, { passive: true });\npainel.addEventListener('click', atualizarPainel, { signal: painelController.signal });\n\n// Fechar o painel: painelController.abort(). Decida ciclo de vida e cancelamento padrão.",
 }
 for _card_id, _starter in _LITERAL_STARTERS.items():
@@ -634,6 +632,13 @@ CONTENT["11.08"]["solution"] = (
     "Implemente o Kanban V1 {version:1,tasks:[{id,text,status}]} com estado em memória como "
     "fonte, tarefas adicionadas/movidas/removidas, render seguro e storage local. Em JSON "
     "inválido mostre aviso e estado vazio sem sobrescrever o valor salvo."
+)
+
+# O HTML é contexto fornecido e somente leitura; não faz parte dos arquivos que o runner JavaScript avalia.
+CONTENT["11.10"]["prompt"] = (
+    CONTENT["11.10"]["prompt"]
+    + '\n\nO HTML abaixo é fornecido como contexto somente leitura; implemente a composição nos módulos, sem editar esta página:\n'
+    + '```html\n<!doctype html><meta charset="utf-8"><ul id="todo"></ul><script type="module" src="./main.js"></script>\n```'
 )
 CONTENT["11.13"]["public"] = (
     "V1 {version:1,tasks:[{id:'t1',text:'Ler pauta',status:'todo'}]} -> V2 "
@@ -753,8 +758,8 @@ _REVIEW_FEEDBACK = {
         "Se escolheu “Sempre espera o parse completo e conserva a ordem do HTML”, descreveu defer, não async. Se escolheu “Sempre executa depois de DOMContentLoaded”, aplicou a expectativa de defer a async; nenhuma das duas garantias vale para async.",
     ),
     "11.10": (
-        "O ponto de entrada compõe os módulos: state calcula o próximo valor, view desenha o número recebido e o ponto de entrada conecta clique e renderização, sem o domínio depender do DOM.",
-        "Se escolheu que state importa view, acoplou o estado ao DOM e perdeu a possibilidade de testar as regras sem navegador. Se escolheu variável global compartilhada, trocou imports explícitos por estado difícil de rastrear.",
+        "O ponto de entrada compõe os módulos: state carrega e salva tarefas, view renderiza o quadro e main conecta os imports à lista HTML, sem o estado depender do DOM.",
+        "Se state importar view, o domínio fica acoplado ao DOM e perde testes isolados. Se os módulos dependerem de uma variável global compartilhada, os imports deixam de explicitar o fluxo de dados.",
     ),
     "11.11": (
         "preventDefault cancela a ação padrão cancelável, como a navegação de um link; ele não remove listeners nem muda a fase, e os ancestrais continuam recebendo o evento.",

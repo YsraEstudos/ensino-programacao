@@ -1,3 +1,7 @@
+// Contrato visível 21.05:
+// Exporte contarPrimos(n): número de primos até n, inclusive.
+// n negativo, fracionário, NaN, Infinity ou texto lança RangeError com message "n must be a nonnegative integer".
+
 // 21.05 · Cálculo puro que bloqueia a interface quando n é grande.
 // Este arquivo roda no executor do site; worker.js e main.js rodam no navegador, servidos localmente.
 

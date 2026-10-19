@@ -4,7 +4,7 @@ CONTENT = {
     "07.01": E(
         "arrays.method_choice",
         "intenções: dobrar todos; manter pares; achar primeiro; existe negativo?; todos positivos?; somar; transformar nomes; remover vazios; achar id; há ativo?; todos válidos?; produto",
-        "respostas na ordem -> map,filter,find,some,every,reduce,map,filter,find,some,every,reduce",
+        "intenção 'há algum item inválido?' -> resposta booleana",
         "intenção 'primeiro maior que 10' -> find; 'quantos maiores que 10' -> filter(...).length ou reduce justificado",
         "Escolher método pela última aula, não pelo formato do resultado.",
         "Usa map para boolean ou find para array completo.",
@@ -14,7 +14,7 @@ CONTENT = {
             "Para um item, find; para boolean, some/every.",
             "Use reduce quando realmente há acumulação.",
         ),
-        "A lista pública associa cada intenção à operação mais direta; alternativas equivalentes são aceitas quando a justificativa explica o trade-off.",
+        "A tabela inicial deixa o método em branco para que você associe cada intenção à forma da saída. Justifique alternativas equivalentes quando houver trade-off.",
         "Escolher método para logs: existe ERROR? e primeiro ERROR -> some e find",
         prompt="Classifique as 12 intenções pelo formato pedido (coleção nova, subconjunto, primeiro item, sim/não ou acumulado), depois preencha método e justificativa. Por fim, resolva separadamente 'primeiro valor maior que 10' e 'quantos valores maiores que 10'.",
         kind="COMPARE",
@@ -30,7 +30,7 @@ CONTENT = {
         interaction="Tabela editável de 12 linhas: Intenção, Forma da saída, Método, Justificativa; mais dois campos para as perguntas novas. Tab percorre células, cabeçalhos são anunciados pelo leitor de tela e nada depende de cor ou arrastar.",
         resources=(
             "Tabela das 12 intenções, exibida no próprio cartão.",
-            "Exemplo público: transformar todos, manter pares, achar primeiro, responder existência/universalidade e somar; permanece visível durante a classificação.",
+            "Exemplo público: a pergunta “há algum item inválido?” pede uma resposta booleana; fica visível durante a classificação.",
             "Duas perguntas novas no prompt: primeiro valor acima do limite e quantidade acima do limite; nenhum arquivo ou asset separado está cadastrado.",
         ),
         review={

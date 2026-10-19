@@ -1,5 +1,7 @@
-import { soma } from './math.js';
+import {somar} from './math.js';
 import './style.css';
-import { mostrarDetalhe } from './details.js';
-document.querySelector('#result').textContent = String(soma(2, 3));
-document.querySelector('#details').addEventListener('click', mostrarDetalhe);
+document.querySelector('#resultado').textContent = `Total: ${somar(2, 3)}`;
+document.querySelector('#detalhes').addEventListener('click', async () => {
+  const {descrever} = await import('./details.js');
+  document.querySelector('#resultado').textContent = descrever(5);
+});

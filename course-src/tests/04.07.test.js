@@ -8,6 +8,10 @@ describe("adicionarTaxa", () => {
     /*@case 04.07.meio-centavo-arredonda-para--3708a273*/expect(adicionarTaxa(105, 0.1)).toBe(116);
     /*@case 04.07.meio-centavo-arredonda-para--74b2d9bb*/expect(adicionarTaxa(5, 0.1)).toBe(6);
   });
+  test("distingue arredondamento de ceiling", () => {
+    expect(adicionarTaxa(1, 0.1)).toBe(1);
+    expect(adicionarTaxa(333, 0.07)).toBe(356);
+  });
   test("zeros", () => {
     /*@case 04.07.zeros-45d18eb5*/expect(adicionarTaxa(0, 0)).toBe(0);
     /*@case 04.07.zeros-2712a93e*/expect(adicionarTaxa(0, 0.5)).toBe(0);

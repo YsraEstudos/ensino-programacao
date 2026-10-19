@@ -1,5 +1,5 @@
-import {calcular, encerrar} from '../main.js';
-import {contarPrimos} from '../primos.js';
+import {calcular, encerrar} from './main.js';
+import {contarPrimos} from './primos.js';
 
 function observeWorker({reorder = false} = {}) {
   const exposedPrototype = Worker.prototype;

@@ -27,6 +27,13 @@ test('restored completion flags cannot approve incorrect code',()=>{
 test('mastery transfers reject a copied second value without the requested reassignment',()=>{
   const f=fixture('01.09');try{for(const t of stage01Preparation['01.09'].masteryTransfers){const name=t.id==='config'?'duracao':'horas', value=t.id==='config'?'30':'6';const shortcut=t.solution.replace(new RegExp(`${name} = ${value};`),'').replaceAll(`\${${name}}`, `\${${name}}`);assert.equal(f.dom.window.DevPathStage01Checks.checkTransfer(t.id,shortcut).ok,false);}}finally{f.dom.window.close();}
 });
+test('01.09 transfer prompts expose the exact values their checks require',()=>{
+  const f=fixture('01.09');try {
+    const prompts=[...f.view.querySelectorAll('.s01-transfer > p')].map(node=>node.textContent);
+    assert.match(prompts[0],/30/);
+    assert.match(prompts[1],/6 horas/);
+  } finally {f.dom.window.close();}
+});
 for(const id of Object.keys(solutions)) test(`${id}: real UI requires prediction, passing code, explanation and explicit completion`,()=>{
   const f=fixture(id);try {
     f.click('[data-stage01-action="run"]');assert.equal(f.progress.stage01[id].passedCode,null);

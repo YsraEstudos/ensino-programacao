@@ -222,7 +222,7 @@ CONTENT = {
         },
         transfer_prompt='Projete leitura de configuração de painel distinguindo texto corrompido de objeto válido com versão/tipo incompatível; descreva validação e resposta segura.',
 
-        prompt='Corrija lerSave separando falha de sintaxe JSON de validação do formato parseado. Classifique os exemplos antes da execução e explique as duas etapas.',
+        prompt='Leia lerSave e compare JSON inválido, JSON válido com esquema inesperado e as perdas no round-trip. Classifique os exemplos antes da execução e explique por que parse e validação de esquema são etapas diferentes.',
     ),
     "06.07": E(
         "objects.index_by_id",

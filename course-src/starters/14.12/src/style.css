@@ -1,2 +1,2 @@
-body { font: 1rem sans-serif; }
-button { color: navy; }
+body { font-family: sans-serif; margin: 2rem; }
+#resultado { color: #174d35; }

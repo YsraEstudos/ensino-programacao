@@ -1,3 +1,4 @@
-import {carregar, mover, salvar} from './state.js';
+import {carregar} from './state.js';
 import {render} from './view.js';
-export function wire({storage, document, list}) { let state = carregar(storage); render(document, state, list); return (id, status) => { state = mover(state, id, status); salvar(storage, state); render(document, state, list); }; }
+export function boot(storage, document, list) { const state = carregar(storage); render(document, state, list); return state; }
+if (typeof document !== 'undefined' && typeof localStorage !== 'undefined') { const list = document.querySelector('#todo'); if (list) boot(localStorage, document, list); }

@@ -4,6 +4,8 @@
 //   review-resposta       review.answer fora do intervalo de review.choices
 //   feedback-repetido     review.correctFeedback repetido dentro da mesma etapa
 //   primeira-resposta     firstResponse.action igual a objective
+//   primeira-pergunta     primeira resposta de etapa guiada não é pergunta
+//   dica-copia-prompt     primeira dica de etapa guiada repete o enunciado
 import { wordRegExp } from "./gate-common.mjs";
 
 export const GATE = "gate-texto";
@@ -57,17 +59,35 @@ function normalizeText(value) {
   return String(value ?? "").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
+function copiesPrompt(hint, prompt) {
+  const source = normalizeText(prompt);
+  if (!source) return false;
+  const text = normalizeText(hint);
+  // Prefixos de dica não tornam uma cópia integral uma pista independente.
+  return text.includes(source) || text.startsWith('releia o enunciado e separe entrada, saída e restrições:');
+}
+
+function genericObjectiveQuestion(action) {
+  return /\b(?:qual (?:é|seria) (?:o |a )?(?:objetivo|tarefa|enunciado)|o que (?:devo|preciso) fazer)\b/i.test(action);
+}
+
 export function run({ catalog = [] } = {}) {
   const warnings = [];
   const push = (activityId, check, message) => warnings.push({ activityId, check, message });
 
   for (const activity of catalog) {
     const id = activity.id;
+    const guidedStage = Number(activity.stage) >= 4;
 
     for (const hint of Array.isArray(activity.hints) ? activity.hints : []) {
       const text = String(hint).trim();
       if (/\p{L}$/u.test(text)) {
         push(id, "hint-cortado", `hint termina no meio da palavra: "...${text.slice(-30)}"`);
+      }
+    }
+    if (guidedStage && Array.isArray(activity.hints) && activity.hints.length) {
+      if (copiesPrompt(activity.hints[0], activity.prompt)) {
+        push(id, 'dica-copia-prompt', 'primeira dica repete o enunciado em vez de oferecer uma pista própria');
       }
     }
 
@@ -89,6 +109,10 @@ export function run({ catalog = [] } = {}) {
     if (activity.firstResponse && typeof activity.firstResponse.action === "string") {
       if (normalizeText(activity.firstResponse.action) === normalizeText(activity.objective)) {
         push(id, "primeira-resposta", "firstResponse.action é igual ao objective");
+      }
+      if (guidedStage && (!activity.firstResponse.action.trim().endsWith('?') ||
+          genericObjectiveQuestion(activity.firstResponse.action))) {
+        push(id, 'primeira-pergunta', 'firstResponse.action deve pedir uma hipótese inicial concreta, não apenas perguntar pelo objetivo');
       }
     }
   }

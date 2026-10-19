@@ -1,1 +1,15 @@
-export function debounce(fn,wait,{set=setTimeout,clear=clearTimeout}={}){let timer;const f=(...a)=>{if(timer!==undefined)clear(timer);timer=set(()=>{timer=undefined;fn(...a);},wait);};f.cancel=()=>{if(timer!==undefined)clear(timer);timer=undefined;};return f;}export function throttle(fn,wait,{now=Date.now}={}){let last=-Infinity;return(...a)=>{const t=now();if(t-last>=wait){last=t;fn(...a);}};}
+export function debounce(fn, wait, relogio = {setTimeout, clearTimeout}) {
+  let timer;
+  const schedule = relogio.setTimeout ?? relogio.set;
+  const cancel = relogio.clearTimeout ?? relogio.clear;
+  const wrapped = (...args) => {
+    if (timer !== undefined) cancel(timer);
+    timer = schedule(() => { timer = undefined; fn(...args); }, wait);
+  };
+  wrapped.cancel = () => { if (timer !== undefined) cancel(timer); timer = undefined; };
+  return wrapped;
+}
+export function throttle(fn, wait, relogio = {agora: Date.now}) {
+  let last = -Infinity;
+  return (...args) => { const now = (relogio.agora ?? relogio.now)(); if (now - last >= wait) { last = now; fn(...args); } };
+}

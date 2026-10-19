@@ -226,6 +226,21 @@ test('DOM and network behavior do not fall back to JavaScript execution', async 
   assert.equal(result.kind, 'unsupported');
 });
 
+test('generic DOM behavior forwards public assertion case records to the DOM runner', async () => {
+  const assertionCases = [{id: '11.04.case-1', title: 'renders totals'}, {id: '11.05.case-2', title: 'updates the summary'}];
+  let capturedOptions;
+  const api = load({domRunner: async (_spec, options) => {
+    capturedOptions = options;
+    return {kind: 'passed', text: 'DOM checks passed', tests: {passed: 2, failed: 0, total: 2}};
+  }});
+  const result = await api.run({item: base, assessment: {
+    environment: 'dom', version: 1, checks: ['behavior'], tests: 'test("renders", () => {});', assertionCases,
+  }, files: [{path: 'main.js', content: 'export const ready = true;'}], fingerprint: 'generic-dom'});
+
+  assert.equal(result.kind, 'passed');
+  assert.strictEqual(capturedOptions.assertionCases, assertionCases);
+});
+
 test('protected DOM behavior runs against submitted HTML and source', async () => {
   let captured;
   const protectedTests='test("measures page", () => { expect(document.querySelector("#resultados")).toBeTruthy(); });';

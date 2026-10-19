@@ -228,6 +228,63 @@ test('legacy freeform prediction remains visible until explicit structured repla
   assert.match(html, /data-course-run="04\.03"/, 'a current versioned response unlocks execution');
 });
 
+test('opted-in prediction hides starter source until a compatible response without changing other IDs', async () => {
+  const sourceMarker = 'export const marker = "starter-source";';
+  const table = {version: 1, instructions: 'Registre sua previsão.', fields: [{id: 'crescimentos', path: '[*].crescimento'}], revealSourceAfterPrediction: true};
+  const item08 = {id: '08.01', stage: '08', kind: 'PREDICT', contentVersion: 1,
+    firstResponse: {action: 'Classifique os crescimentos.', timing: 'Antes de executar.'},
+    preparation: {practiceSteps: ['Classifique os trechos.'], predictionGuide: 'Preveja a saída.'},
+    explanation: {mental_model: 'm', worked_example: 'w', common_trap: 't', why_it_matters: 'y'},
+    prompt: 'Classifique os trechos.', interaction: 'Registre uma previsão.', starterFiles: [{path: 'main.js', content: sourceMarker}]};
+  const {controller, ctx} = lessonController([item08], {'08.01': {environment: 'javascript', version: 1, checks: ['behavior'], predictionTable: table}});
+  ctx.progress.warmupCompleted = {'08.01': false};
+
+  let html = controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source/, 'first render must not leak source while assessment metadata is loading');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  html = controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source/, 'unanswered opted-in activity hides source after metadata loads');
+
+  ctx.progress.warmupCompleted['08.01'] = true;
+  ctx.progress.exercisePredictions['08.01'] = 'resposta antiga em formato livre';
+  html = controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source/, 'an incompatible preserved response does not unlock the preview');
+  assert.match(html, /resposta antiga em formato livre/, 'the learner\'s legacy response remains visible');
+  ctx.progress.exercisePredictions['08.01'] = JSON.stringify({version: 0, answers: {crescimentos: 'resposta anterior'}});
+  html = controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source/, 'a structured response from another table version also keeps the preview hidden');
+  assert.match(html, /resposta anterior/, 'the incompatible structured response remains visible for explicit replacement');
+
+  ctx.progress.exercisePredictions['08.01'] = JSON.stringify({version: 1, answers: {crescimentos: 'O(n)'}});
+  html = controller.renderCurriculumLesson(item08);
+  assert.match(html, /starter-source/, 'a compatible registered prediction unlocks the standard starter preview');
+  assert.match(html, /data-course-editor="08\.01"/, 'the practice editor is also available after answerReady');
+
+  const legacyWarmup = lessonController([item08], {'08.01': {environment: 'javascript', version: 1, checks: ['behavior'], predictionTable: table}}, {'08.01': 'previsão antiga em formato livre'});
+  html = legacyWarmup.controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source|data-course-editor="08\.01"/, 'saved legacy progress cannot unlock source or editor before assessment metadata loads');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  html = legacyWarmup.controller.renderCurriculumLesson(item08);
+  assert.match(html, /previsão antiga em formato livre/, 'legacy progress remains visible after metadata arrives');
+  assert.doesNotMatch(html, /starter-source|data-course-editor="08\.01"/, 'incompatible legacy progress remains gated after metadata validation');
+
+  const structuredWarmup = lessonController([item08], {'08.01': {environment: 'javascript', version: 1, checks: ['behavior'], predictionTable: table}}, {'08.01': JSON.stringify({version: 1, answers: {crescimentos: 'O(n)'}})});
+  html = structuredWarmup.controller.renderCurriculumLesson(item08);
+  assert.doesNotMatch(html, /starter-source|data-course-editor="08\.01"/, 'saved structured progress also waits for assessment metadata on first paint');
+  await new Promise(resolve => setTimeout(resolve, 0));
+  html = structuredWarmup.controller.renderCurriculumLesson(item08);
+  assert.match(html, /starter-source/, 'a saved compatible prediction unlocks the preview once metadata is verified');
+  assert.match(html, /data-course-editor="08\.01"/, 'a saved compatible prediction unlocks the editor once metadata is verified');
+
+  const item07 = {...item08, id: '07.01', stage: '07', starterFiles: [{path: 'main.js', content: sourceMarker}]};
+  const other = lessonController([item07], {'07.01': {environment: 'javascript', version: 1, checks: ['behavior']}});
+  other.ctx.progress.warmupCompleted = {'07.01': false};
+  other.controller.renderCurriculumLesson(item07);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  html = other.controller.renderCurriculumLesson(item07);
+  assert.match(html, /starter-source/, 'an ID without the opt-in keeps its published preview behavior');
+});
+
 test('prediction table version mismatch stays visible and does not unlock execution', async () => {
   const item = {id: '04.03', stage: '04', kind: 'PREDICT', contentVersion: 1, autoTested: true, firstResponse: {action: 'Preveja os resultados.', timing: 'Antes de executar.'}, explanation: {mental_model: 'm', worked_example: 'w', common_trap: 't', why_it_matters: 'y'}, starterFiles: [{path: 'main.js', content: 'export const value = 1;'}]};
   const table = {version: 2, instructions: 'Preveja os valores.', fields: [{id: 'value', label: 'value'}]};

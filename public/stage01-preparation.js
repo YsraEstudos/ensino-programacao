@@ -768,7 +768,7 @@ globalThis.DevPathStage01Preparation = {
       {
         "id": "config",
         "title": "Configuração de agenda",
-        "prompt": "Modele uma agenda com nome, duração e avisos; altere apenas duração e imprima dois estados.",
+        "prompt": "Modele uma agenda com nome, duração e avisos. Comece com duração 0, atualize-a para 30 e imprima os dois estados.",
         "starter": "const nome = \"Agenda\";\nlet duracao = 0;\nconst avisos = false;",
         "expected": [
           "Agenda | duração 0 | avisos false",
@@ -809,7 +809,7 @@ globalThis.DevPathStage01Preparation = {
       {
         "id": "duration",
         "title": "Duração por dias e horas",
-        "prompt": "Produza uma ficha textual usando dias e horas e atualize apenas horas.",
+        "prompt": "Comece com 2 dias e 4 horas, atualize apenas horas para 6 horas e imprima os dois estados.",
         "starter": "const dias = 2;\nlet horas = 4;",
         "expected": [
           "2 dias | 4 horas",

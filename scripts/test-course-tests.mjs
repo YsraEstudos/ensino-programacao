@@ -21,6 +21,23 @@ const observationalStarterPassKinds = new Map([
   ['10.01', 'PREDICT'], ['11.01', 'TRACE'], ['11.11', 'COMPARE'], ['11.14', 'COMPARE'],
   ['12.11', 'INVESTIGATE'], ['12.14', 'PREDICT'],
 ]);
+// These exact objectives can pass their starter behavior checks by design:
+// 18.10 replaces copied aliases with utility types that preserve the same types;
+// 20.01 is a TRACE activity that records the iterator behavior already present;
+// 23.04 characterizes legacy behavior and asks for a behavior-preserving refactor.
+// This allowance covers functional behavior only; refactor structure remains a
+// separate rubric/focused review criterion. Keep each expected kind explicit so
+// an objective whose kind changes cannot silently inherit this exception.
+const objectiveSpecificStarterPassKinds = new Map([
+  ['18.10', 'MODIFY'],
+  ['20.01', 'TRACE'],
+  ['23.04', 'MODIFY'],
+]);
+for (const [id, kind] of objectiveSpecificStarterPassKinds) {
+  const item = catalog.find(entry => entry.id === id);
+  assert.ok(item?.autoTested, `${id}: objective-specific starter acceptance requires its autoTested gate`);
+  assert.equal(item.kind, kind, `${id}: objective kind changed; revisit its bounded starter acceptance`);
+}
 const moduleGraph = (() => { const w = {TextEncoder}; w.window = w; vm.runInThisContext('(function(window){' + readFileSync('public/module-graph.js', 'utf8') + '})')(w); return w.DevPathModuleGraph; })();
 const assessmentSource = readFileSync('public/course-assessment.js', 'utf8');
 const typescriptLibraries = Object.fromEntries(readTypescriptDirectory('node_modules/typescript/lib')
@@ -178,6 +195,39 @@ test('16–19 affected transfer cards have distinct scenarios, boundaries, and s
     return content;
   });
   assert.equal(new Set(contents).size, ids.length, 'each activity needs an independent scenario');
+});
+
+test('Fase 7: as referências dos 10 IDs passam e o avaliador rejeita seus mutantes publicados', async () => {
+  const ids = ['15.02','15.03','15.04','15.07','15.08','15.11','16.02','16.03','16.04','16.05'];
+  let exercised = 0;
+  for (const id of ids) {
+    const item = catalog.find(entry => entry.id === id);
+    const source = assessments[id];
+    assert.ok(item && source?.correctFiles?.length, `${id}: item e implementação de referência obrigatórios`);
+    assert.ok(tests[id], `${id}: suíte publicada obrigatória`);
+    const mutantCases = [
+      ...(source.mutantDirs || []).map(mutant => ({field: 'mutantDirs', mutant})),
+      ...(source.typeContractMutants || []).map(mutant => ({field: 'typeContractMutants', mutant})),
+    ];
+    assert.ok(mutantCases.length, `${id}: ao menos um mutante executável`);
+    for (const {field, mutant} of mutantCases) {
+      const env = setup();
+      try {
+        const w = await assessmentContext(env);
+        const assessment = {
+          ...source,
+          tests: tests[id],
+          mutantDirs: field === 'mutantDirs' ? [mutant] : source.mutantDirs || [],
+          typeContractMutants: field === 'typeContractMutants' ? [mutant] : source.typeContractMutants || [],
+        };
+        const result = await w.DevPathAssessment.run({item, assessment, files: source.correctFiles, fingerprint: `${id}:fase7:${field}:${mutant.id}`});
+        assert.equal(result.kind, 'passed', `${id}/${field}/${mutant.id}: referência e mutante devem satisfazer o contrato de avaliação; ${result.text}`);
+        assert.equal(result.tests?.failed || 0, 0, `${id}/${field}/${mutant.id}: implementação correta deve passar`);
+        exercised++;
+      } finally { await env.close(); }
+    }
+  }
+  assert.equal(exercised, 12, 'a lista atual contém 12 mutantes comportamentais/type-contract nos 10 IDs');
 });
 
 test('15.01 reports only the six published intentional diagnostics', async () => {
@@ -347,11 +397,13 @@ for (const item of catalog.filter(entry => entry.autoTested)) {
   const assessment = assessments[item.id];
   const predictionOrReading = observationalStarterPassKinds.get(item.id) === item.kind
     && assessment.assertionCases?.length > 0;
+  const objectiveSpecificStarterPassKind = objectiveSpecificStarterPassKinds.get(item.id);
+  const objectiveSpecificStarterPass = objectiveSpecificStarterPassKind === item.kind;
   const renameRegression = item.id === '04.10'
     && /renome|novo nome/i.test(item.objective || '')
     && assessment.checks.includes('rubric');
-  const title = predictionOrReading || renameRegression
-    ? `${item.id}: intentional starter observation and reference solution pass`
+  const title = predictionOrReading || renameRegression || objectiveSpecificStarterPass
+    ? `${item.id}: objective-specific starter acceptance and reference solution pass`
     : `${item.id}: starter fails and reference solution passes`;
   test(title, async () => {
     assert.ok(assessment?.referenceDir, `${item.id}: missing referenceDir`);
@@ -361,7 +413,7 @@ for (const item of catalog.filter(entry => entry.autoTested)) {
     try {
       const runnable = file => /\.(?:m?js|jsx|ts|tsx|json)$/.test(file.path) || (['dom', 'network'].includes(assessment.environment) && /\.(?:html?|css)$/.test(file.path));
       const starter = await execute(env, item.starterFiles.filter(runnable), item.id);
-      if (predictionOrReading || renameRegression) {
+      if (predictionOrReading || renameRegression || objectiveSpecificStarterPass) {
         assert.equal(starter.kind, 'result', `${item.id}: the reference observation for this ${item.kind} activity must execute (${starter.text})`);
         assert.equal(starter.tests?.failed, 0, `${item.id}: intentional reference observation should pass (${starter.text})`);
       } else {
@@ -378,6 +430,16 @@ for (const item of catalog.filter(entry => entry.autoTested)) {
       const hasPublishedCases = (assessment.assertionCases || []).length > 0;
       assert.ok(solved.tests.total >= 1 && (assertionCount >= 2 || solved.tests.total >= 2 || hasPublishedCases), `${item.id}: no executed behavioral checks tied to a published case (${solved.tests.total} tests, ${assertionCount} assertions)`);
       assert.equal(solved.tests.failed, 0, solved.text);
+      if (objectiveSpecificStarterPass) {
+        for (const mutant of assessment.mutantDirs || []) {
+          const mutantFiles = new Map((mutant.files || []).map(file => [file.path, file.content]));
+          const incorrect = files.map(file => mutantFiles.has(file.path) ? {...file, content: mutantFiles.get(file.path)} : file);
+          for (const [path, content] of mutantFiles) if (!incorrect.some(file => file.path === path)) incorrect.push({path, content});
+          const rejected = await execute(env, incorrect, item.id);
+          assert.ok(['failed', 'result'].includes(rejected.kind), `${item.id}/${mutant.id}: expected semantic execution, got ${rejected.kind}: ${rejected.text}`);
+          assert.ok(rejected.tests?.failed > 0, `${item.id}/${mutant.id}: authored behavioral cases must reject this incorrect behavior (${rejected.text})`);
+        }
+      }
       if (item.id === '11.07') {
         const brokenMarkup = item.starterFiles.filter(runnable).map(file => file.path === 'main.js' ? referenceFiles.get('main.js') : file);
         const markupOnly = await execute(env, brokenMarkup, item.id);

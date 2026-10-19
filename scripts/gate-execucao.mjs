@@ -76,6 +76,16 @@ function mutantsFor(assessment, override) {
   }));
 }
 
+export function allowsBehaviorPreservingStarter(id, assessment, item) {
+  return id === '04.10'
+    && item?.kind === 'MODIFY'
+    && /identificador interno/i.test(item?.objective || '')
+    && /novo nome/i.test(item?.objective || '')
+    && assessment?.checks?.includes('behavior')
+    && assessment?.checks?.includes('rubric')
+    && assessment?.rubric?.some(criterion => /preserv/i.test(criterion) && /resultado|comportamento/i.test(criterion));
+}
+
 // Loads the published artifacts and the evaluator once per process (jsdom + esbuild-wasm + TypeScript libs).
 export async function createContext() {
   const catalog = new Map(JSON.parse(readFileSync('public/course-catalog.json', 'utf8')).map(item => [item.id, item]));
@@ -169,7 +179,7 @@ export async function evaluateActivity(ctx, id, opts = {}) {
     mutants.push({id: mutant.id, kind: result.kind, killed: FAILING_KINDS.has(result.kind), killedByTimeout: result.kind === 'timeout', ms: result.ms});
   }
   const problems = [];
-  if (starter.kind === 'passed') problems.push('starter-not-failing');
+  if (starter.kind === 'passed' && !allowsBehaviorPreservingStarter(id, assessment0, item)) problems.push('starter-not-failing');
   if (referenceResult.kind !== 'passed') problems.push(`reference-failing (${referenceResult.kind})`);
   for (const mutant of mutants) if (mutant.kind !== 'not-run' && !mutant.killed) problems.push(`mutant-surviving ${mutant.id} (${mutant.kind})`);
   return {

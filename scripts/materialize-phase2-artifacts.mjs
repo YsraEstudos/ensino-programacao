@@ -28,6 +28,23 @@ const put = (relative, content) => {
   writeFileSync(target, content.endsWith('\n') ? content : `${content}\n`);
 };
 
+const typeRubric = id => id === '19.06'
+  ? [
+      'Aplicar -readonly e -? e comprovar que as propriedades resultantes são obrigatórias e graváveis.',
+      'No TypeScript 6.0.3 em --strict sem exactOptionalPropertyTypes, testar ausência e undefined em propriedades opcionais, inclusive union explícito; ambos são rejeitados.',
+      'Com exactOptionalPropertyTypes, um union explícito com undefined permanece; comparar os dois modos antes de normalizar Settings.',
+    ]
+  : ['Os type tests confirmam as relações e rejeitam os casos inválidos publicados.'];
+
+if (process.argv.includes('--only=19.06-rubric')) {
+  const assessments = readJson('course-src/assessments.json');
+  if (assessments['19.06']?.environment !== 'typescript') throw new Error('19.06 assessment tipado ausente');
+  assessments['19.06'].rubric = typeRubric('19.06');
+  writeJson('course-src/assessments.json', assessments);
+  console.log('Regenerated 19.06 type rubric from the canonical Phase 2 materializer.');
+  process.exit(0);
+}
+
 const starters = {
   '11.01': {
     files: {'index.html':'<!doctype html><article id="pai"><a id="filho" href="#"><span id="alvo">Abrir</span></a></article>', 'main.js':`export function observarClique(root) {
@@ -283,7 +300,7 @@ for(const [id,definition] of Object.entries(typeContracts)){
   };
   const mutantPath=`mutants/${id}/weakened/${definition.entry}`;
   put(path.join('course-src',mutantPath),mutantSources[id]);
-  assessments[id]={environment:'typescript',version:(old?.version||1)+1,checks:definition.test?['types','behavior']:['types','mutation'],entryPath:definition.entry,...(definition.test?{testPath:`tests/${id}.test.js`,behaviorTestPath:'__devpath_protected_behavior__.js'}:{}),referenceDir:`solutions/${id}`,correctFiles:[{path:definition.entry,content:referenceSources[id]}],contractTypeFiles:[{path:assertionsPath,content:definition.assertions}],...(!definition.test?{typeContractMutants:[{id:'weakened-contract',files:[{path:definition.entry,content:mutantSources[id]}]}]}:{}),rubric:['Os type tests confirmam as relações e rejeitam os casos inválidos publicados.']};
+  assessments[id]={environment:'typescript',version:(old?.version||1)+1,checks:definition.test?['types','behavior']:['types','mutation'],entryPath:definition.entry,...(definition.test?{testPath:`tests/${id}.test.js`,behaviorTestPath:'__devpath_protected_behavior__.js'}:{}),referenceDir:`solutions/${id}`,correctFiles:[{path:definition.entry,content:referenceSources[id]}],contractTypeFiles:[{path:assertionsPath,content:definition.assertions}],...(!definition.test?{typeContractMutants:[{id:'weakened-contract',files:[{path:definition.entry,content:mutantSources[id]}]}]}:{}),rubric:typeRubric(id)};
   mkdirSync(path.join(root,'course-src',`solutions/${id}`),{recursive:true});put(path.join('course-src',`solutions/${id}/${definition.entry}`),referenceSources[id]);
   const readonlyFiles=({
     '16.01':[{path:'busca.ts',label:'Arquivo inicial original para comparação com a união discriminada.'}],

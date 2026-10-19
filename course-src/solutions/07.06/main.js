@@ -1,6 +1,7 @@
 export function resumirPorCategoria(itens) {
-  return itens.reduce((acumulado, item) => {
-    acumulado[item.categoria] = (acumulado[item.categoria] ?? 0) + item.preco;
-    return acumulado;
-  }, {});
+  const acumulado = itens.reduce((resultado, item) => {
+    resultado[item.categoria] = (resultado[item.categoria] ?? 0) + item.preco;
+    return resultado;
+  }, Object.create(null));
+  return { ...acumulado };
 }

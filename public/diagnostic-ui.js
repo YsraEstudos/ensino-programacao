@@ -149,6 +149,8 @@
       <p>${esc(config.introduction)}
       
       </p>
+
+      ${['READ', 'INVESTIGATE'].includes(item.kind) && Array.isArray(item.rubric) && item.rubric.length === 3 ? `<section class="diagnostic-reading-criteria" aria-label="Critérios de ${item.kind === 'READ' ? 'leitura' : 'investigação'}"><h2>Critérios para conferir sua ${item.kind === 'READ' ? 'leitura' : 'investigação'}</h2><ul>${item.rubric.map(criterion => `<li>${esc(criterion)}</li>`).join('')}</ul></section>` : ''}
       
       <div
        

@@ -47,7 +47,7 @@ def _lesson(skill, starter, misconception, _hints, _solution, transfer, estimate
     else:
         runtime_note = runtime_notes.get(runtime, f"Compatibilidade: {runtime}; use os recursos nativos e fixtures locais descritos.")
     return {
-        "prompt": task + chr(10) + chr(10) + "Starter de trabalho:" + chr(10) + starter + chr(10) + chr(10) + "Registre sua primeira decisão antes de executar; depois compare previsão, evidência e justificativa.",
+        "prompt": task,
         "explanation": {
             "mental_model": mental_model,
             "worked_example": example,
@@ -113,7 +113,7 @@ CONTENT = {
     'runtime.event_loop_context',
     ('dois snippets rotulados: browser Promise.then,setTimeout; Node ESM '
      'process.nextTick,Promise.then; prever com contexto'),
-    'browser síncrono A, Promise P, timer T -> A,P,T',
+    'browser síncrono A, B, Promise P, timer T -> A,B,P,T',
     ('Node nextTick versus Promise em ESM/top-level -> ordem depende de contexto; executar '
      'no runtime declarado e registrar versão; não aplicar regra de CJS universalmente'),
     'Dizer sempre nextTick antes de Promise sem informar CJS/ESM e fase.',
@@ -226,14 +226,14 @@ CONTENT = {
 "14.03": C(
     'npm.scripts',
     'package.json incompleto; src/main.js; test/*.test.js; scripts dev,test,start',
-    ('npm run dev -> node --watch src/main.js; npm test -> vitest run; npm start -> node '
+    ('npm run dev -> node --watch src/main.js; npm test -> node --test; npm start -> node '
      'src/main.js'),
     ('script ausente -> npm run falha; package type module combina com imports ESM; '
      'lockfile versionado'),
     'Copiar scripts que apontam para arquivo inexistente ou misturar CJS/ESM.',
     ('Liste arquivos de entrada reais.',
      'Associe um comando a cada modo.',
-     'Cheque package type e dependência vitest.'),
+     'Confirme que o teste usa node:test e que nenhum executável externo é necessário.'),
     ('Preencha scripts com caminhos reais e verifique que test termina, dev observa e '
      'start executa uma vez.'),
     'Scripts para app com src/server.js -> caminhos coerentes',
@@ -242,7 +242,7 @@ CONTENT = {
     estimated=10,
     **_lesson('npm.scripts', 'package.json incompleto; src/main.js; test/*.test.js; scripts dev,test,start', 'Copiar scripts que apontam para arquivo inexistente ou misturar CJS/ESM.', ('Liste arquivos de entrada reais.',
      'Associe um comando a cada modo.',
-     'Cheque package type e dependência vitest.'), ('Preencha scripts com caminhos reais e verifique que test termina, dev observa e '
+     'Confirme que node:test é nativo e identifique o que exigiria instalar Vitest.'), ('Preencha scripts com caminhos reais e verifique que test termina, dev observa e '
      'start executa uma vez.'), 'Scripts para app com src/server.js -> caminhos coerentes', 10, 'Node.js', ('Complete os scripts dev/test/start usando caminhos que existem, formato de módulo '
      'coerente e comando apropriado para cada ciclo de trabalho.',
      'Um projeto pode ter um script check que aponta para src/check.js; o nome bonito do '
@@ -251,7 +251,7 @@ CONTENT = {
      'confira quais comandos rodam uma vez ou observam mudanças.',
      'Editor de package.json com validação de caminho, previsão do comportamento do script '
      'e feedback em texto; teclado total.',
-     'package.json incompleto, árvore de arquivos src/test e instalação local indicada; '
+     'package.json incompleto, árvore de arquivos src/test e comandos locais sem dependências; '
      'terminal didático simula dev/test/start sem rede.',
      'O que precisa ser verificado além do nome do script no package.json?',
      'O caminho de entrada, as dependências e a compatibilidade com o formato de módulos '
@@ -441,7 +441,7 @@ CONTENT = {
      'Injete repositório para teste.',
      'Persistência lê/valida e grava com estratégia segura.'), ('Separe parse CLI, serviço de notas e repositório JSON; teste domínio sem I/O e teste '
      'adaptador com diretório temporário.'), 'CLI de inventário com comandos equivalentes -> módulo isolado', 100, 'Node.js', ('Entregue uma CLI modular de notas: parse de argumentos na borda, domínio puro e '
-     'repositório JSON com leitura e validação seguras; ID inexistente retorna not-found; JSON inválido gera erro contextual sem sobrescrever storage; para gravar atomicamente, escreva em arquivo temporário no mesmo diretório e depois renomeie-o.',
+     'repositório JSON com leitura e validação seguras. Exporte carregarRepositorio(fs, origem): leia por fs.readFile(origem, "utf8"), lance SyntaxError contextual para JSON inválido sem chamar escrita, retorne { notes: [{ id, text }] } quando válido e rejeite formato inválido com TypeError. ID inexistente retorna not-found; para gravar atomicamente, escreva em arquivo temporário no mesmo diretório e depois renomeie-o.',
      'Uma CLI de relatórios pode validar --format na borda, chamar uma função pura para '
      'montar o conteúdo e só então imprimir o texto.',
      'Desenhe dependências CLI→serviço→repositório e identifique uma operação de cada '
@@ -586,12 +586,12 @@ _LITERAL_STARTERS = {
     '14.03': "package.json: {\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"TODO\",\n    \"test\": \"TODO\",\n    \"start\": \"TODO\"\n  }\n}\n\nArquivos existentes: src/main.js e test/app.test.js. Preencha somente os três comandos; o ambiente é Node.js 24 e usa node:test.",
     '14.04': "material.md: // math.cjs\nfunction soma(a, b) { return a + b; }\nmodule.exports = { soma };\n\n// app.cjs\nconst { soma } = require('./math.cjs');\nconsole.log(soma(2, 3));\n\nConverta o pacote para ESM no Node.js: package type module, exports/imports consistentes e extensão relativa explícita.",
     '14.05': "config.js: import { readFile } from 'node:fs/promises';\n\nexport async function carregarConfig() {\n  return JSON.parse(await readFile('./data/config.json', 'utf8'));\n}\n\n// BUG: o caminho é resolvido em relação ao cwd do processo. O arquivo fica ao lado do módulo.",
-    '14.06': "config.js: export function loadConfig(env) {\n  const portTexto = env.PORT || '3000';\n  const logLevel = env.LOG_LEVEL || 'info';\n  const token = env.TOKEN;\n  // TODO: trate defaults, conversão/intervalo da porta e segredo exigido em produção.\n  // Nunca inclua token em erro ou log.\n}\n",
+    '14.06': "config.js: export function loadConfig(env) {\n  const portTexto = env.PORT || '3000';\n  const logLevel = env.LOG_LEVEL || 'info';\n  const token = env.TOKEN;\n  // TODO: PORT vazio usa 3000; aceite inteiro 1..65535; valor inválido lança RangeError.\n  // TODO: LOG_LEVEL ausente usa info; aceite debug/info/warn/error ou lance RangeError.\n  // TODO: em NODE_ENV='production', TOKEN não vazio é obrigatório.\n  // Retorne somente { port, logLevel }; nunca inclua token em retorno, erro ou log.\n}\n",
     '14.07': "promise-try.js: // Runtime-alvo: Node.js 24 LTS. Registre a versão exata (node --version), a fonte oficial e a data da consulta.\nconst registro = [];\nconst callback = () => {\n  registro.push('callback executou');\n  throw new Error('falhou');\n};\n\n// A: API nativa, se existir no runtime-alvo.\nif (typeof Promise.try === 'function') {\n  registro.push('antes de A');\n  Promise.try(callback).catch((erro) => registro.push(`A rejeitou: ${erro.message}`));\n}\n\n// B: fallback fiel — chama fn agora e transforma throw síncrono em rejeição.\nfunction tentar(fn) {\n  try { return Promise.resolve(fn()); }\n  catch (erro) { return Promise.reject(erro); }\n}\nregistro.push('antes de B');\ntentar(callback).catch((erro) => registro.push(`B rejeitou: ${erro.message}`));\n\n// C: NÃO equivalente — adia fn para uma microtask.\nregistro.push('antes de C');\nPromise.resolve().then(callback).catch((erro) => registro.push(`C rejeitou: ${erro.message}`));\nregistro.push('fim do código síncrono');\n\nsetTimeout(() => console.log(registro.join('\\n')), 0);\n// TODO: preveja a ordem do registro e explique quando o callback roda em A, B e C.",
-    '14.08': "cli.js: export async function executar(comando, repositorio, argumentos = []) {\n  if (!repositorio || typeof repositorio[comando] !== 'function') return {status: 'usage', exitCode: 2};\n}\nexport async function salvarAtomico(fs, destino, conteudo) { await fs.writeFile(destino, conteudo); }\n\n// BUG: a gravação direta pode deixar dados parciais; o contrato exige temp e rename.",
+    '14.08': "cli.js: export async function executar(comando, repositorio, argumentos = []) {\n  if (!repositorio || typeof repositorio[comando] !== 'function') return {status: 'usage', exitCode: 2};\n}\n\n// Implemente leitura injetável e validação sem escrita durante o carregamento.\nexport async function carregarRepositorio(fs, origem) {\n  // Use fs.readFile(origem, 'utf8'). JSON inválido deve gerar SyntaxError com origem no contexto.\n  // Retorne { notes: [{ id: string, text: string }] } ou rejeite estrutura inválida com TypeError.\n}\n\nexport async function salvarAtomico(fs, destino, conteudo) { await fs.writeFile(destino, conteudo); }\n\n// BUG: a gravação direta pode deixar dados parciais; o contrato exige temp e rename.",
     '14.09': "material.md: repositório descartável\nbranch main: README.md contém 'uso'\nbranch feature: README.md contém 'uso' e 'exemplo'\nworking tree: config.json modificado e segredo fictício visível no diff\n\nAntes de concluir merge/commit, inspecione status, diff staged e resultado combinado.",
     '14.10': "material.md: Traceie a sequência de três módulos abaixo.\n\n```js\n// a.js\nimport { valor } from './b.js';\nconsole.log('A', valor);\n\n// b.js\nexport const valor = await Promise.resolve(5);\n\n// c.js\nconst modulo = await import('./a.js');\nconsole.log('C', modulo.valor);\n```\n\nRegistre separadamente: vinculação do import nomeado; avaliação assíncrona de b.js; instante em que a Promise de import() de c.js resolve; e ordem dos logs. Não misture o grafo ilustrativo em um único arquivo executável.",
-    '14.11': "package.json: {\n  \"dependencies\": { \"csv-choice-a\": \"^1.2.0\", \"csv-choice-b\": \"^3.0.0\" }\n}\n\nDossiê local compara licença, manutenção, tamanho, dependências transitivas, versão/lockfile e plano de atualização.",
+    '14.11': [{'path': 'package.json', 'content': '{\n  "name": "devpath-csv-choice",\n  "private": true,\n  "dependencies": {\n    "csv-choice-a": "^1.2.0",\n    "csv-choice-b": "^3.0.0"\n  }\n}\n'}, {'path': 'README.md', 'content': 'Dossiê comparativo: compare licença, manutenção, tamanho, dependências transitivas, versão/lockfile e plano de atualização. As dependências são exemplos para análise; confirme dados reais antes de instalar.\n'}],
 }
 for _card_id, _starter in _LITERAL_STARTERS.items():
     CONTENT[_card_id]["starter"] = _starter
@@ -607,16 +607,32 @@ CONTENT["14.03"]["starter"] = [
     {"path": "package-lock.json", "content": '{\n  "name": "devpath-14-03",\n  "version": "1.0.0",\n  "lockfileVersion": 3,\n  "requires": true,\n  "packages": {\n    "": {\n      "name": "devpath-14-03",\n      "version": "1.0.0"\n    }\n  }\n}\n'},
     {"path": "src/main.js", "content": "// Ponto de entrada do app: implemente o módulo ESM neste arquivo.\nexport {};\n"},
     {"path": "test/app.test.js", "content": "import test from 'node:test';\n\n// Escreva o teste do app com node:test; substitua este lembrete pelo caso real.\ntest.todo('app');\n"},
-    {"path": "README.md", "content": "# Projeto do app\n\nPreencha somente os comandos dev, test e start em package.json. Arquivos existentes: src/main.js e test/app.test.js. O ambiente é Node.js 24 e usa node:test.\n"},
+    {"path": "README.md", "content": "# Projeto do app\n\nPreencha somente os comandos dev, test e start em package.json. Arquivos existentes: src/main.js e test/app.test.js. O teste usa `node:test`, incluído no Node.js; não exige instalação. Vitest é um runner separado: só use `vitest run` se adicionar Vitest às dependências e importar sua API.\n"},
 ]
+CONTENT["14.03"]["compatibility"] = (
+    "A referência usa Node.js 24 ou posterior e `node:test`, integrado ao Node.js, sem instalar dependências. "
+    "O cartão mostra a configuração; prove `dev`, `test` e `start` no computador local. Vitest é outro runner, "
+    "não incluído no lockfile: `vitest run` só funciona após adicioná-lo ao projeto. A avaliação declarada é local."
+)
+CONTENT["14.03"]["resources"] += (
+    "No site, consulte e complete o cartão; na pasta exportada, rode `npm test` e `npm run start` localmente. "
+    "Para comparar, `node:test` vem com Node.js e `node --test` executa uma vez; Vitest requer dependência instalada e `vitest run` também executa uma vez.",
+)
 CONTENT["14.05"]["starter"] = [
     _split_starter(CONTENT["14.05"]["starter"]),
     {"path": "test/config.test.js", "content": "import test from 'node:test';\n\n// Escreva os casos: cwd diferente, caminho com espaço e arquivo ausente com cause.\ntest.todo('carregarConfig');\n"},
 ]
 CONTENT["14.08"]["starter"] = [
     _split_starter(CONTENT["14.08"]["starter"]),
-    {"path": "test/cli.test.js", "content": "import test from 'node:test';\n\n// Escreva os testes de adicionar, listar, remover e das falhas de storage em diretório temporário.\ntest.todo('CLI de notas');\n"},
+    {"path": "test/cli.test.js", "content": "import test from 'node:test';\nimport assert from 'node:assert/strict';\nimport { carregarRepositorio } from '../cli.js';\n\ntest('JSON inválido gera SyntaxError contextual e preserva storage', async () => {\n  let storage = '{ inválido';\n  const writes = []; const renames = [];\n  const fs = { async readFile() { return storage; }, async writeFile(path, value) { writes.push([path, value]); storage = value; }, async rename(from, to) { renames.push([from, to]); } };\n  await assert.rejects(carregarRepositorio(fs, 'notes.json'), error => error instanceof SyntaxError && error.message.includes('notes.json'));\n  // @case 14.08.json-invalido-contextual-sem-write-5d912eab\n  assert.equal(storage, '{ inválido');\n  assert.deepEqual(writes, []);\n  assert.deepEqual(renames, []);\n});\ntest('estrutura válida é carregada', async () => {\n  const fs = { async readFile() { return '{\\\"notes\\\":[{\\\"id\\\":\\\"1\\\",\\\"text\\\":\\\"A\\\"}]}'; } };\n  // @case 14.08.json-valido-retorna-notes-5d912eac\n  assert.deepEqual(await carregarRepositorio(fs, 'notes.json'), { notes: [{ id: '1', text: 'A' }] });\n});\ntest('formato inválido é rejeitado', async () => {\n  const fs = { async readFile() { return '{\\\"notes\\\":[{\\\"id\\\":1,\\\"text\\\":\\\"A\\\"}]}'; } };\n  // @case 14.08.formato-invalido-rejeitado-5d912ead\n  await assert.rejects(carregarRepositorio(fs, 'notes.json'), TypeError);\n});\n"},
 ]
+CONTENT["14.08"]["compatibility"] = (
+    "O projeto exportado e `node --test test/cli.test.js` rodam no computador local com Node.js 24 ou posterior. "
+    "A avaliação automática do contrato roda no site pelo executor DevPath; ela não executa a suíte local do aluno."
+)
+CONTENT["14.08"]["resources"] += (
+    "Verificação local: `node --test test/cli.test.js`; avaliação automática do contrato: site DevPath.",
+)
 
 # A consulta de compatibilidade é extensão opt-in e usa o recurso realmente avaliado.
 CONTENT["14.07"]["optional"] = True

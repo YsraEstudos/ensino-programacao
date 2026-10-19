@@ -492,7 +492,7 @@
         if (!global.DevPathDomRunner?.run) return { ...base, kind: 'unsupported', text: textFor('unsupported') };
         const entryPath = assessment.entryPath || files.find(file => /\.(?:m?js|jsx|ts|tsx)$/i.test(file.path))?.path;
         if (!entryPath) return { ...base, kind: 'error', text: textFor('error') };
-        const domResult = await global.DevPathDomRunner.run({files, entryPath, testCode: typeof assessment.tests === 'string' ? assessment.tests : '', fixtures: assessment.fixtures || {}}, {signal, timeoutMs: assessment.timeoutMs});
+        const domResult = await global.DevPathDomRunner.run({files, entryPath, testCode: typeof assessment.tests === 'string' ? assessment.tests : '', fixtures: assessment.fixtures || {}}, {signal, timeoutMs: assessment.timeoutMs, assertionCases: assessment.assertionCases || []});
         return normalized(base, domResult.kind, domResult.text, domResult);
       }
       if (!global.DevPathModuleGraph?.buildModuleGraph || !global.DevPathCourseRunner?.run) return { ...base, kind: 'unsupported', text: textFor('unsupported') };

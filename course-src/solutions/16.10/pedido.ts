@@ -1,2 +1,2 @@
 export async function salvar(pedido:{id:string},falha:unknown):Promise<void>{if(falha!==undefined)throw falha;console.log("salvo",pedido.id);}
-export async function salvarPedido(pedido:{id:string},falha?:unknown):Promise<string>{try{await salvar(pedido,falha);return "Pedido salvo.";}catch(e){const message=e instanceof Error?e.message:"Não foi possível salvar o pedido.";throw new Error("Falhou: "+message,{cause:e});}}
+export async function salvarPedido(pedido:{id:string},falha?:unknown):Promise<string>{try{await salvar(pedido,falha);return "Pedido salvo.";}catch(e){throw new Error("Não foi possível salvar o pedido.",{cause:e});}}

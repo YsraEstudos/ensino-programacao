@@ -120,6 +120,7 @@ if (selectedIndex >= 0 && (!selectedIds.size || !argumentsList[selectedIndex + 1
 const initializeMarked = argumentsList.includes('--initialize-marked');
 const refreshMarked = argumentsList.includes('--refresh-marked');
 if (refreshMarked && !selectedIds) throw new Error('--refresh-marked exige --ids para limitar a atualização.');
+if (initializeMarked && !selectedIds) throw new Error('--initialize-marked exige --ids para limitar a inicialização.');
 const files = readdirSync(testRoot).filter(name => name.endsWith('.test.js')
   && (!selectedIds || selectedIds.has(name.replace(/\.test\.js$/, '')))).sort();
 if (selectedIds && files.length !== selectedIds.size) throw new Error(`Arquivo de suíte ausente para: ${[...selectedIds].join(', ')}`);

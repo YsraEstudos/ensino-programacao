@@ -127,31 +127,103 @@
   },
   "D.06": {
     "objective": "Preveja a expressão síncrona e distinga número, texto e rótulo de typeof.",
-    "firstResponse": {"action":"Registre a saída prevista e classifique cada valor sem aspas ou com aspas.","timing":"Depois de ler o trecho e antes de abrir o feedback."},
-    "explanation": {"mental_model":"Uma expressão é calculada antes da chamada síncrona imprimir. Aspas formam texto, e typeof devolve um rótulo sobre o valor.","worked_example":"4 + 1 resulta em 5; 5 é number; \"5\" é string.","common_trap":"Ler uma expressão como texto ou classificar o valor só pela aparência do algarismo.","why_it_matters":"Ler valores e saídas com precisão prepara a interpretação de variáveis e expressões."},
-    "interaction":"Mostre um trecho curto e perguntas fechadas com alternativa Ainda não sei. O feedback ensina cada distinção e pode ser lido sem editar código.",
-    "review": {"prompt":"O que ocorre antes de console.log mostrar o resultado de 4 + 1?","choices":["O JavaScript calcula a expressão, que vale 5.","A expressão vira o texto literal 4 + 1.","typeof troca o número por uma string antes da soma."],"answer":0,"correctFeedback":"Correto. A soma é calculada antes da chamada escrever 5.","incorrectFeedback":"Sem aspas, 4 + 1 é uma expressão numérica. Ela é calculada antes do log."}
+    "firstResponse": {
+      "action": "Registre a saída prevista e classifique cada valor sem aspas ou com aspas.",
+      "timing": "Depois de ler o trecho e antes de abrir o feedback."
+    },
+    "explanation": {
+      "mental_model": "Uma expressão é calculada antes da chamada síncrona imprimir. Aspas formam texto, e typeof devolve um rótulo sobre o valor.",
+      "worked_example": "4 + 1 resulta em 5; 5 é number; \"5\" é string.",
+      "common_trap": "Ler uma expressão como texto ou classificar o valor só pela aparência do algarismo.",
+      "why_it_matters": "Ler valores e saídas com precisão prepara a interpretação de variáveis e expressões."
+    },
+    "interaction": "Mostre um trecho curto e perguntas fechadas com alternativa Ainda não sei. O feedback ensina cada distinção e pode ser lido sem editar código.",
+    "review": {
+      "prompt": "O que ocorre antes de console.log mostrar o resultado de 4 + 1?",
+      "choices": [
+        "O JavaScript calcula a expressão, que vale 5.",
+        "A expressão vira o texto literal 4 + 1.",
+        "typeof troca o número por uma string antes da soma."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A soma é calculada antes da chamada escrever 5.",
+      "incorrectFeedback": "Sem aspas, 4 + 1 é uma expressão numérica. Ela é calculada antes do log."
+    }
   },
   "D.07": {
     "objective": "Acompanhe retorno e estado de array e escolha método pelo resultado solicitado.",
-    "firstResponse": {"action":"Registre o retorno, a mudança do array e qual operação atende a cada pedido.","timing":"Depois de ler as perguntas e antes de ver a explicação."},
-    "explanation": {"mental_model":"return entrega um valor; push altera um array; map transforma todos, filter seleciona e find procura o primeiro correspondente.","worked_example":"dobro(3) retorna 6. Depois de push(6), [2,4] passa a [2,4,6]. filter(n > 2) produz [4,6].","common_trap":"Confundir valor retornado com saída ou selecionar um método sem verificar o formato pedido.","why_it_matters":"Escolher métodos pelo resultado desejado reduz erros em operações de coleção."},
-    "interaction":"Apresente cartões de previsão com alternativas fechadas, inclusive Ainda não sei. A explicação acompanha a chamada e o array separadamente.",
-    "review": {"prompt":"Qual combinação corresponde a transformar todos os elementos, selecionar vários ou obter o primeiro que combina?","choices":["map, filter e find","filter, find e map","find, map e filter"],"answer":0,"correctFeedback":"Correto: map transforma, filter seleciona e find devolve o primeiro correspondente.","incorrectFeedback":"Pense no formato de retorno: map cria valores transformados, filter mantém vários itens e find retorna um único item."}
+    "firstResponse": {
+      "action": "Registre o retorno, a mudança do array e qual operação atende a cada pedido.",
+      "timing": "Depois de ler as perguntas e antes de ver a explicação."
+    },
+    "explanation": {
+      "mental_model": "return entrega um valor; push altera um array; map transforma todos, filter seleciona e find procura o primeiro correspondente.",
+      "worked_example": "dobro(3) retorna 6. Depois de push(6), [2,4] passa a [2,4,6]. filter(n > 2) produz [4,6].",
+      "common_trap": "Confundir valor retornado com saída ou selecionar um método sem verificar o formato pedido.",
+      "why_it_matters": "Escolher métodos pelo resultado desejado reduz erros em operações de coleção."
+    },
+    "interaction": "Apresente cartões de previsão com alternativas fechadas, inclusive Ainda não sei. A explicação acompanha a chamada e o array separadamente.",
+    "review": {
+      "prompt": "Qual combinação corresponde a transformar todos os elementos, selecionar vários ou obter o primeiro que combina?",
+      "choices": [
+        "map, filter e find",
+        "filter, find e map",
+        "find, map e filter"
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto: map transforma, filter seleciona e find devolve o primeiro correspondente.",
+      "incorrectFeedback": "Pense no formato de retorno: map cria valores transformados, filter mantém vários itens e find retorna um único item."
+    }
   },
   "D.08": {
     "objective": "Separe retorno, acesso a propriedades, checagem estática e validação de dados externos.",
-    "firstResponse": {"action":"Classifique cada situação como retorno, acesso a campo, diagnóstico estático ou validação em runtime.","timing":"Depois de ler os cartões e antes de consultar o feedback."},
-    "explanation": {"mental_model":"Um tipo descreve formas esperadas durante a checagem estática; ele não confirma a forma de JSON recebido em runtime.","worked_example":"pessoa.nome lê um campo. Uma string atribuída a number pode gerar erro do TypeScript. JSON externo começa como unknown e precisa de validação.","common_trap":"Usar any ou cast como se provasse que um dado externo é válido.","why_it_matters":"Separar esses limites ajuda a escolher entre corrigir código e validar entradas reais."},
-    "interaction":"Use perguntas curtas sobre trechos TypeScript e JSON, sem exigir compilação. Cada resposta abre uma explicação independente.",
-    "review": {"prompt":"O cast de um objeto externo para Pessoa prova que ele contém uma propriedade nome válida?","choices":["Não; o dado ainda precisa ser validado em runtime.","Sim; o cast executa a validação e corrige os campos.","Sim, mas apenas quando o objeto vem de JSON."],"answer":0,"correctFeedback":"Correto. O cast muda a expectativa do compilador, mas não inspeciona os dados externos em runtime.","incorrectFeedback":"A checagem estática não executa uma validação do JSON recebido. Verifique a forma do dado em runtime."}
+    "firstResponse": {
+      "action": "Classifique cada situação como retorno, acesso a campo, diagnóstico estático ou validação em runtime.",
+      "timing": "Depois de ler os cartões e antes de consultar o feedback."
+    },
+    "explanation": {
+      "mental_model": "Um tipo descreve formas esperadas durante a checagem estática; ele não confirma a forma de JSON recebido em runtime.",
+      "worked_example": "pessoa.nome lê um campo. Uma string atribuída a number pode gerar erro do TypeScript. JSON externo começa como unknown e precisa de validação.",
+      "common_trap": "Usar any ou cast como se provasse que um dado externo é válido.",
+      "why_it_matters": "Separar esses limites ajuda a escolher entre corrigir código e validar entradas reais."
+    },
+    "interaction": "Use perguntas curtas sobre trechos TypeScript e JSON, sem exigir compilação. Cada resposta abre uma explicação independente.",
+    "review": {
+      "prompt": "O cast de um objeto externo para Pessoa prova que ele contém uma propriedade nome válida?",
+      "choices": [
+        "Não; o dado ainda precisa ser validado em runtime.",
+        "Sim; o cast executa a validação e corrige os campos.",
+        "Sim, mas apenas quando o objeto vem de JSON."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. O cast muda a expectativa do compilador, mas não inspeciona os dados externos em runtime.",
+      "incorrectFeedback": "A checagem estática não executa uma validação do JSON recebido. Verifique a forma do dado em runtime."
+    }
   },
   "D.09": {
     "objective": "Classifique hipóteses de desempenho e indique observações que podem testá-las.",
-    "firstResponse": {"action":"Para cada cenário, escolha uma hipótese inicial e uma observação capaz de distingui-la de uma alternativa.","timing":"Depois de ler os cenários, antes de consultar o feedback."},
-    "explanation": {"mental_model":"Uma causa de desempenho é uma hipótese até que uma medida contextualizada a apoie. CPU, rede, DOM, memória e I/O podem competir como explicações.","worked_example":"Uma espera antes da resposta sugere medir rede e servidor; pausas durante cálculo local sugerem medir CPU e tarefas longas.","common_trap":"Concluir a causa apenas pela aparência da lentidão ou ignorar explicações alternativas.","why_it_matters":"Métricas que podem refutar uma hipótese evitam otimizações baseadas em palpite."},
-    "interaction":"Mostre cenários com opções de hipótese e observação. O feedback reforça que os exemplos não substituem medição real.",
-    "review": {"prompt":"Como testar a hipótese de que uma pausa coincide com trabalho local de CPU?","choices":["Medir tarefas longas e tempo de CPU durante a pausa.","Medir somente a latência DNS em outro momento.","Contar nomes de variáveis no arquivo sem observar a execução."],"answer":0,"correctFeedback":"Correto. A medida deve observar o período e o recurso que a hipótese aponta.","incorrectFeedback":"Escolha uma métrica ligada à hipótese e ao instante da pausa; uma observação distante não distingue a causa."}
+    "firstResponse": {
+      "action": "Para cada cenário, escolha uma hipótese inicial e uma observação capaz de distingui-la de uma alternativa.",
+      "timing": "Depois de ler os cenários, antes de consultar o feedback."
+    },
+    "explanation": {
+      "mental_model": "Uma causa de desempenho é uma hipótese até que uma medida contextualizada a apoie. CPU, rede, DOM, memória e I/O podem competir como explicações.",
+      "worked_example": "Uma espera antes da resposta sugere medir rede e servidor; pausas durante cálculo local sugerem medir CPU e tarefas longas.",
+      "common_trap": "Concluir a causa apenas pela aparência da lentidão ou ignorar explicações alternativas.",
+      "why_it_matters": "Métricas que podem refutar uma hipótese evitam otimizações baseadas em palpite."
+    },
+    "interaction": "Mostre cenários com opções de hipótese e observação. O feedback reforça que os exemplos não substituem medição real.",
+    "review": {
+      "prompt": "Como testar a hipótese de que uma pausa coincide com trabalho local de CPU?",
+      "choices": [
+        "Medir tarefas longas e tempo de CPU durante a pausa.",
+        "Medir somente a latência DNS em outro momento.",
+        "Contar nomes de variáveis no arquivo sem observar a execução."
+      ],
+      "answer": 0,
+      "correctFeedback": "Correto. A medida deve observar o período e o recurso que a hipótese aponta.",
+      "incorrectFeedback": "Escolha uma métrica ligada à hipótese e ao instante da pausa; uma observação distante não distingue a causa."
+    }
   },
   "04.01": {
     "review": {
@@ -410,7 +482,7 @@
   },
   "06.06": {
     "objective": "Diferencie falha de sintaxe JSON de JSON válido; investigue perdas e conversões no round-trip de Date, undefined, NaN, Infinity, Map e Set.",
-    "prompt": "Depure lerSave para retornar null em texto JSON sintaticamente inválido e aceitar um objeto JSON válido, como {\"vida\":0}. Em uma investigação separada no mesmo starter, serialize e restaure a amostra fornecida; registre o que acontece com Date, undefined, NaN, Infinity, Map e Set. Não implemente validação de esquema neste cartão: essa etapa vem depois do parse.",
+    "prompt": "Leia lerSave e preveja por que texto JSON sintaticamente inválido retorna null, enquanto um objeto JSON válido, como {\"vida\":0}, é aceito. Depois serialize e restaure a amostra fornecida; compare o que acontece com Date, undefined, NaN, Infinity, Map e Set. Separe falha de sintaxe de validação de esquema: essa etapa vem depois do parse.",
     "resources": [
       "Tabela visível de round-trip: Date vira string ISO; propriedade undefined é omitida; NaN e Infinity viram null; Map e Set viram objetos vazios; depois do parse, os tipos originais não são reconstruídos.",
       "MDN JSON.parse: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse",
@@ -624,7 +696,7 @@
         "Para visitar o destino antes de processar qualquer vizinho.",
         "Para transformar um grafo sem pesos em grafo ponderado."
       ],
-      "answer": 2,
+      "answer": 0,
       "correctFeedback": "Correto. Registrar na descoberta garante que cada vértice entre uma vez na fila.",
       "incorrectFeedback": "A descoberta ocorre antes da remoção posterior. Marcar nesse momento evita duplicação em ciclos e caminhos convergentes."
     }
@@ -890,6 +962,7 @@
     }
   },
   "11.03": {
+    "prompt": "Implemente validar({ nome, quantidade }) em validate.js. No sucesso, retorne { ok: true, nome: nome.trim(), quantidade: numeroInteiroPositivo }. Se nome ficar vazio ou quantidade não for inteiro positivo (inclusive '2.5', '0' e 'abc'), retorne { ok: false, erros, valores: { nome, quantidade } }: erros associa uma mensagem ao campo inválido e valores preserva exatamente a entrada original para edição, mesmo quando ambos os campos falham.",
     "review": {
       "prompt": "Qual é uma vantagem de manter a validação de dados em uma função separada da manipulação do DOM?",
       "choices": [
@@ -954,7 +1027,11 @@
       "incorrectFeedback": "Se escolheu a conversão em string HTML, confundiu append com serialização: o nó continua sendo nó. Se escolheu clonar o nó para todos os elementos com o seletor, atribuiu ao método uma busca e uma cópia que ele não faz."
     }
   },
+  "11.08": {
+    "prompt": "Complete o Kanban V1 em index.html, style.css e app.js. Exporte montarKanban(document, storage), que monta os eventos e devolve { getState() }; getState() retorna { version: 1, tasks: [{ id, text, status }] }. Exporte mover(estado, id, status): use apenas todo, doing e done; status desconhecido lança RangeError, e a mudança não altera o estado anterior. Use o formulário #nova-tarefa e #texto; entrada vazia anuncia 'Informe' em #aviso, mantém foco no campo e não grava. Entrada válida é aparada, entra em todo, aparece como texto literal em #todo li span, grava JSON na chave kanban:v1 e anuncia 'adicionada'. Botões de movimento anunciam 'Em curso' ao mover para doing; recarregar lê o save. JSON inválido começa com quadro vazio e aviso com 'inválidos', sem sobrescrever o valor salvo. Preserve as três colunas, o rótulo e a região aria-live do HTML; ligue app.js como módulo no index.html para a prévia funcionar."
+  },
   "11.13": {
+    "prompt": "Implemente migrarV1ParaV2(entrada) e carregar(entrada, avisos = []) em migration.js. V1 tem { version: 1, tasks: [{ id, text, status }] }; V2 tem { version: 2, tasks: [{ id, text, status, priority }] }. Preserve id/text/status; acrescente priority: 'normal' à tarefa V1 sem prioridade e mantenha prioridade V2 válida, como 'high', sem migrar V2 de novo. Valide cada tarefa: descarte apenas o registro parcial e acrescente um aviso ao array avisos, mantendo as demais. carregar aceita objeto ou storage com getItem('kanban:v1'); JSON inválido devolve { version: 2, tasks: [] } e não chama setItem nem apaga os bytes originais. A conversão segura precede qualquer gravação.",
     "review": {
       "prompt": "Por que tarefas persistidas devem ter um identificador estável?",
       "choices": [
@@ -1321,6 +1398,9 @@
       "incorrectFeedback": "Se escolheu que a concatenação vira URL de módulo, confundiu caminho de arquivo com URL: concatenar não muda o tipo do valor. Se escolheu que os helpers verificam existência e carregam conteúdo, atribuiu a path uma responsabilidade de leitura, que é de fs: path apenas monta e normaliza."
     }
   },
+  "14.06": {
+    "prompt": "Implemente loadConfig(env) em config.js como função pura. Retorne somente { port, logLevel }; PORT ausente ou em branco usa 3000, e PORT válido é inteiro de 1 a 65535. Rejeite 'abc', '0', '65536' e '2.5' com RangeError. LOG_LEVEL ausente usa 'info'; aceite apenas debug, info, warn ou error e rejeite outro nível com RangeError. Se NODE_ENV === 'production', TOKEN precisa ser string não vazia após trim; na falta dele, lance erro cuja mensagem contém 'TOKEN obrigatório'. Nunca inclua o valor de TOKEN em retorno, log ou mensagem de erro, inclusive quando a configuração for válida."
+  },
   "14.07": {
     "objective": "Consulte documentação oficial para decidir se Promise.try está disponível no runtime baseline definido; registre runtime, versão, data da consulta, assinatura, parâmetros, retorno e erros antes de escolher uso ou fallback.",
     "prompt": "Avalie Promise.try no runtime-alvo Node.js 24 LTS consultando uma fonte oficial. Registre versão exata, data da consulta, assinatura, parâmetros, retorno e tratamento de erros. Execute promise-try.js e compare três caminhos: A (Promise.try nativo), B (fallback fiel: chama fn dentro de try e converte retorno/exceção com Promise.resolve/Promise.reject) e C (Promise.resolve().then(fn), que adia fn para uma microtask). Decida entre usar a API, usar o fallback B ou adiar, e explique por que C não é equivalente.",
@@ -1627,7 +1707,11 @@
       "incorrectFeedback": "Separe a informação de tipo usada pelo compilador do comportamento real de Array.filter."
     }
   },
+  "15.07": {
+    "prompt": "Corrija catalogo.ts sob strict, noUncheckedIndexedAccess e exactOptionalPropertyTypes. Mantenha as assinaturas primeiroNome(lista: string[]): string, semApelido(produto: Produto): Produto e rotulo(produto: Produto): string. primeiroNome(['ana']) devolve 'ANA'; primeiroNome([]) lança RangeError. semApelido devolve uma cópia sem a propriedade apelido, sem mutar a entrada; não inclua apelido: undefined. rotulo usa apelido quando presente ou nome como fallback, removendo espaços do texto escolhido. Entregue casos próprios que comprovem o contrato de ausência e rode o typecheck sem desligar flags, usar ! ou cast para ocultar falhas."
+  },
   "16.10": {
+    "prompt": "Corrija salvarPedido(pedido, falha?) em pedido.ts. Sucesso resolve com 'Pedido salvo.'. Se salvar lançar Error ou qualquer valor não-Error, a promessa rejeita com um novo Error cuja mensagem pública é exatamente 'Não foi possível salvar o pedido.'; o valor original fica em cause para diagnóstico interno. Use narrowing de unknown antes de inspecionar propriedades e não exponha e.message, o valor lançado ou cause na resposta da UI.",
     "review": {
       "prompt": "Em runtimes JavaScript comuns, qual propriedade de Error é usada para inspecionar o caminho de chamadas associado a uma falha?",
       "choices": [
@@ -1950,7 +2034,7 @@
     }
   },
   "20.01": {
-    "prompt": "Rastreie a sequência conceitual de chamadas next() durante for...of. Antes de executar, registre quantas chamadas ocorrem, os pares done/value de cada resultado e quais valores chegam ao corpo. Não conte o resultado terminal como elemento.",
+    "prompt": "Rastreie a sequência conceitual de chamadas next() durante for...of. Antes de executar, registre quantas chamadas ocorrem, os pares done/value de cada resultado e quais valores chegam ao corpo. Não conte o resultado terminal como elemento.\n\nContrato da entrega (20.01):\n- Exporte percorrer(): {primeira:number[], depois:number, segunda:number[], chamadas:number}.\n- A coleta produz primeira=[1,2], depois=3, segunda=[], chamadas=4; o mesmo iterador é consumível uma vez e done:true encerra a coleta.",
     "explanation": {
       "mental_model": "O laço pede next() até receber done:true. Os resultados com done:false fornecem os elementos ao corpo; o resultado terminal encerra o laço e não é entregue como elemento, mesmo que uma implementação também inclua value nele.",
       "worked_example": "Uma ferramenta que expõe IteratorResult permite inspecionar o sinal de término e o campo value separadamente; o consumidor decide quais resultados contam como elementos.",
@@ -2021,7 +2105,8 @@
       "answer": 2,
       "correctFeedback": "Uma hipótese e uma observação comparável tornam a alteração localizada e revisável.",
       "incorrectFeedback": "Compilar ou alterar vários traps ao mesmo tempo não explica qual comportamento precisava de correção."
-    }
+    },
+    "prompt": "Reproduza a reentrada do trap get e faça correção localizada; registre hipótese antes de editar e compare uma leitura normal.\n\nContrato da entrega (20.04):\n- Exporte observar(target, onRead = () => {}): Proxy; o trap get chama onRead(key) e delega com Reflect.get(target, key, receiver).\n- O getter herdado deve receber o Proxy como this; leituras de símbolo também funcionam."
   },
   "20.05": {
     "review": {
@@ -2034,7 +2119,8 @@
       "answer": 0,
       "correctFeedback": "A atividade compara as abordagens pela clareza da regra e pela evidência dos testes, não por uma preferência universal.",
       "incorrectFeedback": "Proxy não torna a validação automaticamente profunda, e ambos os estilos podem expressar uma regra de atualização."
-    }
+    },
+    "prompt": "Implemente a regra de validação declarada no trap set e compare com uma função update explícita. Entregue um pequeno teste para cada abordagem e recomende uma com base na visibilidade da regra.\n\nContrato da entrega (20.05):\n- Exporte validarUser(user): Proxy e updateUser(current, patch): novo objeto validado sem mutar current.\n- age deve ser inteiro entre 0 e 150, inclusive; qualquer outro valor lança RangeError antes de gravar. A validação do Proxy é superficial."
   },
   "20.06": {
     "review": {
@@ -2047,7 +2133,8 @@
       "answer": 1,
       "correctFeedback": "A recomendação deve considerar legibilidade e adequação ao projeto, além do comportamento observado.",
       "incorrectFeedback": "Novidade ou quantidade de operadores, por si só, não estabelece clareza nem adequação."
-    }
+    },
+    "prompt": "Compare uma pipeline generator manual com Iterator.from/filter/map/take. Preveja o valor e a quantidade de itens solicitados antes de executar; recomende API somente após verificar o runtime alvo.\n\nContrato da entrega (20.06):\n- Exporte manualPipeline(iteravel): generator; take(iteravel,count): array; run(): {values:number[],pulls:number,zero:number[]}.\n- run usa [1,2,3,4,5], filtra pares, dobra e pega dois: values=[4,8], pulls=4, zero=[]. take(iteravel,0) não consome a fonte."
   },
   "20.07": {
     "review": {
@@ -2222,7 +2309,8 @@
       "answer": 1,
       "correctFeedback": "Correto. O worker executa cálculo e troca mensagens; a página e seu DOM continuam no thread principal.",
       "incorrectFeedback": "Separe cálculo independente de interface: o DOM continua sob responsabilidade do thread principal."
-    }
+    },
+    "prompt": "Mover cálculo pesado independente para worker e criar fallback/teste da função pura.\n\nContrato da entrega (21.05):\n- Exporte contarPrimos(n): número de primos até n, inclusive.\n- n negativo, fracionário, NaN, Infinity ou texto lança RangeError com message \"n must be a nonnegative integer\"."
   },
   "21.06": {
     "objective": "Compare os casos do mesmo objeto, de outro objeto com a mesma forma e de um identificador string; anote a estrutura apropriada e o motivo.",
@@ -2251,7 +2339,8 @@
       "answer": 2,
       "correctFeedback": "Correto. A segunda instância tem outra identidade, mesmo que seus campos coincidam.",
       "incorrectFeedback": "WeakMap usa a chave objeto, não uma comparação estrutural de propriedades. Compare se é a mesma referência."
-    }
+    },
+    "prompt": "Associar metadados calculados a objetos com WeakMap, demonstrando por que string/id comum pediria Map.\n\nContrato da entrega (21.06):\n- Exporte criarCache(calcular): {metaDe(node),calculos}; cachePorId(): Map.\n- criarCache memoiza por identidade de objeto em WeakMap; cachePorId aceita IDs string."
   },
   "21.07": {
     "objective": "Registre no timeline as chamadas previstas para debounce e throttle e declare a política leading/trailing do throttle.",
@@ -2280,7 +2369,8 @@
       "answer": 0,
       "correctFeedback": "Correto. A espera reiniciada caracteriza debounce; throttle aplica um limite de frequência conforme a política escolhida.",
       "incorrectFeedback": "Compare quando cada função pode emitir: debounce espera silêncio após o evento mais recente, enquanto throttle limita chamadas ao longo das janelas."
-    }
+    },
+    "prompt": "Implementar ambos, simular 100 eventos e medir numero/tempo de chamadas.\n\nContrato da entrega (21.07):\n- Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).\n- relogio fornece agora(), setTimeout(fn, ms) e clearTimeout(id). Simule 100 eventos em t=0,10,...,990 ms.\n- Debounce final chama uma vez em t=1090; throttle inicial chama em t=0,100,...,900."
   },
   "21.08": {
     "objective": "Trace a aquisição e a liberação do recurso no caso síncrono e no assíncrono; anote também o fallback de compatibilidade.",
@@ -2309,7 +2399,8 @@
       "answer": 1,
       "correctFeedback": "A associação com o escopo ajuda a deixar visível quem usa e quem libera o recurso.",
       "incorrectFeedback": "Gerenciamento de escopo organiza a responsabilidade pelo descarte; não remove essa responsabilidade."
-    }
+    },
+    "prompt": "Criar recurso descartavel didatico e reescrever bloco de try/finally com using; depois criar AsyncDisposable para await using.\n\nContrato da entrega (21.08):\n- A suíte complementar usa usarRecursos(recursos, corpo): Promise<valor>.\n- Descarte em LIFO com Symbol.dispose ou Symbol.asyncDispose, aguardando descartes assíncronos.\n- Mesmo quando corpo lança, todos os recursos fecham e o erro continua observável."
   },
   "21.09": {
     "objective": "Esboce como confirmar resultados equivalentes, separar warmup das medições e apresentar amostras, mediana, dispersão, ambiente e disponibilidade de memória.",
@@ -2338,7 +2429,8 @@
       "answer": 2,
       "correctFeedback": "Uma comparação interpretável mantém o trabalho e as condições relevantes equivalentes.",
       "incorrectFeedback": "Se a tarefa ou as condições mudam, não é possível atribuir a diferença apenas às implementações."
-    }
+    },
+    "prompt": "Construir página que compara duas implementações, mede tempo e memória aproximada e registra resultados.\n\nContrato da entrega (21.09):\n- Exporte comparar(input) e medir(fn,input,{warmups,runs,now}); comparar valida a entrada e mede reduce e for sobre a mesma lista.\n- median em quantidade par de amostras é a média dos dois valores centrais ordenados."
   },
   "21.10": {
     "objective": "Registre o byteLength do emissor e do worker antes e depois da transferência e compare com structuredClone sem transferência.",
@@ -2504,7 +2596,8 @@
       "answer": 2,
       "correctFeedback": "Uma alteração global amplia o alcance da API e pode afetar código fora do módulo que a introduziu.",
       "incorrectFeedback": "Uma declaração de tipo não limita o alcance runtime de uma mutação global."
-    }
+    },
+    "prompt": "Remover monkey patch global desnecessário ou isolá-lo com documentação e escopo.\n\nContrato da entrega (22.04):\n- Exporte first(xs) e migrar(xs): migrar usa a função explícita; array vazio produz undefined.\n- Não modifique Array.prototype nem adicione propriedade enumerável."
   },
   "22.05": {
     "objective": "Proponha uma ordem de migração e um critério para avançar de um módulo ao próximo.",
@@ -2533,7 +2626,8 @@
       "answer": 0,
       "correctFeedback": "Checkpoints pequenos preservam consumidores e tornam visíveis os problemas de cada módulo antes de avançar.",
       "incorrectFeedback": "Uma migração em lote ou sem contratos deixa os problemas para o final. Use checkJs e valide cada etapa, reduzindo any progressivamente."
-    }
+    },
+    "prompt": "Migrar módulo por módulo usando allowJs/checkJs, reduzindo any em etapas.\n\nContrato da entrega (22.05):\n- Exporte executar(json): número. Para {\"quantidade\":3,\"preco\":5}, devolve 15.\n- JSON inválido lança SyntaxError; quantidade que não seja inteira lança TypeError antes de produzir resultado."
   },
   "22.06": {
     "objective": "Preveja quais entradas devem passar ou falhar e que critérios ajudam a comparar as duas abordagens.",
@@ -2728,7 +2822,8 @@
       "answer": 1,
       "correctFeedback": "Separar formatos das regras facilita reutilizar e manter o domínio.",
       "incorrectFeedback": "Conhecer todos os formatos de entrada ou delegar as regras à UI aumenta o acoplamento."
-    }
+    },
+    "prompt": "Reordenar camadas de entrada -> validação -> domínio -> persistência -> apresentação.\n\nContrato da entrega (23.02):\n- Exporte criarServico(repo) com criarPedido(raw), e responder(servico,raw): Promise<{status,corpo}>.\n- 400 não persiste; 500 tem mensagem genérica e não traz cause/causa pública. A causa original permanece disponível no erro interno."
   },
   "23.03": {
     "objective": "Escreva a assinatura de criarTarefa e liste seu resultado esperado, invariantes e comportamentos de erro.",
@@ -2757,7 +2852,8 @@
       "answer": 2,
       "correctFeedback": "Um contrato prévio alinha expectativas sobre comportamento observável antes de escolher detalhes de código.",
       "incorrectFeedback": "O contrato define expectativas externas; não serve para decidir cada detalhe interno de implementação."
-    }
+    },
+    "prompt": "Definir interface pública e invariantes de uma feature antes da implementação.\n\nContrato da entrega (23.03):\n- Exporte ValidationError(campo,mensagem), StorageError(mensagem,cause) e criarTarefa(entrada,repositorio,criarId): Promise<Tarefa>.\n- Tarefa tem ID injetável, título sem espaços externos, prazo opcional em data ISO real e status inicial a-fazer.\n- Título vazio e prazo inválido lançam ValidationError antes de salvar; falha do repositório lança StorageError cujo cause é a mesma referência original."
   },
   "23.04": {
     "objective": "Proponha passos pequenos para refatorar o código legado e indique que evidência verificaria cada passo.",
@@ -2786,7 +2882,8 @@
       "answer": 0,
       "correctFeedback": "Passos pequenos ajudam a entender a causa de mudanças e a manter a revisão focada.",
       "incorrectFeedback": "Refatorar incrementalmente ainda exige entender o código e controlar o alcance de cada alteração."
-    }
+    },
+    "prompt": "Refatore legado.js em três checkpoints, mantendo node --test legado.test.js verde após cada passo. Primeiro registre os resultados e erros atuais. Depois extraia a validação compartilhada e passe a usar criarCadastroCliente(repo, nome, email, idade) e atualizarCliente(repo, id, nome, email, idade). O repositório oferece listar(), salvar(cliente), atualizar(cliente) e registrar(tipo, detalhe); no cadastro, registre ('cadastro', email), e na atualização, ('atualização', id). Preserve nome trimado, normalização do email com trim e minúsculas, idade numérica, ID clientes.length + 1, o resultado ok: true com cliente {id, nome, email, idade} e ok: false com erro. As mensagens são 'nome obrigatório', 'email inválido', 'idade mínima 18', 'email já cadastrado' e 'cliente não encontrado'. Validações, duplicidade e cliente ausente não podem gravar nem registrar. Caracterize strings numéricas e a comparação frouxa antes de trocar var, == e isNaN; documente qualquer mudança intencional como etapa separada."
   },
   "23.05": {
     "objective": "Registre possíveis achados do diff com localização, impacto e evidência ou correção mínima.",
@@ -2948,7 +3045,8 @@
       "answer": 0,
       "correctFeedback": "Uma estrutura estável torna mais previsíveis as consultas e análises posteriores.",
       "incorrectFeedback": "Estruturar não escolhe o conteúdo por conta própria, e texto livre ainda pode ser legível; a vantagem é a consistência."
-    }
+    },
+    "prompt": "Instrumente operação com ID, duração, nível do log e Error.cause; reproduza falha e produza relatório sem token.\n\nContrato da entrega (23.09):\n- Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.\n- Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada."
   },
   "23.08": {
     "objective": "Esboce o MVP escolhido e indique como domínio, persistência, interface, API tipada, testes e documentação se relacionam.",
@@ -2978,5 +3076,14 @@
       "correctFeedback": "A justificativa e os tradeoffs ajudam a entender o contexto e a reavaliar a decisão no futuro.",
       "incorrectFeedback": "Uma escolha sem contexto ou uma lista sem relação com requisitos oferece pouca orientação a quem mantém o projeto."
     }
+  },
+  "20.08": {
+    "prompt": "Projete uma pipeline lazy de map/filter/take para fonte potencialmente infinita. Registre uma hipótese e um contador de pulls antes de implementar; escreva o primeiro teste autoral, implemente os generators e revise encerramento antecipado.\n\nContrato da entrega (20.08):\n- pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().\n- Cada operador retorna um novo pipeline lazy; take limita valores aceitos, take(0) não consome e return() da fonte é respeitado ao interromper a iteração."
+  },
+  "20.09": {
+    "prompt": "Investigue a relação entre produtor e consumidor sob uma strategy de fila declarada. Colete sequência de eventos e explique como a demanda influencia o produtor sem inferir valores universais.\n\nContrato da entrega (20.09):\n- Exporte criarStream(): {stream:ReadableStream,eventos:Array} e consumirLento(source,wait=0): Promise<{values:number[],eventos:Array}>.\n- Leia 1,2,3 e cancele com motivo \"consumidor terminou\"; cada evento pull registra desiredSize numérico."
+  },
+  "20.10": {
+    "prompt": "Codifique o texto Unicode para bytes UTF-8, conte bytes separadamente do comprimento da string e faça round-trip. Explique qual opção do decoder torna a conversão estrita ou tolerante, mantendo separado o round-trip válido.\n\nContrato da entrega (20.10):\n- Exporte medirTexto(text): {textLength:number,byteLength:number,bytes:Uint8Array,decoded:string} e decodificar(bytes,{fatal=false}={}): string.\n- byteLength conta UTF-8; UTF-8 inválido lança TypeError no modo fatal e insere U+FFFD no modo padrão."
   }
 }

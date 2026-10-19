@@ -674,14 +674,15 @@
     ]
   },
   "22.08": {
-    "version": 2,
+    "version": 3,
     "files": [
-      "src/index.ts",
-      "src/index.test.ts",
+      "src/index.js",
+      "src/index.test.mjs",
       "package.json",
       "tsconfig.json",
       "README.md",
       "consumidor/main.mjs",
+      "consumidor/main.ts",
       "package-lock.json"
     ]
   },

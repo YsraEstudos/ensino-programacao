@@ -53,11 +53,12 @@ CONTENT = {
         "dobro(3) retorna 6; a chamada a console.log fora da função imprime esse resultado.",
         "Ler função somaUm com log externo -> retorno e efeito separados",
         kind="READ", estimated=4,
+        rubric=("Identifiquei a entrada 3 passada a dobro.", "Identifiquei 6 como o valor devolvido por return.", "Localizei o console.log externo como a linha que imprime 6."),
     ),
     "D.05": E(
         "diagnostic.tool_choice",
         'main.js: function total(xs) { let n=0; for (const x of xs) if(x>0) n+=x; return n; }',
-        "pergunta 'qual retorno para [2,-1,3]?' -> leitura/Run é suficiente, 5; pergunta 'por que falha em caso grande?' -> teste de borda e debugger se fluxo divergir",
+        "pergunta 'qual retorno para [2,-1,3]?' -> leitura/Run é suficiente, 5; pergunta hipotética 'se um caso grande falhar, como investigar?' -> teste de borda e debugger se fluxo divergir",
         "lista vazia -> 0; ferramenta inicial para hipótese de borda: teste pequeno reproduzível",
         "Usar debugger por reflexo sem hipótese ou apenas ler quando há divergência de estado.",
         "Escolha de ferramenta não responde ao tipo de incerteza apresentado.",
@@ -66,6 +67,8 @@ CONTENT = {
         "Leia e preveja 5; rode para conferir. Para falha reproduzível, escreva teste; use debugger se o estado divergir entre iterações.",
         "Escolher ferramenta para loop com contador que muda no ramo errado -> debugger com breakpoint no ramo",
         kind="INVESTIGATE", estimated=5,
+        prompt="Leia a função e compare duas perguntas: qual retorno ela produz para [2,-1,3], e como investigar uma divergência caso outra entrada apresente resultado inesperado? Para cada caso, registre hipótese, ferramenta inicial e evidência esperada.",
+        rubric=("Previ o retorno 5 e usei leitura ou Run para conferir essa saída simples.", "Escolhi um teste pequeno para reproduzir uma borda e indiquei a saída esperada.", "Para um estado divergente no loop, indiquei onde pausar no debugger e qual valor observar."),
     ),
     "D.06": E(
         "diagnostic.foundation_entry",
@@ -93,6 +96,7 @@ CONTENT = {
         "return entrega um valor; push altera o array; map, filter e find têm propósitos distintos.",
         "array [1,2,3] -> filter para manter acima de um limite e map para transformar todos",
         kind="READ", estimated=5, title="Intermediário · funções e arrays",
+        rubric=("Acompanhei o retorno de dobro e os estados do array antes e depois das chamadas.", "Diferenciei a mutação por alias da cópia criada por slice.", "Associei map a transformar todos, filter a selecionar vários e find ao primeiro correspondente."),
         prompt="O diagnóstico oferece feedback de estudo e uma sugestão limitada; não declara domínio completo do estágio.",
     ),
     "D.08": E(
@@ -107,6 +111,7 @@ CONTENT = {
         "Acesso a campo e retorno são operações diferentes; checagem estática não substitui validação runtime.",
         "string atribuída a number -> erro estático; JSON sem validação -> risco runtime",
         kind="READ", estimated=6, title="TypeScript · tipos e limites da verificação",
+        rubric=("Separei o valor retornado do acesso pessoa.nome.", "Distingui diagnóstico estático de tipo de validação em runtime de JSON externo.", "Expliquei por que cast ou any não comprovam a forma do dado recebido."),
         prompt="Esta leitura orienta o começo pelo item 15.01. Não executa o compilador do aluno e não certifica domínio de TypeScript.",
     ),
     "D.09": E(
@@ -122,5 +127,6 @@ CONTENT = {
         "CPU alta e rede baixa -> investigar cálculo local antes de atribuir a espera ao servidor",
         kind="INVESTIGATE", estimated=6, title="Avançado · hipóteses e medições",
         prompt="O diagnóstico recomenda somente a entrada do item 21.01 quando estes exemplos fechados estão corretos; ele não observa um sistema real nem prova profiling.",
+        rubric=("Classifiquei cada cenário como hipótese de CPU, rede, DOM/layout, memória ou I/O.", "Indiquei uma medida ou observação que pode apoiar ou enfraquecer a hipótese.", "Registrei uma explicação alternativa e o dado que ajudaria a distingui-la."),
     ),
 }

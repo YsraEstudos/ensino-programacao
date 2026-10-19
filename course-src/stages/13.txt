@@ -22,9 +22,14 @@ Debugging comeca pelo habito prever -> executar -> comparar. Nesta etapa o aluno
 breakpoints, step over/into/out, watch e leitura de stack traces. Pesquisas recentes sugerem que execucao
 simples e util em trechos pequenos e debugger ganha valor relativo conforme a complexidade aumenta
 [E9].
-Vitest e a API padrao da plataforma: describe, test/it e expect. Isso remove a ambiguidade da primeira
-edicao. O aluno aprende arranjo-acao-verificacao, testes de tabela e a diferenca entre testar
-comportamento e acoplar o teste a detalhes internos.
+Vitest e um runner para projetos locais; alguns exemplos usam sua API describe, test/it e expect.
+No site, atividades marcadas autoTested passam pelo avaliador do DevPath, que fornece a API de
+teste compativel sem executar a CLI Vitest nem instalar o pacote no projeto do aluno. Cartoes de
+rubrica, como 13.01, 13.04, 13.11 e 13.12, sao avaliados pela rubrica no site e pedem a evidencia
+especifica indicada no cartao. Quando a tarefa pede testes locais, use o runner e os comandos do
+starter; instale Vitest somente se o projeto realmente o declarar. O aluno aprende
+arranjo-acao-verificacao, testes de tabela e a diferenca entre testar comportamento e acoplar o
+teste a detalhes internos.
 TDD aparece onde o feedback de especificacao e util: parsers, regras puras e bugs reproduziveis. O curso
 evita a regra "todo codigo precisa nascer de TDD". O criterio e reduzir ambiguidade e facilitar mudanca.
 Erros e concepcoes que a etapa deve revelar
@@ -36,14 +41,16 @@ Exemplo resolvido - teste de borda antes da implementação
 expect(clamp(12, 0, 10)).toBe(10);
 expect(clamp(-2, 0, 10)).toBe(0);
 expect(clamp(6, 0, 10)).toBe(6);
-Os exemplos usam a API do Vitest (describe/test/expect). O site ainda nao roda Vitest: as
-suites sao executadas no seu computador com `npx vitest`. Debugger
+Os exemplos que usam Vitest rodam localmente somente quando o projeto instala o runner. O site
+executa seus proprios testes para atividades `autoTested`; isso nao equivale a rodar `npx vitest`.
+Atividades por rubrica sao revistas conforme a evidencia descrita no cartao. Debugger
 aparece formalmente aqui, mas exercicios de previsao -> execucao -> breakpoint ja comecam nas etapas
 iniciais. A meta e alternar leitura, execucao e debugger conforme a complexidade, nao usar console.log
 para tudo.
 GATE DE DOMINIO
 Avance quando o projeto cumprir os exemplos e casos de borda publicados, voce registrar
 por escrito uma sessao de debugging (hipotese, evidencia, causa, correcao) e o projeto
-resistir a uma pequena mudanca de requisito. O site nao verifica esses itens: a conclusao e
-revisao propria, com testes rodados no seu computador quando o cartao pedir. Erros de
+resistir a uma pequena mudanca de requisito. A avaliacao automatizada do site se aplica apenas
+as atividades marcadas `autoTested`; os cartoes de rubrica dependem da evidencia indicada e
+testes locais rodam no seu computador quando o cartao pedir. Erros de
 acessibilidade/async que quebram o contrato bloqueiam o gate.

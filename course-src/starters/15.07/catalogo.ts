@@ -17,6 +17,6 @@ export function rotulo(produto: Produto): string {
 }
 
 // Casos próprios para o contrato de ausência:
-// primeiroNome([])                                -> ___
-// semApelido({ nome: "Caneca", apelido: "C" })    -> ___
-// rotulo({ nome: "Caneca" })                      -> ___
+// primeiroNome([])                                -> lança RangeError
+// semApelido({ nome: "Caneca", apelido: "C" })    -> { nome: "Caneca" } (cópia sem a chave apelido)
+// rotulo({ nome: "Caneca" })                      -> "Caneca" (fallback para nome)

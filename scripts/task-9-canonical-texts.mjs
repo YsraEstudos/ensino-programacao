@@ -6,6 +6,139 @@ import {readFileSync, writeFileSync, mkdirSync} from "node:fs";
 import path from "node:path";
 
 const CANONICAL_FILES = {
+ "course-src/starters/23.04/legado.js": String.raw`// 23.04 · Código legado: valide o comportamento antes de refatorar.
+// API pública: criarCadastroCliente(repo, nome, email, idade).
+// atualização: atualizarCliente(repo, id, nome, email, idade).
+// repo: listar() -> clientes; salvar(cliente); atualizar(cliente); registrar(tipo, detalhe).
+
+export const disco = { arquivos: new Map(), escritas: 0 };
+function escrever(caminho, texto) { disco.escritas++; disco.arquivos.set(caminho, texto); }
+function ler(caminho) { return disco.arquivos.get(caminho); }
+
+export function cadastrarCliente(nome, email, idade) {
+  if (nome == null || String(nome).trim() == "") return { ok: false, erro: "nome obrigatório" };
+  if (email == null || String(email).indexOf("@") == -1) return { ok: false, erro: "email inválido" };
+  if (idade == null || isNaN(idade) || Number(idade) < 18) return { ok: false, erro: "idade mínima 18" };
+  var clientes = JSON.parse(ler("clientes.json") || "[]");
+  for (var i = 0; i < clientes.length; i++) {
+    if (clientes[i].email == String(email).trim().toLowerCase()) return { ok: false, erro: "email já cadastrado" };
+  }
+  var cliente = { id: clientes.length + 1, nome: String(nome).trim(), email: String(email).trim().toLowerCase(), idade: Number(idade) };
+  clientes.push(cliente);
+  escrever("clientes.json", JSON.stringify(clientes));
+  escrever("log.txt", (ler("log.txt") || "") + "cadastro " + cliente.email + "\n");
+  return { ok: true, cliente: cliente };
+}
+
+function validarComportamentoAtual(nome, email, idade) {
+  if (nome == null || String(nome).trim() == "") return { ok: false, erro: "nome obrigatório" };
+  if (email == null || String(email).indexOf("@") == -1) return { ok: false, erro: "email inválido" };
+  if (idade == null || isNaN(idade) || Number(idade) < 18) return { ok: false, erro: "idade mínima 18" };
+  return { ok: true, value: { nome: String(nome).trim(), email: String(email).trim().toLowerCase(), idade: Number(idade) } };
+}
+
+export function criarCadastroCliente(repo, nome, email, idade) {
+  const dados = validarComportamentoAtual(nome, email, idade);
+  if (!dados.ok) return dados;
+  const clientes = repo.listar();
+  if (clientes.some(cliente => cliente.email == dados.value.email)) return { ok: false, erro: "email já cadastrado" };
+  const cliente = { id: clientes.length + 1, ...dados.value };
+  repo.salvar(cliente);
+  repo.registrar("cadastro", cliente.email);
+  return { ok: true, cliente };
+}
+
+function atualizarClienteLegado(id, nome, email, idade) {
+  if (nome == null || String(nome).trim() == "") return { ok: false, erro: "nome obrigatório" };
+  if (email == null || String(email).indexOf("@") == -1) return { ok: false, erro: "email inválido" };
+  if (idade == null || isNaN(idade) || Number(idade) < 18) return { ok: false, erro: "idade mínima 18" };
+  var clientes = JSON.parse(ler("clientes.json") || "[]");
+  var achou = false;
+  for (var i = 0; i < clientes.length; i++) {
+    if (clientes[i].id == id) {
+      clientes[i].nome = String(nome).trim();
+      clientes[i].email = String(email).trim().toLowerCase();
+      clientes[i].idade = Number(idade);
+      achou = true;
+    }
+  }
+  if (!achou) return { ok: false, erro: "cliente não encontrado" };
+  escrever("clientes.json", JSON.stringify(clientes));
+  escrever("log.txt", (ler("log.txt") || "") + "atualização " + id + "\n");
+  return { ok: true };
+}
+
+export function atualizarCliente(repoOuId, idOuNome, nomeOuEmail, emailOuIdade, idade) {
+  if (!repoOuId || typeof repoOuId.listar !== "function") return atualizarClienteLegado(repoOuId, idOuNome, nomeOuEmail, emailOuIdade);
+  const [id, nome, email, idadeCliente] = [idOuNome, nomeOuEmail, emailOuIdade, idade];
+  const dados = validarComportamentoAtual(nome, email, idadeCliente);
+  if (!dados.ok) return dados;
+  const atual = repoOuId.listar().find(cliente => cliente.id == id);
+  if (!atual) return { ok: false, erro: "cliente não encontrado" };
+  repoOuId.atualizar({ id: atual.id, ...dados.value });
+  repoOuId.registrar("atualização", id);
+  return { ok: true };
+}
+
+// Passos sugeridos: registre primeiro as coercões observadas; extraia a validação;
+// depois reduza o acoplamento ao disco e só então substitua var, == e isNaN.
+`,
+ "course-src/starters/23.04/legado.test.js": String.raw`// Suíte de caracterização: node --test legado.test.js; mantenha-a verde em cada checkpoint.
+import { test, beforeEach } from "node:test";
+import assert from "node:assert/strict";
+import { cadastrarCliente, criarCadastroCliente, atualizarCliente, disco } from "./legado.js";
+
+beforeEach(() => { disco.arquivos.clear(); disco.escritas = 0; });
+
+test("cadastra e normaliza", () => {
+  const r = cadastrarCliente(" Ana ", " ANA@EX.COM ", "30");
+  assert.deepEqual(r, { ok: true, cliente: { id: 1, nome: "Ana", email: "ana@ex.com", idade: 30 } });
+});
+
+test("entrada inválida não escreve nada", () => {
+  assert.deepEqual(cadastrarCliente("", "a@b", 20), { ok: false, erro: "nome obrigatório" });
+  assert.deepEqual(cadastrarCliente("A", "sem-arroba", 20), { ok: false, erro: "email inválido" });
+  assert.deepEqual(cadastrarCliente("A", "a@b", 17), { ok: false, erro: "idade mínima 18" });
+  assert.equal(disco.escritas, 0);
+});
+
+test("email duplicado", () => {
+  cadastrarCliente("Ana", "a@b", 20);
+  assert.deepEqual(cadastrarCliente("Bia", "A@B", 20), { ok: false, erro: "email já cadastrado" });
+});
+
+test("atualiza existente e recusa ausente", () => {
+  cadastrarCliente("Ana", "a@b", 20);
+  assert.deepEqual(atualizarCliente(1, "Ana Maria", "a@b", 21), { ok: true });
+  assert.deepEqual(atualizarCliente(9, "X", "x@y", 30), { ok: false, erro: "cliente não encontrado" });
+});
+
+test("API com repositório preserva formato, normalização e chamadas", () => {
+  const calls = [];
+  const repo = {
+    rows: [],
+    listar() { calls.push("listar"); return this.rows.map(row => ({ ...row })); },
+    salvar(cliente) { calls.push("salvar"); this.rows.push({ ...cliente }); },
+    atualizar(cliente) { calls.push("atualizar"); this.rows = this.rows.map(row => row.id === cliente.id ? { ...cliente } : row); },
+    registrar(...args) { calls.push(["registrar", ...args]); },
+  };
+  assert.deepEqual(criarCadastroCliente(repo, " Ana ", " ANA@EXAMPLE.COM ", "18"), {
+    ok: true, cliente: { id: 1, nome: "Ana", email: "ana@example.com", idade: 18 },
+  });
+  assert.deepEqual(calls, ["listar", "salvar", ["registrar", "cadastro", "ana@example.com"]]);
+  assert.deepEqual(atualizarCliente(repo, "1", "Ana Maria", "ANA@EXAMPLE.COM", 19), { ok: true });
+  assert.deepEqual(calls.slice(-3), ["listar", "atualizar", ["registrar", "atualização", "1"]]);
+});
+
+test("falhas não gravam nem registram", () => {
+  const calls = [];
+  const repo = { listar() { calls.push("listar"); return [{ id: 1, nome: "A", email: "a@x", idade: 20 }]; }, salvar() { calls.push("salvar"); }, atualizar() { calls.push("atualizar"); }, registrar() { calls.push("registrar"); } };
+  assert.deepEqual(criarCadastroCliente(repo, "", "b@y", 20), { ok: false, erro: "nome obrigatório" });
+  assert.deepEqual(criarCadastroCliente(repo, "B", "A@X", 20), { ok: false, erro: "email já cadastrado" });
+  assert.deepEqual(atualizarCliente(repo, 99, "B", "b@y", 20), { ok: false, erro: "cliente não encontrado" });
+  assert.deepEqual(calls, ["listar", "listar"]);
+});
+`,
  "course-src/tests/15.02.test.js": "import {test} from 'node:test'; import assert from 'node:assert/strict'; import {parseConfig} from './config.ts';\ntest('usa default apenas quando port está ausente',()=>/*@case 15.02.usa-default-apenas-quando-po-430e1dc4*/assert.deepEqual(parseConfig({}),{port:3000}));\ntest('aceita texto de dígitos nos limites e no meio da faixa',()=>{/*@case 15.02.aceita-texto-de-digitos-nos--5d89bd8f*/assert.deepEqual(parseConfig({port:'1'}),{port:1});/*@case 15.02.aceita-texto-de-digitos-nos--0e3d7a2d*/assert.deepEqual(parseConfig({port:'65535'}),{port:65535});/*@case 15.02.aceita-texto-de-digitos-nos--201f78a6*/assert.deepEqual(parseConfig({port:'8080'}),{port:8080});});\ntest('rejeita valor numérico e texto que não representa inteiro permitido',()=>{for(const port of [1,3000,65535,'',' 80','80 ','+80','8e1','1.5','abc','0','65536'])/*@case 15.02.rejeita-valor-numerico-e-tex-2e5b9fc5*/assert.throws(()=>parseConfig({port}),RangeError);});\ntest('port undefined usa default e entrada que não seja objeto falha',()=>{/*@case 15.02.port-undefined-usa-default-e-be30e2b8*/assert.deepEqual(parseConfig({port:undefined}),{port:3000});for(const raw of [null,undefined,7,'{}'])/*@case 15.02.port-undefined-usa-default-e-47e47ae2*/assert.throws(()=>parseConfig(raw),TypeError);});\n",
  "course-src/tests/15.03.test.js": "import {test} from 'node:test'; import assert from 'node:assert/strict'; import {criarUsuario} from './usuario.ts';\ntest('preserva API, normaliza nome e grava instante ISO atual',()=>{const before=Date.now();const user=criarUsuario(' Ana ',13);const after=Date.now();/*@case 15.03.preserva-api-normaliza-nome--3d8b9e82*/assert.equal(user.nome,'Ana');/*@case 15.03.preserva-api-normaliza-nome--5c0eff86*/assert.equal(user.idade,13);/*@case 15.03.preserva-api-normaliza-nome--b62b94fd*/assert.match(user.criadoEm,/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z$/);const stamp=Date.parse(user.criadoEm);/*@case 15.03.preserva-api-normaliza-nome--f362adaf*/assert.ok(stamp>=before-1000&&stamp<=after+1000);});\ntest('rejeita idade abaixo do limite',()=>/*@case 15.03.rejeita-idade-abaixo-do-limi-96fc4241*/assert.throws(()=>criarUsuario('Ana',12),RangeError));\ntest('não altera a idade permitida',()=>/*@case 15.03.nao-altera-a-idade-permitida-9016c546*/assert.equal(criarUsuario('Bia',13).idade,13));\n",
  "course-src/tests/15.04.test.js": "import {test} from 'node:test'; import assert from 'node:assert/strict'; import {ler} from './perfil.ts';\ntest('lê o perfil válido',()=>/*@case 15.04.le-o-perfil-valido-42e642c6*/assert.equal(ler({user:{name:'Ana'}}),'ANA'));\ntest('rejeita cada fronteira sem acesso prematuro',()=>{for(const v of [null,{}, {user:null},{user:{}},{user:{name:42}}]) /*@case 15.04.rejeita-cada-fronteira-sem-a-fb434af8*/assert.throws(()=>ler(v),TypeError);});\ntest('aceita nomes em branco sem alterar o limite da função',()=>/*@case 15.04.aceita-nomes-em-branco-sem-a-5da3946e*/assert.equal(ler({user:{name:'bia'}}),'BIA'));\ntest('valida a string antes de chamar métodos',()=>/*@case 15.04.valida-a-string-antes-de-cha-d717418e*/assert.throws(()=>ler({user:{name:42}}),/Nome inválido/));\n",
@@ -26,7 +159,7 @@ const CANONICAL_FILES = {
  "course-src/tests/21.02.test.js": "const{montar,desmontar}=await import('./cleanup.js');test('mount/unmount are idempotent and reuse listener identity',()=>{const target=new EventTarget(),state={timer:null},events=[];let serial=0;const calls={set:0,clear:0,setInterval(){this.set++;return ++serial;},clearInterval(){this.clear++;}};const click=()=>events.push('click');montar(target,state,click,calls);montar(target,state,click,calls);target.dispatchEvent(new Event('click'));/*@case 21.02.mount-unmount-are-idempotent-fa6161fc*/expect(events).toEqual(['click']);/*@case 21.02.mount-unmount-are-idempotent-6bb317ab*/expect(calls.set).toBe(1);desmontar(target,state,click,calls);desmontar(target,state,click,calls);target.dispatchEvent(new Event('click'));/*@case 21.02.mount-unmount-are-idempotent-fa6161fc*/expect(events).toEqual(['click']);/*@case 21.02.mount-unmount-are-idempotent-9407b478*/expect(calls.clear).toBe(1);/*@case 21.02.mount-unmount-are-idempotent-4bf789aa*/expect(state.timer).toBe(null);});\n",
  "course-src/tests/21.03.test.js": "import{benchmark}from'./benchmark.js';test('authored defaults and result names remain stable',()=>{let calls=0;const r=benchmark(()=>{calls++;});/*@case 21.03.authored-defaults-and-result-229ef67b*/expect(calls).toBe(14);/*@case 21.03.authored-defaults-and-result-ecf114b7*/expect(r.amostras.length).toBe(9);/*@case 21.03.authored-defaults-and-result-bc69666d*/expect(typeof r.mediana).toBe('number');/*@case 21.03.authored-defaults-and-result-481551fb*/expect('samples' in r).toBe(false);});test('warmups are excluded from measured samples',()=>{let calls=0;const r=benchmark(()=>{calls++;},{runs:3,warmups:2});/*@case 21.03.warmups-are-excluded-from-me-a7b04261*/expect(calls).toBe(5);/*@case 21.03.warmups-are-excluded-from-me-427a82bd*/expect(r.amostras.length).toBe(3);/*@case 21.03.warmups-are-excluded-from-me-47bccc13*/expect(r.mediana>=0).toBe(true);});test('median is not the arithmetic mean',()=>{const original=performance.now;let i=0;Object.defineProperty(performance,'now',{configurable:true,value:()=>[0,10,11,12,13,22][i++]});try{const r=benchmark(()=>{},{warmups:0,runs:3});/*@case 21.03.median-is-not-the-arithmetic-19bd9409*/expect(r.amostras).toEqual([10,1,9]);/*@case 21.03.median-is-not-the-arithmetic-14cf85d5*/expect(r.mediana).toBe(9);}finally{Object.defineProperty(performance,'now',{configurable:true,value:original});}});\n",
  "course-src/tests/21.04.test.js": "import {memoizeLRU} from './memo.js';\n\ntest('hit refreshes recency before the least recent key is evicted', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; }, 2);\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  /*@case 21.04.lru-refresh-eviction*/ expect(memoized('B')).toBe('B');\n  /*@case 21.04.lru-refresh-eviction*/ expect(calls).toBe(4);\n});\n\ntest('omitted capacity uses the default of two', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(key => { calls += 1; return key; });\n  memoized('A');\n  memoized('B');\n  memoized('A');\n  memoized('C');\n  memoized('B');\n  /*@case 21.04.default-capacity*/ expect(calls).toBe(4);\n});\n\ntest('falsy values are cached while zero capacity recalculates every time', () => {\n  let calls = 0;\n  const falsy = memoizeLRU(() => { calls += 1; return 0; }, 1);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(falsy('zero')).toBe(0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(1);\n\n  const uncached = memoizeLRU(() => { calls += 1; return false; }, 0);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(uncached('x')).toBe(false);\n  /*@case 21.04.falsy-and-zero-capacity*/ expect(calls).toBe(3);\n});\n\ntest('a thrown calculation propagates and the same key can be retried', () => {\n  let calls = 0;\n  const failure = new Error('falha ao calcular X');\n  const memoized = memoizeLRU(() => {\n    calls += 1;\n    if (calls === 1) throw failure;\n    return false;\n  });\n  let observed;\n  try { memoized('X'); } catch (error) { observed = error; }\n  /*@case 21.04.throw-propagates-and-retries*/ expect(observed).toBe(failure);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(memoized('X')).toBe(false);\n  /*@case 21.04.throw-propagates-and-retries*/ expect(calls).toBe(2);\n});\n\ntest('capacity three preserves adversarial object keys without collisions', () => {\n  let calls = 0;\n  const memoized = memoizeLRU(value => { calls += 1; return value.label; }, 3);\n  const first = {tenant: 'a|b', locale: 'c', label: 'first'};\n  const second = {tenant: 'a', locale: 'b|c', label: 'second'};\n  const third = {tenant: 'other', locale: 'en', label: 'third'};\n  const fourth = {tenant: 'last', locale: 'pt', label: 'fourth'};\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(first)).toBe('first');\n  memoized(fourth);\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(third)).toBe('third');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(memoized(second)).toBe('second');\n  /*@case 21.04.composite-keys-capacity-three*/ expect(calls).toBe(5);\n});\n",
- "course-src/tests/21.05.test.js": "import {calcular, encerrar} from '../main.js';\nimport {contarPrimos} from '../primos.js';\n\nfunction observeWorker({reorder = false} = {}) {\n  const exposedPrototype = Worker.prototype;\n  const postDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'postMessage');\n  const terminateDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'terminate');\n  const NativeWorker = Object.getPrototypeOf(exposedPrototype).constructor;\n  const nativePostMessage = NativeWorker.prototype.postMessage;\n  const nativeTerminate = terminateDescriptor?.value;\n  const sent = [];\n  const received = [];\n  let resolveTwoResponses;\n  const twoResponses = new Promise(resolve => { resolveTwoResponses = resolve; });\n  let worker;\n  let held;\n  let terminateCalls = 0;\n\n  Object.defineProperty(exposedPrototype, 'postMessage', {\n    configurable: true,\n    writable: true,\n    value(message, ...options) {\n      worker ||= this;\n      if (worker !== this) throw new Error('A suíte esperava uma única instância Worker.');\n      if (sent.length === 0) this.addEventListener('message', event => {\n        received.push(event.data);\n        if (received.length >= 2) resolveTwoResponses(received);\n      });\n      sent.push(message);\n      if (!reorder) return nativePostMessage.call(this, message, ...options);\n      if (!held) { held = {message, options}; return; }\n      if (sent.length !== 2) throw new Error('A fixture de reordenação aceita exatamente duas mensagens.');\n      nativePostMessage.call(this, message, ...options);\n      nativePostMessage.call(this, held.message, ...held.options);\n    },\n  });\n  if (terminateDescriptor) {\n    Object.defineProperty(exposedPrototype, 'terminate', {\n      ...terminateDescriptor,\n      value(...args) { return nativeTerminate.apply(this, args); },\n    });\n  }\n\n  return {\n    sent,\n    received,\n    twoResponses,\n    terminateCalls: () => terminateCalls,\n    countTerminateCalls() {\n      if (!terminateDescriptor) throw new Error('Worker.terminate não é observável nesta implementação do runner.');\n      Object.defineProperty(exposedPrototype, 'terminate', {\n        ...terminateDescriptor,\n        value(...args) { terminateCalls += 1; return nativeTerminate.apply(this, args); },\n      });\n    },\n    restore() {\n      if (postDescriptor) Object.defineProperty(exposedPrototype, 'postMessage', postDescriptor);\n      else delete exposedPrototype.postMessage;\n      if (terminateDescriptor) Object.defineProperty(exposedPrototype, 'terminate', terminateDescriptor);\n      else delete exposedPrototype.terminate;\n    },\n  };\n}\n\ntest('contarPrimos preserves its public values and input boundary', () => {\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(0)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(1)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(2)).toBe(1);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(10)).toBe(4);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(100)).toBe(25);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(NaN)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(Infinity)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos('10')).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n});\n\ntest('an independent sieve checks the full range and fixed-seed samples', () => {\n  const N = 20011;\n  const sieve = new Uint8Array(N + 1).fill(1);\n  sieve[0] = 0;\n  sieve[1] = 0;\n  for (let i = 2; i * i <= N; i += 1) {\n    if (sieve[i]) for (let j = i * i; j <= N; j += i) sieve[j] = 0;\n  }\n  const expected = new Array(N + 1);\n  let count = 0;\n  for (let n = 0; n <= N; n += 1) {\n    count += sieve[n];\n    expected[n] = count;\n  }\n  const actualRange = Array.from({length: 1501}, (_, n) => contarPrimos(n));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(actualRange).toEqual(expected.slice(0, 1501));\n  let seed = 7;\n  const samples = [];\n  for (let k = 0; k < 12; k += 1) {\n    seed = (seed * 48271) % 2147483647;\n    samples.push(1501 + seed % (N - 1500));\n  }\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples).toEqual([6200, 1976, 13815, 2677, 15038, 15794, 4350, 13141, 5812, 9009, 16689, 19503]);\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples.map(n => contarPrimos(n))).toEqual(samples.map(n => expected[n]));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(contarPrimos(N)).toBe(expected[N]);\n});\n\ntest('native Worker message IDs route out-of-order responses to their own promises', async () => {\n  const spy = observeWorker({reorder: true});\n  try {\n    const first = calcular(10);\n    const second = calcular(100);\n    const outcome = await Promise.race([\n      Promise.all([first, second]).then(values => ({kind: 'completed', values})),\n      new Promise(resolve => setTimeout(() => resolve({kind: 'timeout'}), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(outcome.kind).toBe('completed');\n    const values = outcome.kind === 'completed' ? outcome.values : [];\n    const twoResponsesArrived = await Promise.race([\n      spy.twoResponses.then(() => true),\n      new Promise(resolve => setTimeout(() => resolve(false), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(twoResponsesArrived).toBe(true);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.sent).toHaveLength(2);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.id)).toEqual([spy.sent[1].id, spy.sent[0].id]);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.result)).toEqual([25, 4]);\n    /*@case 21.05.real-worker-response-ids*/ expect(values).toEqual([4, 25]);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('a task error rejects only its request and the Worker stays usable', async () => {\n  const spy = observeWorker();\n  try {\n    const invalid = calcular(-1).then(() => null, error => error.message);\n    const valid = calcular(10);\n    /*@case 21.05.task-error-is-isolated*/ expect(await invalid).toBe('n must be a nonnegative integer');\n    /*@case 21.05.task-error-is-isolated*/ expect(await valid).toBe(4);\n    /*@case 21.05.task-error-is-isolated*/ expect(spy.received.some(message => message.error === 'n must be a nonnegative integer')).toBe(true);\n    /*@case 21.05.task-error-is-isolated*/ expect(await calcular(2)).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('closing terminates once, rejects pending work, and rejects future work', async () => {\n  const spy = observeWorker();\n  spy.countTerminateCalls();\n  try {\n    const pending = calcular(100).then(() => null, error => error.message);\n    encerrar();\n    encerrar();\n    const pendingResult = await pending;\n    const afterClose = await calcular(10).then(() => null, error => error.message);\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(pendingResult).toBe('Cálculo cancelado pelo encerramento.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(afterClose).toBe('Worker encerrado.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(spy.terminateCalls()).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n",
+ "course-src/tests/21.05.test.js": "import {calcular, encerrar} from './main.js';\nimport {contarPrimos} from './primos.js';\n\nfunction observeWorker({reorder = false} = {}) {\n  const exposedPrototype = Worker.prototype;\n  const postDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'postMessage');\n  const terminateDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'terminate');\n  const NativeWorker = Object.getPrototypeOf(exposedPrototype).constructor;\n  const nativePostMessage = NativeWorker.prototype.postMessage;\n  const nativeTerminate = terminateDescriptor?.value;\n  const sent = [];\n  const received = [];\n  let resolveTwoResponses;\n  const twoResponses = new Promise(resolve => { resolveTwoResponses = resolve; });\n  let worker;\n  let held;\n  let terminateCalls = 0;\n\n  Object.defineProperty(exposedPrototype, 'postMessage', {\n    configurable: true,\n    writable: true,\n    value(message, ...options) {\n      worker ||= this;\n      if (worker !== this) throw new Error('A suíte esperava uma única instância Worker.');\n      if (sent.length === 0) this.addEventListener('message', event => {\n        received.push(event.data);\n        if (received.length >= 2) resolveTwoResponses(received);\n      });\n      sent.push(message);\n      if (!reorder) return nativePostMessage.call(this, message, ...options);\n      if (!held) { held = {message, options}; return; }\n      if (sent.length !== 2) throw new Error('A fixture de reordenação aceita exatamente duas mensagens.');\n      nativePostMessage.call(this, message, ...options);\n      nativePostMessage.call(this, held.message, ...held.options);\n    },\n  });\n  if (terminateDescriptor) {\n    Object.defineProperty(exposedPrototype, 'terminate', {\n      ...terminateDescriptor,\n      value(...args) { return nativeTerminate.apply(this, args); },\n    });\n  }\n\n  return {\n    sent,\n    received,\n    twoResponses,\n    terminateCalls: () => terminateCalls,\n    countTerminateCalls() {\n      if (!terminateDescriptor) throw new Error('Worker.terminate não é observável nesta implementação do runner.');\n      Object.defineProperty(exposedPrototype, 'terminate', {\n        ...terminateDescriptor,\n        value(...args) { terminateCalls += 1; return nativeTerminate.apply(this, args); },\n      });\n    },\n    restore() {\n      if (postDescriptor) Object.defineProperty(exposedPrototype, 'postMessage', postDescriptor);\n      else delete exposedPrototype.postMessage;\n      if (terminateDescriptor) Object.defineProperty(exposedPrototype, 'terminate', terminateDescriptor);\n      else delete exposedPrototype.terminate;\n    },\n  };\n}\n\ntest('contarPrimos preserves its public values and input boundary', () => {\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(0)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(1)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(2)).toBe(1);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(10)).toBe(4);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(100)).toBe(25);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(NaN)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(Infinity)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos('10')).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n});\n\ntest('an independent sieve checks the full range and fixed-seed samples', () => {\n  const N = 20011;\n  const sieve = new Uint8Array(N + 1).fill(1);\n  sieve[0] = 0;\n  sieve[1] = 0;\n  for (let i = 2; i * i <= N; i += 1) {\n    if (sieve[i]) for (let j = i * i; j <= N; j += i) sieve[j] = 0;\n  }\n  const expected = new Array(N + 1);\n  let count = 0;\n  for (let n = 0; n <= N; n += 1) {\n    count += sieve[n];\n    expected[n] = count;\n  }\n  const actualRange = Array.from({length: 1501}, (_, n) => contarPrimos(n));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(actualRange).toEqual(expected.slice(0, 1501));\n  let seed = 7;\n  const samples = [];\n  for (let k = 0; k < 12; k += 1) {\n    seed = (seed * 48271) % 2147483647;\n    samples.push(1501 + seed % (N - 1500));\n  }\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples).toEqual([6200, 1976, 13815, 2677, 15038, 15794, 4350, 13141, 5812, 9009, 16689, 19503]);\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples.map(n => contarPrimos(n))).toEqual(samples.map(n => expected[n]));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(contarPrimos(N)).toBe(expected[N]);\n});\n\ntest('native Worker message IDs route out-of-order responses to their own promises', async () => {\n  const spy = observeWorker({reorder: true});\n  try {\n    const first = calcular(10);\n    const second = calcular(100);\n    const outcome = await Promise.race([\n      Promise.all([first, second]).then(values => ({kind: 'completed', values})),\n      new Promise(resolve => setTimeout(() => resolve({kind: 'timeout'}), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(outcome.kind).toBe('completed');\n    const values = outcome.kind === 'completed' ? outcome.values : [];\n    const twoResponsesArrived = await Promise.race([\n      spy.twoResponses.then(() => true),\n      new Promise(resolve => setTimeout(() => resolve(false), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(twoResponsesArrived).toBe(true);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.sent).toHaveLength(2);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.id)).toEqual([spy.sent[1].id, spy.sent[0].id]);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.result)).toEqual([25, 4]);\n    /*@case 21.05.real-worker-response-ids*/ expect(values).toEqual([4, 25]);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('a task error rejects only its request and the Worker stays usable', async () => {\n  const spy = observeWorker();\n  try {\n    const invalid = calcular(-1).then(() => null, error => error.message);\n    const valid = calcular(10);\n    /*@case 21.05.task-error-is-isolated*/ expect(await invalid).toBe('n must be a nonnegative integer');\n    /*@case 21.05.task-error-is-isolated*/ expect(await valid).toBe(4);\n    /*@case 21.05.task-error-is-isolated*/ expect(spy.received.some(message => message.error === 'n must be a nonnegative integer')).toBe(true);\n    /*@case 21.05.task-error-is-isolated*/ expect(await calcular(2)).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('closing terminates once, rejects pending work, and rejects future work', async () => {\n  const spy = observeWorker();\n  spy.countTerminateCalls();\n  try {\n    const pending = calcular(100).then(() => null, error => error.message);\n    encerrar();\n    encerrar();\n    const pendingResult = await pending;\n    const afterClose = await calcular(10).then(() => null, error => error.message);\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(pendingResult).toBe('Cálculo cancelado pelo encerramento.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(afterClose).toBe('Worker encerrado.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(spy.terminateCalls()).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n",
  "course-src/tests/21.06.test.js": "const{criarCache,cachePorId}=await import('./metadados.js');test('WeakMap memoizes by object identity, not structural equality',()=>{const c=criarCache((node,n)=>({profundidade:node.filhos.length,calculadoEm:n}));const a={filhos:[1,2]},b={filhos:[1,2]};c.metaDe(a);c.metaDe(a);c.metaDe(b);/*@case 21.06.weakmap-memoizes-by-object-i-9c8ae8b4*/expect(c.calculos).toBe(2);const ids=cachePorId();ids.set('node-1',{ok:true});/*@case 21.06.weakmap-memoizes-by-object-i-e7af2fcd*/expect(ids.get('node-1')).toEqual({ok:true});let caught;try{new WeakMap().set('node-1',{});}catch(error){caught=error;}/*@case 21.06.weakmap-memoizes-by-object-i-489ed550*/expect(caught instanceof TypeError).toBe(true);});\n",
  "course-src/tests/21.07.test.js": "import{debounce,throttle}from'./tempo.js';test('trailing debounce resets timer and cancel clears',()=>{let now=0,j=[],o=[];const set=(fn,ms)=>{const x={fn,at:now+ms,c:false};j.push(x);return x},clear=x=>x.c=true,advance=t=>{now=t;for(const x of j.filter(x=>!x.c&&x.at<=t)){x.c=true;x.fn();}};const d=debounce(x=>o.push(x),100,{set,clear});d(1);now=20;d(2);advance(119);/*@case 21.07.trailing-debounce-resets-tim-0e652d46*/expect(o).toEqual([]);advance(120);/*@case 21.07.trailing-debounce-resets-tim-a9ac4e1b*/expect(o).toEqual([2]);d(3);d.cancel();advance(300);/*@case 21.07.trailing-debounce-resets-tim-a9ac4e1b*/expect(o).toEqual([2]);});test('throttle accepts exact boundary',()=>{let t=0,o=[];const f=throttle(x=>o.push(x),100,{now:()=>t});f(0);t=99;f(99);t=100;f(100);/*@case 21.07.throttle-accepts-exact-bound-12f32c85*/expect(o).toEqual([0,100]);});\n",
  "course-src/tests/21.08.test.js": "import{usarRecursos}from'./recurso.js';\r\ntest('LIFO after body failure',async()=>{const log=[],r=x=>({[Symbol.dispose](){log.push(x)}});let caught=false;try{await usarRecursos([r('A'),r('B')],()=>{throw Error('body')});}catch(e){caught=true;}/*@case 21.08.lifo-after-body-failure-02b40de5*/expect(caught).toBe(true);/*@case 21.08.lifo-after-body-failure-d018c7b4*/expect(log).toEqual(['B','A']);});\r\ntest('async cleanup is awaited',async()=>{let done=false;const v=await usarRecursos([{[Symbol.asyncDispose]:async()=>{await Promise.resolve();done=true}}],()=>42);/*@case 21.08.async-cleanup-is-awaited-57a29e75*/expect(done).toBe(true);/*@case 21.08.async-cleanup-is-awaited-5beaf444*/expect(v).toBe(42);});\r\n",
@@ -40,7 +173,7 @@ const CANONICAL_FILES = {
  "course-src/tests/22.11.test.js": "import {calcularFrete} from './main.js';\r\n\r\ntest('calcula frete comum e expresso', () => {\r\n  /*@case 22.11.calcula-frete-comum-e-expres-08070a9c*/expect(calcularFrete(2)).toBe(16);\r\n  /*@case 22.11.calcula-frete-comum-e-expres-fa99e534*/expect(calcularFrete(2, true)).toBe(20);\r\n});\r\n\r\ntest('rejeita peso inválido antes de calcular', () => {\r\n  /*@case 22.11.rejeita-peso-invalido-antes--1ca9f860*/expect(() => calcularFrete(0)).toThrow(RangeError);\r\n  /*@case 22.11.rejeita-peso-invalido-antes--0e2f8695*/expect(() => calcularFrete(Number.NaN)).toThrow(RangeError);\r\n  /*@case 22.11.rejeita-peso-invalido-antes--d3f6725d*/expect(() => calcularFrete(Number.POSITIVE_INFINITY)).toThrow(RangeError);\r\n});\r\n",
  "course-src/tests/23.02.test.js": "const{criarServico,responder}=await import('./fluxo.js');test('parse validate domain save and present valid response in order',async()=>{const repo={itens:[],async salvar(x){this.itens.push(x);}};const s=criarServico(repo);/*@case 23.02.parse-validate-domain-save-a-84b96754*/expect(await responder(s,'{\"produto\":\" caneca \",\"quantidade\":2}')).toEqual({status:201,corpo:'Pedido de caneca criado'});/*@case 23.02.parse-validate-domain-save-a-406c35fc*/expect(repo.itens).toEqual([{produto:'caneca',quantidade:2,total:20}]);});test('invalid input does not write and storage failure returns safe 500 with cause retained',async()=>{const repo={itens:[],async salvar(x){if(x.quantidade>99)throw new Error('disco cheio');this.itens.push(x);}};const s=criarServico(repo);/*@case 23.02.invalid-input-does-not-write-8ff0eeff*/expect((await responder(s,'{')).status).toBe(400);/*@case 23.02.invalid-input-does-not-write-1a74c9ec*/expect((await responder(s,'{\"produto\":\"x\",\"quantidade\":0}')).status).toBe(400);/*@case 23.02.invalid-input-does-not-write-9ddb3467*/expect(repo.itens.length).toBe(0);const r=await responder(s,'{\"produto\":\"x\",\"quantidade\":100}');/*@case 23.02.invalid-input-does-not-write-9deb2ea9*/expect(r.status).toBe(500);/*@case 23.02.invalid-input-does-not-write-c3c20b49*/expect(r.corpo.includes('disco cheio')).toBe(false);/*@case 23.02.invalid-input-does-not-write-0d10c73b*/expect(r.causa).toBe('disco cheio');/*@case 23.02.invalid-input-does-not-write-9ddb3467*/expect(repo.itens.length).toBe(0);});\n",
  "course-src/tests/23.03.test.js": "const{criarTarefa,ValidationError,StorageError}=await import('./contrato.js');test('normaliza e define prazo/status/id determinísticos',async()=>{let saved;const t=await criarTarefa({titulo:'  Estudar  ',prazo:'2026-11-02'},{async salvar(v){saved=v;}},()=> 't-1');/*@case 23.03.normaliza-e-define-prazo-sta-bad803c3*/expect(t).toEqual({id:'t-1',titulo:'Estudar',prazo:'2026-11-02',status:'a-fazer'});/*@case 23.03.normaliza-e-define-prazo-sta-1538b997*/expect(saved).toEqual(t);});test('rejeita título vazio e data impossível antes da escrita',async()=>{let writes=0;const repo={async salvar(){writes++;}};for(const input of [{titulo:'  '},{titulo:'A',prazo:'2026-02-30'}]){let caught;try{await criarTarefa(input,repo);}catch(error){caught=error;}/*@case 23.03.rejeita-titulo-vazio-e-data--a52d8ec6*/expect(caught instanceof ValidationError).toBe(true);}/*@case 23.03.rejeita-titulo-vazio-e-data--1c592b31*/expect(writes).toBe(0);});test('wraps storage cause and never reports success',async()=>{const cause=new Error('disk');let caught;try{await criarTarefa({titulo:'A'},{async salvar(){throw cause;}},()=> 'x');}catch(error){caught=error;}/*@case 23.03.wraps-storage-cause-and-neve-f7b5925a*/expect(caught instanceof StorageError).toBe(true);/*@case 23.03.wraps-storage-cause-and-neve-6d3c575e*/expect(caught.cause).toBe(cause);});\n",
- "course-src/tests/23.04.test.js": "const{criarCadastroCliente,atualizarCliente}=await import('./legado.js');function repositorio(seed=[]){let rows=structuredClone(seed);const log=[];return{listar:()=>structuredClone(rows),salvar(v){rows.push(structuredClone(v));},atualizar(v){rows=rows.map(x=>x.id===v.id?structuredClone(v):x);},registrar(...x){log.push(x);},get log(){return log;}};}test('normalizes, writes once and preserves legacy result shape',()=>{const r=repositorio();/*@case 23.04.normalizes-writes-once-and-p-31066ee9*/expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}});/*@case 23.04.normalizes-writes-once-and-p-a74105e0*/expect(r.log).toEqual([['cadastro','ana@example.com']]);});test('invalid, duplicate and missing update do not write',()=>{const r=repositorio([{id:1,nome:'A',email:'a@x',idade:20}]);/*@case 23.04.invalid-duplicate-and-missin-c2aad35f*/expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório');/*@case 23.04.invalid-duplicate-and-missin-9bf3975a*/expect(criarCadastroCliente(r,'B','a@x',22).erro).toBe('email já cadastrado');/*@case 23.04.invalid-duplicate-and-missin-5bbd5d9c*/expect(atualizarCliente(r,99,'B','b@y',22).erro).toBe('cliente não encontrado');/*@case 23.04.invalid-duplicate-and-missin-1c00c00c*/expect(r.log.length).toBe(0);});test('coercion and email normalization are characterized',()=>{const r=repositorio();/*@case 23.04.coercion-and-email-normaliza-939f06dd*/expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18);/*@case 23.04.coercion-and-email-normaliza-82648544*/expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório');});\n",
+ "course-src/tests/23.04.test.js": "const{criarCadastroCliente,atualizarCliente}=await import('./legado.js');function repositorio(seed=[]){let rows=structuredClone(seed);const log=[],writes=[];return{listar:()=>structuredClone(rows),salvar(v){writes.push(['salvar',structuredClone(v)]);rows.push(structuredClone(v));},atualizar(v){writes.push(['atualizar',structuredClone(v)]);rows=rows.map(x=>x.id===v.id?structuredClone(v):x);},registrar(...x){writes.push(['registrar',...x]);log.push(x);},get rows(){return structuredClone(rows);},get log(){return structuredClone(log);},get writes(){return structuredClone(writes);}};}test('normalizes, writes once and preserves legacy result shape',()=>{const r=repositorio();/*@case 23.04.normalizes-writes-once-and-p-dbcb319b*/expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}});/*@case 23.04.normalizes-writes-once-and-p-079061da*/expect(r.log).toEqual([['cadastro','ana@example.com']]);/*@case 23.04.normalizes-writes-once-and-p-ba78ba2c*/expect(r.writes).toEqual([['salvar',{id:1,nome:'Ana',email:'ana@example.com',idade:20}],['registrar','cadastro','ana@example.com']]);});test('successful update changes normalized row and records exactly once',()=>{const r=repositorio([{id:1,nome:'Antes',email:'antes@example.com',idade:20}]);/*@case 23.04.successful-update-changes-no-49626560*/expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true});/*@case 23.04.successful-update-changes-no-313a106b*/expect(r.rows).toEqual([{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}]);/*@case 23.04.successful-update-changes-no-e5fd4dc4*/expect(r.writes).toEqual([['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]]);/*@case 23.04.successful-update-changes-no-4a402b06*/expect(r.log).toEqual([['atualização',1]]);});test('invalid email, underage, duplicate and missing client return exact errors without writes or state changes',()=>{const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);/*@case 23.04.invalid-email-underage-dupli-1231f57a*/expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});/*@case 23.04.invalid-email-underage-dupli-5627b41f*/expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});/*@case 23.04.invalid-email-underage-dupli-b1fdce73*/expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});/*@case 23.04.invalid-email-underage-dupli-f2c53a7d*/expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});/*@case 23.04.invalid-email-underage-dupli-997e0cff*/expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'});/*@case 23.04.invalid-email-underage-dupli-8d86f500*/expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});/*@case 23.04.invalid-email-underage-dupli-d94d0ccd*/expect(r.writes).toEqual([]);/*@case 23.04.invalid-email-underage-dupli-46e5dd6d*/expect(r.rows).toEqual(seed);/*@case 23.04.invalid-email-underage-dupli-71f468b7*/expect(r.log).toEqual([]);});test('coercion and email normalization are characterized',()=>{const r=repositorio();/*@case 23.04.coercion-and-email-normaliza-ee9a9023*/expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18);/*@case 23.04.coercion-and-email-normaliza-1777f9ec*/expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório');});",
  "course-src/tests/23.07.test.js": "import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial}from'./src/dominio.ts';import{criarRepositorioEmMemoria}from'./src/adapters/memoria.ts';import{reabrir,ForbiddenError}from'./src/reabrir.ts';test('admin reopens a completed task and writes deterministic audit',async()=>{const r=criarRepositorioEmMemoria(mover(criar(estadoInicial,'x','Revisar'),'x','feito'));const state=await reabrir(r,{id:'a1',papel:'admin'},'x',()=>new Date('2026-10-01T00:00:00Z'));/*@case 23.07.admin-reopens-a-completed-ta-3d3c30d8*/assert.equal((await r.carregar()).tarefas[0].coluna,'a-fazer');/*@case 23.07.admin-reopens-a-completed-ta-08720422*/assert.deepEqual(await r.carregarEventos(),[{tipo:'reaberta',tarefaId:'x',por:'a1',em:'2026-10-01T00:00:00.000Z'}]);/*@case 23.07.admin-reopens-a-completed-ta-dacd1c54*/assert.equal(state.tarefas[0].coluna,'a-fazer');});test('ordinary user is forbidden before any write; invalid status is rejected',async()=>{const r=criarRepositorioEmMemoria(mover(criar(estadoInicial,'x','X'),'x','feito'));await /*@case 23.07.ordinary-user-is-forbidden-b-8de7911c*/assert.rejects(reabrir(r,{id:'u',papel:'comum'},'x'),ForbiddenError);/*@case 23.07.ordinary-user-is-forbidden-b-35b10d82*/assert.deepEqual(await r.carregarEventos(),[]);await /*@case 23.07.ordinary-user-is-forbidden-b-2b873397*/assert.rejects(reabrir(r,{id:'a',papel:'admin'},'missing'));});test('failed event transaction persists neither state nor audit; CRUD remains immutable',async()=>{const base=criar(estadoInicial,'x','X'),done=mover(base,'x','feito'),r=criarRepositorioEmMemoria(done);r.falharProximo();await /*@case 23.07.failed-event-transaction-per-9c012460*/assert.rejects(reabrir(r,{id:'a',papel:'admin'},'x'));/*@case 23.07.failed-event-transaction-per-5a7ad0d1*/assert.equal((await r.carregar()).tarefas[0].coluna,'feito');/*@case 23.07.failed-event-transaction-per-3fad0d21*/assert.deepEqual(await r.carregarEventos(),[]);/*@case 23.07.failed-event-transaction-per-ae1fb4cc*/assert.equal(remover(mover(base,'x','fazendo'),'x').tarefas.length,0);/*@case 23.07.failed-event-transaction-per-a3ac43ea*/assert.equal(base.tarefas[0].coluna,'a-fazer');});\n",
  "course-src/tests/23.08.test.js": "import './test/contrato.test.ts';\n",
  "course-src/tests/23.09.test.js": "const{salvar,redigir,lerLogs,limparLogs}=await import('./operacao.js');test('redacts nested secrets in objects and arrays without mutating input',()=>{const input={headers:[{Authorization:'Bearer abc',Cookie:'s=xyz'}],nested:{TOKEN:'secret'}};/*@case 23.09.redacts-nested-secrets-in-ob-a522150f*/expect(redigir(input)).toEqual({headers:[{Authorization:'[REDACTED]',Cookie:'[REDACTED]'}],nested:{TOKEN:'[REDACTED]'}});/*@case 23.09.redacts-nested-secrets-in-ob-035e6467*/expect(input.nested.TOKEN).toBe('secret');});test('success has correlation and nonnegative monotonic duration but no context',async()=>{limparLogs();let t=5;const result=await salvar({id:'p1'},{headers:{Cookie:'leak'},token:'leak'},{id:()=> 'op-1',now:()=>t+=3});/*@case 23.09.success-has-correlation-and--f0e2b609*/expect(result.ok).toBe(true);const json=JSON.stringify(lerLogs());/*@case 23.09.success-has-correlation-and--1b6e134f*/expect(json.includes('op-1')).toBe(true);/*@case 23.09.success-has-correlation-and--3a6c6e67*/expect(json.includes('duracaoMs')).toBe(true);/*@case 23.09.success-has-correlation-and--95b8b274*/expect(json.includes('leak')).toBe(false);});test('validation warn and technical error are safe while retaining redacted cause',async()=>{limparLogs();const ticks=[2,9,14,20];let i=0;await salvar({}, {headers:{Authorization:'Bearer secret'},token:'tok'}, {id:()=> 'v',now:()=>ticks[i++]});await salvar({id:'p',lento:true},{headers:{Cookie:'cookie-secret'},token:'token-secret'}, {id:()=> 'e',now:()=>ticks[i++]});const rows=lerLogs();/*@case 23.09.validation-warn-and-technica-162404bc*/expect(rows[0].nivel).toBe('warn');/*@case 23.09.validation-warn-and-technica-cbbc715b*/expect(rows[1].nivel).toBe('error');const json=JSON.stringify(rows);for(const value of ['secret','cookie-secret','token-secret','Bearer'])/*@case 23.09.validation-warn-and-technica-a12611a2*/expect(json.includes(value)).toBe(false);/*@case 23.09.validation-warn-and-technica-b6f66a3d*/expect(json.includes('REDACTED')).toBe(true);});\n",
@@ -452,7 +585,7 @@ const CANONICAL_ENTRIES = {
   "entryPath": "main.js",
   "testPath": "tests/21.05.test.js",
   "behaviorTestPath": "__devpath_protected_behavior__.js",
-  "tests": "import {calcular, encerrar} from '../main.js';\nimport {contarPrimos} from '../primos.js';\n\nfunction observeWorker({reorder = false} = {}) {\n  const exposedPrototype = Worker.prototype;\n  const postDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'postMessage');\n  const terminateDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'terminate');\n  const NativeWorker = Object.getPrototypeOf(exposedPrototype).constructor;\n  const nativePostMessage = NativeWorker.prototype.postMessage;\n  const nativeTerminate = terminateDescriptor?.value;\n  const sent = [];\n  const received = [];\n  let resolveTwoResponses;\n  const twoResponses = new Promise(resolve => { resolveTwoResponses = resolve; });\n  let worker;\n  let held;\n  let terminateCalls = 0;\n\n  Object.defineProperty(exposedPrototype, 'postMessage', {\n    configurable: true,\n    writable: true,\n    value(message, ...options) {\n      worker ||= this;\n      if (worker !== this) throw new Error('A suíte esperava uma única instância Worker.');\n      if (sent.length === 0) this.addEventListener('message', event => {\n        received.push(event.data);\n        if (received.length >= 2) resolveTwoResponses(received);\n      });\n      sent.push(message);\n      if (!reorder) return nativePostMessage.call(this, message, ...options);\n      if (!held) { held = {message, options}; return; }\n      if (sent.length !== 2) throw new Error('A fixture de reordenação aceita exatamente duas mensagens.');\n      nativePostMessage.call(this, message, ...options);\n      nativePostMessage.call(this, held.message, ...held.options);\n    },\n  });\n  if (terminateDescriptor) {\n    Object.defineProperty(exposedPrototype, 'terminate', {\n      ...terminateDescriptor,\n      value(...args) { return nativeTerminate.apply(this, args); },\n    });\n  }\n\n  return {\n    sent,\n    received,\n    twoResponses,\n    terminateCalls: () => terminateCalls,\n    countTerminateCalls() {\n      if (!terminateDescriptor) throw new Error('Worker.terminate não é observável nesta implementação do runner.');\n      Object.defineProperty(exposedPrototype, 'terminate', {\n        ...terminateDescriptor,\n        value(...args) { terminateCalls += 1; return nativeTerminate.apply(this, args); },\n      });\n    },\n    restore() {\n      if (postDescriptor) Object.defineProperty(exposedPrototype, 'postMessage', postDescriptor);\n      else delete exposedPrototype.postMessage;\n      if (terminateDescriptor) Object.defineProperty(exposedPrototype, 'terminate', terminateDescriptor);\n      else delete exposedPrototype.terminate;\n    },\n  };\n}\n\ntest('contarPrimos preserves its public values and input boundary', () => {\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(0)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(1)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(2)).toBe(1);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(10)).toBe(4);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(100)).toBe(25);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(NaN)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(Infinity)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos('10')).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n});\n\ntest('an independent sieve checks the full range and fixed-seed samples', () => {\n  const N = 20011;\n  const sieve = new Uint8Array(N + 1).fill(1);\n  sieve[0] = 0;\n  sieve[1] = 0;\n  for (let i = 2; i * i <= N; i += 1) {\n    if (sieve[i]) for (let j = i * i; j <= N; j += i) sieve[j] = 0;\n  }\n  const expected = new Array(N + 1);\n  let count = 0;\n  for (let n = 0; n <= N; n += 1) {\n    count += sieve[n];\n    expected[n] = count;\n  }\n  const actualRange = Array.from({length: 1501}, (_, n) => contarPrimos(n));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(actualRange).toEqual(expected.slice(0, 1501));\n  let seed = 7;\n  const samples = [];\n  for (let k = 0; k < 12; k += 1) {\n    seed = (seed * 48271) % 2147483647;\n    samples.push(1501 + seed % (N - 1500));\n  }\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples).toEqual([6200, 1976, 13815, 2677, 15038, 15794, 4350, 13141, 5812, 9009, 16689, 19503]);\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples.map(n => contarPrimos(n))).toEqual(samples.map(n => expected[n]));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(contarPrimos(N)).toBe(expected[N]);\n});\n\ntest('native Worker message IDs route out-of-order responses to their own promises', async () => {\n  const spy = observeWorker({reorder: true});\n  try {\n    const first = calcular(10);\n    const second = calcular(100);\n    const outcome = await Promise.race([\n      Promise.all([first, second]).then(values => ({kind: 'completed', values})),\n      new Promise(resolve => setTimeout(() => resolve({kind: 'timeout'}), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(outcome.kind).toBe('completed');\n    const values = outcome.kind === 'completed' ? outcome.values : [];\n    const twoResponsesArrived = await Promise.race([\n      spy.twoResponses.then(() => true),\n      new Promise(resolve => setTimeout(() => resolve(false), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(twoResponsesArrived).toBe(true);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.sent).toHaveLength(2);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.id)).toEqual([spy.sent[1].id, spy.sent[0].id]);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.result)).toEqual([25, 4]);\n    /*@case 21.05.real-worker-response-ids*/ expect(values).toEqual([4, 25]);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('a task error rejects only its request and the Worker stays usable', async () => {\n  const spy = observeWorker();\n  try {\n    const invalid = calcular(-1).then(() => null, error => error.message);\n    const valid = calcular(10);\n    /*@case 21.05.task-error-is-isolated*/ expect(await invalid).toBe('n must be a nonnegative integer');\n    /*@case 21.05.task-error-is-isolated*/ expect(await valid).toBe(4);\n    /*@case 21.05.task-error-is-isolated*/ expect(spy.received.some(message => message.error === 'n must be a nonnegative integer')).toBe(true);\n    /*@case 21.05.task-error-is-isolated*/ expect(await calcular(2)).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('closing terminates once, rejects pending work, and rejects future work', async () => {\n  const spy = observeWorker();\n  spy.countTerminateCalls();\n  try {\n    const pending = calcular(100).then(() => null, error => error.message);\n    encerrar();\n    encerrar();\n    const pendingResult = await pending;\n    const afterClose = await calcular(10).then(() => null, error => error.message);\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(pendingResult).toBe('Cálculo cancelado pelo encerramento.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(afterClose).toBe('Worker encerrado.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(spy.terminateCalls()).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});",
+  "tests": "import {calcular, encerrar} from './main.js';\nimport {contarPrimos} from './primos.js';\n\nfunction observeWorker({reorder = false} = {}) {\n  const exposedPrototype = Worker.prototype;\n  const postDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'postMessage');\n  const terminateDescriptor = Object.getOwnPropertyDescriptor(exposedPrototype, 'terminate');\n  const NativeWorker = Object.getPrototypeOf(exposedPrototype).constructor;\n  const nativePostMessage = NativeWorker.prototype.postMessage;\n  const nativeTerminate = terminateDescriptor?.value;\n  const sent = [];\n  const received = [];\n  let resolveTwoResponses;\n  const twoResponses = new Promise(resolve => { resolveTwoResponses = resolve; });\n  let worker;\n  let held;\n  let terminateCalls = 0;\n\n  Object.defineProperty(exposedPrototype, 'postMessage', {\n    configurable: true,\n    writable: true,\n    value(message, ...options) {\n      worker ||= this;\n      if (worker !== this) throw new Error('A suíte esperava uma única instância Worker.');\n      if (sent.length === 0) this.addEventListener('message', event => {\n        received.push(event.data);\n        if (received.length >= 2) resolveTwoResponses(received);\n      });\n      sent.push(message);\n      if (!reorder) return nativePostMessage.call(this, message, ...options);\n      if (!held) { held = {message, options}; return; }\n      if (sent.length !== 2) throw new Error('A fixture de reordenação aceita exatamente duas mensagens.');\n      nativePostMessage.call(this, message, ...options);\n      nativePostMessage.call(this, held.message, ...held.options);\n    },\n  });\n  if (terminateDescriptor) {\n    Object.defineProperty(exposedPrototype, 'terminate', {\n      ...terminateDescriptor,\n      value(...args) { return nativeTerminate.apply(this, args); },\n    });\n  }\n\n  return {\n    sent,\n    received,\n    twoResponses,\n    terminateCalls: () => terminateCalls,\n    countTerminateCalls() {\n      if (!terminateDescriptor) throw new Error('Worker.terminate não é observável nesta implementação do runner.');\n      Object.defineProperty(exposedPrototype, 'terminate', {\n        ...terminateDescriptor,\n        value(...args) { terminateCalls += 1; return nativeTerminate.apply(this, args); },\n      });\n    },\n    restore() {\n      if (postDescriptor) Object.defineProperty(exposedPrototype, 'postMessage', postDescriptor);\n      else delete exposedPrototype.postMessage;\n      if (terminateDescriptor) Object.defineProperty(exposedPrototype, 'terminate', terminateDescriptor);\n      else delete exposedPrototype.terminate;\n    },\n  };\n}\n\ntest('contarPrimos preserves its public values and input boundary', () => {\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(0)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(1)).toBe(0);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(2)).toBe(1);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(10)).toBe(4);\n  /*@case 21.05.primes-public-api*/ expect(contarPrimos(100)).toBe(25);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.primes-public-api*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(NaN)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(Infinity)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos('10')).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(-1)).toThrow(RangeError);\n  /*@case 21.05.invalid-inputs*/ expect(() => contarPrimos(2.5)).toThrow(RangeError);\n});\n\ntest('an independent sieve checks the full range and fixed-seed samples', () => {\n  const N = 20011;\n  const sieve = new Uint8Array(N + 1).fill(1);\n  sieve[0] = 0;\n  sieve[1] = 0;\n  for (let i = 2; i * i <= N; i += 1) {\n    if (sieve[i]) for (let j = i * i; j <= N; j += i) sieve[j] = 0;\n  }\n  const expected = new Array(N + 1);\n  let count = 0;\n  for (let n = 0; n <= N; n += 1) {\n    count += sieve[n];\n    expected[n] = count;\n  }\n  const actualRange = Array.from({length: 1501}, (_, n) => contarPrimos(n));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(actualRange).toEqual(expected.slice(0, 1501));\n  let seed = 7;\n  const samples = [];\n  for (let k = 0; k < 12; k += 1) {\n    seed = (seed * 48271) % 2147483647;\n    samples.push(1501 + seed % (N - 1500));\n  }\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples).toEqual([6200, 1976, 13815, 2677, 15038, 15794, 4350, 13141, 5812, 9009, 16689, 19503]);\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(samples.map(n => contarPrimos(n))).toEqual(samples.map(n => expected[n]));\n  /*@case 21.05.sieve-range-and-deterministic-samples*/ expect(contarPrimos(N)).toBe(expected[N]);\n});\n\ntest('native Worker message IDs route out-of-order responses to their own promises', async () => {\n  const spy = observeWorker({reorder: true});\n  try {\n    const first = calcular(10);\n    const second = calcular(100);\n    const outcome = await Promise.race([\n      Promise.all([first, second]).then(values => ({kind: 'completed', values})),\n      new Promise(resolve => setTimeout(() => resolve({kind: 'timeout'}), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(outcome.kind).toBe('completed');\n    const values = outcome.kind === 'completed' ? outcome.values : [];\n    const twoResponsesArrived = await Promise.race([\n      spy.twoResponses.then(() => true),\n      new Promise(resolve => setTimeout(() => resolve(false), 1500)),\n    ]);\n    /*@case 21.05.real-worker-response-ids*/ expect(twoResponsesArrived).toBe(true);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.sent).toHaveLength(2);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.id)).toEqual([spy.sent[1].id, spy.sent[0].id]);\n    /*@case 21.05.real-worker-response-ids*/ expect(spy.received.map(message => message.result)).toEqual([25, 4]);\n    /*@case 21.05.real-worker-response-ids*/ expect(values).toEqual([4, 25]);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('a task error rejects only its request and the Worker stays usable', async () => {\n  const spy = observeWorker();\n  try {\n    const invalid = calcular(-1).then(() => null, error => error.message);\n    const valid = calcular(10);\n    /*@case 21.05.task-error-is-isolated*/ expect(await invalid).toBe('n must be a nonnegative integer');\n    /*@case 21.05.task-error-is-isolated*/ expect(await valid).toBe(4);\n    /*@case 21.05.task-error-is-isolated*/ expect(spy.received.some(message => message.error === 'n must be a nonnegative integer')).toBe(true);\n    /*@case 21.05.task-error-is-isolated*/ expect(await calcular(2)).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});\n\ntest('closing terminates once, rejects pending work, and rejects future work', async () => {\n  const spy = observeWorker();\n  spy.countTerminateCalls();\n  try {\n    const pending = calcular(100).then(() => null, error => error.message);\n    encerrar();\n    encerrar();\n    const pendingResult = await pending;\n    const afterClose = await calcular(10).then(() => null, error => error.message);\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(pendingResult).toBe('Cálculo cancelado pelo encerramento.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(afterClose).toBe('Worker encerrado.');\n    /*@case 21.05.close-terminates-and-cleans-pending*/ expect(spy.terminateCalls()).toBe(1);\n  } finally {\n    spy.restore();\n  }\n});",
   "referenceDir": "solutions/21.05",
   "correctFiles": [
    {
@@ -2899,134 +3032,294 @@ const CANONICAL_FIELDS = {
  },
  "23.04": {
   "assertionCases": [
-   {
-    "id": "23.04.normalizes-writes-once-and-p-31066ee9",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "normalizes, writes once and preserves legacy result shape",
-    "inputExpression": "criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)",
-    "matcher": "toEqual",
-    "expectedExpression": "{ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}}",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio();",
-    "assertionExpression": "expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}})",
-    "contractRule": "criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20) toEqual {ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}}",
-    "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}})",
-    "assertionOffset": 495,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.normalizes-writes-once-and-p-a74105e0",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "normalizes, writes once and preserves legacy result shape",
-    "inputExpression": "r.log",
-    "matcher": "toEqual",
-    "expectedExpression": "[['cadastro','ana@example.com']]",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio();expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}});",
-    "assertionExpression": "expect(r.log).toEqual([['cadastro','ana@example.com']])",
-    "contractRule": "r.log toEqual [['cadastro','ana@example.com']]",
-    "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.log).toEqual([['cadastro','ana@example.com']])",
-    "assertionOffset": 689,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.invalid-duplicate-and-missin-c2aad35f",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "invalid, duplicate and missing update do not write",
-    "inputExpression": "criarCadastroCliente(r,'','x@y',20).erro",
-    "matcher": "toBe",
-    "expectedExpression": "'nome obrigatório'",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio([{id:1,nome:'A',email:'a@x',idade:20}]);",
-    "assertionExpression": "expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório')",
-    "contractRule": "criarCadastroCliente(r,'','x@y',20).erro toBe 'nome obrigatório'",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório')",
-    "assertionOffset": 924,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.invalid-duplicate-and-missin-9bf3975a",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "invalid, duplicate and missing update do not write",
-    "inputExpression": "criarCadastroCliente(r,'B','a@x',22).erro",
-    "matcher": "toBe",
-    "expectedExpression": "'email já cadastrado'",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio([{id:1,nome:'A',email:'a@x',idade:20}]);expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório');",
-    "assertionExpression": "expect(criarCadastroCliente(r,'B','a@x',22).erro).toBe('email já cadastrado')",
-    "contractRule": "criarCadastroCliente(r,'B','a@x',22).erro toBe 'email já cadastrado'",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(criarCadastroCliente(r,'B','a@x',22).erro).toBe('email já cadastrado')",
-    "assertionOffset": 1051,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.invalid-duplicate-and-missin-5bbd5d9c",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "invalid, duplicate and missing update do not write",
-    "inputExpression": "atualizarCliente(r,99,'B','b@y',22).erro",
-    "matcher": "toBe",
-    "expectedExpression": "'cliente não encontrado'",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio([{id:1,nome:'A',email:'a@x',idade:20}]);expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório');expect(criarCadastroCliente(r,'B','a@x',22).erro).toBe('email já cadastrado');",
-    "assertionExpression": "expect(atualizarCliente(r,99,'B','b@y',22).erro).toBe('cliente não encontrado')",
-    "contractRule": "atualizarCliente(r,99,'B','b@y',22).erro toBe 'cliente não encontrado'",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(atualizarCliente(r,99,'B','b@y',22).erro).toBe('cliente não encontrado')",
-    "assertionOffset": 1182,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.invalid-duplicate-and-missin-1c00c00c",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "invalid, duplicate and missing update do not write",
-    "inputExpression": "r.log.length",
-    "matcher": "toBe",
-    "expectedExpression": "0",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio([{id:1,nome:'A',email:'a@x',idade:20}]);expect(criarCadastroCliente(r,'','x@y',20).erro).toBe('nome obrigatório');expect(criarCadastroCliente(r,'B','a@x',22).erro).toBe('email já cadastrado');expect(atualizarCliente(r,99,'B','b@y',22).erro).toBe('cliente não encontrado');",
-    "assertionExpression": "expect(r.log.length).toBe(0)",
-    "contractRule": "r.log.length toBe 0",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(r.log.length).toBe(0)",
-    "assertionOffset": 1315,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.coercion-and-email-normaliza-939f06dd",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "coercion and email normalization are characterized",
-    "inputExpression": "criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade",
-    "matcher": "toBe",
-    "expectedExpression": "18",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio();",
-    "assertionExpression": "expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18)",
-    "contractRule": "criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade toBe 18",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18)",
-    "assertionOffset": 1485,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   },
-   {
-    "id": "23.04.coercion-and-email-normaliza-82648544",
-    "sourceTestPath": "tests/23.04.test.js",
-    "testName": "coercion and email normalization are characterized",
-    "inputExpression": "atualizarCliente(r,1,null,'b@y',20).erro",
-    "matcher": "toBe",
-    "expectedExpression": "'nome obrigatório'",
-    "negated": false,
-    "initialArrangementExpression": "const r=repositorio();expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18);",
-    "assertionExpression": "expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório')",
-    "contractRule": "atualizarCliente(r,1,null,'b@y',20).erro toBe 'nome obrigatório'",
-    "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório')",
-    "assertionOffset": 1620,
-    "assertionApi": "expect",
-    "executionScope": "browser-behavior-suite"
-   }
+    {
+      "id": "23.04.normalizes-writes-once-and-p-dbcb319b",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "normalizes, writes once and preserves legacy result shape",
+      "inputExpression": "criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio();",
+      "assertionExpression": "expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}})",
+      "contractRule": "criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20) toEqual {ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}})",
+      "assertionOffset": 678
+    },
+    {
+      "id": "23.04.normalizes-writes-once-and-p-079061da",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "normalizes, writes once and preserves legacy result shape",
+      "inputExpression": "r.log",
+      "matcher": "toEqual",
+      "expectedExpression": "[['cadastro','ana@example.com']]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio();expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}});",
+      "assertionExpression": "expect(r.log).toEqual([['cadastro','ana@example.com']])",
+      "contractRule": "r.log toEqual [['cadastro','ana@example.com']]",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.log).toEqual([['cadastro','ana@example.com']])",
+      "assertionOffset": 819
+    },
+    {
+      "id": "23.04.normalizes-writes-once-and-p-ba78ba2c",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "normalizes, writes once and preserves legacy result shape",
+      "inputExpression": "r.writes",
+      "matcher": "toEqual",
+      "expectedExpression": "[['salvar',{id:1,nome:'Ana',email:'ana@example.com',idade:20}],['registrar','cadastro','ana@example.com']]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio();expect(criarCadastroCliente(r,' Ana ',' ANA@EXAMPLE.COM ',20)).toEqual({ok:true,cliente:{id:1,nome:'Ana',email:'ana@example.com',idade:20}});expect(r.log).toEqual([['cadastro','ana@example.com']]);",
+      "assertionExpression": "expect(r.writes).toEqual([['salvar',{id:1,nome:'Ana',email:'ana@example.com',idade:20}],['registrar','cadastro','ana@example.com']])",
+      "contractRule": "r.writes toEqual [['salvar',{id:1,nome:'Ana',email:'ana@example.com',idade:20}],['registrar','cadastro','ana@example.com']]",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.writes).toEqual([['salvar',{id:1,nome:'Ana',email:'ana@example.com',idade:20}],['registrar','cadastro','ana@example.com']])",
+      "assertionOffset": 875
+    },
+    {
+      "id": "23.04.successful-update-changes-no-49626560",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "successful update changes normalized row and records exactly once",
+      "inputExpression": "atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:true}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio([{id:1,nome:'Antes',email:'antes@example.com',idade:20}]);",
+      "assertionExpression": "expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true})",
+      "contractRule": "atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22') toEqual {ok:true}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true})",
+      "assertionOffset": 1167
+    },
+    {
+      "id": "23.04.successful-update-changes-no-313a106b",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "successful update changes normalized row and records exactly once",
+      "inputExpression": "r.rows",
+      "matcher": "toEqual",
+      "expectedExpression": "[{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio([{id:1,nome:'Antes',email:'antes@example.com',idade:20}]);expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true});",
+      "assertionExpression": "expect(r.rows).toEqual([{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}])",
+      "contractRule": "r.rows toEqual [{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}]",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.rows).toEqual([{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}])",
+      "assertionOffset": 1255
+    },
+    {
+      "id": "23.04.successful-update-changes-no-e5fd4dc4",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "successful update changes normalized row and records exactly once",
+      "inputExpression": "r.writes",
+      "matcher": "toEqual",
+      "expectedExpression": "[['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio([{id:1,nome:'Antes',email:'antes@example.com',idade:20}]);expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true});expect(r.rows).toEqual([{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}]);",
+      "assertionExpression": "expect(r.writes).toEqual([['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]])",
+      "contractRule": "r.writes toEqual [['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]]",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.writes).toEqual([['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]])",
+      "assertionOffset": 1338
+    },
+    {
+      "id": "23.04.successful-update-changes-no-4a402b06",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "successful update changes normalized row and records exactly once",
+      "inputExpression": "r.log",
+      "matcher": "toEqual",
+      "expectedExpression": "[['atualização',1]]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio([{id:1,nome:'Antes',email:'antes@example.com',idade:20}]);expect(atualizarCliente(r,1,' Ana Maria ',' ANA@EXAMPLE.COM ','22')).toEqual({ok:true});expect(r.rows).toEqual([{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}]);expect(r.writes).toEqual([['atualizar',{id:1,nome:'Ana Maria',email:'ana@example.com',idade:22}],['registrar','atualização',1]]);",
+      "assertionExpression": "expect(r.log).toEqual([['atualização',1]])",
+      "contractRule": "r.log toEqual [['atualização',1]]",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.log).toEqual([['atualização',1]])",
+      "assertionOffset": 1467
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-1231f57a",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "criarCadastroCliente(r,'Bia','bad-email',20)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'email inválido'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);",
+      "assertionExpression": "expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'})",
+      "contractRule": "criarCadastroCliente(r,'Bia','bad-email',20) toEqual {ok:false,erro:'email inválido'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'})",
+      "assertionOffset": 1721
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-5627b41f",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "criarCadastroCliente(r,'Bia','bia@example.com',17)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'idade mínima 18'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});",
+      "assertionExpression": "expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'})",
+      "contractRule": "criarCadastroCliente(r,'Bia','bia@example.com',17) toEqual {ok:false,erro:'idade mínima 18'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'})",
+      "assertionOffset": 1816
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-b1fdce73",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'email já cadastrado'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});",
+      "assertionExpression": "expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'})",
+      "contractRule": "criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22) toEqual {ok:false,erro:'email já cadastrado'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'})",
+      "assertionOffset": 1918
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-f2c53a7d",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "atualizarCliente(r,99,'Bia','bia@example.com',22)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'cliente não encontrado'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});",
+      "assertionExpression": "expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'})",
+      "contractRule": "atualizarCliente(r,99,'Bia','bia@example.com',22) toEqual {ok:false,erro:'cliente não encontrado'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'})",
+      "assertionOffset": 2026
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-997e0cff",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "atualizarCliente(r,1,'Bia','bad-email',22)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'email inválido'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});",
+      "assertionExpression": "expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'})",
+      "contractRule": "atualizarCliente(r,1,'Bia','bad-email',22) toEqual {ok:false,erro:'email inválido'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'})",
+      "assertionOffset": 2134
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-8d86f500",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "atualizarCliente(r,1,'Bia','bia@example.com',17)",
+      "matcher": "toEqual",
+      "expectedExpression": "{ok:false,erro:'idade mínima 18'}",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'});",
+      "assertionExpression": "expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'})",
+      "contractRule": "atualizarCliente(r,1,'Bia','bia@example.com',17) toEqual {ok:false,erro:'idade mínima 18'}",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'})",
+      "assertionOffset": 2227
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-d94d0ccd",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "r.writes",
+      "matcher": "toEqual",
+      "expectedExpression": "[]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'});expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});",
+      "assertionExpression": "expect(r.writes).toEqual([])",
+      "contractRule": "r.writes toEqual []",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.writes).toEqual([])",
+      "assertionOffset": 2327
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-46e5dd6d",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "r.rows",
+      "matcher": "toEqual",
+      "expectedExpression": "seed",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'});expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(r.writes).toEqual([]);",
+      "assertionExpression": "expect(r.rows).toEqual(seed)",
+      "contractRule": "r.rows toEqual seed",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.rows).toEqual(seed)",
+      "assertionOffset": 2356
+    },
+    {
+      "id": "23.04.invalid-email-underage-dupli-71f468b7",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "invalid email, underage, duplicate and missing client return exact errors without writes or state changes",
+      "inputExpression": "r.log",
+      "matcher": "toEqual",
+      "expectedExpression": "[]",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const seed=[{id:1,nome:'Ana',email:'ana@example.com',idade:20}];const r=repositorio(seed);expect(criarCadastroCliente(r,'Bia','bad-email',20)).toEqual({ok:false,erro:'email inválido'});expect(criarCadastroCliente(r,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(criarCadastroCliente(r,'Bia',' ANA@EXAMPLE.COM ',22)).toEqual({ok:false,erro:'email já cadastrado'});expect(atualizarCliente(r,99,'Bia','bia@example.com',22)).toEqual({ok:false,erro:'cliente não encontrado'});expect(atualizarCliente(r,1,'Bia','bad-email',22)).toEqual({ok:false,erro:'email inválido'});expect(atualizarCliente(r,1,'Bia','bia@example.com',17)).toEqual({ok:false,erro:'idade mínima 18'});expect(r.writes).toEqual([]);expect(r.rows).toEqual(seed);",
+      "assertionExpression": "expect(r.log).toEqual([])",
+      "contractRule": "r.log toEqual []",
+      "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(r.log).toEqual([])",
+      "assertionOffset": 2385
+    },
+    {
+      "id": "23.04.coercion-and-email-normaliza-ee9a9023",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "coercion and email normalization are characterized",
+      "inputExpression": "criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade",
+      "matcher": "toBe",
+      "expectedExpression": "18",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio();",
+      "assertionExpression": "expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18)",
+      "contractRule": "criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade toBe 18",
+      "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18)",
+      "assertionOffset": 2499
+    },
+    {
+      "id": "23.04.coercion-and-email-normaliza-1777f9ec",
+      "sourceTestPath": "tests/23.04.test.js",
+      "testName": "coercion and email normalization are characterized",
+      "inputExpression": "atualizarCliente(r,1,null,'b@y',20).erro",
+      "matcher": "toBe",
+      "expectedExpression": "'nome obrigatório'",
+      "negated": false,
+      "assertionApi": "expect",
+      "executionScope": "browser-behavior-suite",
+      "initialArrangementExpression": "const r=repositorio();expect(criarCadastroCliente(r,'B',' B@EXAMPLE.COM ','18').cliente.idade).toBe(18);",
+      "assertionExpression": "expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório')",
+      "contractRule": "atualizarCliente(r,1,null,'b@y',20).erro toBe 'nome obrigatório'",
+      "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(atualizarCliente(r,1,null,'b@y',20).erro).toBe('nome obrigatório')",
+      "assertionOffset": 2581
+    }
   ]
  },
  "23.07": {
@@ -4289,6 +4582,12 @@ for (const [file, content] of Object.entries(CANONICAL_FILES)) {
   const target = path.resolve(file);
   mkdirSync(path.dirname(target), {recursive: true});
   writeFileSync(target, content, "utf8");
+}
+{
+  const overridesPath = "course-src/publication-overrides.json";
+  const overrides = JSON.parse(readFileSync(overridesPath, "utf8"));
+  overrides["23.04"].prompt = "Refatore legado.js em três checkpoints, mantendo node --test legado.test.js verde após cada passo. Primeiro registre os resultados e erros atuais. Depois extraia a validação compartilhada e passe a usar criarCadastroCliente(repo, nome, email, idade) e atualizarCliente(repo, id, nome, email, idade). O repositório oferece listar(), salvar(cliente), atualizar(cliente) e registrar(tipo, detalhe); no cadastro, registre ('cadastro', email), e na atualização, ('atualização', id). Preserve nome trimado, normalização do email com trim e minúsculas, idade numérica, ID clientes.length + 1, o resultado ok: true com cliente {id, nome, email, idade} e ok: false com erro. As mensagens são 'nome obrigatório', 'email inválido', 'idade mínima 18', 'email já cadastrado' e 'cliente não encontrado'. Validações, duplicidade e cliente ausente não podem gravar nem registrar. Caracterize strings numéricas e a comparação frouxa antes de trocar var, == e isNaN; documente qualquer mudança intencional como etapa separada.";
+  writeFileSync(overridesPath, JSON.stringify(overrides, null, 2) + "\n", "utf8");
 }
 {
   const manifestPath = "course-src/assessments.json";

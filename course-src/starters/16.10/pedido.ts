@@ -18,6 +18,6 @@ export async function salvarPedido(pedido: { id: string }, falha?: unknown): Pro
 
 // Casos para conferir:
 // salvarPedido({ id: "p1" })                       -> "Pedido salvo."
-// salvarPedido({ id: "p1" }, new Error("disco"))   -> mensagem com "disco"; cause preservada
-// salvarPedido({ id: "p1" }, "falhou")             -> mensagem pública segura
+// salvarPedido({ id: "p1" }, new Error("disco"))   -> rejeita com "Não foi possível salvar o pedido."; cause preservada
+// salvarPedido({ id: "p1" }, "falhou")             -> mesma mensagem pública; cause preservada
 // salvarPedido({ id: "p1" }, { codigo: 503 })      -> não acessar .message de um objeto qualquer

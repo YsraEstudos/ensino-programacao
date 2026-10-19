@@ -1,3 +1,9 @@
+// Contrato visível 21.09:
+// Exporte comparar(input) e medir(fn,input,{warmups,runs,now}); comparar valida a entrada e mede reduce e for sobre a mesma lista.
+// median em quantidade par de amostras é a média dos dois valores centrais ordenados.
+// Exporte comparar(input) para validar números finitos, comparar os totais e medir reduce/for; medir(fn,input,{warmups,runs,now}) retorna samples e median.
+// Com número par de amostras, median é a média dos dois valores centrais ordenados.
+
 // 21.09 · Laboratório de performance: duas implementações, mesma entrada.
 // Este arquivo roda no executor (sem DOM); index.html usa as mesmas funções para montar a tabela.
 

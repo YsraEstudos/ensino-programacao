@@ -255,7 +255,7 @@ CONTENT = {
         load={'novelty': 3, 'syntax': 4, 'composition': 4, 'state': 4, 'debugging': 3, 'files': 2, 'reading': 5, 'independence': 4, 'tools': 3},
         kind="MODIFY",
         estimated=25,
-        prompt="Investigue a hierarquia do starter e liste dados mutáveis separados de capacidades. Substitua a combinação de subclasses por composição para somente as capacidades configuradas. Antes de executar, preveja quais operações cada entidade expõe; depois teste duas entidades sem compartilhar estado.",
+        prompt="Investigue a hierarquia do starter e liste dados mutáveis separados de capacidades. Substitua a combinação de subclasses por composição para somente as capacidades configuradas. Faça as funções receberem estado e devolverem uma cópia atualizada sem mutar a entrada, como exigem os testes. Antes de executar, preveja quais operações cada entidade expõe; depois teste duas entidades sem compartilhar estado.",
         explanation={
             "mental_model": "Composição monta uma entidade a partir de dados próprios e capacidades escolhidas. Funções de capacidade podem receber a entidade explicitamente; compartilhar a função não significa compartilhar os dados mutáveis de cada instância.",
             "worked_example": "Um personagem pode receber `{estado, capacidades}` e ganhar `mover` e `curar` apenas quando configurados. As funções de capacidade podem ser reutilizadas enquanto o estado fica em cada instância. Um personagem sem capacidade de curar não precisa herdar uma classe combinatória para escondê-la.",

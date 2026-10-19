@@ -119,8 +119,8 @@ CONTENT = {
     ('Inicie as três operações antes do primeiro await.',
      'Passe promises em array na ordem do contrato.',
      'Desestruture resultado após Promise.all.'),
-    ('const [produtos,usuarios,precos]=await '
-     'Promise.all([api.produtos(),api.usuarios(),api.precos()]); retorne objeto nomeado.'),
+    ('Retorne Promise.all([api.produtos(), api.usuarios(), api.precos()]); o array mantém '
+     'a ordem declarada mesmo se as promises terminarem em outra ordem.'),
     'Carregar perfil e preferências independentes -> concorrência e ordem estável',
     load={"novelty": 2, "syntax": 3, "composition": 3, "state": 3, "debugging": 2, "files": 2, "reading": 3, "independence": 3, "tools": 2},
         kind='FADED',
@@ -130,11 +130,10 @@ CONTENT = {
      'independentes */ }'), ('Fazer awaits sequenciais para recursos independentes ou pensar que rejeição cancela '
      'requests.'), ('Inicie as três operações antes do primeiro await.',
      'Passe promises em array na ordem do contrato.',
-     'Desestruture resultado após Promise.all.'), ('const [produtos,usuarios,precos]=await '
-     'Promise.all([api.produtos(),api.usuarios(),api.precos()]); retorne objeto nomeado.'), 'Carregar perfil e preferências independentes -> concorrência e ordem estável', 10, 'Node.js 24 LTS', ('Complete carregar iniciando juntas as requisições independentes e mantendo a ordem '
-     'da API no objeto retornado. Explique o limite de rejeição.',
-     'Uma tela pode pedir detalhes de conta e preferências ao mesmo tempo; se preferências '
-     'terminar primeiro, cada valor ainda ocupa seu campo nomeado no resultado final.',
+     'Desestruture resultado após Promise.all.'), ('return Promise.all([api.produtos(), api.usuarios(), api.precos()]);'), 'Carregar perfil e preferências independentes -> concorrência e ordem estável', 10, 'Node.js 24 LTS', ('Complete carregar iniciando juntas as requisições independentes e mantendo a ordem '
+     'de entrada no array retornado. Explique o limite de rejeição.',
+     'Uma tela pode pedir detalhes de conta e preferências ao mesmo tempo; mesmo que preferências '
+     'termine primeiro, cada valor mantém a posição da chamada correspondente no array.',
      'Marque quais chamadas dependem de outras; inicie apenas as independentes antes do '
      'primeiro await.',
      'Editor com três stubs nomeados, linha do tempo por ordem de conclusão e retorno em '
@@ -145,13 +144,13 @@ CONTENT = {
      'A ordem das promises na entrada, não o tempo em que se resolvem.',
      'A ordem em que cada promise é cumprida.',
      'Uma rejeição cancela automaticamente todas as outras operações.',
-     'Carregue seções de conta independentes ao mesmo tempo e monte a resposta por nome, '
-     'ainda que terminem em ordens diferentes.')),
+     'Carregue seções independentes ao mesmo tempo e associe cada posição do array à chamada '
+     'de entrada correspondente, ainda que terminem em ordens diferentes.')),
          ),
 "12.04": C(
     'async.microtasks_tasks',
-    'logs sync A; Promise.resolve().then P1; queueMicrotask Q; setTimeout T; log B',
-    'ordem -> A,B,P1,Q,T',
+    'logs sync A; Promise.resolve().then P1 (que agenda Promise.then P2); queueMicrotask Q; setTimeout T; log B',
+    'P1 agenda P2; ordem dos logs -> A,B,P1,Q,P2,T',
     'P1 agenda P2 durante execução -> A,B,P1,Q,P2,T',
     'Supor que novas microtasks pulam à frente das que já estavam na fila.',
     ('Marque execução síncrona primeiro.',
@@ -164,7 +163,7 @@ CONTENT = {
         kind='TRACE',
     estimated=9,
     runtime='Node.js 24 LTS',
-    **_lesson('async.microtasks_tasks', 'logs sync A; Promise.resolve().then P1; queueMicrotask Q; setTimeout T; log B', 'Supor que novas microtasks pulam à frente das que já estavam na fila.', ('Marque execução síncrona primeiro.',
+    **_lesson('async.microtasks_tasks', 'logs sync A; Promise.resolve().then P1 (que agenda Promise.then P2); queueMicrotask Q; setTimeout T; log B', 'Supor que novas microtasks pulam à frente das que já estavam na fila.', ('Marque execução síncrona primeiro.',
      'Adicione microtasks à fila na ordem de agendamento.',
      'Task T só roda após esvaziar a fila.'), ('Trace a fila FIFO de microtasks, incluindo as adicionadas por P1; timer é task '
      'posterior.'), 'Prever atualização assíncrona antes de timeout -> ordem com fila explícita', 9, 'Node.js 24 LTS', ('Trace pilha síncrona, fila FIFO de microtasks e task do timer, incluindo uma '
@@ -317,8 +316,8 @@ CONTENT = {
     ('fixture HTTP 404 -> erro mesmo com Promise resolvida; JSON inválido -> erro; fixture '
      'antiga lenta -> não sobrescreve nova; loading finaliza; nenhuma requisição externa'),
     'Assumir que fetch rejeita em status HTTP de erro.',
-    ('Cheque response.ok e Content-Type.',
-     'Leia corpo uma vez e valide forma mínima.',
+    ('Cheque response.ok; parseie o JSON uma vez.',
+     'Valide a forma mínima dos dados antes de atualizar a interface.',
      'Identificador de geração impede race e try/finally fecha loading.'),
     ('Camada api verifica HTTP e body; controlador inicia requisições independentes, '
      'atualiza estados, permite retry e descarta resposta obsoleta. Todas as respostas vêm '
@@ -329,11 +328,12 @@ CONTENT = {
         kind='PROJECT',
     runtime='browser',
     estimated=90,
+    content_version=2,
     **_lesson('fetch.dashboard', ('dashboard consulta /profile e /stats por fetcher injetado; fixtures locais fornecem '
      'Response/status/body/atraso determinísticos; UI loading/error/success; retry; '
-     'geração por atualização'), 'Assumir que fetch rejeita em status HTTP de erro.', ('Cheque response.ok e Content-Type.',
-     'Leia corpo uma vez e valide forma mínima.',
-     'Identificador de geração impede race e try/finally fecha loading.'), ('Camada api verifica HTTP e body; controlador inicia requisições independentes, '
+    'geração por atualização'), 'Assumir que fetch rejeita em status HTTP de erro.', ('Cheque response.ok; leia o JSON uma vez.',
+     'Valide a forma mínima dos dados antes de atualizar a interface.',
+     'Promise.race encerra a espera; ao terminar, limpe o timer e remova o listener de cancelamento.'), ('Camada api verifica HTTP e body; controlador inicia requisições independentes, '
      'atualiza estados, permite retry e descarta resposta obsoleta. Todas as respostas vêm '
      'de fixtures injetadas; não dependa da rede.'), ('Painel de clima com fixtures para duas fontes -> loading/erro/retry e resposta atual '
      'determinísticos'), 90, 'browser', ('Complete o dashboard somente com fixtures injetadas. Trate status HTTP separado de '
@@ -642,7 +642,7 @@ _LITERAL_STARTERS = {
     '12.05': "profile.js: export async function carregar(fetchProfile) {\n  try {\n    return fetchProfile();\n  } catch (erro) {\n    return { nome: 'offline' };\n  }\n}\n\n// fetchProfile() devolve uma Promise que pode rejeitar depois da chamada.\n// O fallback deveria ser usado quando essa rejeição ocorre.",
     '12.06': "search.js: export function criarBusca(fetcher) {\n  let controllerAtual;\n  let sequencia = 0;\n  return async function buscar(query) {\n    // TODO: cancelar a busca anterior, iniciar a nova e ignorar resposta obsoleta.\n    // fetcher(query, { signal }) usa fixtures locais e pode resolver/rejeitar com atraso.\n  };\n}\n",
     '12.07': "material.md: // São seis requisitos possíveis: esperar todas; conservar sucessos parciais; primeiro a terminar; primeiro sucesso; corrida com timeout; consultar réplicas.\n// Para cada requisito, escolha all, allSettled, race ou any e registre efeitos de cancelamento/limpeza.",
-    '12.08': "dashboard.js: export function criarDashboard(fetcher) {\n  // fetcher('/profile') e fetcher('/stats') retornam Response de fixtures locais.\n  // TODO: modelar loading/error/success, validar status e JSON e ignorar resposta antiga.\n}\n",
+    '12.08': "dashboard.js: export async function criarDashboard(fetcher, options = {}) {\n  // options: {onState, timeoutMs, signal}; a chamada com apenas fetcher continua válida.\n  // fetcher(path, {signal}) usa fixtures locais para /profile e /stats.\n  // TODO: emitir loading e resultado final, validar HTTP/JSON e encerrar timeout/cancelamento.\n  // Resultado: success com profile/stats, error com error.status/name ou stale sem notificação.\n}\n",
     '12.09': "material.md: const callback = () => 3;\nconst nativo = Promise.try(callback);\nconst comFallback = (() => {\n  try { return Promise.resolve(callback()); }\n  catch (erro) { return Promise.reject(erro); }\n})();\n\nCompare quando callback roda e como um throw síncrono vira rejeição. Promise.resolve().then(callback) adia a chamada para uma microtask.",
     '12.10': "material.md: // Troca 1\nRequest: GET /itens\nResponse: 200, Content-Type: application/json, body=[{\"id\":1}]\n\n// Troca 2\nRequest: POST /itens\nResponse: 201, Location: /itens/2, Content-Type: application/json, body={\"id\":2}\n\n// Troca 3\nRequest: GET /ausente\nResponse: 404, Content-Type: text/plain, body=not found\n\n// Troca 4\nResponse: 204 No Content, sem corpo.",
     '12.11': "client.js: export async function carregar(url, fetcher) {\n  const resposta = await fetcher(url);\n  return resposta.json();\n}\n\n// Fixture pública: status 503, Content-Type application/json, corpo {\"erro\":\"indisponível\"}.\n// O cliente também precisa tratar status, cabeçalho, JSON inválido e cancelamento.",
@@ -711,6 +711,17 @@ CONTENT["12.08"]["rubric"] = (
     "Entrega 2 — estados loading, error e success são observáveis; erro HTTP/JSON preserva a mensagem e retry inicia uma nova geração.",
     "Entrega 3 — timeout/cancelamento encerra a espera e limpa o indicador; resposta antiga que termina por último não substitui a atual.",
     "Entrega 4 — checklist registra sucesso, 404 cumprido, JSON inválido, retry, timeout e resposta fora de ordem; reflexão anota o comando e confirma que não houve rede real.",
+)
+CONTENT["12.08"]["content_version"] = 3
+CONTENT["12.08"]["prompt"] += (
+    "\n\nContrato: `criarDashboard(fetcher, {onState, timeoutMs, signal} = {})`; a chamada antiga "
+    "`criarDashboard(fetcher)` continua válida. O fetcher recebe `(path, {signal})` e usa somente "
+    "fixtures. `onState` recebe `{status:'loading'}` e, ao final da geração atual, `{status:'success', "
+    "profile, stats}` ou `{status:'error', error}`. Erro HTTP expõe `error.status`; timeout e cancelamento "
+    "retornam `status:'error'` com `error.name` igual a `TimeoutError` ou `AbortError`. O mesmo objeto "
+    "fetcher identifica as gerações do dashboard: somente a chamada mais recente notifica; uma anterior "
+    "que termine depois retorna `{status:'stale'}` sem chamar `onState`. Timeout e sinal externo encerram "
+    "a espera mesmo se a fixture não respeitar o AbortSignal."
 )
 
 

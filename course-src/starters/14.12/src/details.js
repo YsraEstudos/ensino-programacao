@@ -1,1 +1,1 @@
-export function mostrarDetalhe() { document.querySelector('#result').textContent = '5 detalhes'; }
+export const descrever = total => `Detalhes carregados: total ${total}`;

@@ -1,3 +1,7 @@
+// Contrato visível 23.02:
+// Exporte criarServico(repo) com criarPedido(raw), e responder(servico,raw): Promise<{status,corpo}>.
+// 400 não persiste; 500 tem mensagem genérica e não traz cause/causa pública. A causa original permanece disponível no erro interno.
+
 // 23.02 · Fluxo de uma requisição pelas camadas.
 // Ordene os blocos dentro de criarPedido: entrada -> parse -> validação -> domínio -> persistência -> apresentação.
 
@@ -34,3 +38,7 @@ console.log(await responder('{"produto":"caneca","quantidade":2}'));  // 201
 console.log(await responder('{"produto":"caneca","quantidade":0}'));  // 400 e repositório intacto
 console.log(await responder('{"produto":"caneca","quantidade":100}')); // 500 com causa preservada, mensagem segura
 console.log("itens salvos:", repositorio.itens.length);               // esperado: 1
+
+// Avaliação visível: implementação pendente
+export function criarServico(repo) { return {async criarPedido(raw) { /* TODO: parse, validate, save, and preserve an internal cause on storage failure. */ return {status:201,corpo:raw}; }}; }
+export async function responder(servico, raw) { /* TODO: return only safe {status,corpo}. */ return servico.criarPedido(raw); }
