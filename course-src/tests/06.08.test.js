@@ -28,6 +28,11 @@ describe("ausência e corrupção", () => {
     /*@case 06.08.json-valido-sem-versao-ou-qu-6cb3d24b*/expect(migrar("42")).toEqual(padrao);
     /*@case 06.08.json-valido-sem-versao-ou-qu-9c064376*/expect(migrar("null")).toEqual(padrao);
   });
+  test("v2 sem áudio e versão textual restauram o padrão", () => {
+    /*@case 06.08.v2-sem-audio-e-versao-textua-1ebc12bb*/expect(migrar('{"version":2}')).toEqual(padrao);
+    /*@case 06.08.v2-sem-audio-e-versao-textua-75d51bdc*/expect(migrar('{"version":2,"audio":null}')).toEqual(padrao);
+    /*@case 06.08.v2-sem-audio-e-versao-textua-2adfe163*/expect(migrar('{"version":"2"}')).toEqual(padrao);
+  });
 });
 
 describe("versão futura", () => {

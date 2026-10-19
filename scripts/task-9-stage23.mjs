@@ -1,6 +1,54 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, rmSync } from 'node:fs';
-const TRANSFER_RUBRICS={"23.01": ["Mapeamento de cada função do diff para sua camada, com primeira extração testável usando fake repository", "Casos avaliáveis: fetch, validação de CSV, comissão e tabela DOM classificados; fake repo testa a comissão sem rede; parse, cause e textContent localizados no plano."], "23.02": ["Ordem de execução parse → validação → domínio → repository, com 400 sem escrita e 500 sem mensagem técnica ao cliente", "Casos avaliáveis: linha corrompida retorna 400 com repository intacto; SKU sem autorização retorna 400; falha de banco retorna 500 com cause só no log."], "23.03": ["Criação de pedido com validação antes da persistência, IDs e datas injetáveis e cause preservada na falha do adapter", "Casos avaliáveis: pedido de duas linhas válido; quantidade zero rejeitada sem chamar persistência; 31 de fevereiro rejeitado; falha do adapter mantém a cause."], "23.04": ["Refatoração por checkpoints: caracterização antes da injeção, normalização de email e registro dos valores aceitos antes da troca", "Casos avaliáveis: linha vazia e duplicada geram 0 gravações na caracterização; email normalizado após a injeção; igualdade frouxa substituída só depois da lista de valores aceitos."], "23.05": ["Revisão de diff que aponta um retry sem limite e uma perda de atualização, com reprodução sem editar o diff", "Casos avaliáveis: retry sem limite cita arquivo e linha; perda de atualização reproduzida com fake clock; comentário sobre nome de variável refutado com evidência."], "23.06": ["Auditoria de upload que mapeia parse → validação → domínio → storage e identifica quais erros podem expor cause", "Casos avaliáveis: MIME declarado divergente da assinatura rejeitado; filename com caminho bloqueado; erro de storage não expõe cause ao cliente."], "23.07": ["Regra de aprovação no domínio de reembolsos, com negação antes da gravação e atomicidade entre estado e evento", "Casos avaliáveis: atendente tenta aprovar e é negado sem escrita; falha entre estado e evento mantém status e histórico antigos; timestamp injetado no teste."], "23.08": ["Domínio de pedidos com adapter SQLite substituível, suíte de contrato comum e tela restrita ao serviço", "Casos avaliáveis: a mesma suíte passa com adapter em memória e com SQLite; o restart mantém o pedido expedido; a migração v1→v2 preserva os itens; a tela não acessa o adapter."], "23.09": ["Instrumentação de upload com redação de segredos nos logs e na resposta, e níveis warn/error definidos pela classe do erro", "Casos avaliáveis: 422 gera warning; erro de rede gera error com cause redigida; API key e cookie ausentes do JSON de log e da resposta simulada."], "23.10": ["Localização da regra de valor mínimo com rastreamento UI → serviço → domínio, sem edição de código", "Casos avaliáveis: previsão de 9.999 e 10.000 centavos registrada antes da execução; formatter identificado como não dono da regra."], "23.11": ["Correção de limite com teste vermelho primeiro, regra inclusiva localizada no domínio e resumo/ordenação preservados", "Casos avaliáveis: 1.000 pontos com desconto; 1.001 sem desconto; score negativo e NaN rejeitados; configuração de 250 respeitada."]};
+const TRANSFER_RUBRICS={"23.01": ["Mapeamento de cada função do diff para sua camada, com primeira extração testável usando fake repository", "Casos avaliáveis: fetch, validação de CSV, comissão e tabela DOM classificados; fake repo testa a comissão sem rede; parse, cause e textContent localizados no plano."], "23.02": ["Ordem de execução parse → validação → domínio → repository, com 400 sem escrita e 500 sem mensagem técnica ao cliente", "Casos avaliáveis: linha corrompida retorna 400 com repository intacto; SKU sem autorização retorna 400; falha de banco retorna 500 com cause só no log."], "23.03": ["Criação de pedido com validação antes da persistência, IDs e datas injetáveis e cause preservada na falha do adapter", "Casos avaliáveis: pedido de duas linhas válido; quantidade zero rejeitada sem chamar persistência; 31 de fevereiro rejeitado; falha do adapter mantém a cause."], "23.04": ["Refatoração por checkpoints: caracterização antes da injeção, normalização de email e registro dos valores aceitos antes da troca", "Casos avaliáveis: linha vazia e duplicada geram 0 gravações na caracterização; email normalizado após a injeção; igualdade frouxa substituída só depois da lista de valores aceitos."], "23.05": ["Revisão de diff que aponta um retry sem limite e uma perda de atualização, com reprodução sem editar o diff", "Casos avaliáveis: retry sem limite cita arquivo e linha; perda de atualização reproduzida com fake clock; comentário sobre nome de variável refutado com evidência; sugestão de IA comparada ao diff, com requisito e teste omitidos identificados."], "23.06": ["Auditoria de upload que mapeia parse → validação → domínio → storage e identifica quais erros podem expor cause", "Casos avaliáveis: MIME declarado divergente da assinatura rejeitado; filename com caminho bloqueado; erro de storage não expõe cause ao cliente."], "23.07": ["Regra de aprovação no domínio de reembolsos, com negação antes da gravação e atomicidade entre estado e evento", "Casos avaliáveis: atendente tenta aprovar e é negado sem escrita; falha entre estado e evento mantém status e histórico antigos; timestamp injetado no teste."], "23.08": ["Domínio de pedidos com adapter SQLite substituível, suíte de contrato comum e tela restrita ao serviço", "Casos avaliáveis: a mesma suíte passa com adapter em memória e com SQLite; o restart mantém o pedido expedido; a migração v1→v2 preserva os itens; a tela não acessa o adapter."], "23.09": ["Instrumentação de upload com resposta pública genérica e causa técnica útil apenas no log interno, redigida", "Casos avaliáveis: 422 gera warning; erro de rede gera error com causa redigida e contexto útil preservado; API key/cookie não aparecem na resposta nem no JSON de logs."], "23.10": ["Localização da regra de valor mínimo com rastreamento UI → serviço → domínio, sem edição de código", "Casos avaliáveis: previsão de 9.999 e 10.000 centavos registrada antes da execução; formatter identificado como não dono da regra."], "23.11": ["Correção de limite com teste vermelho primeiro, regra inclusiva localizada no domínio e resumo/ordenação preservados", "Casos avaliáveis: 1.000 pontos com desconto; 1.001 sem desconto; score negativo e NaN rejeitados; configuração de 250 respeitada."]};
 import path from 'node:path';
+
+function localTypeScriptProject(id, testFile) {
+  const devDependencies = { '@types/node': '24.19.1', typescript: '6.0.3' };
+  const name = `devpath-${id.replace('.', '-')}`;
+  const packageJson = {
+    name, version: '1.0.0', private: true, type: 'module',
+    engines: { node: '>=24.0.0' },
+    scripts: {
+      test: `node --experimental-strip-types --test ${testFile}`,
+      typecheck: 'tsc --noEmit -p tsconfig.json'
+    },
+    devDependencies
+  };
+  const packageLock = {
+    name, version: '1.0.0', lockfileVersion: 3, requires: true,
+    packages: {
+      '': { name, version: '1.0.0', devDependencies, engines: { node: '>=24.0.0' } },
+      'node_modules/@types/node': {
+        version: '24.19.1',
+        resolved: 'https://registry.npmjs.org/@types/node/-/node-24.19.1.tgz',
+        integrity: 'sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==',
+        dev: true, license: 'MIT', dependencies: { 'undici-types': '>=7.24.0 <7.24.7' }
+      },
+      'node_modules/typescript': {
+        version: '6.0.3',
+        resolved: 'https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz',
+        integrity: 'sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==',
+        dev: true, license: 'Apache-2.0', bin: { tsc: 'bin/tsc', tsserver: 'bin/tsserver' }, engines: { node: '>=14.17' }
+      },
+      'node_modules/undici-types': {
+        version: '7.24.6',
+        resolved: 'https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz',
+        integrity: 'sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==',
+        dev: true, license: 'MIT'
+      }
+    }
+  };
+  const tsconfig = {
+    compilerOptions: {
+      target: 'ES2022', module: 'NodeNext', moduleResolution: 'NodeNext', strict: true,
+      noEmit: true, allowImportingTsExtensions: true, types: ['node'], skipLibCheck: true
+    },
+    include: ['src/**/*.ts', 'test/**/*.ts']
+  };
+  return Object.fromEntries([
+    ['package.json', packageJson], ['package-lock.json', packageLock], ['tsconfig.json', tsconfig]
+  ].map(([file, value]) => [file, JSON.stringify(value, null, 2) + '\n']));
+}
 
 const entries = {
   '23.03': {
@@ -22,32 +70,34 @@ const entries = {
   },
   '23.07': {
     environment: 'local', entryPath: 'src/dominio.ts', files: {
+      ...localTypeScriptProject('23.07', 'test/reabrir.test.ts'),
       'src/dominio.ts': `export type Coluna="a-fazer"|"fazendo"|"feito";export type Tarefa={readonly id:string;titulo:string;coluna:Coluna};export type Estado={versao:1;tarefas:readonly Tarefa[]};export class ValidationError extends Error{};export const estadoInicial:Estado={versao:1,tarefas:[]};export function criar(estado:Estado,id:string,titulo:string):Estado{const limpo=titulo.trim();if(!limpo)throw new ValidationError('título obrigatório');if(!id.trim()||estado.tarefas.some(t=>t.id===id))throw new ValidationError('id inválido ou duplicado');return{...estado,tarefas:[...estado.tarefas,{id,titulo:limpo,coluna:'a-fazer'}]};}export function mover(estado:Estado,id:string,coluna:Coluna):Estado{if(!['a-fazer','fazendo','feito'].includes(coluna))throw new ValidationError('coluna inválida');let found=false;const tarefas=estado.tarefas.map(t=>{if(t.id!==id)return t;found=true;return{...t,coluna};});if(!found)throw new ValidationError('tarefa inexistente');return{...estado,tarefas};}export function remover(estado:Estado,id:string):Estado{if(!estado.tarefas.some(t=>t.id===id))throw new ValidationError('tarefa inexistente');return{...estado,tarefas:estado.tarefas.filter(t=>t.id!==id)};}`,
       'src/portas.ts': `import type{Estado}from'./dominio.ts';export type EventoAuditoria={tipo:'reaberta';tarefaId:string;por:string;em:string};export interface Repositorio{carregar():Promise<Estado>;salvar(estado:Estado):Promise<void>;salvarComEvento(estado:Estado,evento:EventoAuditoria):Promise<void>;carregarEventos():Promise<readonly EventoAuditoria[]>;}export class StorageError extends Error{constructor(mensagemPublica:string,options?:{cause?:unknown}){super(mensagemPublica,options);this.name='StorageError';}}`,
       'src/adapters/memoria.ts': `import{estadoInicial,type Estado}from'../dominio.ts';import type{EventoAuditoria,Repositorio}from'../portas.ts';export function criarRepositorioEmMemoria(inicial:Estado=estadoInicial):Repositorio&{falharProximo():void}{let salvo=structuredClone(inicial),eventos:EventoAuditoria[]=[];let falhar=false;const snapshot=(s:Estado)=>structuredClone(s);return{async carregar(){return snapshot(salvo);},async carregarEventos(){return structuredClone(eventos);},async salvar(s){if(falhar){falhar=false;throw new Error('falha simulada');}salvo=snapshot(s);},async salvarComEvento(s,e){if(falhar){falhar=false;throw new Error('falha simulada');}const next=snapshot(s),log=structuredClone([...eventos,e]);salvo=next;eventos=log;},falharProximo(){falhar=true;}};}`,
       'src/reabrir.ts': `import{mover,type Estado}from'./dominio.ts';import type{EventoAuditoria,Repositorio}from'./portas.ts';export type Usuario={id:string;papel:'comum'|'admin'};export class ForbiddenError extends Error{};export async function reabrir(repo:Repositorio,usuario:Usuario,tarefaId:string,agora:()=>Date=()=>new Date()):Promise<Estado>{if(usuario.papel!=='admin')throw new ForbiddenError('somente administrador pode reabrir');const atual=await repo.carregar(),tarefa=atual.tarefas.find(t=>t.id===tarefaId);if(!tarefa||tarefa.coluna!=='feito')throw new Error('tarefa inexistente ou não concluída');const atualizado=mover(atual,tarefaId,'a-fazer');const evento:EventoAuditoria={tipo:'reaberta',tarefaId,por:usuario.id,em:agora().toISOString()};await repo.salvarComEvento(atualizado,evento);return atualizado;}`,
-      'README.md': `# 23.07 — Reabertura autorizada no capstone\n\nA autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos. Rode a suíte de contrato 23.08. Teste comum, admin, inexistente, coluna errada, relógio injetado e falha atômica.`,
+      'README.md': `# 23.07 — Reabertura autorizada no capstone\n\nA autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos.\n\n## Verificação local\n\nRequer Node.js 24 ou superior. A configuração declara TypeScript 6.0.3 e @types/node 24.19.1; Node.js 26.7.0 foi usado nesta conferência. Na pasta copiada, rode npm ci, npm test e npm run typecheck. O pacote inclui scripts e tsconfig, sem configuração herdada do repositório principal.\n\nA suíte cobre CRUD existente, usuário comum sem gravação, admin com evento determinístico e falha atômica de estado/auditoria.`,
       'mudanca.md': `# Change request preenchida\n\n| Camada | Arquivo | Mudança |\n|---|---|---|\n| Autorização/serviço | src/reabrir.ts | rejeitar usuário comum antes de ler/escrever e validar tarefa concluída |\n| Domínio | src/dominio.ts | mover cria estado novo e não altera anterior |\n| Porta | src/portas.ts | salvar estado + evento em uma operação |\n| Adapter | src/adapters/memoria.ts | clonar e trocar ambos após sucesso |\n| Testes | test/contrato.test.ts | regressão de criar/mover/remover e falha de auditoria |\n\nEvento { tipo: reaberta, tarefaId, por, em }. Falha de persistência não publica estado nem evento; o relógio é injetável para teste.`
     }, test: `import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial}from'./src/dominio.ts';import{criarRepositorioEmMemoria}from'./src/adapters/memoria.ts';import{reabrir,ForbiddenError}from'./src/reabrir.ts';test('admin reopens a completed task and writes deterministic audit',async()=>{const r=criarRepositorioEmMemoria(mover(criar(estadoInicial,'x','Revisar'),'x','feito'));const state=await reabrir(r,{id:'a1',papel:'admin'},'x',()=>new Date('2026-10-01T00:00:00Z'));assert.equal((await r.carregar()).tarefas[0].coluna,'a-fazer');assert.deepEqual(await r.carregarEventos(),[{tipo:'reaberta',tarefaId:'x',por:'a1',em:'2026-10-01T00:00:00.000Z'}]);assert.equal(state.tarefas[0].coluna,'a-fazer');});test('ordinary user is forbidden before any write; invalid status is rejected',async()=>{const r=criarRepositorioEmMemoria(mover(criar(estadoInicial,'x','X'),'x','feito'));await assert.rejects(reabrir(r,{id:'u',papel:'comum'},'x'),ForbiddenError);assert.deepEqual(await r.carregarEventos(),[]);await assert.rejects(reabrir(r,{id:'a',papel:'admin'},'missing'));});test('failed event transaction persists neither state nor audit; CRUD remains immutable',async()=>{const base=criar(estadoInicial,'x','X'),done=mover(base,'x','feito'),r=criarRepositorioEmMemoria(done);r.falharProximo();await assert.rejects(reabrir(r,{id:'a',papel:'admin'},'x'));assert.equal((await r.carregar()).tarefas[0].coluna,'feito');assert.deepEqual(await r.carregarEventos(),[]);assert.equal(remover(mover(base,'x','fazendo'),'x').tarefas.length,0);assert.equal(base.tarefas[0].coluna,'a-fazer');});`,
-    local:{commands:[['node','--experimental-strip-types','--test','test/reabrir.test.ts'],['node','node_modules/typescript/bin/tsc','--ignoreConfig','--noEmit','--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--allowImportingTsExtensions','src/dominio.ts','src/portas.ts','src/adapters/memoria.ts','src/reabrir.ts']],evidence:['2 native Node tests verify authorized reopening, deterministic audit, no-write denial, and incomplete-task rejection.','TypeScript 6 strict no-emit check covers the changed domain, port, memory adapter, and service.']},
+    local:{commands:[['npm','ci'],['npm','test'],['npm','run','typecheck']],evidence:['Native Node tests verify authorized reopening, deterministic audit, no-write denial, and incomplete-task rejection.','TypeScript 6.0.3 strict no-emit check includes the starter source and test files using declared dependencies.']},
     transfer: `Em um domínio de reembolsos, só gerente aprova solicitação liquidada; negar atendente antes de gravar, salvar mudança + evento juntos, timestamp injetável e provar que uma falha deixa status e histórico antigos.`, rubric: ['Matriz de arquivos coloca permissão no serviço, regra de estado no domínio e atomicidade na porta/adapter.', 'Teste assertivamente que usuário comum não grava, admin registra ator/instante e erro de storage não persiste metade.', 'Testes originais de criar/mover/remover continuam passando sobre objetos imutáveis.']
   },
   '23.08': {
     environment: 'local', entryPath: 'src/dominio.ts', files: {
+      ...localTypeScriptProject('23.08', 'test/contrato.test.ts'),
       'src/dominio.ts': `export type Coluna="a-fazer"|"fazendo"|"feito";export type Tarefa={readonly id:string;titulo:string;coluna:Coluna};export type Estado={versao:1;tarefas:readonly Tarefa[]};export class ValidationError extends Error{};export const estadoInicial:Estado={versao:1,tarefas:[]};function validar(s:Estado){if(!s||s.versao!==1||!Array.isArray(s.tarefas))throw new ValidationError('estado inválido');}export function criar(s:Estado,id:string,titulo:string):Estado{validar(s);if(typeof id!=='string'||!id.trim()||s.tarefas.some(t=>t.id===id))throw new ValidationError('id inválido ou duplicado');if(typeof titulo!=='string'||!titulo.trim())throw new ValidationError('título obrigatório');return{versao:1,tarefas:[...s.tarefas,{id,titulo:titulo.trim(),coluna:'a-fazer'}]};}export function mover(s:Estado,id:string,coluna:Coluna):Estado{validar(s);if(!['a-fazer','fazendo','feito'].includes(coluna))throw new ValidationError('coluna inválida');let found=false;const tarefas=s.tarefas.map(t=>{if(t.id!==id)return t;found=true;return{...t,coluna};});if(!found)throw new ValidationError('tarefa inexistente');return{versao:1,tarefas};}export function remover(s:Estado,id:string):Estado{validar(s);if(!s.tarefas.some(t=>t.id===id))throw new ValidationError('tarefa inexistente');return{versao:1,tarefas:s.tarefas.filter(t=>t.id!==id)};}`,
       'src/portas.ts': `import type{Estado}from'./dominio.ts';export type Evento={tipo:string;entidadeId:string;por:string;em:string};export interface Repositorio{carregar():Promise<Estado>;salvar(estado:Estado):Promise<void>;salvarComEvento(estado:Estado,eventos:readonly Evento[]):Promise<void>;carregarEventos():Promise<readonly Evento[]>;}`,
       'src/adapters/memoria.ts': `import{estadoInicial,type Estado}from'../dominio.ts';import type{Evento,Repositorio}from'../portas.ts';export class StorageError extends Error{constructor(message:string,cause:unknown){super('Não foi possível persistir o estado',{cause});this.name='StorageError';}}export function criarRepositorioEmMemoria(inicial:Estado=estadoInicial):Repositorio&{falharProximo():void}{let estado=structuredClone(inicial),eventos:Evento[]=[];let falha=false;return{async carregar(){return structuredClone(estado);},async carregarEventos(){return structuredClone(eventos);},async salvar(s){if(falha){falha=false;throw new StorageError('falhou',new Error('segredo interno'));}estado=structuredClone(s);},async salvarComEvento(s,ev){if(falha){falha=false;throw new StorageError('falhou',new Error('segredo interno'));}const novoEstado=structuredClone(s),novosEventos=structuredClone([...eventos,...ev]);estado=novoEstado;eventos=novosEventos;},falharProximo(){falha=true;}};}`,
       'src/servico.ts': `import{criar,mover,remover,type Estado,type Coluna}from'./dominio.ts';import type{Repositorio,Evento}from'./portas.ts';export async function adicionar(repo:Repositorio,id:string,titulo:string,por='sistema'){const atual=await repo.carregar(),novo=criar(atual,id,titulo);await repo.salvarComEvento(novo,[{tipo:'criada',entidadeId:id,por,em:new Date().toISOString()}]);return novo;}export async function alterarColuna(repo:Repositorio,id:string,coluna:Coluna,por='sistema'){const atual=await repo.carregar(),novo=mover(atual,id,coluna);await repo.salvar(novo);return novo;}export async function excluir(repo:Repositorio,id:string){const atual=await repo.carregar(),novo=remover(atual,id);await repo.salvar(novo);return novo;}`,
       'src/adapters/versao.ts': `import type{Estado}from'../dominio.ts';export type DocumentoPersistido={versao:number;dados:unknown;eventos?:unknown};export function migrar(documento:DocumentoPersistido):{estado:Estado;eventos:unknown[]}{if(documento.versao===0){const rows=Array.isArray(documento.dados)?documento.dados:[];const tarefas=rows.map((x:any)=>({id:String(x.id),titulo:String(x.titulo).trim(),coluna:x.concluida?'feito' as const:'a-fazer' as const}));return{estado:{versao:1,tarefas},eventos:[]};}if(documento.versao===1&&documento.dados&&typeof documento.dados==='object')return{estado:documento.dados as Estado,eventos:Array.isArray(documento.eventos)?structuredClone(documento.eventos):[]};throw new Error('versão persistida não suportada');}`,
-      'README.md': `# 23.08 — Capstone de tarefas\n\nO domínio puro valida antes de criar/mover/remover e retorna novos estados. O serviço orquestra a porta; adapter em memória clona na entrada/saída e persiste estado/eventos juntos. O adapter de versão migra documento 0 (campo concluida) para esquema 1 e rejeita versão desconhecida. UI/CLI deve chamar serviço, nunca acessar storage. Execute node --experimental-strip-types --test test/contrato.test.ts e node node_modules/typescript/bin/tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext src/dominio.ts src/portas.ts src/adapters/memoria.ts src/adapters/versao.ts src/servico.ts.`,
-      'test/contrato.test.ts': `import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial,ValidationError}from'../src/dominio.ts';import{criarRepositorioEmMemoria,StorageError}from'../src/adapters/memoria.ts';import{migrar}from'../src/adapters/versao.ts';import{adicionar,alterarColuna,excluir}from'../src/servico.ts';const adapters:[string,()=>ReturnType<typeof criarRepositorioEmMemoria>][]=[['memoria',()=>criarRepositorioEmMemoria()]];for(const[name,factory]of adapters){test(name+': contrato CRUD, recusa e cópias',async()=>{const r=factory();await adicionar(r,'t1','Estudar');let stored=await r.carregar();assert.equal(stored.tarefas[0].titulo,'Estudar');await alterarColuna(r,'t1','fazendo');await excluir(r,'t1');assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});const outside=await r.carregar();(outside.tarefas as any).push({id:'evil'});assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});await assert.rejects(adicionar(r,'','   '),ValidationError);assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});});}test('falha de persistência não altera estado/evento e não vaza causa',async()=>{const r=criarRepositorioEmMemoria();r.falharProximo();await assert.rejects(adicionar(r,'x','X'),e=>e instanceof StorageError&&e.message==='Não foi possível persistir o estado'&&e.cause instanceof Error);assert.deepEqual(await r.carregar(),estadoInicial);assert.deepEqual(await r.carregarEventos(),[]);});test('documento v0 migra e versão desconhecida falha',()=>{assert.deepEqual(migrar({versao:0,dados:[{id:'a',titulo:' X ',concluida:true}]}),{estado:{versao:1,tarefas:[{id:'a',titulo:'X',coluna:'feito'}]},eventos:[]});assert.throws(()=>migrar({versao:9,dados:{}}));});test('domain stays immutable and rejects missing task before replacement',()=>{const a=criar(estadoInicial,'x','x'),b=mover(a,'x','feito');assert.equal(a.tarefas[0].coluna,'a-fazer');assert.equal(b.tarefas[0].coluna,'feito');assert.throws(()=>remover(b,'missing'),ValidationError);});`
-    }, test: `import './test/contrato.test.ts';`, local:{commands:[['node','--experimental-strip-types','--test','test/contrato.test.ts'],['node','node_modules/typescript/bin/tsc','--ignoreConfig','--noEmit','--strict','--target','ES2022','--module','NodeNext','--moduleResolution','NodeNext','--allowImportingTsExtensions','src/dominio.ts','src/portas.ts','src/adapters/memoria.ts','src/adapters/versao.ts','src/servico.ts']],evidence:['4 native Node tests cover CRUD, invalid input, atomic storage failure, defensive copies, restart and v0 migration','TypeScript 6.0.3 strict no-emit source check']},
+      'README.md': `# 23.08 — Capstone de tarefas\n\nO domínio puro valida antes de criar/mover/remover e retorna novos estados. O serviço orquestra a porta; adapter em memória clona na entrada/saída e persiste estado/eventos juntos. O adapter de versão migra documento 0 (campo concluida) para esquema 1 e rejeita versão desconhecida. UI/CLI deve chamar serviço, nunca acessar storage.\n\n## Verificação local\n\nRequer Node.js 24 ou superior. A configuração declara TypeScript 6.0.3 e @types/node 24.19.1; Node.js 26.7.0 foi usado nesta conferência. Na pasta copiada, rode npm ci, npm test e npm run typecheck. O pacote inclui scripts e tsconfig, sem configuração herdada do repositório principal.\n\nA suíte de contrato exercita criar, mover, remover, entrada inválida, cópias, migração v0, reinício no adapter em memória e falha de storage sem alterar estado ou auditoria prévios.`,
+      'test/contrato.test.ts': `import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial,ValidationError}from'../src/dominio.ts';import{criarRepositorioEmMemoria,StorageError}from'../src/adapters/memoria.ts';import{migrar}from'../src/adapters/versao.ts';import{adicionar,alterarColuna,excluir}from'../src/servico.ts';const adapters:[string,()=>ReturnType<typeof criarRepositorioEmMemoria>][]=[['memoria',()=>criarRepositorioEmMemoria()]];for(const[name,factory]of adapters){test(name+': contrato CRUD, recusa e cópias',async()=>{const r=factory();await adicionar(r,'t1','Estudar');let stored=await r.carregar();assert.equal(stored.tarefas[0].titulo,'Estudar');const moved=await alterarColuna(r,'t1','fazendo');assert.equal(moved.tarefas[0].coluna,'fazendo');assert.equal((await r.carregar()).tarefas[0].coluna,'fazendo');await excluir(r,'t1');assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});const outside=await r.carregar();(outside.tarefas as any).push({id:'evil'});assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});await assert.rejects(adicionar(r,'','   '),ValidationError);assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});});}test('falha de persistência preserva estado e auditoria anteriores',async()=>{const r=criarRepositorioEmMemoria();await adicionar(r,'stable','Manter');const stateBefore=await r.carregar(),eventsBefore=await r.carregarEventos();r.falharProximo();await assert.rejects(adicionar(r,'new','Não gravar parcialmente'),e=>e instanceof StorageError&&e.message==='Não foi possível persistir o estado'&&e.cause instanceof Error);assert.deepEqual(await r.carregar(),stateBefore);assert.deepEqual(await r.carregarEventos(),eventsBefore);});test('documento v0 migra e versão desconhecida falha',()=>{assert.deepEqual(migrar({versao:0,dados:[{id:'a',titulo:' X ',concluida:true}]}),{estado:{versao:1,tarefas:[{id:'a',titulo:'X',coluna:'feito'}]},eventos:[]});assert.throws(()=>migrar({versao:9,dados:{}}));});test('domain stays immutable and rejects missing task before replacement',()=>{const a=criar(estadoInicial,'x','x'),b=mover(a,'x','feito');assert.equal(a.tarefas[0].coluna,'a-fazer');assert.equal(b.tarefas[0].coluna,'feito');const removed=remover(b,'x');assert.equal(removed.tarefas.length,0);assert.equal(b.tarefas.length,1);assert.throws(()=>remover(b,'missing'),ValidationError);});`
+    }, test: `import './test/contrato.test.ts';`, local:{commands:[['npm','ci'],['npm','test'],['npm','run','typecheck']],evidence:['4 native Node tests cover CRUD, invalid input, atomic storage failure, defensive copies, restart and v0 migration','TypeScript 6.0.3 strict no-emit check includes source and contract test files']},
     transfer: `Adicionar domínio de pedidos com adapter SQLite substituível: mesma suíte de contrato cobre criar item, mover para expedido, cancelar, restart e migração v1→v2; simule falha entre estado/evento, proteja cópias e faça tela chamar somente serviço.`, rubric: ['Contrato percorre CRUD, reinício, migração, cópia defensiva e falha sem persistência parcial para adapter.', 'Validação fica no domínio, autorização/efeito no serviço e parsing de versão no adapter; UI/CLI não importa storage.', 'README cita comandos, formato v0/v1, tratamento de erro/cause e limitação do adapter demonstrada por teste.']
   },
   '23.09': {
     environment: 'javascript', entryPath: 'operacao.js', files: {
       'operacao.js': `const logs=[];export const logger={info:e=>logs.push({nivel:'info',...e}),warn:e=>logs.push({nivel:'warn',...e}),error:e=>logs.push({nivel:'error',...e})};const SECRET=/authorization|token|cookie/i;export function redigir(v){if(Array.isArray(v))return v.map(redigir);if(v&&typeof v==='object'){const out={};for(const[k,x]of Object.entries(v))out[k]=SECRET.test(k)?'[REDACTED]':redigir(x);return out;}return v;}class ValidationError extends Error{};async function salvarNoServidor(p,c){if(!p.id)throw new ValidationError('pedido sem id');if(p.lento)throw new Error('timeout depois de 5000 ms',{cause:{headers:c.headers,token:c.token}});}export async function salvar(pedido,contexto,{id=()=>crypto.randomUUID(),now=()=>performance.now()}={}){const operacaoId=id(),inicio=now();try{await salvarNoServidor(pedido,contexto);logger.info({operacaoId,status:'ok',duracaoMs:Math.max(0,now()-inicio)});return{ok:true,operacaoId};}catch(err){const duracaoMs=Math.max(0,now()-inicio),cause=redigir(err.cause);const evento={operacaoId,mensagem:err.name==='ValidationError'?'dados inválidos':'falha técnica',duracaoMs,...(cause===undefined?{}:{cause})};(err instanceof ValidationError?logger.warn:logger.error)(evento);return{ok:false,operacaoId,mensagem:'Não foi possível salvar. Informe o código '+operacaoId};}}export function lerLogs(){return structuredClone(logs);}export function limparLogs(){logs.length=0;}`,
-      'README.md': `# 23.09 — Logs sem segredos\n\nRedação profunda percorre objetos e arrays e compara chaves sem diferenciar maiúsculas. Logger grava ID, resultado e duração monotônica; validação é warn e falha técnica error com cause redigida. Resposta pública não contém mensagem/cause técnica. Use lerLogs para auditar o evento serializado e limparLogs entre casos.`,
+      'README.md': `# 23.09 — Logs sem segredos\n\nA resposta pública informa apenas que a operação falhou e seu ID de correlação. O log interno preserva o nível, a duração e a causa técnica útil, depois de redigir Authorization, Cookie e Token em objetos e arrays aninhados. A redação cria uma cópia e não altera a entrada. Use lerLogs para auditar o evento serializado e limparLogs entre casos.`,
       'operacao.test.js': `import{test}from'node:test';import assert from'node:assert/strict';import{salvar,redigir,lerLogs,limparLogs}from'./operacao.js';test('redacts nested secrets in objects and arrays without mutating input',()=>{const input={headers:[{Authorization:'Bearer abc',Cookie:'s=xyz'}],nested:{TOKEN:'secret'}};assert.deepEqual(redigir(input),{headers:[{Authorization:'[REDACTED]',Cookie:'[REDACTED]'}],nested:{TOKEN:'[REDACTED]'}});assert.equal(input.nested.TOKEN,'secret');});test('success has correlation and nonnegative monotonic duration but no context',async()=>{limparLogs();let t=5;const result=await salvar({id:'p1'},{headers:{Cookie:'leak'},token:'leak'},{id:()=> 'op-1',now:()=>t+=3});assert.equal(result.ok,true);const json=JSON.stringify(lerLogs());assert.match(json,/op-1/);assert.match(json,/duracaoMs/);assert.doesNotMatch(json,/leak/);});test('validation warn and technical error are safe while retaining redacted cause',async()=>{limparLogs();const ticks=[2,9,14,20];let i=0;await salvar({}, {headers:{Authorization:'Bearer secret'},token:'tok'}, {id:()=> 'v',now:()=>ticks[i++]});await salvar({id:'p',lento:true},{headers:{Cookie:'cookie-secret'},token:'token-secret'}, {id:()=> 'e',now:()=>ticks[i++]});const rows=lerLogs();assert.equal(rows[0].nivel,'warn');assert.equal(rows[1].nivel,'error');const json=JSON.stringify(rows);for(const value of ['secret','cookie-secret','token-secret','Bearer'])assert.equal(json.includes(value),false,json);assert.match(json,/REDACTED/);});`,
     }, test: `const{salvar,redigir,lerLogs,limparLogs}=await import('./operacao.js');test('redacts nested secrets in objects and arrays without mutating input',()=>{const input={headers:[{Authorization:'Bearer abc',Cookie:'s=xyz'}],nested:{TOKEN:'secret'}};expect(redigir(input)).toEqual({headers:[{Authorization:'[REDACTED]',Cookie:'[REDACTED]'}],nested:{TOKEN:'[REDACTED]'}});expect(input.nested.TOKEN).toBe('secret');});test('success has correlation and nonnegative monotonic duration but no context',async()=>{limparLogs();let t=5;const result=await salvar({id:'p1'},{headers:{Cookie:'leak'},token:'leak'},{id:()=> 'op-1',now:()=>t+=3});expect(result.ok).toBe(true);const json=JSON.stringify(lerLogs());expect(json.includes('op-1')).toBe(true);expect(json.includes('duracaoMs')).toBe(true);expect(json.includes('leak')).toBe(false);});test('validation warn and technical error are safe while retaining redacted cause',async()=>{limparLogs();const ticks=[2,9,14,20];let i=0;await salvar({}, {headers:{Authorization:'Bearer secret'},token:'tok'}, {id:()=> 'v',now:()=>ticks[i++]});await salvar({id:'p',lento:true},{headers:{Cookie:'cookie-secret'},token:'token-secret'}, {id:()=> 'e',now:()=>ticks[i++]});const rows=lerLogs();expect(rows[0].nivel).toBe('warn');expect(rows[1].nivel).toBe('error');const json=JSON.stringify(rows);for(const value of ['secret','cookie-secret','token-secret','Bearer'])expect(json.includes(value)).toBe(false);expect(json.includes('REDACTED')).toBe(true);});`,
     mutants: [{id:'leak-context',files:[{path:'operacao.js',content:`const logs=[];export const logger={info:e=>logs.push({nivel:'info',...e}),warn:e=>logs.push({nivel:'warn',...e}),error:e=>logs.push({nivel:'error',...e})};export function redigir(v){return v;}export async function salvar(p,c,{id=()=> 'id',now=()=>1}={}){const operacaoId=id();try{if(!p.id)throw Object.assign(new Error('pedido sem id'),{name:'ValidationError'});if(p.lento)throw new Error('network',{cause:{headers:c.headers,token:c.token}});logger.info({operacaoId,status:'ok',contexto:c});return{ok:true,operacaoId};}catch(e){logger.error({operacaoId,cause:e.cause});return{ok:false,operacaoId,mensagem:'não foi possível'};}}export function lerLogs(){return structuredClone(logs)}export function limparLogs(){logs.length=0;}`}]}],
@@ -87,6 +137,140 @@ for (const [id, item] of Object.entries(entries)) {
   const correctFiles = Object.entries(item.files).filter(([file])=>item.environment==='local'||(!(/\.test\.(?:js|ts)$/.test(file))&&!file.endsWith('.md'))).map(([file,content])=>({path:file,content}));
   assessments[id]={environment:item.environment,version:1,checks:item.environment==='rubric'?['rubric']:item.environment==='local'?['local']:item.environment==='typescript'?['types','behavior']:['behavior','mutation'],entryPath:item.entryPath,testPath,behaviorTestPath:'__devpath_protected_behavior__.js',tests:item.test,referenceDir:`solutions/${id}`,correctFiles,mutantDirs:item.mutants||[],...(item.local?{local:item.local}:{}),transfer:{id:`${id}-transfer`,files:[{path:'transfer.md',content:`# Transfer ${id}\n\n${item.transfer}`}],rubric:item.rubric},rubric:item.rubric,prompt:item.prompt||`Demonstre a avaliação ${id} e complete a transferência independente com casos verificáveis.`};
 }
+// Local starter packages are self-contained: both expose the same Node/TypeScript commands and pinned toolchain.
+const starterPackageManifest = JSON.parse(readFileSync('course-src/starters/manifest.json', 'utf8'));
+for (const [id, testFile] of [['23.07', 'test/reabrir.test.ts'], ['23.08', 'test/contrato.test.ts']]) {
+  const files = localTypeScriptProject(id, testFile);
+  for (const [file, content] of Object.entries(files)) put(`course-src/starters/${id}/${file}`, content);
+  starterPackageManifest[id].files = [...new Set([...(starterPackageManifest[id].files || []), 'package.json', 'package-lock.json', 'tsconfig.json'])].sort();
+}
+put('course-src/starters/manifest.json', JSON.stringify(starterPackageManifest, null, 2));
+put('course-src/starters/23.08/test/contrato.test.ts', `// Contrato local do adapter em memória; a mesma suíte também deve cobrir outros adapters que você criar.
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { criar, mover, remover, estadoInicial } from '../src/dominio.ts';
+import { criarRepositorioEmMemoria } from '../src/adapters/memoria.ts';
+
+test('salva e recupera após recriar a referência ao adapter', async () => {
+  const repositorio = criarRepositorioEmMemoria();
+  const criado = criar(estadoInicial, 't1', 'Estudar');
+  await repositorio.salvar(criado);
+  const recuperado = await repositorio.carregar();
+  assert.deepEqual(recuperado, criado);
+});
+
+test('mover e remover preservam a regra do domínio e o estado salvo', async () => {
+  const repositorio = criarRepositorioEmMemoria();
+  const criado = criar(estadoInicial, 't1', 'Estudar');
+  const movido = mover(criado, 't1', 'fazendo');
+  assert.equal(criado.tarefas[0]?.coluna, 'a-fazer');
+  assert.equal(movido.tarefas[0]?.coluna, 'fazendo');
+  await repositorio.salvar(movido);
+  assert.deepEqual(await repositorio.carregar(), movido);
+  const removido = remover(movido, 't1');
+  await repositorio.salvar(removido);
+  assert.deepEqual(await repositorio.carregar(), removido);
+});
+
+test('entrada inválida e falha de storage preservam o estado anterior', async () => {
+  const repositorio = criarRepositorioEmMemoria();
+  const criado = criar(estadoInicial, 't1', 'Estudar');
+  await repositorio.salvar(criado);
+  assert.throws(() => criar(criado, 't2', '   '));
+  assert.deepEqual(await repositorio.carregar(), criado);
+  repositorio.falharProximo();
+  await assert.rejects(repositorio.salvar(remover(criado, 't1')));
+  assert.deepEqual(await repositorio.carregar(), criado);
+});
+`);
+// Keep the 23.07 learner skeleton typecheckable; behavior tests below start red until the TODOs are implemented.
+for (const file of ['src/dominio.ts', 'src/reabrir.ts']) {
+  const target = `course-src/starters/23.07/${file}`;
+  const source = readFileSync(target, 'utf8').replace(/  \/\/ implemente[^\n]*(?:\n  \/\/[^\n]*)*/g,
+    '  throw new Error("TODO: implemente o contrato desta função");');
+  put(target, source);
+}
+put('course-src/starters/23.07/test/reabrir.test.ts', `import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import type { Estado } from '../src/dominio.ts';
+import { ForbiddenError, reabrir, type EventoAuditoria } from '../src/reabrir.ts';
+
+function criarRepositorio(inicial: Estado) {
+  let estado = structuredClone(inicial);
+  let eventos: EventoAuditoria[] = [];
+  let falhar = false;
+  let escritas = 0;
+  return {
+    async carregar() { return structuredClone(estado); },
+    async salvarComEvento(novoEstado: Estado, evento: EventoAuditoria) {
+      escritas++;
+      if (falhar) { falhar = false; throw new Error('falha simulada'); }
+      estado = structuredClone(novoEstado);
+      eventos = [...eventos, structuredClone(evento)];
+    },
+    falharProximo() { falhar = true; },
+    eventos: () => structuredClone(eventos),
+    escritas: () => escritas,
+  };
+}
+
+const concluida: Estado = { versao: 1, tarefas: [{ id: 't1', titulo: 'Revisar', coluna: 'feito' }] };
+
+test('admin reabre a tarefa e grava evento com horário injetado', async () => {
+  const repositorio = criarRepositorio(concluida);
+  const resultado = await reabrir(repositorio, { id: 'a1', papel: 'admin' }, 't1', () => new Date('2026-10-01T00:00:00Z'));
+  assert.equal(resultado.tarefas[0]?.coluna, 'a-fazer');
+  assert.deepEqual(repositorio.eventos(), [{ tipo: 'reaberta', tarefaId: 't1', por: 'a1', em: '2026-10-01T00:00:00.000Z' }]);
+});
+
+test('usuário comum é negado antes de qualquer escrita e tarefa ausente é rejeitada', async () => {
+  const repositorio = criarRepositorio(concluida);
+  await assert.rejects(reabrir(repositorio, { id: 'u1', papel: 'comum' }, 't1'), ForbiddenError);
+  assert.equal(repositorio.escritas(), 0);
+  assert.deepEqual(await repositorio.carregar(), concluida);
+  await assert.rejects(reabrir(repositorio, { id: 'a1', papel: 'admin' }, 'ausente'));
+  assert.equal(repositorio.escritas(), 0);
+});
+
+test('falha ao persistir não altera status nem histórico', async () => {
+  const repositorio = criarRepositorio(concluida);
+  repositorio.falharProximo();
+  await assert.rejects(reabrir(repositorio, { id: 'a1', papel: 'admin' }, 't1'));
+  assert.deepEqual(await repositorio.carregar(), concluida);
+  assert.deepEqual(repositorio.eventos(), []);
+});
+`);
+// 23.08's supplied contract suite is executable from day one, including move/remove and failure atomicity.
+put('course-src/starters/23.08/src/dominio.ts', `export type Coluna = "a-fazer" | "fazendo" | "feito";
+export type Tarefa = { readonly id: string; titulo: string; coluna: Coluna };
+export type Estado = { versao: 1; tarefas: readonly Tarefa[] };
+export class ValidationError extends Error {}
+export const estadoInicial: Estado = { versao: 1, tarefas: [] };
+export function criar(estado: Estado, id: string, titulo: string): Estado {
+  const limpo = titulo.trim();
+  if (!limpo) throw new ValidationError("título obrigatório");
+  if (!id.trim() || estado.tarefas.some(tarefa => tarefa.id === id)) throw new ValidationError("id inválido ou duplicado");
+  return { ...estado, tarefas: [...estado.tarefas, { id, titulo: limpo, coluna: "a-fazer" }] };
+}
+export function mover(estado: Estado, id: string, coluna: Coluna): Estado {
+  if (!["a-fazer", "fazendo", "feito"].includes(coluna)) throw new ValidationError("coluna inválida");
+  let encontrado = false;
+  const tarefas = estado.tarefas.map(tarefa => {
+    if (tarefa.id !== id) return tarefa;
+    encontrado = true;
+    return { ...tarefa, coluna };
+  });
+  if (!encontrado) throw new ValidationError("tarefa inexistente");
+  return { ...estado, tarefas };
+}
+export function remover(estado: Estado, id: string): Estado {
+  if (!estado.tarefas.some(tarefa => tarefa.id === id)) throw new ValidationError("tarefa inexistente");
+  return { ...estado, tarefas: estado.tarefas.filter(tarefa => tarefa.id !== id) };
+}
+`);
+const starterReadme2308Path = 'course-src/starters/23.08/README.md';
+const starterReadme2308 = readFileSync(starterReadme2308Path, 'utf8');
+if (!starterReadme2308.includes('npm ci')) put(starterReadme2308Path, starterReadme2308.replace('npm install', 'npm ci').replace('## Documente aqui', '## Cobertura inicial\n\nA suíte inicial cobre criar, mover, remover, entrada inválida e falha de storage preservando o estado salvo. Ao criar outro adapter ou um serviço, acrescente os casos de contrato correspondentes.\n\n## Documente aqui'));
 // Local items (23.07/23.08) are validated by scripts/check-local-course.mjs; the browser must report them unsupported like 21.08/22.08.
 for (const [id, item] of Object.entries(entries)) {
   if (item.environment !== 'local') continue;

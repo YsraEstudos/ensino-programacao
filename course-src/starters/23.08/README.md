@@ -10,7 +10,11 @@ Escolha: app de tarefas (este esqueleto) ou biblioteca de pedidos (mesma estrutu
 - UI ou CLI só chama o serviço; nunca o storage.
 
 ## Rodar
-`npm install`, `npm run typecheck`, `npm test`.
+`npm ci`, `npm run typecheck`, `npm test`.
+
+## Cobertura inicial
+
+A suíte inicial cobre criar, mover, remover, entrada inválida e falha de storage preservando o estado salvo. Ao criar outro adapter ou um serviço, acrescente os casos de contrato correspondentes.
 
 ## Documente aqui
 Decisões, limites conhecidos e como trocar o adapter.

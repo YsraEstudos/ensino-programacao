@@ -1,6 +1,3 @@
 # Referência 19.01
 
-Para Expanda à mão, inspecione flags.ts e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.
-
-## Transferência
-Escolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.
+`Flags<User>` expande para `{ id: boolean; name: boolean; active: boolean }`. O mapped type atua no checker e não emite um loop JavaScript. Mapeamentos homomórficos podem preservar `readonly` e `?` da fonte; este `User` não tem esses modificadores.

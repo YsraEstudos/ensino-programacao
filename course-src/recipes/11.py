@@ -69,10 +69,10 @@ CONTENT = {
          ),
 "11.01": C(
     'dom.event_bubbling',
-    'DOM pai>filho>botão; listeners bubble em cada nó; clique botão',
-    'clique botão -> logs botão,filho,pai',
-    ('stopPropagation em filho -> botão,filho; stopImmediatePropagation em primeiro '
-     'listener do filho -> segundo listener do filho não roda'),
+    'article#pai > a#filho > span#alvo; listeners bubble em cada nó; clique em #alvo',
+    "clique em #alvo -> target 'alvo'; currentTarget percorre 'alvo', 'filho', 'pai'",
+    ('stopPropagation em #alvo -> mantém os listeners do alvo e interrompe o bubble; '
+     'stopImmediatePropagation em #alvo -> interrompe também o próximo listener desse alvo'),
     'Supor que eventos sempre começam no elemento mais externo.',
     ('Identifique target e ancestralidade.',
      'Na fase bubble, suba um ancestral por vez.',
@@ -84,13 +84,13 @@ CONTENT = {
         kind='TRACE',
     runtime='browser',
     estimated=9,
-    **_lesson('dom.event_bubbling', 'DOM pai>filho>botão; listeners bubble em cada nó; clique botão', 'Supor que eventos sempre começam no elemento mais externo.', ('Identifique target e ancestralidade.',
+    **_lesson('dom.event_bubbling', 'article#pai > a#filho > span#alvo; listeners bubble em cada nó; clique em #alvo', 'Supor que eventos sempre começam no elemento mais externo.', ('Identifique target e ancestralidade.',
      'Na fase bubble, suba um ancestral por vez.',
      'Distinga impedir próxima fase de impedir listener irmão.'), ('Trace target e caminho de propagação; exclua listeners após parada conforme método '
      'usado.'), 'Clique em item de menu aninhado -> ordem e parada corretas', 9, 'browser', ('Trace um clique do alvo até os ancestrais na fase bubble. Compare então '
      'stopPropagation e stopImmediatePropagation pelo efeito em listeners do mesmo nó.',
-     'Em article > a > span, clicar em span começa nele; o listener bubble de a roda antes '
-     'do listener de article porque o caminho sobe a partir do alvo.',
+     'Em article#pai > a#filho > span#alvo, clicar no span começa em #alvo; o listener bubble de a#filho roda antes '
+     'do listener de article#pai porque o caminho sobe a partir do alvo.',
      'Antes de executar, escreva o alvo e a cadeia de ancestrais na ordem visitada pelo '
      'evento.',
      'Tabela de rastreamento com célula por nó/fase, campos de previsão e justificativa; '
@@ -107,11 +107,12 @@ CONTENT = {
          ),
 "11.02": C(
     'dom.safe_creation',
-    ("blocos: createElement('li'), createTextNode(texto), createElement('button'), append, "
-     'addEventListener(remove), append no ul'),
-    "texto '<b>x</b>' -> aparece literalmente; clicar Remover -> só li alvo sai",
+    ("main.js: montarItem monta o li com innerHTML e o clique do botão remove a lista "
+     'inteira; corrigir para nó de texto e remoção do próprio item'),
+    ("mensagem '<b>rascunho</b>' -> aparece como texto literal; clique no botão de um item "
+     '-> sai apenas o li daquele botão; no starter, o texto vira elemento e o clique esvazia a lista'),
     ("texto '<img src=x onerror=alert(1)>' -> nenhuma execução; dois itens iguais -> "
-     'remover um'),
+     'remover apenas o acionado; primeiro filho do li é nó de texto'),
     'Usar innerHTML com dado não confiável ou remover a lista inteira.',
     ('Crie nós explícitos.',
      'textContent/createTextNode interpreta conteúdo como texto.',
@@ -119,24 +120,23 @@ CONTENT = {
     ('Monte li com texto e botão, anexe listener ao botão e depois li à lista; conteúdo de '
      'usuário nunca entra em innerHTML.'),
     'Renderizar mensagens de chat como texto literal -> sem elemento injetado',
-    load={"novelty": 2, "syntax": 3, "composition": 3, "state": 2, "debugging": 1, "files": 2, "reading": 3, "independence": 3, "tools": 2},
-        kind='PARSONS',
+    load={"novelty": 2, "syntax": 3, "composition": 3, "state": 2, "debugging": 2, "files": 2, "reading": 3, "independence": 3, "tools": 2},
+        kind='DEBUG',
     runtime='browser',
     estimated=10,
-    **_lesson('dom.safe_creation', ("blocos: createElement('li'), createTextNode(texto), createElement('button'), append, "
-     'addEventListener(remove), append no ul'), 'Usar innerHTML com dado não confiável ou remover a lista inteira.', ('Crie nós explícitos.',
+    **_lesson('dom.safe_creation', ("main.js: montarItem monta o li com innerHTML e o clique do botão remove a lista "
+     'inteira; corrigir para nó de texto e remoção do próprio item'), 'Usar innerHTML com dado não confiável ou remover a lista inteira.', ('Crie nós explícitos.',
      'textContent/createTextNode interpreta conteúdo como texto.',
      'Listener fecha sobre o li criado.'), ('Monte li com texto e botão, anexe listener ao botão e depois li à lista; conteúdo de '
-     'usuário nunca entra em innerHTML.'), 'Renderizar mensagens de chat como texto literal -> sem elemento injetado', 10, 'browser', ('Ordene os blocos para criar um item de lista seguro e removível. Explique por que o '
-     'texto é texto e como o botão encontra apenas seu item.',
+     'usuário nunca entra em innerHTML.'), 'Renderizar mensagens de chat como texto literal -> sem elemento injetado', 10, 'browser', ('Corrija `montarItem` para inserir a mensagem como texto literal e fazer cada botão '
+     'remover apenas o próprio item. Reproduza o defeito, altere o código e confira os casos antes e depois.',
      'Para exibir “Novo <em>rascunho</em>”, um nó de texto mantém as marcas literalmente; '
      'o navegador não cria um elemento <em> a partir delas.',
-     'Desenhe primeiro a árvore final com um li, seu texto e um botão; anote qual nó cada '
-     'append recebe.',
-     'Blocos reordenáveis por botões Mover para cima/baixo, posição acessível pelo teclado '
-     'e anúncio textual da posição; sem arrastar.',
-     'Editor com os seis blocos DOM do enunciado, lista de saída e botão remover; console '
-     'local, sem conteúdo remoto.',
+     'Antes de editar, liste os dois defeitos do starter — elemento criado por innerHTML e '
+     'clique removendo a lista — e a observação que comprova cada um.',
+     'Editor com o starter de `montarItem`, lista de saída e console textual; execute os '
+     'casos antes e depois da correção, com foco por teclado.',
+     'Editor com o starter e uma lista de saída; console local, sem conteúdo remoto.',
      'Como inserir uma string de usuário para que <em> apareça literalmente?',
      'Criá-la como nó de texto e anexá-la ao elemento apropriado.',
      'Concatená-la em innerHTML para o navegador decidir se é texto ou marcação.',
@@ -189,7 +189,7 @@ CONTENT = {
     'form: nome, quantidade, checkboxes interesse com mesmo name; usar new FormData(form)',
     ('nome Ana, quantidade 2, interesses JS+TS -> nome Ana, quantidade 2, interesses '
      "['JS','TS']"),
-    ("sem interesse -> []; quantidade '2x' -> erro; FormData.get devolve string/File/null, "
+    ("sem interesse -> []; quantidade '2x' -> {ok:false, erros:{quantidade}, valores:{nome:'Ana', quantidade:'2x', interesses:['JS','TS']}}; FormData.get devolve string/File/null, "
      'nunca number'),
     'Usar get no campo repetido ou tratar string numérica como number.',
     ('Leia FormData no submit preventDefault.',
@@ -206,7 +206,7 @@ CONTENT = {
      'Use getAll para campos repetidos.',
      'Valide tipo e converta quantidade só após leitura.'), ('Extrair nome com get, interesses com getAll e quantidade com Number seguido de '
      'inteiro positivo; preserve UI e mostre erros.'), 'Inscrição com múltiplas preferências e idade -> array e número validados', 25, 'browser', ('Leia os valores no submit. Diferencie um campo simples dos controles com mesmo name '
-     'e converta números somente após ler a string.',
+     'e converta números somente após ler a string. Em erro, devolva valores com nome, quantidade e interesses originais.',
      'Em um formulário de preferências, getAll("cor") pode retornar [azul, verde] e '
      'preservar as duas caixas marcadas; get("cor") retorna apenas uma ocorrência.',
      'Antes de preencher lacunas, escreva o tipo retornado por get/getAll e marque a etapa '
@@ -422,8 +422,8 @@ CONTENT = {
     'modules.browser_entry',
     ('Kanban V1 em app.js; extrair state.js, view.js, main.js; index com script '
      'type=module src=main.js'),
-    ('state exporta operações; view recebe estado; main conecta eventos; '
-     'adicionar/mover/reload -> V1 preservado'),
+    ('state exporta carregar, salvar e mover puro; view recebe estado; main importa os módulos; '
+     'boot compõe carregamento e renderização -> V1 preservado'),
     ('import com caminho relativo e extensão .js; abrir via file:// -> servir por HTTP '
      'local; módulo sem globals implícitas'),
     'Achar que separar arquivos sem imports/exports basta para executar no navegador.',
@@ -443,8 +443,8 @@ CONTENT = {
      'main importa ambos e é entrada única do HTML.'), ('Separe domínio/persistência em state, DOM em view e composição em main; use imports '
      'ESM explícitos e servidor local.'), 'Separar app de notas em model/view/main -> mesmas fronteiras', 22, 'browser', ('Separe o Kanban em estado, visualização e ponto de entrada. Defina dependências e '
      'dados entre fronteiras e valide o carregamento no navegador.',
-     'Num Kanban, state.js carrega e salva as tarefas, view.js renderiza um snapshot e '
-     'main.js importa os dois módulos e inicia a lista HTML fornecida por boot.',
+     'Num Kanban, state.js carrega e salva tarefas e move uma tarefa sem mutar a entrada; '
+     'view.js renderiza o snapshot e main.js importa os módulos para boot iniciar a lista.',
      'Desenhe setas entre state, view e main e anote qual dado/callback cruza cada uma '
      'antes de mover funções.',
      'Três painéis de arquivos com mapa de imports, ação executar via servidor local e '
@@ -459,11 +459,11 @@ CONTENT = {
          ),
 "11.11": C(
     'dom.event_phases_default',
-    ('link dentro de li dentro de ul; listeners capture/bubble; cenários preventDefault e '
+    ('button dentro de div dentro de div; listeners capture/bubble; cenários preventDefault e '
      'stopPropagation'),
-    ('capture ul, target link, bubble li, bubble ul -> ordem de fases; preventDefault no '
-     'link -> navegação impedida, propagação continua'),
-    ('stopPropagation no link -> navegação padrão ainda pode ocorrer; passive listener -> '
+    ('<div id=fora><div id=menu><button id=item>Escolher</button></div></div> -> capture fora, '
+     'target button#item, bubble menu e fora; preventDefault no botão não afeta a propagação'),
+    ('stopPropagation no botão -> bubble dos ancestrais para; passive listener -> '
      'preventDefault não cancela'),
     'Confundir ação padrão com propagação.',
     ('Capture desce, bubble sobe.',
@@ -471,30 +471,30 @@ CONTENT = {
      'stopPropagation atua no caminho do evento.'),
     ('Trace fase/caminho e trate dois eixos separados: cancelamento padrão por cancelable '
      'e interrupção de propagação.'),
-    'Clique em checkbox dentro de linha clicável -> escolha correta de ação e propagação',
+    'Clique em botão dentro de menu -> escolha correta de ação e propagação',
     load={"novelty": 2, "syntax": 2, "composition": 3, "state": 2, "debugging": 1, "files": 1, "reading": 4, "independence": 3, "tools": 1},
         kind='COMPARE',
     runtime='browser',
     estimated=12,
-    **_lesson('dom.event_phases_default', ('link dentro de li dentro de ul; listeners capture/bubble; cenários preventDefault e '
+    **_lesson('dom.event_phases_default', ('button dentro de div dentro de div; listeners capture/bubble; cenários preventDefault e '
      'stopPropagation'), 'Confundir ação padrão com propagação.', ('Capture desce, bubble sobe.',
      'preventDefault atua na ação padrão.',
      'stopPropagation atua no caminho do evento.'), ('Trace fase/caminho e trate dois eixos separados: cancelamento padrão por cancelable '
-     'e interrupção de propagação.'), 'Clique em checkbox dentro de linha clicável -> escolha correta de ação e propagação', 12, 'browser', ('Rastreie capture, target e bubble separadamente. Avalie preventDefault e '
+     'e interrupção de propagação.'), 'Clique em botão dentro de menu -> escolha correta de ação e propagação', 12, 'browser', ('Rastreie capture, target e bubble separadamente. Avalie preventDefault e '
      'stopPropagation como controles independentes.',
-     'Num link dentro de item de lista, impedir navegação não impede o evento de alcançar '
-     'ancestrais; parar propagação não cancela sozinho a navegação.',
+     'Num button dentro de div#menu, preventDefault não impede o evento de alcançar '
+     'ancestrais; stopPropagation não cancela sozinho uma ação padrão cancelável.',
      'Faça duas previsões independentes: ordem dos listeners e ocorrência da ação padrão.',
      'Matriz 2x2 para propagação/ação padrão e tabela de fases; cada combinação tem '
      'explicação textual e navegação acessível.',
-     'Snippet de link aninhado, listeners capture/bubble e controles de ativar cada '
+     'Snippet de botão aninhado, listeners capture/bubble e controles para ativar cada '
      'método; execução local.',
      'O que preventDefault altera diretamente?',
      'A ação padrão cancelável; ele sozinho não interrompe o caminho de propagação.',
      'A ordem dos listeners e a fase bubble, mantendo navegação.',
      'A lista de listeners dos elementos ancestrais.',
-     'Escolha a política de evento para uma checkbox dentro de uma linha selecionável, '
-     'preservando o comportamento de cada controle.')),
+     'Escolha a política de evento para um botão dentro de um menu, preservando '
+     'propagação e ação padrão.')),
          ),
 "11.12": C(
     'dom.untrusted_text',
@@ -576,8 +576,8 @@ CONTENT = {
 
 
 _LITERAL_STARTERS = {
-    '11.01': "material.md: <!doctype html>\n<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"botao\">Abrir</span></a></article>\n\nCada um dos três nós tem um listener click em bubble que registra currentTarget.id. Clique em span.",
-    '11.02': "material.md: Bloco A: const item = document.createElement('li');\nBloco B: const texto = document.createTextNode(mensagem);\nBloco C: const botao = document.createElement('button');\nBloco D: botao.textContent = 'Remover';\nBloco E: botao.addEventListener('click', () => item.remove());\nBloco F: item.append(texto, botao);\nBloco G: lista.append(item);\n\nContexto fixo: const lista = document.querySelector('ul'); const mensagem = '<b>rascunho</b>'; Os blocos estão fora de ordem; cada declaração ocorre uma vez.",
+    '11.01': "material.md: <!doctype html>\n<article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>\n\nCada um dos três nós tem um listener click em bubble que registra currentTarget.id. Clique em #alvo.",
+    '11.02': "main.js: export function montarItem(lista, mensagem) {\n  const item = document.createElement('li'); item.innerHTML = mensagem;\n  const botao = document.createElement('button'); botao.type = 'button'; botao.textContent = 'Remover';\n  botao.addEventListener('click', () => lista.remove()); item.append(botao); lista.append(item); return item;\n}\n\nDefeitos: innerHTML interpreta a mensagem como marcação e o clique remove a lista inteira; corrigir para nó de texto e item.remove().",
     '11.03': "validate.js: export function validar({ nome, quantidade }) {\n  const erros = {};\n  // TODO: normalize o nome com trim e registre erro se ficar vazio.\n  // TODO: converta quantidade e aceite somente inteiro positivo.\n  // TODO: retorne { ok: true, nome: nome.trim(), quantidade: numero } no sucesso.\n  // TODO: na falha retorne { ok: false, erros, valores: { nome, quantidade } }; valores preserva a entrada original.\n}\n",
     '11.04': [{'path': 'form.js', 'content': "export function lerInscricao(form) {\n  const dados = new FormData(form);\n  const nome = dados.get('nome');\n  const quantidadeTexto = dados.get('quantidade');\n  const interesses = dados.getAll('interesse');\n  // TODO: normalize e valide sem descartar os valores do formulário.\n}\n"}, {'path': 'index.html', 'content': '<form id="inscricao"><label>Nome <input name="nome"></label><label>Quantidade <input name="quantidade" type="text"></label><fieldset><label><input type="checkbox" name="interesse" value="JS">JS</label><label><input type="checkbox" name="interesse" value="TS">TS</label></fieldset></form>\n'}],
     '11.05': [{'path': 'app.js', 'content': "const lista = document.querySelector('#lista');\nlet acoes = 0;\nconst limpezas = [];\nfunction render(itens) {\n  lista.replaceChildren();\n  for (const item of itens) {\n    const botao = document.createElement('button');\n    botao.textContent = item;\n    lista.append(botao);\n  }\n  const aoClicar = (event) => {\n    if (event.target.closest('button')) acoes += 1;\n  };\n  lista.addEventListener('click', aoClicar);\n  limpezas.push(() => lista.removeEventListener('click', aoClicar));\n}\nfunction mount() { /* TODO: instale uma única delegação no contêiner */ }\nfunction destroy() {\n  lista.replaceChildren();\n  // BUG: limpezas nunca são executadas; renders também acumulam listeners.\n}\nexport { mount, render, destroy };\nexport const getAcoes = () => acoes;\n"}, {'path': 'index.html', 'content': '<ul id="lista"></ul>\n'}],

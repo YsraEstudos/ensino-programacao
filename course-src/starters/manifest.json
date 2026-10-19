@@ -663,7 +663,10 @@
   "22.06": {
     "version": 2,
     "files": [
-      "pagamento.js"
+      "README.md",
+      "pagamento.js",
+      "schema.ts",
+      "verify.mjs"
     ]
   },
   "22.07": {
@@ -689,12 +692,15 @@
   "22.09": {
     "version": 2,
     "files": [
+      "README.md",
+      "consumer.ts",
+      "package-lock.json",
+      "package.json",
+      "src/index.test.ts",
       "src/index.ts",
       "src/interno.ts",
-      "tsconfig.json",
-      "package.json",
-      "package-lock.json",
-      "src/index.test.ts"
+      "src/isolated-demo.ts",
+      "tsconfig.json"
     ]
   },
   "22.10": {
@@ -750,28 +756,29 @@
     "version": 2,
     "files": [
       "mudanca.md",
-      "src/reabrir.ts",
       "package-lock.json",
       "package.json",
       "src/adapters/memoria.ts",
       "src/dominio.ts",
       "src/portas.ts",
-      "test/reabrir.test.ts"
+      "src/reabrir.ts",
+      "test/reabrir.test.ts",
+      "tsconfig.json"
     ]
   },
   "23.08": {
     "version": 2,
     "files": [
       "README.md",
+      "package-lock.json",
+      "package.json",
+      "src/adapters/memoria.ts",
+      "src/adapters/versao.ts",
       "src/dominio.ts",
       "src/portas.ts",
-      "src/adapters/memoria.ts",
-      "test/contrato.test.ts",
-      "package.json",
-      "tsconfig.json",
-      "src/adapters/versao.ts",
       "src/servico.ts",
-      "package-lock.json"
+      "test/contrato.test.ts",
+      "tsconfig.json"
     ]
   },
   "23.09": {
@@ -860,13 +867,13 @@
     ]
   },
   "07.06": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
   },
   "08.01": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -878,19 +885,19 @@
     ]
   },
   "08.04": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
   },
   "08.07": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
   },
   "09.01": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -932,7 +939,7 @@
     ]
   },
   "10.06": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -968,14 +975,14 @@
     ]
   },
   "11.01": {
-    "version": 2,
+    "version": 3,
     "files": [
       "index.html",
       "main.js"
     ]
   },
   "11.02": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -1010,7 +1017,7 @@
     ]
   },
   "12.02": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -1064,7 +1071,7 @@
     ]
   },
   "13.02": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]
@@ -1094,7 +1101,7 @@
     ]
   },
   "14.02": {
-    "version": 2,
+    "version": 3,
     "files": [
       "main.js"
     ]

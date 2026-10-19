@@ -1,1 +1,1 @@
-{"name":"slug-kit","type":"module","exports":{".":{"types":"./dist/index.d.ts","default":"./dist/index.js"}},"scripts":{"build":"tsc -p tsconfig.json"}}
+{"name":"slug-kit","type":"module","devDependencies":{"typescript":"6.0.3"},"exports":{".":{"types":"./dist/index.d.ts","default":"./dist/index.js"}},"scripts":{"build":"tsc -p tsconfig.json"}}

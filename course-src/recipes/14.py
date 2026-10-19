@@ -188,41 +188,50 @@ CONTENT = {
           load={"novelty": 3, "syntax": 1, "composition": 2, "state": 1, "debugging": 3, "files": 2, "reading": 4, "independence": 3, "tools": 1}),
 "14.02": C(
     'node.cli_entry',
-    ('blocos: process.argv.slice(2), validar comando, parse args, chamar função de '
-     'domínio, imprimir e definir exitCode'),
-    "node cli.js add 'A' -> domínio recebe add/A e saída confirma A",
-    ('comando desconhecido -> mensagem de uso e exitCode=2; função de domínio não lê '
-     'process.argv diretamente'),
-    'Espalhar leitura do processo dentro da lógica de domínio.',
+    ('main.js: main chama o domínio sem validar o comando; comando ausente ou desconhecido '
+     'deve imprimir uso e devolver status 2'),
+    ("somar 2 3 -> imprime 5 e main devolve 0; comando desconhecido -> imprime 'Uso: somar "
+     "<a> <b>' e main devolve 2; no starter, o comando desconhecido lança erro"),
+    ('comando ausente ou desconhecido -> mensagem de uso e retorno 2 sem executar o '
+     'domínio; sucesso escreve resultado com quebra de linha e devolve 0; domínio invocável '
+     'sem process.argv'),
+    'Validar o comando dentro do domínio ou deixar a exceção escapar em vez de imprimir '
+    'uso e devolver status 2.',
     ('Entrada CLI fica na borda.',
      'Valide antes de invocar domínio.',
      'Formate saída/erro depois do resultado.'),
-    'Reordene parse/validação/chamada/apresentação e deixe domínio invocável sem processo.',
+    ('Valide o comando na borda antes de invocar o domínio: ausente ou desconhecido '
+     'imprime uso e devolve 2; sucesso chama o domínio, escreve o resultado com quebra de '
+     'linha e devolve 0.'),
     'CLI para listar tarefas com argumento opcional -> camada de borda',
-    kind='PARSONS',
+    kind='DEBUG',
     runtime='Node.js',
     estimated=10,
-    **_lesson('node.cli_entry', ('blocos: process.argv.slice(2), validar comando, parse args, chamar função de '
-     'domínio, imprimir e definir exitCode'), 'Espalhar leitura do processo dentro da lógica de domínio.', ('Entrada CLI fica na borda.',
+    **_lesson('node.cli_entry', ('main.js: main chama o domínio sem validar o comando; comando ausente ou desconhecido '
+     'deve imprimir uso e devolver status 2'), 'Validar o comando dentro do domínio ou deixar a exceção escapar em vez de imprimir '
+     'uso e devolver status 2.', ('Entrada CLI fica na borda.',
      'Valide antes de invocar domínio.',
-     'Formate saída/erro depois do resultado.'), 'Reordene parse/validação/chamada/apresentação e deixe domínio invocável sem processo.', 'CLI para listar tarefas com argumento opcional -> camada de borda', 10, 'Node.js', ('Ordene a entrada CLI para separar leitura de argumentos, validação, chamada ao '
-     'domínio e apresentação. Mantenha o domínio invocável sem process.argv.',
+     'Formate saída/erro depois do resultado.'), ('Valide o comando na borda antes de invocar o domínio: ausente ou desconhecido '
+     'imprime uso e devolve 2; sucesso chama o domínio, escreve o resultado com quebra de '
+     'linha e devolve 0.'), 'CLI para listar tarefas com argumento opcional -> camada de borda', 10, 'Node.js', ('Corrija `main` para validar o comando antes de chamar o domínio: comando ausente ou '
+     'desconhecido imprime `Uso: somar <a> <b>` e devolve status 2. Reproduza o caso, altere o '
+     'código e confira sucesso e falha antes e depois.',
      'Um comando de exportação pode validar o formato solicitado na borda e então chamar '
      'uma função de domínio recebendo uma opção já estruturada, sem ler argumentos de '
      'processo.',
-     'Marque o ponto em que dados externos se tornam entrada validada e só depois conecte '
-     'a função de domínio.',
-     'Blocos de CLI reordenáveis por teclado, fluxo argumento→resultado e captura textual '
-     'de stdout/exit code.',
-     'Blocos process.argv/parse/validação, função de domínio simulada e terminal local; '
-     'sem subprocesso real obrigatório.',
+     'Antes de editar, diga o que o starter faz com `apagar` e qual saída e status o '
+     'contrato exige nesse caso.',
+     'Editor com o starter da CLI e captura textual de stdout e do status de saída; execute '
+     'sucesso e comando inválido antes e depois da correção.',
+     'Starter com `main` e domínio no mesmo arquivo, `io` injetado e terminal local '
+     'simulado; sem subprocesso real obrigatório.',
      'Onde deve ocorrer a leitura de process.argv?',
      'Na borda da aplicação, antes de validar e chamar o domínio.',
      'Dentro de cada regra de domínio que precisa do comando.',
      'Depois de imprimir sucesso para decidir qual saída produzir.',
      'Adapte a CLI para listar tarefas com um argumento opcional mantendo a regra '
      'independente do processo.')),
-          load={"novelty": 3, "syntax": 3, "composition": 3, "state": 3, "debugging": 2, "files": 3, "reading": 3, "independence": 3, "tools": 3}),
+          load={"novelty": 3, "syntax": 3, "composition": 3, "state": 3, "debugging": 3, "files": 3, "reading": 3, "independence": 3, "tools": 3}),
 "14.03": C(
     'npm.scripts',
     'package.json incompleto; src/main.js; test/*.test.js; scripts dev,test,start',
@@ -582,7 +591,7 @@ _LITERAL_STARTERS = {
     '14.12': "material.md: // src/main.js\nimport { soma } from './math.js';\nimport './style.css';\nconsole.log(soma(2, 3));\n\n// package.json declara type=module. O diretório dist ainda não existe.\n// Compare os arquivos-fonte com um bundle de saída fornecido pelo exercício.",
     '14.13': "ordem-browser.js: // Snippet A — navegador (este arquivo roda no executor do site).\nconsole.log('A síncrono');\nsetTimeout(() => console.log('T timer'), 0);\nPromise.resolve().then(() => console.log('P promise'));\nconsole.log('B síncrono');\n\n// Snippet B — Node.js 24 LTS, rode localmente como node-ordem.mjs (ESM) e depois como node-ordem.cjs (CommonJS):\n//   console.log('A síncrono');\n//   setTimeout(() => console.log('T timer'), 0);\n//   Promise.resolve().then(() => console.log('P promise'));\n//   process.nextTick(() => console.log('N nextTick'));\n//   console.log('B síncrono');\n// Registre versão do Node (node --version), formato do módulo e a ordem observada em cada formato.",
     '14.01': "material.md: // grafo de import de valor\nA -> B\nB -> C\nC -> A\nD -> B\nE (sem dependências)\n\nDesenhe o ciclo e indique quais módulos pertencem ao ciclo. Depois considere um import de tipo isolado em D.",
-    '14.02': "material.md: Bloco A: const argumentos = process.argv.slice(2);\nBloco B: const comando = argumentos[0];\nBloco C: const resultado = executarDominio(comando, argumentos.slice(1));\nBloco D: process.stdout.write(`${resultado}\\n`);\nBloco E: if (!comandos.has(comando)) { mostrarUso(); process.exitCode = 2; return; }\n\nContexto: function main(argv = process.argv) { /* ordenar blocos; domínio não lê process.argv */ }",
+    '14.02': "main.js: const comandos = new Set(['somar']);\nexport function executarDominio(comando,args){if(comando==='somar')return String(Number(args[0])+Number(args[1]));throw new Error('comando inválido');}\nexport function main(argv,io){const argumentos=argv.slice(2);io.write(executarDominio(argumentos[0],argumentos.slice(1))+'\n');return 0;}\n\nDefeito: sem validar o comando, um valor desconhecido lança erro em vez de imprimir uso e devolver 2.",
     '14.03': "package.json: {\n  \"type\": \"module\",\n  \"scripts\": {\n    \"dev\": \"TODO\",\n    \"test\": \"TODO\",\n    \"start\": \"TODO\"\n  }\n}\n\nArquivos existentes: src/main.js e test/app.test.js. Preencha somente os três comandos; o ambiente é Node.js 24 e usa node:test.",
     '14.04': "material.md: // math.cjs\nfunction soma(a, b) { return a + b; }\nmodule.exports = { soma };\n\n// app.cjs\nconst { soma } = require('./math.cjs');\nconsole.log(soma(2, 3));\n\nConverta o pacote para ESM no Node.js: package type module, exports/imports consistentes e extensão relativa explícita.",
     '14.05': "config.js: import { readFile } from 'node:fs/promises';\n\nexport async function carregarConfig() {\n  return JSON.parse(await readFile('./data/config.json', 'utf8'));\n}\n\n// BUG: o caminho é resolvido em relação ao cwd do processo. O arquivo fica ao lado do módulo.",

@@ -1,11 +1,13 @@
 # Plano Mestre DevPath — apoio ao estudo pessoal
 
-**Data de revisão:** 18/10/2026
+**Data de revisão:** 19/10/2026
 **Uso definido pelo proprietário:** site privado, utilizado apenas como auxiliar do próprio estudo, sem disponibilização para outras pessoas.
-**Objetivo:** aprender com conteúdo correto, conseguir praticar e conservar o progresso, com manutenção proporcional a esse uso.
+**Objetivo:** consultar conteúdo correto no site, levar os exercícios para uma IA quando necessário e praticar na própria máquina, usando editor, terminal e navegador locais.
 
 ## Decisão de escopo aprovada
 
+- **Regra aplicável às 23 fases e a todas as etapas do currículo:** o site é material de consulta e apoio ao estudo, não o ambiente obrigatório de execução ou correção. O proprietário pode copiar enunciado, código e exemplos para uma IA e executar/conferir o exercício na própria máquina. Não criar ou adaptar runners, sandboxes, corretores, integrações de terminal, exportadores ou controles de avaliação para viabilizar esse fluxo.
+- Ausência de execução interna de JavaScript, TypeScript, DOM, Workers, Node ou testes não é defeito a corrigir neste plano. Extensão de arquivo usada apenas para apresentação, limitação do simulador e falta de nota automática também não geram trabalho por si. Corrigir o material quando ele impedir a execução local proposta, ensinar errado ou omitir informação indispensável.
 - As fases 1–10 permanecem como histórico do trabalho realizado. Seus registros e evidências não serão refeitos para adequá-los ao novo padrão.
 - As fases 11–20 são as **10 fases restantes, todas reduzidas**. As fases 11–16 tratam o conteúdo conforme ele for usado; as fases 17–19 são adiadas até o estudo alcançar os assuntos avançados; a fase 20 encerra o escopo efetivamente trabalhado.
 - As fases 21–22 deixam de existir como etapas independentes. Seus princípios úteis estão resumidos nas regras deste documento.
@@ -23,11 +25,13 @@
 
 ## O que merece correção
 
-**Corrigir quando confirmado:** gabarito ou exemplo errado; tarefa impossível com o material fornecido; arquivo/import ausente; requisito cobrado sem ser explicado; teste que rejeita solução válida ou aceita o erro relevante; código que trava a prática; perda de rascunho/progresso; pré-requisito indispensável sem preparação.
+**Corrigir quando confirmado:** gabarito ou exemplo errado; tarefa impossível de realizar localmente com o material fornecido; arquivo/import necessário ausente; requisito cobrado sem ser explicado; teste entregue ao aluno que rejeita solução válida ou aceita o erro relevante; código do exercício que trava a prática local; pré-requisito indispensável sem preparação. No site, tratar dificuldades concretas de acesso/leitura/cópia e perda de rascunho/progresso efetivamente utilizados, sem expandir sua estrutura.
 
 **Melhorar somente se atrapalhar o estudo:** texto confuso, dica que entrega a resposta, rubrica genérica ou ausência de critério compreensível, estimativa de tempo muito enganosa e explicação insuficiente de um conceito usado na tarefa.
 
-**Fora do trabalho obrigatório:** reescrever texto já compreensível por estética; padronizar todo o curso em quatro blocos; impor tamanho mínimo de prompt ou exatamente três critérios de rubrica; criar mutante para toda atividade; eliminar todo aviso do repositório; obter cobertura total; expandir infraestrutura, documentação ou homologação para um lançamento público.
+**Fora do trabalho obrigatório:** reescrever texto já compreensível por estética; padronizar todo o curso em quatro blocos; impor tamanho mínimo de prompt ou exatamente três critérios de rubrica; criar mutante para toda atividade; eliminar todo aviso do repositório; obter cobertura total; expandir infraestrutura, documentação ou homologação para um lançamento público; executar/corrigir os exercícios dentro do site; adaptar a interface a cada formato de atividade; certificar domínio automaticamente ou registrar no site tentativas feitas fora dele.
+
+**Material suficiente para o estudo com IA e execução local:** objetivo e enunciado compreensíveis, código copiável quando necessário, nomes de arquivos/imports quando relevantes, entradas e resultados esperados ou critérios de análise, além dos comandos/dependências indispensáveis ao ambiente local. Não exigir pacote de exportação, botão de execução, teste oculto ou integração com IA. A ajuda da IA pode esclarecer e discutir a solução; a conferência usa o resultado esperado, a documentação ou o teste local pertinente, sem depender apenas da aprovação verbal da IA.
 
 Leitura, comparação e previsão continuam sendo atividades válidas. Material escrito não precisa virar código quando esse não é o objetivo. Conteúdo de segurança, DOM, Workers, TypeScript ou pacotes continua útil quando fizer parte do assunto estudado; o uso privado não autoriza ensinar um comportamento incorreto.
 
@@ -36,21 +40,21 @@ Leitura, comparação e previsão continuam sendo atividades válidas. Material 
 1. Localizar a fonte efetiva e o conteúdo consumido pelo site. Tratar listas antigas e contagens como pistas, não como prova de defeito atual.
 2. Reproduzir apenas o problema relevante. Se já estiver resolvido, registrar isso e seguir. IDs sem descrição de falha não geram correção presumida.
 3. Fazer a menor correção que permita cumprir o objetivo. Manter teste de regressão quando o comportamento puder voltar a quebrar.
-4. Para comportamento, conferir solução válida e um caso incorreto representativo; para tipos, usar o verificador TypeScript configurado; para previsão, conferir a resposta; para leitura, fornecer critérios específicos suficientes. Não exigir um mutante armazenado para cada caso.
+4. Conferir o conteúdo fora do site: para comportamento, executar localmente a solução e um caso relevante; para tipos, usar o verificador TypeScript configurado; para previsão, conferir a resposta; para leitura, fornecer critérios específicos suficientes. Verificar um caso incorreto quando necessário para corrigir um teste entregue ao aluno. Não exigir correção automática interna nem um mutante armazenado para cada caso.
 5. Depois de alterar geração ou conteúdo, conferir o resultado compilado. Se mudar public/, executar npm run assets:version e seu check. Não editar só a saída gerada.
-6. Executar os testes existentes afetados pela mudança. Ampliar a verificação quando mudar runner, persistência, geração compartilhada ou contrato usado por outras atividades; não repetir a suíte inteira após cada ajuste de texto.
+6. Executar os testes existentes pertinentes ao conteúdo ou à geração alterados; conferir o programa do exercício no ambiente local correspondente. Não ampliar a rodada para consertar runners/corretores do site ou exigir homologação de sua execução interna. Se surgir necessidade de mudança estrutural da plataforma, registrar fora deste escopo, sem implementá-la.
 7. Registrar no item do plano apenas ID, problema confirmado ou classificação, correção e verificação/limite. Não exigir relatório ou ledger separado, hash por arquivo, matriz de gravidade ou tabela de auditoria de toda a etapa.
 
 ### Testes, mutantes e avisos existentes
 
 Os testes, gates e mutantes já implementados ficam preservados. A exigência futura de criar mutantes em todos os IDs pendentes, inclusive a obrigação residual registrada na fase 7, está dispensada. Criar ou ajustar um mutante só quando ele ajudar a provar um defeito relevante ou um teste insuficiente.
 
-Manter os gates no modo existente; não relaxar ou desligar um gate, autoTested ou avaliação para ocultar uma falha. Um aviso de ausência de mutante, prompt curto ou leitura sem teste genérico não bloqueia automaticamente o estudo. Classificar o resultado e corrigir o defeito comprovado, sem confundir aviso com falha nem saída 0 com prova de qualidade global.
+Manter os gates no modo existente; não relaxar ou desligar um gate, autoTested ou avaliação para ocultar uma falha. Ausência de mutante, prompt curto, leitura sem teste genérico ou limitação de execução/correção interna não bloqueiam o estudo externo. Registrar limitações sem transformá-las em obrigação de infraestrutura. Um teste local entregue incorreto ou conteúdo errado continua exigindo correção; saída 0 não prova qualidade global.
 
 ### Restrições de preservação
 
 - Preservar IDs, ordem, rascunhos, respostas, progresso e trabalho não commitado. Não fazer migração ou reorganização para simplificar esta revisão.
-- Preservar os runners e contratos funcionais. Não trocar o modo de avaliação para fazer a referência passar no lugar da submissão do usuário.
+- Preservar os runners e recursos existentes, sem exigir que sejam ampliados ou corrigidos para executar o currículo. Não trocar o modo de avaliação para fazer a referência passar no lugar da submissão do usuário. Eventual bloqueio do site que impeça consultar/copiar material deve ser registrado e tratado sem presumir autorização para uma mudança estrutural.
 - Não remover conteúdo avançado ou recursos existentes para reduzir o plano. Adiar sua manutenção até que sejam necessários.
 - Não publicar, enviar alterações ao remoto ou limpar arquivos sem autorização específica.
 - Código em inglês; interface, cartões e documentos em português.
@@ -74,13 +78,291 @@ As fontes abaixo são pontos de partida. Antes de alterar `prompt`, `firstRespon
 | 1–10 | Histórico preservado | Reabrir somente se surgir regressão concreta ou evidência de erro. |
 | 11–16 | Reduzidas, conforme avanço do estudo | Resolver problemas que impedem praticar ou ensinam errado. |
 | 17–19 | Reduzidas e adiadas | Conferir conteúdo avançado quando o proprietário chegar a ele. |
-| 20 | Fechamento leve | Testes pertinentes e um percurso real de estudo/salvamento. |
+| 20 | Fechamento leve | Conferir material consultável/copiável e prática na máquina do proprietário; salvamento somente se usado. |
 | 21–22 | Dispensadas como fases independentes | Usar as regras simples de clareza e material adequado deste documento. |
 | 23 | Campanha formal dispensada | Preservar acessibilidade existente e resolver dificuldades reais de uso. |
 
+## Revisão curricular das etapas 00 e 01 — estudo com IA e execução local
+
+**Escopo autorizado em 19/10/2026:** incorporar ao plano as revisões das etapas 00 e 01 discutidas na conversa, já filtradas pelo uso externo com IA, editor, terminal e navegador locais. Esta seção complementa o lote da fase 9 sem reescrever seu histórico, renumerar as 23 fases ou criar uma nova fase de plataforma. Não se aplica às demais etapas.
+
+**Estado desta solicitação:** ajuste documental. A árvore já contém alterações locais em `course-src/recipes/00.py`, `course-src/recipes/01.py`, `course-src/stage00-preparation.mjs`, `course-src/stage01-preparation.mjs` e artefatos gerados. Algumas correspondem às propostas abaixo; preservá-las e conferir o estado efetivo antes de implementar qualquer coisa. Presença de texto na fonte não comprova execução local, publicação ou conclusão de todos os critérios. As caixas abertas indicam conferência pendente, não autorização para refazer trabalho já presente.
+
+### Etapa 00 — executar, observar e investigar
+
+| Atividade | Revisão a incorporar ou conferir | Critério de conferência fora do site |
+|---|---|---|
+| 00.06 | Manter o primeiro exemplo guiado e oferecer uma segunda investigação curta sem indicar a linha ou a causa. Solicitar erro observado, hipótese, uma alteração e nova execução. Usar apenas chamadas e valores já apresentados; não antecipar funções ou pilhas de chamadas complexas. | O material permite executar o trecho intacto e comparar a saída final com um alvo explícito. O aluno consegue explicar a relação entre a alteração e o resultado, com apoio da IA se necessário. |
+| 00.06 | Reforçar a diferença entre falha de sintaxe, erro durante a execução e saída incorreta sem exceção, usando três trechos pequenos com resultados/categorias para conferência após a tentativa. | As três situações podem ser reproduzidas localmente; a explicação não confunde erro de análise com execução parcial nem trata ausência de exceção como solução correta. Não exigir mensagem literal idêntica entre ambientes. |
+| 00.02 / 00.06 | Acrescentar ou reaproveitar um cenário textual de arquivo errado: dois arquivos com mensagens diferentes, alteração em um e execução do outro. Pedir que o aluno confira nome, pasta e comando antes de editar a lógica. | Os nomes dos arquivos, o comando e a saída esperada são suficientes para reproduzir a situação na máquina local. Não construir simulador de terminal ou gerenciador de arquivos no site. |
+| Fechamento da etapa | Reaproveitar as três chamadas já ensinadas para orientar a execução em arquivo local ou console real, indicando a diferença entre código digitado e saída. Se usar Node, explicar pasta do arquivo, salvamento e `node main.js`; usar o ambiente já disponível, sem transformar instalação em bloqueio. | O aluno consegue levar o código para fora do site e reconhecer as mensagens produzidas. O exercício pode ser discutido com IA e não depende de botão Run ou nota do site. |
+| 00.09 | Alinhar a classificação editorial à escrita do programa: MAKE, preservando o ID, o contrato de quatro mensagens, a mudança de quantidade 3 para 0 e as transferências existentes. A alteração para MAKE já foi encontrada na receita local; conferir o catálogo efetivo antes de considerar concluído. | Enunciado, material e classificação concordam. As quatro mensagens e a variante com zero têm resultado definido; não reabrir a alegação antiga de que só existem três saídas na preparação atual. |
+
+- [ ] Conferir o material atual dos itens acima e completar somente o que ainda faltar para estudo local.
+- [ ] Registrar a conferência das categorias/saídas dos trechos efetivamente acrescentados, sem criar uma suíte de avaliação interna.
+
+### Etapa 01 — valores, reatribuição e texto derivado
+
+| Atividade | Revisão a incorporar ou conferir | Critério de conferência fora do site |
+|---|---|---|
+| 01.02 | Reforçar a cópia do valor primitivo no momento da inicialização: pedir a previsão de `base` e `total` depois de alterar somente `total`, com outra entrada curta. Reaproveitar a tabela e as explicações existentes. | A previsão e a execução mostram que alterar `total` não altera `base`. Não generalizar a explicação para objetos nem exigir nova visualização interativa. |
+| 01.04 | Transformar em comparação prática a distinção já explicada entre convenção e regra da linguagem: `let` para um nome não reatribuído pode funcionar; tentar reatribuir `const` provoca erro. | Enunciado deixa claro quando exige a convenção de usar const. A explicação não afirma que JavaScript proíbe let em valores fixos; 0 e false permanecem valores válidos. |
+| 01.04 / 01.08 | Ajustar ajuda que entrega a escolha cedo demais. A primeira pista pede procurar reatribuições; a seguinte ajuda a comparar declarações e usos. Evitar nomear imediatamente todos os bindings corretos, especialmente na transferência 01.08. | O texto preserva a decisão do aluno antes de fornecer a resposta. Não impor analogia na terceira pista nem proibir referências úteis a linhas/nomes. A ajuda da IA continua permitida, sem criar telemetria ou bloqueio de domínio. |
+| 01.07 | Alinhar o campo de modelo mental à preparação: a template literal avalia expressões e produz uma string; guardar o resultado não cria atualização automática. Substituir a explicação que apenas define MAKE. A alteração já aparece na receita local; conferir as fontes efetivas e o catálogo. | Modelo mental, exemplo e enunciado explicam a mesma regra. Preservar formato, espaços e resultados publicados, inclusive os casos com zero. |
+| 01.09 | Converter o exemplo já existente sobre string calculada em uma tentativa curta com outros dados: imprimir uma string guardada, mudar o valor de origem, imprimi-la novamente e comparar com uma nova template literal. Solicitar previsão antes da execução e fornecer conferência separada da tarefa. | A string guardada conserva o texto anterior; a nova expressão reflete o valor atualizado, incluindo zero. Reaproveitar as duas transferências existentes, sem criar novas funções ou alterar o executor. |
+| Revisão posterior | Acrescentar ou reaproveitar uma prática curta em outro dia: escolher const/let e imprimir dois estados de uma configuração com dados diferentes. Pode ser uma orientação de texto no fechamento da etapa, com saída esperada e justificativa da escolha. | A tarefa pode ser copiada e feita localmente. Sugerir tentativa antes de pedir pista à IA, sem proibir ajuda, exigir agendamento automático, registrar tentativas externas ou inventar certificado de retenção. |
+
+- [ ] Conferir o texto atual, incluindo as alterações locais preexistentes, e completar somente as lacunas dos itens acima.
+- [ ] Conferir exemplos e resultados novos no runtime local pertinente; para ajustes apenas explicativos, verificar coerência entre enunciado, exemplo e gabarito.
+
+### Apontamentos descartados ou já atendidos no escopo 00–01
+
+- Não renomear `material.md` nem adaptar o runner apenas para permitir execução dentro do site. Quando o aluno precisar criar um arquivo local, basta indicar o nome e o conteúdo adequados; corrigir uma extensão somente se ela tornar incorreta a instrução de execução local.
+- Lacunas `___` em FADED são intencionais quando o texto ensina como preenchê-las; não exigir starter executável antes do preenchimento nem tratar sua incompletude como defeito de infraestrutura.
+- Ensinar que `typeof null` devolve `"object"` e `typeof NaN` devolve `"number"` é preparação legítima. Não esconder a regra para obrigar descoberta por tentativa nem remover conteúdo correto sob o rótulo genérico de spoiler.
+- A preparação atual de 00.09 já define quatro saídas e a variante com zero; 01.09 já oferece duas transferências com resultados definidos. Reutilizar esse material e corrigir apenas inconsistência efetivamente encontrada.
+- O exemplo guiado inicial de 00.06 é mantido; a autonomia vem da segunda tentativa. A regra de string calculada já aparece em 01.07/01.09; reforçá-la com prática, sem duplicar a explicação inteira.
+- Não adicionar suporte interno a JavaScript/TypeScript, corretores, seletores, tabelas interativas, simuladores, exportadores ou controles de ajuda. Não antecipar DOM, funções, segurança de URLs ou funcionamento interno da engine para atender estas revisões.
+
+**Saída desta revisão curricular:** material correto, compreensível e suficiente para copiar, discutir com IA e praticar localmente. Na execução futura, preservar IDs, ordem, progresso e alterações locais; modificar somente as fontes de conteúdo necessárias de 00/01, conferir a geração pertinente e registrar limites. Este ajuste do plano não conclui os itens acima, não altera exercícios, não executa as fases e não publica o site.
+
+## Correções curriculares executadas nas etapas 02–05 — 19/10/2026
+
+**Autorização:** corrigir as etapas 02–05 conforme a análise da conversa. Trabalho limitado às fontes de conteúdo, material inicial de 05.03, rubrica de 05.14, artefatos derivados e verificação focal; sem adaptar a estrutura ou os executores do site.
+
+| Etapa | Correções e reforços incorporados |
+|---|---|
+| 02 | Mantidos os blocos e IDs existentes. A Ponte 02B retoma ausência, validade e resultados não booleanos de operadores com previsões e conferência local, antes de Number/Math. |
+| 03 | Material de FizzBuzz copiável em blocos no arquivo inicial; comparação entre < e <=; investigação adicional de progresso com três passagens limitadas; orientação Ctrl+C para a execução local do while; previsão de um único turno antes da batalha. Mantidos esqueleto de fila, formatos e verificadores existentes. |
+| 04 | Exemplos de 04.01 alinhados às chamadas reais; 04.07 esclarece Math.round sobre o produto Number e publica o contraexemplo 100 × 0.145, sem exigir validação externa; 04.08 explica comparação aproximada e retira validação indevida do gabarito. Acrescentadas investigação de retorno, rastreamento dos três caminhos de leitura/parse/limpeza e orientação local de módulos. |
+| 05 | Starter 05.03 entrega blocos A–E e distrator X, com saída por hífen; 05.13 explica a captura parcial ome sem flag i; 05.14 justifica parser por clareza/manutenção/diagnóstico, sem afirmar impossibilidade geral de regex. 05.08 mantém o contrato aberto a níveis não vazios, sem restringir o vocabulário a INFO/WARN/ERROR, e preserva o restante da mensagem. Acrescentadas retomadas de acumuladores, ordenação numérica/textual, delimitadores em mensagens, formato versus validade de data e blocos de estudo, com orientação de execução local. |
+
+**Verificação desta rodada:** os quatro testes novos de contrato falharam antes das correções e passaram após a geração. O conjunto focal de conteúdo e etapas 02/03 passou 106/106; o teste focal de 02-05 passou 14/14 após a última rodada; as referências 04/05 passaram 134/134 casos no Node 26.7.0 usando o runtime de asserções existente. Geração curricular, validação do catálogo, conferência de 21 checkpoints locais e check de versões de assets passaram. O validador da fonte reportou zero erros e cinco avisos de sintaxe em 01.08, fora do escopo e em material previamente modificado. A comparação com o snapshot desta rodada confirmou os 310 IDs na mesma ordem, alterações do catálogo apenas em 02–05 e preservação byte a byte das modificações anteriores de 00/01. Revisão independente identificou a necessidade de explicitar a substituição do nome importado na instrução local de 04; texto ajustado.
+
+**Limites:** os testes locais utilizaram Node 26.7.0, não demonstram homologação integral no Node 24 do baseline. Não foi feita observação visual em navegador, suíte global, medição de aprendizagem ou publicação. Formatos, APIs, avaliações existentes e histórico das fases 1–10 preservados; não houve instalação de dependências, commit ou push. O teste focal adicional está em `scripts/test-stages02-05-content.mjs`.
+
+## Plano de correção das etapas 06–10 — 19/10/2026
+
+**Autorização e estado:** incorporar ao plano a análise das etapas 06–10 feita nesta conversa. Este ajuste é **documental**: não altera exercícios, testes, fontes, IDs, ordem, progresso, runners ou publicação. As correções abaixo ficam pendentes até uma execução explícita. A auditoria de 14/10/2026 é tratada como pista, não como prova: vários achados já foram corrigidos e outros descrevem o artefato antigo.
+
+**Diagnóstico que orienta o plano:**
+
+- O problema principal não é carga cognitiva; é contrato entre enunciado, starter, exemplo e teste.
+- Nas etapas 06–10, os cinco `PARSONS` (`06.03`, `07.03`, `08.02`, `09.02`, `10.02`) não têm blocos reais no catálogo. O editor recebe um `main.js` completo e, pelo código atual, todos os cinco starters contradizem a suíte.
+- `07.06`, `09.01` e `10.06` ensinam ou exigem comportamento diferente do teste. São os três P0.
+- `08.01` contém as respostas literais; `08.04` promete um terceiro trecho ausente; `07.10` mantém texto antigo em `checks.scoring`.
+- `edgeCases` e `checks` fazem parte do catálogo. Antes de declarar “contrato oculto”, conferir esses campos; várias críticas da auditoria caem por já estarem publicadas.
+- Testes verdes da solução não provam que o starter está correto. A verificação precisa comparar starter, exemplo, teste e fonte efetiva.
+
+**Decisão sobre `PARSONS`:** não construir uma interface de blocos, conforme o escopo deste plano. Para cada atividade, escolher uma das opções:
+
+1. **Manter `PARSONS`** somente se o cartão exibir blocos copiáveis e o starter não for a solução completa; o aluno monta a ordem localmente e o teste avalia o resultado.
+2. **Reclassificar** para `DEBUG` quando o starter for uma solução quase pronta com um defeito; para `FADED`/`MAKE` quando for esqueleto ou implementação guiada.
+
+Preservar ID, posição, carga e vínculos conceituais; atualizar `kind`, prompt, `preparation`, exemplos e avaliação na mesma rodada. Não criar ID novo para contornar a classificação.
+
+### Correções por etapa
+
+| Etapa | ID | Ação planejada | Conferência fora do site |
+|---|---|---|---|
+| 06 | `06.01` | Alinhar o exemplo ao starter e ao teste: usar `base/alias/copia` (ou renomear o código e o teste para `a/b/c`), mantendo a saída em objeto. | Executar o starter e comparar `2,2,1`, `false,false` e as identidades `mesmaRaiz`/`mesmoMeta`; conferir o exemplo publicado. |
+| 06 | `06.03` | Reclassificar como `DEBUG` (preferencial): manter `senha` como o defeito no starter e pedir que o campo seja removido, pois ele não deve atravessar a fronteira. Alternativa: `MAKE` com esqueleto. Não manter “Ordene os blocos” sem blocos. | `normalizar({id,nome,senha})` deve devolver somente `{id,nome}`; `edgeCases` de campo extra e nome vazio devem coincidir. |
+| 06 | `06.08` | Se quiser fechar “corrupção”, acrescentar casos públicos para `{version:2,audio:null}` e `version:"2"`; definir defaults e manter o teste atual. | Rodar JSON inválido, v1 sem volume, versão futura e os dois novos casos; conferir a matriz de decisões. |
+| 07 | `07.03` | Reclassificar como `DEBUG`: o starter ascendente é o defeito; pedir correção para pontos decrescentes e nome crescente. Explicitar que a saída é a lista de IDs por partida, não um ranking agregado por jogador. Alternativa: fornecer blocos A–D reais. | Conferir `['y','x']`, ordem `top/middle/low` e desempate `Ágata/Bruno`; confirmar que a entrada não é mutada. |
+| 07 | `07.06` | **P0.** Corrigir o starter para somar por categoria (`(resultado[categoria] ?? 0) + preco`) e preservar chaves especiais. Manter o teste atual, que também exige `__proto__` próprio e protótipo comum. Atualizar qualquer texto que descreva o starter errado. | `A=5`, `B=4`, preço zero, `toString`/`constructor`/`__proto__` e `1`/`'1'`; executar o teste focal. |
+| 07 | `07.06` | Reforço sem novo ID: acrescentar à preparação um trace curto do acumulador antes da refatoração. Não transformar o exercício em aula completa de `reduce`. | O aluno consegue dizer o acumulador inicial, o retorno de cada passo e por que a categoria repetida soma. |
+| 07 | `07.10` | Corrigir `checks.scoring`: trocar `pedido.cancelado` por `pedido.status === "ativo"`. Solução e teste já estão corretos; conferir também `preparation.materials`. | Gerar o catálogo e conferir que o texto de entrega esperada não contradiz o teste. |
+| 07 | `07.02`, `07.09` | Traduzir `compatibility`/hint em inglês quando forem exibidos ao aluno. Não reescrever o conteúdo técnico. | Conferir o catálogo publicado; manter a mesma semântica. |
+| 08 | `08.01` | **P1.** Substituir o array `analises` com respostas literais por snippets de código e campos `crescimento` em branco; o teste/assessment deve comparar a previsão com a classificação canônica, não apenas ler o array pronto. Corrigir “Set.has médio” para `O(1) médio` no material e na expectativa. | Conferir PREDICT, tabela de previsão, snippets e os oito crescimentos; executar o fluxo antes/depois. |
+| 08 | `08.02` | **P1.** Antes da atividade, acrescentar uma retomada linear de recursão (sem novo ID) ou uma ponte curta. Reclassificar para `FADED`/`MAKE` ou fornecer blocos reais. Definir folha como `null` e `somar(null) = 0`; normalizar ramos ausentes com `?? null`. | `somar(null) = 0`, nó único `-2 = -2`, árvore do exemplo `17`; conferir a ordem B/C e a explicação da dependência. |
+| 08 | `08.04` | Completar o terceiro trecho (dois ponteiros) ou retirar a promessa do prompt; explicitar a invariante semiaberta `[inicio,fim)`. Não é necessário criar teste executável para uma atividade `READ`. | Conferir que os três trechos existem no material e que a invariante aparece no texto; conferir o caso de array vazio. |
+| 08 | `08.07` | Alinhar o retorno de destino inalcançável: usar `null` (coerente com `08.08`) ou trocar o `edgeCases` para `[]`. Acrescentar o caso ao teste se o comportamento for contrato. | `A -> D` reconstrói o caminho; `A -> X` devolve o valor escolhido; ciclo não revisita vértice. |
+| 09 | `09.01` | **P0.** Corrigir o snippet: `bloco` nasce no bloco e `dentro` nasce dentro de `f`. Escolher um contrato coerente: devolver `dentro` por closure ou retirar `dentro` do objeto e testar `ReferenceError` fora de `f`. Não manter o híbrido atual. | Conferir `{fora:1,bloco:2,...}`, a soma e a tentativa de acesso fora do escopo; explicar a cadeia léxica. |
+| 09 | `09.02` | **P1.** Reclassificar como `DEBUG`/`MAKE` ou fornecer blocos reais. Definir `depositar(0) = false` e usar `valor <= 0`; acrescentar a política ao prompt/`edgeCases`. | Zero, negativo, positivo, consulta e isolamento entre contas; conferir o teste atual. |
+| 09 | `09.04` | Alinhar o exemplo à sequência real do starter/teste: `a.inc()` e retorno `{a:1,b:0}`, ou mudar o starter para produzir a sequência publicada. Explicitar que `const r = a.read; r()` vê o `n` atual. | Executar a sequência e comparar; não exigir `this` para o método. |
+| 09 | `09.08` | Repetir no prompt o que `edgeCases` já publica: `Object.is`, cancelamento idempotente, listener removido durante emissão e isolamento entre stores. O teste existente permanece. | Conferir o texto do cartão contra o teste; não criar contrato novo. |
+| 10 | `10.02` | **P1.** Reclassificar como `DEBUG` (ou fornecer blocos reais). Normalizar `inicial` com `Math.max(0, inicial)`; manter zero/negativo como depósito inválido. | `new Cofre(-4).saldo === 0`, `depositar(0) === false`, `#saldo` inacessível. |
+| 10 | `10.03` | Trocar `hasOwnProperty` por `Object.hasOwn` no teste/edge, se o runtime do exercício for Node 24; não é correção de comportamento. | Rodar o caso de chave própria e o de chave herdada. |
+| 10 | `10.04` | Traduzir o `edgeCases` para português; conferir que o exemplo `[5,5]`/`[5,9]` continua correto. | Executar antes/depois da reatribuição de `obj`. |
+| 10 | `10.06` | **P0.** Preferencial: fornecer a hierarquia real no starter e pedir a refatoração para composição, com funções puras. Alternativa: mudar título/prompt para “Corrija a composição” e remover a promessa de hierarquia. Em ambos, `mover/atacar/curar` devem devolver novo estado sem mutar a entrada. | Conferir o teste que exige novo objeto e estado original intacto; conferir que o vocabulário do exemplo corresponde ao código. |
+| 10 | `10.07` | Manter. O cenário retângulo/quadrado é proposital para LSP; o notificador é o segundo eixo de variação. Não “corrigir” a aparente falta de relação entre os cenários. | Executar a troca de canal em runtime e o setter do quadrado; comparar com o contrato. |
+| 10 | `10.09` | Manter. `edgeCases` já publica `RangeError` e `Object.keys`; não tratar como contrato oculto. | Conferir saldo, `id` não enumerável e erro para saldo negativo. |
+
+### Itens que não devem ser reabertos nesta rodada
+
+- `06.06`: é `COMPARE`; `04.12` já ensina `try/catch/finally`. Não criar nova ponte nem exigir `try/catch` novo.
+- `06.07`: o teste e o prompt atuais cobrem `__proto__` como chave própria; `Object.create(null)` não é requisito.
+- `07.01`: starter vazio, sem respostas prontas; a crítica antiga está desatualizada.
+- `09.08`: teste e `edgeCases` existem; falta apenas eco no prompt.
+- `10.01`: `PREDICT` com starter executável é normal; a previsão é registrada antes do Run.
+- `10.09`: contrato visível em `edgeCases`.
+- `08.08`: a Ponte 08 e `08.07` já preparam BFS; não criar outro projeto ou outra atividade de BFS.
+- Não adicionar benchmarks em 08, nova atividade de merge recursivo em 06, nova atividade de `reduce` ou uma atividade extra de LSP em 10. Corrigir o material existente primeiro.
+
+### Ordem de execução
+
+1. Corrigir os P0 `07.06`, `09.01` e `10.06`.
+2. Resolver os cinco `PARSONS`: blocos reais ou reclassificação para `DEBUG`/`FADED`/`MAKE`.
+3. Corrigir `08.01`, `08.02`, `08.04` e o texto de `07.10`.
+4. Aplicar as correções P2/P3 (exemplos, tradução, `Object.hasOwn`, `08.07`).
+5. Criar/estender um teste focal de conteúdo para 06–10, nos moldes de `scripts/test-stages02-05-content.mjs`, cobrindo exemplos, starters que deveriam falhar, contratos de `PARSONS` e textos de entrega. Não criar gate de plataforma.
+6. Regenerar o catálogo, conferir IDs/ordem e executar os testes locais pertinentes. Registrar limites e não publicar.
+
+**Critério de saída:** cada atividade de 06–10 usada no estudo tem enunciado, exemplo, starter e teste coerentes; o aluno consegue copiar, discutir com IA e conferir o resultado localmente; nenhuma correção exige runner, bloco interativo ou corretor interno do site.
+
+**Relação com os registros anteriores:** as frases “06.08 e 07.03 não mostraram defeito”, “07.06 reutiliza verificação anterior” e “10.06 agora explicita…” descrevem o estado daquelas rodadas e não o estado atual. A conferência de 19/10/2026 encontrou pendências; elas estão registradas acima e não invalidam as evidências históricas dos demais IDs.
+
+## Plano de correção das etapas 11–15 — 19/10/2026
+
+**Autorização e estado:** incorporar ao plano a auditoria das etapas 11–15 feita nesta conversa. Este ajuste é **documental**: não altera exercícios, testes, fontes, IDs, ordem, progresso, runners ou publicação. As correções abaixo ficam pendentes até uma execução explícita. A auditoria de 14/10/2026 é tratada como pista, não como prova: o estado atual foi conferido contra catálogo, starters, testes e soluções.
+
+**Diagnóstico que orienta o plano:**
+
+- O gate automático das atividades executáveis de 11–15 passou **51/51**; `13.03`, `13.07`, `13.09` e `13.13` também passaram no gate focal. Teste verde não prova que enunciado, starter, exemplo e referência estão coerentes.
+- Quatro atividades declaram `PARSONS`, mas não entregam blocos: `11.02`, `12.02`, `13.02` e `14.02`. Apenas `15.02` tem blocos reais. Em `11.02`, o diretório `course-src/starters/11.02/` vence a receita; por isso o catálogo publica um `main.js`, não os blocos que a fonte sugere.
+- `12.21` rejeita com `AbortError` quando a busca antiga é abortada por um fetcher que honra o sinal. O teste usa um fetcher que ignora o sinal, então não detecta a violação do contrato público de devolver `undefined` para a busca obsoleta.
+- `13.14` deixa tags inválidas passarem quando a contagem de tarefas não muda e não emite aviso específico para tags inválidas em `migrarV2ParaV3`.
+- `12.08` exige `profile.nome` e `stats.total` no teste e na solução, mas o contrato público não declara esses campos.
+- `11.04` exige `result.valores.quantidade`; `12.06` exige `null`; `11.10` promete adicionar/mover/reload no exemplo, mas o teste cobre apenas `boot`, storage e `mover`.
+- `11.01` e `11.11` têm exemplos que não correspondem ao artefato/teste; `11.08`, `14.08` e `15.08` têm pontes curriculares opcionais, não contratos escondidos.
+- Vários registros antigos não devem ser reabertos: `12.03` já usa array; `12.04` foi corrigido; `11.12` publica o caso de string vazia; `13.13` usa `studentSuite`/mutação; `15.02` é Parsons real; `15.05` foi aposentado para `16.09`.
+
+**Decisão sobre `PARSONS`:** manter `PARSONS` somente quando o cartão exibir blocos copiáveis e o starter não for a solução completa. Para `11.02`, `12.02`, `13.02` e `14.02`, preferir `DEBUG` — o starter já é uma implementação quase pronta — e reescrever prompt, exemplos, `edgeCases` e avaliação na mesma rodada. Alternativa: fornecer blocos reais A–D. Preservar ID, posição e vínculo conceitual; não criar ID novo. `15.02` permanece `PARSONS`.
+
+### Correções por etapa
+
+| Etapa | ID | Prioridade | Ação planejada | Conferência fora do site |
+|---|---|---|---|---|
+| 11 | `11.02` | P1 | Reclassificar para `DEBUG` e pedir correção de texto/remoção; ou fornecer blocos reais. Não manter “Ordene os blocos” com um `main.js` completo. | Remover somente o `li` acionado; texto hostil vira `TEXT_NODE`; executar o teste focal. |
+| 11 | `11.01` | P2 | Alinhar o exemplo ao teste: o alvo `alvo` vem primeiro; evitar `<a href="#">` que navega. | Executar o clique e conferir foco, alvo e prevenção de navegação. |
+| 11 | `11.04` | P1 | Publicar `result.valores` (nome, quantidade e interesses; ao menos `quantidade`) no prompt/edge cases, ou retirar a exigência do teste. Manter labels; acrescentar `legend` é melhoria P2. | Sucesso e falha com `{ok:false, erros:{quantidade}, valores:{quantidade:'2x'}}`; conferir DOM local. |
+| 11 | `11.08` | P2 | Acrescentar uma ponte curta de `localStorage` antes do projeto. O teste já cobre formulário, label, colunas, `aria-live`, inclusão, persistência e recarga; não há requisito de remoção. | Salvar, recarregar e recuperar; conferir que a ausência de `lang`/`title`/`h1` é dívida editorial, não falha funcional. |
+| 11 | `11.10` | P1 | Escolher: reduzir exemplo/teste a módulos e remover a promessa de adicionar/mover/reload, ou implementar e testar a interface. O starter já está separado em `state.js`, `view.js` e `main.js`. | `mover` puro, storage inválido, `boot` e os controles que o enunciado prometer; não inventar UI não exigida. |
+| 11 | `11.11` | P2 | Alinhar o exemplo ao artefato real (`div`/`button`, não `ul`/link). | Executar o clique e conferir o HTML publicado. |
+| 11 | `11.12` | — | Não reabrir: string vazia como nó de comentário é edge case público, não contrato escondido. | Casos de texto hostil, quebra de linha e vazio já publicados. |
+| 12 | `12.02` | P1 | Reclassificar para `DEBUG` ou fornecer blocos reais. Corrigir `tentativa <= max` e a espera após a última tentativa. | Com `max=2`, contar exatamente duas chamadas e esperar somente entre falhas. |
+| 12 | `12.03` | — | Não reabrir: o contrato atual usa array e está coerente com exemplo, teste e solução. A alegação de “objeto nomeado” é histórica. | Conferir `[1,2,3]` e a ordem das chamadas paralelas. |
+| 12 | `12.06` | P1 | Publicar que a busca obsoleta/abortada devolve `null`, ou aceitar `undefined` no teste. Preferir declarar `null` no contrato. | Busca antiga obsoleta e abortada; conferir que o `AbortError` não chega ao usuário. |
+| 12 | `12.08` | P0 | Publicar `profile.nome: string` e `stats.total: number` finito no prompt/edge cases, ou remover a validação correspondente. Acrescentar caso de payload inválido. Manter o `WeakMap` por identidade do fetcher, que é contrato explícito. | Sucesso com `{nome}`, `{total}`; JSON inválido, HTTP, timeout, cancelamento e busca antiga. |
+| 12 | `12.21` | P0 | Capturar/ignorar a rejeição da busca antiga abortada e garantir retorno `undefined`. Adicionar teste com fetcher que honra o `signal`, não apenas o que ignora. | Busca nova resolve; busca antiga resolve `undefined`, sem `AbortError` não tratado. |
+| 13 | `13.02` | P1 | Reclassificar para `DEBUG`/`FADED` ou fornecer blocos reais. O starter é `return dividendo/divisor`; acrescentar guardas de `NaN`/`Infinity` e divisor zero. | `TypeError` para `NaN`/`Infinity`; `RangeError` para zero; caso válido. |
+| 13 | `13.03`, `13.07`, `13.09` | — | Não reabrir: `studentSuite: true` avalia a suíte submetida contra referência e mutantes; o teste mínimo do starter é intencional. | Gate focal já passou; manter o mecanismo. |
+| 13 | `13.13` | — | Não reabrir: a suíte de referência é `course-src/tests/13.13.test.js`; o starter tem apenas um teste fraco, mas a avaliação usa a suíte do aluno e mutação. | Gate focal passou; não exigir suíte completa no starter. |
+| 13 | `13.14` | P0 | Normalizar/validar tags V3 mesmo quando a contagem de tarefas não muda; emitir aviso específico para tags inválidas em `migrarV2ParaV3`. | `carregar` com `tags:['']` deve normalizar e avisar; testar o aviso, não só a existência de warnings do registro parcial. |
+| 14 | `14.02` | P1 | Reclassificar para `DEBUG` ou fornecer blocos reais; validar comando, imprimir uso e retornar status 2. | Sem argumentos, comando inválido e domínio inválido; conferir `exitCode`. |
+| 14 | `14.08` | P2 | Acrescentar uma ponte curta sobre arquivo temporário + `rename` antes do projeto. A exigência é pública; não é contrato escondido. | Escrita atômica, JSON inválido e ausência de arquivo parcial. |
+| 15 | `15.02` | — | Manter: é o único `PARSONS` real, com blocos e distrator; teste cobre default e limites. | Ordenar os blocos e validar `3000`, `1` e `65535`. |
+| 15 | `15.05` | — | Não reabrir: foi aposentado e redireciona para `16.09`. | Conferir o redirecionamento no catálogo. |
+| 15 | `15.08` | P2 | Acrescentar uma ponte curta de estratégia de migração JS→TS. Teste, solução e starter estão coerentes; não há bug confirmado. | Conferir `paginacao.ts` e a migração incremental. |
+
+### Itens que não devem ser reabertos nesta rodada
+
+- `12.03`: array e ordem já são o contrato corrente; a crítica de objeto nomeado descreve o artefato antigo.
+- `12.04`: a sequência `A,B,P1,Q,P2,T` já foi corrigida e verificada.
+- `11.12`: string vazia como nó de comentário é caso público; o starter com `innerHTML` não é contrato escondido.
+- `11.10`: a crítica de XSS não se sustenta porque a view usa `textContent`; a pendência real é escopo/exemplo, não segurança.
+- `11.04`: os labels já existem; a pendência é o formato oculto de `valores` e, no máximo, o `legend`.
+- `13.03`, `13.07`, `13.09`, `13.13`: `studentSuite: true` e mutação são o mecanismo vigente; não migrar runner nem exigir suíte completa no starter.
+- `15.02`: Parsons real; `15.03`, `15.04`, `15.07` e `15.11`: testes e soluções coerentes no estado atual.
+- `15.05`: aposentado para `16.09`; não é lacuna.
+- `12.18`: `limite <= 0` não está no contrato nem nos testes; não criar caso retroativo.
+- `11.08`: não há requisito de remoção; o teste forte existente não deve ser “corrigido” para incluir uma operação não pedida.
+- `14.08`: gravação atômica é exigência pública; a lacuna é apenas de sequência pedagógica.
+
+### Ordem de execução
+
+1. Corrigir os P0 `12.21`, `13.14` e publicar o schema de `12.08`.
+2. Resolver os quatro `PARSONS`: `DEBUG` com prompt reescrito ou blocos reais; manter `15.02`.
+3. Publicar ou alinhar os contratos P1 de `11.04`, `12.06` e `11.10`.
+4. Aplicar as correções P2 de exemplos e pontes (`11.01`, `11.11`, `11.08`, `14.08`, `15.08`).
+5. Criar/estender um teste focal de conteúdo para 11–15, nos moldes de `scripts/test-stages02-05-content.mjs`, cobrindo starters que deveriam falhar, contratos de `PARSONS`, schemas e textos de entrega. Não criar gate de plataforma.
+6. Regenerar o catálogo, conferir IDs/ordem e executar os testes locais pertinentes. Registrar limites e não publicar.
+
+**Critério de saída:** cada atividade de 11–15 usada no estudo tem enunciado, exemplo, starter e teste coerentes; o aluno consegue copiar, discutir com IA e conferir o resultado localmente; nenhuma correção exige runner, bloco interativo ou corretor interno do site. Em particular: `12.21` devolve `undefined` para busca obsoleta; `13.14` normaliza/avisa tags inválidas; `12.08` tem schema público; os quatro `PARSONS` foram resolvidos; `11.04`, `12.06` e `11.10` não dependem de requisito oculto.
+
+**Limites desta conferência:** verificação local em Node, com **51/51** testes automáticos de 11–15 e reproduções focais de `12.21` e `13.14`; não houve Chromium, suíte global, edição de conteúdo, commit, push ou publicação. O gate verde não classifica os achados acima como falhas de execução.
+
+**Relação com os registros anteriores:** as frases “12.02/12.05/12.06 não apresentaram defeito” e “12.15–12.21 não foram auditados”, na Fase 13, descrevem aquela rodada; a auditoria de 19/10/2026 encontrou pendências em `12.02`, `12.06` e `12.21`. Em `13.14`, a correção da Fase 4 tratou a fixture/teste, mas o bug de tags permanece. Em `11.04`, o ajuste de `assertionCases` não publicou o formato de `valores`. `13.13` continua sem defeito, agora com o mecanismo `studentSuite` confirmado. `15.05` está aposentado, não ausente. Essas atualizações não invalidam as evidências históricas dos demais IDs.
+
+## Plano de correção das etapas 16–23 — 19/10/2026
+
+**Autorização e estado:** a revisão inicialmente documental foi executada em 19/10/2026, por solicitação do proprietário, com subagentes GPT-6 Luna e revisão independente. Foram corrigidos os itens de material e preparação local descritos abaixo; as verificações e seus limites estão no registro de execução ao fim desta seção. Preservadas as alterações locais anteriores, as revisões 00–15, IDs, ordem, progresso e o histórico das 23 fases. Não houve commit, push ou publicação.
+
+**Fluxo de estudo:** consultar/copiar o material, discutir com IA e executar ou verificar tipos na própria máquina. Não criar runner, sandbox, terminal integrado, corretor, nota automática, exportador ou interface específica. Uma lacuna de material para execução local merece correção; uma limitação do executor do site não cria tarefa de plataforma.
+
+**Base da análise documental anterior:** comparação do catálogo com fontes, arquivos iniciais e referências, usando a auditoria de 14/10 como pista. Verificação pontual em memória com TypeScript 6.0.3 confirmou `unknown` nas propriedades de Flags<User> do starter 19.01 e no resultado de ElementOrSelf<number> do starter 19.02. Execução pontual da referência 20.08 no Node 26.7.0 confirmou duas iterações repetíveis para uma fonte array e a segunda vazia para o mesmo generator. Essa análise inicial não foi um teste integral dos oito estágios; a evidência nova está registrada abaixo.
+
+### Correções de material e contratos
+
+P1 indica inconsistência que pode ensinar uma resposta errada ou bloquear a prática local; P2 indica clareza ou reforço pedagógico. Reconfirmar o arquivo efetivamente publicado antes de implementar, para não refazer uma correção de outra rodada.
+
+| Etapa | ID ou trecho | Prioridade | Ação planejada | Conferência fora do site |
+|---|---|---|---|---|
+| 16 | `16.06` | P1 | Alinhar os exemplos de Status/idle ao starter de NIVEIS/Nivel com leitor, editor e admin. Manter derivação a partir da lista real e separar restrição estática de congelamento runtime. | Os valores aceitos/rejeitados correspondem aos nomes do arquivo; Object.isFrozen não é inferido de as const. |
+| 16/17/19 | `16.08`, `17.08`, `19.08` | P1 | Completar a preparação local dos pacotes: os tsconfigs pedem types node, mas os package.json publicados não declaram TypeScript/@types/node. Declarar versões coerentes, comandos e lockfile quando necessários; retirar uma dependência de tipos somente se os arquivos/testes realmente não precisarem dela. | Copiar o pacote para pasta isolada, preparar dependências declaradas e executar typecheck/testes pelos comandos fornecidos, sem aproveitar node_modules do repositório principal. Distinguir execução de .ts por Node de checagem estática por tsc. |
+| 17 | `17.02` | P1 | Resolver o desencontro entre PARSONS e declarações sem blocos. Preferir tarefa de modificação de assinaturas se esse for o objetivo; manter PARSONS somente com blocos textuais copiáveis. Não acrescentar implementação completa com Map apenas para preencher o formato. | pair preserva os dois papéis de tipo; Repository conserva a entidade específica e a relação do ID; assinaturas e exemplos usam os mesmos nomes. |
+| 18 | `18.02` | P1 | Alinhar o exemplo update ao nome aplicarPatch e aos dados Usuario/Perfil. Fornecer blocos textuais se mantiver PARSONS; caso contrário, descrever a modificação de patch:any com clareza. | Patch de primeiro nível altera somente o contrato declarado; um objeto aninhado é substituído por inteiro, sem promessa de deep merge. |
+| 19 | `19.01` | P1 | Alinhar o starter de previsão ao contrato booleano já publicado: o arquivo atual usa unknown enquanto exemplo/referência usam boolean. Manter a previsão como previsão, sem exigir transformação não anunciada. | A expansão literal do tipo efetivamente entregue concorda com o gabarito para id/name/active; não reprovar unknown quando esse ainda for o starter fornecido. |
+| 19 | `19.02` | P1 | Entregar blocos para ordenar ElementOrSelf, com readonly (infer U)[] e ramo falso que preserva T, conforme os exemplos publicados. Identificar unknown como distrator se usado. | Arrays mutáveis, tupla readonly, escalar e união produzem os tipos esperados; preservar o ID e não criar controle interativo. |
+| 19 | `19.06` | P1 | Trocar a expansão a/b/c pelos campos theme/retries do arquivo real. Conferir a política de opcionalidade e undefined nos modos declarados, reaproveitando a correção anterior da rubrica. | Type tests usam Settings e a configuração efetiva; separar remover opcionalidade de remover um union explícito com undefined. Não substituir uma configuração por outra silenciosamente. |
+| 20 | Ponte 20 e `20.08` | P1 | Retirar a regra geral de que todo for...of cria cursor novo. Distinguir coleção reiniciável, instância de generator e fábrica de generators; delimitar em que fonte a segunda iteração é independente. Manter propagação de return e ausência de pull extra. | Array pode repetir valores; a mesma instância de generator pode estar consumida. Testar take(0), entradas descartadas pelo filtro, número de pulls e fechamento antecipado sem impor reinício a uma fonte de uso único. |
+| 21 | `21.07` | P1 | Alinhar o pedido de 100 eventos ao starter que simula quatro e aos respectivos horários esperados. Escolher um cenário principal ou apresentar os dois explicitamente, com espera e políticas leading/trailing. | Cada cronograma tem sua própria saída prevista. Conferir um evento exatamente no limite e distinguir debounce de throttle. |
+| 22 | Ponte 22 / `22.09` | P2 | Corrigir a frase de que todo export exige retorno explícito em isolatedDeclarations: há expressões triviais inferíveis. Manter o exercício de anotar exports que realmente dependam de análise adicional. | Um export simples inferível e outro que exige anotação demonstram a diferença na versão de TypeScript escolhida. Não criar regra de anotar todo tipo do projeto. |
+| 22 | `22.06` | P1 | Completar a parte de schema que o enunciado pede, mas que o material atual não entrega: escolher biblioteca e versão ou explicar como usar uma já declarada, fornecer passos locais e aplicar os mesmos dados ao guard e ao schema. | A comparação pode ser reproduzida na máquina local e separa coerção, validação e inferência. Mensagens não precisam ser literalmente iguais entre bibliotecas; não instalar dependência nesta revisão documental. |
+| 23 | `23.07` | P1 | Fornecer ao aluno um comando completo de checagem/teste ou configuração local suficiente para o pacote inicial, que não traz scripts de teste/typecheck nem tsconfig. Reaproveitar o baseline do capstone quando aplicável. | O pacote copiado pode ser conferido sem configuração implícita do repositório principal; usuário comum não grava, admin reabre e falha não persiste estado/auditoria parcialmente. |
+| 23 | `23.09` | P1 | Resolver a contradição entre o prompt que proíbe causa técnica nos logs e o exemplo/rubrica/referência que preservam causa redigida no log interno. Publicar a distinção entre resposta pública, log interno e segredo. | A resposta pública omite detalhes internos; logs preservam contexto útil com segredos redigidos, inclusive em campos aninhados, sem mutar a entrada. Não apagar toda causa apenas para satisfazer uma frase ambígua. |
+
+### Reforços pedagógicos proporcionais
+
+Os itens abaixo são práticas curtas dentro do material existente, sem novos IDs ou requisitos de plataforma. Reaproveitar exemplos já presentes e não transformar cada proposta em outro projeto obrigatório.
+
+| Etapa | Onde | Melhoria proposta | Evidência de compreensão |
+|---|---|---|---|
+| 16 | `16.05`, `16.06`, antes de `16.08` | Comparar predicate correto com outro que promete mais do que verifica; contrastar as const com congelamento runtime; rastrear duas transições válidas e uma incompatível usando a política já declarada. | Explicar por que um predicate mentiroso compila, por que a marcação estática não congela dados e qual estado cada ação produz. Não construir tela de upload. |
+| 17 | `17.01`/`17.06`, `17.08` | Comparar assinatura que perde informação com assinatura que a preserva. No cache, isolar primeiro valor undefined armazenado versus ausência e só depois integrar TTL. | Justificar generic/union/concreto por relação útil; usar has para distinguir presença quando get devolve undefined e testar exatamente o instante de expiração. |
+| 18 | `18.02`, `18.06`, `18.08` | Demonstrar substituição rasa de um objeto aninhado, acrescentar uma rota e observar os tipos derivados; contrastar objeto estaticamente aceito com JSON externo inválido. | Distinguir derivação, restrição estática, merge runtime e validação. Não exigir tipos derivados quando um alias explícito pequeno é mais claro. |
+| 19 | Antes de `19.08` e junto de `19.07` | Praticar registro/emissão/remoção para um evento concreto antes de generalizar; comparar conditional distributivo e em tupla com tipos pequenos. Perguntar que mudança na fonte a abstração acompanha e qual alternativa simples existe. | Explicar Events[K], o efeito da distributividade e o custo da abstração. Manter o orçamento de complexidade; não acrescentar type-golf nem exigir domínio universal de toda técnica avançada. |
+| 20 | `20.04`, `20.08` | Mostrar Proxy/Reflect em exemplo mínimo antes de depurar recursão; comparar array, generator criado e fábrica; separar pulls, descartes, entregas e fechamento. | Escolher Proxy versus update explícito pelo contrato e explicar por que duas saídas filtradas podem exigir mais de duas entradas. |
+| 21 | `21.03`, `21.05`, `21.07` | Declarar hipótese antes de medir, confirmar resultados equivalentes e incluir envio/retorno no custo de Worker; usar linha do tempo para debounce/throttle. | Distinguir tempo total de responsividade e evitar conclusão universal a partir de poucas amostras. Worker do navegador é conferido em projeto local quando for o assunto, sem adaptar o site. |
+| 22 | `22.01`, `22.06`, `22.08` | Consumir o tarball em pasta independente; alterar JS sem atualizar .d.ts e investigar a divergência; comparar guard/schema com a mesma matriz de casos. | Runtime e declarações concordam no consumidor; escolha de dependência considera o tamanho do problema. npm pack é suficiente, sem publicação real. |
+| 23 | `23.08`, `23.05`, `23.07` | Dividir o projeto pessoal em regra principal, armazenamento, falhas, testes e mudança de requisito; disponibilizar um caso público de mover/remover e outro de falha de storage, reaproveitando os existentes quando suficientes. Analisar uma sugestão de IA e identificar requisitos/testes esquecidos. | Projeto pequeno satisfaz os requisitos escolhidos e mantém regressões. Uma suíte inicial verde não certifica operações ainda não cobertas; refatoração pode legitimamente começar com testes verdes. |
+
+### Decisões que limitam o trabalho
+
+- Cast localizado pode ser justificável com evidência; o alvo é evitar assertions que substituem validação, não eliminar toda ocorrência de as.
+- Não impor GUI para estados/upload, repositório completo para uma tarefa de assinaturas ou arquitetura em camadas para qualquer programa pessoal.
+- Readonly, as const, satisfies e marcas nominais não são validadores de dados externos nem promessa automática de imutabilidade runtime.
+- `16.05`: a referência atual verifica id number sem exigir inteiro; não reabrir a exigência antiga de Number.isInteger sem contrato novo.
+- Manter a diferença entre código incompleto intencional e gabarito contraditório. As pendências de previsão em 19.01 e de exemplos em 19.06 não são justificadas apenas por o starter ser um exercício.
+- Iterator helpers, Proxy, using e demais extensões não se tornam obrigatórios apenas porque uma versão os suporta. Não acrescentar dependência ou camada por aparência de sofisticação.
+- Não transformar Worker em promessa de ganho de velocidade nem uma medição local em recomendação universal.
+- Não exigir registry, CI, matriz de navegadores, lançamento público ou projeto de duração mínima. Em 22.08, aceitar a abordagem JS/JSDoc com declarações quando cumprir o objetivo do exercício.
+- As versões de Node e TypeScript usadas na conferência precisam ser explícitas. Não apresentar execução de .ts sem typecheck como validação de tipos, nem resultado no TypeScript 6.0.3 como homologação integral do alvo 7.0.
+
+### Ordem e critérios para execução futura
+
+1. Reconfirmar fonte, starter publicado e alterações locais dos IDs listados; preservar revisões anteriores. Usar os geradores protegidos de 20–23 conforme o mapa de fontes, sem editar artefatos derivados à mão.
+2. Corrigir alinhamento de exemplos/tipos em 16.06, 18.02, 19.01, 19.02 e 19.06, resolvendo também o formato de 17.02 sem ampliar o objetivo.
+3. Completar a preparação local dos três microprojetos TS e de 23.07; definir a comparação com schema de 22.06.
+4. Alinhar reinício de iteradores, cronogramas de 21.07 e contrato de logs de 23.09; corrigir a explicação de isolatedDeclarations.
+5. Incorporar as práticas curtas efetivamente úteis no mesmo lote, sem duplicar conteúdo já suficiente. Não criar um projeto ou mecanismo para cada linha da tabela.
+6. Conferir previsões/type tests e executar os exemplos/testes locais pertinentes. Para Worker ou outro recurso específico de navegador, usar o projeto local declarado; não considerar Worker Thread prova de API de navegador. Regenerar e conferir o material efetivo, IDs e ordem. Não exigir suíte global para encerrar ajustes de conteúdo.
+7. Registrar no plano os IDs corrigidos, verificação realizada, versões e limites. Esta seção só poderá ser marcada como executada após evidência nova; nenhuma caixa de fase histórica deve ser marcada por esta edição documental.
+
+**Critério de saída:** o material de 16–23 trabalhado permite copiar o exercício, entender seu contrato e conferir a solução com IA e ferramentas locais; exemplos e referências concordam; dependências indispensáveis estão declaradas. O esforço acompanha a etapa estudada, sem exigir manutenção estrutural do site ou publicação.
+
+### Registro de execução das etapas 16–23 — 19/10/2026
+
+- **16–19:** alinhados `16.06` (NIVEIS/Nivel e restrição estática versus congelamento), `17.02` (modificação de assinaturas), `18.02` (aplicarPatch/Usuario/Perfil e substituição rasa), `19.01` (Flags booleanas), `19.02` (blocos copiáveis de ElementOrSelf) e `19.06` (Settings e opcionalidade). Os pacotes `16.08`, `17.08` e `19.08` têm scripts separados de teste/typecheck e lockfiles com TypeScript 6.0.3, @types/node 24.19.1 e undici-types 7.24.6. O teste focal inclui compilação real de previsões e contratos, inclusive os dois modos de exactOptionalPropertyTypes; as três referências passaram 3/3 testes cada e typecheck em cópias isoladas. O gerador preserva as avaliações existentes de `17.11` e `18.11`, que não pertencem aos seus mapas de geração.
+- **20–21:** Ponte 20 e `20.08` distinguem array, mesma instância generator e nova instância criada pela fábrica, preservando `pipeline(iterable)`. Testes conferem descartes, pulls, take(0), limite e fechamento. `21.07` separa quatro eventos (debounce 140/260; throttle 0/160) de cem eventos (debounce 1090/valor 99; throttle 0–900) e explicita a borda. Foram corrigidas duas causas de geração não idempotente: substituição parcial de comentários de contrato e repetição de export em `20.06`; o helper tem cobertura LF/CRLF. Práticas curtas já suficientes foram reaproveitadas, sem criar novos projetos ou APIs de plataforma.
+- **22:** `22.06` fornece schema com Zod 3.25.76, passos/configuração local e matriz comum de sete casos para comparação com o guard, sem coerção implícita. Ponte 22 e `22.09` mostram export trivial inferível e retorno que exige anotação; o consumer verifica as declarações emitidas em dist. Starter, manifesto, pacote/lockfile, consumer e comandos estão alinhados, preservando a implementação inicial incompleta de index.ts. O gerador continua funcionando no fixture mínimo de `22.08`; o teste de tarball/consumidor separado passou.
+- **23:** `23.07` tem tsconfig, dependências/lockfile e comandos locais completos; três testes públicos reais cobrem admin/auditoria, usuário comum sem escrita e falha atômica. Esses testes falham intencionalmente no starter incompleto; a referência passa. `23.09` separa resposta pública de log interno com causa útil redigida, inclusive segredos aninhados sem mutar a entrada. `23.05`/`23.08` reforçam revisão de sugestão de IA, mover/remover e falha de armazenamento, reutilizando o projeto existente.
+- **Conferência integrada:** geração canônica em cópia temporária passou duas vezes com estabilidade; incorporação seletiva e build curricular produziram 310 atividades. IDs, ordem e entradas publicadas de 00–15 permaneceram iguais ao snapshot inicial; hashes dos arquivos-fonte anteriores dessas etapas também foram preservados. `node scripts/test-stages16-19-content.mjs`, `node scripts/test-stage22-content.mjs` e `node scripts/test-stage23-content.mjs` passaram. A bateria `node --test --test-force-exit scripts/test-stages20-21-content.mjs scripts/test-master456-advanced.mjs scripts/test-task-9-typed-suite.mjs scripts/test-task-9-package-22-08.mjs` passou 26/26. Validação de catálogo, fonte curricular, `build-public-curriculum.mjs --check`, versões de assets e `git diff --check` passaram. A fonte curricular terminou com 0 erros e cinco avisos de parsing em `01.08`, cujo conteúdo anterior foi preservado. A comparação canônica confirmou 1.295 hashes estáveis para a cadeia de 48 IDs de 20–23.
+- **Limites:** conferência em Node.js 26.7.0 e TypeScript 6.0.3, sem homologação integral de TypeScript 7.0/Node 24, percurso em navegador ou suíte global. O cache npm offline não continha todos os pacotes/metadados necessários; os testes isolados copiaram somente as dependências fixadas disponíveis localmente, sem resolver módulos pelo node_modules do checkout. Isso comprova execução/typecheck com essas dependências, mas não uma instalação limpa via rede ou npm ci offline. Nenhum runner, corretor, progresso persistido ou recurso de publicação foi ampliado ou removido.
+
 ## Histórico das fases 1–10
 
-Os registros abaixo descrevem a execução sob o escopo anterior. Obrigações de abrangência global, mutantes por atividade, quantidade fixa de critérios e homologação de lançamento citadas nesses registros não criam novas tarefas após esta revisão. A evidência histórica continua válida dentro dos limites que ela declara.
+Os registros abaixo descrevem a execução sob o escopo anterior. Obrigações de abrangência global, mutantes por atividade, quantidade fixa de critérios, execução/correção interna e homologação de lançamento citadas nesses registros não criam novas tarefas após esta revisão. A evidência histórica continua válida dentro dos limites que ela declara. Nas fases 11–20, os registros de execuções já realizadas também são históricos: menções a fixtures, avaliações e interfaces não reativam obrigações de plataforma.
 
 # GRUPO 1: Base e plataforma
 
@@ -370,23 +652,25 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 **Reutilizar:** 06.06 já teve diagnóstico na fase 3 e o timeout de 08.03 foi verificado na fase 7. Referências antigas a 05.05/05.08 pertencem ao lote já trabalhado; não reabrir sem um problema atual.
 
 **Fora do obrigatório:** converter toda prosa em código, testar todas as leituras automaticamente, uniformizar cenários ou preencher uma cota de mutantes.
-**Saída:** a atividade estudada tem material suficiente, resposta coerente e avaliação utilizável; a correção e seu resultado estão registrados.
+**Saída:** a atividade estudada tem material suficiente e resposta coerente para resolução com apoio de IA e conferência local; a correção e seu resultado estão registrados, sem depender da avaliação do site.
 
-**Registro:** 07.01 mantém starter `string[]` com respostas em branco e revisão por rubrica; a referência fornece as classificações. Em 08.01, a interface real mostrava o código em “Materiais desta atividade” antes da previsão, embora o editor de prática ficasse bloqueado. O renderer agora respeita `assessment.predictionTable.revealSourceAfterPrediction` somente em 08.01 e aguarda os metadados antes de exibir prévia/editor, inclusive quando `answered` já está salvo; após carregar, preserva respostas salvas compatíveis e só libera ambos depois da previsão. No reload com resposta salva e metadados atrasados, prévia/editor permanecem ocultos até a liberação e então reaparecem. Foram preservados PREDICT, checks, tabela e a saída correta do starter, sem torná-lo artificialmente vermelho. 05.11 não exige grafemas; 06.02, 06.08 e 07.03 não mostraram defeito; 07.06 e 08.03 reutilizam verificações anteriores. A regressão de primeira pintura passou em 14/14 verificações do controller; no Chromium real, o fluxo antes/depois e o reload com metadata atrasada passaram. O teste focal público de 08.01 também passou após geração.
+**Registro:** 07.01 mantém starter `string[]` com respostas em branco e revisão por rubrica; a referência fornece as classificações. Em 08.01, a interface real mostrava o código em “Materiais desta atividade” antes da previsão, embora o editor de prática ficasse bloqueado. O renderer agora respeita `assessment.predictionTable.revealSourceAfterPrediction` somente em 08.01 e aguarda os metadados antes de exibir prévia/editor, inclusive quando `answered` já está salvo; após carregar, preserva respostas salvas compatíveis e só libera ambos depois da previsão. No reload com resposta salva e metadados atrasados, prévia/editor permanecem ocultos até a liberação e então reaparecem. A interface foi ajustada, mas o starter ainda contém as classificações literais; a correção de conteúdo está pendente. 05.11 não exige grafemas; 06.02 não mostrou defeito. No estado atual, 06.08 e 07.03 têm correções pendentes, 07.06 mantém a solução corrigida mas o starter contradiz o teste, e 08.03 reutiliza a verificação anterior; ver “Plano de correção das etapas 06–10”. A regressão de primeira pintura passou em 14/14 verificações do controller; no Chromium real, o fluxo antes/depois e o reload com metadata atrasada passaram. O teste focal público de 08.01 também passou após geração, sem validar o conteúdo literal do starter.
 
 ## Fase 12: Lote 4 — funções, orientação a objetos e DOM
 
 **Faixa preservada:** 08.06–11.14, exceto 11.08, 11.10 e 11.13, que ficam na fase 13.
 - [x] Conferir os exercícios usados no escopo reduzido e corrigir arquivos ausentes, contratos escondidos ou exemplos que ensinem errado.
-- [x] Nas atividades DOM alteradas, testar a interface no navegador usado pelo proprietário, além do teste focal quando couber.
+- [x] Nas atividades DOM alteradas, conferir o programa do exercício em navegador local, além do teste focal quando couber; não exigir integração com o executor do site.
 
 **Pontos úteis do inventário:** 08.06 pode ordenar quando deveria preservar a ordem; 09.04/10.02 podem ter exemplos de retorno/acesso incorretos; 10.06 pode pedir modificação sem fornecer código; 10.07, 11.03 e 11.06 podem cobrar contratos não apresentados. Em 11.12, alinhar nomes de funções e verificar que texto hostil é exibido como texto quando esse for o contrato, usando DOM/parser apropriado para conferir o resultado. Explicar AbortController/FormData antes de exigir seu uso.
 
 **Reutilizar:** resultados anteriores de 08.07, 11.04 e 11.05; conferir somente a integração relevante se o estado mudou.
 **Redução:** revisar duração ou linguagem apenas se estiverem atrapalhando a prática; sem campanha geral de segurança, estética ou compatibilidade entre navegadores.
-**Saída:** o exercício funciona no ambiente informado, a solução atende ao enunciado e o erro relevante é identificado pela avaliação.
+**Saída:** o exercício funciona no ambiente local informado, a solução atende ao enunciado e o resultado pode ser conferido por exemplos, critérios ou testes entregues.
 
-**Registro:** 10.06 agora explicita que as funções recebem estado e devolvem uma cópia sem mutar a entrada. Em 11.06, dados/IDs e a avaliação foram conferidos; em 11.12, o contrato de texto/comentário foi alinhado a `childNodes`, com sete casos publicados preservando IDs e offsets. Os testes do navegador real confirmaram 11.06 (referência 3/3; starter rejeitado) e 11.12 (markup hostil, quebra de linha e vazio).
+**Registro:** 10.06 teve o texto ajustado para explicitar funções puras, mas o starter ainda é composição mutável e o enunciado ainda promete refatorar uma hierarquia; a correção está pendente na seção “Plano de correção das etapas 06–10”. Em 11.06, dados/IDs e a avaliação foram conferidos; em 11.12, o contrato de texto/comentário foi alinhado a `childNodes`, com sete casos publicados preservando IDs e offsets. Os testes do navegador real confirmaram 11.06 (referência 3/3; starter rejeitado) e 11.12 (markup hostil, quebra de linha e vazio).
+
+**Atualização de 19/10/2026:** a revisão de 11–15 reabriu `11.01`, `11.02`, `11.04` e `11.11`; ver “Plano de correção das etapas 11–15”.
 
 ## Fase 13: Lote 5A — Kanban e programação assíncrona
 
@@ -397,10 +681,12 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 **Pontos úteis do inventário:** 11.08 pode esconder montarKanban(document, storage).getState(); 11.13 pode usar done inexistente ou regras contraditórias de registro parcial; 12.03 pode pedir objeto e avaliar array; 12.06 pode aceitar engolir erros; 12.08 pode verificar headers inexistentes no fake. Em 11.10, esclarecer o papel de boot e do HTML fornecido. Preparar try/catch em 12.02 se necessário. Texto herdado de outro projeto só precisa mudar quando confundir o contrato.
 
 **Reutilizar:** a saída de 12.04 já foi tratada na fase 3. O ID 12.05 sozinho não comprova defeito; investigar apenas se houver dificuldade concreta.
-**Redução:** sem ampliar o Kanban em produto completo, nem criar infraestrutura de servidor/rede se a tarefa é resolvida pelo ambiente existente.
+**Redução:** sem ampliar o Kanban em produto completo, nem criar infraestrutura de servidor/rede no site para executar a tarefa. Quando necessários ao assunto, servidor local e navegador pertencem ao exercício feito na máquina do proprietário. Limitação de fake ou fixture do corretor interno não exige adaptação da plataforma; manter corretos os arquivos e contratos entregues para estudo local.
 **Saída:** o fluxo praticado mantém estado e responde corretamente aos cenários de sucesso e falha que o enunciado exige.
 
 **Registro:** 11.08 passou no navegador real com salvamento, movimentação e recarga; 11.10 agora recebe o HTML como contexto somente leitura e restaura a tela após recarga; 11.13 manteve a migração V1 e sinaliza dados parciais. 12.03 conserva o contrato de array/ordem e inicia chamadas em paralelo; 12.08 aceita headers opcionais na fixture e cobre retry, resposta antiga, estado de loading, timeout e cancelamento pelas opções `onState`, `timeoutMs` e `signal`, mantendo a chamada antiga de um argumento. A frase de preparação foi alinhada à limpeza após `Promise.race`. Focal público de 11.10/12.08 passou; 12.04 foi reutilizado, 12.02/12.05/12.06 não apresentaram defeito, e 12.15–12.21 não foram auditados.
+
+**Atualização de 19/10/2026:** a revisão de 11–15 reabriu `11.08`, `11.10`, `12.02`, `12.06`, `12.08` e `12.21`; ver “Plano de correção das etapas 11–15”. O gate focal continua verde, mas não cobre os contratos e os caminhos de falha descritos lá.
 
 ## Fase 14: Lote 5B — testes e depuração (13.01–13.13)
 
@@ -409,7 +695,7 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 
 **Pontos úteis do inventário:** arquivos de apoio em 13.03/13.09/13.13; armadilhas descritas de forma genérica. Os IDs 13.05, 13.07, 13.08, 13.10 e 13.12 foram listados sem defeito específico; isso não exige criar trabalho nem presumir falha.
 
-**Reutilizar:** a fase 8 já esclareceu avaliação no site versus testes locais e as modalidades reais de 13.x; a fase 2 já tratou geração de dicas. Não migrar runners ou mudar autoTested para uniformizar a etapa.
+**Reutilizar:** a fase 8 já esclareceu avaliação no site versus testes locais e as modalidades reais de 13.x; a fase 2 já tratou geração de dicas. Para o uso atual, testes do exercício rodam localmente; não migrar runners ou mudar autoTested para uniformizar a etapa, nem implementar execução de testes no site.
 **Saída:** o exercício de teste/depuração permite executar ou analisar exatamente o que pede, com critério compreensível.
 
 **Registro:** em 13.04, foi fornecido o código de depuração ausente e alinhado o prompt condicional à tarefa. A cobertura existente de 13.x passou em 9/9, com roteamento 1/1; `test-task-8a-evidence.mjs` passou 1/1 após adaptar somente os mutantes 11.05 ao lifecycle atual. IDs sem defeito específico não foram tratados como falhas presumidas.
@@ -424,9 +710,11 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 
 **Reutilizar:** correções e provas anteriores de 13.14, 14.03, 14.13, 16.03 e mutantes. 15.07 já declara RangeError para lista vazia; não contar isso como contrato oculto.
 **Redução:** não montar pipelines de publicação, instalar Vitest sem necessidade ou converter tarefas comparativas em projetos apenas para padronizar.
-**Saída:** comandos e exemplos usados funcionam, arquivos necessários estão presentes e as avaliações aceitam a solução correta.
+**Saída:** comandos e exemplos usados funcionam localmente, arquivos necessários estão presentes e os resultados ou testes entregues permitem conferir a solução correta.
 
 **Registro:** 14.06 foi resolvido; 14.08 agora valida JSON inválido sem escrever nem renomear arquivos, coberto também por contraprova publicada; 14.11 é comparação de dependências e não exige contrato de JSON inválido. Em 14.12, a divergência entre as cinco fontes entregues e o bundle foi corrigida: `src/` corresponde a `sourcesContent`, HTML/bundles/maps apontam entre si e os 12 arquivos do manifesto estão presentes, preservando os nomes genéricos. O teste de referências 15.07/15.08 passou 2/2; o checker local TypeScript 6.0.3 é proxy estático limitado e não equivale integralmente ao alvo didático TypeScript 7.0.
+
+**Atualização de 19/10/2026:** `13.14` continua com o bug de tags V3 e precisa de nova correção; `15.02` permanece um Parsons real e `15.08` está coerente, com ponte de migração apenas opcional; `15.05` foi aposentado para `16.09`. Ver “Plano de correção das etapas 11–15”.
 
 ## Fase 16: Lote 7 — TypeScript intermediário e avançado
 
@@ -460,9 +748,9 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 
 ## Fase 18: Lote 8B — desempenho, Workers e integração JS/TS (21.01–22.07)
 
-**Situação:** execução focal concluída para 21.01, 21.05 e 22.05; a verificação em Worker nativo do navegador permanece pendente.
+**Situação:** execução focal concluída para 21.01, 21.05 e 22.05; a prova didática de Worker nativo pode ser feita em navegador local quando esse exercício for estudado. Não há pendência de implementar ou homologar Worker dentro do site.
 - [x] Conferir os contratos e executar a comparação de carga, a lógica de Worker e o caso CLI escolhido.
-- [ ] Confirmar 21.05 em Worker nativo de navegador servido; a alternativa com Worker Thread real passou, mas não confirma o navegador.
+- [ ] Ao estudar Worker de navegador em 21.05, conferir os arquivos do exercício em navegador e servidor locais; a prova anterior com Worker Thread não confirma essa API. Não adaptar o executor nem o servidor do site para essa conferência.
 - [x] Conferir os comandos CLI de 22.05 no Windows utilizado.
 
 **Pontos úteis do inventário:** montagem/desmontagem de 21.02; ciclo de vida e pendências de 21.05; compatibilidade de process.argv em 22.04/22.05; material de transferência de 22.07. Em 21.04, o contrato é LRU, sem acrescentar TTL por engano. Em tarefas de desempenho, comparar a mesma carga em condições declaradas, sem construir uma suíte de benchmark além do objetivo.
@@ -470,7 +758,7 @@ As listas seguintes preservam os principais IDs e problemas do inventário anter
 **Reutilizar:** correções de 21.06–21.09 nas fases 4–6. Quando uma tarefa exigir resposta válida para entradas variadas, acrescentar casos que impeçam resposta decorada se a suíte atual for insuficiente; não impor testes aleatórios a todo exercício.
 **Fonte:** geradores task-9 das etapas 21–22 e regra de cópia temporária.
 **Redução:** sem homologação em vários navegadores, matriz extensa de desempenho ou distribuição pública de bibliotecas.
-**Saída:** o recurso estudado funciona no ambiente declarado, e sua avaliação consegue conferir o comportamento exigido.
+**Saída:** o recurso estudado funciona no ambiente local declarado, com resultados ou testes suficientes para conferir o comportamento exigido, sem depender do corretor do site.
 
 **Registro:** em 21.01/21.05, a mesma função e carga de 50.000 números foi comparada no Node.js v26.7.0/Windows, após um aquecimento e em cinco amostras; medianas: 4,19 ms na thread principal e 4,64 ms no Worker Thread (inclui ida e volta). Em 21.05, o módulo real worker.js executou num Worker Thread real, com respostas entregues em ordem inversa ([25,4]) e associadas corretamente às chamadas ([4,25]); erro de tarefa rejeitou só a própria chamada, a seguinte retornou 1, e encerrar rejeitou o trabalho pendente e chamou terminate uma vez. O browser nativo foi tentado via Playwright/CUA e Edge/Chrome headless, mas o loopback do servidor local expirou e os binários headless falharam ao iniciar no sandbox; o cenário de navegador não está homologado. Em 22.05, o comando Windows 'node .\a.js' não imprimia o resultado porque a URL de entrada tratava incorretamente o caminho relativo; a fonte scripts/task-9-stage22.mjs agora normaliza o caminho com resolve/pathToFileURL. A geração em cópia temporária foi aplicada somente à entrada 22.05 dos artefatos, à referência e ao teste correspondentes. Após a correção, 'node .\a.js' imprime 15; importar a.js não executa o CLI; a API retorna 15, JSON inválido lança SyntaxError e formato inválido lança TypeError. 'npm run test:course-node-runtime' passou 12/12, incluindo o fixture de Worker/browser do runtime Node simulado. Os demais IDs de 21.01–22.07 não foram revisados nesta seleção.
 
@@ -495,10 +783,10 @@ Se o objetivo escolhido for aprender empacotamento, manter a prova pertinente (p
 ## Fase 20: Fechamento leve do trabalho realizado
 
 **Quando:** após concluir os lotes escolhidos para a rodada de estudo. Etapas avançadas adiadas permanecem adiadas; este fechamento não declara que foram executadas.
-- [ ] Confirmar que as correções da rodada têm uma verificação pertinente e que nenhum defeito confirmado impede o exercício usado ou põe seu progresso em risco.
-- [ ] Executar os testes existentes afetados e npm run check:curriculum. Rodar npm test no fechamento da rodada ampla, com limite de tempo e registro de eventuais falhas/travamentos; não repeti-lo a cada edição de texto. Uma falha confirmada no caminho usado precisa ser corrigida; outras falhas conhecidas ficam identificadas e adiadas, sem alegar suíte global verde.
-- [ ] Abrir o site no navegador habitual: estudar uma atividade alterada, fazer uma tentativa incorreta e uma válida quando houver avaliação, executar e conferir o retorno; salvar um rascunho/progresso e recarregar para confirmar a restauração. Exercitar ajuda ou modos de estudo que tenham sido alterados ou sejam usados nesse percurso.
-- [ ] Se a rodada mudou DOM, Worker, runner ou persistência, conferir o comportamento afetado no navegador real; testes sintéticos não substituem essa observação. Não exigir repetir todos os fluxos e navegadores.
+- [ ] Confirmar que as correções da rodada têm uma verificação pertinente e que nenhum defeito de conteúdo impede fazer localmente o exercício utilizado.
+- [ ] Executar os testes focais pertinentes ao material alterado. Se houve geração curricular, executar o check correspondente com limite de tempo e registrar falhas/limitações. Não exigir npm test global nem corrigir infraestrutura interna para encerrar uma rodada de conteúdo; preservar os testes existentes, sem alegar suíte global verde.
+- [ ] Conferir que o material alterado pode ser lido e copiado do site e que enunciado, código, arquivos e resultados esperados bastam para usar com IA e praticar fora dele. Executar o exercício na máquina local quando seu objetivo exigir execução; o site não precisa receber a tentativa, executar código ou aprovar a resposta.
+- [ ] Se o proprietário usar rascunho/progresso do site e esse recurso tiver sido alterado, conferir salvamento e recarga. DOM, Worker e persistência do programa estudado são verificados no projeto local quando fizerem parte do objetivo, sem exigir suporte equivalente na plataforma.
 - [x] Registrar em poucas linhas: atividades corrigidas, comandos/resultados, percurso manual conferido e pendências realmente adiadas.
 
 **Registro Fase 20 — 19/10/2026:** revisão limitada aos trabalhos focais de 19.08, 20.08, 22.05 e 22.08 das fases 17–19; nesta fase, nenhuma fonte funcional foi alterada.
@@ -509,8 +797,8 @@ Se o objetivo escolhido for aprender empacotamento, manter a prova pertinente (p
 - `npm.cmd test` foi executado uma vez com teto aproximado de 10 min e interrompido ainda em `test:stage02`; saída final do comando: exit 1 por interrupção, não por falha observada nessa parte. Blocos concluídos observados: catálogo 4/4, learning 62/62, executors 224 aprovados/0 falhas/1 skip (225 total), test-course-test-runtime 10/10, test-course-node-runtime 12/12, layout 4/4 e Stage 01 61/61. O resumo do executor marcou 21.05 como skip por exigir Worker nativo. Fases seguintes e o restante de Stage 02 não foram concluídos; não há resultado de suíte global.
 - Tentativa no navegador: o inventário confirmou uma janela Edge “Estudar programacao”; a automação Windows dessa janela expirou antes do controle. O servidor local `vinext dev` iniciou a varredura de dependências, mas o acesso a `http://127.0.0.1:5173/` falhou no próprio host com `EACCES` de socket e no Edge com `ERR_CONNECTION_REFUSED`. Não foi possível fazer tentativa errada/correta nem salvar/recarregar rascunho/progresso. A aba local de erro foi fechada e não há processo `node`/`npm` remanescente. A caixa de percurso em navegador, incluindo a observação do Worker nativo, permanece pendente por bloqueio de acesso ao servidor loopback no sandbox; nenhum defeito funcional foi confirmado que justificasse editar código nesta fase.
 
-**Dispensado:** exigir fases 21–23 concluídas, recontar todos os indicadores editoriais, atingir zero avisos, cobertura total, revisão de todo o catálogo ou homologação de lançamento. Nenhum gate será desligado para obter aprovação.
-**Saída:** o percurso pessoal trabalhado permite estudar, praticar e retomar o progresso; testes pertinentes passam e os limites são explícitos. O plano pode ser retomado na próxima etapa sem reabrir o que continua correto.
+**Dispensado:** exigir fases 21–23 concluídas, recontar todos os indicadores editoriais, atingir zero avisos, cobertura total, revisão de todo o catálogo, homologação de lançamento, execução/correção interna ou um percurso de tentativa errada/correta no site. Os bloqueios históricos de loopback, automação e Worker interno não geram tarefa de adaptação da plataforma. Nenhum gate será desligado para obter aprovação.
+**Saída:** o material trabalhado permite estudar com IA e executar/conferir localmente quando necessário; verificações pertinentes e seus limites estão registrados. O progresso do site só entra na conferência se for utilizado e tiver sido afetado. O plano pode ser retomado na próxima etapa sem reabrir o que continua correto.
 
 ## Fase 21: Dispensada como fase independente — critérios editoriais
 
@@ -529,3 +817,7 @@ Se o objetivo escolhido for aprender empacotamento, manter a prova pertinente (p
 ## Registro desta revisão — 18/10/2026
 
 Replanejamento documental aprovado na conversa para uso privado como auxiliar de estudo: 10 fases reduzidas (11–20) e 3 retiradas da fila autônoma (21–23, com acessibilidade condicional). Mantidos os registros das fases 1–10, IDs, escopos de referência e mapa de fontes; substituídas as regras globais e o trabalho futuro pelo critério de utilidade pessoal. Nenhuma alteração funcional, execução das fases futuras, remoção de teste, commit ou publicação faz parte desta revisão.
+
+## Ajuste de escopo — 19/10/2026
+
+O proprietário esclareceu que copia os exercícios para uma IA e executa JavaScript, TypeScript e demais programas na própria máquina. A regra vale para as 23 fases e todas as etapas curriculares: retiradas as obrigações futuras de adaptar estrutura, runners e corretores do site, homologar execução interna, obter nota automática ou registrar tentativas externas. Mantidos conteúdo correto, material copiável/suficiente, comandos e arquivos necessários, resultados esperados e testes locais pertinentes ao aprendizado. Ajustados o fechamento da fase 20 e o enquadramento da prova local de Worker da fase 18; execução local de DOM/Worker não foi confundida com suporte na plataforma. Registros históricos, IDs, ordem e recursos existentes preservados. Revisão somente documental; sem alteração funcional, remoção de testes, commit ou publicação.

@@ -2370,7 +2370,7 @@
       "correctFeedback": "Correto. A espera reiniciada caracteriza debounce; throttle aplica um limite de frequência conforme a política escolhida.",
       "incorrectFeedback": "Compare quando cada função pode emitir: debounce espera silêncio após o evento mais recente, enquanto throttle limita chamadas ao longo das janelas."
     },
-    "prompt": "Implementar ambos, simular 100 eventos e medir numero/tempo de chamadas.\n\nContrato da entrega (21.07):\n- Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).\n- relogio fornece agora(), setTimeout(fn, ms) e clearTimeout(id). Simule 100 eventos em t=0,10,...,990 ms.\n- Debounce final chama uma vez em t=1090; throttle inicial chama em t=0,100,...,900."
+    "prompt": "Implementar ambos, simular 100 eventos e medir numero/tempo de chamadas.\n\nContrato da entrega (21.07):\n- Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).\n- No cronograma de quatro eventos do starter (t=0,20,40,160), debounce trailing chama em t=140,260 e throttle leading em t=0,160.\n- Em cenário separado de 100 eventos (t=0,10,...,990), debounce trailing chama em t=1090 com valor 99 e throttle leading em t=0,100,...,900.\n- Throttle leading aceita na borda quando t - última chamada >= 100; debounce trailing dispara ao avançar o relógio até o prazo após o último evento."
   },
   "21.08": {
     "objective": "Trace a aquisição e a liberação do recurso no caso síncrono e no assíncrono; anote também o fallback de compatibilidade.",
@@ -3046,7 +3046,7 @@
       "correctFeedback": "Uma estrutura estável torna mais previsíveis as consultas e análises posteriores.",
       "incorrectFeedback": "Estruturar não escolhe o conteúdo por conta própria, e texto livre ainda pode ser legível; a vantagem é a consistência."
     },
-    "prompt": "Instrumente operação com ID, duração, nível do log e Error.cause; reproduza falha e produza relatório sem token.\n\nContrato da entrega (23.09):\n- Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.\n- Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada."
+    "prompt": "Instrumente operação com ID, duração, nível do log e Error.cause; reproduza falha e produza relatório sem token.\n\nContrato da entrega (23.09):\n- Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.\n- Resposta pública informa apenas falha e ID; log interno preserva causa técnica útil com Authorization, Cookie e Token redigidos em campos aninhados, sem mutar a entrada."
   },
   "23.08": {
     "objective": "Esboce o MVP escolhido e indique como domínio, persistência, interface, API tipada, testes e documentação se relacionam.",
@@ -3078,7 +3078,7 @@
     }
   },
   "20.08": {
-    "prompt": "Projete uma pipeline lazy de map/filter/take para fonte potencialmente infinita. Registre uma hipótese e um contador de pulls antes de implementar; escreva o primeiro teste autoral, implemente os generators e revise encerramento antecipado.\n\nContrato da entrega (20.08):\n- pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().\n- Cada operador retorna um novo pipeline lazy; take limita valores aceitos, take(0) não consome e return() da fonte é respeitado ao interromper a iteração."
+    "prompt": "Projete uma pipeline lazy de map/filter/take para fonte potencialmente infinita. Registre uma hipótese e um contador de pulls antes de implementar; escreva o primeiro teste autoral, implemente os generators e revise encerramento antecipado.\n\nContrato da entrega (20.08):\n- pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().\n- source é um iterable. Array cria novo iterator; a mesma instância generator pode estar consumida; para repetir, chame a fábrica e passe a nova instância a outra pipeline.\n- Cada operador retorna um pipeline lazy independente; take limita valores aceitos, take(0) não consome, filtros podem descartar pulls, e return() da fonte é propagado ao interromper a iteração."
   },
   "20.09": {
     "prompt": "Investigue a relação entre produtor e consumidor sob uma strategy de fila declarada. Colete sequência de eventos e explique como a demanda influencia o produtor sem inferir valores universais.\n\nContrato da entrega (20.09):\n- Exporte criarStream(): {stream:ReadableStream,eventos:Array} e consumirLento(source,wait=0): Promise<{values:number[],eventos:Array}>.\n- Leia 1,2,3 e cancele com motivo \"consumidor terminou\"; cada evento pull registra desiredSize numérico."

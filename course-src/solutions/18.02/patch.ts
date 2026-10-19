@@ -1,1 +1,6 @@
-export type Perfil={nome:string;tema:'claro'|'escuro'}; export type Usuario={id:number;nome:string;perfil:Perfil}; export function aplicarPatch<T extends object>(base:T,patch:Partial<T>):T{return {...base,...patch};}
+export type Perfil = { nome: string; tema: "claro" | "escuro" };
+export type Usuario = { id: number; nome: string; perfil: Perfil };
+
+export function aplicarPatch<T extends object>(base: T, patch: Partial<T>): T {
+  return { ...base, ...patch };
+}

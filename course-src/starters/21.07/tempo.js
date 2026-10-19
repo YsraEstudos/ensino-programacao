@@ -1,7 +1,8 @@
 // Contrato visível 21.07:
 // Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).
-// relogio fornece agora(), setTimeout(fn, ms) e clearTimeout(id). Simule 100 eventos em t=0,10,...,990 ms.
-// Debounce final chama uma vez em t=1090; throttle inicial chama em t=0,100,...,900.
+// No cronograma de quatro eventos do starter (t=0,20,40,160), debounce trailing chama em t=140,260 e throttle leading em t=0,160.
+// Em cenário separado de 100 eventos (t=0,10,...,990), debounce trailing chama em t=1090 com valor 99 e throttle leading em t=0,100,...,900.
+// Throttle leading aceita na borda quando t - última chamada >= 100; debounce trailing dispara ao avançar o relógio até o prazo após o último evento.
 
 // 21.07 · Debounce e throttle com relógio falso (determinístico).
 // O relógio falso substitui setTimeout/Date.now para medir número e instante das chamadas.

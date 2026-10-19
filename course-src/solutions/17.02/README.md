@@ -1,6 +1,3 @@
 # Referência 17.02
 
-Para Parsons de repository, inspecione repositorio.ts e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.
-
-## Transferência
-Escolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.
+`pair<K, V>` preserva os papéis da chave e do valor; `pair("a", 2)` tem tipo `[string, number]`. `wrap<T>` devolve `{ value: T }`. `Repository<T extends Entity>` exige `id: string` e conserva a entidade concreta em `save` e `get`; uma busca ausente retorna `undefined`. O exercício altera assinaturas e não pede implementação de armazenamento. `Entity` pode ser interface ou type conforme extensão/composição necessárias; nenhum é universalmente superior.

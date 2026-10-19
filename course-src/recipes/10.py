@@ -50,32 +50,32 @@ CONTENT = {
     ),
     "10.02": C(
         "classes.encapsulation",
-        "blocos de class Cofre {#saldo; constructor(inicial); depositar(valor); get saldo()} embaralhados",
+        "class Cofre com #saldo, constructor, depositar e getter; o constructor não normaliza saldo inicial negativo",
         "new Cofre(2).depositar(3); saldo -> 5",
-        "saldo inicial negativo -> saldo inicial 0; depósito zero/negativo -> retorna false e não altera o saldo; #saldo só pode ser acessado no corpo da classe",
+        "new Cofre(-4).saldo -> 0; depósito zero/negativo -> retorna false e não altera o saldo; #saldo só pode ser acessado no corpo da classe",
         "Declarar campo privado fora da instância ou omitir validação.",
         (
             "Class tem declaração, constructor e métodos.",
-            "#saldo é inicializado no constructor.",
+            "#saldo é inicializado no constructor; normalize inicial negativo antes de guardar.",
             "Getter só lê; depositar valida antes de alterar.",
         ),
         "A classe mantém #saldo e expõe getter de leitura. O constructor normaliza inicial negativo para 0; depositar(valor) retorna false sem mutar quando valor<=0 e retorna true após depósito positivo.",
         "Cofre com saque validado -> saldo não pode ficar negativo",
         load={'novelty': 3, 'syntax': 4, 'composition': 4, 'state': 4, 'debugging': 2, 'files': 1, 'reading': 4, 'independence': 4, 'tools': 2},
-        kind="PARSONS",
+        kind="DEBUG",
         estimated=10,
-        prompt="Ordene os blocos da classe e complete a implementação. Antes de executar, escreva onde o campo privado é inicializado e quais operações podem alterar saldo. Depois rode o cenário e acrescente um teste que proteja o invariante da classe.",
+        prompt="Corrija o constructor da classe Cofre para nunca aceitar saldo negativo. Antes de executar, escreva onde o campo privado é inicializado e quais operações podem alterar saldo. Depois rode o cenário e acrescente um teste que proteja o invariante da classe.",
         explanation={
             "mental_model": "Campos privados com `#` pertencem à instância da classe e só podem ser acessados no corpo autorizado. O constructor estabelece estado inicial; métodos públicos validam mudanças e um getter pode expor leitura sem liberar mutação direta.",
             "worked_example": "Uma classe `Vagas` pode inicializar `#livres` no constructor, expor um getter e oferecer `reservar()`. A operação verifica a condição antes de diminuir o valor; código externo consulta a quantidade, mas não escreve diretamente no campo privado.",
             "common_trap": "Não atribua o campo privado fora da classe nem permita que uma mutação viole o invariante. Faça a validação antes de alterar o estado.",
             "why_it_matters": "Encapsular estado torna explícito quais operações são permitidas e protege invariantes locais sem precisar de arquitetura externa.",
         },
-        first_response="Marque nos blocos onde o campo privado nasce, onde muda e qual interface externa apenas o consulta.",
-        first_response_timing="Nos primeiros 2 minutos, antes de ordenar ou executar os blocos.",
-        interaction="Parsons por botões de subir/descer ou lista acessível com ordem escolhida; depois editor para completar validação. Saída de erros e leituras aparece como texto.",
+        first_response="Marque no starter onde o campo privado nasce, onde muda e qual interface externa apenas o consulta.",
+        first_response_timing="Nos primeiros 2 minutos, antes de corrigir ou executar.",
+        interaction="Editor com o starter e saída esperada/recebida em texto; foco por teclado e anúncio acessível do saldo após cada operação.",
         resources=(
-            "Starter do exercício incluído no cartão: blocos de class Cofre {#saldo; constructor(inicial); depositar(valor); get saldo()} embaralhados",
+            "Starter do exercício incluído no cartão: class Cofre com #saldo, constructor, depositar e getter; o constructor não normaliza saldo inicial negativo",
             "Documentação oficial indicada: MDN private elements: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_elements",
         ),
         review={
@@ -99,7 +99,7 @@ CONTENT = {
         "prototypes.method_sharing",
         "main.js: export function criarPonto(x,y){}; const proto={mover(dx,dy){}}",
         "a=criarPonto(1,2); b=criarPonto(3,4); Object.getPrototypeOf(a)===Object.getPrototypeOf(b) -> true",
-        "a.mover(2,-1) -> a=(3,1), b=(3,4); a.hasOwnProperty('mover') -> false",
+        "a.mover(2,-1) -> a=(3,1), b=(3,4); Object.hasOwn(a,'mover') -> false",
         "Copiar método para cada instância e chamar isso de compartilhamento.",
         (
             "Crie um único objeto protótipo.",
@@ -146,7 +146,7 @@ CONTENT = {
         "objects.method_binding",
         "main.js: let obj={valor:4,ler(){return this.valor}}; const fixo=obj.ler.bind({valor:4}); const wrapper=()=>obj.ler(); obj.valor=5; const antes=[fixo(),wrapper()]; obj={valor:9,ler(){return this.valor}}; console.log(antes,fixo(),wrapper());",
         "após correção: antes da troca -> fixo=5, wrapper=5; após obj ser substituído -> fixo=5 (objeto original, propriedade atualizada), wrapper=9 (objeto atual no instante da chamada)",
-        "obj.valor=5; console.log(fixo(),wrapper()); obj={valor:9,ler(){return this.valor}}; console.log(fixo(),wrapper()) -> first calls [5,5]; calls after reassignment [5,9]",
+        "obj.valor=5; console.log(fixo(),wrapper()); obj={valor:9,ler(){return this.valor}}; console.log(fixo(),wrapper()) -> primeiras chamadas [5,5]; chamadas após a reatribuição [5,9]",
         "bind deve receber o objeto original; prendê-lo a um objeto copiado deixa o callback com estado desatualizado.",
         (
             "Compare obj.ler() com ler().",
@@ -241,7 +241,7 @@ CONTENT = {
     ),
     "10.06": C(
         "design.composition",
-        "hierarquia artificial Personagem->MagoCuradorVoador; capacidades mover/atacar/curar recebem estado explícito",
+        "main.js: classes Personagem, Mago, Guerreiro e MagoGuerreiro; criarPersonagem escolhe a classe pelas capacidades; mover/atacar/curar ainda mutam o estado",
         "entidade com mover+curar -> move e cura; entidade sem atacar -> não expõe atacar",
         "duas entidades compartilham função de capacidade -> funções compartilhadas, vida isolada por entidade",
         "Criar subclasses para cada combinação e compartilhar estado mutável entre entidades.",
@@ -266,7 +266,7 @@ CONTENT = {
         first_response_timing="Nos primeiros 3 minutos, antes de modificar a hierarquia.",
         interaction="Editor de composição com checklist textual de capacidades e duas entidades; resultados mostram operações disponíveis e estado por objeto. Checklist acessível por teclado/leitor de tela.",
         resources=(
-            "Starter do exercício incluído no cartão: hierarquia artificial Personagem->MagoCuradorVoador; capacidades mover/atacar/curar recebem estado explícito",
+            "Starter do exercício incluído no cartão: classes Personagem, Mago, Guerreiro e MagoGuerreiro; criarPersonagem escolhe a classe pelas capacidades; mover/atacar/curar ainda mutam o estado",
             "Documentação oficial indicada: MDN Classes: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes ; MDN Functions: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions",
         ),
         review={

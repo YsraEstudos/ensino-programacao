@@ -1,6 +1,6 @@
 # 23.09 — Logs sem segredos
 
-Redação profunda percorre objetos e arrays e compara chaves sem diferenciar maiúsculas. Logger grava ID, resultado e duração monotônica; validação é warn e falha técnica error com cause redigida. Resposta pública não contém mensagem/cause técnica. Use lerLogs para auditar o evento serializado e limparLogs entre casos.
+Redação profunda percorre objetos e arrays e compara chaves sem diferenciar maiúsculas. Logger grava ID, resultado e duração monotônica; validação é warn e falha técnica error com cause redigida. A resposta pública informa apenas falha e ID de correlação; os logs internos preservam contexto técnico útil com segredos redigidos. redigir() cria cópia, inclusive para objetos e arrays aninhados, e não muta a entrada. Use lerLogs para auditar e limparLogs entre casos.
 
 ## Transferência independente
 

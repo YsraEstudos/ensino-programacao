@@ -74,3 +74,4 @@ assert.equal(result.ok, false);
 assert.equal(result.lines.length, 0);
 
 console.log('stage01 runner tests passed');
+import './test-stage01-authoring.mjs';

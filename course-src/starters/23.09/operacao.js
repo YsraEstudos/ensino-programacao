@@ -1,6 +1,6 @@
 // Contrato visível 23.09:
 // Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.
-// Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada.
+// Resposta pública informa apenas falha e ID; log interno preserva causa técnica útil com Authorization, Cookie e Token redigidos em campos aninhados, sem mutar a entrada.
 
 // 23.09 · Falha observável sem segredo.
 // Complete o redator e a instrumentação. O token NUNCA pode aparecer em nenhuma linha de log.

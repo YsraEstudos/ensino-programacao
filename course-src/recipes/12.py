@@ -68,11 +68,12 @@ CONTENT = {
          ),
 "12.02": C(
     'async.retry',
-    ('blocos embaralhados: attempt=0; try await op(); catch; se attempt<max await delay; '
-     'senão throw'),
-    'op falha duas vezes e resolve na 3ª, max=3 -> 3 chamadas, resultado',
-    ('max=1 com falha -> 1 chamada e erro original; delay só entre tentativas; max<=0 -> '
-     'rejeição de validação antes da primeira chamada'),
+    ('main.js: tentar usa o laço com tentativa<=max e espera após a última falha; corrigir '
+     'para o máximo exato e espera só entre tentativas'),
+    ('op falha duas vezes e resolve na 3ª, max=3 -> 3 chamadas e resultado; op sempre falha '
+     'com max=2 -> 2 chamadas, 1 espera e o erro original; o starter excede o limite e espera após a última falha'),
+    ('max=1 com falha -> 1 chamada, nenhuma espera e erro original; delay só entre '
+     'tentativas; max<=0 -> rejeição de validação antes da primeira chamada'),
     'Repetir infinitamente ou esperar após última falha.',
     ('Defina se max conta tentativas totais.',
      'Incremente antes de executar op.',
@@ -81,23 +82,24 @@ CONTENT = {
      'await delay; valide max.'),
     'Retry de gravação transitória com máximo fixo -> chamadas e atrasos exatos',
     load={"novelty": 2, "syntax": 3, "composition": 4, "state": 4, "debugging": 3, "files": 2, "reading": 3, "independence": 3, "tools": 2},
-        kind='PARSONS',
+        kind='DEBUG',
     estimated=10,
     runtime='Node.js 24 LTS',
     requires=('errors.types',),
-    **_lesson('async.retry', ('blocos embaralhados: attempt=0; try await op(); catch; se attempt<max await delay; '
-     'senão throw'), 'Repetir infinitamente ou esperar após última falha.', ('Defina se max conta tentativas totais.',
+    **_lesson('async.retry', ('main.js: tentar usa o laço com tentativa<=max e espera após a última falha; corrigir '
+     'para o máximo exato e espera só entre tentativas'), 'Repetir infinitamente ou esperar após última falha.', ('Defina se max conta tentativas totais.',
      'Incremente antes de executar op.',
      'Só aguarde se ainda houver tentativa.'), ('Loop for attempt de 1 a max, return await op no try; catch relança na última, senão '
-     'await delay; valide max.'), 'Retry de gravação transitória com máximo fixo -> chamadas e atrasos exatos', 10, 'Node.js 24 LTS', ('Ordene os blocos de retry e declare se max representa tentativas totais. Inclua '
-     'validação e os pontos onde uma espera é permitida.',
+     'await delay; valide max.'), 'Retry de gravação transitória com máximo fixo -> chamadas e atrasos exatos', 10, 'Node.js 24 LTS', ('Corrija `tentar` para executar no máximo `max` chamadas e aguardar somente quando '
+     'ainda houver nova tentativa, preservando o erro original. Reproduza os casos, altere o '
+     'código e confira chamadas e esperas antes e depois.',
      'Se uma gravação de arquivo puder ser tentada duas vezes, uma falha transitória na '
      'primeira chamada permite uma espera e uma última chamada; não há espera depois da '
      'falha final.',
-     'Defina o significado de max e marque no laço a única transição que pode aguardar '
-     'antes de uma nova tentativa.',
-     'Blocos reordenáveis por teclado com contador de tentativas e log de atrasos '
-     'virtuais; sem arrastar.',
+     'Antes de rodar, conte quantas chamadas e esperas o starter produz com max=2 e explique '
+     'por que cada contagem contraria o contrato.',
+     'Editor com o starter, contador de chamadas e log de atrasos virtuais; foco por teclado '
+     'e falhas anunciadas sem depender de cor.',
      'Starter com operação e delay injetados, promises locais controláveis e saída de '
      'chamadas/esperas/erros.',
      'Quando retry deve esperar antes de chamar a operação novamente?',
@@ -227,8 +229,8 @@ CONTENT = {
     ('search(q) recebe un fetcher injetado; fixtures determinísticas controlam resposta, '
      'rejeição e atraso; AbortController; UI loading/result/error'),
     'fixture A lenta, depois B rápida -> B visível; A abortada',
-    ('abort anterior ocorre antes de iniciar B; resposta A chega tardiamente apesar de '
-     'abort -> token de sequência impede sobrescrita; AbortError não aparece como erro ao '
+    ('Busca substituída ou abortada -> null; a resposta A pode chegar tarde apesar do '
+     'abort, mas o token impede sobrescrita; AbortError não aparece como erro ao '
      'usuário; nenhuma chamada à rede externa'),
     'Confiar só na ordem de chegada ou mostrar abort como falha.',
     ('Guarde controller corrente.',
@@ -248,8 +250,8 @@ CONTENT = {
      'Antes de render, cheque id e trate AbortError separado.'), ('Injete fetcher controlado nos exemplos: cada busca cria controller e geração; nova '
      'busca aborta anterior; somente geração atual altera UI e erros de cancelamento são '
      'silenciosos. Não use endpoint real.'), 'Autocomplete com fixture atrasada -> resultado mais recente vence sem depender da rede', 25, 'browser', ('Implemente a busca somente com o fetcher injetado e fixtures determinísticas. '
-     'Cancele trabalho obsoleto e proteja a renderização se uma resposta antiga chegar '
-     'tarde.',
+     'Cancele trabalho obsoleto e devolva null quando a busca foi substituída ou abortada; '
+     'falhas reais continuam rejeitando.',
      'Busque uma cidade com fixture lenta e depois outra com fixture rápida. Mesmo que a '
      'primeira resolva por último apesar do abort, um id de geração impede que substitua o '
      'resultado novo.',
@@ -313,7 +315,8 @@ CONTENT = {
      'geração por atualização'),
     ('duas fixtures 200 com JSON válido -> sucesso com dois painéis; retry após fixture de '
      'erro -> nova tentativa'),
-    ('fixture HTTP 404 -> erro mesmo com Promise resolvida; JSON inválido -> erro; fixture '
+    ('fixture HTTP 404 -> erro mesmo com Promise resolvida; JSON inválido -> erro; payload '
+     'sem nome string ou total finito -> erro de validação; fixture '
      'antiga lenta -> não sobrescreve nova; loading finaliza; nenhuma requisição externa'),
     'Assumir que fetch rejeita em status HTTP de erro.',
     ('Cheque response.ok; parseie o JSON uma vez.',
@@ -636,11 +639,11 @@ CONTENT["12.16"] = C(
 
 _LITERAL_STARTERS = {
     '12.01': "main.js: console.log('A');\nsetTimeout(() => console.log('T'), 0);\nPromise.resolve().then(() => console.log('P'));\nconsole.log('B');",
-    '12.02': "material.md: Bloco A: let tentativa = 0;\nBloco B: while (tentativa < max) {\nBloco C: try { return await operacao(); }\nBloco D: catch (erro) {\nBloco E: if (tentativa === max - 1) throw erro;\nBloco F: await esperar(atraso);\nBloco G: tentativa += 1;\nBloco H: }\n\nContexto: async function tentar(operacao, max, esperar, atraso) { /* ordenar blocos */ } Atraso só ocorre antes de uma nova tentativa.",
+    '12.02': "main.js: export async function tentar(operacao, max, esperar, atraso) {\n  if(!Number.isInteger(max)||max<1)return Promise.reject(new RangeError('max deve ser inteiro positivo')); let ultima;\n  for(let tentativa=0;tentativa<=max;tentativa++){try{return await operacao();}catch(erro){ultima=erro;await esperar(atraso);}}\n  return Promise.reject(ultima);\n}\n\nDefeitos: o laço executa max+1 chamadas e a espera ocorre até depois da última falha; corrigir para o máximo exato e espera só entre tentativas.",
     '12.03': "main.js: export async function carregar(api) {\n  // api.produtos(), api.usuarios() e api.precos() são independentes.\n  // TODO: iniciar as três operações em paralelo e devolver os resultados na ordem acima.\n}\n",
     '12.04': "main.js: console.log('A');\nPromise.resolve().then(() => {\n  console.log('P1');\n  Promise.resolve().then(() => console.log('P2'));\n});\nqueueMicrotask(() => console.log('Q'));\nsetTimeout(() => console.log('T'), 0);\nconsole.log('B');",
     '12.05': "profile.js: export async function carregar(fetchProfile) {\n  try {\n    return fetchProfile();\n  } catch (erro) {\n    return { nome: 'offline' };\n  }\n}\n\n// fetchProfile() devolve uma Promise que pode rejeitar depois da chamada.\n// O fallback deveria ser usado quando essa rejeição ocorre.",
-    '12.06': "search.js: export function criarBusca(fetcher) {\n  let controllerAtual;\n  let sequencia = 0;\n  return async function buscar(query) {\n    // TODO: cancelar a busca anterior, iniciar a nova e ignorar resposta obsoleta.\n    // fetcher(query, { signal }) usa fixtures locais e pode resolver/rejeitar com atraso.\n  };\n}\n",
+    '12.06': "search.js: export function criarBusca(fetcher) {\n  let controllerAtual;\n  let sequencia = 0;\n  return async function buscar(query) {\n    // TODO: cancelar a busca anterior, iniciar a nova e devolver null se esta chamada\n    // ficar obsoleta ou receber AbortError. Falhas reais devem continuar rejeitando.\n    // fetcher(query, { signal }) usa fixtures locais e pode resolver/rejeitar com atraso.\n  };\n}\n",
     '12.07': "material.md: // São seis requisitos possíveis: esperar todas; conservar sucessos parciais; primeiro a terminar; primeiro sucesso; corrida com timeout; consultar réplicas.\n// Para cada requisito, escolha all, allSettled, race ou any e registre efeitos de cancelamento/limpeza.",
     '12.08': "dashboard.js: export async function criarDashboard(fetcher, options = {}) {\n  // options: {onState, timeoutMs, signal}; a chamada com apenas fetcher continua válida.\n  // fetcher(path, {signal}) usa fixtures locais para /profile e /stats.\n  // TODO: emitir loading e resultado final, validar HTTP/JSON e encerrar timeout/cancelamento.\n  // Resultado: success com profile/stats, error com error.status/name ou stale sem notificação.\n}\n",
     '12.09': "material.md: const callback = () => 3;\nconst nativo = Promise.try(callback);\nconst comFallback = (() => {\n  try { return Promise.resolve(callback()); }\n  catch (erro) { return Promise.reject(erro); }\n})();\n\nCompare quando callback roda e como um throw síncrono vira rejeição. Promise.resolve().then(callback) adia a chamada para uma microtask.",
@@ -718,7 +721,9 @@ CONTENT["12.08"]["prompt"] += (
     "`criarDashboard(fetcher)` continua válida. O fetcher recebe `(path, {signal})` e usa somente "
     "fixtures. `onState` recebe `{status:'loading'}` e, ao final da geração atual, `{status:'success', "
     "profile, stats}` ou `{status:'error', error}`. Erro HTTP expõe `error.status`; timeout e cancelamento "
-    "retornam `status:'error'` com `error.name` igual a `TimeoutError` ou `AbortError`. O mesmo objeto "
+    "retornam `status:'error'` com `error.name` igual a `TimeoutError` ou `AbortError`. O schema mínimo "
+    "de sucesso é `profile.nome` string e `stats.total` número finito; payload fora dessa forma termina "
+    "em `status:'error'` com `error.name` `TypeError`, sem notificar sucesso. O mesmo objeto "
     "fetcher identifica as gerações do dashboard: somente a chamada mais recente notifica; uma anterior "
     "que termine depois retorna `{status:'stale'}` sem chamar `onState`. Timeout e sinal externo encerram "
     "a espera mesmo se a fixture não respeitar o AbortSignal."

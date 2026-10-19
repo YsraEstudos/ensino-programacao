@@ -18,7 +18,5 @@ export async function reabrir(
   tarefaId: string,
   agora: () => Date = () => new Date(),
 ): Promise<Estado> {
-  // implemente: usuário comum -> ForbiddenError antes de qualquer escrita;
-  // tarefa inexistente ou fora de "feito" -> erro de validação;
-  // admin -> estado com a tarefa em "a-fazer" + evento de auditoria salvos juntos.
+  throw new Error("TODO: implemente o contrato desta função");
 }

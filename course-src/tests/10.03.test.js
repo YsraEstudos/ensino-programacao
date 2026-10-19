@@ -9,7 +9,7 @@ describe("protótipo compartilhado", () => {
   });
   test("mover é herdado, não propriedade própria", () => {
     const a = criarPonto(1, 2);
-    /*@case 10.03.mover-e-herdado-nao-propried-5d8615ed*/expect(a.hasOwnProperty("mover")).toBe(false);
+    /*@case 10.03.mover-e-herdado-nao-propried-5d8615ed*/expect(Object.hasOwn(a, "mover")).toBe(false);
     /*@case 10.03.mover-e-herdado-nao-propried-095d6b17*/expect(typeof a.mover).toBe("function");
     /*@case 10.03.mover-e-herdado-nao-propried-125ff5bb*/expect(Object.hasOwn(a, "x") && Object.hasOwn(a, "y")).toBe(true);
   });

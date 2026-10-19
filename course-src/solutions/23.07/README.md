@@ -1,6 +1,6 @@
 # 23.07 — Reabertura autorizada no capstone
 
-A autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos. Rode a suíte de contrato 23.08. Teste comum, admin, inexistente, coluna errada, relógio injetado e falha atômica.
+A autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos. Na pasta copiada, rode npm ci, npm test e npm run typecheck. O pacote declara Node >=24, TypeScript 6.0.3 e @types/node 24.19.1; Node 26.7.0 foi usado na conferência. A suíte cobre CRUD anterior, negação sem gravação, reabertura admin com auditoria e falha atômica.
 
 ## Transferência independente
 
@@ -16,8 +16,10 @@ Em um domínio de reembolsos, só gerente aprova solicitação liquidada; negar 
 
 ## Verificação local
 
-node --experimental-strip-types --test test/reabrir.test.ts
+npm ci
 
-node node_modules/typescript/bin/tsc --ignoreConfig --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions src/dominio.ts src/portas.ts src/adapters/memoria.ts src/reabrir.ts
+npm test
+
+npm run typecheck
 
 Limite: esta evidência é local/contida e não representa aprovação de navegador nem publicação.

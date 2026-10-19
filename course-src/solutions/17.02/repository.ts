@@ -1,1 +1,4 @@
-export type Entity={id:string|number}; export function pair<K,V>(key:K,value:V):readonly [K,V]{return [key,value];} export function wrap<T>(value:T){return {value};} export interface Repository<T extends Entity,ID=T['id']>{save(value:T):void;get(id:ID):T|undefined;}
+export interface Entity { id: string }
+export function pair<K, V>(key: K, value: V): [K, V] { return [key, value]; }
+export function wrap<T>(value: T): { value: T } { return { value }; }
+export interface Repository<T extends Entity> { save(entity: T): T; get(id: Entity["id"]): T | undefined; }

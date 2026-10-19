@@ -1,5 +1,14 @@
 {
   "name": "devpath-16-08",
   "version": "1.0.0",
-  "type": "module"
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "node --test *.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "typescript": "6.0.3"
+  }
 }

@@ -2,8 +2,6 @@
 // Exporte ValidationError(campo,mensagem), StorageError(mensagem,cause) e criarTarefa(entrada,repositorio,criarId): Promise<Tarefa>.
 // Tarefa tem ID injetável, título sem espaços externos, prazo opcional em data ISO real e status inicial a-fazer.
 // Título vazio e prazo inválido lançam ValidationError antes de salvar; falha do repositório lança StorageError cujo cause é a mesma referência original.
-// Exporte ValidationError(campo,mensagem), StorageError(mensagem,cause) e criarTarefa(entrada,repositorio,criarId): Promise<Tarefa>.
-// Normalize título, valide prazo ISO real antes de salvar e use status a-fazer. Entrada inválida não chama salvar; falha do repositório vira StorageError com a mesma referência em cause.
 
 // 23.03 · Contrato de criarTarefa antes da implementação.
 // Complete os tipos, as invariantes e os erros nos blocos JSDoc. Ainda não implemente o corpo.

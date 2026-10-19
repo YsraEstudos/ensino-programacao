@@ -3398,6 +3398,54 @@
         "executionScope": "browser-behavior-suite"
       },
       {
+        "id": "06.08.v2-sem-audio-e-versao-textua-1ebc12bb",
+        "sourceTestPath": "tests/06.08.test.js",
+        "testName": "v2 sem áudio e versão textual restauram o padrão",
+        "inputExpression": "migrar('{\"version\":2}')",
+        "matcher": "toEqual",
+        "expectedExpression": "padrao",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(migrar('{\"version\":2}')).toEqual(padrao)",
+        "contractRule": "migrar('{\"version\":2}') toEqual padrao",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(migrar('{\"version\":2}')).toEqual(padrao)",
+        "assertionOffset": 1823
+      },
+      {
+        "id": "06.08.v2-sem-audio-e-versao-textua-75d51bdc",
+        "sourceTestPath": "tests/06.08.test.js",
+        "testName": "v2 sem áudio e versão textual restauram o padrão",
+        "inputExpression": "migrar('{\"version\":2,\"audio\":null}')",
+        "matcher": "toEqual",
+        "expectedExpression": "padrao",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(migrar('{\"version\":2}')).toEqual(padrao);",
+        "assertionExpression": "expect(migrar('{\"version\":2,\"audio\":null}')).toEqual(padrao)",
+        "contractRule": "migrar('{\"version\":2,\"audio\":null}') toEqual padrao",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(migrar('{\"version\":2,\"audio\":null}')).toEqual(padrao)",
+        "assertionOffset": 1876
+      },
+      {
+        "id": "06.08.v2-sem-audio-e-versao-textua-2adfe163",
+        "sourceTestPath": "tests/06.08.test.js",
+        "testName": "v2 sem áudio e versão textual restauram o padrão",
+        "inputExpression": "migrar('{\"version\":\"2\"}')",
+        "matcher": "toEqual",
+        "expectedExpression": "padrao",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "expect(migrar('{\"version\":2}')).toEqual(padrao);\n    expect(migrar('{\"version\":2,\"audio\":null}')).toEqual(padrao);",
+        "assertionExpression": "expect(migrar('{\"version\":\"2\"}')).toEqual(padrao)",
+        "contractRule": "migrar('{\"version\":\"2\"}') toEqual padrao",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(migrar('{\"version\":\"2\"}')).toEqual(padrao)",
+        "assertionOffset": 1942
+      },
+      {
         "id": "06.08.nao-tenta-migrar-116c6bce",
         "sourceTestPath": "tests/06.08.test.js",
         "testName": "não tenta migrar",
@@ -3409,7 +3457,7 @@
         "assertionExpression": "expect(migrar('{\"version\":3,\"audio\":{\"volume\":9}}')).toEqual({ status: \"unsupported\", version: 3 })",
         "contractRule": "migrar('{\"version\":3,\"audio\":{\"volume\":9}}') toEqual { status: \"unsupported\", version: 3 }",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(migrar('{\"version\":3,\"audio\":{\"volume\":9}}')).toEqual({ status: \"unsupported\", version: 3 })",
-        "assertionOffset": 1871,
+        "assertionOffset": 2118,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       },
@@ -3425,7 +3473,7 @@
         "assertionExpression": "expect(migrar('{\"version\":10}')).toEqual({ status: \"unsupported\", version: 10 })",
         "contractRule": "migrar('{\"version\":10}') toEqual { status: \"unsupported\", version: 10 }",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(migrar('{\"version\":10}')).toEqual({ status: \"unsupported\", version: 10 })",
-        "assertionOffset": 2017,
+        "assertionOffset": 2264,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       }
@@ -6245,13 +6293,13 @@
         "matcher": "toBe",
         "expectedExpression": "true",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    const b = criarPonto(3, 4);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    const b = criarPonto(3, 4);",
         "assertionExpression": "expect(Object.getPrototypeOf(a) === Object.getPrototypeOf(b)).toBe(true)",
         "contractRule": "Object.getPrototypeOf(a) === Object.getPrototypeOf(b) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(Object.getPrototypeOf(a) === Object.getPrototypeOf(b)).toBe(true)",
-        "assertionOffset": 282,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 276
       },
       {
         "id": "10.03.dois-pontos-tem-o-mesmo-prot-0ab63d98",
@@ -6261,29 +6309,29 @@
         "matcher": "toBe",
         "expectedExpression": "false",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    const b = criarPonto(3, 4);\r\n    expect(Object.getPrototypeOf(a) === Object.getPrototypeOf(b)).toBe(true);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    const b = criarPonto(3, 4);\n    expect(Object.getPrototypeOf(a) === Object.getPrototypeOf(b)).toBe(true);",
         "assertionExpression": "expect(Object.getPrototypeOf(a) === Object.prototype).toBe(false)",
         "contractRule": "Object.getPrototypeOf(a) === Object.prototype toBe false",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(Object.getPrototypeOf(a) === Object.prototype).toBe(false)",
-        "assertionOffset": 414,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 407
       },
       {
         "id": "10.03.mover-e-herdado-nao-propried-5d8615ed",
         "sourceTestPath": "tests/10.03.test.js",
         "testName": "mover é herdado, não propriedade própria",
-        "inputExpression": "a.hasOwnProperty(\"mover\")",
+        "inputExpression": "Object.hasOwn(a, \"mover\")",
         "matcher": "toBe",
         "expectedExpression": "false",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);",
-        "assertionExpression": "expect(a.hasOwnProperty(\"mover\")).toBe(false)",
-        "contractRule": "a.hasOwnProperty(\"mover\") toBe false",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(a.hasOwnProperty(\"mover\")).toBe(false)",
-        "assertionOffset": 639,
         "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);",
+        "assertionExpression": "expect(Object.hasOwn(a, \"mover\")).toBe(false)",
+        "contractRule": "Object.hasOwn(a, \"mover\") toBe false",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(Object.hasOwn(a, \"mover\")).toBe(false)",
+        "assertionOffset": 628
       },
       {
         "id": "10.03.mover-e-herdado-nao-propried-095d6b17",
@@ -6293,13 +6341,13 @@
         "matcher": "toBe",
         "expectedExpression": "\"function\"",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    expect(a.hasOwnProperty(\"mover\")).toBe(false);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    expect(Object.hasOwn(a, \"mover\")).toBe(false);",
         "assertionExpression": "expect(typeof a.mover).toBe(\"function\")",
         "contractRule": "typeof a.mover toBe \"function\"",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(typeof a.mover).toBe(\"function\")",
-        "assertionOffset": 744,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 732
       },
       {
         "id": "10.03.mover-e-herdado-nao-propried-125ff5bb",
@@ -6309,13 +6357,13 @@
         "matcher": "toBe",
         "expectedExpression": "true",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    expect(a.hasOwnProperty(\"mover\")).toBe(false);\r\n    expect(typeof a.mover).toBe(\"function\");",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    expect(Object.hasOwn(a, \"mover\")).toBe(false);\n    expect(typeof a.mover).toBe(\"function\");",
         "assertionExpression": "expect(Object.hasOwn(a, \"x\") && Object.hasOwn(a, \"y\")).toBe(true)",
         "contractRule": "Object.hasOwn(a, \"x\") && Object.hasOwn(a, \"y\") toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(Object.hasOwn(a, \"x\") && Object.hasOwn(a, \"y\")).toBe(true)",
-        "assertionOffset": 843,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 830
       },
       {
         "id": "10.03.a-mover-2-1-leva-a-para-3-1--03fbeeb3",
@@ -6325,13 +6373,13 @@
         "matcher": "toEqual",
         "expectedExpression": "[3, 1]",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    const b = criarPonto(3, 4);\r\n    a.mover(2, -1);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    const b = criarPonto(3, 4);\n    a.mover(2, -1);",
         "assertionExpression": "expect([a.x, a.y]).toEqual([3, 1])",
         "contractRule": "[a.x, a.y] toEqual [3, 1]",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect([a.x, a.y]).toEqual([3, 1])",
-        "assertionOffset": 1183,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1161
       },
       {
         "id": "10.03.a-mover-2-1-leva-a-para-3-1--931b2b2f",
@@ -6341,13 +6389,13 @@
         "matcher": "toEqual",
         "expectedExpression": "[3, 4]",
         "negated": false,
-        "initialArrangementExpression": "const a = criarPonto(1, 2);\r\n    const b = criarPonto(3, 4);\r\n    a.mover(2, -1);\r\n    expect([a.x, a.y]).toEqual([3, 1]);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const a = criarPonto(1, 2);\n    const b = criarPonto(3, 4);\n    a.mover(2, -1);\n    expect([a.x, a.y]).toEqual([3, 1]);",
         "assertionExpression": "expect([b.x, b.y]).toEqual([3, 4])",
         "contractRule": "[b.x, b.y] toEqual [3, 4]",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect([b.x, b.y]).toEqual([3, 4])",
-        "assertionOffset": 1277,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1254
       },
       {
         "id": "10.03.mover-acumula-e-aceita-zero-e11b65af",
@@ -6357,13 +6405,13 @@
         "matcher": "toEqual",
         "expectedExpression": "[1, 6]",
         "negated": false,
-        "initialArrangementExpression": "const p = criarPonto(0, 0);\r\n    p.mover(1, 1);\r\n    p.mover(0, 5);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const p = criarPonto(0, 0);\n    p.mover(1, 1);\n    p.mover(0, 5);",
         "assertionExpression": "expect([p.x, p.y]).toEqual([1, 6])",
         "contractRule": "[p.x, p.y] toEqual [1, 6]",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect([p.x, p.y]).toEqual([1, 6])",
-        "assertionOffset": 1497,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1468
       },
       {
         "id": "10.03.o-metodo-compartilhado-e-o-m-7f871d1c",
@@ -6377,7 +6425,7 @@
         "assertionExpression": "expect(criarPonto(0, 0).mover === criarPonto(9, 9).mover).toBe(true)",
         "contractRule": "criarPonto(0, 0).mover === criarPonto(9, 9).mover toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(criarPonto(0, 0).mover === criarPonto(9, 9).mover).toBe(true)",
-        "assertionOffset": 1661,
+        "assertionOffset": 1629,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       }
@@ -7017,12 +7065,12 @@
     "entryPath": "main.js",
     "testPath": "tests/11.01.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "import {observarClique,observarControles} from './main.js';\ndescribe('propagação de eventos',()=>{\n test('preserva target e a ordem bubble dos currentTarget',()=>{const root=document.createElement('div');root.innerHTML='<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"alvo\">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]);});\n test('stopPropagation mantém listeners do mesmo alvo e remove o bubble ancestral',()=>{const root=document.createElement('div');root.innerHTML='<span id=\"alvo\"></span>';const log=observarControles(root,'stop');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle','target-3']);});\n test('stopImmediatePropagation também interrompe listeners irmãos',()=>{const root=document.createElement('div');root.innerHTML='<span id=\"alvo\"></span>';const log=observarControles(root,'immediate');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle']);});\n});",
+    "tests": "import {observarClique,observarControles} from './main.js';\ndescribe('propagação de eventos',()=>{\n test('preserva target e a ordem bubble dos currentTarget',()=>{const root=document.createElement('div');root.innerHTML='<article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));expect(root.querySelector('#filho').hasAttribute('href')).toBe(false);expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]);});\n test('stopPropagation mantém listeners do mesmo alvo e remove o bubble ancestral',()=>{const root=document.createElement('div');root.innerHTML='<span id=\"alvo\"></span>';const log=observarControles(root,'stop');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle','target-3']);});\n test('stopImmediatePropagation também interrompe listeners irmãos',()=>{const root=document.createElement('div');root.innerHTML='<span id=\"alvo\"></span>';const log=observarControles(root,'immediate');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle']);});\n});",
     "referenceDir": "solutions/11.01",
     "correctFiles": [
       {
         "path": "index.html",
-        "content": "<!doctype html><article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"alvo\">Abrir</span></a></article>"
+        "content": "<!doctype html><article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>"
       },
       {
         "path": "main.js",
@@ -7044,7 +7092,7 @@
       "prompt": "Tarefa independente — Uma lista de cards tem article > a > span. article tem um listener de bubble e a tem um listener que chama stopPropagation. Clique no span, registre a ordem dos listeners e o caminho do evento; depois troque por stopImmediatePropagation num segundo listener de a e registre a diferença."
     },
     "fixtures": {
-      "html": "<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"alvo\">Abrir</span></a></article>"
+      "html": "<article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>"
     },
     "predictionTable": {
       "version": 1,
@@ -7058,6 +7106,22 @@
     },
     "assertionCases": [
       {
+        "id": "11.01.anchor-sem-href-nao-navega",
+        "sourceTestPath": "tests/11.01.test.js",
+        "testName": "preserva target e a ordem bubble dos currentTarget",
+        "inputExpression": "root.querySelector('#filho').hasAttribute('href')",
+        "matcher": "toBe",
+        "expectedExpression": "false",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const root=document.createElement('div');root.innerHTML='<article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));",
+        "assertionExpression": "expect(root.querySelector('#filho').hasAttribute('href')).toBe(false)",
+        "contractRule": "root.querySelector('#filho').hasAttribute('href') toBe false",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(root.querySelector('#filho').hasAttribute('href')).toBe(false)",
+        "assertionOffset": 467
+      },
+      {
         "id": "11.01.preserva-target-e-a-ordem-bu-da9cf1f8",
         "sourceTestPath": "tests/11.01.test.js",
         "testName": "preserva target e a ordem bubble dos currentTarget",
@@ -7065,13 +7129,13 @@
         "matcher": "toEqual",
         "expectedExpression": "[{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]",
         "negated": false,
-        "initialArrangementExpression": "const root=document.createElement('div');root.innerHTML='<article id=\"pai\"><a id=\"filho\" href=\"#\"><span id=\"alvo\">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const root=document.createElement('div');root.innerHTML='<article id=\"pai\"><a id=\"filho\"><span id=\"alvo\">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));expect(root.querySelector('#filho').hasAttribute('href')).toBe(false);",
         "assertionExpression": "expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}])",
         "contractRule": "log toEqual [{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}])",
-        "assertionOffset": 487,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 590
       },
       {
         "id": "11.01.stoppropagation-mantem-liste-7af9f78d",
@@ -7085,7 +7149,7 @@
         "assertionExpression": "expect(log).toEqual(['capture','target-1','target-controle','target-3'])",
         "contractRule": "log toEqual ['capture','target-1','target-controle','target-3']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(log).toEqual(['capture','target-1','target-controle','target-3'])",
-        "assertionOffset": 925,
+        "assertionOffset": 1028,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       },
@@ -7101,7 +7165,7 @@
         "assertionExpression": "expect(log).toEqual(['capture','target-1','target-controle'])",
         "contractRule": "log toEqual ['capture','target-1','target-controle']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(log).toEqual(['capture','target-1','target-controle'])",
-        "assertionOffset": 1292,
+        "assertionOffset": 1395,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
       }
@@ -9588,7 +9652,7 @@
   },
   "12.08": {
     "environment": "javascript",
-    "version": 1,
+    "version": 2,
     "checks": [
       "behavior"
     ],
@@ -9723,6 +9787,86 @@
         "executionScope": "browser-behavior-suite"
       },
       {
+        "id": "12.08.payload-fora-do-schema-termi-038fb3bc",
+        "sourceTestPath": "tests/12.08.test.js",
+        "testName": "payload fora do schema termina em erro de validação",
+        "inputExpression": "invalidProfile.status",
+        "matcher": "toBe",
+        "expectedExpression": "'error'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const states = []; const invalidProfile = await criarDashboard(async path => response(200, path === '/profile' ? {noma: 'Ana'} : {total: 3}), {onState: state => states.push(state.status)});",
+        "assertionExpression": "expect(invalidProfile.status).toBe('error')",
+        "contractRule": "invalidProfile.status toBe 'error'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(invalidProfile.status).toBe('error')",
+        "assertionOffset": 1983
+      },
+      {
+        "id": "12.08.payload-fora-do-schema-termi-4d257620",
+        "sourceTestPath": "tests/12.08.test.js",
+        "testName": "payload fora do schema termina em erro de validação",
+        "inputExpression": "invalidProfile.error.name",
+        "matcher": "toBe",
+        "expectedExpression": "'TypeError'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const states = []; const invalidProfile = await criarDashboard(async path => response(200, path === '/profile' ? {noma: 'Ana'} : {total: 3}), {onState: state => states.push(state.status)}); expect(invalidProfile.status).toBe('error');",
+        "assertionExpression": "expect(invalidProfile.error.name).toBe('TypeError')",
+        "contractRule": "invalidProfile.error.name toBe 'TypeError'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(invalidProfile.error.name).toBe('TypeError')",
+        "assertionOffset": 2028
+      },
+      {
+        "id": "12.08.payload-fora-do-schema-termi-a63206c7",
+        "sourceTestPath": "tests/12.08.test.js",
+        "testName": "payload fora do schema termina em erro de validação",
+        "inputExpression": "invalidTotal.status",
+        "matcher": "toBe",
+        "expectedExpression": "'error'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const states = []; const invalidProfile = await criarDashboard(async path => response(200, path === '/profile' ? {noma: 'Ana'} : {total: 3}), {onState: state => states.push(state.status)}); expect(invalidProfile.status).toBe('error'); expect(invalidProfile.error.name).toBe('TypeError'); const invalidTotal = await criarDashboard(async path => response(200, path === '/profile' ? {nome: 'Ana'} : {total: '3'}));",
+        "assertionExpression": "expect(invalidTotal.status).toBe('error')",
+        "contractRule": "invalidTotal.status toBe 'error'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(invalidTotal.status).toBe('error')",
+        "assertionOffset": 2205
+      },
+      {
+        "id": "12.08.payload-fora-do-schema-termi-d89424ec",
+        "sourceTestPath": "tests/12.08.test.js",
+        "testName": "payload fora do schema termina em erro de validação",
+        "inputExpression": "invalidTotal.error.name",
+        "matcher": "toBe",
+        "expectedExpression": "'TypeError'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const states = []; const invalidProfile = await criarDashboard(async path => response(200, path === '/profile' ? {noma: 'Ana'} : {total: 3}), {onState: state => states.push(state.status)}); expect(invalidProfile.status).toBe('error'); expect(invalidProfile.error.name).toBe('TypeError'); const invalidTotal = await criarDashboard(async path => response(200, path === '/profile' ? {nome: 'Ana'} : {total: '3'})); expect(invalidTotal.status).toBe('error');",
+        "assertionExpression": "expect(invalidTotal.error.name).toBe('TypeError')",
+        "contractRule": "invalidTotal.error.name toBe 'TypeError'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(invalidTotal.error.name).toBe('TypeError')",
+        "assertionOffset": 2248
+      },
+      {
+        "id": "12.08.payload-fora-do-schema-termi-7ac3dc2b",
+        "sourceTestPath": "tests/12.08.test.js",
+        "testName": "payload fora do schema termina em erro de validação",
+        "inputExpression": "states",
+        "matcher": "toEqual",
+        "expectedExpression": "['loading', 'error']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const states = []; const invalidProfile = await criarDashboard(async path => response(200, path === '/profile' ? {noma: 'Ana'} : {total: 3}), {onState: state => states.push(state.status)}); expect(invalidProfile.status).toBe('error'); expect(invalidProfile.error.name).toBe('TypeError'); const invalidTotal = await criarDashboard(async path => response(200, path === '/profile' ? {nome: 'Ana'} : {total: '3'})); expect(invalidTotal.status).toBe('error'); expect(invalidTotal.error.name).toBe('TypeError');",
+        "assertionExpression": "expect(states).toEqual(['loading', 'error'])",
+        "contractRule": "states toEqual ['loading', 'error']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(states).toEqual(['loading', 'error'])",
+        "assertionOffset": 2299
+      },
+      {
         "id": "12.08.nao-deixa-resposta-antiga-ve-ceef639e",
         "sourceTestPath": "tests/12.08.test.js",
         "testName": "não deixa resposta antiga vencer nem notificar",
@@ -9736,7 +9880,7 @@
         "assertionExpression": "expect((await newer).profile.nome).toBe('new')",
         "contractRule": "(await newer).profile.nome toBe 'new'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect((await newer).profile.nome).toBe('new')",
-        "assertionOffset": 2360
+        "assertionOffset": 2992
       },
       {
         "id": "12.08.resposta-antiga-que-termina--1a9ce80a",
@@ -9752,7 +9896,7 @@
         "assertionExpression": "expect((await newer).stats.total).toBe(2)",
         "contractRule": "(await newer).stats.total toBe 2",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect((await newer).stats.total).toBe(2)",
-        "assertionOffset": 2461
+        "assertionOffset": 3093
       },
       {
         "id": "12.08.resposta-antiga-que-termina--2da5b93c",
@@ -9768,7 +9912,7 @@
         "assertionExpression": "expect(await older).toEqual({status: 'stale'})",
         "contractRule": "await older toEqual {status: 'stale'}",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(await older).toEqual({status: 'stale'})",
-        "assertionOffset": 2674
+        "assertionOffset": 3306
       },
       {
         "id": "12.08.nao-deixa-resposta-antiga-ve-e4ce11c3",
@@ -9784,7 +9928,7 @@
         "assertionExpression": "expect(oldStates).toEqual(['loading'])",
         "contractRule": "oldStates toEqual ['loading']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(oldStates).toEqual(['loading'])",
-        "assertionOffset": 2775
+        "assertionOffset": 3407
       },
       {
         "id": "12.08.nao-deixa-resposta-antiga-ve-12d298a1",
@@ -9800,7 +9944,7 @@
         "assertionExpression": "expect(newStates).toEqual(['loading', 'success'])",
         "contractRule": "newStates toEqual ['loading', 'success']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(newStates).toEqual(['loading', 'success'])",
-        "assertionOffset": 2868
+        "assertionOffset": 3500
       },
       {
         "id": "12.08.retry-inicia-outra-carga-apo-a0fc02f2",
@@ -9816,7 +9960,7 @@
         "assertionExpression": "expect(failed.status).toBe('error')",
         "contractRule": "failed.status toBe 'error'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(failed.status).toBe('error')",
-        "assertionOffset": 3263
+        "assertionOffset": 3895
       },
       {
         "id": "12.08.retry-inicia-outra-carga-apo-c3ef1636",
@@ -9832,7 +9976,7 @@
         "assertionExpression": "expect(retried.status).toBe('success')",
         "contractRule": "retried.status toBe 'success'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(retried.status).toBe('success')",
-        "assertionOffset": 3400
+        "assertionOffset": 4032
       },
       {
         "id": "12.08.onstate-observa-loading-e-os-6c2f0fcc",
@@ -9848,7 +9992,7 @@
         "assertionExpression": "expect(states.map(state => state.status)).toEqual(['loading', 'success', 'loading', 'error'])",
         "contractRule": "states.map(state => state.status) toEqual ['loading', 'success', 'loading', 'error']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(states.map(state => state.status)).toEqual(['loading', 'success', 'loading', 'error'])",
-        "assertionOffset": 3977
+        "assertionOffset": 4609
       },
       {
         "id": "12.08.onstate-observa-loading-e-os-f07f367c",
@@ -9864,7 +10008,7 @@
         "assertionExpression": "expect(states[3].error.status).toBe(503)",
         "contractRule": "states[3].error.status toBe 503",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(states[3].error.status).toBe(503)",
-        "assertionOffset": 4125
+        "assertionOffset": 4757
       },
       {
         "id": "12.08.onstate-observa-loading-e-os-e3976bd7",
@@ -9880,7 +10024,7 @@
         "assertionExpression": "expect(success.status).toBe('success')",
         "contractRule": "success.status toBe 'success'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(success.status).toBe('success')",
-        "assertionOffset": 4220
+        "assertionOffset": 4852
       },
       {
         "id": "12.08.onstate-observa-loading-e-os-8c8ecfbc",
@@ -9896,7 +10040,7 @@
         "assertionExpression": "expect(failed.status).toBe('error')",
         "contractRule": "failed.status toBe 'error'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(failed.status).toBe('error')",
-        "assertionOffset": 4313
+        "assertionOffset": 4945
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-16b763f0",
@@ -9912,7 +10056,7 @@
         "assertionExpression": "expect(result.status).toBe('error')",
         "contractRule": "result.status toBe 'error'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(result.status).toBe('error')",
-        "assertionOffset": 4834
+        "assertionOffset": 5466
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-78b27908",
@@ -9928,7 +10072,7 @@
         "assertionExpression": "expect(result.error.name).toBe('TimeoutError')",
         "contractRule": "result.error.name toBe 'TimeoutError'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(result.error.name).toBe('TimeoutError')",
-        "assertionOffset": 4924
+        "assertionOffset": 5556
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-992b4629",
@@ -9944,7 +10088,7 @@
         "assertionExpression": "expect(states.map(state => state.status)).toEqual(['loading', 'error'])",
         "contractRule": "states.map(state => state.status) toEqual ['loading', 'error']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(states.map(state => state.status)).toEqual(['loading', 'error'])",
-        "assertionOffset": 5025
+        "assertionOffset": 5657
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-4872a611",
@@ -9960,7 +10104,7 @@
         "assertionExpression": "expect(signals.every(signal => signal.aborted)).toBe(true)",
         "contractRule": "signals.every(signal => signal.aborted) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(signals.every(signal => signal.aborted)).toBe(true)",
-        "assertionOffset": 5151
+        "assertionOffset": 5783
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-34a5ea99",
@@ -9976,7 +10120,7 @@
         "assertionExpression": "expect(external.listeners.size).toBe(0)",
         "contractRule": "external.listeners.size toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(external.listeners.size).toBe(0)",
-        "assertionOffset": 5264
+        "assertionOffset": 5896
       },
       {
         "id": "12.08.timeout-encerra-fetcher-pend-ff1fb6d4",
@@ -9992,7 +10136,7 @@
         "assertionExpression": "expect(vi.getTimerCount()).toBe(0)",
         "contractRule": "vi.getTimerCount() toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(vi.getTimerCount()).toBe(0)",
-        "assertionOffset": 5358
+        "assertionOffset": 5990
       },
       {
         "id": "12.08.cancelamento-encerra-fetcher-a69ef79a",
@@ -10008,7 +10152,7 @@
         "assertionExpression": "expect(result.status).toBe('error')",
         "contractRule": "result.status toBe 'error'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(result.status).toBe('error')",
-        "assertionOffset": 5871
+        "assertionOffset": 6503
       },
       {
         "id": "12.08.cancelamento-encerra-fetcher-7236cb85",
@@ -10024,7 +10168,7 @@
         "assertionExpression": "expect(result.error.name).toBe('AbortError')",
         "contractRule": "result.error.name toBe 'AbortError'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(result.error.name).toBe('AbortError')",
-        "assertionOffset": 5961
+        "assertionOffset": 6593
       },
       {
         "id": "12.08.cancelamento-encerra-fetcher-d8ba2b54",
@@ -10040,7 +10184,7 @@
         "assertionExpression": "expect(states.map(state => state.status)).toEqual(['loading', 'error'])",
         "contractRule": "states.map(state => state.status) toEqual ['loading', 'error']",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(states.map(state => state.status)).toEqual(['loading', 'error'])",
-        "assertionOffset": 6060
+        "assertionOffset": 6692
       },
       {
         "id": "12.08.cancelamento-encerra-fetcher-52a08a5c",
@@ -10056,7 +10200,7 @@
         "assertionExpression": "expect(signals.every(signal => signal.aborted)).toBe(true)",
         "contractRule": "signals.every(signal => signal.aborted) toBe true",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(signals.every(signal => signal.aborted)).toBe(true)",
-        "assertionOffset": 6186
+        "assertionOffset": 6818
       },
       {
         "id": "12.08.cancelamento-encerra-fetcher-6d3ae7ac",
@@ -10072,7 +10216,7 @@
         "assertionExpression": "expect(external.listeners.size).toBe(0)",
         "contractRule": "external.listeners.size toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(external.listeners.size).toBe(0)",
-        "assertionOffset": 6299
+        "assertionOffset": 6931
       }
     ]
   },
@@ -11688,7 +11832,7 @@
   },
   "13.14": {
     "environment": "javascript",
-    "version": 2,
+    "version": 3,
     "checks": [
       "behavior"
     ],
@@ -11711,52 +11855,84 @@
     },
     "assertionCases": [
       {
+        "id": "13.14.v1-percorre-ambas-as-versoes-56d26972",
+        "sourceTestPath": "tests/13.14.test.js",
+        "testName": "V1 percorre ambas as versões pelo contrato de storage",
+        "inputExpression": "reads",
+        "matcher": "toEqual",
+        "expectedExpression": "['kanban:v1']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const {storage, reads} = storageOf({version: 1, tasks: [{id: 't1', text: 'x', status: 'todo'}]});\n    const value = carregar(storage);",
+        "assertionExpression": "expect(reads).toEqual(['kanban:v1'])",
+        "contractRule": "reads toEqual ['kanban:v1']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(reads).toEqual(['kanban:v1'])",
+        "assertionOffset": 564
+      },
+      {
         "id": "13.14.v1-percorre-ambas-as-versoes-c38d8c66",
         "sourceTestPath": "tests/13.14.test.js",
-        "testName": "V1 percorre ambas as versões",
+        "testName": "V1 percorre ambas as versões pelo contrato de storage",
         "inputExpression": "value",
         "matcher": "toEqual",
-        "expectedExpression": "{ version: 3, tasks: [{ id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: [] }] }",
+        "expectedExpression": "{version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: []}]}",
         "negated": false,
-        "initialArrangementExpression": "const value = carregar({ version: 1, tasks: [{ id: 't1', text: 'x', status: 'todo' }] });",
-        "assertionExpression": "expect(value).toEqual({ version: 3, tasks: [{ id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: [] }] })",
-        "contractRule": "value toEqual { version: 3, tasks: [{ id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: [] }] }",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(value).toEqual({ version: 3, tasks: [{ id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: [] }] })",
-        "assertionOffset": 303,
         "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const {storage, reads} = storageOf({version: 1, tasks: [{id: 't1', text: 'x', status: 'todo'}]});\n    const value = carregar(storage);\n    expect(reads).toEqual(['kanban:v1']);",
+        "assertionExpression": "expect(value).toEqual({version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: []}]})",
+        "contractRule": "value toEqual {version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: []}]}",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(value).toEqual({version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', priority: 'normal', tags: []}]})",
+        "assertionOffset": 659
       },
       {
         "id": "13.14.v2-preserva-priority-e-v3-e--684908ec",
         "sourceTestPath": "tests/13.14.test.js",
-        "testName": "V2 preserva priority e V3 é idempotente",
+        "testName": "V2 preserva priority e V3 é idempotente pelo contrato de storage",
         "inputExpression": "v3.tasks[0].priority",
         "matcher": "toBe",
         "expectedExpression": "'high'",
         "negated": false,
-        "initialArrangementExpression": "const v2 = { version: 2, tasks: [{ id: 't1', text: 'x', status: 'done', priority: 'high' }] }; const v3 = migrarV2ParaV3(v2);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const v2 = {version: 2, tasks: [{id: 't1', text: 'x', status: 'done', priority: 'high'}]};\n    const v3 = migrarV2ParaV3(v2);",
         "assertionExpression": "expect(v3.tasks[0].priority).toBe('high')",
         "contractRule": "v3.tasks[0].priority toBe 'high'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(v3.tasks[0].priority).toBe('high')",
-        "assertionOffset": 663,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1050
       },
       {
         "id": "13.14.v2-preserva-priority-e-v3-e--6215e5de",
         "sourceTestPath": "tests/13.14.test.js",
-        "testName": "V2 preserva priority e V3 é idempotente",
-        "inputExpression": "carregar(v3)",
+        "testName": "V2 preserva priority e V3 é idempotente pelo contrato de storage",
+        "inputExpression": "carregar(storage)",
         "matcher": "toEqual",
         "expectedExpression": "v3",
         "negated": false,
-        "initialArrangementExpression": "const v2 = { version: 2, tasks: [{ id: 't1', text: 'x', status: 'done', priority: 'high' }] }; const v3 = migrarV2ParaV3(v2); expect(v3.tasks[0].priority).toBe('high');",
-        "assertionExpression": "expect(carregar(v3)).toEqual(v3)",
-        "contractRule": "carregar(v3) toEqual v3",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(carregar(v3)).toEqual(v3)",
-        "assertionOffset": 759,
         "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const v2 = {version: 2, tasks: [{id: 't1', text: 'x', status: 'done', priority: 'high'}]};\n    const v3 = migrarV2ParaV3(v2);\n    expect(v3.tasks[0].priority).toBe('high');\n    const {storage, reads} = storageOf(v3);",
+        "assertionExpression": "expect(carregar(storage)).toEqual(v3)",
+        "contractRule": "carregar(storage) toEqual v3",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(carregar(storage)).toEqual(v3)",
+        "assertionOffset": 1194
+      },
+      {
+        "id": "13.14.v2-preserva-priority-e-v3-e--61103f68",
+        "sourceTestPath": "tests/13.14.test.js",
+        "testName": "V2 preserva priority e V3 é idempotente pelo contrato de storage",
+        "inputExpression": "reads",
+        "matcher": "toEqual",
+        "expectedExpression": "['kanban:v1']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const v2 = {version: 2, tasks: [{id: 't1', text: 'x', status: 'done', priority: 'high'}]};\n    const v3 = migrarV2ParaV3(v2);\n    expect(v3.tasks[0].priority).toBe('high');\n    const {storage, reads} = storageOf(v3);\n    expect(carregar(storage)).toEqual(v3);",
+        "assertionExpression": "expect(reads).toEqual(['kanban:v1'])",
+        "contractRule": "reads toEqual ['kanban:v1']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(reads).toEqual(['kanban:v1'])",
+        "assertionOffset": 1237
       },
       {
         "id": "13.14.tags-invalidas-e-registro-pa-259bafbb",
@@ -11766,13 +11942,13 @@
         "matcher": "toHaveLength",
         "expectedExpression": "2",
         "negated": false,
-        "initialArrangementExpression": "const warnings = []; const value = migrarV2ParaV3({ version: 2, tasks: [{ id: 'ok', text: 'x', status: 'todo', tags: ['a'] }, { id: 'bad' }, { id: 'tag', text: 'y', status: 'todo', tags: [''] }] }, warnings);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const value = migrarV2ParaV3({version: 2, tasks: [{id: 'ok', text: 'x', status: 'todo', tags: ['a']}, {id: 'bad'}, {id: 'tag', text: 'y', status: 'todo', tags: ['']}]}, warnings);",
         "assertionExpression": "expect(value.tasks).toHaveLength(2)",
         "contractRule": "value.tasks toHaveLength 2",
         "investigation": "Confira a expressão de entrada e a comparação toHaveLength deste caso: expect(value.tasks).toHaveLength(2)",
-        "assertionOffset": 1135,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1623
       },
       {
         "id": "13.14.tags-invalidas-e-registro-pa-4b714436",
@@ -11782,29 +11958,77 @@
         "matcher": "toEqual",
         "expectedExpression": "[]",
         "negated": false,
-        "initialArrangementExpression": "const warnings = []; const value = migrarV2ParaV3({ version: 2, tasks: [{ id: 'ok', text: 'x', status: 'todo', tags: ['a'] }, { id: 'bad' }, { id: 'tag', text: 'y', status: 'todo', tags: [''] }] }, warnings); expect(value.tasks).toHaveLength(2);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const value = migrarV2ParaV3({version: 2, tasks: [{id: 'ok', text: 'x', status: 'todo', tags: ['a']}, {id: 'bad'}, {id: 'tag', text: 'y', status: 'todo', tags: ['']}]}, warnings);\n    expect(value.tasks).toHaveLength(2);",
         "assertionExpression": "expect(value.tasks[1].tags).toEqual([])",
         "contractRule": "value.tasks[1].tags toEqual []",
         "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(value.tasks[1].tags).toEqual([])",
-        "assertionOffset": 1225,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 1717
       },
       {
         "id": "13.14.tags-invalidas-e-registro-pa-c49bfe64",
         "sourceTestPath": "tests/13.14.test.js",
         "testName": "tags inválidas e registro parcial recuperam itens válidos",
-        "inputExpression": "warnings.length",
-        "matcher": "toBeGreaterThan",
-        "expectedExpression": "0",
+        "inputExpression": "warnings",
+        "matcher": "toContain",
+        "expectedExpression": "'tags inválidas'",
         "negated": false,
-        "initialArrangementExpression": "const warnings = []; const value = migrarV2ParaV3({ version: 2, tasks: [{ id: 'ok', text: 'x', status: 'todo', tags: ['a'] }, { id: 'bad' }, { id: 'tag', text: 'y', status: 'todo', tags: [''] }] }, warnings); expect(value.tasks).toHaveLength(2); expect(value.tasks[1].tags).toEqual([]);",
-        "assertionExpression": "expect(warnings.length).toBeGreaterThan(0)",
-        "contractRule": "warnings.length toBeGreaterThan 0",
-        "investigation": "Confira a expressão de entrada e a comparação toBeGreaterThan deste caso: expect(warnings.length).toBeGreaterThan(0)",
-        "assertionOffset": 1319,
         "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const value = migrarV2ParaV3({version: 2, tasks: [{id: 'ok', text: 'x', status: 'todo', tags: ['a']}, {id: 'bad'}, {id: 'tag', text: 'y', status: 'todo', tags: ['']}]}, warnings);\n    expect(value.tasks).toHaveLength(2);\n    expect(value.tasks[1].tags).toEqual([]);",
+        "assertionExpression": "expect(warnings).toContain('tags inválidas')",
+        "contractRule": "warnings toContain 'tags inválidas'",
+        "investigation": "Confira a expressão de entrada e a comparação toContain deste caso: expect(warnings).toContain('tags inválidas')",
+        "assertionOffset": 1815
+      },
+      {
+        "id": "13.14.v3-com-tags-invalidas-normal-5d647b98",
+        "sourceTestPath": "tests/13.14.test.js",
+        "testName": "V3 com tags inválidas normaliza e avisa mesmo sem mudar a contagem",
+        "inputExpression": "value.tasks[0].tags",
+        "matcher": "toEqual",
+        "expectedExpression": "[]",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const {storage, reads} = storageOf({version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', tags: ['']}]});\n    const value = carregar(storage, warnings);",
+        "assertionExpression": "expect(value.tasks[0].tags).toEqual([])",
+        "contractRule": "value.tasks[0].tags toEqual []",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(value.tasks[0].tags).toEqual([])",
+        "assertionOffset": 2142
+      },
+      {
+        "id": "13.14.v3-com-tags-invalidas-normal-a4a8ed02",
+        "sourceTestPath": "tests/13.14.test.js",
+        "testName": "V3 com tags inválidas normaliza e avisa mesmo sem mudar a contagem",
+        "inputExpression": "warnings",
+        "matcher": "toContain",
+        "expectedExpression": "'tags inválidas'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const {storage, reads} = storageOf({version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', tags: ['']}]});\n    const value = carregar(storage, warnings);\n    expect(value.tasks[0].tags).toEqual([]);",
+        "assertionExpression": "expect(warnings).toContain('tags inválidas')",
+        "contractRule": "warnings toContain 'tags inválidas'",
+        "investigation": "Confira a expressão de entrada e a comparação toContain deste caso: expect(warnings).toContain('tags inválidas')",
+        "assertionOffset": 2187
+      },
+      {
+        "id": "13.14.v3-com-tags-invalidas-normal-f3d8fa55",
+        "sourceTestPath": "tests/13.14.test.js",
+        "testName": "V3 com tags inválidas normaliza e avisa mesmo sem mudar a contagem",
+        "inputExpression": "reads",
+        "matcher": "toEqual",
+        "expectedExpression": "['kanban:v1']",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const warnings = [];\n    const {storage, reads} = storageOf({version: 3, tasks: [{id: 't1', text: 'x', status: 'todo', tags: ['']}]});\n    const value = carregar(storage, warnings);\n    expect(value.tasks[0].tags).toEqual([]);\n    expect(warnings).toContain('tags inválidas');",
+        "assertionExpression": "expect(reads).toEqual(['kanban:v1'])",
+        "contractRule": "reads toEqual ['kanban:v1']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(reads).toEqual(['kanban:v1'])",
+        "assertionOffset": 2237
       },
       {
         "id": "13.14.json-invalido-nao-escreve-de-edcd8fc8",
@@ -11814,13 +12038,13 @@
         "matcher": "toHaveLength",
         "expectedExpression": "0",
         "negated": false,
-        "initialArrangementExpression": "let writes = 0; const value = carregar({ getItem: () => '{', setItem: () => { writes++; } });",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "let writes = 0;\n    const value = carregar({getItem: () => '{', setItem: () => { writes++; }});",
         "assertionExpression": "expect(value.tasks).toHaveLength(0)",
         "contractRule": "value.tasks toHaveLength 0",
         "investigation": "Confira a expressão de entrada e a comparação toHaveLength deste caso: expect(value.tasks).toHaveLength(0)",
-        "assertionOffset": 1567,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 2491
       },
       {
         "id": "13.14.json-invalido-nao-escreve-de-b901a9bc",
@@ -11830,19 +12054,19 @@
         "matcher": "toBe",
         "expectedExpression": "0",
         "negated": false,
-        "initialArrangementExpression": "let writes = 0; const value = carregar({ getItem: () => '{', setItem: () => { writes++; } }); expect(value.tasks).toHaveLength(0);",
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "let writes = 0;\n    const value = carregar({getItem: () => '{', setItem: () => { writes++; }});\n    expect(value.tasks).toHaveLength(0);",
         "assertionExpression": "expect(writes).toBe(0)",
         "contractRule": "writes toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(writes).toBe(0)",
-        "assertionOffset": 1657,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "assertionOffset": 2585
       }
     ],
     "correctFiles": [
       {
         "path": "migration.js",
-        "content": "const statuses = new Set(['todo', 'doing', 'done']);\r\nfunction valid(task) { return task && typeof task.id === 'string' && typeof task.text === 'string' && statuses.has(task.status); }\r\nexport function migrarV1ParaV2(value) { return { version: 2, tasks: (value?.tasks || []).filter(valid).map(task => ({ id: task.id, text: task.text, status: task.status, priority: ['low', 'normal', 'high'].includes(task.priority) ? task.priority : 'normal' })) }; }\r\nexport function migrarV2ParaV3(value, warnings = []) { return { version: 3, tasks: (value?.tasks || []).filter(task => { const ok = valid(task); if (!ok) warnings.push('registro parcial'); return ok; }).map(task => ({ ...task, tags: Array.isArray(task.tags) && task.tags.every(tag => typeof tag === 'string' && tag.length > 0) ? [...task.tags] : [] })) }; }\r\nexport function carregar(input, warnings = []) { let value = input; if (input && typeof input.getItem === 'function') { const raw = input.getItem('kanban:v1'); if (raw == null) return { version: 3, tasks: [] }; try { value = JSON.parse(raw); } catch { warnings.push('JSON inválido'); return { version: 3, tasks: [] }; } } else if (typeof input === 'string') { try { value = JSON.parse(input); } catch { warnings.push('JSON inválido'); return { version: 3, tasks: [] }; } } if (value?.version === 1) value = migrarV1ParaV2(value); if (value?.version === 2) value = migrarV2ParaV3(value, warnings); if (value?.version !== 3) return { version: 3, tasks: [] }; return migrarV2ParaV3(value, warnings).tasks.length === value.tasks.length ? value : { version: 3, tasks: value.tasks.filter(valid) }; }\r\n"
+        "content": "const statuses = new Set(['todo', 'doing', 'done']);\r\nfunction valid(task) { return task && typeof task.id === 'string' && typeof task.text === 'string' && statuses.has(task.status); }\r\nexport function migrarV1ParaV2(value) { return { version: 2, tasks: (value?.tasks || []).filter(valid).map(task => ({ id: task.id, text: task.text, status: task.status, priority: ['low', 'normal', 'high'].includes(task.priority) ? task.priority : 'normal' })) }; }\r\nexport function migrarV2ParaV3(value, warnings = []) { return { version: 3, tasks: (value?.tasks || []).filter(task => { const ok = valid(task); if (!ok) warnings.push('registro parcial'); return ok; }).map(task => { const tagsOk = Array.isArray(task.tags) && task.tags.every(tag => typeof tag === 'string' && tag.length > 0); if (!tagsOk && task.tags !== undefined) warnings.push('tags inválidas'); return { ...task, tags: tagsOk ? [...task.tags] : [] }; }) }; }\r\nexport function carregar(input, warnings = []) { let value = input; if (input && typeof input.getItem === 'function') { const raw = input.getItem('kanban:v1'); if (raw == null) return { version: 3, tasks: [] }; try { value = JSON.parse(raw); } catch { warnings.push('JSON inválido'); return { version: 3, tasks: [] }; } } else if (typeof input === 'string') { try { value = JSON.parse(input); } catch { warnings.push('JSON inválido'); return { version: 3, tasks: [] }; } } if (value?.version === 1) value = migrarV1ParaV2(value); if (value?.version === 2) return migrarV2ParaV3(value, warnings); if (value?.version !== 3) return { version: 3, tasks: [] }; return migrarV2ParaV3(value, warnings); }\r\n"
       }
     ]
   },
@@ -14057,137 +14281,7 @@
         "Tipos e reducer concordam sobre cancelamento e sobre o limite de progresso 100."
       ]
     },
-    "prompt": "Implemente Microprojeto - máquina de estados; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente.",
-    "assertionCases": [
-      {
-        "id": "16.08.fluxo-feliz-e-progresso-zero-e63edaca",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fluxo feliz e progresso zero",
-        "inputExpression": "u",
-        "matcher": "assert.deepEqual",
-        "expectedExpression": "{status:'uploading',progress:0}",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const s=reducer({status:'idle'},{type:'select'});const u=reducer(s,{type:'start'});",
-        "assertionExpression": "assert.deepEqual(u,{status:'uploading',progress:0})",
-        "contractRule": "u assert.deepEqual {status:'uploading',progress:0}",
-        "investigation": "Confira a expressão de entrada e a comparação assert.deepEqual deste caso: assert.deepEqual(u,{status:'uploading',progress:0})",
-        "assertionOffset": 287,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.fluxo-feliz-e-progresso-zero-1c96d0b6",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fluxo feliz e progresso zero",
-        "inputExpression": "reducer(u,{type:'progress',valor:0})",
-        "matcher": "assert.deepEqual",
-        "expectedExpression": "{status:'uploading',progress:0}",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const s=reducer({status:'idle'},{type:'select'});const u=reducer(s,{type:'start'});assert.deepEqual(u,{status:'uploading',progress:0});",
-        "assertionExpression": "assert.deepEqual(reducer(u,{type:'progress',valor:0}),{status:'uploading',progress:0})",
-        "contractRule": "reducer(u,{type:'progress',valor:0}) assert.deepEqual {status:'uploading',progress:0}",
-        "investigation": "Confira a expressão de entrada e a comparação assert.deepEqual deste caso: assert.deepEqual(reducer(u,{type:'progress',valor:0}),{status:'uploading',progress:0})",
-        "assertionOffset": 392,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.fluxo-feliz-e-progresso-zero-c3fef515",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fluxo feliz e progresso zero",
-        "inputExpression": "reducer(u,{type:'resolve',url:'/r'})",
-        "matcher": "assert.deepEqual",
-        "expectedExpression": "{status:'success',url:'/r'}",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const s=reducer({status:'idle'},{type:'select'});const u=reducer(s,{type:'start'});assert.deepEqual(u,{status:'uploading',progress:0});assert.deepEqual(reducer(u,{type:'progress',valor:0}),{status:'uploading',progress:0});",
-        "assertionExpression": "assert.deepEqual(reducer(u,{type:'resolve',url:'/r'}),{status:'success',url:'/r'})",
-        "contractRule": "reducer(u,{type:'resolve',url:'/r'}) assert.deepEqual {status:'success',url:'/r'}",
-        "investigation": "Confira a expressão de entrada e a comparação assert.deepEqual deste caso: assert.deepEqual(reducer(u,{type:'resolve',url:'/r'}),{status:'success',url:'/r'})",
-        "assertionOffset": 532,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.fronteiras-sao-inclusivas-e--0c266e3a",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fronteiras são inclusivas e fora da faixa lança",
-        "inputExpression": "reducer(u,{type:'progress',valor:100}).status",
-        "matcher": "assert.equal",
-        "expectedExpression": "'uploading'",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const u={status:'uploading',progress:0};",
-        "assertionExpression": "assert.equal(reducer(u,{type:'progress',valor:100}).status,'uploading')",
-        "contractRule": "reducer(u,{type:'progress',valor:100}).status assert.equal 'uploading'",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(reducer(u,{type:'progress',valor:100}).status,'uploading')",
-        "assertionOffset": 772,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.fronteiras-sao-inclusivas-e--bd2315d9",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fronteiras são inclusivas e fora da faixa lança",
-        "inputExpression": "()=>reducer(u,{type:'progress',valor:101})",
-        "matcher": "assert.throws",
-        "expectedExpression": "RangeError",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const u={status:'uploading',progress:0};assert.equal(reducer(u,{type:'progress',valor:100}).status,'uploading');",
-        "assertionExpression": "assert.throws(()=>reducer(u,{type:'progress',valor:101}),RangeError)",
-        "contractRule": "()=>reducer(u,{type:'progress',valor:101}) assert.throws RangeError",
-        "investigation": "Confira a expressão de entrada e a comparação assert.throws deste caso: assert.throws(()=>reducer(u,{type:'progress',valor:101}),RangeError)",
-        "assertionOffset": 897,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.fronteiras-sao-inclusivas-e--598a7cdb",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "fronteiras são inclusivas e fora da faixa lança",
-        "inputExpression": "()=>reducer(u,{type:'progress',valor:-1})",
-        "matcher": "assert.throws",
-        "expectedExpression": "RangeError",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const u={status:'uploading',progress:0};assert.equal(reducer(u,{type:'progress',valor:100}).status,'uploading');assert.throws(()=>reducer(u,{type:'progress',valor:101}),RangeError);",
-        "assertionExpression": "assert.throws(()=>reducer(u,{type:'progress',valor:-1}),RangeError)",
-        "contractRule": "()=>reducer(u,{type:'progress',valor:-1}) assert.throws RangeError",
-        "investigation": "Confira a expressão de entrada e a comparação assert.throws deste caso: assert.throws(()=>reducer(u,{type:'progress',valor:-1}),RangeError)",
-        "assertionOffset": 1019,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.acao-incompativel-preserva-i-b705db47",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "ação incompatível preserva identidade e reset limpa",
-        "inputExpression": "reducer(idle,{type:'progress',valor:4})",
-        "matcher": "assert.equal",
-        "expectedExpression": "idle",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const idle={status:'idle'};",
-        "assertionExpression": "assert.equal(reducer(idle,{type:'progress',valor:4}),idle)",
-        "contractRule": "reducer(idle,{type:'progress',valor:4}) assert.equal idle",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(reducer(idle,{type:'progress',valor:4}),idle)",
-        "assertionOffset": 1235,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "16.08.acao-incompativel-preserva-i-5e0afcf9",
-        "sourceTestPath": "tests/16.08.test.js",
-        "testName": "ação incompatível preserva identidade e reset limpa",
-        "inputExpression": "reducer({status:'success',url:'/x'},{type:'reset'})",
-        "matcher": "assert.deepEqual",
-        "expectedExpression": "idle",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const idle={status:'idle'};assert.equal(reducer(idle,{type:'progress',valor:4}),idle);",
-        "assertionExpression": "assert.deepEqual(reducer({status:'success',url:'/x'},{type:'reset'}),idle)",
-        "contractRule": "reducer({status:'success',url:'/x'},{type:'reset'}) assert.deepEqual idle",
-        "investigation": "Confira a expressão de entrada e a comparação assert.deepEqual deste caso: assert.deepEqual(reducer({status:'success',url:'/x'},{type:'reset'}),idle)",
-        "assertionOffset": 1347,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      }
-    ]
+    "prompt": "Implemente Microprojeto - máquina de estados; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente."
   },
   "17.01": {
     "environment": "rubric",
@@ -14219,40 +14313,32 @@
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
   "17.02": {
-    "environment": "typescript",
-    "version": 2,
+    "environment": "rubric",
+    "version": 1,
     "checks": [
-      "types",
-      "mutation"
+      "rubric"
     ],
-    "entryPath": "repository.ts",
     "referenceDir": "solutions/17.02",
-    "correctFiles": [
-      {
-        "path": "repository.ts",
-        "content": "export type Entity={id:string|number}; export function pair<K,V>(key:K,value:V):readonly [K,V]{return [key,value];} export function wrap<T>(value:T){return {value};} export interface Repository<T extends Entity,ID=T['id']>{save(value:T):void;get(id:ID):T|undefined;}"
-      }
-    ],
-    "contractTypeFiles": [
-      {
-        "path": "contracts/17.02.types.ts",
-        "content": "import {pair,wrap,type Repository} from '../repository.js';\ntype Equal<A,B>=(<T>()=>T extends A?1:2) extends (<T>()=>T extends B?1:2)?true:false; type Assert<T extends true>=T;\ntype P=Assert<Equal<ReturnType<typeof pair<string,number>>,readonly [string,number]>>; const w=wrap({id:1,total:10}); const total:number=w.value.total;\ntype Order={id:number;total:number}; declare const repo:Repository<Order,number>; const found=repo.get(1); if(found) found.total.toFixed();\n// @ts-expect-error repository requires an Order\nrepo.save({id:2});\n// @ts-expect-error ID is a number\nrepo.get('2');"
-      }
-    ],
-    "typeContractMutants": [
-      {
-        "id": "weakened-contract",
-        "files": [
-          {
-            "path": "repository.ts",
-            "content": "export type Entity={id:string}; export function pair<K,V>(key:K,value:V){return [key,value];} export function wrap<T>(value:T){return {value};} export interface Repository<T extends Entity,ID=T['id']>{save(value:T):void;get(id:ID):T|undefined;}"
-          }
-        ]
-      }
-    ],
     "rubric": [
-      "Os type tests confirmam as relações e rejeitam os casos inválidos publicados."
-    ]
+      "Separar genericidade de entidade T e chave ID; manter constraints somente onde necessárias (0–3).",
+      "Mostrar inferência preservada em pair/wrap/repository e `undefined` em ausência (0–4).",
+      "Incluir chamada inválida e um repositório independente de pedidos (0–3)."
+    ],
+    "transfer": {
+      "id": "17.02-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transferência 17.02\n\nAplique os critérios a Parsons de repository em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão."
+        }
+      ],
+      "rubric": [
+        "Separar genericidade de entidade T e chave ID; manter constraints somente onde necessárias (0–3).",
+        "Mostrar inferência preservada em pair/wrap/repository e `undefined` em ausência (0–4).",
+        "Incluir chamada inválida e um repositório independente de pedidos (0–3)."
+      ]
+    },
+    "prompt": "Analise Parsons de repository com evidência localizada em repository.ts e resolva um caso independente."
   },
   "17.03": {
     "environment": "node-simulated",
@@ -14951,153 +15037,7 @@
         "Expiração remove a entrada observável e não afeta uma entrada sem TTL."
       ]
     },
-    "prompt": "Implemente Microprojeto - cache genérico; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente.",
-    "assertionCases": [
-      {
-        "id": "17.08.expira-exatamente-no-limite--607b3e65",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "expira exatamente no limite e remove entrada",
-        "inputExpression": "c.get('a')",
-        "matcher": "assert.equal",
-        "expectedExpression": "1",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "let now=0;const c=new Cache(()=>now);c.set('a',1,100);now=99;",
-        "assertionExpression": "assert.equal(c.get('a'),1)",
-        "contractRule": "c.get('a') assert.equal 1",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.get('a'),1)",
-        "assertionOffset": 278,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.expira-exatamente-no-limite--5bcad0c7",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "expira exatamente no limite e remove entrada",
-        "inputExpression": "c.get('a')",
-        "matcher": "assert.equal",
-        "expectedExpression": "undefined",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "let now=0;const c=new Cache(()=>now);c.set('a',1,100);now=99;assert.equal(c.get('a'),1);now=100;",
-        "assertionExpression": "assert.equal(c.get('a'),undefined)",
-        "contractRule": "c.get('a') assert.equal undefined",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.get('a'),undefined)",
-        "assertionOffset": 366,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.expira-exatamente-no-limite--48f83f29",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "expira exatamente no limite e remove entrada",
-        "inputExpression": "c.has('a')",
-        "matcher": "assert.equal",
-        "expectedExpression": "false",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "let now=0;const c=new Cache(()=>now);c.set('a',1,100);now=99;assert.equal(c.get('a'),1);now=100;assert.equal(c.get('a'),undefined);",
-        "assertionExpression": "assert.equal(c.has('a'),false)",
-        "contractRule": "c.has('a') assert.equal false",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.has('a'),false)",
-        "assertionOffset": 454,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.ttl-invalido-e-valores-falsy-8ff35c59",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "TTL inválido e valores falsy",
-        "inputExpression": "()=>c.set('bad',1,-1)",
-        "matcher": "assert.throws",
-        "expectedExpression": "RangeError",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);",
-        "assertionExpression": "assert.throws(()=>c.set('bad',1,-1),RangeError)",
-        "contractRule": "()=>c.set('bad',1,-1) assert.throws RangeError",
-        "investigation": "Confira a expressão de entrada e a comparação assert.throws deste caso: assert.throws(()=>c.set('bad',1,-1),RangeError)",
-        "assertionOffset": 608,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.ttl-invalido-e-valores-falsy-2941c531",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "TTL inválido e valores falsy",
-        "inputExpression": "c.has('zero')",
-        "matcher": "assert.equal",
-        "expectedExpression": "true",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);assert.throws(()=>c.set('bad',1,-1),RangeError);c.set('zero',0,20);c.set('undef',undefined,20);",
-        "assertionExpression": "assert.equal(c.has('zero'),true)",
-        "contractRule": "c.has('zero') assert.equal true",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.has('zero'),true)",
-        "assertionOffset": 756,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.ttl-invalido-e-valores-falsy-debfc23f",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "TTL inválido e valores falsy",
-        "inputExpression": "c.get('zero')",
-        "matcher": "assert.equal",
-        "expectedExpression": "0",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);assert.throws(()=>c.set('bad',1,-1),RangeError);c.set('zero',0,20);c.set('undef',undefined,20);assert.equal(c.has('zero'),true);",
-        "assertionExpression": "assert.equal(c.get('zero'),0)",
-        "contractRule": "c.get('zero') assert.equal 0",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.get('zero'),0)",
-        "assertionOffset": 842,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.ttl-invalido-e-valores-falsy-78c5ee08",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "TTL inválido e valores falsy",
-        "inputExpression": "c.has('undef')",
-        "matcher": "assert.equal",
-        "expectedExpression": "true",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);assert.throws(()=>c.set('bad',1,-1),RangeError);c.set('zero',0,20);c.set('undef',undefined,20);assert.equal(c.has('zero'),true);assert.equal(c.get('zero'),0);",
-        "assertionExpression": "assert.equal(c.has('undef'),true)",
-        "contractRule": "c.has('undef') assert.equal true",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.has('undef'),true)",
-        "assertionOffset": 925,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.delete-informa-presenca-10db68b5",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "delete informa presença",
-        "inputExpression": "c.delete(1)",
-        "matcher": "assert.equal",
-        "expectedExpression": "true",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);c.set(1,'x',5);",
-        "assertionExpression": "assert.equal(c.delete(1),true)",
-        "contractRule": "c.delete(1) assert.equal true",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.delete(1),true)",
-        "assertionOffset": 1087,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "17.08.delete-informa-presenca-32702e0a",
-        "sourceTestPath": "tests/17.08.test.js",
-        "testName": "delete informa presença",
-        "inputExpression": "c.delete(1)",
-        "matcher": "assert.equal",
-        "expectedExpression": "false",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const c=new Cache(()=>0);c.set(1,'x',5);assert.equal(c.delete(1),true);",
-        "assertionExpression": "assert.equal(c.delete(1),false)",
-        "contractRule": "c.delete(1) assert.equal false",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(c.delete(1),false)",
-        "assertionOffset": 1166,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      }
-    ]
+    "prompt": "Implemente Microprojeto - cache genérico; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente."
   },
   "17.09": {
     "environment": "rubric",
@@ -15158,113 +15098,32 @@
     "evidenceNote": "Evidência declarada · execução apoia o estudo; a decisão exige análise do contexto e conferência humana da rubrica."
   },
   "18.02": {
-    "environment": "typescript",
-    "version": 2,
+    "environment": "rubric",
+    "version": 1,
     "checks": [
-      "types",
-      "behavior"
+      "rubric"
     ],
-    "entryPath": "patch.ts",
-    "testPath": "tests/18.02.test.js",
-    "behaviorTestPath": "__devpath_protected_behavior__.js",
     "referenceDir": "solutions/18.02",
-    "correctFiles": [
-      {
-        "path": "patch.ts",
-        "content": "export type Perfil={nome:string;tema:'claro'|'escuro'}; export type Usuario={id:number;nome:string;perfil:Perfil}; export function aplicarPatch<T extends object>(base:T,patch:Partial<T>):T{return {...base,...patch};}"
-      }
-    ],
-    "contractTypeFiles": [
-      {
-        "path": "contracts/18.02.types.ts",
-        "content": "import {aplicarPatch,type Usuario} from '../patch.js';\nconst u:Usuario={id:1,nome:'Ana',perfil:{nome:'alto contraste',tema:'escuro'}};const atual=aplicarPatch(u,{nome:'Bia'});const id:number=atual.id;\n// @ts-expect-error chave desconhecida\naplicarPatch(u,{apelido:'B'});\n// @ts-expect-error nome tem tipo string\naplicarPatch(u,{nome:2});"
-      }
-    ],
     "rubric": [
-      "Os type tests confirmam as relações e rejeitam os casos inválidos publicados."
+      "Implementar merge raso sem mutar base, provar referência nova e chaves/tipos inválidos (0–4).",
+      "Demonstrar que perfil aninhado é substituído inteiro e Partial<T> é raso (0–4).",
+      "Explicar validação necessária para JSON externo e transferir a preferências (0–2)."
     ],
-    "assertionCases": [
-      {
-        "id": "18.02.retorna-copia-preserva-campo-f632d513",
-        "sourceTestPath": "tests/18.02.test.js",
-        "testName": "retorna cópia, preserva campos ausentes e substitui o objeto aninhado inteiro",
-        "inputExpression": "atual",
-        "matcher": "toEqual",
-        "expectedExpression": "{id:1,nome:'Bia',perfil}",
-        "negated": false,
-        "initialArrangementExpression": "const perfil={nome:'alto contraste',tema:'escuro'};const original={id:1,nome:'Ana',perfil};const atual=aplicarPatch(original,{nome:'Bia'});",
-        "assertionExpression": "expect(atual).toEqual({id:1,nome:'Bia',perfil})",
-        "contractRule": "atual toEqual {id:1,nome:'Bia',perfil}",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atual).toEqual({id:1,nome:'Bia',perfil})",
-        "assertionOffset": 362,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "18.02.retorna-copia-preserva-campo-aff464d3",
-        "sourceTestPath": "tests/18.02.test.js",
-        "testName": "retorna cópia, preserva campos ausentes e substitui o objeto aninhado inteiro",
-        "inputExpression": "atual",
-        "matcher": "toBe",
-        "expectedExpression": "original",
-        "negated": true,
-        "initialArrangementExpression": "const perfil={nome:'alto contraste',tema:'escuro'};const original={id:1,nome:'Ana',perfil};const atual=aplicarPatch(original,{nome:'Bia'});expect(atual).toEqual({id:1,nome:'Bia',perfil});",
-        "assertionExpression": "expect(atual).not.toBe(original)",
-        "contractRule": "atual não toBe original",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(atual).not.toBe(original)",
-        "assertionOffset": 463,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "18.02.retorna-copia-preserva-campo-26e02a51",
-        "sourceTestPath": "tests/18.02.test.js",
-        "testName": "retorna cópia, preserva campos ausentes e substitui o objeto aninhado inteiro",
-        "inputExpression": "atual.perfil",
-        "matcher": "toBe",
-        "expectedExpression": "perfil",
-        "negated": false,
-        "initialArrangementExpression": "const perfil={nome:'alto contraste',tema:'escuro'};const original={id:1,nome:'Ana',perfil};const atual=aplicarPatch(original,{nome:'Bia'});expect(atual).toEqual({id:1,nome:'Bia',perfil});expect(atual).not.toBe(original);",
-        "assertionExpression": "expect(atual.perfil).toBe(perfil)",
-        "contractRule": "atual.perfil toBe perfil",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(atual.perfil).toBe(perfil)",
-        "assertionOffset": 549,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "18.02.retorna-copia-preserva-campo-773bc211",
-        "sourceTestPath": "tests/18.02.test.js",
-        "testName": "retorna cópia, preserva campos ausentes e substitui o objeto aninhado inteiro",
-        "inputExpression": "original.nome",
-        "matcher": "toBe",
-        "expectedExpression": "'Ana'",
-        "negated": false,
-        "initialArrangementExpression": "const perfil={nome:'alto contraste',tema:'escuro'};const original={id:1,nome:'Ana',perfil};const atual=aplicarPatch(original,{nome:'Bia'});expect(atual).toEqual({id:1,nome:'Bia',perfil});expect(atual).not.toBe(original);expect(atual.perfil).toBe(perfil);",
-        "assertionExpression": "expect(original.nome).toBe('Ana')",
-        "contractRule": "original.nome toBe 'Ana'",
-        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(original.nome).toBe('Ana')",
-        "assertionOffset": 636,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      },
-      {
-        "id": "18.02.retorna-copia-preserva-campo-3ed3d7ad",
-        "sourceTestPath": "tests/18.02.test.js",
-        "testName": "retorna cópia, preserva campos ausentes e substitui o objeto aninhado inteiro",
-        "inputExpression": "atualizado.perfil",
-        "matcher": "toEqual",
-        "expectedExpression": "{nome:'compacto',tema:'claro'}",
-        "negated": false,
-        "initialArrangementExpression": "const perfil={nome:'alto contraste',tema:'escuro'};const original={id:1,nome:'Ana',perfil};const atual=aplicarPatch(original,{nome:'Bia'});expect(atual).toEqual({id:1,nome:'Bia',perfil});expect(atual).not.toBe(original);expect(atual.perfil).toBe(perfil);expect(original.nome).toBe('Ana');const atualizado=aplicarPatch(original,{perfil:{nome:'compacto',tema:'claro'}});",
-        "assertionExpression": "expect(atualizado.perfil).toEqual({nome:'compacto',tema:'claro'})",
-        "contractRule": "atualizado.perfil toEqual {nome:'compacto',tema:'claro'}",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(atualizado.perfil).toEqual({nome:'compacto',tema:'claro'})",
-        "assertionOffset": 803,
-        "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
-      }
-    ]
+    "transfer": {
+      "id": "18.02-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transferência 18.02\n\nAplique os critérios a Parsons de patch em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão."
+        }
+      ],
+      "rubric": [
+        "Implementar merge raso sem mutar base, provar referência nova e chaves/tipos inválidos (0–4).",
+        "Demonstrar que perfil aninhado é substituído inteiro e Partial<T> é raso (0–4).",
+        "Explicar validação necessária para JSON externo e transferir a preferências (0–2)."
+      ]
+    },
+    "prompt": "Analise Parsons de patch com evidência localizada em patch.ts e resolva um caso independente."
   },
   "18.03": {
     "environment": "node-simulated",
@@ -16014,76 +15873,60 @@
     ]
   },
   "19.01": {
-    "environment": "typescript",
-    "version": 2,
+    "environment": "rubric",
+    "version": 1,
     "checks": [
-      "types",
-      "mutation"
+      "rubric"
     ],
-    "entryPath": "flags.ts",
     "referenceDir": "solutions/19.01",
-    "correctFiles": [
-      {
-        "path": "flags.ts",
-        "content": "export type User={id:number;name:string;active:boolean}; export type Flags<T>={[K in keyof T]:boolean}; export type UserFlags=Flags<User>;"
-      }
-    ],
-    "contractTypeFiles": [
-      {
-        "path": "contracts/19.01.types.ts",
-        "content": "import type {Flags,User} from '../flags.js'; type F=Flags<User>; const flags:F={id:true,name:false,active:true};\n// @ts-expect-error chaves inexistentes\nconst extra:F={id:true,name:false,active:true,email:true};\n// @ts-expect-error valor deve ser boolean\nconst wrong:F={id:true,name:'no',active:true};"
-      }
-    ],
-    "typeContractMutants": [
-      {
-        "id": "weakened-contract",
-        "files": [
-          {
-            "path": "flags.ts",
-            "content": "export type User={id:number;name:string;active:boolean}; export type Flags<T>=Record<string,boolean>; export type UserFlags=Flags<User>;"
-          }
-        ]
-      }
-    ],
     "rubric": [
-      "Os type tests confirmam as relações e rejeitam os casos inválidos publicados."
-    ]
+      "Prever Flags<User> e provar com igualdade type-level executada (0–4).",
+      "Negativos de propriedades/valores e variante homomórfica readonly/opcional (0–3).",
+      "Transferir para mapa de permissões e separar tipo de runtime (0–3)."
+    ],
+    "transfer": {
+      "id": "19.01-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transferência 19.01\n\nAplique os critérios a Expanda à mão em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão."
+        }
+      ],
+      "rubric": [
+        "Prever Flags<User> e provar com igualdade type-level executada (0–4).",
+        "Negativos de propriedades/valores e variante homomórfica readonly/opcional (0–3).",
+        "Transferir para mapa de permissões e separar tipo de runtime (0–3)."
+      ]
+    },
+    "prompt": "Analise Expanda à mão com evidência localizada em flags.ts e resolva um caso independente."
   },
   "19.02": {
-    "environment": "typescript",
-    "version": 2,
+    "environment": "rubric",
+    "version": 1,
     "checks": [
-      "types",
-      "mutation"
+      "rubric"
     ],
-    "entryPath": "element.ts",
     "referenceDir": "solutions/19.02",
-    "correctFiles": [
-      {
-        "path": "element.ts",
-        "content": "export type ElementOrSelf<T>=T extends readonly (infer U)[]?U:T;"
-      }
-    ],
-    "contractTypeFiles": [
-      {
-        "path": "contracts/19.02.types.ts",
-        "content": "import type {ElementOrSelf} from '../element.js'; type Equal<A,B>=(<T>()=>T extends A?1:2) extends (<T>()=>T extends B?1:2)?true:false; type Assert<T extends true>=T;\ntype A=Assert<Equal<ElementOrSelf<string[]>,string>>; type B=Assert<Equal<ElementOrSelf<readonly [1,2]>,1|2>>; type C=Assert<Equal<ElementOrSelf<number>,number>>; type D=Assert<Equal<ElementOrSelf<boolean[]|number>,boolean|number>>;"
-      }
-    ],
-    "typeContractMutants": [
-      {
-        "id": "weakened-contract",
-        "files": [
-          {
-            "path": "element.ts",
-            "content": "export type ElementOrSelf<T>=[T] extends [readonly (infer U)[]]?U:T;"
-          }
-        ]
-      }
-    ],
     "rubric": [
-      "Os type tests confirmam as relações e rejeitam os casos inválidos publicados."
-    ]
+      "Definir conditional com readonly array/tuple e ramo self para não-arrays (0–3).",
+      "Provar string[], tuple, number e união readonly/boolean com igualdade type-level (0–4).",
+      "Explicar distributividade e criar variante Promise/valor (0–3)."
+    ],
+    "transfer": {
+      "id": "19.02-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transferência 19.02\n\nAplique os critérios a Parsons condicional em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão."
+        }
+      ],
+      "rubric": [
+        "Definir conditional com readonly array/tuple e ramo self para não-arrays (0–3).",
+        "Provar string[], tuple, number e união readonly/boolean com igualdade type-level (0–4).",
+        "Explicar distributividade e criar variante Promise/valor (0–3)."
+      ]
+    },
+    "prompt": "Analise Parsons condicional com evidência localizada em element.ts e resolva um caso independente."
   },
   "19.03": {
     "environment": "node-simulated",
@@ -16217,42 +16060,32 @@
     "prompt": "Implemente Eventos por template literal; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente."
   },
   "19.06": {
-    "environment": "typescript",
-    "version": 2,
+    "environment": "rubric",
+    "version": 1,
     "checks": [
-      "types",
-      "mutation"
+      "rubric"
     ],
-    "entryPath": "mutable.ts",
     "referenceDir": "solutions/19.06",
-    "correctFiles": [
-      {
-        "path": "mutable.ts",
-        "content": "export type MutableRequired<T>={-readonly [K in keyof T]-?:T[K]}; export type Settings=MutableRequired<{readonly theme?:'light'|'dark';readonly retries?:number}>;"
-      }
-    ],
-    "contractTypeFiles": [
-      {
-        "path": "contracts/19.06.types.ts",
-        "content": "import type {MutableRequired} from '../mutable.js'; type Input={readonly theme?:'light'|'dark';readonly retries?:number}; type Out=MutableRequired<Input>; let out:Out={theme:'dark',retries:2};out.retries=3;\n// @ts-expect-error mapped -? requires theme\nconst absent:Out={retries:2};\n// @ts-expect-error exact value union excludes undefined\nconst invalid:Out={theme:undefined,retries:2};"
-      }
-    ],
-    "typeContractMutants": [
-      {
-        "id": "weakened-contract",
-        "files": [
-          {
-            "path": "mutable.ts",
-            "content": "export type MutableRequired<T>=T; export type Settings=MutableRequired<{readonly theme?:'light'|'dark';readonly retries?:number}>;"
-          }
-        ]
-      }
-    ],
     "rubric": [
-      "Aplicar -readonly e -? e comprovar que as propriedades resultantes são obrigatórias e graváveis.",
-      "No TypeScript 6.0.3 em --strict sem exactOptionalPropertyTypes, testar ausência e undefined em propriedades opcionais, inclusive union explícito; ambos são rejeitados.",
-      "Com exactOptionalPropertyTypes, um union explícito com undefined permanece; comparar os dois modos antes de normalizar Settings."
-    ]
+      "Aplicar -readonly e -? no lugar correto para normalizar X (0–4).",
+      "Provar required/mutable e negativos de ausência; descrever exactOptionalPropertyTypes com undefined explícito (0–4).",
+      "Transferir para normalização de settings sem afirmar que `-?` remove valor undefined (0–2)."
+    ],
+    "transfer": {
+      "id": "19.06-transfer",
+      "files": [
+        {
+          "path": "transfer.md",
+          "content": "# Transferência 19.06\n\nAplique os critérios a Expandir mapped type em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão."
+        }
+      ],
+      "rubric": [
+        "Aplicar -readonly e -? no lugar correto para normalizar X (0–4).",
+        "Provar required/mutable e negativos de ausência; descrever exactOptionalPropertyTypes com undefined explícito (0–4).",
+        "Transferir para normalização de settings sem afirmar que `-?` remove valor undefined (0–2)."
+      ]
+    },
+    "prompt": "Analise Expandir mapped type com evidência localizada em mutable.ts e resolva um caso independente."
   },
   "19.07": {
     "environment": "rubric",
@@ -16350,73 +16183,7 @@
         "Evento distinto permanece isolado; payload incompatível é rejeitado pelo contrato tipado."
       ]
     },
-    "prompt": "Implemente Microprojeto - DSL de eventos tipada; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente.",
-    "assertionCases": [
-      {
-        "id": "19.08.evento-envia-somente-o-paylo-a0511b08",
-        "sourceTestPath": "tests/19.08.test.js",
-        "testName": "evento envia somente o payload associado ao nome",
-        "inputExpression": "received",
-        "matcher": "assert.deepEqual",
-        "expectedExpression": "[{sku:'x',price:4}]",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const emitter=new Emitter();\n  const received=[];\n  emitter.on('priceChanged',payload=>received.push(payload));\n  emitter.emit('priceChanged',{sku:'x',price:4});",
-        "assertionExpression": "assert.deepEqual(received,[{sku:'x',price:4}])",
-        "contractRule": "received assert.deepEqual [{sku:'x',price:4}]",
-        "investigation": "Confira a expressão de entrada e a comparação assert.deepEqual deste caso: assert.deepEqual(received,[{sku:'x',price:4}])",
-        "assertionOffset": 394,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "19.08.off-impede-chamadas-futuras--2f3174e4",
-        "sourceTestPath": "tests/19.08.test.js",
-        "testName": "off impede chamadas futuras e é idempotente",
-        "inputExpression": "calls",
-        "matcher": "assert.equal",
-        "expectedExpression": "0",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const emitter=new Emitter();\n  let calls=0;\n  const listener=()=>{calls++;};\n  emitter.on('itemRemoved',listener);\n  emitter.off('itemRemoved',listener);\n  emitter.off('itemRemoved',listener);\n  emitter.emit('itemRemoved',{sku:'x'});",
-        "assertionExpression": "assert.equal(calls,0)",
-        "contractRule": "calls assert.equal 0",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(calls,0)",
-        "assertionOffset": 795,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "19.08.listeners-de-eventos-distint-58059764",
-        "sourceTestPath": "tests/19.08.test.js",
-        "testName": "listeners de eventos distintos permanecem isolados",
-        "inputExpression": "added",
-        "matcher": "assert.equal",
-        "expectedExpression": "1",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const emitter=new Emitter();\n  let added=0;\n  let removed=0;\n  emitter.on('itemAdded',()=>{added++;});\n  emitter.on('itemRemoved',()=>{removed++;});\n  emitter.emit('itemAdded',{sku:'x'});",
-        "assertionExpression": "assert.equal(added,1)",
-        "contractRule": "added assert.equal 1",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(added,1)",
-        "assertionOffset": 1132,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      },
-      {
-        "id": "19.08.listeners-de-eventos-distint-49814ca6",
-        "sourceTestPath": "tests/19.08.test.js",
-        "testName": "listeners de eventos distintos permanecem isolados",
-        "inputExpression": "removed",
-        "matcher": "assert.equal",
-        "expectedExpression": "0",
-        "negated": false,
-        "assertionApi": "node-assert",
-        "initialArrangementExpression": "const emitter=new Emitter();\n  let added=0;\n  let removed=0;\n  emitter.on('itemAdded',()=>{added++;});\n  emitter.on('itemRemoved',()=>{removed++;});\n  emitter.emit('itemAdded',{sku:'x'});\n  assert.equal(added,1);",
-        "assertionExpression": "assert.equal(removed,0)",
-        "contractRule": "removed assert.equal 0",
-        "investigation": "Confira a expressão de entrada e a comparação assert.equal deste caso: assert.equal(removed,0)",
-        "assertionOffset": 1210,
-        "executionScope": "source-local-suite; not evidence of browser behavior"
-      }
-    ]
+    "prompt": "Implemente Microprojeto - DSL de eventos tipada; use os arquivos publicados, prove entradas válidas e inválidas e transfira a solução a um caso independente."
   },
   "19.09": {
     "environment": "node-simulated",
@@ -17037,7 +16804,7 @@
     "entryPath": "pipeline.js",
     "testPath": "tests/20.08.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "import {pipeline} from \"./pipeline.js\";\nfunction* tracked(limit, pulls, closed){try{for(let i=1;i<=limit;i++){pulls.count++;yield i;}}finally{closed.value=true;}}\ntest(\"lazy map/filter/take puxa só até resultados aceitos\",()=>{const pulls={count:0},closed={value:false};const values=[...pipeline(tracked(10,pulls,closed)).map(x=>x*2).filter(x=>x>3).take(2)];expect(values).toEqual([4,6]);expect(pulls.count).toBe(3);expect(closed.value).toBe(true);});\ntest(\"take zero não consome e a pipeline pode ser iterada de novo\",()=>{const pulls={count:0},closed={value:false};const source=tracked(10,pulls,closed);const p=pipeline(source).map(x=>x).take(0);expect([...p]).toEqual([]);expect(pulls.count).toBe(0);const finite=pipeline([1,2,3]).filter(x=>x>1).take(1);expect([...finite]).toEqual([2]);expect([...finite]).toEqual([2]);});\ntest('take posicional e ramos independentes',()=>{const base=pipeline([1,2,3,4]);expect([...base.take(2).map(x=>x*10)]).toEqual([10,20]);expect([...base.filter(x=>x%2===0).take(2)]).toEqual([2,4]);expect([...base]).toEqual([1,2,3,4]);});\ntest('break fecha a fonte',()=>{let closed=false;function* input(){try{yield 1;yield 2;}finally{closed=true;}}for(const value of pipeline(input()))break;expect(closed).toBe(true);});",
+    "tests": "import {pipeline} from \"./pipeline.js\";\nfunction* tracked(limit, pulls, closed){try{for(let i=1;i<=limit;i++){pulls.count++;yield i;}}finally{closed.value=true;}}\ntest(\"lazy map/filter/take puxa só até resultados aceitos\",()=>{const pulls={count:0},closed={value:false};const values=[...pipeline(tracked(10,pulls,closed)).map(x=>x*2).filter(x=>x>3).take(2)];expect(values).toEqual([4,6]);expect(pulls.count).toBe(3);expect(closed.value).toBe(true);});\ntest(\"take zero não consome e a pipeline pode ser iterada de novo\",()=>{const pulls={count:0},closed={value:false};const source=tracked(10,pulls,closed);const p=pipeline(source).map(x=>x).take(0);expect([...p]).toEqual([]);expect(pulls.count).toBe(0);const finite=pipeline([1,2,3]).filter(x=>x>1).take(1);expect([...finite]).toEqual([2]);expect([...finite]).toEqual([2]);});\ntest('iterável reiniciável, generator consumível e fábrica explícita',()=>{\n  const values=pipeline([1,2]);\n  expect([...values]).toEqual([1,2]);\n  expect([...values]).toEqual([1,2]);\n  function* generate(){yield 1;yield 2;}\n  const oneShot=pipeline(generate());\n  expect([...oneShot]).toEqual([1,2]);\n  expect([...oneShot]).toEqual([]);\n  let creations=0;\n  const makeSource=()=>{creations++;return generate();};\n  expect([...pipeline(makeSource())]).toEqual([1,2]);\n  expect([...pipeline(makeSource())]).toEqual([1,2]);\n  expect(creations).toBe(2);\n});\ntest('take fecha a fonte e não faz pull após a quantidade aceita',()=>{\n  const trace=[];\n  function* source(){try{for(let value=1;value<=3;value++){trace.push('pull:'+value);yield value;}}finally{trace.push('return');}}\n  expect([...pipeline(source()).take(2)]).toEqual([1,2]);\n  expect(trace).toEqual(['pull:1','pull:2','return']);\n});\ntest('take posicional e ramos independentes',()=>{const base=pipeline([1,2,3,4]);expect([...base.take(2).map(x=>x*10)]).toEqual([10,20]);expect([...base.filter(x=>x%2===0).take(2)]).toEqual([2,4]);expect([...base]).toEqual([1,2,3,4]);});\ntest('break fecha a fonte',()=>{let closed=false;function* input(){try{yield 1;yield 2;}finally{closed=true;}}for(const value of pipeline(input()).map(x=>x).filter(Boolean))break;expect(closed).toBe(true);});\ntest('array reinicia, mesma instância generator pode estar consumida, fábrica cria nova instância',()=>{const array=pipeline([1,2]);expect([...array]).toEqual([1,2]);expect([...array]).toEqual([1,2]);function* items(){yield 1;yield 2;}const instance=pipeline(items());expect([...instance]).toEqual([1,2]);expect([...instance]).toEqual([]);const makeItems=()=>items();expect([...pipeline(makeItems())]).toEqual([1,2]);expect([...pipeline(makeItems())]).toEqual([1,2]);});\ntest('take fecha com return sem pull extra depois do limite',()=>{const trace=[];function* input(){try{for(let n=1;n<=3;n++){trace.push('pull:'+n);yield n;}}finally{trace.push('return');}}expect([...pipeline(input()).take(2)]).toEqual([1,2]);expect(trace).toEqual(['pull:1','pull:2','return']);});",
     "referenceDir": "solutions/20.08",
     "correctFiles": [
       {
@@ -17061,21 +16828,21 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transferência 20.08\n\nConstrua pipeline para pedidos em fluxo infinito: converta cada entrada para {sku, ativo}, filtre ativos e pegue três. Fonte começa com um inativo e, após o terceiro ativo, lança se puxada de novo. Resultado esperado: três SKUs, quatro pulls e produtor fechado. Acrescente `take(0)` sem pull e segunda iteração independente."
+          "content": "# Transferência 20.08\n\nCompare três fontes para a mesma pipeline: um array reiniciável, a mesma instância de generator (iterador de uso único) e uma fábrica que cria generators. Registre a saída da primeira e da segunda iteração do array e da instância. Em seguida, chame a fábrica para construir uma pipeline nova a cada passagem e confirme que ambas começam do início. Depois encadeie map/filter/take com uma fonte que conte os valores produzidos: inclua entradas descartadas pelo filtro, prove que take(0) não consome, que não há pull após o último resultado aceito e que interromper com break propaga return/finally. Não suponha que todo for...of reinicia qualquer fonte."
         }
       ],
       "rubric": [
-        "Cada operador adia o trabalho até next e o contador de pulls distingue resultado de entrada.",
-        "A fonte encerra sem pull extra depois do terceiro ativo; take(0) não avança a fonte.",
-        "return/finally fecha o produtor e a explicação relaciona demanda upstream a memória/cancelamento."
+        "Distingue a chamada a Symbol.iterator de um novo cursor: array reinicia, a mesma instância generator pode estar consumida e uma fábrica cria outra instância.",
+        "Conta pulls da fonte separadamente dos valores aceitos pelo filtro e demonstra que take(0) não consome.",
+        "Confirma que take/break fecha a fonte por return/finally sem pedir um item além do limite."
       ]
     },
     "rubric": [
-      "Cada operador adia o trabalho até next e o contador de pulls distingue resultado de entrada.",
-      "A fonte encerra sem pull extra depois do terceiro ativo; take(0) não avança a fonte.",
-      "return/finally fecha o produtor e a explicação relaciona demanda upstream a memória/cancelamento."
+      "Distingue a chamada a Symbol.iterator de um novo cursor: array reinicia, a mesma instância generator pode estar consumida e uma fábrica cria outra instância.",
+      "Conta pulls da fonte separadamente dos valores aceitos pelo filtro e demonstra que take(0) não consome.",
+      "Confirma que take/break fecha a fonte por return/finally sem pedir um item além do limite."
     ],
-    "prompt": "Resolva 20.08 conforme o contrato e use a evidência dos testes para transferir o conceito.\n\nContrato da entrega (20.08):\n- pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().\n- Cada operador retorna um novo pipeline lazy; take limita valores aceitos, take(0) não consome e return() da fonte é respeitado ao interromper a iteração.",
+    "prompt": "Resolva 20.08 conforme o contrato e use a evidência dos testes para transferir o conceito.\n\nContrato da entrega (20.08):\n- pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().\n- source é um iterable. Array cria novo iterator; a mesma instância generator pode estar consumida; para repetir, chame a fábrica e passe a nova instância a outra pipeline.\n- Cada operador retorna um pipeline lazy independente; take limita valores aceitos, take(0) não consome, filtros podem descartar pulls, e return() da fonte é propagado ao interromper a iteração.",
     "assertionCases": [
       {
         "id": "20.08.lazy-map-filter-take-puxa-so-321e0f09",
@@ -18484,7 +18251,7 @@
     "entryPath": "tempo.js",
     "testPath": "tests/21.07.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "import{debounce,throttle}from'./tempo.js';test('trailing debounce resets timer and cancel clears',()=>{let now=0,j=[],o=[];const set=(fn,ms)=>{const x={fn,at:now+ms,c:false};j.push(x);return x},clear=x=>x.c=true,advance=t=>{now=t;for(const x of j.filter(x=>!x.c&&x.at<=t)){x.c=true;x.fn();}};const d=debounce(x=>o.push(x),100,{set,clear});d(1);now=20;d(2);advance(119);expect(o).toEqual([]);advance(120);expect(o).toEqual([2]);d(3);d.cancel();advance(300);expect(o).toEqual([2]);});test('throttle accepts exact boundary',()=>{let t=0,o=[];const f=throttle(x=>o.push(x),100,{now:()=>t});f(0);t=99;f(99);t=100;f(100);expect(o).toEqual([0,100]);});\ntest('100 eventos usam o relogio do starter',()=>{let now=0;const tasks=[];const callsD=[],callsT=[];const clock={agora:()=>now,setTimeout(fn,ms){const task={at:now+ms,fn,cancelled:false};tasks.push(task);return task;},clearTimeout(task){task.cancelled=true;}};const d=debounce(x=>callsD.push([now,x]),100,clock),t=throttle(x=>callsT.push([now,x]),100,clock);for(let i=0;i<100;i++){now=i*10;d(i);t(i);}now=1090;for(const task of tasks)if(!task.cancelled&&task.at<=now)task.fn();expect(callsD).toEqual([[1090,99]]);expect(callsT.map(row=>row[0])).toEqual([0,100,200,300,400,500,600,700,800,900]);d(101);d.cancel();});",
+    "tests": "import{debounce,throttle}from'./tempo.js';test('trailing debounce resets timer and cancel clears',()=>{let now=0,j=[],o=[];const set=(fn,ms)=>{const x={fn,at:now+ms,c:false};j.push(x);return x},clear=x=>x.c=true,advance=t=>{now=t;for(const x of j.filter(x=>!x.c&&x.at<=t)){x.c=true;x.fn();}};const d=debounce(x=>o.push(x),100,{set,clear});d(1);now=20;d(2);advance(119);expect(o).toEqual([]);advance(120);expect(o).toEqual([2]);d(3);d.cancel();advance(300);expect(o).toEqual([2]);});test('throttle accepts exact boundary',()=>{let t=0,o=[];const f=throttle(x=>o.push(x),100,{now:()=>t});f(0);t=99;f(99);t=100;f(100);expect(o).toEqual([0,100]);});\ntest('starter com quatro eventos mantém as duas saídas esperadas',()=>{\n  let now=0;const jobs=[];\n  const clock={agora:()=>now,setTimeout(fn,ms){const task={at:now+ms,fn,cancelled:false};jobs.push(task);return task;},clearTimeout(task){task.cancelled=true;}};\n  const advance=target=>{for(;;){const task=jobs.filter(item=>!item.cancelled&&item.at<=target).sort((a,b)=>a.at-b.at)[0];if(!task)break;task.cancelled=true;now=task.at;task.fn();}now=target;};\n  const callsD=[],callsT=[];\n  const d=debounce(()=>callsD.push(now),100,clock);\n  const t=throttle(()=>callsT.push(now),100,{now:clock.agora});\n  for(const at of [0,20,40,160]){advance(at);d();t();}\n  advance(1000);\n  expect(callsD).toEqual([140,260]);\n  expect(callsT).toEqual([0,160]);\n});\ntest('eventos no limite trailing e leading seguem a politica declarada',()=>{\n  let now=0;const jobs=[],debounced=[],throttled=[];\n  const clock={agora:()=>now,setTimeout(fn,ms){const task={at:now+ms,fn,cancelled:false};jobs.push(task);return task;},clearTimeout(task){task.cancelled=true;}};\n  const d=debounce(value=>debounced.push([now,value]),100,clock);\n  const t=throttle(value=>throttled.push([now,value]),100,{now:clock.agora});\n  d('trailing');t('leading');now=99;t('before-boundary');now=100;t('at-boundary');\n  for(const job of jobs)if(!job.cancelled&&job.at<=now){job.cancelled=true;job.fn();}\n  expect(debounced).toEqual([[100,'trailing']]);\n  expect(throttled).toEqual([[0,'leading'],[100,'at-boundary']]);\n});\ntest('100 eventos usam o relogio do starter',()=>{let now=0;const tasks=[];const callsD=[],callsT=[];const clock={agora:()=>now,setTimeout(fn,ms){const task={at:now+ms,fn,cancelled:false};tasks.push(task);return task;},clearTimeout(task){task.cancelled=true;}};const d=debounce(x=>callsD.push([now,x]),100,clock),t=throttle(x=>callsT.push([now,x]),100,clock);for(let i=0;i<100;i++){now=i*10;d(i);t(i);}now=1090;for(const task of tasks)if(!task.cancelled&&task.at<=now)task.fn();expect(callsD).toEqual([[1090,99]]);expect(callsT.map(row=>row[0])).toEqual([0,100,200,300,400,500,600,700,800,900]);d(101);d.cancel();});",
     "referenceDir": "solutions/21.07",
     "correctFiles": [
       {
@@ -18508,21 +18275,21 @@
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transfer 21.07\n\nConstrua um autosave com debounce final de 300 ms para edições em t=0, 100 e 299 (só a última salva em 599); cancele uma edição em t=800 antes do salvamento previsto em t=1100. Separadamente, defina um throttle de rolagem na borda inicial exata de 250 ms e mostre uma tabela de eventos com marcas de tempo."
+          "content": "# Transfer 21.07\n\nExecute os dois cronogramas separadamente com relógio falso. Primeiro, acompanhe os quatro eventos do starter em t=0,20,40,160: debounce trailing produz t=140 e t=260; throttle leading produz t=0 e t=160. Depois simule outra rajada de 100 eventos em t=0,10,...,990: debounce trailing salva apenas o evento 99 em t=1090; throttle leading aceita t=0,100,...,900. Declare a regra de borda: o throttle leading aceita exatamente quando t - última chamada >= espera (incluindo t=100); o callback trailing devido no limite executa quando o relógio avança até o prazo. Inclua uma edição cancelada e explique por que a política do debounce e a do throttle são diferentes."
         }
       ],
       "rubric": [
-        "Os testes de linha do tempo verificam horários exatos e o último valor do autosave; o cancelamento remove o callback pendente.",
-        "O throttle de rolagem declara e testa a política exata da fronteira.",
-        "A explicação distingue debounce por janela de silêncio de throttle por limite de frequência nos dois casos de uso."
+        "Os quatro eventos do starter têm saídas separadas e exatas para debounce trailing ([140,260]) e throttle leading ([0,160]).",
+        "A segunda rajada contém exatamente 100 eventos e produz somente a última chamada trailing em t=1090 e chamadas leading em t=0,100,...,900.",
+        "O evento throttle em t=100 é aceito pelo limite inclusivo; cancelamento remove callback trailing pendente e a explicação não confunde as duas políticas."
       ]
     },
     "rubric": [
-      "Os testes de linha do tempo verificam horários exatos e o último valor do autosave; o cancelamento remove o callback pendente.",
-      "O throttle de rolagem declara e testa a política exata da fronteira.",
-      "A explicação distingue debounce por janela de silêncio de throttle por limite de frequência nos dois casos de uso."
+      "Os quatro eventos do starter têm saídas separadas e exatas para debounce trailing ([140,260]) e throttle leading ([0,160]).",
+      "A segunda rajada contém exatamente 100 eventos e produz somente a última chamada trailing em t=1090 e chamadas leading em t=0,100,...,900.",
+      "O evento throttle em t=100 é aceito pelo limite inclusivo; cancelamento remove callback trailing pendente e a explicação não confunde as duas políticas."
     ],
-    "prompt": "Complete 21.07 and demonstrate the contract using independent evidence.\n\nContrato da entrega (21.07):\n- Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).\n- relogio fornece agora(), setTimeout(fn, ms) e clearTimeout(id). Simule 100 eventos em t=0,10,...,990 ms.\n- Debounce final chama uma vez em t=1090; throttle inicial chama em t=0,100,...,900.",
+    "prompt": "Complete 21.07 and demonstrate the contract using independent evidence.\n\nContrato da entrega (21.07):\n- Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).\n- No cronograma de quatro eventos do starter (t=0,20,40,160), debounce trailing chama em t=140,260 e throttle leading em t=0,160.\n- Em cenário separado de 100 eventos (t=0,10,...,990), debounce trailing chama em t=1090 com valor 99 e throttle leading em t=0,100,...,900.\n- Throttle leading aceita na borda quando t - última chamada >= 100; debounce trailing dispara ao avançar o relógio até o prazo após o último evento.",
     "assertionCases": [
       {
         "id": "21.07.trailing-debounce-resets-tim-0e652d46",
@@ -18728,7 +18495,7 @@
     "entryPath": "index.html",
     "testPath": "tests/21.09.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "test('measurement separates warmups and reports median plus spread',async()=>{const api=await import('./lab.js');let i=0;const sequence=[0,10,11,12,13,22];const r=api.medir(()=>{},[1],{warmups:2,runs:3,now:()=>sequence[i++]});expect(r.samples).toEqual([10,1,9]);expect(r.median).toBe(9);expect(r.min).toBe(1);expect(r.max).toBe(10);});test('valid click renders both implementations with shared result',()=>{const input=document.querySelector('#tamanho'),button=document.querySelector('#medir');input.value='10';button.dispatchEvent(new Event('click'));expect(document.querySelectorAll('#resultados tr').length).toBe(2);expect(document.querySelector('#mensagem').textContent.includes('Resultado 45')).toBe(true);expect(document.querySelector('#ambiente').textContent.length>0).toBe(true);const expected=typeof performance.memory?.usedJSHeapSize==='number';expect(document.querySelector('#memoria').textContent==='N/D'||expected).toBe(true);});test('invalid size reports an accessible error and clears stale rows',()=>{const input=document.querySelector('#tamanho'),button=document.querySelector('#medir');input.value='0';button.dispatchEvent(new Event('click'));expect(document.querySelector('#mensagem').textContent).toBe('Informe um inteiro entre 1 e 200000.');expect(document.querySelector('#resultados').textContent).toBe('');expect(document.querySelector('#mensagem').getAttribute('role')).toBe('status');});test('mediana de quatro amostras usa a media central',async()=>{const {medir}=await import('./lab.js');let i=0;const times=[0,2,3,7,8,14,15,25];const r=medir(()=>{},[1],{warmups:0,runs:4,now:()=>times[i++]});expect(r.samples).toEqual([2,4,6,10]);expect(r.median).toBe(5);});",
+    "tests": "test('measurement separates warmups and reports median plus spread',async()=>{const api=await import('./lab.js');let i=0;const sequence=[0,10,11,12,13,22];const r=api.medir(()=>{},[1],{warmups:2,runs:3,now:()=>sequence[i++]});expect(r.samples).toEqual([10,1,9]);expect(r.median).toBe(9);expect(r.min).toBe(1);expect(r.max).toBe(10);});test('valid click renders both implementations with shared result',()=>{const input=document.querySelector('#tamanho'),button=document.querySelector('#medir');input.value='10';button.dispatchEvent(new Event('click'));expect(document.querySelectorAll('#resultados tr').length).toBe(2);expect(document.querySelector('#mensagem').textContent.includes('Resultado 45')).toBe(true);expect(document.querySelector('#ambiente').textContent.length>0).toBe(true);const expected=typeof performance.memory?.usedJSHeapSize==='number';expect(document.querySelector('#memoria').textContent==='N/D'||expected).toBe(true);});test('invalid size reports an accessible error and clears stale rows',()=>{const input=document.querySelector('#tamanho'),button=document.querySelector('#medir');input.value='0';button.dispatchEvent(new Event('click'));expect(document.querySelector('#mensagem').textContent).toBe('Informe um inteiro entre 1 e 200000.');expect(document.querySelector('#resultados').textContent).toBe('');expect(document.querySelector('#mensagem').getAttribute('role')).toBe('status');});\ntest('mediana de quatro amostras usa a media central',async()=>{const {medir}=await import('./lab.js');let i=0;const times=[0,2,3,7,8,14,15,25];const r=medir(()=>{},[1],{warmups:0,runs:4,now:()=>times[i++]});expect(r.samples).toEqual([2,4,6,10]);expect(r.median).toBe(5);});",
     "referenceDir": "solutions/21.09",
     "correctFiles": [
       {
@@ -19317,7 +19084,7 @@
     "entryPath": "a.js",
     "testPath": "tests/22.05.test.js",
     "behaviorTestPath": "__devpath_protected_behavior__.js",
-    "tests": "import{executar}from'./a.js';test('leaf-to-entry migration preserves result 15',()=>{expect(executar('{\"quantidade\":3,\"preco\":5}')).toBe(15);});test('invalid JSON and invalid shape fail before output',()=>{expect(()=>executar('{')).toThrow(SyntaxError);expect(()=>executar('{\"quantidade\":\"3\",\"preco\":5}')).toThrow(TypeError);});",
+    "tests": "import{executar}from'./a.js';test('leaf-to-entry migration preserves result 15',()=>{/*@case 22.05.leaf-to-entry-migration-pres-b5a6fdfb*/expect(executar('{\"quantidade\":3,\"preco\":5}')).toBe(15);});test('invalid JSON and invalid shape fail before output',()=>{/*@case 22.05.invalid-json-and-invalid-sha-39fbf8ef*/expect(()=>executar('{')).toThrow(SyntaxError);/*@case 22.05.invalid-json-and-invalid-sha-b5b996c3*/expect(()=>executar('{\"quantidade\":\"3\",\"preco\":5}')).toThrow(TypeError);});",
     "referenceDir": "solutions/22.05",
     "correctFiles": [
       {
@@ -19513,19 +19280,23 @@
       },
       {
         "path": "tsconfig.json",
-        "content": "{\"compilerOptions\":{\"target\":\"ES2022\",\"module\":\"ESNext\",\"strict\":true,\"declaration\":true,\"isolatedDeclarations\":true,\"allowImportingTsExtensions\":true,\"rewriteRelativeImportExtensions\":true,\"outDir\":\"dist\",\"rootDir\":\"src\"},\"include\":[\"src/index.ts\",\"src/interno.ts\"]}"
+        "content": "{\"compilerOptions\":{\"target\":\"ES2022\",\"module\":\"ESNext\",\"strict\":true,\"declaration\":true,\"isolatedDeclarations\":true,\"allowImportingTsExtensions\":true,\"rewriteRelativeImportExtensions\":true,\"outDir\":\"dist\",\"rootDir\":\"src\"},\"include\":[\"src/index.ts\",\"src/interno.ts\",\"src/isolated-demo.ts\"]}"
       },
       {
         "path": "package.json",
-        "content": "{\"name\":\"slug-kit\",\"type\":\"module\",\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"default\":\"./dist/index.js\"}},\"scripts\":{\"build\":\"tsc -p tsconfig.json\"}}"
+        "content": "{\"name\":\"slug-kit\",\"type\":\"module\",\"devDependencies\":{\"typescript\":\"6.0.3\"},\"exports\":{\".\":{\"types\":\"./dist/index.d.ts\",\"default\":\"./dist/index.js\"}},\"scripts\":{\"build\":\"tsc -p tsconfig.json\"}}"
       },
       {
         "path": "consumer.ts",
-        "content": "import{criarSlug,limitar,padroes,VERSAO,type Opcoes}from'./src/index.js';const accented:string=criarSlug('  Olá Mundo  ');const defaultLimit:string=limitar('x'.repeat(70));const customLimit:string=limitar('abcdefghijkl',5);const options:Opcoes=padroes;console.log(accented,defaultLimit.length,customLimit,options.separador,VERSAO);"
+        "content": "import{criarSlug,limitar,padroes,VERSAO,type Opcoes}from'slug-kit';import{um,tamanho}from'./dist/isolated-demo.js';const accented:string=criarSlug('  Olá Mundo  ');const defaultLimit:string=limitar('x'.repeat(70));const customLimit:string=limitar('abcdefghijkl',5);const options:Opcoes=padroes;const literal:number=um();const measured:number=tamanho('DevPath');console.log(accented,defaultLimit.length,customLimit,options.separador,VERSAO,literal,measured);"
       },
       {
         "path": "src/index.test.ts",
         "content": "import assert from 'node:assert/strict';import{test}from'node:test';import{criarSlug,limitar,padroes,VERSAO}from'./index.ts';test('starter API preserves NFD normalization, defaults, and options',()=>{assert.equal(criarSlug('  Olá Mundo  '),'ola-mundo');assert.equal(limitar('x'.repeat(70)).length,60);assert.equal(limitar('abcdefghijkl',5),'abcde');assert.deepEqual(padroes,{separador:'-',maximo:60});assert.equal(VERSAO,'1.0.0');});"
+      },
+      {
+        "path": "src/isolated-demo.ts",
+        "content": "export function um() { return 1; }\nexport function tamanho(texto: string): number { return texto.length; }"
       }
     ],
     "mutantDirs": [],
@@ -19538,14 +19309,15 @@
         }
       ],
       "rubric": [
-        "Anotações mínimas para emissão de declarações, com comportamento de acentos, hífen, fatia padrão e máximo customizado preservado",
-        "Casos avaliáveis: acentos dobrados; trim e hífen corretos; fatia padrão de 60 caracteres; máximo customizado aceito; VERSAO e Opcoes presentes no consumidor."
+        "TypeScript 6.0.3 com isolatedDeclarations aceita export function um(){return 1} e emite .d.ts sem retorno anotado.",
+        "tamanho(texto:string) exige : number por depender da análise do corpo; o diagnóstico TS9007 e a declaração emitida são conferidos em cópia temporária.",
+        "As anotações adicionadas preservam a API e os casos de runtime; não se exige anotação geral de cada tipo do projeto."
       ]
     },
     "rubric": [
-      "O runtime preserva a API inicial: criarSlug(texto), VERSAO, padroes {separador,maximo:60}, limitar(texto,maximo=60) e Opcoes.",
-      "A emissão nativa de isolatedDeclarations coincide com a implementação; só as anotações necessárias são adicionadas, sem redesenho de API nem mudança de normalização.",
-      "O consumidor nativo cobre acentos, trim, padrões, máximo customizado e formato de opções; caminhos de emissão e diagnósticos do compilador são registrados."
+      "A trivial um() export compiles without a return annotation and appears in the emitted declaration.",
+      "Removing : number from tamanho(texto:string) yields the compiler diagnostic for a body-dependent return; restoring it passes.",
+      "The existing slug API and its runtime cases remain intact; the exercise does not require annotating every type."
     ],
     "local": {
       "commands": [
@@ -19560,15 +19332,32 @@
           "node_modules/typescript/bin/tsc",
           "--project",
           "tsconfig.json",
-          "--noEmit"
+          "--emitDeclarationOnly",
+          "--outDir",
+          "dist"
+        ],
+        [
+          "node",
+          "node_modules/typescript/bin/tsc",
+          "--ignoreConfig",
+          "--noEmit",
+          "--module",
+          "NodeNext",
+          "--moduleResolution",
+          "NodeNext",
+          "--target",
+          "ES2022",
+          "--strict",
+          "consumer.ts"
         ]
       ],
       "evidence": [
-        "Node executes authored TypeScript source after stripping types; outputs preserve accents, trim, separator, and 60-character default.",
-        "Native TypeScript 6 project check with isolatedDeclarations succeeds; use scripts/test-task-9-typed-suite.mjs for declaration emit evidence."
+        "Node executes the authored TypeScript after stripping types; accents, trim, defaults, custom maximum and VERSAO remain unchanged.",
+        "TypeScript 6.0.3 emits declarations under isolatedDeclarations; um() is inferred from a trivial expression while tamanho(texto) needs an explicit return annotation.",
+        "The consumer typechecks the emitted public surface in a copied package; outputs and diagnostics are local evidence, not browser or publication validation."
       ]
     },
-    "prompt": "Demonstrate the contract for 22.09 with its authored scenario and transfer.",
+    "prompt": "Compare two TypeScript 6.0.3 exports under isolatedDeclarations: um() can be inferred from a trivial expression, while tamanho(texto) needs an explicit return annotation. Then annotate only the exports in src/index.ts that need it, emit .d.ts files and check the consumer.",
     "evidenceNote": "Evidência declarada · execute este checkpoint em ambiente local isolado e registre o resultado junto aos critérios humanos.",
     "assertionCases": [
       {
@@ -20313,6 +20102,18 @@
     "referenceDir": "solutions/23.07",
     "correctFiles": [
       {
+        "path": "package.json",
+        "content": "{\n  \"name\": \"devpath-23-07\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"engines\": {\n    \"node\": \">=24.0.0\"\n  },\n  \"scripts\": {\n    \"test\": \"node --experimental-strip-types --test test/reabrir.test.ts\",\n    \"typecheck\": \"tsc --noEmit -p tsconfig.json\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"24.19.1\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n"
+      },
+      {
+        "path": "package-lock.json",
+        "content": "{\n  \"name\": \"devpath-23-07\",\n  \"version\": \"1.0.0\",\n  \"lockfileVersion\": 3,\n  \"requires\": true,\n  \"packages\": {\n    \"\": {\n      \"name\": \"devpath-23-07\",\n      \"version\": \"1.0.0\",\n      \"devDependencies\": {\n        \"@types/node\": \"24.19.1\",\n        \"typescript\": \"6.0.3\"\n      },\n      \"engines\": {\n        \"node\": \">=24.0.0\"\n      }\n    },\n    \"node_modules/@types/node\": {\n      \"version\": \"24.19.1\",\n      \"resolved\": \"https://registry.npmjs.org/@types/node/-/node-24.19.1.tgz\",\n      \"integrity\": \"sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==\",\n      \"dev\": true,\n      \"license\": \"MIT\",\n      \"dependencies\": {\n        \"undici-types\": \">=7.24.0 <7.24.7\"\n      }\n    },\n    \"node_modules/typescript\": {\n      \"version\": \"6.0.3\",\n      \"resolved\": \"https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz\",\n      \"integrity\": \"sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==\",\n      \"dev\": true,\n      \"license\": \"Apache-2.0\",\n      \"bin\": {\n        \"tsc\": \"bin/tsc\",\n        \"tsserver\": \"bin/tsserver\"\n      },\n      \"engines\": {\n        \"node\": \">=14.17\"\n      }\n    },\n    \"node_modules/undici-types\": {\n      \"version\": \"7.24.6\",\n      \"resolved\": \"https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz\",\n      \"integrity\": \"sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==\",\n      \"dev\": true,\n      \"license\": \"MIT\"\n    }\n  }\n}\n"
+      },
+      {
+        "path": "tsconfig.json",
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"allowImportingTsExtensions\": true,\n    \"types\": [\n      \"node\"\n    ],\n    \"skipLibCheck\": true\n  },\n  \"include\": [\n    \"src/**/*.ts\",\n    \"test/**/*.ts\"\n  ]\n}\n"
+      },
+      {
         "path": "src/dominio.ts",
         "content": "export type Coluna=\"a-fazer\"|\"fazendo\"|\"feito\";export type Tarefa={readonly id:string;titulo:string;coluna:Coluna};export type Estado={versao:1;tarefas:readonly Tarefa[]};export class ValidationError extends Error{};export const estadoInicial:Estado={versao:1,tarefas:[]};export function criar(estado:Estado,id:string,titulo:string):Estado{const limpo=titulo.trim();if(!limpo)throw new ValidationError('título obrigatório');if(!id.trim()||estado.tarefas.some(t=>t.id===id))throw new ValidationError('id inválido ou duplicado');return{...estado,tarefas:[...estado.tarefas,{id,titulo:limpo,coluna:'a-fazer'}]};}export function mover(estado:Estado,id:string,coluna:Coluna):Estado{if(!['a-fazer','fazendo','feito'].includes(coluna))throw new ValidationError('coluna inválida');let found=false;const tarefas=estado.tarefas.map(t=>{if(t.id!==id)return t;found=true;return{...t,coluna};});if(!found)throw new ValidationError('tarefa inexistente');return{...estado,tarefas};}export function remover(estado:Estado,id:string):Estado{if(!estado.tarefas.some(t=>t.id===id))throw new ValidationError('tarefa inexistente');return{...estado,tarefas:estado.tarefas.filter(t=>t.id!==id)};}"
       },
@@ -20330,7 +20131,7 @@
       },
       {
         "path": "README.md",
-        "content": "# 23.07 — Reabertura autorizada no capstone\n\nA autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos. Rode a suíte de contrato 23.08. Teste comum, admin, inexistente, coluna errada, relógio injetado e falha atômica."
+        "content": "# 23.07 — Reabertura autorizada no capstone\n\nA autorização fica no serviço src/reabrir.ts, antes de carregar ou escrever. Só admin pode mover tarefa concluída para a-fazer; estado e evento são persistidos juntos pela porta. O adapter troca estado e log somente após clonar ambos.\n\n## Verificação local\n\nRequer Node.js 24 ou superior. A configuração declara TypeScript 6.0.3 e @types/node 24.19.1; Node.js 26.7.0 foi usado nesta conferência. Na pasta copiada, rode npm ci, npm test e npm run typecheck. O pacote inclui scripts e tsconfig, sem configuração herdada do repositório principal.\n\nA suíte cobre CRUD existente, usuário comum sem gravação, admin com evento determinístico e falha atômica de estado/auditoria."
       },
       {
         "path": "mudanca.md",
@@ -20345,33 +20146,22 @@
     "local": {
       "commands": [
         [
-          "node",
-          "--experimental-strip-types",
-          "--test",
-          "test/reabrir.test.ts"
+          "npm",
+          "ci"
         ],
         [
-          "node",
-          "node_modules/typescript/bin/tsc",
-          "--ignoreConfig",
-          "--noEmit",
-          "--strict",
-          "--target",
-          "ES2022",
-          "--module",
-          "NodeNext",
-          "--moduleResolution",
-          "NodeNext",
-          "--allowImportingTsExtensions",
-          "src/dominio.ts",
-          "src/portas.ts",
-          "src/adapters/memoria.ts",
-          "src/reabrir.ts"
+          "npm",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "typecheck"
         ]
       ],
       "evidence": [
-        "2 native Node tests verify authorized reopening, deterministic audit, no-write denial, and incomplete-task rejection.",
-        "TypeScript 6 strict no-emit check covers the changed domain, port, memory adapter, and service."
+        "Native Node tests verify authorized reopening, deterministic audit, no-write denial, and incomplete-task rejection.",
+        "TypeScript 6.0.3 strict no-emit check includes the starter source and test files using declared dependencies."
       ]
     },
     "transfer": {
@@ -20583,6 +20373,18 @@
     "referenceDir": "solutions/23.08",
     "correctFiles": [
       {
+        "path": "package.json",
+        "content": "{\n  \"name\": \"devpath-23-08\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"type\": \"module\",\n  \"engines\": {\n    \"node\": \">=24.0.0\"\n  },\n  \"scripts\": {\n    \"test\": \"node --experimental-strip-types --test test/contrato.test.ts\",\n    \"typecheck\": \"tsc --noEmit -p tsconfig.json\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"24.19.1\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n"
+      },
+      {
+        "path": "package-lock.json",
+        "content": "{\n  \"name\": \"devpath-23-08\",\n  \"version\": \"1.0.0\",\n  \"lockfileVersion\": 3,\n  \"requires\": true,\n  \"packages\": {\n    \"\": {\n      \"name\": \"devpath-23-08\",\n      \"version\": \"1.0.0\",\n      \"devDependencies\": {\n        \"@types/node\": \"24.19.1\",\n        \"typescript\": \"6.0.3\"\n      },\n      \"engines\": {\n        \"node\": \">=24.0.0\"\n      }\n    },\n    \"node_modules/@types/node\": {\n      \"version\": \"24.19.1\",\n      \"resolved\": \"https://registry.npmjs.org/@types/node/-/node-24.19.1.tgz\",\n      \"integrity\": \"sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==\",\n      \"dev\": true,\n      \"license\": \"MIT\",\n      \"dependencies\": {\n        \"undici-types\": \">=7.24.0 <7.24.7\"\n      }\n    },\n    \"node_modules/typescript\": {\n      \"version\": \"6.0.3\",\n      \"resolved\": \"https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz\",\n      \"integrity\": \"sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==\",\n      \"dev\": true,\n      \"license\": \"Apache-2.0\",\n      \"bin\": {\n        \"tsc\": \"bin/tsc\",\n        \"tsserver\": \"bin/tsserver\"\n      },\n      \"engines\": {\n        \"node\": \">=14.17\"\n      }\n    },\n    \"node_modules/undici-types\": {\n      \"version\": \"7.24.6\",\n      \"resolved\": \"https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz\",\n      \"integrity\": \"sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==\",\n      \"dev\": true,\n      \"license\": \"MIT\"\n    }\n  }\n}\n"
+      },
+      {
+        "path": "tsconfig.json",
+        "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\",\n    \"moduleResolution\": \"NodeNext\",\n    \"strict\": true,\n    \"noEmit\": true,\n    \"allowImportingTsExtensions\": true,\n    \"types\": [\n      \"node\"\n    ],\n    \"skipLibCheck\": true\n  },\n  \"include\": [\n    \"src/**/*.ts\",\n    \"test/**/*.ts\"\n  ]\n}\n"
+      },
+      {
         "path": "src/dominio.ts",
         "content": "export type Coluna=\"a-fazer\"|\"fazendo\"|\"feito\";export type Tarefa={readonly id:string;titulo:string;coluna:Coluna};export type Estado={versao:1;tarefas:readonly Tarefa[]};export class ValidationError extends Error{};export const estadoInicial:Estado={versao:1,tarefas:[]};function validar(s:Estado){if(!s||s.versao!==1||!Array.isArray(s.tarefas))throw new ValidationError('estado inválido');}export function criar(s:Estado,id:string,titulo:string):Estado{validar(s);if(typeof id!=='string'||!id.trim()||s.tarefas.some(t=>t.id===id))throw new ValidationError('id inválido ou duplicado');if(typeof titulo!=='string'||!titulo.trim())throw new ValidationError('título obrigatório');return{versao:1,tarefas:[...s.tarefas,{id,titulo:titulo.trim(),coluna:'a-fazer'}]};}export function mover(s:Estado,id:string,coluna:Coluna):Estado{validar(s);if(!['a-fazer','fazendo','feito'].includes(coluna))throw new ValidationError('coluna inválida');let found=false;const tarefas=s.tarefas.map(t=>{if(t.id!==id)return t;found=true;return{...t,coluna};});if(!found)throw new ValidationError('tarefa inexistente');return{versao:1,tarefas};}export function remover(s:Estado,id:string):Estado{validar(s);if(!s.tarefas.some(t=>t.id===id))throw new ValidationError('tarefa inexistente');return{versao:1,tarefas:s.tarefas.filter(t=>t.id!==id)};}"
       },
@@ -20604,45 +20406,33 @@
       },
       {
         "path": "README.md",
-        "content": "# 23.08 — Capstone de tarefas\n\nO domínio puro valida antes de criar/mover/remover e retorna novos estados. O serviço orquestra a porta; adapter em memória clona na entrada/saída e persiste estado/eventos juntos. O adapter de versão migra documento 0 (campo concluida) para esquema 1 e rejeita versão desconhecida. UI/CLI deve chamar serviço, nunca acessar storage. Execute node --experimental-strip-types --test test/contrato.test.ts e node node_modules/typescript/bin/tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext src/dominio.ts src/portas.ts src/adapters/memoria.ts src/adapters/versao.ts src/servico.ts."
+        "content": "# 23.08 — Capstone de tarefas\n\nO domínio puro valida antes de criar/mover/remover e retorna novos estados. O serviço orquestra a porta; adapter em memória clona na entrada/saída e persiste estado/eventos juntos. O adapter de versão migra documento 0 (campo concluida) para esquema 1 e rejeita versão desconhecida. UI/CLI deve chamar serviço, nunca acessar storage.\n\n## Verificação local\n\nRequer Node.js 24 ou superior. A configuração declara TypeScript 6.0.3 e @types/node 24.19.1; Node.js 26.7.0 foi usado nesta conferência. Na pasta copiada, rode npm ci, npm test e npm run typecheck. O pacote inclui scripts e tsconfig, sem configuração herdada do repositório principal.\n\nA suíte de contrato exercita criar, mover, remover, entrada inválida, cópias, migração v0, reinício no adapter em memória e falha de storage sem alterar estado ou auditoria prévios."
       },
       {
         "path": "test/contrato.test.ts",
-        "content": "import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial,ValidationError}from'../src/dominio.ts';import{criarRepositorioEmMemoria,StorageError}from'../src/adapters/memoria.ts';import{migrar}from'../src/adapters/versao.ts';import{adicionar,alterarColuna,excluir}from'../src/servico.ts';const adapters:[string,()=>ReturnType<typeof criarRepositorioEmMemoria>][]=[['memoria',()=>criarRepositorioEmMemoria()]];for(const[name,factory]of adapters){test(name+': contrato CRUD, recusa e cópias',async()=>{const r=factory();await adicionar(r,'t1','Estudar');let stored=await r.carregar();assert.equal(stored.tarefas[0].titulo,'Estudar');await alterarColuna(r,'t1','fazendo');await excluir(r,'t1');assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});const outside=await r.carregar();(outside.tarefas as any).push({id:'evil'});assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});await assert.rejects(adicionar(r,'','   '),ValidationError);assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});});}test('falha de persistência não altera estado/evento e não vaza causa',async()=>{const r=criarRepositorioEmMemoria();r.falharProximo();await assert.rejects(adicionar(r,'x','X'),e=>e instanceof StorageError&&e.message==='Não foi possível persistir o estado'&&e.cause instanceof Error);assert.deepEqual(await r.carregar(),estadoInicial);assert.deepEqual(await r.carregarEventos(),[]);});test('documento v0 migra e versão desconhecida falha',()=>{assert.deepEqual(migrar({versao:0,dados:[{id:'a',titulo:' X ',concluida:true}]}),{estado:{versao:1,tarefas:[{id:'a',titulo:'X',coluna:'feito'}]},eventos:[]});assert.throws(()=>migrar({versao:9,dados:{}}));});test('domain stays immutable and rejects missing task before replacement',()=>{const a=criar(estadoInicial,'x','x'),b=mover(a,'x','feito');assert.equal(a.tarefas[0].coluna,'a-fazer');assert.equal(b.tarefas[0].coluna,'feito');assert.throws(()=>remover(b,'missing'),ValidationError);});"
+        "content": "import{test}from'node:test';import assert from'node:assert/strict';import{criar,mover,remover,estadoInicial,ValidationError}from'../src/dominio.ts';import{criarRepositorioEmMemoria,StorageError}from'../src/adapters/memoria.ts';import{migrar}from'../src/adapters/versao.ts';import{adicionar,alterarColuna,excluir}from'../src/servico.ts';const adapters:[string,()=>ReturnType<typeof criarRepositorioEmMemoria>][]=[['memoria',()=>criarRepositorioEmMemoria()]];for(const[name,factory]of adapters){test(name+': contrato CRUD, recusa e cópias',async()=>{const r=factory();await adicionar(r,'t1','Estudar');let stored=await r.carregar();assert.equal(stored.tarefas[0].titulo,'Estudar');const moved=await alterarColuna(r,'t1','fazendo');assert.equal(moved.tarefas[0].coluna,'fazendo');assert.equal((await r.carregar()).tarefas[0].coluna,'fazendo');await excluir(r,'t1');assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});const outside=await r.carregar();(outside.tarefas as any).push({id:'evil'});assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});await assert.rejects(adicionar(r,'','   '),ValidationError);assert.deepEqual(await r.carregar(),{versao:1,tarefas:[]});});}test('falha de persistência preserva estado e auditoria anteriores',async()=>{const r=criarRepositorioEmMemoria();await adicionar(r,'stable','Manter');const stateBefore=await r.carregar(),eventsBefore=await r.carregarEventos();r.falharProximo();await assert.rejects(adicionar(r,'new','Não gravar parcialmente'),e=>e instanceof StorageError&&e.message==='Não foi possível persistir o estado'&&e.cause instanceof Error);assert.deepEqual(await r.carregar(),stateBefore);assert.deepEqual(await r.carregarEventos(),eventsBefore);});test('documento v0 migra e versão desconhecida falha',()=>{assert.deepEqual(migrar({versao:0,dados:[{id:'a',titulo:' X ',concluida:true}]}),{estado:{versao:1,tarefas:[{id:'a',titulo:'X',coluna:'feito'}]},eventos:[]});assert.throws(()=>migrar({versao:9,dados:{}}));});test('domain stays immutable and rejects missing task before replacement',()=>{const a=criar(estadoInicial,'x','x'),b=mover(a,'x','feito');assert.equal(a.tarefas[0].coluna,'a-fazer');assert.equal(b.tarefas[0].coluna,'feito');const removed=remover(b,'x');assert.equal(removed.tarefas.length,0);assert.equal(b.tarefas.length,1);assert.throws(()=>remover(b,'missing'),ValidationError);});"
       }
     ],
     "mutantDirs": [],
     "local": {
       "commands": [
         [
-          "node",
-          "--experimental-strip-types",
-          "--test",
-          "test/contrato.test.ts"
+          "npm",
+          "ci"
         ],
         [
-          "node",
-          "node_modules/typescript/bin/tsc",
-          "--ignoreConfig",
-          "--noEmit",
-          "--strict",
-          "--target",
-          "ES2022",
-          "--module",
-          "NodeNext",
-          "--moduleResolution",
-          "NodeNext",
-          "--allowImportingTsExtensions",
-          "src/dominio.ts",
-          "src/portas.ts",
-          "src/adapters/memoria.ts",
-          "src/adapters/versao.ts",
-          "src/servico.ts"
+          "npm",
+          "test"
+        ],
+        [
+          "npm",
+          "run",
+          "typecheck"
         ]
       ],
       "evidence": [
         "4 native Node tests cover CRUD, invalid input, atomic storage failure, defensive copies, restart and v0 migration",
-        "TypeScript 6.0.3 strict no-emit source check"
+        "TypeScript 6.0.3 strict no-emit check includes source and contract test files"
       ]
     },
     "transfer": {
@@ -20706,8 +20496,8 @@
         }
       ],
       "rubric": [
-        "Instrumentação de upload com redação de segredos nos logs e na resposta, e níveis warn/error definidos pela classe do erro",
-        "Casos avaliáveis: 422 gera warning; erro de rede gera error com cause redigida; API key e cookie ausentes do JSON de log e da resposta simulada."
+        "Instrumentação de upload com resposta pública genérica e causa técnica útil apenas no log interno, redigida",
+        "Casos avaliáveis: 422 gera warning; erro de rede gera error com causa redigida e contexto útil preservado; API key/cookie não aparecem na resposta nem no JSON de logs."
       ]
     },
     "rubric": [
@@ -20715,7 +20505,7 @@
       "A classe de erro determina warn/error; duration é monotônica não negativa e ID é único não secreto.",
       "Nenhum segredo aparece no JSON de logs nem na resposta pública, mas causa técnica útil permanece redigida."
     ],
-    "prompt": "Demonstre a avaliação 23.09 e complete a transferência independente com casos verificáveis.\n\nContrato da entrega (23.09):\n- Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.\n- Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada.",
+    "prompt": "Demonstre a avaliação 23.09 e complete a transferência independente com casos verificáveis.\n\nContrato da entrega (23.09):\n- Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.\n- Resposta pública informa apenas falha e ID; log interno preserva causa técnica útil com Authorization, Cookie e Token redigidos em campos aninhados, sem mutar a entrada.",
     "assertionCases": [
       {
         "id": "23.09.redacts-nested-secrets-in-ob-a522150f",
@@ -22318,6 +22108,14 @@
       {
         "path": "pagamento.js",
         "content": "export function validarPagamento(payload){if(typeof payload!=='object'||payload===null)return{ok:false,erros:['payload precisa ser objeto']};const erros=[];if(typeof payload.id!=='string'||payload.id==='')erros.push('id: texto não vazio');if(typeof payload.amount!=='number'||!Number.isFinite(payload.amount))erros.push('amount: número finito');return erros.length?{ok:false,erros}:{ok:true,valor:{id:payload.id,amount:payload.amount}};}"
+      },
+      {
+        "path": "schema.ts",
+        "content": "import { z } from 'zod';\n\nexport const PagamentoSchema = z.object({\n  id: z.string().min(1, 'texto não vazio'),\n  amount: z.number().finite('número finito'),\n});\nexport type Pagamento = z.infer<typeof PagamentoSchema>;\n\nexport function validarComSchema(payload: unknown) {\n  const result = PagamentoSchema.safeParse(payload);\n  if (!result.success) return { ok: false as const, erros: result.error.issues.map(issue => issue.path.length ? issue.path.join('.') + ': ' + issue.message : issue.message) };\n  return { ok: true as const, valor: result.data };\n}\n\nexport const casosSchema = [{ id: 'p1', amount: 10 }, { id: 'p1', amount: '10' }, { id: 'p1', amount: Infinity }, { id: 'p1', amount: NaN }, { id: 'p1', amount: null }, null, { id: '', amount: 1 }];\nfor (const caso of casosSchema) console.log(JSON.stringify(caso), '->', JSON.stringify(validarComSchema(caso)));"
+      },
+      {
+        "path": "verify.mjs",
+        "content": "import assert from 'node:assert/strict';\nimport {validarPagamento} from './pagamento.js';\nimport {validarComSchema} from './schema.ts';\nconst casos = [[{id:'p1',amount:10},true],[{id:'p1',amount:'10'},false],[{id:'p1',amount:Infinity},false],[{id:'p1',amount:NaN},false],[{id:'p1',amount:null},false],[null,false],[{id:'',amount:1},false]];\nfor (const [valor, aceito] of casos) {\n  assert.equal(validarPagamento(valor).ok, aceito, 'guard');\n  assert.equal(validarComSchema(valor).ok, aceito, 'schema Zod');\n}\nconsole.log('Guard e Zod concordam nos 7 casos.');"
       }
     ],
     "mutantDirs": [
@@ -22332,21 +22130,21 @@
       }
     ],
     "rubric": [
-      "Mesma matriz de entradas é aplicada às abordagens; `10` string, NaN e null não passam por coerção.",
-      "Shape e valores válidos são preservados e erros apontam campo concreto.",
-      "Decisão de schema/guard cobre tipo inferido, runtime validation, custo de bundle e dependência sem install não autorizado."
+      "Guard e schema aceitam {id:\"p1\",amount:10} e rejeitam as mesmas seis entradas inválidas sem coerção.",
+      "A execução local fixa Zod 3.25.76 e TypeScript 6.0.3 numa pasta temporária; npm install e compilação não usam dependências globais.",
+      "A explicação separa z.infer, validação de runtime e regra de negócio; registra trade-off de mensagens, tamanho/custo sem exigir publicação."
     ],
     "transfer": {
       "id": "22.06-transfer",
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transfer 22.06\n\nValidar retorno de gateway de frete {quoteId, cents}: comparar guard manual e schema existente já declarado no projeto; testar string numérica, Infinity, null e id vazio; registrar tamanho da dependência e não instalar biblioteca implicitamente."
+          "content": "# Transfer 22.06\n\nComparar o guard de pagamento com Zod 3.25.76 em pasta temporária. Fixe typescript@6.0.3 e zod@3.25.76 no package.json local; execute o guard e validarComSchema com a mesma matriz: payload válido, amount '10', Infinity, NaN e null, payload null e id vazio. Não use coerção nem publique o pacote."
         }
       ],
       "rubric": [
-        "Validação do gateway de frete comparada entre guard manual e schema já existente, com custo da dependência registrado",
-        "Casos avaliáveis: string numérica tratada conforme a regra declarada; Infinity, null e id vazio rejeitados; nenhuma biblioteca instalada sem registro."
+        "Guard e schema Zod 3.25.76 aceitam o mesmo payload válido e rejeitam as seis entradas inválidas sem coerção.",
+        "A execução local fixa Zod 3.25.76 e TypeScript 6.0.3 numa pasta temporária; compara tipo inferido, validação runtime, mensagens e custo sem exigir publicação."
       ]
     },
     "prompt": "Avalie 22.06 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -22639,19 +22437,20 @@
     "rubric": [
       "Dois achados prioritários citam arquivo/linha, fluxo, impacto e reprodução; any não é apenas preferência.",
       "Refuta ou marca um falso positivo com evidência; identifica mutação do sort em entrada supostamente imutável.",
-      "Retry async tem teto e relógio falso; transferência revisa novo diff com dois achados e um falso positivo."
+      "Retry async tem teto e relógio falso; transferência revisa novo diff com dois achados e um falso positivo.",
+      "Avalia a sugestão de IA com evidência e nomeia pelo menos um teste ou requisito que ela ainda não cobre."
     ],
     "transfer": {
       "id": "23.05-transfer",
       "files": [
         {
           "path": "transfer.md",
-          "content": "# Transfer 23.05\n\nRevisar diff de sincronização offline: apontar exatamente um retry sem limite e uma perda de atualização, refutar comentário sobre nome de variável e propor reprodução com fake server/clock sem editar o diff."
+          "content": "# Transfer 23.05\n\nRevisar diff de sincronização offline: apontar exatamente um retry sem limite e uma perda de atualização, refutar comentário sobre nome de variável e propor reprodução com fake server/clock sem editar o diff. Ao final, compare uma sugestão de IA com os requisitos e testes já existentes; identifique um risco resolvido e uma lacuna que exige evidência."
         }
       ],
       "rubric": [
         "Revisão de diff que aponta um retry sem limite e uma perda de atualização, com reprodução sem editar o diff",
-        "Casos avaliáveis: retry sem limite cita arquivo e linha; perda de atualização reproduzida com fake clock; comentário sobre nome de variável refutado com evidência."
+        "Avalia a sugestão de IA com evidência e nomeia pelo menos um teste ou requisito que ela ainda não cobre."
       ]
     },
     "prompt": "Avalie 23.05 segundo a referência e produza a transferência com os casos e evidências descritos.",
@@ -23908,15 +23707,15 @@
         "testName": "ordens de crescimento são associadas aos trechos na ordem publicada",
         "inputExpression": "analises.map(item => item.crescimento)",
         "matcher": "toEqual",
-        "expectedExpression": "['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1)', 'O(n)']",
+        "expectedExpression": "['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1) médio', 'O(n)']",
         "negated": false,
-        "initialArrangementExpression": "sem setup anterior dentro deste teste",
-        "assertionExpression": "expect(analises.map(item => item.crescimento)).toEqual(['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1)', 'O(n)'])",
-        "contractRule": "analises.map(item => item.crescimento) toEqual ['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1)', 'O(n)']",
-        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(analises.map(item => item.crescimento)).toEqual(['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1)', 'O(n)'])",
-        "assertionOffset": 176,
         "assertionApi": "expect",
-        "executionScope": "browser-behavior-suite"
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "sem setup anterior dentro deste teste",
+        "assertionExpression": "expect(analises.map(item => item.crescimento)).toEqual(['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1) médio', 'O(n)'])",
+        "contractRule": "analises.map(item => item.crescimento) toEqual ['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1) médio', 'O(n)']",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(analises.map(item => item.crescimento)).toEqual(['O(1)', 'O(n)', 'O(n²)', 'O(log n)', 'O(n log n)', 'O(log n)', 'O(1) médio', 'O(n)'])",
+        "assertionOffset": 176
       }
     ]
   },
@@ -24001,6 +23800,22 @@
         "assertionOffset": 265,
         "assertionApi": "expect",
         "executionScope": "browser-behavior-suite"
+      },
+      {
+        "id": "08.07.destino-ausente-devolve-cami-4a751765",
+        "sourceTestPath": "tests/08.07.test.js",
+        "testName": "destino ausente devolve caminho null e preserva a ordem visitada",
+        "inputExpression": "tracarBfs(grafo, 'A', 'X')",
+        "matcher": "toEqual",
+        "expectedExpression": "{ordem: ['A', 'B'], caminho: null}",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const grafo = new Map([['A', ['B']], ['B', []]]);",
+        "assertionExpression": "expect(tracarBfs(grafo, 'A', 'X')).toEqual({ordem: ['A', 'B'], caminho: null})",
+        "contractRule": "tracarBfs(grafo, 'A', 'X') toEqual {ordem: ['A', 'B'], caminho: null}",
+        "investigation": "Confira a expressão de entrada e a comparação toEqual deste caso: expect(tracarBfs(grafo, 'A', 'X')).toEqual({ordem: ['A', 'B'], caminho: null})",
+        "assertionOffset": 506
       }
     ]
   },
@@ -25388,8 +25203,8 @@
     "referenceDir": "solutions/05.14",
     "rubric": [
       "Compara regex e parser com um exemplo concreto de cada.",
-      "Identifica o que a regex não representa: estado entre aspas e escapes.",
-      "Justifica a escolha pelo formato, com o campo ou a posição que falharia."
+      "Explica como o parser mantém estados de aspas e escapes sem afirmar que regex é incapaz de reconhecer esses campos.",
+      "Justifica a escolha por clareza, manutenção e diagnóstico de uma falha concreta."
     ],
     "assertionCases": [
       {
@@ -27193,7 +27008,7 @@
   },
   "12.21": {
     "environment": "javascript",
-    "version": 1,
+    "version": 2,
     "checks": [
       "behavior"
     ],
@@ -27214,7 +27029,7 @@
         "assertionExpression": "expect(await buscarComLimite(fetchFalso, '/a', 1000)).toBe('ok')",
         "contractRule": "await buscarComLimite(fetchFalso, '/a', 1000) toBe 'ok'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(await buscarComLimite(fetchFalso, '/a', 1000)).toBe('ok')",
-        "assertionOffset": 671
+        "assertionOffset": 724
       },
       {
         "id": "12.21.cancelamento-previo-rejeita--937f0186",
@@ -27230,7 +27045,7 @@
         "assertionExpression": "expect(erro.name).toBe('AbortError')",
         "contractRule": "erro.name toBe 'AbortError'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(erro.name).toBe('AbortError')",
-        "assertionOffset": 1032
+        "assertionOffset": 1138
       },
       {
         "id": "12.21.cancelamento-previo-rejeita--622ff297",
@@ -27246,7 +27061,7 @@
         "assertionExpression": "expect(chamadas).toBe(0)",
         "contractRule": "chamadas toBe 0",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(chamadas).toBe(0)",
-        "assertionOffset": 1074
+        "assertionOffset": 1233
       },
       {
         "id": "12.21.timeout-rejeita-com-timeoute-fb8c7861",
@@ -27262,7 +27077,7 @@
         "assertionExpression": "expect(erro.name).toBe('TimeoutError')",
         "contractRule": "erro.name toBe 'TimeoutError'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(erro.name).toBe('TimeoutError')",
-        "assertionOffset": 1281
+        "assertionOffset": 1493
       },
       {
         "id": "12.21.cancelamento-durante-a-esper-d5ac91bf",
@@ -27278,7 +27093,7 @@
         "assertionExpression": "expect((await resultado).name).toBe('AbortError')",
         "contractRule": "(await resultado).name toBe 'AbortError'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect((await resultado).name).toBe('AbortError')",
-        "assertionOffset": 1575
+        "assertionOffset": 1840
       },
       {
         "id": "12.21.so-a-busca-mais-recente-entr-a534f140",
@@ -27294,7 +27109,7 @@
         "assertionExpression": "expect(await segunda).toBe('dois')",
         "contractRule": "await segunda toBe 'dois'",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(await segunda).toBe('dois')",
-        "assertionOffset": 2142
+        "assertionOffset": 2460
       },
       {
         "id": "12.21.so-a-busca-mais-recente-entr-9810e500",
@@ -27310,7 +27125,39 @@
         "assertionExpression": "expect(await primeira).toBe(undefined)",
         "contractRule": "await primeira toBe undefined",
         "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(await primeira).toBe(undefined)",
-        "assertionOffset": 2182
+        "assertionOffset": 2553
+      },
+      {
+        "id": "12.21.busca-obsoleta-abortada-por--c90742ed",
+        "sourceTestPath": "tests/12.21.test.js",
+        "testName": "busca obsoleta abortada por fetcher que honra o sinal devolve undefined",
+        "inputExpression": "await segunda",
+        "matcher": "toBe",
+        "expectedExpression": "'dois'",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const pendentes = [];\n    const fetchQueHonraSinal = (url, {signal}) => new Promise((resolver, rejeitar) => {\n      const adiada = adiarResposta();\n      pendentes.push(adiada);\n      signal.addEventListener('abort', () => rejeitar(signal.reason), {once: true});\n      adiada.promise.then(texto => resolver({text: async () => texto}), rejeitar);\n    });\n    const buscar = criarBuscaAtual(fetchQueHonraSinal);\n    const primeira = buscar('/um');\n    const segunda = buscar('/dois');\n    pendentes[1].resolve('dois');",
+        "assertionExpression": "expect(await segunda).toBe('dois')",
+        "contractRule": "await segunda toBe 'dois'",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(await segunda).toBe('dois')",
+        "assertionOffset": 3220
+      },
+      {
+        "id": "12.21.busca-obsoleta-abortada-por--8e1f8d3a",
+        "sourceTestPath": "tests/12.21.test.js",
+        "testName": "busca obsoleta abortada por fetcher que honra o sinal devolve undefined",
+        "inputExpression": "await primeira",
+        "matcher": "toBe",
+        "expectedExpression": "undefined",
+        "negated": false,
+        "assertionApi": "expect",
+        "executionScope": "browser-behavior-suite",
+        "initialArrangementExpression": "const pendentes = [];\n    const fetchQueHonraSinal = (url, {signal}) => new Promise((resolver, rejeitar) => {\n      const adiada = adiarResposta();\n      pendentes.push(adiada);\n      signal.addEventListener('abort', () => rejeitar(signal.reason), {once: true});\n      adiada.promise.then(texto => resolver({text: async () => texto}), rejeitar);\n    });\n    const buscar = criarBuscaAtual(fetchQueHonraSinal);\n    const primeira = buscar('/um');\n    const segunda = buscar('/dois');\n    pendentes[1].resolve('dois');\n    expect(await segunda).toBe('dois');",
+        "assertionExpression": "expect(await primeira).toBe(undefined)",
+        "contractRule": "await primeira toBe undefined",
+        "investigation": "Confira a expressão de entrada e a comparação toBe deste caso: expect(await primeira).toBe(undefined)",
+        "assertionOffset": 3260
       }
     ]
   },

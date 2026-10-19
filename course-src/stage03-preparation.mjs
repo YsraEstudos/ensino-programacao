@@ -699,3 +699,20 @@ export const stage03Preparation = {
     }
   }
 };
+
+
+// Local practice additions: textual guidance only, no new interaction or evaluator.
+stage03Preparation["03.01"].teaching.paragraphs.push(
+  "Prática local adicional: compare for (let i=1; i<3; i++) console.log(i); com a versão i<=3. Preveja as linhas antes de executar. Conferência: a primeira mostra 1 e 2; a segunda mostra 1, 2 e 3. O valor i=3 distingue os limites; não é uma quarta execução do corpo."
+);
+stage03Preparation["03.06"].teaching.paragraphs.push(
+  "Execução local: um while sem progresso pode ocupar o terminal e imprimir indefinidamente. Trace duas ou três passagens antes de executar. Se precisar interromper Node no terminal, use Ctrl+C; não espere o site encerrar o programa.",
+  "Segunda investigação, sem consultar a demonstração: let itens=3; for(let passo=0; passo<3; passo++){ if(itens===2) continue; itens--; } console.log(itens);. O alvo após três tentativas era 0. Faça a tabela, formule uma hipótese e altere uma causa; este trecho é limitado a três passagens e pode ser executado localmente.",
+  "Conferência depois da tentativa adicional: o trecho mostra 2. itens passa de 3 para 2 e não muda nas duas passagens seguintes, embora passo avance. Uma correção para consumir um item em cada passagem é remover o desvio que pula o decremento; o resultado passa a 0. Não atribua 0 diretamente só para reproduzir o alvo."
+);
+stage03Preparation["03.09"].teaching.paragraphs.push(
+  "Antes do projeto, rastreie um único turno em outro cenário: herói=4, monstro=2, dano do herói=3 e dano do monstro=2. Aplique o ataque e o piso zero; decida se há resposta e anote os HP finais antes de conferir.",
+  "Conferência do turno isolado: monstro fica 0 e não responde; herói permanece 4. Em outra tentativa, monstro começa com 5: após o ataque fica 2, responde e deixa herói com 2. Não é preciso arma opcional, ?? ou outra regra nova."
+);
+stage03Preparation["03.03"].starter = "// Copie os blocos para o corpo do for na ordem correta, sem o prefixo do comentário.\n// [B] else if (i % 3 === 0) { console.log(\"Fizz\"); }\n// [D] else { console.log(i); }\n// [A] if (i % 15 === 0) { console.log(\"FizzBuzz\"); }\n// [C] else if (i % 5 === 0) { console.log(\"Buzz\"); }\nfor (let i = 1; i <= 30; i++) {\n  // insira a cadeia if/else if/else aqui\n}\n";
+stage03Preparation["03.03"].teaching.paragraphs.push("Para resolver fora do site, copie este esqueleto e os blocos: for (let i = 1; i <= 30; i++) { /* cadeia */ }; [B] else if (i % 3 === 0) { console.log(\"Fizz\"); }; [D] else { console.log(i); }; [A] if (i % 15 === 0) { console.log(\"FizzBuzz\"); }; [C] else if (i % 5 === 0) { console.log(\"Buzz\"); }. A ordem exibida aqui n\u00e3o \u00e9 a resposta; a combina\u00e7\u00e3o vem antes dos testes individuais e os ramos exclusivos de 3 e 5 podem trocar entre si. Execute node main.js e confira 30 linhas, incluindo 1, Fizz, Buzz e FizzBuzz nos respectivos casos.");

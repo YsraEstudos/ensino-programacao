@@ -1,9 +1,13 @@
+// Copie para o corpo de slug os blocos A–E na ordem correta, sem o prefixo do comentário.
+// X é um distrator: ele preserva espaços onde o contrato exige hífens.
+// [D] const validas = partes.filter(parte => parte !== "");
+// [B] const minusculo = limpo.toLowerCase();
+// [X] return validas.join(" ");
+// [E] return validas.join("-");
+// [A] const limpo = titulo.trim();
+// [C] const partes = minusculo.split(" ");
 export function slug(titulo) {
-  const limpo = titulo.trim();
-  const minusculo = limpo.toLowerCase();
-  const partes = minusculo.split(" ");
-  const validas = partes.filter(parte => parte !== "");
-  return validas.join(" ");
+  // Insira os cinco blocos escolhidos aqui.
 }
 
-console.log(slug("Dragão Azul"));
+console.log(slug("  Olá  Mundo  "));

@@ -1,9 +1,9 @@
 export function resumirPorCategoria(itens) {
-  const resumo = itens.reduce((acumulado, item) => {
-    acumulado[item.categoria] = item.preco;
-    return acumulado;
-  }, {});
-  return resumo;
+  const acumulado = itens.reduce((resultado, item) => {
+    resultado[item.categoria] = (resultado[item.categoria] ?? 0) + item.preco;
+    return resultado;
+  }, Object.create(null));
+  return { ...acumulado };
 }
 
 console.log(JSON.stringify(resumirPorCategoria([

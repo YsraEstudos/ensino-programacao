@@ -1,6 +1,7 @@
 import {readFileSync, writeFileSync} from 'node:fs';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
+import {replaceContractBlock} from './task-9-contract-block.mjs';
 
 // This generator is intentionally the last task-9 source pass.
 const root = path.resolve(process.cwd());
@@ -29,10 +30,7 @@ function contract(id, file, lines) {
   const filename = 'course-src/starters/' + id + '/' + file;
   const old = readFileSync(filename, 'utf8');
   const marker = '// Contrato visível ' + id + ':';
-  const starterBlock = marker + '\n' + lines.map(line => '// ' + line).join('\n') + '\n';
-  const updatedStarter = old.includes(marker)
-    ? old.replace(new RegExp(`^// Contrato visível ${id.replaceAll('.', '\\.')}:[\\s\\S]*?(?=\\n\\n|$)`, 'm'), starterBlock.trimEnd())
-    : starterBlock + '\n' + old;
+  const updatedStarter = replaceContractBlock(old, marker, lines);
   if (updatedStarter !== old) put(filename, updatedStarter);
   const promptMarker = '\n\nContrato da entrega (' + id + '):\n';
   const updatePrompt = prompt => {
@@ -84,7 +82,9 @@ const pipeline = [
 reference('20.08', 'pipeline.js', pipeline);
 suite('20.08', data['20.08'].tests + '\n' +
   "test('take posicional e ramos independentes',()=>{const base=pipeline([1,2,3,4]);expect([...base.take(2).map(x=>x*10)]).toEqual([10,20]);expect([...base.filter(x=>x%2===0).take(2)]).toEqual([2,4]);expect([...base]).toEqual([1,2,3,4]);});\n" +
-  "test('break fecha a fonte',()=>{let closed=false;function* input(){try{yield 1;yield 2;}finally{closed=true;}}for(const value of pipeline(input()))break;expect(closed).toBe(true);});");
+  "test('break fecha a fonte',()=>{let closed=false;function* input(){try{yield 1;yield 2;}finally{closed=true;}}for(const value of pipeline(input()).map(x=>x).filter(Boolean))break;expect(closed).toBe(true);});\n" +
+  "test('array reinicia, mesma instância generator pode estar consumida, fábrica cria nova instância',()=>{const array=pipeline([1,2]);expect([...array]).toEqual([1,2]);expect([...array]).toEqual([1,2]);function* items(){yield 1;yield 2;}const instance=pipeline(items());expect([...instance]).toEqual([1,2]);expect([...instance]).toEqual([]);const makeItems=()=>items();expect([...pipeline(makeItems())]).toEqual([1,2]);expect([...pipeline(makeItems())]).toEqual([1,2]);});\n" +
+  "test('take fecha com return sem pull extra depois do limite',()=>{const trace=[];function* input(){try{for(let n=1;n<=3;n++){trace.push('pull:'+n);yield n;}}finally{trace.push('return');}}expect([...pipeline(input()).take(2)]).toEqual([1,2]);expect(trace).toEqual(['pull:1','pull:2','return']);});");
 const clockCode = [
   'export function debounce(fn, wait, relogio = {setTimeout, clearTimeout}) {',
   '  let timer;',
@@ -105,11 +105,6 @@ const clockCode = [
 reference('21.07', 'tempo.js', clockCode);
 suite('21.07', data['21.07'].tests + '\n' +
   "test('100 eventos usam o relogio do starter',()=>{let now=0;const tasks=[];const callsD=[],callsT=[];const clock={agora:()=>now,setTimeout(fn,ms){const task={at:now+ms,fn,cancelled:false};tasks.push(task);return task;},clearTimeout(task){task.cancelled=true;}};const d=debounce(x=>callsD.push([now,x]),100,clock),t=throttle(x=>callsT.push([now,x]),100,clock);for(let i=0;i<100;i++){now=i*10;d(i);t(i);}now=1090;for(const task of tasks)if(!task.cancelled&&task.at<=now)task.fn();expect(callsD).toEqual([[1090,99]]);expect(callsT.map(row=>row[0])).toEqual([0,100,200,300,400,500,600,700,800,900]);d(101);d.cancel();});");
-contract('21.07', 'tempo.js', [
-  'Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).',
-  'relogio fornece agora(), setTimeout(fn, ms) e clearTimeout(id). Simule 100 eventos em t=0,10,...,990 ms.',
-  'Debounce final chama uma vez em t=1090; throttle inicial chama em t=0,100,...,900.',
-]);
 const resource = readFileSync('course-src/solutions/21.08/recurso.js', 'utf8').trimEnd();
 if (!data['21.08'].correctFiles.some(entry => entry.path === 'recurso.js')) {
   data['21.08'].correctFiles.push({path: 'recurso.js', content: resource});
@@ -165,13 +160,14 @@ const visible = {
   '20.10': ['bytes.js', 'Exporte medirTexto(text): {textLength:number,byteLength:number,bytes:Uint8Array,decoded:string} e decodificar(bytes,{fatal=false}={}): string.', 'byteLength conta UTF-8; UTF-8 inválido lança TypeError no modo fatal e insere U+FFFD no modo padrão.'],
   '20.08': ['pipeline.js', 'Exporte pipeline(source), cujo builder oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().', 'Cada encadeamento é lazy e imutável; take(2) limita dois valores aceitos e sair do for...of chama return() na fonte.'],
   '21.09': ['lab.js', 'Exporte comparar(input) para validar números finitos, comparar os totais e medir reduce/for; medir(fn,input,{warmups,runs,now}) retorna samples e median.', 'Com número par de amostras, median é a média dos dois valores centrais ordenados.'],
+  '21.07': ['tempo.js', 'Implemente debounce(fn, ms, relogio) e throttle(fn, ms, relogio).', 'No cronograma de quatro eventos do starter (t=0,20,40,160), debounce trailing chama em t=140,260 e throttle leading em t=0,160.', 'Em cenário separado de 100 eventos (t=0,10,...,990), debounce trailing chama em t=1090 com valor 99 e throttle leading em t=0,100,...,900.', 'Throttle leading aceita na borda quando t - última chamada >= 100; debounce trailing dispara ao avançar o relógio até o prazo após o último evento.'],
   '21.05': ['primos.js', 'Exporte contarPrimos(n): número de primos até n, inclusive.', 'n negativo, fracionário, NaN, Infinity ou texto lança RangeError com message "n must be a nonnegative integer".'],
   '21.06': ['metadados.js', 'Exporte criarCache(calcular): {metaDe(node),calculos}; cachePorId(): Map.', 'criarCache memoiza por identidade de objeto em WeakMap; cachePorId aceita IDs string.'],
   '22.04': ['patch.js', 'Exporte first(xs) e migrar(xs): migrar usa a função explícita; array vazio produz undefined.', 'Não modifique Array.prototype nem adicione propriedade enumerável.'],
   '22.05': ['a.js', 'Exporte executar(json): número. Para {"quantidade":3,"preco":5}, devolve 15.', 'JSON inválido lança SyntaxError; quantidade que não seja inteira lança TypeError antes de produzir resultado.'],
   '23.02': ['fluxo.js', 'Exporte criarServico(repo) com criarPedido(raw), e responder(servico,raw): Promise<{status,corpo}>.', '400 não persiste; 500 tem mensagem genérica e não traz cause/causa pública. A causa original permanece disponível no erro interno.'],
   '23.03': ['contrato.js', 'Exporte ValidationError(campo,mensagem), StorageError(mensagem,cause) e criarTarefa(entrada,repositorio,criarId): Promise<Tarefa>.', 'Normalize título, valide prazo ISO real antes de salvar e use status a-fazer. Entrada inválida não chama salvar; falha do repositório vira StorageError com a mesma referência em cause.'],
-  '23.09': ['operacao.js', 'Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.', 'Resposta e logs não contêm token, Cookie, Authorization ou causa técnica; preserve redaction de segredos aninhados sem mutar a entrada.'],
+  '23.09': ['operacao.js', 'Exporte lerLogs(): cópia dos eventos e limparLogs(): remove eventos entre testes.', 'Resposta pública informa apenas falha e ID; log interno preserva causa técnica útil com Authorization, Cookie e Token redigidos em campos aninhados, sem mutar a entrada.'],
 };
 for (const [id, [file, ...lines]] of Object.entries(visible)) contract(id, file, lines);
 starterAppend('20.04', 'proxy.js', 'export function observar(target, onRead = () => {}) { return new Proxy(target, {get(obj,key,receiver) { onRead(key); return receiver[key]; }}); }');
@@ -181,7 +177,7 @@ const validatorStarter = 'course-src/starters/20.05/validador.js';
 put(validatorStarter, readFileSync(validatorStarter, 'utf8').replace('function updateUser(atual, patch)', 'export function updateUser(current, patch)'));
 starterAppend('20.05', 'validador.js', 'export function validarUser(user) { return new Proxy(user, {set(target,key,value,receiver) { /* TODO: validar age antes de gravar. */ return Reflect.set(target,key,value,receiver); }}); }');
 const pipelineStarter = 'course-src/starters/20.06/pipelines.js';
-let pipelineStarterText = readFileSync(pipelineStarter, 'utf8').replace('function* manualPipeline(iteravel)', 'export function* manualPipeline(iteravel)');
+let pipelineStarterText = readFileSync(pipelineStarter, 'utf8').replace(/^function\* manualPipeline\(iteravel\)/m, 'export function* manualPipeline(iteravel)');
 if (!pipelineStarterText.includes('// API pública visível 20.06')) {
   pipelineStarterText += '\n\n// API pública visível 20.06\nexport function take(iteravel, count) { /* TODO: retornar no máximo count valores sem consumir quando count é zero. */ return []; }\nexport function run() { /* TODO: usar a fonte descrita acima. */ return {values: [], pulls: 0, zero: []}; }';
 }
@@ -190,7 +186,8 @@ starterAppend('20.09', 'stream.js', 'export function criarStream() { /* TODO: re
 starterAppend('20.10', 'bytes.js', 'export function medirTexto(text) { return {textLength:text.length, byteLength:text.length, bytes:new Uint8Array(), decoded:text}; }\nexport function decodificar(bytes, {fatal=false}={}) { return new TextDecoder("utf-8",{fatal}).decode(bytes); }');
 contract('20.08', 'pipeline.js', [
   'pipeline(source) oferece map(fn), filter(predicate), take(count) e [Symbol.iterator]().',
-  'Cada operador retorna um novo pipeline lazy; take limita valores aceitos, take(0) não consome e return() da fonte é respeitado ao interromper a iteração.',
+  'source é um iterable. Array cria novo iterator; a mesma instância generator pode estar consumida; para repetir, chame a fábrica e passe a nova instância a outra pipeline.',
+  'Cada operador retorna um pipeline lazy independente; take limita valores aceitos, take(0) não consome, filtros podem descartar pulls, e return() da fonte é propagado ao interromper a iteração.',
 ]);
 contract('21.09', 'lab.js', [
   'Exporte comparar(input) e medir(fn,input,{warmups,runs,now}); comparar valida a entrada e mede reduce e for sobre a mesma lista.',

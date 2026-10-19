@@ -1,6 +1,3 @@
 # Referência 19.06
 
-Para Expandir mapped type, inspecione mutable.ts e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.
-
-## Transferência
-Escolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.
+Com `Settings = { readonly theme?: "light" | "dark"; readonly retries?: number }`, `MutableRequired<Settings>` torna ambos os campos obrigatórios e graváveis. Sob `strict`, remover `?` de propriedade opcional remove a ausência; teste separadamente uma propriedade cujo valor declare explicitamente `undefined` e compare com `exactOptionalPropertyTypes` ligado e desligado.

@@ -265,7 +265,7 @@ CONTENT = {
         "Registro inválido aparece em válidos ou mensagem perde conteúdo após terceiro campo.",
         "Quantos delimitadores são obrigatórios e a mensagem pode conter |?",
         ("Separe no máximo os dois primeiros delimitadores.", "Exija nível, data e mensagem não vazios.", "Preserve o restante da mensagem como texto, inclusive |."),
-        "Para cada linha, localize os dois primeiros |, valide partes não vazias e nível INFO/WARN/ERROR; preserve a linha original no array válido ou rejeitado. Date vem depois.",
+        "Para cada linha, localize os dois primeiros | e valide partes não vazias; o contrato não restringe o vocabulário de níveis, e INFO/WARN/ERROR são apenas exemplos. Preserve a linha original no array válido ou rejeitado. Date vem depois.",
         "Parsear linhas de importação categoria|id|descrição com descrição contendo | -> preserve descrição",
         prompt="Antes de escrever o parser, classifique cada linha pública como válida ou rejeitada e registre os campos que justificam a decisão. Em seguida implemente a separação pelos dois primeiros delimitadores, rode os casos e explique como preservou o restante da mensagem.",
         kind="MAKE", estimated=28, load={"novelty": 3, "syntax": 3, "composition": 4, "state": 3, "debugging": 2, "files": 3, "reading": 4, "independence": 4, "tools": 3},
@@ -443,7 +443,7 @@ CONTENT["05.13"] = E(
     'extrairPares("nome=Ana; cidade=Recife") -> [{chave:"nome", valor:"Ana"}, {chave:"cidade", valor:"Recife"}]; consoantes("Ação") -> ["ç"]',
     'extrairPares("Nome=Ana") -> [{chave:"Nome", valor:"Ana"}]; consoantes("AÇÃO") -> ["Ç"]',
     "Chamar matchAll com padrão sem a flag g, ou esperar que i altere a classe de caracteres com subtração; deixar o ponto e vírgula entrar no valor.",
-    "Sem g, matchAll lança TypeError; sem i, 'Nome' não casa com [a-z_] e a lista volta vazia.",
+    "Sem g, matchAll com RegExp lança TypeError. Retirar i do padrão de pares em Nome=Ana permite um casamento parcial: a chave capturada é ome, não uma lista vazia; o padrão não ancora o início da chave.",
     "Qual flag o matchAll exige, e qual flag habilita classes com subtração?",
     ("matchAll exige padrão global: sem g, o método lança TypeError antes de devolver resultados.", "Use /(?<chave>...)=(?<valor>...)/gi para pares e /[\\p{L}--[vogais]]/giv para consoantes.", "Exemplo parecido: 'a-b'.match(/[\\p{L}--[a]]/giv) devolve ['b'], porque a subtração remove 'a' da classe."),
     "return [...texto.matchAll(/(?<chave>[a-z_]+)=(?<valor>[^;\\s]+)/gi)].map(m => ({chave: m.groups.chave, valor: m.groups.valor})); e return texto.match(/[\\p{L}--[aeiouáéíóúâêôãõà]]/giv) || [];",
@@ -487,25 +487,25 @@ CONTENT["05.14"] = E(
     runtime="Node.js 24.x, módulos ES, sem DOM.",
     compatibility="A suíte executável verifica o parser de uma linha CSV; a rubrica continua avaliando a comparação entre regex e parser.",
     explanation={
-        "mental_model": "Regex casa padrões regulares sem memória de contexto. Um formato com campos entre aspas e escapes pede estado; escolha pela estrutura do dado, não pela familiaridade com a ferramenta.",
+        "mental_model": "Uma regex pode reconhecer campos com aspas e escapes neste recorte de CSV. Aqui escolhemos um parser sequencial pela clareza dos estados, pela manutenção e pela possibilidade de apontar a posição de um erro, não por uma impossibilidade geral de usar regex.",
         "worked_example": "Em 'ana,\"Rua A, 10\",recife', a vírgula dentro das aspas pertence ao campo. O parser só separa quando está fora delas.",
         "common_trap": "Dividir sempre por vírgula ou tratar aspas duplicadas como fechamento seguido de abertura perde o estado do campo.",
-        "why_it_matters": "Parsers claros dizem em que posição erraram; uma regex gigante erra em silêncio.",
+        "why_it_matters": "Compare legibilidade, cobertura dos casos e diagnóstico. Um parser pode informar a posição de uma falha; um teste com regex normalmente informa apenas se houve casamento, embora também possa ser acompanhado de diagnóstico.",
     },
     first_response="Escreva o critério que separaria regex de parser antes de ler a análise do exemplo.",
     first_response_timing="Antes de comparar as soluções.",
-    interaction="Editor JavaScript para implementar o parser; a resposta curta mantém campos nomeados para justificar quando regex basta e quando parser é necessário.",
+    interaction="Editor JavaScript para implementar o parser; a resposta curta mantém campos nomeados para justificar quando regex basta e por que o parser foi escolhido.",
     resources=("MDN: guia de expressões regulares — https://developer.mozilla.org/docs/Web/JavaScript/Guide/Regular_expressions", "MDN: String.prototype.split — https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String/split"),
     review={
         "prompt": "Quando um parser sequencial é mais adequado do que uma regex?",
-        "choices": ["Quando o formato exige estado, como aspas que podem conter o separador", "Sempre que o texto contém letras", "Quando a regex tem menos de dez caracteres"],
-        "answer": "Quando o formato exige estado, como aspas que podem conter o separador",
-        "feedback_correct": "Estado e escape pedem leitura sequencial; uma regex simples não guarda a informação 'estou dentro de aspas'.",
-        "feedback_incorrect": "Tamanho do padrão e presença de letras não decidem a escolha; decide se o formato exige lembrar contexto.",
+        "choices": ["Quando estados explícitos e diagnóstico de posição tornam o formato mais fácil de manter", "Sempre que o texto contém letras", "Quando a regex tem menos de dez caracteres"],
+        "answer": "Quando estados explícitos e diagnóstico de posição tornam o formato mais fácil de manter",
+        "feedback_correct": "Uma regex pode tratar aspas neste recorte; o parser foi escolhido para tornar transições e erros mais claros. Compare as alternativas pelos requisitos.",
+        "feedback_incorrect": "Tamanho do padrão e presença de letras não decidem a escolha. Avalie clareza, casos cobertos e diagnóstico, sem afirmar que regex nunca trata aspas.",
     },
-    transfer_prompt="Escolha regex ou parser para validar uma placa de veículo e para ler uma exportação com campos entre aspas. Justifique cada escolha com um exemplo que a outra ferramenta trataria mal.",
+    transfer_prompt="Escolha regex ou parser para validar uma placa de veículo e para ler uma exportação com campos entre aspas. Justifique cada escolha por clareza, manutenção e diagnóstico; não presuma que a outra ferramenta seja incapaz de resolver o caso.",
     prompt="Implemente parsearLinhaCsv para as linhas de exemplo, incluindo vírgulas dentro de aspas e aspas duplicadas. Na resposta, compare regex para um token simples com parser para CSV e explique a informação de estado necessária.",
-    rubric=("Compara regex e parser com um exemplo concreto de cada.", "Identifica o que a regex não representa: estado entre aspas e escapes.", "Justifica a escolha pelo formato, com o campo ou a posição que falharia."),
+    rubric=("Compara regex e parser com um exemplo concreto de cada.", "Explica como o parser mantém estados de aspas e escapes sem afirmar que regex é incapaz de reconhecer esses campos.", "Justifica a escolha por clareza, manutenção e diagnóstico de uma falha concreta."),
     content_version=2,
 )
 
@@ -581,3 +581,49 @@ CONTENT["05.16"] = E(
     transfer_prompt="Normalize um campo de nome antes de enviá-lo a uma API: informe se houve substituição e explique por que a troca por U+FFFD é uma perda de informação.",
     prompt="Implemente estaBemFormado e prepararParaEnvio. Antes de executar, preveja o resultado de um surrogate isolado e diga qual método responde cada pergunta.",
 )
+
+
+# Short local-study practices; reuse existing content fields, without platform changes.
+_local_practice = {'05.03': ['Blocos locais: copie apenas o conteúdo após os rótulos A–E para o corpo de slug, em uma ordem '
+           'que respeite as dependências. X é o distrator de separador. Não precisa de arrastar/soltar: '
+           'edite o texto na sua máquina. Preserve acentos e pontuação, pois slug aqui só limpa espaços e '
+           'padroniza a caixa.'],
+ '05.06': ['Previsão adicional local: compare [2,10,1].sort() com [2,10,1].sort((a,b)=>a-b). Conferência: '
+           'sem comparador a ordem é [1,10,2], porque a comparação padrão é textual; com comparador numérico '
+           'é [1,2,10]. sort altera o array sobre o qual foi chamado; no contrato ordenarSemMutar, faça a '
+           'cópia antes. Mutação de um array local não é proibida por princípio.'],
+ '05.07': ['Retomada antes de implementar: trace mínimo, máximo e soma em [3,-2,5]. Após cada item, a tabela '
+           'é (3,3,3), (-2,3,1), (-2,5,6); a média final é 2. Faça primeiro sua previsão e depois confira. '
+           'Para [-3,-1], máximo deve ser -1, não zero: inicializar máximo=0 e mantê-lo falsifica o '
+           'resultado. A lista vazia tem o contrato [null,null,0,null], sem divisão por zero; não ordenar '
+           'nem alterar a entrada.'],
+ '05.08': ['Contrato do parser: separe pelos dois primeiros |, exigindo nível, data textual e mensagem não '
+           'vazios. O contrato não fecha o vocabulário de níveis: INFO, WARN e ERROR são exemplos, e níveis '
+           'como A ou B também são aceitos quando os três campos existem. Preserve os | restantes na mensagem '
+           'e devolva a linha original entre válidas ou rejeitadas. Conferência: '
+           '["INFO|2026-01-02|parte A|parte B", "B|2026-01-02|x"] produz [["INFO|2026-01-02|parte A|parte '
+           'B","B|2026-01-02|x"],[]]. Data é texto no contrato, sem Date nem validação de calendário.'],
+ '05.12': ['Formato não é calendário: nesta atividade, trocar AAAA-MM-DD por DD/MM/AAAA é reorganizar '
+           'grupos, não validar a existência da data. Se o padrão casar "2026-02-31", a substituição produz '
+           '"31/02/2026"; isso não declara a data válida. Não implemente validação de calendário sem '
+           'requisito novo.'],
+ '05.13': ['Experimento local de flags: compare '
+           '[..."Nome=Ana".matchAll(/(?<chave>[a-z_]+)=(?<valor>[^;\\s]+)/g)] com a variante gi e observe '
+           'groups.chave. Sem i, a chave capturada é "ome"; com i, é "Nome". O padrão não ancora o começo da '
+           'chave e pode começar depois do N. Não confunda ignorar caixa com impedir casamento parcial.'],
+ '05.14': ['Recorte: um único registro CSV em uma string; campos podem ser vazios, conter vírgulas entre '
+           'aspas e usar aspas duplicadas. Aspas sem fechamento produzem SyntaxError. Não implementar '
+           'leitura de arquivos, várias linhas, encoding ou detecção de delimitador. Compare o parser com '
+           'uma regex de token simples pela clareza e pelo diagnóstico, sem declarar que todo CSV é '
+           'impossível com regex.']}
+for _activity_id, _materials in _local_practice.items():
+    CONTENT[_activity_id]["resources"] = (*CONTENT[_activity_id]["resources"], *_materials)
+
+CONTENT["05.08"]["prompt"] += " O contrato não restringe o vocabulário de níveis; INFO, WARN e ERROR são exemplos. Preserve delimitadores adicionais na mensagem e a linha original na lista de válidas ou rejeitadas."
+CONTENT["05.03"]["prompt"] = "Copie e ordene os cinco blocos A–E no corpo de slug(titulo), descartando X. filter chama o callback para cada parte e mantém só as partes não vazias. Registre os valores intermediários e confira que espaços repetidos viram um único hífen, sem remover acentos."
+
+CONTENT["05.01"]["resources"] = (*CONTENT["05.01"]["resources"], "Organização da prática: estude arrays e mutação primeiro; retome texto/Unicode ao chegar a 05.11 e depois regex/parsing em 05.02 e seguintes, preservando a ordem das atividades. Antes de trocar de assunto, faça uma previsão curta com dados novos do exercício anterior. As extensões opcionais continuam opcionais; não há obrigação de terminar a etapa numa sessão.")
+CONTENT["05.11"]["resources"] = (*CONTENT["05.11"]["resources"], "Retomada antes de regex: preveja o resultado de '  ab  '.trim(), 'ab'.slice(0,1) e 'ab'[0]. Conferência: ab, a e a. Em seguida explique a diferença entre unidades UTF-16, pontos de código e grafemas antes de avançar; não tente resolver todos esses assuntos com uma única medida.")
+
+for _activity_id, _activity in CONTENT.items():
+    _activity["resources"] = (*_activity["resources"], "Prática local: salve o arquivo fornecido como main.js em uma pasta com package.json contendo {\"type\":\"module\"}. Se ele já imprime resultados, execute node main.js. Para funções exportadas, crie conferir.mjs ao lado com import { nomeExportado } from './main.js', faça as chamadas do enunciado e execute node conferir.mjs. Substitua nomeExportado pelo nome real da função. Use Node 24 ou superior para os recursos modernos indicados na atividade.")

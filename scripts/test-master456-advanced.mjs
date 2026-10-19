@@ -185,5 +185,11 @@ test('visible contracts name every evaluated API, with required failure types', 
   assert.match(visible('22.05'), /SyntaxError.*TypeError/);
   assert.match(visible('23.02'), /400.*não persiste.*500.*cause.*causa/i);
   assert.match(visible('23.03'), /StorageError.*cause.*ValidationError/s);
-  assert.match(visible('23.09'), /token.*Cookie.*Authorization.*causa.*técnica/s);
+  const contract2309 = visible('23.09');
+  assert.match(contract2309, /resposta pública.*falha.*ID/i);
+  assert.match(contract2309, /log interno[^\n]*causa técnica útil/i);
+  assert.match(contract2309, /redigidos em campos aninhados, sem mutar/i);
+  for (const secret of ['Authorization', 'Cookie', 'Token']) {
+    assert.ok(contract2309.includes(secret), `23.09 omits redacted field ${secret}`);
+  }
 });

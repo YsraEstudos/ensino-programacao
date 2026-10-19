@@ -1,15 +1,18 @@
 {
   "compilerOptions": {
-    "target": "es2024",
-    "module": "nodenext",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-    "erasableSyntaxOnly": true,
-    "verbatimModuleSyntax": true,
-    "allowImportingTsExtensions": true,
     "noEmit": true,
-    "types": ["node"]
+    "allowImportingTsExtensions": true,
+    "types": [
+      "node"
+    ],
+    "skipLibCheck": true
   },
-  "include": ["src", "test"]
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ]
 }

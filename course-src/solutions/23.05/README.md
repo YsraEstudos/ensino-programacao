@@ -19,3 +19,9 @@ Revisar diff de sincronização offline: apontar exatamente um retry sem limite 
 ## Verificação
 
 A evidência depende do executor rubric; erros de infraestrutura, suíte vazia ou timeout não aprovam a tentativa.
+
+## Transferência independente
+
+# Transfer 23.05
+
+Revisar diff de sincronização offline: apontar exatamente um retry sem limite e uma perda de atualização, refutar comentário sobre nome de variável e propor reprodução com fake server/clock sem editar o diff. Ao final, compare uma sugestão de IA com os requisitos e testes já existentes; identifique um risco resolvido e uma lacuna que exige evidência.

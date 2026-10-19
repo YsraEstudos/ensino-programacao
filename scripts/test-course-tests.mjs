@@ -17,11 +17,12 @@ const tests = JSON.parse(readFileSync('public/course-tests.json', 'utf8'));
 const assessments = JSON.parse(readFileSync('public/course-assessments.json', 'utf8'));
 const observationalStarterPassKinds = new Map([
   ['04.01', 'PREDICT'], ['05.01', 'PREDICT'], ['06.01', 'PREDICT'], ['06.02', 'TRACE'],
-  ['08.01', 'PREDICT'], ['08.07', 'TRACE'], ['09.01', 'TRACE'], ['09.04', 'TRACE'],
+  ['08.07', 'TRACE'], ['09.01', 'TRACE'], ['09.04', 'TRACE'],
   ['10.01', 'PREDICT'], ['11.01', 'TRACE'], ['11.11', 'COMPARE'], ['11.14', 'COMPARE'],
   ['12.11', 'INVESTIGATE'], ['12.14', 'PREDICT'],
 ]);
 // These exact objectives can pass their starter behavior checks by design:
+// 07.06 is a MODIFY activity that already preserves the accumulator contract;
 // 18.10 replaces copied aliases with utility types that preserve the same types;
 // 20.01 is a TRACE activity that records the iterator behavior already present;
 // 23.04 characterizes legacy behavior and asks for a behavior-preserving refactor.
@@ -29,6 +30,7 @@ const observationalStarterPassKinds = new Map([
 // separate rubric/focused review criterion. Keep each expected kind explicit so
 // an objective whose kind changes cannot silently inherit this exception.
 const objectiveSpecificStarterPassKinds = new Map([
+  ['07.06', 'MODIFY'],
   ['18.10', 'MODIFY'],
   ['20.01', 'TRACE'],
   ['23.04', 'MODIFY'],

@@ -47,7 +47,7 @@ if (process.argv.includes('--only=19.06-rubric')) {
 
 const starters = {
   '11.01': {
-    files: {'index.html':'<!doctype html><article id="pai"><a id="filho" href="#"><span id="alvo">Abrir</span></a></article>', 'main.js':`export function observarClique(root) {
+    files: {'index.html':'<!doctype html><article id="pai"><a id="filho"><span id="alvo">Abrir</span></a></article>', 'main.js':`export function observarClique(root) {
   const log = [];
   for (const id of ['pai', 'filho', 'alvo']) root.querySelector('#'+id).addEventListener('click', event => log.push({target:event.target.id,currentTarget:event.currentTarget.id}));
   return log;
@@ -63,7 +63,7 @@ export function observarControles(root, modo) {
 }`},
     test: `import {observarClique,observarControles} from './main.js';
 describe('propagação de eventos',()=>{
- test('preserva target e a ordem bubble dos currentTarget',()=>{const root=document.createElement('div');root.innerHTML='<article id="pai"><a id="filho" href="#"><span id="alvo">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]);});
+ test('preserva target e a ordem bubble dos currentTarget',()=>{const root=document.createElement('div');root.innerHTML='<article id="pai"><a id="filho"><span id="alvo">Abrir</span></a></article>';const log=observarClique(root);root.querySelector('#alvo').dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));/*@case 11.01.anchor-sem-href-nao-navega*/expect(root.querySelector('#filho').hasAttribute('href')).toBe(false);expect(log).toEqual([{target:'alvo',currentTarget:'alvo'},{target:'alvo',currentTarget:'filho'},{target:'alvo',currentTarget:'pai'}]);});
  test('stopPropagation mantém listeners do mesmo alvo e remove o bubble ancestral',()=>{const root=document.createElement('div');root.innerHTML='<span id="alvo"></span>';const log=observarControles(root,'stop');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle','target-3']);});
  test('stopImmediatePropagation também interrompe listeners irmãos',()=>{const root=document.createElement('div');root.innerHTML='<span id="alvo"></span>';const log=observarControles(root,'immediate');root.querySelector('#alvo').click();expect(log).toEqual(['capture','target-1','target-controle']);});
 });`,
@@ -271,7 +271,7 @@ for(const [id,[environment,entryPath,testPath,referenceDir]] of Object.entries(e
   const old=assessmentsBefore[id];
   const assessment={environment,version:(old?.version||1)+1,checks:['behavior'],entryPath,testPath,behaviorTestPath:'__devpath_protected_behavior__.js',tests:starters[id].test,referenceDir,correctFiles:Object.entries(referenceFiles).filter(([name])=>/\.(?:m?js|html|ts)$/.test(name)).map(([path,content])=>({path,content})),
     transfer:{id:`${id}-transfer`,files:[{path:'transfer.js',content:`// Reaplique ${id} a uma entrada nova e preserve o mesmo contrato observável.\nexport {};`}],rubric:['Aplique o contrato publicado a uma entrada independente e cite a evidência observada.']}};
-  if(environment==='dom')assessment.fixtures={html:id==='11.01'?'<article id="pai"><a id="filho" href="#"><span id="alvo">Abrir</span></a></article>':id==='11.11'?'<div id="menu"><button id="item" data-parar>Escolher</button></div>':id==='11.14'?'<button id="copiar">Copiar</button><div id="conteudo"></div><section id="painel"></section>':'<ul></ul>'};
+  if(environment==='dom')assessment.fixtures={html:id==='11.01'?'<article id="pai"><a id="filho"><span id="alvo">Abrir</span></a></article>':id==='11.11'?'<div id="menu"><button id="item" data-parar>Escolher</button></div>':id==='11.14'?'<button id="copiar">Copiar</button><div id="conteudo"></div><section id="painel"></section>':'<ul></ul>'};
   if(environment==='network')assessment.fixtures={responses:[{url:'/indisponivel',status:503,headers:{'Content-Type':'application/json'},body:'{"erro":"indisponível"}'},{url:'/ruim',status:502,headers:{'Content-Type':'text/plain'},body:'not json'}]};
   for(const [index,content] of (executableMutants[id]||[]).entries())put(path.join('course-src',`mutants/${id}/behavior-${index+1}/${entryPath}`),content);
   assessments[id]=assessment;

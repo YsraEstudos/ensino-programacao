@@ -1,6 +1,3 @@
 # Referência 18.02
 
-Para Parsons de patch, inspecione patch.ts e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.
-
-## Transferência
-Escolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.
+`aplicarPatch<T extends object>(base: T, patch: Partial<T>): T` cria uma cópia com spread superficial. Um patch `{ nome: "Bia" }` mantém os campos omitidos. Um `Perfil` aninhado é substituído por inteiro, sem deep merge, e `base` permanece intacto. JSON externo requer parse como `unknown` e validação de runtime antes de ser aceito como patch; declare a política de `undefined` com `exactOptionalPropertyTypes`.

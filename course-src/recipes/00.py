@@ -205,7 +205,7 @@ CONTENT = {
         "execution.fill_console",
         'main.js: console.log("nome:", ___);\nconsole.log("pontos:", ___);\nconsole.log(___);',
         'lacunas "Ana", 0, "fim" -> nome: Ana; pontos: 0; fim',
-        'lacunas "Ana", 0, "fim" -> nome: Ana; pontos: 0; fim',
+        'lacunas "Rui", 7, "pronto" -> nome: Rui; pontos: 7; pronto',
         "Confundir o valor mostrado com o rótulo ou apagar uma chamada ao preencher uma lacuna.",
         "A saída fica sem uma das três linhas ou mostra o rótulo no lugar do valor.",
         "Quantas chamadas há no arquivo e qual valor cada uma recebe?",
@@ -421,7 +421,7 @@ CONTENT = {
         ("Anote a saída de cada chamada antes de editar.", "Trocar o número muda só a mensagem daquela chamada; a chamada continua no arquivo.", 'Se a linha Itens: some, a quantidade deixa de aparecer na saída.'),
         "Troque somente o 3 por 0 na chamada Itens:; a saída final é Atendimento, Pessoa: Ana, Itens: 0 e Fim.",
         "Registro de backup com a chamada Copias: 2 -> Backup, Copias: 0 e Fim; a chamada Copias: continua no arquivo e só o número muda",
-          kind="TRACE", estimated=15, requires=("execution.order", "execution.sequence"), title="Trace de chamadas e remoções", load={"novelty": 1, "syntax": 1, "composition": 2, "state": 2, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
+          kind="MAKE", estimated=15, requires=("execution.order", "execution.sequence"), title="Integre as habilidades em um programa curto", load={"novelty": 1, "syntax": 1, "composition": 2, "state": 2, "debugging": 1, "files": 1, "reading": 3, "independence": 2, "tools": 1},
           prompt=(('No main.js vazio, escreva chamadas que mostrem uma abertura, a pessoa Ana, a quantidade 3 e um encerramento. '
            'Preveja, execute e compare. Depois aceite a nova exigência de quantidade 0, altere o programa e execute outra vez. '
            'Por fim responda aos dois desafios de transferência.')),

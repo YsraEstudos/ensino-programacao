@@ -44,6 +44,65 @@ const defs = {
   },
 };
 
+// Contrato focal da rodada: a retomada depende da fonte concreta.
+defs['20.08'].solution = `export function pipeline(source) {
+  return {
+    map(fn) {
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() { for (const value of input) yield fn(value); } });
+    },
+    filter(predicate) {
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() { for (const value of input) if (predicate(value)) yield value; } });
+    },
+    take(count) {
+      if (!Number.isInteger(count) || count < 0) throw new RangeError('take requer inteiro não negativo');
+      const input = this;
+      return pipeline({ *[Symbol.iterator]() {
+        if (count === 0) return;
+        const iterator = input[Symbol.iterator]();
+        try {
+          for (let accepted = 0; accepted < count; accepted++) {
+            const step = iterator.next();
+            if (step.done) return;
+            yield step.value;
+          }
+        } finally { iterator.return?.(); }
+      } });
+    },
+    [Symbol.iterator]() { return source[Symbol.iterator](); },
+  };
+}`;
+defs['20.08'].tests += `
+test('iterável reiniciável, generator consumível e fábrica explícita',()=>{
+  const values=pipeline([1,2]);
+  expect([...values]).toEqual([1,2]);
+  expect([...values]).toEqual([1,2]);
+  function* generate(){yield 1;yield 2;}
+  const oneShot=pipeline(generate());
+  expect([...oneShot]).toEqual([1,2]);
+  expect([...oneShot]).toEqual([]);
+  let creations=0;
+  const makeSource=()=>{creations++;return generate();};
+  expect([...pipeline(makeSource())]).toEqual([1,2]);
+  expect([...pipeline(makeSource())]).toEqual([1,2]);
+  expect(creations).toBe(2);
+});
+test('take fecha a fonte e não faz pull após a quantidade aceita',()=>{
+  const trace=[];
+  function* source(){try{for(let value=1;value<=3;value++){trace.push('pull:'+value);yield value;}}finally{trace.push('return');}}
+  expect([...pipeline(source()).take(2)]).toEqual([1,2]);
+  expect(trace).toEqual(['pull:1','pull:2','return']);
+});`;
+defs['20.08'].transfer = `# Transferência 20.08
+
+Compare três fontes para a mesma pipeline: um array reiniciável, a mesma instância de generator (iterador de uso único) e uma fábrica que cria generators. Registre a saída da primeira e da segunda iteração do array e da instância. Em seguida, chame a fábrica para construir uma pipeline nova a cada passagem e confirme que ambas começam do início. Depois encadeie map/filter/take com uma fonte que conte os valores produzidos: inclua entradas descartadas pelo filtro, prove que take(0) não consome, que não há pull após o último resultado aceito e que interromper com break propaga return/finally. Não suponha que todo for...of reinicia qualquer fonte.`;
+defs['20.08'].rubric = [
+  'Distingue a chamada a Symbol.iterator de um novo cursor: array reinicia, a mesma instância generator pode estar consumida e uma fábrica cria outra instância.',
+  'Conta pulls da fonte separadamente dos valores aceitos pelo filtro e demonstra que take(0) não consome.',
+  'Confirma que take/break fecha a fonte por return/finally sem pedir um item além do limite.',
+];
+
 const root=process.cwd();
 const manifestPath=path.join(root,'course-src/assessments.json');
 const assessments=JSON.parse(readFileSync(manifestPath,'utf8'));

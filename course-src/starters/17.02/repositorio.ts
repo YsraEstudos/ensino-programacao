@@ -1,25 +1,22 @@
-// 17.02 · Do helper ao repositório.
-// Reordene os blocos (helpers antes do Repository) e complete as lacunas `___`.
-// O tipo da entidade (T) e o tipo do identificador são papéis diferentes: não os junte num só parâmetro.
+// 17.02 · Ajuste somente as assinaturas para preservar relações entre tipos.
+// Não implemente Map nem outra persistência.
 
-/* Blocos (embaralhados)
-[1] export class Repository<T extends Entity> {
-      #itens = new Map<string, T>();
-      save(entidade: T): T { this.#itens.set(entidade.id, entidade); return entidade; }
-      get(id: Entity["id"]): T | undefined { return this.#itens.get(id); }
-    }
-[2] export function wrap<T>(valor: T): { valor: T } { return { valor }; }
-[3] export interface Entity { id: string }
-[4] export function pair<K, V>(chave: K, valor: V): [K, V] { return [chave, valor]; }
-*/
+export interface Entity { id: string }
 
-// Cole os blocos aqui:
+// Generalize os tipos sem perder a relação entre cada entrada e sua saída.
+export function pair(chave: string | number, valor: string | number): (string | number)[] {
+  return [chave, valor];
+}
 
+export function wrap(valor: unknown): { valor: unknown } {
+  return { valor };
+}
 
-// Uso para conferir no editor (passe o mouse sobre cada nome):
-// const p = pair("a", 2);                          // [string, number]
-// type Usuario = Entity & { name: string };
-// const repo = new Repository<Usuario>();
-// repo.save({ id: "u1", name: "A" });
-// const achado = repo.get("u1");                   // Usuario | undefined
-// const ausente = repo.get("u9");                  // undefined em runtime
+export interface Repository<T> {
+  save(entidade: T): T;
+  get(id: string): T | undefined;
+}
+
+// Contrato esperado: pair("a", 2) conserva K/V; wrap conserva T;
+// Repository<Usuario> devolve Usuario em get, incluindo name, ou undefined.
+type Usuario = Entity & { name: string };

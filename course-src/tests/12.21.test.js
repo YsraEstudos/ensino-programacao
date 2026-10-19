@@ -54,4 +54,19 @@ describe('busca com cancelamento, timeout e resposta obsoleta', () => {
     /*@case 12.21.so-a-busca-mais-recente-entr-a534f140*/expect(await segunda).toBe('dois');
     /*@case 12.21.so-a-busca-mais-recente-entr-9810e500*/expect(await primeira).toBe(undefined);
   });
+  test('busca obsoleta abortada por fetcher que honra o sinal devolve undefined', async () => {
+    const pendentes = [];
+    const fetchQueHonraSinal = (url, {signal}) => new Promise((resolver, rejeitar) => {
+      const adiada = adiarResposta();
+      pendentes.push(adiada);
+      signal.addEventListener('abort', () => rejeitar(signal.reason), {once: true});
+      adiada.promise.then(texto => resolver({text: async () => texto}), rejeitar);
+    });
+    const buscar = criarBuscaAtual(fetchQueHonraSinal);
+    const primeira = buscar('/um');
+    const segunda = buscar('/dois');
+    pendentes[1].resolve('dois');
+    /*@case 12.21.busca-obsoleta-abortada-por--c90742ed*/expect(await segunda).toBe('dois');
+    /*@case 12.21.busca-obsoleta-abortada-por--8e1f8d3a*/expect(await primeira).toBe(undefined);
+  });
 });

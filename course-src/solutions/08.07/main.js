@@ -16,7 +16,7 @@ export function tracarBfs(grafo, inicio, destino) {
   }
   const caminho = [];
   for (let no = destino; no !== undefined; no = anterior.get(no)) caminho.unshift(no);
-  return {ordem, caminho: caminho[0] === inicio ? caminho : []};
+  return {ordem, caminho: caminho[0] === inicio ? caminho : null};
 }
 
 const grafo = new Map([["A", ["B", "C"]], ["B", ["D"]], ["C", ["D"]], ["D", []]]);

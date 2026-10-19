@@ -13,8 +13,13 @@ export function criarBuscaAtual(fetchFn) {
     controleAtual?.abort();
     const controle = new AbortController();
     controleAtual = controle;
-    const texto = await fetchFn(url, {signal: controle.signal}).then(resposta => resposta.text());
-    return controle === controleAtual ? texto : undefined;
+    try {
+      const texto = await fetchFn(url, {signal: controle.signal}).then(resposta => resposta.text());
+      return controle === controleAtual ? texto : undefined;
+    } catch (erro) {
+      if (controle !== controleAtual) return undefined;
+      throw erro;
+    }
   };
 }
 

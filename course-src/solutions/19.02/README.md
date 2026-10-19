@@ -1,6 +1,3 @@
 # Referência 19.02
 
-Para Parsons condicional, inspecione element.ts e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.
-
-## Transferência
-Escolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.
+O ramo verdadeiro captura o elemento de arrays mutáveis ou readonly e o ramo falso preserva `T`: arrays e tuplas produzem o tipo de elemento, e `number` permanece `number`. Como `T` está nu à esquerda de `extends`, uma união distribui; `ElementOrSelf<string[] | number>` resulta em `string | number`. Um ramo `unknown` perderia o escalar.

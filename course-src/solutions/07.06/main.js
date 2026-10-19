@@ -1,7 +1,11 @@
 export function resumirPorCategoria(itens) {
-  const acumulado = itens.reduce((resultado, item) => {
-    resultado[item.categoria] = (resultado[item.categoria] ?? 0) + item.preco;
-    return resultado;
-  }, Object.create(null));
-  return { ...acumulado };
+  const totais = new Map();
+
+  for (const item of itens) {
+    const categoria = String(item.categoria);
+    const totalAtual = totais.get(categoria) ?? 0;
+    totais.set(categoria, totalAtual + item.preco);
+  }
+
+  return Object.fromEntries(totais);
 }

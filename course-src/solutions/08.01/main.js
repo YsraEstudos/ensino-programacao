@@ -1,12 +1,12 @@
 export const analises = [
-  {trecho: "acesso por índice", crescimento: "O(1)"},
-  {trecho: "uma varredura", crescimento: "O(n)"},
-  {trecho: "dois laços aninhados", crescimento: "O(n²)"},
-  {trecho: "dividir por dois", crescimento: "O(log n)"},
-  {trecho: "ordenar", crescimento: "O(n log n)"},
-  {trecho: "busca binária", crescimento: "O(log n)"},
-  {trecho: "Set.has médio", crescimento: "O(1)"},
-  {trecho: "copiar n itens", crescimento: "O(n)"},
+  {trecho: "array[0]", crescimento: "O(1)"},
+  {trecho: "for (const item of array) visitar(item)", crescimento: "O(n)"},
+  {trecho: "for (const a of array) for (const b of array) comparar(a, b)", crescimento: "O(n²)"},
+  {trecho: "while (n > 1) n = Math.floor(n / 2)", crescimento: "O(log n)"},
+  {trecho: "array.toSorted(comparar)", crescimento: "O(n log n)"},
+  {trecho: "buscaBinaria(array, alvo)", crescimento: "O(log n)"},
+  {trecho: "set.has(alvo) no caso médio", crescimento: "O(1) médio"},
+  {trecho: "[...array]", crescimento: "O(n)"},
 ];
 
 console.log(JSON.stringify(analises));

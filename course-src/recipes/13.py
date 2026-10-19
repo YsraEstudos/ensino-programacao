@@ -197,31 +197,32 @@ CONTENT = {
           load={"novelty": 2, "syntax": 1, "composition": 2, "state": 1, "debugging": 2, "files": 1, "reading": 4, "independence": 2, "tools": 1}),
 "13.02": C(
     'errors.validation_order',
-    ('blocos: validar número finito, validar divisor, calcular a/b, return, throw '
-     'TypeError/RangeError'),
-    'dividir(6,2) -> 3',
-    ("dividir('6',2) -> TypeError; dividir(6,0) -> RangeError; nenhum cálculo antes de "
-     'validar'),
+    ('main.js: dividir calcula a/b sem guardas; validar operandos finitos com TypeError e '
+     'divisor zero com RangeError antes do cálculo'),
+    ("dividir(6,2) -> 3; dividir('6',2) -> TypeError antes de calcular; dividir(6,0) -> "
+     'RangeError; no starter, NaN/Infinity escapam como resultado'),
+    ('divisão ocorre depois de todas as guardas; operando não numérico, NaN ou Infinity -> '
+     'TypeError; divisor 0 -> RangeError; nunca retornar NaN/Infinity'),
     'Calcular primeiro e validar depois, deixando NaN/Infinity escapar.',
     ('Cheque tipos e finitude.', 'Cheque divisor zero.', 'Só então calcule e retorne.'),
     ('Ordene guardas antes de a/b e escolha erros estáveis: TypeError para tipo/finito, '
      'RangeError para divisor zero.'),
     'Validador de média com array vazio -> erro antes da divisão',
-    kind='PARSONS',
+    kind='DEBUG',
     estimated=10,
     runtime='Node.js 24 with a provisioned Vitest runner',
-    **_lesson('errors.validation_order', ('blocos: validar número finito, validar divisor, calcular a/b, return, throw '
-     'TypeError/RangeError'), 'Calcular primeiro e validar depois, deixando NaN/Infinity escapar.', ('Cheque tipos e finitude.', 'Cheque divisor zero.', 'Só então calcule e retorne.'), ('Ordene guardas antes de a/b e escolha erros estáveis: TypeError para tipo/finito, '
-     'RangeError para divisor zero.'), 'Validador de média com array vazio -> erro antes da divisão', 10, 'Node.js 24 with a provisioned Vitest runner', ('Ordene as guardas para rejeitar entradas inválidas antes do cálculo. Escolha tipo de '
-     'erro estável e indique por que a operação só vem depois.',
+    **_lesson('errors.validation_order', ('main.js: dividir calcula a/b sem guardas; validar operandos finitos com TypeError e '
+     'divisor zero com RangeError antes do cálculo'), 'Calcular primeiro e validar depois, deixando NaN/Infinity escapar.', ('Cheque tipos e finitude.', 'Cheque divisor zero.', 'Só então calcule e retorne.'), ('Ordene guardas antes de a/b e escolha erros estáveis: TypeError para tipo/finito, '
+     'RangeError para divisor zero.'), 'Validador de média com array vazio -> erro antes da divisão', 10, 'Node.js 24 with a provisioned Vitest runner', ('Corrija `dividir` para rejeitar entradas inválidas antes do cálculo: `TypeError` '
+     'para operando não numérico ou não finito e `RangeError` para divisor zero. Reproduza os '
+     'casos, altere o código e confira antes e depois.',
      'Ao calcular percentual concluído, valide que o total de tarefas é positivo antes de '
      'dividir a quantidade concluída pelo total.',
-     'Agrupe as pré-condições pelo tipo de erro e coloque todas antes da primeira operação '
-     'aritmética.',
-     'Blocos ordenáveis por teclado, sequência do fluxo e painel que informa a primeira '
-     'guarda acionada; sem arrastar.',
-     'Função inicial de divisão, blocos de código e runner Vitest local; erros aparecem em '
-     'texto.',
+     'Antes de editar, liste as guardas que faltam em `dividir`, o erro contratado de cada '
+     'uma e a saída observada no starter para uma string, Infinity e zero.',
+     'Editor com o starter de `dividir` e runner de casos; execute entradas válidas e '
+     'inválidas antes e depois da correção.',
+     'Starter com a função `dividir`, runner de casos e saída de erros em texto.',
      'Por que as guardas devem executar antes da divisão?',
      'Para impedir que entrada inválida produza NaN/Infinity antes do erro definido pelo '
      'contrato.',
@@ -229,7 +230,7 @@ CONTENT = {
      'Para permitir que a divisão escolha quais parâmetros são válidos.',
      'Defina o tratamento de array vazio num cálculo de média, lançando o erro previsto '
      'antes de dividir.')),
-          load={"novelty": 2, "syntax": 2, "composition": 2, "state": 2, "debugging": 1, "files": 1, "reading": 2, "independence": 2, "tools": 1}),
+          load={"novelty": 2, "syntax": 2, "composition": 2, "state": 2, "debugging": 2, "files": 1, "reading": 2, "independence": 2, "tools": 1}),
 "13.03": C(
     'testing.boundary_cases',
     'paginar(items,page,size) 1-based; testes existentes só page=1,size=2',
@@ -621,7 +622,7 @@ _LITERAL_STARTERS = {
         {"path": "tests/13.13.test.js", "content": "import {montarWidget} from '../app.js';\ndescribe('suíte DOM do widget', () => {\n  test('mantém associação de rótulo e botão de submit', () => { montarWidget(document); expect(document.querySelector('label[for=text]')).toBeTruthy(); expect(document.querySelector('#add[type=submit]')).toBeTruthy(); });\n});"},
     ],
     '13.01': "material.md: Teste: expect(paginar([1, 2, 3], 2, 2)).toEqual([3]);\nResultado recebido: [2, 3]\n\nA falha localiza uma divergência entre a saída esperada e recebida; ainda não identifica a causa.",
-    '13.02': "material.md: Bloco A: if (typeof dividendo !== 'number' || !Number.isFinite(dividendo)) throw new TypeError('dividendo inválido');\nBloco B: if (typeof divisor !== 'number' || !Number.isFinite(divisor)) throw new TypeError('divisor inválido');\nBloco C: if (divisor === 0) throw new RangeError('divisor não pode ser zero');\nBloco D: return dividendo / divisor;\n\nContexto: function dividir(dividendo, divisor) { /* ordenar blocos; toda validação precede a divisão */ }",
+    '13.02': "main.js: export function dividir(dividendo, divisor) { return dividendo / divisor; }\n\nDefeitos: sem guardas, uma string ou Infinity produz NaN/Infinity em vez de TypeError, e divisor zero deveria lançar RangeError antes do cálculo.",
     '13.03': [{'path': 'pagination.js', 'content': "export function paginar(items, page, size) { if (!Number.isInteger(page) || page < 1 || !Number.isInteger(size) || size < 1) throw new RangeError('page/size inválidos'); return items.slice((page - 1) * size, page * size); }\n"}, {'path': 'pagination.test.js', 'content': "import { paginar } from './pagination.js';\ndescribe('paginar', () => {\n  it('retorna a primeira página', () => {\n    expect(paginar([1, 2, 3], 1, 2)).toEqual([1, 2]);\n  });\n});\n// Complete a suíte para contratos de borda; page e size são inteiros 1-based.\n"}],
     '13.04': "debug.js: export function somaPositivos(valores) {\n  let total = 0;\n  for (const valor of valores) {\n    if (valor > 0) total += valor;\n  }\n  return total;\n}\n\n// Preveja os estados de total para [1, -2, 3] antes de avançar o debugger.",
     '13.05': "filtro.js: export function manterDefinidos(valores) {\n  const resultado = [];\n  for (const valor of valores) {\n    if (valor) resultado.push(valor); // BUG: remove valores válidos falsy, como 0 e false.\n  }\n  return resultado;\n}\n\n// Contrato: remover somente undefined; preservar 0, false, null, strings e sua ordem.",

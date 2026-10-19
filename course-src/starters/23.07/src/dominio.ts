@@ -13,9 +13,9 @@ export function criar(estado: Estado, id: string, titulo: string): Estado {
 }
 
 export function mover(estado: Estado, id: string, coluna: Coluna): Estado {
-  // implemente: id inexistente -> ValidationError; não mute `estado`
+  throw new Error("TODO: implemente o contrato desta função");
 }
 
 export function remover(estado: Estado, id: string): Estado {
-  // implemente
+  throw new Error("TODO: implemente o contrato desta função");
 }

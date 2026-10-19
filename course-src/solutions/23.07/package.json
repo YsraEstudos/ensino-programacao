@@ -1,1 +1,17 @@
-{"name":"devpath-tasks-capstone","private":true,"type":"module","scripts":{"test":"node --experimental-strip-types --test test/contrato.test.ts","typecheck":"tsc --noEmit --strict --target ES2022 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions src/dominio.ts src/portas.ts src/adapters/memoria.ts src/reabrir.ts"}}
+{
+  "name": "devpath-23-07",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "test": "node --experimental-strip-types --test test/reabrir.test.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.1",
+    "typescript": "6.0.3"
+  }
+}

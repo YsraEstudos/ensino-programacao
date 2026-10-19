@@ -177,7 +177,20 @@ if(new Set(requiredTransferIds.map(id=>transferDefinitions[id].content)).size!==
 // Complete the stage 15 publication independently of the stage 16-19 map.
 const allIds=catalog.filter(item=>['16.','17.','18.','19.'].some(prefix=>item.id.startsWith(prefix))).map(item=>item.id);
 const requestedStage=process.argv[2];
-const selectedIds=requestedStage?allIds.filter(id=>id.startsWith(`${requestedStage}.`)):allIds;
+const ownedIds=new Set([...Object.keys(typed),...Object.keys(behavior),...Object.keys(rubrics)]);
+// These catalog items were added by another curriculum pass and already have
+// valid authored assessments. Keep them untouched; every other stage item is
+// part of this generator's scope and must still have a substantive definition.
+const preservedUnmappedIds=new Set(['17.11','18.11']);
+for(const id of allIds){
+  if(preservedUnmappedIds.has(id)){
+    if(ownedIds.has(id))throw new Error(`Unexpected task-8b ownership overlap ${id}`);
+    if(!manifest[id]||!assessments[id])throw new Error(`Cannot preserve unmapped activity without existing manifest and assessment: ${id}`);
+  }else if(!ownedIds.has(id)){
+    throw new Error(`Missing substantive assessment definition ${id}`);
+  }
+}
+const selectedIds=requestedStage?allIds.filter(id=>ownedIds.has(id)&&id.startsWith(`${requestedStage}.`)):allIds.filter(id=>ownedIds.has(id));
 const learnerSuites=new Set(['19.08']);
 for(const id of selectedIds){
   const activity=typed[id];
@@ -204,7 +217,14 @@ for(const id of selectedIds){
     if(!rubric)throw new Error(`Missing substantive assessment definition ${id}`);
     const files=manifest[id].files;
     const artifact=files[0];
-    const solution=`# Referência ${id}\n\nPara ${topic.title}, inspecione ${artifact} e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.${transferDefinition?`\n\n## Transferência\n${transferDefinition.content}`:'\n\n## Transferência\nEscolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.'}\n`;
+    const referenceSolutions={
+      '17.02':'# Referência 17.02\n\n`pair<K, V>` preserva os papéis da chave e do valor; `pair("a", 2)` tem tipo `[string, number]`. `wrap<T>` devolve `{ value: T }`. `Repository<T extends Entity>` exige `id: string` e conserva a entidade concreta em `save` e `get`; uma busca ausente retorna `undefined`. O exercício altera assinaturas e não pede implementação de armazenamento. `Entity` pode ser interface ou type conforme extensão/composição necessárias; nenhum é universalmente superior.',
+      '18.02':'# Referência 18.02\n\n`aplicarPatch<T extends object>(base: T, patch: Partial<T>): T` cria uma cópia com spread superficial. Um patch `{ nome: "Bia" }` mantém os campos omitidos. Um `Perfil` aninhado é substituído por inteiro, sem deep merge, e `base` permanece intacto. JSON externo requer parse como `unknown` e validação de runtime antes de ser aceito como patch; declare a política de `undefined` com `exactOptionalPropertyTypes`.',
+      '19.01':'# Referência 19.01\n\n`Flags<User>` expande para `{ id: boolean; name: boolean; active: boolean }`. O mapped type atua no checker e não emite um loop JavaScript. Mapeamentos homomórficos podem preservar `readonly` e `?` da fonte; este `User` não tem esses modificadores.',
+      '19.02':'# Referência 19.02\n\nO ramo verdadeiro captura o elemento de arrays mutáveis ou readonly e o ramo falso preserva `T`: arrays e tuplas produzem o tipo de elemento, e `number` permanece `number`. Como `T` está nu à esquerda de `extends`, uma união distribui; `ElementOrSelf<string[] | number>` resulta em `string | number`. Um ramo `unknown` perderia o escalar.',
+      '19.06':'# Referência 19.06\n\nCom `Settings = { readonly theme?: "light" | "dark"; readonly retries?: number }`, `MutableRequired<Settings>` torna ambos os campos obrigatórios e graváveis. Sob `strict`, remover `?` de propriedade opcional remove a ausência; teste separadamente uma propriedade cujo valor declare explicitamente `undefined` e compare com `exactOptionalPropertyTypes` ligado e desligado.'
+    };
+    const solution=referenceSolutions[id]||`# Referência ${id}\n\nPara ${topic.title}, inspecione ${artifact} e registre o comportamento previsto com entradas concretas, evidência da relação entre os dados/tipos e um limite relevante. A decisão deve distinguir saída observada, diagnóstico estático e hipótese; valide também uma borda independente e explique por que ela sustenta a conclusão.${transferDefinition?`\n\n## Transferência\n${transferDefinition.content}`:'\n\n## Transferência\nEscolha uma API ou cenário diferente, informe entrada, saída ou diagnóstico esperado, evidência e o que ainda precisaria de execução real.'}\n`;
     write(`course-src/solutions/${id}/README.md`,solution);
     assessments[id]={environment:'rubric',version:1,checks:['rubric'],referenceDir:`solutions/${id}`,rubric,transfer:{id:`${id}-transfer`,files:[{path:'transfer.md',content:`# Transferência ${id}\n\n${transferDefinition?.content||`Aplique os critérios a ${topic.title} em um caso com entrada e resultado/diagnóstico definidos, cite a evidência e explicite o limite da conclusão.`}`}],rubric:transferDefinition?.rubric||rubric},prompt:`Analise ${topic.title} com evidência localizada em ${files.join(', ')} e resolva um caso independente.`};
     continue;
@@ -218,10 +238,16 @@ for(const id of selectedIds){
   if(tsconfig)sourceFiles['tsconfig.json']=JSON.stringify(tsconfig,null,2);
   if(['16.08','17.08','19.08'].includes(id))sourceFiles['package.json']=JSON.stringify({type:'module'},null,2);
   if(['16.08','17.08','19.08'].includes(id)){
-    // Starter npm project: identity plus a lockfile, so the local export validates (package.json requires a lock).
+    // Each copied TypeScript project has explicit local commands and a reproducible compiler/type environment.
     const name=`devpath-${id.replace('.','-')}`;
-    const pkg={name,version:'1.0.0',type:'module'};
-    const lock={name,version:'1.0.0',lockfileVersion:3,requires:true,packages:{'':{name,version:'1.0.0'}}};
+    const devDependencies={'@types/node':'24.19.1','typescript':'6.0.3'};
+    const pkg={name,version:'1.0.0',private:true,type:'module',scripts:{typecheck:'tsc --noEmit',test:'node --test *.test.ts'},devDependencies};
+    const lock={name,version:'1.0.0',lockfileVersion:3,requires:true,packages:{
+      '':{name,version:'1.0.0',devDependencies},
+      'node_modules/@types/node':{version:'24.19.1',resolved:'https://registry.npmjs.org/@types/node/-/node-24.19.1.tgz',integrity:'sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==',dev:true,license:'MIT',dependencies:{'undici-types':'>=7.24.0 <7.24.7'}},
+      'node_modules/typescript':{version:'6.0.3',resolved:'https://registry.npmjs.org/typescript/-/typescript-6.0.3.tgz',integrity:'sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==',dev:true,license:'Apache-2.0',bin:{tsc:'bin/tsc',tsserver:'bin/tsserver'},engines:{node:'>=14.17'}},
+      'node_modules/undici-types':{version:'7.24.6',resolved:'https://registry.npmjs.org/undici-types/-/undici-types-7.24.6.tgz',integrity:'sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==',dev:true,license:'MIT'}
+    }};
     for(const file of ['package.json','package-lock.json'])if(!manifest[id].files.includes(file))manifest[id].files.push(file);
     write(`course-src/starters/${id}/package.json`,JSON.stringify(pkg,null,2));
     write(`course-src/starters/${id}/package-lock.json`,JSON.stringify(lock,null,2));
